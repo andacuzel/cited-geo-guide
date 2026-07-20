@@ -134,24 +134,17 @@
   function renderCards() {
     var html = subFields.map(function (field) {
       var isLive = saasData.hasOwnProperty(field.id);
-      var cardClass = 'card' + (isLive ? '' : ' card--soon');
-      var badge = isLive
-        ? '<span class="card__badge card__badge--live">Live</span>'
-        : '<span class="card__badge card__badge--soon">Soon</span>';
-      var ctaLabel = isLive ? 'Read the playbook' : 'Coming soon';
+      var rowClass = 'index-row' + (isLive ? '' : ' index-row--soon');
+      var status = isLive
+        ? '<span class="index-row__status index-row__status--live">\u25CF Live</span>'
+        : '<span class="index-row__status index-row__status--soon">\u25CB In preparation</span>';
 
       return (
-        '<button type="button" class="' + cardClass + '" data-id="' + field.id + '" data-live="' + isLive + '" aria-label="' + field.name + (isLive ? '' : ' \u2014 playbook coming soon') + '">' +
-          '<div class="card__top">' +
-            '<span class="card__code">' + field.code + '</span>' +
-            badge +
-          '</div>' +
-          '<span class="card__icon">' + (icons[field.id] || '') + '</span>' +
-          '<span class="card__name">' + field.name + '</span>' +
-          '<span class="card__desc">' + field.description + '</span>' +
-          '<span class="card__cta">' + ctaLabel +
-            '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>' +
-          '</span>' +
+        '<button type="button" class="' + rowClass + '" data-id="' + field.id + '" data-live="' + isLive + '" aria-label="' + field.name + (isLive ? '' : ' \u2014 playbook in preparation') + '">' +
+          '<span class="index-row__code">' + field.code + '</span>' +
+          '<span class="index-row__name">' + field.name + '</span>' +
+          '<span class="index-row__desc">' + field.description + '</span>' +
+          status +
         '</button>'
       );
     }).join('');
@@ -179,7 +172,7 @@
   function showResults(id) {
     var entry = saasData[id];
     if (!entry) {
-      showToast('That playbook is coming soon \u2014 hang tight.');
+      showToast('That playbook is in preparation.');
       return;
     }
 
@@ -271,7 +264,7 @@
      --------------------------------------------------------------- */
 
   cardGrid.addEventListener('click', function (e) {
-    var card = e.target.closest('.card');
+    var card = e.target.closest('.index-row');
     if (!card) return;
     showResults(card.getAttribute('data-id'));
   });

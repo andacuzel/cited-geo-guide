@@ -336,7 +336,7 @@
     lastScore = { domain: domain, total: r.total };
 
     document.getElementById('scoreValue').textContent = r.total;
-    document.getElementById('scoreDomain').textContent = domain + ' \u00b7 ' + new Date().toLocaleDateString('en-GB');
+    document.getElementById('scoreDomain').textContent = domain + ' \u00b7 retrieved ' + new Date().toLocaleDateString('en-GB');
 
     function bar(fillId, valId, val, max) {
       document.getElementById(fillId).style.width = Math.round((val / max) * 100) + '%';
@@ -347,9 +347,9 @@
     bar('barTrust', 'valTrust', r.trust, 40);
 
     var chip = {
-      open: '<span class="bot-chip bot-chip--open">Open</span>',
-      partial: '<span class="bot-chip bot-chip--partial">Limited</span>',
-      block: '<span class="bot-chip bot-chip--block">Blocked</span>'
+      open: '<span class="mark mark--open">\u25CF OPEN</span>',
+      partial: '<span class="mark mark--partial">\u25D0 LIMITED</span>',
+      block: '<span class="mark mark--block">\u25CB BLOCKED</span>'
     };
     var botHtml = '<div class="bot-console__label">' + esc(domain) + '/robots.txt \u2014 AI crawler policy</div>';
     if (!robotsOk) botHtml += '<div class="bot-console__note"># no robots.txt found \u2192 all crawlers have default access</div>';
