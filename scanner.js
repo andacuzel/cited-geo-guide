@@ -347,9 +347,9 @@
     bar('barTrust', 'valTrust', r.trust, 40);
 
     var chip = {
-      open: '<span class="mark mark--open">\u25CF OPEN</span>',
-      partial: '<span class="mark mark--partial">\u25D0 LIMITED</span>',
-      block: '<span class="mark mark--block">\u25CB BLOCKED</span>'
+      open: '<span class="bot-chip bot-chip--open">Open</span>',
+      partial: '<span class="bot-chip bot-chip--partial">Limited</span>',
+      block: '<span class="bot-chip bot-chip--block">Blocked</span>'
     };
     var botHtml = '<div class="bot-console__label">' + esc(domain) + '/robots.txt \u2014 AI crawler policy</div>';
     if (!robotsOk) botHtml += '<div class="bot-console__note"># no robots.txt found \u2192 all crawlers have default access</div>';

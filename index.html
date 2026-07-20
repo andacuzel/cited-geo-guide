@@ -25,13 +25,13 @@
   <meta name="twitter:description" content="Scan your site's AI visibility in 30 seconds, then fix it with vertical-specific GEO & AEO playbooks. No email required." />
   <meta name="twitter:image" content="https://andacuzel.github.io/cited-geo-guide/assets/og-image.png" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23131B26'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23B08A2E' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=4" />
 
   <script type="application/ld+json">
   {
@@ -110,25 +110,35 @@
     <!-- ===================== VIEW 1 — LANDING ===================== -->
     <section id="view-landing" class="view view--landing" aria-hidden="false">
 
-      <!-- ---------- 01 · The shift ---------- -->
-      <section class="section" aria-labelledby="hero-heading">
+      <!-- ---------- Hero with live scan ---------- -->
+      <section class="hero" id="scan" aria-labelledby="hero-heading">
         <div class="section__inner">
-          <div class="idx-label"><span class="idx-label__num">01</span> The shift</div>
           <div class="hero__grid">
             <div>
+              <p class="kicker">B2B SaaS · AI visibility</p>
               <h1 id="hero-heading" class="hero__title">
                 Your buyers stopped&nbsp;Googling.<br />
                 They started&nbsp;<em>asking</em>.
               </h1>
               <p class="hero__sub">
-                AI answer engines now write the B2B SaaS shortlist. If your site
-                isn't in the sources they trust, you're not in the answer.
+                AI answer engines now write the B2B SaaS shortlist. Scan your
+                site and see whether they can find you — then fix it with a
+                playbook built for your category.
               </p>
-              <p class="hero__figures">12 checks &nbsp;·&nbsp; 10 crawlers &nbsp;·&nbsp; 30 seconds</p>
-              <div class="hero__cta-row">
-                <a href="#scan" class="link-cta">Scan your site free
-                  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3.5 9.5L8 13.5l4.5-4"/></svg>
-                </a>
+
+              <form class="hero__form" id="scanForm">
+                <input type="text" class="field" id="scanInput" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
+                <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
+              </form>
+              <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.<sup class="fn"><a href="#footnotes" aria-label="See note 2">2</a></sup></p>
+
+              <div class="scan__status" id="scanStatus" role="status" aria-live="polite"></div>
+              <button type="button" class="btn btn--ghost scan__retry" id="scanRetry">Try again</button>
+
+              <div class="hero__figures" aria-label="Scan coverage">
+                <div class="hero__figure"><b>12</b><span>checks</span></div>
+                <div class="hero__figure"><b>10</b><span>AI crawlers</span></div>
+                <div class="hero__figure"><b>~30s</b><span>live scan</span></div>
               </div>
             </div>
 
@@ -143,7 +153,6 @@
               <div class="answer-mock" aria-hidden="true">
                 <div class="answer-mock__head">
                   <span class="answer-mock__label">ANSWER ENGINE</span>
-                  <span class="answer-mock__fig">FIG. 1</span>
                 </div>
                 <p class="answer-mock__query">“Best CRM for a 40-person outbound sales team?”</p>
                 <div class="answer-mock__response">
@@ -160,32 +169,15 @@
         </div>
       </section>
 
-      <!-- ---------- 02 · The scan ---------- -->
-      <section class="section" id="scan" aria-labelledby="scan-heading">
+      <!-- ---------- Report ---------- -->
+      <section class="report-section" id="scanReport" hidden aria-label="Scan report">
         <div class="section__inner">
-          <div class="idx-label"><span class="idx-label__num">02</span> The scan</div>
-          <h2 id="scan-heading" class="section-title">Can AI crawlers see your site?<sup class="fn"><a href="#footnotes" aria-label="See footnote 1">1</a></sup></h2>
-          <p class="section-sub">
-            Enter a domain. We read the public robots.txt, sitemap and homepage,
-            then score AI visibility across 12 checks. Live data, not estimates.<sup class="fn"><a href="#footnotes" aria-label="See footnote 2">2</a></sup>
-          </p>
-
-          <form class="scan__form" id="scanForm">
-            <input type="text" class="field" id="scanInput" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
-            <button type="submit" class="btn btn--primary" id="scanBtn">Scan free</button>
-          </form>
-          <p class="scan__fineprint">No email. Runs in your browser. Nothing is stored.</p>
-
-          <div class="scan__status" id="scanStatus" role="status" aria-live="polite"></div>
-          <button type="button" class="btn btn--ghost scan__retry" id="scanRetry">Try again</button>
-
-          <!-- ---------- Report ---------- -->
-          <div class="scan-report" id="scanReport" hidden>
+          <div class="report-panel">
 
             <div class="scan-report__grid">
               <div>
                 <div class="score-entry">
-                  <div class="score-entry__value"><span id="scoreValue">0</span><small>/100</small><sup class="fn"><a href="#footnotes" aria-label="See footnote 1">1</a></sup></div>
+                  <div class="score-entry__value"><span id="scoreValue">0</span><small>/100</small><sup class="fn"><a href="#footnotes" aria-label="See note 1">1</a></sup></div>
                   <div class="score-entry__meta" id="scoreDomain"></div>
                 </div>
                 <div class="score-bars">
@@ -194,7 +186,7 @@
                   <div class="score-bar"><span>Content &amp; trust</span><div class="score-bar__track"><div class="score-bar__fill" id="barTrust"></div></div><span class="score-bar__val" id="valTrust"></span></div>
                 </div>
                 <button type="button" class="btn btn--ghost score-entry__share" id="shareBtn">
-                  <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5.5L5.5 8.5M5.5 8.5L11 11.5M13 4.5a2 2 0 11-4 0 2 2 0 014 0zM7 8.5a2 2 0 11-4 0 2 2 0 014 0zM13 12.5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                  <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5.5L5.5 8.5M5.5 8.5L11 11.5M13 4.5a2 2 0 11-4 0 2 2 0 014 0zM7 8.5a2 2 0 11-4 0 2 2 0 014 0zM13 12.5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                   Share your score
                 </button>
               </div>
@@ -215,58 +207,57 @@
             </div>
 
             <div class="scan-bridge">
-              <p class="scan-bridge__text"><span class="idx-inline">03</span>Now fix it for your category. Each vertical has its own playbook.</p>
-              <a href="#verticals" class="link-cta">Choose your vertical
-                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3.5 9.5L8 13.5l4.5-4"/></svg>
-              </a>
+              <p class="scan-bridge__text">Now fix it for your category. Each vertical has its own playbook.</p>
+              <a href="#verticals" class="btn btn--primary">Choose your vertical</a>
             </div>
 
           </div>
         </div>
       </section>
 
-      <!-- ---------- 03 · The playbooks ---------- -->
-      <section class="section" id="verticals" aria-labelledby="verticals-heading">
+      <!-- ---------- Playbooks ---------- -->
+      <section class="verticals" id="verticals" aria-labelledby="verticals-heading">
         <div class="section__inner">
-          <div class="idx-label"><span class="idx-label__num">03</span> The playbooks</div>
-          <h2 id="verticals-heading" class="section-title">One playbook per category.</h2>
-          <p class="section-sub">Each guide is grounded in the citation sources, buying signals and pitfalls of its vertical. No generic AI-SEO checklists.</p>
+          <div class="section-head">
+            <p class="kicker">The playbooks</p>
+            <h2 id="verticals-heading" class="section-title">One playbook per category.</h2>
+            <p class="section-sub">Each guide is grounded in the citation sources, buying signals and pitfalls of its vertical. No generic AI-SEO checklists.</p>
+          </div>
 
-          <div class="index-list" id="cardGrid">
-            <!-- Rows are rendered by app.js from the SUB_FIELDS array -->
+          <div class="card-grid" id="cardGrid">
+            <!-- Cards are rendered by app.js from the SUB_FIELDS array -->
           </div>
         </div>
       </section>
 
-      <!-- ---------- 04 · In preparation ---------- -->
-      <section class="section" id="pro" aria-labelledby="pro-heading">
+      <!-- ---------- Pro band ---------- -->
+      <section class="pro-band" id="pro" aria-labelledby="pro-heading">
         <div class="section__inner">
-          <div class="idx-label"><span class="idx-label__num">04</span> In preparation</div>
-          <div class="pro__grid">
-            <div class="pro-block">
-              <span class="pro-block__status">In preparation</span>
-              <h3 id="pro-heading">Cited Pro — the AI Visibility Report</h3>
-              <p>Your scan findings, interpreted through your vertical's playbook. A personalized report, built to be put in front of your team.</p>
+          <div class="pro-band__grid">
+            <div>
+              <p class="kicker kicker--on-navy">In preparation</p>
+              <h2 id="pro-heading">Cited Pro — the AI Visibility Report</h2>
+              <p class="pro-band__lede">Your scan findings, interpreted through your vertical's playbook. A personalized report, built to be put in front of your team.</p>
               <ul>
                 <li>Scan results mapped to your category's citation sources</li>
                 <li>Prioritized fixes with vertical-specific reasoning</li>
                 <li>Exportable PDF, built to be forwarded</li>
               </ul>
-              <p class="pro-block__price">One-time purchase · No subscription</p>
+              <p class="pro-band__price">One-time purchase · No subscription</p>
             </div>
 
             <div class="services-block">
               <h3>Need this done for you?</h3>
               <p>From schema rollout to citation-source strategy. We implement it end to end.</p>
-              <a href="#" id="agencyLink" class="btn btn--primary">Talk to us</a>
+              <a href="#" id="agencyLink" class="btn btn--gold">Talk to us</a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ---------- Footnotes ---------- -->
-      <section class="footnotes" id="footnotes" aria-label="Footnotes and methodology">
-        <div class="footnotes__inner">
+      <!-- ---------- Notes / footer ---------- -->
+      <section class="footnotes" id="footnotes" aria-label="Notes and methodology">
+        <div class="section__inner">
           <p class="footnotes__label">Notes</p>
           <ol>
             <li><span class="n">[1]</span><span>Scoring weights: Discoverability 40 · Technical foundation 20 · Content &amp; trust 40. Every check and its point value is shown in the report.</span></li>
@@ -283,11 +274,11 @@
 
       <div class="results-toolbar">
         <button type="button" class="btn btn--ghost" id="backBtn">
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 8h-9M7 3.5L3.5 8 7 12.5"/></svg>
-          Back to the index
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 8h-9M7 3.5L3.5 8 7 12.5"/></svg>
+          Back to the playbooks
         </button>
         <button type="button" class="btn btn--primary" id="downloadBtn">
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3l3-3M3 13h10"/></svg>
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3l3-3M3 13h10"/></svg>
           <span id="downloadBtnLabel">Download as PDF</span>
         </button>
       </div>
@@ -303,7 +294,7 @@
 
   <!-- PDF export (client-side, no backend) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="app.js?v=3"></script>
-  <script src="scanner.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <script src="scanner.js?v=4"></script>
 </body>
 </html>
