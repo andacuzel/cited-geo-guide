@@ -84,30 +84,188 @@
      --------------------------------------------------------------- */
 
   var saasData = {
+
     crm: {
       name: 'CRM Software',
       content:
         '<h3>The Strategic Shift</h3>' +
-        '<p>For a decade, CRM buyers built their shortlist by Googling "best CRM for small business" and skimming ten blue links. That research layer is now collapsing into a single AI-generated answer. When a sales-ops lead asks ChatGPT, Perplexity, or Gemini to compare HubSpot, Salesforce, and Pipedrive, the model isn\u2019t crawling your homepage in real time \u2014 it\u2019s synthesizing a response from training data, indexed reviews, and structured signals it has already learned to trust.</p>' +
-        '<p>If your CRM brand isn\u2019t already part of that trusted signal set \u2014 cited on G2, referenced in comparison content, structured in a way a language model can parse \u2014 you don\u2019t lose a ranking position. You disappear from the conversation entirely. The strategic shift for CRM marketing teams is to stop optimizing pages for a crawler hunting keywords, and start engineering your brand\u2019s presence across the sources an LLM treats as ground truth.</p>' +
+        '<p>For a decade, CRM buyers built their shortlist by Googling "best CRM for small business" and skimming ten blue links. That research layer is collapsing into a single AI-generated answer. When a sales-ops lead asks ChatGPT, Perplexity, or Gemini to compare HubSpot, Salesforce, and Pipedrive, the model is not crawling your homepage in real time — it is synthesizing a response from training data, indexed reviews, and structured signals it has learned to trust.</p>' +
+        '<p>If your CRM brand is not in that trusted signal set, you do not lose a ranking position. You disappear from the conversation. If your Cited scan shows "AI crawler access" or "Organization / WebSite schema" failing, this category feels it faster than most — CRM shortlists are one of the highest-volume question types answer engines handle. The shift for CRM marketing teams: stop optimizing pages for a crawler hunting keywords, start engineering your presence across the sources an LLM treats as ground truth.</p>' +
         '<h3>Top 3 Actionable Strategies</h3>' +
         '<ul>' +
-        '<li><strong>Engineer your third-party footprint first.</strong> Generative engines weight independent sources \u2014 G2, Capterra, TrustRadius, Reddit threads \u2014 far more heavily than brand-owned content. Before writing another blog post, audit how your CRM is described on these platforms and run a structured review-generation push focused on the specific use-case language buyers actually ask about, like "CRM for outbound teams under 50 reps."</li>' +
-        '<li><strong>Publish direct-answer comparison content.</strong> Build dedicated "X vs Y" and "best CRM for [use case]" pages that answer the question in a self-contained paragraph an AI can lift whole \u2014 a clear verdict up front, named criteria, and a structured table. Don\u2019t bury the comparison inside a 3,000-word narrative blog post.</li>' +
-        '<li><strong>Mark up everything machine-readable.</strong> Implement Product, Review, and FAQPage schema across pricing and comparison pages so structured facts \u2014 price tiers, integrations, support hours \u2014 are unambiguous to both search and answer engines. Keep one canonical source for these facts so models never encounter two conflicting versions of your own pricing.</li>' +
+        '<li><strong>Engineer your third-party footprint first.</strong> Generative engines weight independent sources — G2, Capterra, TrustRadius, Reddit threads — far more heavily than brand-owned content. Before writing another blog post, audit how your CRM is described on these platforms and run a structured review-generation push around the use-case language buyers ask about, like "CRM for outbound teams under 50 reps."</li>' +
+        '<li><strong>Publish direct-answer comparison content.</strong> Build dedicated "X vs Y" and "best CRM for [use case]" pages that answer the question in a self-contained paragraph an AI can lift whole — a clear verdict up front, named criteria, a structured table. Do not bury the comparison inside a 3,000-word narrative post.</li>' +
+        '<li><strong>Close the gaps your scan found.</strong> "Structured data (JSON-LD)" and "Content schema (Article, FAQ…)" are pass/fail checks in your Cited report for a reason: Product, Review, and FAQPage schema make price tiers, integrations, and support terms unambiguous to answer engines. Keep one canonical source for these facts so models never meet two versions of your own pricing.</li>' +
         '</ul>' +
+        '<div class="expert-tip expert-tip--aside">' +
+        '<p>[A pattern you’ve personally observed in CRM citation sources — e.g. a G2 review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
         '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
         '<ul class="pitfalls">' +
-        '<li>Targeting broad head terms like "best CRM software" with yet another generic listicle nobody asked an AI to summarize.</li>' +
-        '<li>Treating backlink volume as the goal instead of citation-worthy authority on the platforms LLMs actually pull from.</li>' +
-        '<li>Gating case studies, ROI calculators, or comparison data behind a lead form \u2014 content an AI crawler can\u2019t access can\u2019t be cited, full stop.</li>' +
-        '<li>Letting pricing, feature lists, and positioning drift out of sync across your website, app-store listing, and partner pages, since models tend to average out or simply distrust contradictory facts about the same product.</li>' +
+        '<li>Targeting broad head terms like "best CRM software" with another generic listicle nobody asked an AI to summarize.</li>' +
+        '<li>Treating backlink volume as the goal instead of citation-worthy authority on the platforms LLMs pull from.</li>' +
+        '<li>Gating case studies, ROI calculators, or comparison data behind a lead form — content a crawler cannot access cannot be cited.</li>' +
+        '<li>Letting pricing and feature claims drift out of sync across your site, app-store listing, and partner pages — models average out or distrust contradictory facts.</li>' +
         '</ul>' +
+        '<div class="expert-tip expert-tip--data">' +
+        '<p>[One number with a source — e.g. share of CRM-category queries answered by AI tools, a review-volume threshold you’ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
         '<h3>Expert Tip</h3>' +
         '<div class="expert-tip">' +
-        '<p>[Add your own field insight here \u2014 for example, a specific G2 review pattern you\u2019ve seen influence AI citations, a client result from a structured-data rollout, or a contrarian take on where the CRM category\u2019s AI visibility is headed next. <strong>This box is designed for your proprietary point of view.</strong>]</p>' +
+        '<p>[Your strongest strategic opinion on where CRM’s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
         '</div>'
-    }
+    },
+    martech: {
+      name: 'MarTech',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Marketing technology buyers no longer build lists by reading ten blog posts on evaluation criteria. They ask AI engines to compare features, integration depths, and pricing directly. When a demand generation lead prompts an AI to evaluate marketing automation vendors against a HubSpot baseline, the engine relies on indexed reviews, structured data, and third-party mentions to formulate an answer. If your platform is absent from these sources, you drop off the modern shortlist entirely.</p>' +
+        '<p>If your Cited scan shows "Organization / WebSite schema" failing, this category feels it faster than most \u2014 martech buyers demand immediate technical clarity on platform capabilities before requesting a demo. The shift: stop chasing broad keyword rankings, start engineering precise answers across the ecosystem models trust. Focus on distinct use cases, clear feature definitions, and verified customer feedback so AI includes you when it generates comparison matrices.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul>' +
+        '<li><strong>Dominate third-party evaluation sites.</strong> Generative engines pull heavily from platforms like G2 and Capterra to assess user sentiment and specific use cases. Audit your presence on these sites and run targeted campaigns to gather detailed reviews mentioning integrations, migration ease, and support quality. AI summaries favor tools with high-density, specific feedback over generic praise.</li>' +
+        '<li><strong>Structure your feature documentation.</strong> Answer engines need to parse your platform capabilities without ambiguity. If your Cited report flags "Structured data (JSON-LD)", fix it \u2014 deploy precise Product and FAQPage schema across your feature pages so crawlers get explicit pricing tiers, migration processes, and API limits.</li>' +
+        '<li><strong>Target niche community discussions.</strong> Technical marketing leads research platform edge cases on r/marketing and MarTech.org. Participate with factual, non-promotional answers to complex automation and integration problems \u2014 models index these expert communities heavily when resolving implementation queries.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside">' +
+        '<p>[A pattern you\u2019ve personally observed in martech citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls">' +
+        '<li>Publishing generic marketing advice instead of addressing the specific technical workflows and integration hurdles buyers actively ask AI to solve.</li>' +
+        '<li>Focusing solely on high-volume head terms like "marketing automation" while ignoring the detailed long-tail comparison queries models answer daily.</li>' +
+        '<li>Hiding technical documentation and API limitations behind sales lead forms, where AI crawlers cannot read, index, or cite the information.</li>' +
+        '<li>Relying on basic feature landing pages that lack schema, making it impossible for models to verify your claims against competitors.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data">' +
+        '<p>[One number with a source \u2014 e.g. share of martech-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip">' +
+        '<p>[Your strongest strategic opinion on where martech\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+    hrtech: {
+      name: 'HRTech',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>HR leaders rely on generative engines to evaluate payroll compliance, integration depth, and core HR functions before ever scheduling a demo. When a CHRO asks an AI to compare your platform against Workday or BambooHR for a 500-employee enterprise, the model assesses structured technical documentation and verified peer reviews. The old model of capturing leads via broad whitepapers is failing. Buyers want direct answers about data privacy, onboarding workflows, and specific ATS integrations without speaking to sales.</p>' +
+        '<p>If your Cited scan shows "Content schema (Article, FAQ\u2026)" failing, this category feels it faster than most \u2014 HR buyers ask highly specific compliance questions that models must answer with certainty. Stop relying on vague culture-focused marketing pages and start structuring your capabilities into readable, factual data. An answer engine will not guess your SOC 2 status or payroll tax coverage limits \u2014 it requires explicit, verified signals to recommend your software to an evaluation committee.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul>' +
+        '<li><strong>Verify your trust and compliance signals.</strong> HR software involves sensitive employee data, so models prioritize platforms with documented security standards. If your "Author / about signals" check is failing, engines cannot verify the corporate entity behind your tool. List data certifications, SHRM partnerships, and compliance standards explicitly so models can confidently cite your platform as a secure choice for enterprise buyers.</li>' +
+        '<li><strong>Embed specific capabilities in third-party reviews.</strong> Generative models scan sites like G2 and Capterra to understand real-world application; generic praise is useless to an AI. Run targeted campaigns asking users to detail their exact migration process from Workday, specific payroll integrations, or compliance automation workflows \u2014 high-density technical reviews give models the context they need.</li>' +
+        '<li><strong>Engage technical HR communities directly.</strong> Evaluators use forums like r/humanresources to find unfiltered opinions on HRIS implementations and ATS syncing issues. AI models index these threads heavily to surface organic sentiment. Build authority with factual, non-promotional answers about compliance laws and integration limits \u2014 validation marketing pages cannot provide.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside">' +
+        '<p>[A pattern you\u2019ve personally observed in HR tech citation sources \u2014 e.g. a G2 review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls">' +
+        '<li>Writing generic posts about company culture instead of technical implementation guides detailing how your HRIS integrates with legacy accounting software.</li>' +
+        '<li>Burying critical security and compliance documentation in gated PDF files that AI crawlers cannot access, read, or cite during vendor evaluations.</li>' +
+        '<li>Ignoring practitioner communities like SHRM forums while focusing marketing efforts on high-level thought leadership that lacks tactical utility.</li>' +
+        '<li>Treating pricing and feature limits as a sales conversation starter rather than publishing explicit, structured data answer engines require.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data">' +
+        '<p>[One number with a source \u2014 e.g. share of HR tech-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip">' +
+        '<p>[Your strongest strategic opinion on where HR tech\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+    fintech: {
+      name: 'FinTech',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Financial technology buyers do not browse marketing fluff when evaluating payment processors or ledger systems. They ask AI engines for direct comparisons on API latency, PCI compliance, and transaction fees. When a VP of Finance evaluates your platform against Stripe or Plaid, the model synthesizes answers from verified technical documentation and peer reviews. If your site hides technical specs behind vague value propositions, the engine excludes you from the recommendation entirely. The era of winning on brand narrative alone is over.</p>' +
+        '<p>If your Cited scan shows "AI crawler access" failing, this category feels it faster than most \u2014 fintech evaluators demand certainty on security standards, and blocked bots mean zero visibility for your SOC 2 status. Stop producing high-level thought leadership that models ignore. Structure your API documentation, compliance pages, and security thresholds as explicit, machine-readable facts. The platforms that provide the most verifiable data win the AI referral.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul>' +
+        '<li><strong>Structure your technical and compliance facts.</strong> Generative engines require unambiguous data to answer queries about payment limits or fraud prevention features. If your Cited scan flags "Organization / WebSite schema", models cannot verify your corporate entity or security credentials. Deploy strict schema across pricing matrices, PCI compliance declarations, and SOC 2 pages so AI platforms cite your exact specifications instead of guessing.</li>' +
+        '<li><strong>Build highly specific comparison pages.</strong> Financial operators ask generative AI for direct contrast, like how your ledger software compares to legacy systems for multi-currency reconciliation. Create dedicated pages detailing these match-ups with structured tables, named criteria, and verifiable data points \u2014 avoid wrapping this data in long narratives that obscure the facts a model needs to extract.</li>' +
+        '<li><strong>Saturate third-party technical reviews.</strong> Peer trust dictates AI visibility in finance. Engines scrape Gartner Peer Insights, TrustRadius, and G2 to evaluate market consensus on implementation timelines and API reliability. Ask your engineering and finance users to review specific use cases, like handling cross-border payments or ledger synchronization.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside">' +
+        '<p>[A pattern you\u2019ve personally observed in fintech citation sources \u2014 e.g. a TrustRadius review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls">' +
+        '<li>Hiding your SOC 2 documentation and API rate limits behind lead-generation forms where AI crawlers cannot read or cite the information.</li>' +
+        '<li>Targeting broad terms like "payment processing software" with generic blog posts instead of dense, factual answers for integration and reconciliation queries.</li>' +
+        '<li>Allowing pricing tables and compliance declarations to exist as unstructured HTML rather than machine-readable JSON-LD that models can parse.</li>' +
+        '<li>Relying on vague executive thought leadership instead of cultivating dense, specific technical reviews on Gartner Peer Insights and TrustRadius.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data">' +
+        '<p>[One number with a source \u2014 e.g. share of fintech-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip">' +
+        '<p>[Your strongest strategic opinion on where fintech\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+    cybersecurity: {
+      name: 'Cybersecurity',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Security architects and CISOs no longer tolerate vendor marketing fluff when evaluating endpoint protection or cloud security posture. They ask generative AI to map your platform against the MITRE ATT&CK framework or compare your false-positive rates with legacy incumbents. When a security operations lead prompts an engine to evaluate your solution, the AI synthesizes its response from vendor technical documentation, Gartner Peer Insights, PeerSpot reviews, and practitioner debates on r/netsec. If your documentation lacks structure or your brand lacks a verified peer footprint, the model excludes you from the threat-defense shortlist.</p>' +
+        '<p>If your Cited scan shows "Author / about signals" failing, this category feels it faster than most \u2014 cybersecurity evaluators and the models they use demand cryptographic proof of vendor identity and trust credentials. Shift your marketing from broad fear-based narratives to engineering precise, factual answers across the platforms LLMs treat as authoritative. Security buyers interrogate models for explicit deployment requirements and API limitations \u2014 the vendors who structure these technical truths explicitly win the visibility race.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul>' +
+        '<li><strong>Saturate enterprise peer review platforms.</strong> Generative engines rely on PeerSpot, G2, and Gartner Peer Insights to evaluate real-world threat detection capabilities and deployment friction. A generic review is useless to an AI. Ask practitioners to detail specific MITRE ATT&CK technique coverage or SIEM integration workflows \u2014 high-density, technical feedback gives models the granular context needed to recommend you over a competitor.</li>' +
+        '<li><strong>Structure your technical documentation.</strong> Answer engines must parse your API limits and configuration steps without ambiguity. If your Cited report flags "Content schema (Article, FAQ\u2026)", models will struggle to extract your deployment facts. Deploy explicit FAQPage and Article schema across your technical documentation so crawlers ingest your exact specifications and compliance thresholds instead of guessing from unstructured marketing text.</li>' +
+        '<li><strong>Engage technical practitioner communities.</strong> Security engineers use forums like r/netsec to find unfiltered opinions on alert fatigue and false-positive rates. AI models index these skeptical discussions heavily. Participate with factual, non-promotional answers on vulnerability patching or configuration challenges \u2014 validation that vendor marketing pages cannot manufacture.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside">' +
+        '<p>[A pattern you\u2019ve personally observed in cybersecurity citation sources \u2014 e.g. a PeerSpot review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls">' +
+        '<li>Publishing generic fear-based marketing articles instead of dense, technical implementation guides that map directly to the MITRE ATT&CK framework.</li>' +
+        '<li>Gating critical technical documentation and API specifications behind sales forms where AI crawlers cannot access or cite them.</li>' +
+        '<li>Targeting high-volume head terms like "network security" while ignoring the specific, long-tail deployment queries AI engines constantly answer.</li>' +
+        '<li>Leaving product features and compliance standards as unstructured text instead of machine-readable data models require for verification.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data">' +
+        '<p>[One number with a source \u2014 e.g. share of cybersecurity-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip">' +
+        '<p>[Your strongest strategic opinion on where cybersecurity\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+    devtools: {
+      name: 'DevTools & Cloud',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Software engineers do not evaluate new developer tools by reading marketing landing pages. They build shortlists by asking AI coding assistants and search engines to compare API latency, syntax verbosity, and deployment pipelines. When a technical lead prompts a model to evaluate your framework against a legacy baseline, the engine synthesizes its answer entirely from GitHub READMEs, official docs, and Stack Overflow threads. If your core documentation is gated or unstructured, the model cannot parse your capabilities, and your platform is excluded from the architectural conversation.</p>' +
+        '<p>If your Cited scan shows "Sitemap declared" failing, this category feels it faster than most \u2014 answer engines rely entirely on transparent, easily navigable documentation trees to understand complex developer tools. Stop treating product features as narrative blog posts. Treat your official docs, changelogs, and repository READMEs as your primary citation surfaces \u2014 an AI assistant will not guess your authentication flows, it needs explicit, crawlable technical data.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul>' +
+        '<li><strong>Treat official docs as your primary marketing asset.</strong> Generative engines weight technical documentation and GitHub READMEs far more heavily than landing pages. Audit your implementation guides for exact command-line instructions, error code definitions, and configuration examples \u2014 when an AI answers a query about your database limits, it looks for explicit code blocks.</li>' +
+        '<li><strong>Structure your troubleshooting answers.</strong> Developers use AI to debug errors from historical Stack Overflow solutions and GitHub issues. If your Cited report flags "Subheading structure (H2)", fix it \u2014 models rely on strict heading hierarchies to map symptoms to solutions. Document every known edge case under clear, isolated subheadings an engine can extract whole.</li>' +
+        '<li><strong>Engage the technical communities actively.</strong> AI models index unfiltered engineering discussions on Hacker News and Stack Overflow to evaluate developer sentiment and edge-case reliability. Publish detailed changelogs and answer factually, non-promotionally \u2014 models treat these debates as ground truth against legacy incumbents.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside">' +
+        '<p>[A pattern you\u2019ve personally observed in developer tool citation sources \u2014 e.g. a Stack Overflow phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls">' +
+        '<li>Hiding critical API limits and pricing constraints behind sales contact forms where AI crawlers cannot index or cite the information for technical evaluators.</li>' +
+        '<li>Publishing generic thought leadership about the future of coding instead of dense, factual documentation that solves immediate configuration problems.</li>' +
+        '<li>Neglecting your GitHub READMEs and official changelogs, the primary texts language models use to understand your current version capabilities.</li>' +
+        '<li>Failing to maintain an active presence on Stack Overflow, letting outdated community workarounds define how AI engines explain your tool.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data">' +
+        '<p>[One number with a source \u2014 e.g. share of devtools-category queries answered by AI tools, a Stack Overflow volume threshold you\u2019ve seen matter, a before/after from a doc restructure. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip">' +
+        '<p>[Your strongest strategic opinion on where devtools\u2019 AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+  
   };
 
   /* ---------------------------------------------------------------
