@@ -27,23 +27,36 @@ function normalizeDomain(raw) {
   return d;
 }
 
-async function fetchText(url, timeoutMs) {
+var BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
+
+async function fetchText(url, timeoutMs, label) {
   var ctrl = new AbortController();
   var t = setTimeout(function () { ctrl.abort(); }, timeoutMs || 8000);
   try {
     var res = await fetch(url, {
       signal: ctrl.signal,
-      headers: { 'User-Agent': 'CitedScanBot/1.0 (+https://andacuzel.github.io/cited-geo-guide/)' },
+      headers: {
+        'User-Agent': BROWSER_UA,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+      },
       redirect: 'follow'
     });
     clearTimeout(t);
     if (res.status === 404) return { ok: false, notFound: true, status: 404 };
-    if (!res.ok) return { ok: false, status: res.status };
+    if (!res.ok) {
+      console.error('[scan] non-2xx from', label, url, '\u2192 status', res.status);
+      return { ok: false, status: res.status };
+    }
     var text = await res.text();
     return { ok: true, text: text, status: res.status };
   } catch (err) {
     clearTimeout(t);
-    return { ok: false, error: err.message || 'fetch failed' };
+    var kind = err.name === 'AbortError' ? 'timeout'
+      : (err.cause && err.cause.code === 'ENOTFOUND') ? 'dns'
+      : (err.cause && err.cause.code === 'ECONNREFUSED') ? 'refused'
+      : 'network';
+    console.error('[scan] fetch failed for', label, url, '\u2192', kind, '\u2014', err.message);
+    return { ok: false, error: err.message || 'fetch failed', kind: kind };
   }
 }
 
@@ -242,58 +255,73 @@ function scoreAll(robotsOk, sitemapOk, botResults, sig) {
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
-  var domain = normalizeDomain(req.query.domain);
+  var rawDomain = (req.query && req.query.domain) || null;
+  if (!rawDomain) {
+    try {
+      var u = new URL(req.url, 'http://localhost');
+      rawDomain = u.searchParams.get('domain');
+    } catch (e) { /* fall through to the validation error below */ }
+  }
+
+  var domain = normalizeDomain(rawDomain);
   if (!domain) {
     res.status(400).json({ error: 'Enter a valid domain, e.g. example.com' });
     return;
   }
 
-  var base = 'https://' + domain;
+  try {
+    var base = 'https://' + domain;
 
-  // Fetch robots.txt and the homepage in parallel — they're independent.
-  // Sitemap is fetched after, only if robots.txt didn't already declare one.
-  var robotsPromise = fetchText(base + '/robots.txt', 12000);
-  var pagePromise = fetchText(base + '/', 12000);
+    // Fetch robots.txt and the homepage in parallel — they're independent.
+    // Sitemap is fetched after, only if robots.txt didn't already declare one.
+    var robotsPromise = fetchText(base + '/robots.txt', 12000, 'robots.txt');
+    var pagePromise = fetchText(base + '/', 12000, 'homepage');
 
-  var robotsRes = await robotsPromise;
-  var robotsOk = false;
-  var robots = { groups: [], sitemaps: [] };
+    var robotsRes = await robotsPromise;
+    var robotsOk = false;
+    var robots = { groups: [], sitemaps: [] };
 
-  if (robotsRes.notFound) {
-    robotsOk = false; // genuinely absent → default access is the true state
-  } else if (robotsRes.ok && robotsRes.text.trim() && !/^\s*</.test(robotsRes.text)) {
-    robots = parseRobots(robotsRes.text);
-    robotsOk = true;
-  } else {
-    await pagePromise; // let the homepage request finish before returning, avoid an unhandled rejection
-    res.status(502).json({ error: 'Couldn\u2019t reach robots.txt, so the score wouldn\u2019t be reliable. Please try again.' });
-    return;
+    if (robotsRes.notFound) {
+      robotsOk = false; // genuinely absent → default access is the true state
+    } else if (robotsRes.ok && robotsRes.text.trim() && !/^\s*</.test(robotsRes.text)) {
+      robots = parseRobots(robotsRes.text);
+      robotsOk = true;
+    } else {
+      await pagePromise.catch(function () {}); // let the homepage request settle, avoid an unhandled rejection
+      console.error('[scan]', domain, 'robots.txt failed \u2014 kind:', robotsRes.kind || 'http-' + robotsRes.status);
+      res.status(502).json({ error: 'Couldn\u2019t reach robots.txt, so the score wouldn\u2019t be reliable. Please try again.' });
+      return;
+    }
+
+    var sitemapOk = robots.sitemaps.length > 0;
+    if (!sitemapOk) {
+      var smRes = await fetchText(base + '/sitemap.xml', 8000, 'sitemap.xml');
+      sitemapOk = !!(smRes.ok && /<(urlset|sitemapindex)/i.test(smRes.text));
+    }
+
+    var pageRes = await pagePromise;
+    if (!pageRes.ok || !pageRes.text) {
+      console.error('[scan]', domain, 'homepage failed \u2014 kind:', pageRes.kind || 'http-' + pageRes.status);
+      res.status(502).json({ error: 'The homepage could not be read. Please try again.' });
+      return;
+    }
+    var sig = parseSignals(pageRes.text);
+
+    var botResults = BOTS.map(function (b) {
+      var st = botStatus(b.ua, robots);
+      return { name: b.ua, desc: b.desc, state: st.state, rule: st.rule };
+    });
+
+    var result = scoreAll(robotsOk, sitemapOk, botResults, sig);
+
+    res.status(200).json({
+      domain: domain,
+      robotsOk: robotsOk,
+      botResults: botResults,
+      result: result
+    });
+  } catch (err) {
+    console.error('[scan] unhandled error for', domain, '\u2014', err && err.stack ? err.stack : err);
+    res.status(500).json({ error: 'Unexpected server error. Please try again.' });
   }
-
-  var sitemapOk = robots.sitemaps.length > 0;
-  if (!sitemapOk) {
-    var smRes = await fetchText(base + '/sitemap.xml', 8000);
-    sitemapOk = !!(smRes.ok && /<(urlset|sitemapindex)/i.test(smRes.text));
-  }
-
-  var pageRes = await pagePromise;
-  if (!pageRes.ok || !pageRes.text) {
-    res.status(502).json({ error: 'The homepage could not be read. Please try again.' });
-    return;
-  }
-  var sig = parseSignals(pageRes.text);
-
-  var botResults = BOTS.map(function (b) {
-    var st = botStatus(b.ua, robots);
-    return { name: b.ua, desc: b.desc, state: st.state, rule: st.rule };
-  });
-
-  var result = scoreAll(robotsOk, sitemapOk, botResults, sig);
-
-  res.status(200).json({
-    domain: domain,
-    robotsOk: robotsOk,
-    botResults: botResults,
-    result: result
-  });
 };
