@@ -253,7 +253,7 @@ function scoreAll(robotsOk, sitemapOk, botResults, sig) {
 /* ---------------- Handler ---------------- */
 
 module.exports = async (req, res) => {
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'no-store');
 
   var rawDomain = (req.query && req.query.domain) || null;
   if (!rawDomain) {
