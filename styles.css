@@ -897,3 +897,39 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 @media print {
   .results-toolbar, .site-header, .toast { display: none !important; }
 }
+
+/* ----------------------------- Expert tip variants ----------------------------- */
+
+/* Variant B — inline aside: light, gold-edged, sits inside content flow */
+.expert-tip--aside {
+  background: var(--warn-tint);
+  border: 1px solid var(--gold-soft);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+.expert-tip--aside::before { content: 'FROM PRACTICE'; color: var(--gold-deep); }
+.expert-tip--aside p { color: var(--ink-soft); font-size: 14.5px; padding-right: 96px; }
+.expert-tip--aside p strong { color: var(--gold-deep); }
+
+/* Variant C — benchmark note: mono, data-flavored */
+.expert-tip--data {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--navy-800);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+.expert-tip--data::before { content: 'BENCHMARK'; color: var(--navy-800); }
+.expert-tip--data p {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding-right: 92px;
+}
+.expert-tip--data p strong { color: var(--navy-800); font-style: normal; }
+
+@media (max-width: 640px) {
+  .expert-tip p, .expert-tip--aside p, .expert-tip--data p { padding-right: 0; padding-top: 18px; }
+}
