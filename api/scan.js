@@ -250,7 +250,12 @@ module.exports = async (req, res) => {
 
   var base = 'https://' + domain;
 
-  var robotsRes = await fetchText(base + '/robots.txt', 8000);
+  // Fetch robots.txt and the homepage in parallel — they're independent.
+  // Sitemap is fetched after, only if robots.txt didn't already declare one.
+  var robotsPromise = fetchText(base + '/robots.txt', 12000);
+  var pagePromise = fetchText(base + '/', 12000);
+
+  var robotsRes = await robotsPromise;
   var robotsOk = false;
   var robots = { groups: [], sitemaps: [] };
 
@@ -260,17 +265,18 @@ module.exports = async (req, res) => {
     robots = parseRobots(robotsRes.text);
     robotsOk = true;
   } else {
+    await pagePromise; // let the homepage request finish before returning, avoid an unhandled rejection
     res.status(502).json({ error: 'Couldn\u2019t reach robots.txt, so the score wouldn\u2019t be reliable. Please try again.' });
     return;
   }
 
   var sitemapOk = robots.sitemaps.length > 0;
   if (!sitemapOk) {
-    var smRes = await fetchText(base + '/sitemap.xml', 6000);
+    var smRes = await fetchText(base + '/sitemap.xml', 8000);
     sitemapOk = !!(smRes.ok && /<(urlset|sitemapindex)/i.test(smRes.text));
   }
 
-  var pageRes = await fetchText(base + '/', 8000);
+  var pageRes = await pagePromise;
   if (!pageRes.ok || !pageRes.text) {
     res.status(502).json({ error: 'The homepage could not be read. Please try again.' });
     return;
