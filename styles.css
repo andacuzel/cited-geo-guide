@@ -183,6 +183,23 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 }
 .logo__dot { color: var(--gold); }
 
+.site-nav {
+  display: flex;
+  gap: 28px;
+}
+.site-nav__link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color var(--t), border-color var(--t);
+}
+.site-nav__link:hover { color: var(--ink); border-color: var(--gold); }
+
 .header-note {
   font-family: var(--font-mono);
   font-size: 11.5px;
@@ -589,13 +606,10 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   margin-top: 32px;
   border-top: 3px solid var(--navy-950);
   padding-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 20px;
-  flex-wrap: wrap;
 }
-.scan-bridge__text { font-size: 16.5px; color: var(--ink); max-width: 560px; font-weight: 600; }
+.scan-bridge__text { font-size: 16.5px; color: var(--ink); max-width: 560px; font-weight: 600; margin-bottom: 20px; }
+.scan-bridge .card-grid { gap: 16px; }
+.scan-bridge .card { min-height: 0; padding: 20px 20px 18px; }
 
 /* ----------------------------- Playbooks ----------------------------- */
 
@@ -612,6 +626,8 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .card {
   position: relative;
   width: 100%;
+  text-decoration: none;
+  color: inherit;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -879,6 +895,7 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 @media (max-width: 640px) {
   .site-header__inner { padding: 14px 20px; }
+  .site-nav { display: none; }
   .header-note { display: none; }
   .section__inner { padding: 0 20px; }
   .hero { padding: 44px 0 64px; }

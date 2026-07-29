@@ -314,7 +314,7 @@
       );
     }).join('');
 
-    cardGrid.innerHTML = html;
+    if (cardGrid) cardGrid.innerHTML = html;
   }
 
   /* ---------------------------------------------------------------
@@ -382,7 +382,7 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
-    if (lastFocusedCardId) {
+    if (lastFocusedCardId && cardGrid) {
       var card = cardGrid.querySelector('[data-id="' + lastFocusedCardId + '"]');
       if (card) card.focus();
     }
@@ -428,11 +428,13 @@
      9. Event wiring
      --------------------------------------------------------------- */
 
-  cardGrid.addEventListener('click', function (e) {
-    var card = e.target.closest('.card');
-    if (!card) return;
-    showResults(card.getAttribute('data-id'));
-  });
+  if (cardGrid) {
+    cardGrid.addEventListener('click', function (e) {
+      var card = e.target.closest('.card');
+      if (!card) return;
+      showResults(card.getAttribute('data-id'));
+    });
+  }
 
   backBtn.addEventListener('click', function () {
     showLanding();

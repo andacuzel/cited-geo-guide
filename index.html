@@ -9,21 +9,21 @@
   <meta name="keywords" content="GEO, AEO, AI visibility, Generative Engine Optimization, Answer Engine Optimization, B2B SaaS marketing, AI crawler access" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://answerable.vercel.app/" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — AI Visibility Scanner & GEO Playbooks for B2B SaaS" />
   <meta property="og:description" content="Scan your site's AI visibility in 30 seconds, then fix it with vertical-specific GEO & AEO playbooks. No email required." />
-  <meta property="og:url" content="https://answerable.vercel.app/" />
-  <meta property="og:image" content="https://answerable.vercel.app/assets/og-image.png" />
+  <meta property="og:url" content="https://answerable-app.vercel.app/" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — AI Visibility Scanner & GEO Playbooks for B2B SaaS" />
   <meta name="twitter:description" content="Scan your site's AI visibility in 30 seconds, then fix it with vertical-specific GEO & AEO playbooks. No email required." />
-  <meta name="twitter:image" content="https://answerable.vercel.app/assets/og-image.png" />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
 
@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="styles.css?v=6" />
 
   <script type="application/ld+json">
   {
@@ -39,17 +39,17 @@
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://answerable.vercel.app/#org",
+        "@id": "https://answerable-app.vercel.app/#org",
         "name": "Answerable.",
-        "url": "https://answerable.vercel.app/",
+        "url": "https://answerable-app.vercel.app/",
         "description": "AI visibility tools and GEO & AEO strategy for B2B SaaS."
       },
       {
         "@type": "WebSite",
-        "@id": "https://answerable.vercel.app/#website",
+        "@id": "https://answerable-app.vercel.app/#website",
         "name": "Answerable.",
-        "url": "https://answerable.vercel.app/",
-        "publisher": { "@id": "https://answerable.vercel.app/#org" }
+        "url": "https://answerable-app.vercel.app/",
+        "publisher": { "@id": "https://answerable-app.vercel.app/#org" }
       },
       {
         "@type": "WebApplication",
@@ -101,6 +101,11 @@
       <a href="#" class="logo" id="logoLink" aria-label="Answerable. — back to top">
         <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
       </a>
+      <nav class="site-nav" aria-label="Audience tracks">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Consumer &amp; e-commerce brands</a>
+        <a href="/for-professionals" class="site-nav__link">Local &amp; independent professionals</a>
+      </nav>
       <span class="header-note" aria-hidden="true">No email. No signup.</span>
     </div>
   </header>
@@ -207,25 +212,32 @@
             </div>
 
             <div class="scan-bridge">
-              <p class="scan-bridge__text">Now fix it for your category. Each vertical has its own playbook.</p>
-              <a href="#verticals" class="btn btn--primary">Choose your vertical</a>
+              <p class="scan-bridge__text">Now fix it for your category.</p>
+              <div class="card-grid">
+                <a href="/for-saas" class="card">
+                  <span class="card__name">B2B SaaS</span>
+                  <span class="card__desc">Feature and pricing questions, evaluated against G2, Capterra and vendor docs.</span>
+                  <span class="card__cta">Choose this track
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                  </span>
+                </a>
+                <a href="/for-brands" class="card">
+                  <span class="card__name">Consumer &amp; e-commerce brands</span>
+                  <span class="card__desc">Product and trust questions, evaluated against Trustpilot, marketplaces and reviews.</span>
+                  <span class="card__cta">Choose this track
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                  </span>
+                </a>
+                <a href="/for-professionals" class="card">
+                  <span class="card__name">Local &amp; independent professionals</span>
+                  <span class="card__desc">Local and service questions, evaluated against Google Business Profile and directories.</span>
+                  <span class="card__cta">Choose this track
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                  </span>
+                </a>
+              </div>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- Playbooks ---------- -->
-      <section class="verticals" id="verticals" aria-labelledby="verticals-heading">
-        <div class="section__inner">
-          <div class="section-head">
-            <p class="kicker">The playbooks</p>
-            <h2 id="verticals-heading" class="section-title">One playbook per category.</h2>
-            <p class="section-sub">Each guide is grounded in the citation sources, buying signals and pitfalls of its vertical. No generic AI-SEO checklists.</p>
-          </div>
-
-          <div class="card-grid" id="cardGrid">
-            <!-- Cards are rendered by app.js from the SUB_FIELDS array -->
           </div>
         </div>
       </section>
@@ -294,7 +306,7 @@
 
   <!-- PDF export (client-side, no backend) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="app.js?v=7"></script>
-  <script src="scanner.js?v=7"></script>
+  <script src="app.js?v=8"></script>
+  <script src="scanner.js?v=8"></script>
 </body>
 </html>
