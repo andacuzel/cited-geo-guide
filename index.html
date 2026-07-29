@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=7" />
 
   <script type="application/ld+json">
   {
@@ -281,32 +281,11 @@
       </section>
     </section>
 
-    <!-- ===================== VIEW 2 — RESULTS ===================== -->
-    <section id="view-results" class="view view--results" hidden aria-hidden="true">
-
-      <div class="results-toolbar">
-        <button type="button" class="btn btn--ghost" id="backBtn">
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 8h-9M7 3.5L3.5 8 7 12.5"/></svg>
-          Back to the playbooks
-        </button>
-        <button type="button" class="btn btn--primary" id="downloadBtn">
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3l3-3M3 13h10"/></svg>
-          <span id="downloadBtnLabel">Download as PDF</span>
-        </button>
-      </div>
-
-      <article class="results-content" id="resultsContent">
-        <!-- Populated by app.js from SAAS_DATA -->
-      </article>
-    </section>
-
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- PDF export (client-side, no backend) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="app.js?v=8"></script>
-  <script src="scanner.js?v=8"></script>
+  <script src="app.js?v=9"></script>
+  <script src="scanner.js?v=9"></script>
 </body>
 </html>

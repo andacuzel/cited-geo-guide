@@ -322,6 +322,7 @@
      --------------------------------------------------------------- */
 
   function showToast(message) {
+    if (!toastEl) return;
     toastEl.textContent = message;
     toastEl.classList.add('is-visible');
     clearTimeout(toastTimer);
@@ -340,6 +341,7 @@
       showToast('That playbook is in preparation.');
       return;
     }
+    if (!resultsContent || !viewLanding || !viewResults) return;
 
     lastFocusedCardId = id;
 
@@ -369,10 +371,14 @@
   function showLanding(opts) {
     opts = opts || {};
 
-    viewResults.hidden = true;
-    viewResults.setAttribute('aria-hidden', 'true');
-    viewLanding.hidden = false;
-    viewLanding.setAttribute('aria-hidden', 'false');
+    if (viewResults) {
+      viewResults.hidden = true;
+      viewResults.setAttribute('aria-hidden', 'true');
+    }
+    if (viewLanding) {
+      viewLanding.hidden = false;
+      viewLanding.setAttribute('aria-hidden', 'false');
+    }
 
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
@@ -436,11 +442,15 @@
     });
   }
 
-  backBtn.addEventListener('click', function () {
-    showLanding();
-  });
+  if (backBtn) {
+    backBtn.addEventListener('click', function () {
+      showLanding();
+    });
+  }
 
-  downloadBtn.addEventListener('click', downloadPDF);
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', downloadPDF);
+  }
 
   logoLink.addEventListener('click', function (e) {
     e.preventDefault();
