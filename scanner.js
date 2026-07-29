@@ -35,6 +35,14 @@
     return d.innerHTML;
   }
 
+  function showToast(message) {
+    var toast = $('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    setTimeout(function () { toast.classList.remove('is-visible'); }, 2600);
+  }
+
   function setStatus(msg, isError) {
     statusEl.textContent = msg;
     statusEl.classList.toggle('is-error', !!isError);
@@ -66,7 +74,7 @@
         throw new Error(data.error || ('Scan failed (HTTP ' + res.status + ')'));
       }
 
-      renderReport(data.domain, data.robotsOk, data.botResults, data.result);
+      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo);
       setStatus('');
     } catch (err) {
       setStatus('Scan failed: ' + (err && err.message ? err.message : 'connection error'), true);
@@ -77,7 +85,7 @@
 
   /* ---------------- Render ---------------- */
 
-  function renderReport(domain, robotsOk, botResults, r) {
+  function renderReport(domain, robotsOk, botResults, r, siteInfo) {
     lastScore = { domain: domain, total: r.total };
 
     $('scoreValue').textContent = r.total;
@@ -128,8 +136,88 @@
             '<p class="action-item__why">' + esc(c.why) + '</p></li>';
         }).join('');
 
+    renderFixSnippets(domain, r.checks, siteInfo || {});
+
     report.hidden = false;
     report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---------------- Copy-paste fixes ---------------- */
+
+  function renderFixSnippets(domain, checks, siteInfo) {
+    var container = $('fixSnippets');
+    if (!container) return;
+
+    var siteUrl = 'https://' + domain;
+    var title = siteInfo.title || '';
+    var metaDesc = siteInfo.metaDesc || '';
+    var lang = siteInfo.lang || '';
+
+    var blocks = [];
+
+    var orgCheck = checks.filter(function (c) { return c.label === 'Organization / WebSite schema'; })[0];
+    if (orgCheck && !orgCheck.ok) {
+      blocks.push({
+        label: orgCheck.label,
+        ld: {
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'Organization',
+              name: '[Your company name]',
+              url: siteUrl,
+              description: metaDesc || '[A one-sentence description of your business]'
+            },
+            {
+              '@type': 'WebSite',
+              name: title || '[Your site name]',
+              url: siteUrl,
+              inLanguage: lang || '[e.g. en]'
+            }
+          ]
+        }
+      });
+    }
+
+    var contentCheck = checks.filter(function (c) { return c.label === 'Content schema (Article, FAQ…)'; })[0];
+    if (contentCheck && !contentCheck.ok) {
+      blocks.push({
+        label: contentCheck.label,
+        ld: {
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: title || '[Your page title]',
+          description: metaDesc || '[A one-sentence description of this page]',
+          inLanguage: lang || '[e.g. en]',
+          author: { '@type': 'Organization', name: '[Your company name]' },
+          datePublished: '[YYYY-MM-DD]',
+          url: siteUrl
+        }
+      });
+    }
+
+    if (blocks.length === 0) {
+      container.hidden = true;
+      container.innerHTML = '';
+      return;
+    }
+
+    container.innerHTML = '<h3 class="fix-snippets__title">Copy-paste fixes</h3>' +
+      blocks.map(function (b, i) {
+        var code = '<script type="application/ld+json">\n' + JSON.stringify(b.ld, null, 2) + '\n<\/script>';
+        return '<div class="fix-snippet">' +
+          '<div class="fix-snippet__head">' +
+            '<span class="fix-snippet__label">' + esc(b.label) + '</span>' +
+            '<button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" data-index="' + i + '">' +
+              '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>' +
+              'Copy' +
+            '</button>' +
+          '</div>' +
+          '<pre class="fix-snippet__code">' + esc(code) + '</pre>' +
+        '</div>';
+      }).join('');
+
+    container.hidden = false;
   }
 
   /* ---------------- Share ---------------- */
@@ -141,12 +229,7 @@
       navigator.share({ title: 'Answerable. \u2014 AI visibility score', text: text, url: CONFIG.shareUrl }).catch(function () {});
     } else {
       navigator.clipboard.writeText(text).then(function () {
-        var toast = $('toast');
-        if (toast) {
-          toast.textContent = 'Score copied \u2014 paste it anywhere.';
-          toast.classList.add('is-visible');
-          setTimeout(function () { toast.classList.remove('is-visible'); }, 2600);
-        }
+        showToast('Score copied \u2014 paste it anywhere.');
       });
     }
   }
@@ -156,5 +239,18 @@
   form.addEventListener('submit', function (e) { e.preventDefault(); runScan(); });
   retryBtn.addEventListener('click', function () { runScan(); });
   $('shareBtn').addEventListener('click', shareScore);
+
+  var fixSnippets = $('fixSnippets');
+  if (fixSnippets) {
+    fixSnippets.addEventListener('click', function (e) {
+      var btn = e.target.closest('.fix-snippet__copy');
+      if (!btn) return;
+      var pre = btn.closest('.fix-snippet').querySelector('.fix-snippet__code');
+      if (!pre) return;
+      navigator.clipboard.writeText(pre.textContent).then(function () {
+        showToast('Snippet copied \u2014 paste it into your <head>.');
+      });
+    });
+  }
 
 }());

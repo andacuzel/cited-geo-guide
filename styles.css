@@ -600,6 +600,47 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 }
 .action-item__why { margin-top: 5px; font-size: 14px; color: var(--ink-soft); max-width: 640px; }
 
+/* Copy-paste fixes */
+
+.fix-snippets { margin-top: 36px; }
+.fix-snippets__title { font-size: 24px; margin-bottom: 14px; }
+
+.fix-snippet {
+  background: var(--navy-950);
+  border-radius: var(--radius);
+  border: 1px solid rgba(194, 146, 47, 0.4);
+  padding: 18px 20px;
+}
+.fix-snippet + .fix-snippet { margin-top: 16px; }
+
+.fix-snippet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.fix-snippet__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+.fix-snippet__copy { padding: 7px 14px; font-size: 12.5px; }
+
+.fix-snippet__code {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.82);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
 /* Bridge */
 
 .scan-bridge {

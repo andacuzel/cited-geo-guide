@@ -161,7 +161,7 @@ function parseSignals(html) {
     title: titleMatch ? titleMatch[1].trim() : '',
     metaDesc: descMatch ? descMatch[1].trim() : '',
     canonical: canonical,
-    lang: !!(langMatch && langMatch[1]),
+    lang: langMatch ? langMatch[1].trim() : '',
     ogOk: ogTitle && ogDesc,
     schemaTypes: schemaTypes,
     hasOrgSchema: schemaTypes.some(function (t) { return /organization|website|localbusiness/i.test(t); }),
@@ -206,7 +206,7 @@ function scoreAll(robotsOk, llmsOk, sitemapOk, botResults, sig) {
   add('tech', 'Canonical tag', sig.canonical, 4,
     'Add rel=canonical to your homepage',
     'Tells machines the definitive URL and prevents duplicate-content ambiguity.');
-  add('tech', 'html lang attribute', sig.lang, 3,
+  add('tech', 'html lang attribute', !!sig.lang, 3,
     'Declare a language, e.g. <html lang="en">',
     'Lets AI systems classify your content\u2019s language correctly.');
   add('tech', 'Page title', sig.title.length >= 10 && sig.title.length <= 70, 3,
@@ -329,7 +329,8 @@ module.exports = async (req, res) => {
       domain: domain,
       robotsOk: robotsOk,
       botResults: botResults,
-      result: result
+      result: result,
+      siteInfo: { title: sig.title, metaDesc: sig.metaDesc, lang: sig.lang }
     });
   } catch (err) {
     console.error('[scan] unhandled error for', domain, '\u2014', err && err.stack ? err.stack : err);
