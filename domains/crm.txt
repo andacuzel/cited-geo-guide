@@ -1,0 +1,49 @@
+# CRM software — category scan list
+# One domain per line. Lines starting with # are ignored.
+# Dead or wrong domains simply fail and are excluded from the stats,
+# so leave anything you're unsure about — the script filters them out.
+
+# --- Core CRM platforms ---
+salesforce.com
+hubspot.com
+pipedrive.com
+zoho.com
+freshworks.com
+monday.com
+zendesk.com
+close.com
+copper.com
+insightly.com
+nutshell.com
+keap.com
+activecampaign.com
+sugarcrm.com
+vtiger.com
+nimble.com
+capsulecrm.com
+lessannoyingcrm.com
+streak.com
+salesflare.com
+onepagecrm.com
+bitrix24.com
+espocrm.com
+suitecrm.com
+odoo.com
+creatio.com
+pipelinersales.com
+membrain.com
+teamgate.com
+agilecrm.com
+
+# --- Enterprise suites with CRM offerings ---
+dynamics.microsoft.com
+sap.com
+oracle.com
+netsuite.com
+sage.com
+maximizer.com
+efficy.com
+teamleader.eu
+weclapp.com
+
+

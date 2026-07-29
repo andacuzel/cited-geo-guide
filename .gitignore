@@ -1,0 +1,15 @@
+# Batch-scan output — company names and scores, not for publishing
+data/
+
+# OS
+.DS_Store
+
+# Vercel local state
+.vercel
+
+# Node
+node_modules/
+
+# Env / secrets
+.env
+.env.local
