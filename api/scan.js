@@ -1,8 +1,9 @@
 /* =====================================================================
    /api/scan — server-side AI visibility scan.
-   Runs on Vercel's Node runtime. Fetches robots.txt, sitemap.xml and
-   the homepage directly (no CORS, no proxies) and returns the same
-   score shape the frontend previously computed in-browser.
+   Runs on Vercel's Node runtime. Fetches robots.txt, llms.txt,
+   sitemap.xml and the homepage directly (no CORS, no proxies) and
+   returns the same score shape the frontend previously computed
+   in-browser.
 
    Usage: GET /api/scan?domain=example.com
    ===================================================================== */
@@ -174,7 +175,7 @@ function parseSignals(html) {
 
 /* ---------------- Scoring (identical weights to the old client version) ---------------- */
 
-function scoreAll(robotsOk, sitemapOk, botResults, sig) {
+function scoreAll(robotsOk, llmsOk, sitemapOk, botResults, sig) {
   var checks = [];
   function add(cat, label, ok, max, advice, why) {
     checks.push({ cat: cat, label: label, ok: ok, pts: ok ? max : 0, max: max, advice: advice, why: why });
@@ -183,6 +184,9 @@ function scoreAll(robotsOk, sitemapOk, botResults, sig) {
   add('discover', 'robots.txt present', robotsOk, 4,
     'Add a robots.txt file at your site root',
     'AI crawlers read your access policy from this file.');
+  add('discover', 'llms.txt present', llmsOk, 4,
+    'Add an llms.txt file at your site root',
+    'An emerging standard that gives AI systems a curated map of your content.');
   add('discover', 'Sitemap declared', sitemapOk, 6,
     'Declare a Sitemap: line in robots.txt',
     'Sitemaps let crawlers discover your content completely.');
@@ -190,11 +194,11 @@ function scoreAll(robotsOk, sitemapOk, botResults, sig) {
   var openCount = 0;
   botResults.forEach(function (b) { openCount += b.state === 'open' ? 1 : (b.state === 'partial' ? 0.5 : 0); });
   var fullyOpen = botResults.filter(function (b) { return b.state === 'open'; }).length;
-  var botPts = Math.round((openCount / BOTS.length) * 30);
+  var botPts = Math.round((openCount / BOTS.length) * 26);
   checks.push({
     cat: 'discover',
     label: 'AI crawler access (' + fullyOpen + '/' + BOTS.length + ' open)',
-    ok: botPts >= 24, pts: botPts, max: 30,
+    ok: botPts >= 21, pts: botPts, max: 26,
     advice: 'Review robots.txt rules for blocked AI crawlers',
     why: 'Every blocked crawler removes you from that platform\u2019s answers.'
   });
@@ -272,10 +276,12 @@ module.exports = async (req, res) => {
   try {
     var base = 'https://' + domain;
 
-    // Fetch robots.txt and the homepage in parallel — they're independent.
-    // Sitemap is fetched after, only if robots.txt didn't already declare one.
+    // Fetch robots.txt, llms.txt and the homepage in parallel — they're
+    // independent. Sitemap is fetched after, only if robots.txt didn't
+    // already declare one.
     var robotsPromise = fetchText(base + '/robots.txt', 12000, 'robots.txt');
     var pagePromise = fetchText(base + '/', 12000, 'homepage');
+    var llmsPromise = fetchText(base + '/llms.txt', 8000, 'llms.txt');
 
     var robotsRes = await robotsPromise;
     var robotsOk = false;
@@ -287,11 +293,16 @@ module.exports = async (req, res) => {
       robots = parseRobots(robotsRes.text);
       robotsOk = true;
     } else {
-      await pagePromise.catch(function () {}); // let the homepage request settle, avoid an unhandled rejection
+      // let the other in-flight requests settle, avoid an unhandled rejection
+      await pagePromise.catch(function () {});
+      await llmsPromise.catch(function () {});
       console.error('[scan]', domain, 'robots.txt failed \u2014 kind:', robotsRes.kind || 'http-' + robotsRes.status);
       res.status(502).json({ error: 'Couldn\u2019t reach robots.txt, so the score wouldn\u2019t be reliable. Please try again.' });
       return;
     }
+
+    var llmsRes = await llmsPromise;
+    var llmsOk = !!(llmsRes.ok && llmsRes.text.trim() && !/^\s*</.test(llmsRes.text));
 
     var sitemapOk = robots.sitemaps.length > 0;
     if (!sitemapOk) {
@@ -312,7 +323,7 @@ module.exports = async (req, res) => {
       return { name: b.ua, desc: b.desc, state: st.state, rule: st.rule };
     });
 
-    var result = scoreAll(robotsOk, sitemapOk, botResults, sig);
+    var result = scoreAll(robotsOk, llmsOk, sitemapOk, botResults, sig);
 
     res.status(200).json({
       domain: domain,
