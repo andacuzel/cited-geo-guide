@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Methodology: How the AI Visibility Score Is Calculated</title>
+  <meta name="description" content="How Answerable's AI visibility score is built: the three weighted pillars, all 16 checks and their point values, what the scan does and does not measure, and how the data is collected." />
+  <meta name="keywords" content="AI visibility methodology, GEO scoring, AEO scoring, AI crawler access, scan methodology" />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/methodology" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — Methodology: How the AI Visibility Score Is Calculated" />
+  <meta property="og:description" content="The three weighted pillars, all 16 checks and their point values, what the scan does not measure, and how the data is collected." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/methodology" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Methodology: How the AI Visibility Score Is Calculated" />
+  <meta name="twitter:description" content="The three weighted pillars, all 16 checks and their point values, what the scan does not measure, and how the data is collected." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=14" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How is the score calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The score out of 100 is split across three weighted pillars: Discoverability (40 points), Technical foundation (20 points), and Content & trust (40 points), covering 16 individual checks. Every check and its exact point value is listed on this page and shown in every scan report."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does the scan not measure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The scan measures AI readiness — whether AI crawlers can access your site and whether your on-page signals give a model a reason to trust and cite you. It does not measure whether ChatGPT, Claude, Perplexity or any other assistant currently mentions your brand in a live answer. That depends on the prompt, the session and the model's training data, none of which a scanner can observe or promise."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How often should I re-scan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "There is no fixed schedule. Re-scan after you change robots.txt or llms.txt, add or edit structured data, or publish a new page — or any time you want to confirm a fix worked. The scan is free, requires no signup, and takes about 30 seconds, so there is no cost to checking often."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Consumer &amp; e-commerce brands</a>
+        <a href="/for-professionals" class="site-nav__link">Local &amp; independent professionals</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/methodology" class="site-nav__link">Methodology</a>
+      </nav>
+      <span class="header-note" aria-hidden="true">No email. No signup.</span>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="verticals" aria-labelledby="methodology-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Methodology</p>
+          <h1 id="methodology-heading" class="section-title">How the score is built.</h1>
+          <p class="section-sub">Every point value below is exactly what runs in the live scan. Nothing here is rounded, hidden or simplified for marketing.</p>
+        </div>
+
+        <div class="doc-section">
+
+          <h2 class="doc-section__heading">The three pillars</h2>
+          <p>The 100-point score splits into three weighted pillars. The weighting is deliberate, not arbitrary.</p>
+
+          <div class="results-content__body">
+            <h3>Discoverability — 40 points</h3>
+            <p>Carries the most weight because it gates everything else. A page an AI crawler cannot read cannot be evaluated on any other signal — access is the precondition, not one factor among many. AI crawler access alone is worth 26 of these 40 points: blocking even one major crawler removes you from that platform's answers entirely, which is a bigger loss than any single on-page fix can offset.</p>
+            <div class="check-row"><span>robots.txt present</span><span class="check-row__pts">4 pts</span></div>
+            <div class="check-row"><span>llms.txt present</span><span class="check-row__pts">4 pts</span></div>
+            <div class="check-row"><span>Sitemap declared</span><span class="check-row__pts">6 pts</span></div>
+            <div class="check-row"><span>AI crawler access (10 crawlers)</span><span class="check-row__pts">26 pts</span></div>
+
+            <h3>Technical foundation — 20 points</h3>
+            <p>Baseline machine-readability hygiene. These checks rarely make or break a citation on their own, which is why they carry the least weight, but a page failing most of them signals a site nobody has ever prepared for machine readers.</p>
+            <div class="check-row"><span>Canonical tag</span><span class="check-row__pts">4 pts</span></div>
+            <div class="check-row"><span>html lang attribute</span><span class="check-row__pts">3 pts</span></div>
+            <div class="check-row"><span>Page title</span><span class="check-row__pts">3 pts</span></div>
+            <div class="check-row"><span>Meta description</span><span class="check-row__pts">4 pts</span></div>
+            <div class="check-row"><span>Open Graph tags</span><span class="check-row__pts">3 pts</span></div>
+            <div class="check-row"><span>Structured data (JSON-LD)</span><span class="check-row__pts">3 pts</span></div>
+
+            <h3>Content &amp; trust — 40 points</h3>
+            <p>Equal weight to Discoverability, deliberately. Access without credibility just means a model can read you without trusting you enough to cite you. These checks are the ones that tell a model who you are and whether your claims are verifiable.</p>
+            <div class="check-row"><span>Single H1 heading</span><span class="check-row__pts">6 pts</span></div>
+            <div class="check-row"><span>Subheading structure (H2)</span><span class="check-row__pts">5 pts</span></div>
+            <div class="check-row"><span>Organization / WebSite schema</span><span class="check-row__pts">8 pts</span></div>
+            <div class="check-row"><span>Content schema (Article, FAQ&hellip;)</span><span class="check-row__pts">5 pts</span></div>
+            <div class="check-row"><span>Author / about signals</span><span class="check-row__pts">8 pts</span></div>
+            <div class="check-row"><span>Contact signals</span><span class="check-row__pts">8 pts</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- What this scan does not measure ---------- -->
+    <section class="pro-band" aria-labelledby="honesty-heading">
+      <div class="section__inner">
+        <p class="kicker kicker--on-navy">What this scan does not measure</p>
+        <h2 id="honesty-heading">A readiness score, not a presence score.</h2>
+        <p class="pro-band__lede">Answerable measures AI readiness: whether AI crawlers can access your content, and whether your on-page signals give a model a reason to trust and cite you. It does not measure whether ChatGPT, Claude, Perplexity or any other assistant currently mentions your brand in a live answer.</p>
+        <p class="pro-band__lede">That is a different, harder problem. Model responses vary by prompt, by session, and by training snapshot — no scanner can observe a black box or promise a citation. What we can measure, and verify with certainty, is whether the door is open. A perfect score does not guarantee an answer engine will cite you. A blocked crawler guarantees it cannot.</p>
+        <p class="pro-band__lede">We built the tool that measures the certain thing precisely, instead of the uncertain thing vaguely. That precision is the point.</p>
+      </div>
+    </section>
+
+    <section class="verticals" aria-labelledby="data-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="data-heading" class="doc-section__heading">How the data is collected</h2>
+          <div class="results-content__body">
+            <p>Every scan fetches four things directly from your domain, live, at scan time: public <code>robots.txt</code>, <code>llms.txt</code>, <code>sitemap.xml</code> (if not already declared in robots.txt), and the homepage. All four requests happen inside a single Vercel serverless function — nothing routes through a third-party proxy.</p>
+            <p>Nothing is stored. There is no database behind the scan. The result exists in your browser for as long as the page stays open, and re-running the scan simply fetches everything again.</p>
+            <p>If <code>robots.txt</code> cannot be read at all — a network failure, not a genuine 404 — the scan stops and returns an error rather than guessing. A missing <code>robots.txt</code> (a real 404) is scored as default-open access, which is the true state of that site; a failed <em>fetch</em> is not, and reporting a guessed score in that case would be a fabricated result. We do not fabricate results.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-labelledby="changelog-heading">
+      <div class="section__inner">
+        <h2 id="changelog-heading" class="doc-section__heading">Changelog</h2>
+        <ol class="changelog-list">
+          <li><span class="n">2026-07-29</span><span>Added <code>llms.txt</code> detection as a new check, bringing the total from 15 to 16. Rebalanced Discoverability: robots.txt 4, llms.txt 4, Sitemap declared 6, AI crawler access 26 (down from 30). Discoverability, Technical foundation and Content &amp; trust totals (40 / 20 / 40) are unchanged.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ---------- Scan reminder ---------- -->
+    <section aria-label="Scan reminder">
+      <div class="section__inner">
+        <div class="scan-bridge">
+          <p class="scan-bridge__text">See exactly how your own site scores against this.</p>
+          <a href="/" class="btn btn--primary">Scan your site free</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="footnotes" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+          <a href="/tools" class="site-nav__link">Tools</a>
+          <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="#" class="site-nav__link">Privacy</a>
+          <a href="#" class="site-nav__link">Terms</a>
+        </nav>
+        <p class="footnotes__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

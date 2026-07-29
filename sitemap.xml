@@ -18,4 +18,10 @@
   <url>
     <loc>https://answerable-app.vercel.app/tools/robots-txt</loc>
   </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/about</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/methodology</loc>
+  </url>
 </urlset>
