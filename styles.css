@@ -105,16 +105,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; margin: 0; 
 }
 .kicker--on-navy { color: var(--gold-soft); }
 
-sup.fn {
-  font-family: var(--font-mono);
-  font-size: 0.5em;
-  color: var(--gold);
-  vertical-align: super;
-  margin-left: 2px;
-}
-sup.fn a { text-decoration: none; color: inherit; }
-sup.fn a:hover { text-decoration: underline; }
-
 /* ----------------------------- Buttons & inputs ----------------------------- */
 
 .btn {
@@ -848,27 +838,12 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .services-block p { margin-top: 10px; font-size: 14.5px; color: rgba(255, 255, 255, 0.7); }
 .services-block .btn { margin-top: 22px; }
 
-/* ----------------------------- Notes / footer ----------------------------- */
+/* ----------------------------- Site footer ----------------------------- */
 
-.footnotes { padding: 48px 0 60px; }
-.footnotes__label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-bottom: 16px;
-}
-.footnotes ol { list-style: none; display: grid; gap: 10px; max-width: 760px; }
-.footnotes li { font-size: 13px; color: var(--ink-soft); display: flex; gap: 12px; }
-.footnotes li .n { font-family: var(--font-mono); color: var(--gold-deep); flex-shrink: 0; }
-.footnotes li a { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 2px; }
-.footnotes li a:hover { color: var(--gold); }
-
+.site-footer { padding: 48px 0 60px; }
 .footer-links { flex-wrap: wrap; gap: 10px 24px; }
-.footnotes ol + .footer-links { margin-top: 24px; }
 
-.footnotes__coda {
+.site-footer__coda {
   margin-top: 28px;
   padding-top: 18px;
   border-top: 1px solid var(--line);

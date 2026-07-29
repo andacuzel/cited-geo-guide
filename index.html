@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="styles.css?v=17" />
 
   <script type="application/ld+json">
   {
@@ -149,7 +149,7 @@
                 <input type="text" class="field" id="scanInput" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
                 <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
               </form>
-              <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.<sup class="fn"><a href="#footnotes" aria-label="See note 2">2</a></sup></p>
+              <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.</p>
 
               <div class="scan__status" id="scanStatus" role="status" aria-live="polite"></div>
               <button type="button" class="btn btn--ghost scan__retry" id="scanRetry">Try again</button>
@@ -196,7 +196,7 @@
             <div class="scan-report__grid">
               <div>
                 <div class="score-entry">
-                  <div class="score-entry__value"><span id="scoreValue">0</span><small>/100</small><sup class="fn"><a href="#footnotes" aria-label="See note 1">1</a></sup></div>
+                  <div class="score-entry__value"><span id="scoreValue">0</span><small>/100</small></div>
                   <div class="score-entry__meta" id="scoreDomain"></div>
                 </div>
                 <div class="score-bars">
@@ -283,31 +283,24 @@
         </div>
       </section>
 
-      <!-- ---------- Notes / footer ---------- -->
-      <section class="footnotes" id="footnotes" aria-label="Notes and methodology">
+      <!-- ---------- Site footer ---------- -->
+      <footer class="site-footer" aria-label="Footer">
         <div class="section__inner">
-          <p class="footnotes__label">Notes</p>
-          <ol>
-            <li><span class="n">[1]</span><span>Scoring weights across 16 checks: Discoverability 40 · Technical foundation 20 · Content &amp; trust 40. Every check and its point value is shown in the report. <a href="/methodology">Read the full methodology</a>.</span></li>
-            <li><span class="n">[2]</span><span>Data: public robots.txt, llms.txt, sitemap.xml and homepage, retrieved live at scan time. If robots.txt cannot be read, the scan stops with an error — never a guessed score.</span></li>
-            <li><span class="n">[3]</span><span>Crawlers checked: GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, CCBot, Bytespider.</span></li>
-          </ol>
           <nav class="site-nav footer-links" aria-label="More">
-            <a href="/tools" class="site-nav__link">Tools</a>
             <a href="/methodology" class="site-nav__link">Methodology</a>
             <a href="#" class="site-nav__link">Privacy</a>
             <a href="#" class="site-nav__link">Terms</a>
           </nav>
-          <p class="footnotes__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+          <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
         </div>
-      </section>
+      </footer>
     </section>
 
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="app.js?v=16"></script>
-  <script src="scanner.js?v=18"></script>
+  <script src="app.js?v=17"></script>
+  <script src="scanner.js?v=19"></script>
 </body>
 </html>
