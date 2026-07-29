@@ -1,5 +1,5 @@
 /* =====================================================================
-   CITED SCAN — frontend
+   ANSWERABLE SCAN — frontend
    All scanning logic now lives server-side in /api/scan.js (Vercel).
    This file only calls the API and renders the result. No proxies,
    no CORS workarounds.
@@ -10,7 +10,7 @@
 
   var CONFIG = {
     contactEmail: 'you@example.com', // ← replace before deploying
-    shareUrl: 'https://andacuzel.github.io/cited-geo-guide/' // ← update if you move to a custom domain
+    shareUrl: 'https://answerable.vercel.app/' // ← update if you move to a custom domain
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -25,7 +25,7 @@
   var report = $('scanReport');
   var agencyLink = $('agencyLink');
 
-  if (agencyLink) agencyLink.href = 'mailto:' + CONFIG.contactEmail + '?subject=Cited%20%E2%80%94%20done-for-you%20AI%20visibility';
+  if (agencyLink) agencyLink.href = 'mailto:' + CONFIG.contactEmail + '?subject=Answerable%20%E2%80%94%20done-for-you%20AI%20visibility';
 
   var lastScore = null;
 
@@ -138,7 +138,7 @@
     if (!lastScore) return;
     var text = lastScore.domain + ' scored ' + lastScore.total + '/100 on AI visibility. Scan yours free \u2014 no signup: ' + CONFIG.shareUrl;
     if (navigator.share) {
-      navigator.share({ title: 'Cited. \u2014 AI visibility score', text: text, url: CONFIG.shareUrl }).catch(function () {});
+      navigator.share({ title: 'Answerable. \u2014 AI visibility score', text: text, url: CONFIG.shareUrl }).catch(function () {});
     } else {
       navigator.clipboard.writeText(text).then(function () {
         var toast = $('toast');
