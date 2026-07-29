@@ -1,20 +1,28 @@
 /* =====================================================================
    ANSWERABLE. — GEO & AEO Strategy Generator
-   Vanilla JS, zero backend, zero API calls. Built for static hosting
-   (e.g. GitHub Pages).
+   Vanilla JS, zero backend, zero API calls. Built for static hosting.
+
+   Three tracks share this one file: B2B SaaS (for-saas.html), consumer
+   and e-commerce brands (for-brands.html), local and independent
+   professionals (for-professionals.html). Each page has exactly one
+   card grid element; at init the script detects which one is present
+   and renders that track's fields into it.
 
    --------------------------------------------------------------------
    HOW TO ADD A NEW VERTICAL (e.g. "MarTech")
    --------------------------------------------------------------------
-   1. Find its entry in the subFields array below and confirm its `id`
+   1. Find its entry in the relevant fields array below (subFields,
+      brandFields or professionalFields) and confirm its `id`
       (e.g. 'martech').
-   2. Add a matching key to the saasData object with that same id,
-      following the exact structure used for `crm` (the four required
-      headings: "The Strategic Shift", "Top 3 Actionable Strategies",
-      "Outdated SEO Pitfalls to Avoid", and an "Expert Tip" block).
+   2. Add a matching key to that track's data object (saasData,
+      brandData or professionalData) with that same id, following the
+      exact structure used for `crm` (the four required headings:
+      "The Strategic Shift", "Top 3 Actionable Strategies", "Outdated
+      SEO Pitfalls to Avoid", and an "Expert Tip" block).
    3. That's it — the card automatically switches from a disabled
       "Soon" badge to a clickable "Live" card, because liveness is
-      derived from `saasData.hasOwnProperty(id)`, not hardcoded.
+      derived from the data object's `hasOwnProperty(id)`, not
+      hardcoded.
    ===================================================================== */
 
 (function () {
@@ -74,6 +82,60 @@
       name: 'DevTools & Cloud',
       code: 'VERT / DEV',
       description: 'Developer-first products where documentation has become the real landing page.'
+    }
+  ];
+
+  var brandFields = [
+    {
+      id: 'ecommerce',
+      name: 'E-commerce & DTC Brands',
+      code: 'VERT / ECM',
+      description: 'Online stores competing to be the product AI names when shoppers ask.'
+    },
+    {
+      id: 'consumerapps',
+      name: 'Consumer Apps',
+      code: 'VERT / APP',
+      description: 'Apps discovered through AI recommendations instead of app-store search.'
+    },
+    {
+      id: 'hospitality',
+      name: 'Hospitality & Travel',
+      code: 'VERT / HSP',
+      description: 'Hotels, restaurants and venues surfacing in AI trip planning.'
+    },
+    {
+      id: 'marketplaces',
+      name: 'Marketplaces',
+      code: 'VERT / MKT',
+      description: 'Platforms competing to be the source AI cites for category comparisons.'
+    }
+  ];
+
+  var professionalFields = [
+    {
+      id: 'realestate',
+      name: 'Real Estate Agents',
+      code: 'PROF / RES',
+      description: 'Agents competing to be named when buyers ask AI who to work with locally.'
+    },
+    {
+      id: 'legal',
+      name: 'Legal Practices',
+      code: 'PROF / LAW',
+      description: 'Small firms and solo practitioners in a market where referrals now start with a chatbot.'
+    },
+    {
+      id: 'health',
+      name: 'Health & Wellness',
+      code: 'PROF / HLT',
+      description: 'Practitioners whose new patients ask an AI before they ask a friend.'
+    },
+    {
+      id: 'localservices',
+      name: 'Local Services & Trades',
+      code: 'PROF / LOC',
+      description: 'Contractors, photographers and event vendors competing for AI recommendations.'
     }
   ];
 
@@ -264,17 +326,44 @@
         '<div class="expert-tip">' +
         '<p>[Your strongest strategic opinion on where devtools\u2019 AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
         '</div>'
-    },
-  
+    }
+
   };
+
+  /* ---------------------------------------------------------------
+     3b. BRAND_DATA / PROFESSIONAL_DATA -- no playbooks written yet.
+        Every card in brandFields/professionalFields renders as
+        "In preparation" until a matching key is added here.
+     --------------------------------------------------------------- */
+
+  var brandData = {};
+
+  var professionalData = {};
 
   /* ---------------------------------------------------------------
      4. DOM references
      --------------------------------------------------------------- */
 
+  var fieldSets = [
+    { gridId: 'saasCardGrid', fields: subFields, data: saasData },
+    { gridId: 'brandCardGrid', fields: brandFields, data: brandData },
+    { gridId: 'professionalCardGrid', fields: professionalFields, data: professionalData }
+  ];
+
+  var activeSet = null;
+  for (var fs = 0; fs < fieldSets.length; fs++) {
+    if (document.getElementById(fieldSets[fs].gridId)) {
+      activeSet = fieldSets[fs];
+      break;
+    }
+  }
+
+  var activeFields = activeSet ? activeSet.fields : [];
+  var activeData = activeSet ? activeSet.data : {};
+
   var viewLanding = document.getElementById('view-landing');
   var viewResults = document.getElementById('view-results');
-  var cardGrid = document.getElementById('cardGrid');
+  var cardGrid = activeSet ? document.getElementById(activeSet.gridId) : null;
   var resultsContent = document.getElementById('resultsContent');
   var backBtn = document.getElementById('backBtn');
   var downloadBtn = document.getElementById('downloadBtn');
@@ -290,8 +379,8 @@
      --------------------------------------------------------------- */
 
   function renderCards() {
-    var html = subFields.map(function (field) {
-      var isLive = saasData.hasOwnProperty(field.id);
+    var html = activeFields.map(function (field) {
+      var isLive = activeData.hasOwnProperty(field.id);
       var cardClass = 'card' + (isLive ? '' : ' card--soon');
       var badge = isLive
         ? '<span class="card__badge card__badge--live">Live</span>'
@@ -336,7 +425,7 @@
      --------------------------------------------------------------- */
 
   function showResults(id) {
-    var entry = saasData[id];
+    var entry = activeData[id];
     if (!entry) {
       showToast('That playbook is in preparation.');
       return;
@@ -405,7 +494,7 @@
     }
 
     var activeId = (location.hash || '').replace('#', '') || lastFocusedCardId;
-    var entry = saasData[activeId];
+    var entry = activeData[activeId];
     var fileSlug = (entry ? entry.name : 'playbook').toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     downloadBtn.disabled = true;
@@ -459,7 +548,7 @@
 
   window.addEventListener('hashchange', function () {
     var id = (location.hash || '').replace('#', '');
-    if (id && saasData[id]) {
+    if (id && activeData[id]) {
       showResults(id);
     } else if (!id) {
       showLanding({ skipScroll: true });
@@ -473,7 +562,7 @@
   renderCards();
 
   var initialId = (location.hash || '').replace('#', '');
-  if (initialId && saasData[initialId]) {
+  if (initialId && activeData[initialId]) {
     showResults(initialId);
   }
 
