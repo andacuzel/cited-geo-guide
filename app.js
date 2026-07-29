@@ -542,8 +542,10 @@
   }
 
   logoLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    showLanding();
+    if (viewResults && !viewResults.hidden) {
+      e.preventDefault();
+      showLanding();
+    }
   });
 
   window.addEventListener('hashchange', function () {

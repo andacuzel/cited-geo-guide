@@ -174,8 +174,9 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 32px;
 }
-.logo { text-decoration: none; }
+.logo { text-decoration: none; flex-shrink: 0; }
 .logo__mark {
   font-family: var(--font-display);
   font-size: 24px;
@@ -185,9 +186,8 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 .site-nav {
   display: flex;
-  flex-wrap: wrap;
-  row-gap: 6px;
-  column-gap: 24px;
+  flex-wrap: nowrap;
+  gap: 24px;
 }
 .site-nav__link {
   font-family: var(--font-mono);
@@ -198,25 +198,34 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   text-decoration: none;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
+  white-space: nowrap;
   transition: color var(--t), border-color var(--t);
 }
 .site-nav__link:hover { color: var(--ink); border-color: var(--gold); }
 
-.header-note {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.05em;
-  color: var(--ink-soft);
+/* Mobile nav — a persistent, horizontally scrollable row under the
+   header, shown only below 640px in place of the hidden desktop nav. */
+.mobile-nav { display: none; position: relative; }
+.mobile-nav__scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
+  padding: 0 28px 14px 20px;
 }
-.header-note::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  margin-right: 8px;
-  vertical-align: 1px;
+.mobile-nav__scroll::-webkit-scrollbar { display: none; }
+.mobile-nav__scroll .site-nav__link { flex-shrink: 0; }
+.mobile-nav__fade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 14px;
+  width: 28px;
+  background: rgba(238, 241, 245, 0.9);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
 }
 
 /* ----------------------------- Sections ----------------------------- */
@@ -1052,9 +1061,9 @@ code {
 }
 
 @media (max-width: 640px) {
-  .site-header__inner { padding: 14px 20px; }
+  .site-header__inner { padding: 14px 20px; gap: 20px; }
   .site-nav { display: none; }
-  .header-note { display: none; }
+  .mobile-nav { display: block; }
   .section__inner { padding: 0 20px; }
   .hero { padding: 44px 0 64px; }
   .report-panel { padding: 26px 20px; }
