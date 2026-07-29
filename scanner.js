@@ -110,6 +110,9 @@
       botHtml += '<div class="bot-row"><span class="bot-row__name">' + esc(b.name) + '</span>' + chip[b.state] +
         '<span class="bot-row__rule">' + esc(b.rule) + ' \u00b7 ' + esc(b.desc) + '</span></div>';
     });
+    if (botResults.some(function (b) { return b.state !== 'open'; })) {
+      botHtml += '<div class="bot-console__link">Fix this: <a href="/tools/robots-txt">generate a corrected robots.txt</a></div>';
+    }
     $('botConsole').innerHTML = botHtml;
 
     $('checksBody').innerHTML = r.checks.map(function (c) {

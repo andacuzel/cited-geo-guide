@@ -513,6 +513,16 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   .bot-row__rule { flex-basis: auto; flex: 1; text-align: right; }
 }
 
+.bot-console__link {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-on-navy);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+}
+.bot-console__link a { color: var(--gold-soft); text-decoration: underline; text-underline-offset: 2px; }
+.bot-console__link a:hover { color: var(--gold); }
+
 /* Checks */
 
 .scan-details { margin-top: 32px; border-top: 1px solid var(--line); }
@@ -841,6 +851,10 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .footnotes ol { list-style: none; display: grid; gap: 10px; max-width: 760px; }
 .footnotes li { font-size: 13px; color: var(--ink-soft); display: flex; gap: 12px; }
 .footnotes li .n { font-family: var(--font-mono); color: var(--gold-deep); flex-shrink: 0; }
+
+.footer-links { flex-wrap: wrap; gap: 10px 24px; }
+.footnotes ol + .footer-links { margin-top: 24px; }
+
 .footnotes__coda {
   margin-top: 28px;
   padding-top: 18px;
