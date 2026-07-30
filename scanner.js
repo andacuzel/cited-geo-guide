@@ -10,7 +10,7 @@
 
   var CONFIG = {
     contactEmail: 'you@example.com', // ← replace before deploying
-    shareUrl: 'https://answerable.vercel.app/' // ← update if you move to a custom domain
+    shareUrl: 'https://answerable-app.vercel.app/' // ← update if you move to a custom domain
   };
 
   var $ = function (id) { return document.getElementById(id); };
