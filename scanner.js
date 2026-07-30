@@ -199,9 +199,23 @@
         }).join('');
 
     renderFixSnippets(domain, r.checks, botResults, siteInfo || {});
+    renderProOutput(domain, r);
 
     report.hidden = false;
     report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---------------- Pro output (not yet implemented) ----------------
+     Called after every successful scan with the same domain and result
+     object used to render the free report. Will eventually check for
+     a Pro entitlement (e.g. a purchase token) and, if present, render
+     the category benchmark comparison, named competitor comparison and
+     prioritized fix order into the report. Intentionally a no-op until
+     that entitlement check and its markup exist — kept as a single
+     call site so wiring up the gate later doesn't require touching
+     runScan() or renderReport() again. */
+  function renderProOutput(domain, r) {
+    // no-op — Pro gating not implemented yet
   }
 
   /* ---------------- Copy-paste fixes ---------------- */

@@ -4,25 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Answerable. — Pro: the AI Visibility Report</title>
-  <meta name="description" content="Answerable Pro turns your scan into a personalized AI visibility report, interpreted through your category's playbook. In preparation." />
-  <meta name="keywords" content="Answerable Pro, AI visibility report, GEO, AEO" />
+  <title>Answerable. — Pro: What Your Score Means</title>
+  <meta name="description" content="The scan is free and hands you the fix. Answerable Pro tells you what your score means for your category, a named competitor comparison, and what to fix first. One-time purchase, no subscription." />
+  <meta name="keywords" content="Answerable Pro, AI visibility report, GEO, AEO, competitor comparison" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://answerable-app.vercel.app/pro" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Answerable. — Pro: the AI Visibility Report" />
-  <meta property="og:description" content="A personalized AI visibility report, interpreted through your category's playbook. In preparation." />
+  <meta property="og:title" content="Answerable. — Pro: What Your Score Means" />
+  <meta property="og:description" content="The scan is free and hands you the fix. Pro tells you what your score means for your category, a named competitor comparison, and what to fix first." />
   <meta property="og:url" content="https://answerable-app.vercel.app/pro" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Answerable. — Pro: the AI Visibility Report" />
-  <meta name="twitter:description" content="A personalized AI visibility report, interpreted through your category's playbook. In preparation." />
+  <meta name="twitter:title" content="Answerable. — Pro: What Your Score Means" />
+  <meta name="twitter:description" content="The scan is free and hands you the fix. Pro tells you what your score means for your category, a named competitor comparison, and what to fix first." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -31,7 +31,48 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=19" />
+  <link rel="stylesheet" href="styles.css?v=20" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What do I get with Answerable Pro?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Your scan interpreted through your vertical's playbook, your score compared against your category benchmark instead of a generic average, a named competitor comparison, a prioritized fix order for your specific findings, and an exportable report built to forward to your team."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is it really a one-time payment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Answerable Pro is a single one-time purchase. There is no subscription and no recurring billing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is this different from the free scan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The free scan tells you your score and hands you the fix: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro tells you what that score means for your category: a benchmark comparison, a named competitor comparison, and a prioritized order to work through your findings."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need an account?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. There is no account or login. Your report is generated and delivered right after payment."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -83,12 +124,139 @@
 
   <main id="main">
 
+    <!-- ---------- Headline ---------- -->
     <section class="verticals" aria-labelledby="pro-heading">
       <div class="section__inner">
         <div class="section-head">
-          <p class="kicker">In preparation</p>
-          <h1 id="pro-heading" class="section-title">Answerable Pro — the AI Visibility Report.</h1>
-          <p class="section-sub">Your scan findings, interpreted through your category's playbook. A personalized report, built to be put in front of your team. One-time purchase, no subscription.</p>
+          <p class="kicker">Free vs. Pro</p>
+          <h1 id="pro-heading" class="section-title">Free tells you your score. Pro tells you what it means.</h1>
+          <p class="section-sub">The scan is free and hands you the fix. Answerable Pro tells you what your score means for your category, and what to do first.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- What stays free forever ---------- -->
+    <section class="verticals" aria-labelledby="free-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Always free</p>
+          <h2 id="free-heading" class="section-title">Diagnosis is free. Prescription is Pro.</h2>
+          <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>
+        </div>
+        <div class="results-content__body">
+          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>The full scan, every time you run it</span></div>
+          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>All 16 checks and their exact point values</span></div>
+          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>The AI crawler access matrix, 10 crawlers deep</span></div>
+          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>Copy-paste fixes for schema and robots.txt</span></div>
+          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>Every category playbook: B2B SaaS, consumer brands, local professionals</span></div>
+          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>Both free tools: the robots.txt generator and the llms.txt checker</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- What Pro adds ---------- -->
+    <section class="verticals" aria-labelledby="adds-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">What Pro adds</p>
+          <h2 id="adds-heading" class="section-title">Context the free scan can't give you.</h2>
+        </div>
+        <div class="card-grid">
+          <div class="card card--static">
+            <span class="card__code">PRO / 01</span>
+            <span class="card__name">Vertical interpretation</span>
+            <span class="card__desc">Your scan read through your category's playbook, not a generic SEO checklist.</span>
+          </div>
+          <div class="card card--static">
+            <span class="card__code">PRO / 02</span>
+            <span class="card__name">Category benchmark</span>
+            <span class="card__desc">Your score placed against your category's average, not a one-size-fits-all number.</span>
+          </div>
+          <div class="card card--static">
+            <span class="card__code">PRO / 03</span>
+            <span class="card__name">Competitor comparison</span>
+            <span class="card__desc">Named competitors in your category, and whether they're currently cited where you aren't.</span>
+          </div>
+          <div class="card card--static">
+            <span class="card__code">PRO / 04</span>
+            <span class="card__name">Prioritized fix order</span>
+            <span class="card__desc">Your specific findings, ranked by what to fix first.</span>
+          </div>
+          <div class="card card--static">
+            <span class="card__code">PRO / 05</span>
+            <span class="card__name">Exportable report</span>
+            <span class="card__desc">Built to forward to your team, your client, or your boss.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Example report ---------- -->
+    <section class="verticals" aria-labelledby="example-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Example report</p>
+          <h2 id="example-heading" class="section-title">What a Pro report looks like.</h2>
+          <p class="section-sub">Placeholder data below, for a fictional domain. Not a real scan.</p>
+        </div>
+
+        <div class="report-panel" aria-label="Example Pro report with placeholder data">
+          <div class="scan-report__grid">
+            <div>
+              <div class="score-entry">
+                <div class="score-entry__value">84<small>/100</small></div>
+                <div class="score-entry__meta">yourbrand.example · example report</div>
+                <div class="score-entry__meta">That's 6 points above the B2B SaaS average.</div>
+              </div>
+              <div class="score-bars">
+                <div class="score-bar"><span>Discoverability</span><div class="score-bar__track"><div class="score-bar__fill" style="width: 95%"></div></div><span class="score-bar__val">38/40</span></div>
+                <div class="score-bar"><span>Technical</span><div class="score-bar__track"><div class="score-bar__fill" style="width: 80%"></div></div><span class="score-bar__val">16/20</span></div>
+                <div class="score-bar"><span>Content &amp; trust</span><div class="score-bar__track"><div class="score-bar__fill" style="width: 75%"></div></div><span class="score-bar__val">30/40</span></div>
+              </div>
+            </div>
+
+            <div class="bot-console" aria-label="Example competitor comparison">
+              <div class="bot-console__label">COMPETITOR COMPARISON — EXAMPLE</div>
+              <div class="answer-mock__response">
+                <ol>
+                  <li><span class="answer-mock__brand">Acme Software</span><span class="cited-badge">Cited · G2</span></li>
+                  <li><span class="answer-mock__brand">Yourbrand.example (you)</span><span class="cited-badge">Not cited</span></li>
+                  <li><span class="answer-mock__brand">Widgetly</span><span class="cited-badge">Cited · Capterra</span></li>
+                  <li><span class="answer-mock__brand">Northwind Tools</span><span class="cited-badge">Cited · Docs</span></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="scan-actions">
+            <h3 class="scan-actions__title">What to fix first</h3>
+            <ul class="scan-actions__list">
+              <li class="action-item action-item--high">
+                <div class="action-item__top">
+                  <span class="action-item__label"><span class="action-item__tag">High impact</span>Add Organization schema</span>
+                  <span class="action-item__gain">+8 pts</span>
+                </div>
+                <p class="action-item__why">Acme Software and Widgetly both declare Organization schema. It's the base layer of trust models use to decide who to cite.</p>
+              </li>
+              <li class="action-item action-item--mid">
+                <div class="action-item__top">
+                  <span class="action-item__label"><span class="action-item__tag">Medium impact</span>Add author and about signals</span>
+                  <span class="action-item__gain">+5 pts</span>
+                </div>
+                <p class="action-item__why">Northwind Tools ranks above you on this signal alone. Ownership and credibility are cheap to add and heavily weighted.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Purchase ---------- -->
+    <section aria-label="Purchase">
+      <div class="section__inner">
+        <div class="scan-bridge">
+          <p class="scan-bridge__text">One payment. Full Pro report for your domain.</p>
+          <a href="#" class="btn btn--ghost">In preparation</a>
         </div>
       </div>
     </section>
@@ -97,7 +265,7 @@
     <section aria-label="Scan reminder">
       <div class="section__inner">
         <div class="scan-bridge">
-          <p class="scan-bridge__text">Start with the free scan.</p>
+          <p class="scan-bridge__text">Haven't run the free scan yet? Start there.</p>
           <a href="/" class="btn btn--primary">Scan your site free</a>
         </div>
       </div>
