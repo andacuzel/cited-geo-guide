@@ -1168,3 +1168,243 @@ code {
 @media (max-width: 640px) {
   .expert-tip p, .expert-tip--aside p, .expert-tip--data p { padding-right: 0; padding-top: 18px; }
 }
+
+/* ===================================================================
+   RESEARCH REPORT TEMPLATE
+   Reused by every report in the series. Category colour mapping is
+   fixed across all reports: B2B SaaS is always --navy-800, consumer
+   brands are always --gold. Do not remix these per report.
+   =================================================================== */
+
+.report-header { padding: 56px 0 0; }
+.report-header__title {
+  font-size: clamp(32px, 4.2vw, 52px);
+  line-height: 1.1;
+  max-width: 880px;
+}
+.report-header__dek {
+  margin-top: 18px;
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 660px;
+}
+
+.report-byline {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+}
+.report-byline a { color: var(--navy-800); text-decoration: underline; text-underline-offset: 2px; }
+.report-byline a:hover { color: var(--gold-deep); }
+
+.report-stats { margin-top: 32px; padding-bottom: 40px; }
+
+/* Key findings — a contained navy plate, not full-bleed */
+.report-findings {
+  margin: 40px 0 0;
+  background: var(--navy-950);
+  border-radius: var(--radius);
+  padding: 36px 40px;
+}
+.report-findings__label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: 20px;
+}
+.report-findings ol { list-style: none; display: grid; gap: 20px; counter-reset: finding; }
+.report-findings li {
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-on-navy);
+}
+.report-findings li:first-child { padding-top: 0; border-top: none; }
+.report-findings__num {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--gold-soft);
+  flex-shrink: 0;
+  width: 34px;
+}
+.report-findings p { color: rgba(255, 255, 255, 0.88); font-size: 16.5px; line-height: 1.55; }
+
+/* Body sections */
+.report-section { max-width: 720px; margin: 64px auto 0; }
+.report-section__num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--gold-deep);
+  margin-bottom: 10px;
+}
+.report-section__heading { font-size: 30px; margin-bottom: 20px; }
+.report-section p { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 18px; }
+
+.report-pullquote {
+  margin: 32px 0;
+  padding-left: 22px;
+  border-left: 4px solid var(--gold);
+}
+.report-pullquote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--navy-950);
+}
+
+/* Figure component — the reusable core */
+.report-figure {
+  margin: 40px 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 28px 24px;
+}
+.report-figure__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 16px;
+}
+.report-figure__visual { width: 100%; }
+.report-figure__visual svg { display: block; width: 100%; height: auto; }
+.report-figure__visual--narrow { max-width: 460px; }
+.report-figure__caption {
+  margin-top: 16px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  max-width: 640px;
+}
+.report-figure__source {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+
+/* Methodology & limitations — same weight as findings, different register */
+.report-methodology {
+  max-width: 760px;
+  margin: 64px auto 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px 40px;
+}
+.report-methodology h2 { font-size: 26px; margin-bottom: 18px; }
+.report-methodology h3 { font-size: 16px; color: var(--navy-950); margin: 24px 0 8px; }
+.report-methodology p { font-size: 15px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 10px; }
+
+.report-limits {
+  margin-top: 24px;
+  padding: 20px 22px;
+  background: var(--bg);
+  border-left: 4px solid var(--risk);
+  border-radius: var(--radius-sm);
+}
+.report-limits p:first-child { margin-top: 0; }
+.report-limits ul { list-style: none; display: grid; gap: 10px; margin-top: 10px; }
+.report-limits li { font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; padding-left: 18px; position: relative; }
+.report-limits li::before { content: '\2013'; position: absolute; left: 0; color: var(--risk); }
+
+/* Cite block */
+.report-cite {
+  max-width: 720px;
+  margin: 56px auto 0;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.report-cite__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+.report-cite__line {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.6;
+  word-break: break-word;
+}
+.report-cite__row { margin-top: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* Restrained closing */
+.report-closing { max-width: 640px; margin: 64px auto 0; padding: 40px 0 0; border-top: 1px solid var(--line); }
+.report-closing p { font-size: 16px; color: var(--ink-soft); margin-bottom: 18px; }
+
+/* Chart primitives shared by every figure */
+.chart-track { fill: var(--bg); }
+.chart-bar--b2b { fill: var(--navy-800); }
+.chart-bar--dtc { fill: var(--gold); }
+.chart-axis { stroke: var(--line); stroke-width: 1; }
+.chart-label { font-family: var(--font-mono, monospace); fill: var(--ink-soft); }
+.chart-label--faint { fill: var(--ink-faint); }
+.chart-value { font-family: var(--font-mono, monospace); fill: var(--ink); font-weight: 600; }
+.chart-annotation { font-family: var(--font-mono, monospace); fill: var(--gold-deep); }
+.chart-leader { stroke: var(--gold-deep); stroke-width: 1; fill: none; }
+
+/* Research index (listing page) */
+.research-index-list { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.research-index-item {
+  display: block;
+  background: var(--white);
+  padding: 26px 28px;
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--t);
+}
+.research-index-item:hover { background: var(--bg); }
+.research-index-item__meta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+.research-index-item__title { font-size: 24px; color: var(--navy-950); margin-bottom: 8px; }
+.research-index-item__summary { font-size: 15px; color: var(--ink-soft); max-width: 720px; }
+
+@media (max-width: 920px) {
+  .report-section { max-width: 100%; }
+  .report-findings { padding: 28px 24px; }
+}
+
+@media (max-width: 640px) {
+  .report-header { padding-top: 40px; }
+  .report-findings { padding: 24px 20px; }
+  .report-findings__num { font-size: 22px; width: 28px; }
+  .report-pullquote p { font-size: 19px; }
+  .report-figure { padding: 20px 18px 18px; }
+  .report-methodology, .report-cite { padding: 24px 20px; }
+}
+
+/* Print — reports are built to be sent as a PDF */
+@media print {
+  .site-header, .mobile-nav, .toast, .btn, .report-cite__row .btn { display: none !important; }
+  body { background: var(--white); }
+  .report-figure, .report-findings, .report-methodology, .report-cite { box-shadow: none; break-inside: avoid; }
+  .report-section { break-inside: avoid-page; }
+  a { color: inherit; text-decoration: underline; }
+}
