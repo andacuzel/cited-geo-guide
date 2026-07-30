@@ -1323,6 +1323,26 @@ code {
 .report-limits li { font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; padding-left: 18px; position: relative; }
 .report-limits li::before { content: '\2013'; position: absolute; left: 0; color: var(--risk); }
 
+/* Generic callout — used on doc pages for "will change" / placeholder notes */
+.callout {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--line);
+  background: var(--bg);
+}
+.callout__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+.callout p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+.callout--gold { border-left-color: var(--gold-deep); }
+.callout--gold .callout__label { color: var(--gold-deep); }
+
 /* Cite block */
 .report-cite {
   max-width: 720px;

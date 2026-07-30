@@ -4,25 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Answerable. — Research</title>
-  <meta name="description" content="Answerable's research series: what we find when we scan real sites for AI visibility, category by category." />
-  <meta name="keywords" content="AI visibility research, GEO, AEO, llms.txt, Answerable research" />
+  <title>Answerable. — Privacy</title>
+  <meta name="description" content="What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect. Plain-language privacy policy." />
+  <meta name="keywords" content="Answerable privacy, privacy policy" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://answerable-app.vercel.app/research" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/privacy" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Answerable. — Research" />
-  <meta property="og:description" content="Answerable's research series: what we find when we scan real sites for AI visibility, category by category." />
-  <meta property="og:url" content="https://answerable-app.vercel.app/research" />
+  <meta property="og:title" content="Answerable. — Privacy" />
+  <meta property="og:description" content="What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/privacy" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Answerable. — Research" />
-  <meta name="twitter:description" content="Answerable's research series: what we find when we scan real sites for AI visibility, category by category." />
+  <meta name="twitter:title" content="Answerable. — Privacy" />
+  <meta name="twitter:description" content="What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -31,23 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../styles.css?v=23" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Answerable Research",
-    "description": "Answerable's research series: what we find when we scan real sites for AI visibility, category by category.",
-    "url": "https://answerable-app.vercel.app/research",
-    "mainEntity": {
-      "@type": "ItemList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Who Controls Your Brand's AI Representation?", "url": "https://answerable-app.vercel.app/research/llms-txt-adoption-2026" }
-      ]
-    }
-  }
-  </script>
+  <link rel="stylesheet" href="styles.css?v=23" />
 </head>
 <body>
 
@@ -101,20 +85,45 @@
 
   <main id="main">
 
-    <section class="verticals" aria-labelledby="research-heading">
+    <section class="verticals" aria-labelledby="privacy-heading">
       <div class="section__inner">
         <div class="section-head">
-          <p class="kicker">Research</p>
-          <h1 id="research-heading" class="section-title">What we find when we scan real sites.</h1>
-          <p class="section-sub">Category-by-category scans, published as we run them. Real numbers, sourced methodology, no rounding.</p>
+          <p class="kicker">Privacy</p>
+          <h1 id="privacy-heading" class="section-title">What we fetch, what we store, what we don't.</h1>
+          <p class="section-sub">Last updated 30 July 2026.</p>
         </div>
 
-        <div class="research-index-list">
-          <a href="/research/llms-txt-adoption-2026" class="research-index-item">
-            <p class="research-index-item__meta">Research &middot; 001 &middot; 29 July 2026</p>
-            <p class="research-index-item__title">Who Controls Your Brand's AI Representation?</p>
-            <p class="research-index-item__summary">76% of consumer brands have an llms.txt file, but the files we checked by hand were platform-generated and said nothing about the brand. A scan of 64 sites across B2B SaaS and consumer brands.</p>
-          </a>
+        <div class="doc-section">
+          <h2 class="doc-section__heading">What the scanner fetches</h2>
+          <p>When you scan a domain, Answerable fetches four public files from that domain: <code>robots.txt</code>, <code>sitemap.xml</code>, <code>llms.txt</code>, and the homepage. All four are public by definition &mdash; nothing behind a login, nothing private. We fetch whatever domain you type in, whether or not it's yours.</p>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">What we store</h2>
+          <p>Nothing, today. There are no accounts, no email collection, and no scan history. A scan result exists in your browser for as long as the page stays open.</p>
+          <div class="callout callout--gold">
+            <p class="callout__label">Will change</p>
+            <p>This section will be updated when score history ships. Until then, nothing is retained after your browser tab closes.</p>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">What we don't collect</h2>
+          <p>No personal data. No email addresses. No accounts. No advertising trackers.</p>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Third parties</h2>
+          <p>Hosting: Vercel. The site and the scan function both run on Vercel's infrastructure.</p>
+          <div class="callout">
+            <p class="callout__label">Placeholder</p>
+            <p>[Analytics tool name and what it collects will be added here when analytics is implemented. Nothing is in place yet.]</p>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Contact</h2>
+          <p>Questions about this policy: <a href="mailto:andacuz@gmail.com">andacuz@gmail.com</a>.</p>
         </div>
       </div>
     </section>
@@ -123,7 +132,7 @@
     <section aria-label="Scan reminder">
       <div class="section__inner">
         <div class="scan-bridge">
-          <p class="scan-bridge__text">See where your own site lands.</p>
+          <p class="scan-bridge__text">See what a scan of your own site looks like.</p>
           <a href="/" class="btn btn--primary">Scan your site free</a>
         </div>
       </div>
@@ -144,6 +153,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="../nav.js?v=1"></script>
+  <script src="nav.js?v=1"></script>
 </body>
 </html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Page Not Found</title>
+  <meta name="description" content="This page doesn't exist. Scan your site instead, or find your track: B2B SaaS, consumer brands, or local professionals." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — Page Not Found" />
+  <meta property="og:description" content="This page doesn't exist. Scan your site instead." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Page Not Found" />
+  <meta name="twitter:description" content="This page doesn't exist. Scan your site instead." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=23" />
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <div class="nav-dropdown">
+          <button type="button" class="site-nav__link nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+            Playbooks
+            <svg class="nav-dropdown__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown__menu">
+            <a href="/for-saas" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">B2B SaaS</span>
+              <span class="nav-dropdown__item-desc">Software companies competing for AI shortlists</span>
+            </a>
+            <a href="/for-brands" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Consumer &amp; e-commerce brands</span>
+              <span class="nav-dropdown__item-desc">Products people ask AI about before buying</span>
+            </a>
+            <a href="/for-professionals" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Local &amp; independent professionals</span>
+              <span class="nav-dropdown__item-desc">Practices and services people find through AI</span>
+            </a>
+          </div>
+        </div>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Brands</a>
+        <a href="/for-professionals" class="site-nav__link">Professionals</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ---------- 404 + scan form ---------- -->
+    <section class="hero" id="scan" aria-labelledby="hero-heading">
+      <div class="section__inner">
+        <div>
+          <p class="kicker">404 &middot; Not found</p>
+          <h1 id="hero-heading" class="hero__title">This page isn't here. Scan the one that is.</h1>
+          <p class="hero__sub">The link brought you nowhere. Enter your domain and see whether AI crawlers can find the page that matters.</p>
+
+          <form class="hero__form" id="scanForm">
+            <input type="text" class="field" id="scanInput" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
+            <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
+          </form>
+          <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.</p>
+
+          <div class="scan__status" id="scanStatus" role="status" aria-live="polite"></div>
+          <button type="button" class="btn btn--ghost scan__retry" id="scanRetry">Try again</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Report (populated by scanner.js) ---------- -->
+    <section class="report-section" id="scanReport" hidden aria-label="Scan report">
+      <div class="section__inner">
+        <div class="report-panel">
+
+          <div class="scan-report__grid">
+            <div>
+              <div class="score-entry">
+                <div class="score-entry__value"><span id="scoreValue">0</span><small>/100</small></div>
+                <div class="score-entry__meta" id="scoreDomain"></div>
+                <div class="score-entry__meta" id="scoreScannedNow" hidden></div>
+                <div class="score-entry__meta" id="scoreBenchmark" hidden></div>
+              </div>
+              <div class="score-bars">
+                <div class="score-bar"><span>Discoverability</span><div class="score-bar__track"><div class="score-bar__fill" id="barDiscover"></div></div><span class="score-bar__val" id="valDiscover"></span></div>
+                <div class="score-bar"><span>Technical</span><div class="score-bar__track"><div class="score-bar__fill" id="barTech"></div></div><span class="score-bar__val" id="valTech"></span></div>
+                <div class="score-bar"><span>Content &amp; trust</span><div class="score-bar__track"><div class="score-bar__fill" id="barTrust"></div></div><span class="score-bar__val" id="valTrust"></span></div>
+              </div>
+              <button type="button" class="btn btn--ghost score-entry__share" id="shareBtn">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5.5L5.5 8.5M5.5 8.5L11 11.5M13 4.5a2 2 0 11-4 0 2 2 0 014 0zM7 8.5a2 2 0 11-4 0 2 2 0 014 0zM13 12.5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                Share your score
+              </button>
+            </div>
+
+            <div class="bot-console" id="botConsole" aria-label="AI crawler access matrix">
+              <!-- Populated by scanner.js -->
+            </div>
+          </div>
+
+          <details class="scan-details">
+            <summary>All 16 checks &amp; point values</summary>
+            <div class="scan-details__body" id="checksBody"></div>
+          </details>
+
+          <div class="scan-actions">
+            <h3 class="scan-actions__title">What to fix first</h3>
+            <ul class="scan-actions__list" id="actionsList"></ul>
+          </div>
+
+          <div class="fix-snippets" id="fixSnippets" hidden></div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Where you meant to go ---------- -->
+    <section class="verticals" aria-labelledby="lost-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Or go straight to</p>
+          <h2 id="lost-heading" class="section-title">Pick up where you meant to.</h2>
+        </div>
+
+        <div class="card-grid">
+          <a href="/for-saas" class="card">
+            <span class="card__name">B2B SaaS</span>
+            <span class="card__desc">Software companies competing for AI shortlists.</span>
+            <span class="card__cta">Choose this track
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </span>
+          </a>
+          <a href="/for-brands" class="card">
+            <span class="card__name">Consumer &amp; e-commerce brands</span>
+            <span class="card__desc">Products people ask AI about before buying.</span>
+            <span class="card__cta">Choose this track
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </span>
+          </a>
+          <a href="/for-professionals" class="card">
+            <span class="card__name">Local &amp; independent professionals</span>
+            <span class="card__desc">Practices and services people find through AI.</span>
+            <span class="card__cta">Choose this track
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </span>
+          </a>
+          <a href="/tools" class="card">
+            <span class="card__name">Tools</span>
+            <span class="card__desc">Standalone tools for the fixes the scanner finds most often.</span>
+            <span class="card__cta">Open tools
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </span>
+          </a>
+          <a href="/research" class="card">
+            <span class="card__name">Research</span>
+            <span class="card__desc">What we find when we scan real sites.</span>
+            <span class="card__cta">Read the research
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+          <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="/privacy" class="site-nav__link">Privacy</a>
+          <a href="/terms" class="site-nav__link">Terms</a>
+        </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="scanner.js?v=24"></script>
+  <script src="nav.js?v=1"></script>
+</body>
+</html>
