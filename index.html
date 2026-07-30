@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=17" />
+  <link rel="stylesheet" href="styles.css?v=18" />
 
   <script type="application/ld+json">
   {
@@ -104,11 +104,29 @@
         <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
       </a>
       <nav class="site-nav" aria-label="Site navigation">
-        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
-        <a href="/for-brands" class="site-nav__link">Brands</a>
-        <a href="/for-professionals" class="site-nav__link">Professionals</a>
+        <div class="nav-dropdown">
+          <button type="button" class="site-nav__link nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+            Playbooks
+            <svg class="nav-dropdown__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown__menu">
+            <a href="/for-saas" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">B2B SaaS</span>
+              <span class="nav-dropdown__item-desc">Software companies competing for AI shortlists</span>
+            </a>
+            <a href="/for-brands" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Consumer &amp; e-commerce brands</span>
+              <span class="nav-dropdown__item-desc">Products people ask AI about before buying</span>
+            </a>
+            <a href="/for-professionals" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Local &amp; independent professionals</span>
+              <span class="nav-dropdown__item-desc">Practices and services people find through AI</span>
+            </a>
+          </div>
+        </div>
         <a href="/tools" class="site-nav__link">Tools</a>
         <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
       </nav>
     </div>
     <nav class="mobile-nav" aria-label="Site navigation (mobile)">
@@ -118,6 +136,7 @@
         <a href="/for-professionals" class="site-nav__link">Professionals</a>
         <a href="/tools" class="site-nav__link">Tools</a>
         <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
       </div>
       <div class="mobile-nav__fade" aria-hidden="true"></div>
     </nav>
@@ -300,7 +319,8 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="app.js?v=17"></script>
-  <script src="scanner.js?v=19"></script>
+  <script src="app.js?v=18"></script>
+  <script src="scanner.js?v=20"></script>
+  <script src="nav.js?v=1"></script>
 </body>
 </html>

@@ -193,6 +193,69 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 }
 .site-nav__link:hover { color: var(--ink); border-color: var(--gold); }
 
+/* Playbooks dropdown — opens on hover or keyboard focus (see nav.js for
+   Escape / click-outside / arrow-key handling). The three links stay in
+   the HTML at all times; only their visibility toggles. */
+.nav-dropdown { position: relative; }
+.nav-dropdown__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  margin: 0;
+  padding: 0 0 2px;
+  cursor: pointer;
+}
+.nav-dropdown__caret { flex-shrink: 0; }
+
+.nav-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 0;
+  z-index: 60;
+  width: 300px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--t);
+}
+.nav-dropdown:hover .nav-dropdown__menu,
+.nav-dropdown.is-open .nav-dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-dropdown__item {
+  display: block;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background var(--t);
+}
+.nav-dropdown__item:hover, .nav-dropdown__item:focus-visible { background: var(--bg); }
+
+.nav-dropdown__item-label {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+.nav-dropdown__item-desc {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 3px;
+  white-space: normal;
+}
+
 /* Mobile nav — a persistent, horizontally scrollable row under the
    header, shown only below 640px in place of the hidden desktop nav. */
 .mobile-nav { display: none; position: relative; }
