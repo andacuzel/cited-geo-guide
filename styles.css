@@ -848,6 +848,11 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .card--soon:hover { border-color: var(--line); }
 .card--soon:hover .card__cta { color: var(--ink-faint); border-color: transparent; }
 
+/* A card used purely to display data (benchmark averages), not a link. */
+.card--static { cursor: default; }
+.card--static:hover { border-color: var(--line); }
+.card--static .score-entry__value { margin-top: 10px; }
+
 /* ----------------------------- Pro band (full-bleed navy) ----------------------------- */
 
 .pro-band {

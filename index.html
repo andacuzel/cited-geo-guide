@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=18" />
+  <link rel="stylesheet" href="styles.css?v=19" />
 
   <script type="application/ld+json">
   {
@@ -207,6 +207,29 @@
         </div>
       </section>
 
+      <!-- ---------- Benchmarks ---------- -->
+      <section class="verticals" aria-labelledby="benchmark-heading">
+        <div class="section__inner">
+          <div class="section-head">
+            <p class="kicker">Where does your site land?</p>
+            <h2 id="benchmark-heading" class="section-title">We've scanned 64 sites so far.</h2>
+            <p class="section-sub">Real averages from our own scans. <a href="/methodology">Read the methodology</a>.</p>
+          </div>
+          <div class="card-grid">
+            <div class="card card--static">
+              <span class="card__code">B2B SAAS · 31 CRM PLATFORMS</span>
+              <div class="score-entry__value">78<small>/100</small></div>
+              <div class="score-entry__meta">Range 53–91</div>
+            </div>
+            <div class="card card--static">
+              <span class="card__code">CONSUMER BRANDS · 33 DTC BRANDS</span>
+              <div class="score-entry__value">71<small>/100</small></div>
+              <div class="score-entry__meta">Range 46–87</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- Report ---------- -->
       <section class="report-section" id="scanReport" hidden aria-label="Scan report">
         <div class="section__inner">
@@ -217,6 +240,8 @@
                 <div class="score-entry">
                   <div class="score-entry__value"><span id="scoreValue">0</span><small>/100</small></div>
                   <div class="score-entry__meta" id="scoreDomain"></div>
+                  <div class="score-entry__meta" id="scoreScannedNow" hidden></div>
+                  <div class="score-entry__meta" id="scoreBenchmark" hidden></div>
                 </div>
                 <div class="score-bars">
                   <div class="score-bar"><span>Discoverability</span><div class="score-bar__track"><div class="score-bar__fill" id="barDiscover"></div></div><span class="score-bar__val" id="valDiscover"></span></div>
@@ -277,6 +302,16 @@
         </div>
       </section>
 
+      <!-- ---------- Research teaser ---------- -->
+      <section aria-label="Research">
+        <div class="section__inner">
+          <div class="scan-bridge">
+            <p class="scan-bridge__text"><span class="kicker">Latest finding</span><br />76% of DTC brands have an llms.txt file. Almost none of them wrote it — their platform did, and the default file says nothing about the brand.</p>
+            <a href="/research/llms-txt-adoption-2026" class="btn btn--ghost">Read the full finding</a>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- Pro band ---------- -->
       <section class="pro-band" id="pro" aria-labelledby="pro-heading">
         <div class="section__inner">
@@ -319,8 +354,8 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="app.js?v=18"></script>
-  <script src="scanner.js?v=20"></script>
+  <script src="app.js?v=19"></script>
+  <script src="scanner.js?v=21"></script>
   <script src="nav.js?v=1"></script>
 </body>
 </html>

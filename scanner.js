@@ -28,6 +28,14 @@
   if (agencyLink) agencyLink.href = 'mailto:' + CONFIG.contactEmail + '?subject=Answerable%20%E2%80%94%20done-for-you%20AI%20visibility';
 
   var lastScore = null;
+  var pendingIsParamScan = false;
+
+  /* Hand-maintained to match the averages shown in the homepage
+     benchmark strip (index.html) — update both together. */
+  var BENCHMARKS = [
+    { label: 'B2B SaaS', avg: 78 },
+    { label: 'Consumer brands', avg: 71 }
+  ];
 
   function esc(s) {
     var d = document.createElement('div');
@@ -62,6 +70,9 @@
     var domain = normalizeDomain(input.value);
     if (!domain) { setStatus('Enter a valid domain, e.g. example.com', true); return; }
 
+    var isParamScan = pendingIsParamScan;
+    pendingIsParamScan = false;
+
     scanBtn.disabled = true;
     report.hidden = true;
 
@@ -74,7 +85,8 @@
         throw new Error(data.error || ('Scan failed (HTTP ' + res.status + ')'));
       }
 
-      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo);
+      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan);
+      updateShareableUrl(data.domain);
       setStatus('');
     } catch (err) {
       setStatus('Scan failed: ' + (err && err.message ? err.message : 'connection error'), true);
@@ -83,13 +95,60 @@
     }
   }
 
+  /* ---------------- Shareable URL ---------------- */
+
+  function updateShareableUrl(domain) {
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set('scan', domain);
+      history.replaceState(null, '', url.toString());
+    } catch (e) { /* URL API unavailable \u2014 leave the address bar as-is */ }
+  }
+
+  function benchmarkLine(score) {
+    var closest = BENCHMARKS[0];
+    var closestDiff = Math.abs(score - closest.avg);
+    BENCHMARKS.forEach(function (b) {
+      var diff = Math.abs(score - b.avg);
+      if (diff < closestDiff) { closest = b; closestDiff = diff; }
+    });
+    var delta = score - closest.avg;
+    if (delta === 0) return 'That\u2019s right at the ' + closest.label + ' average.';
+    var points = Math.abs(delta);
+    var word = points === 1 ? 'point' : 'points';
+    return 'That\u2019s ' + points + ' ' + word + ' ' + (delta > 0 ? 'above' : 'below') + ' the ' + closest.label + ' average.';
+  }
+
   /* ---------------- Render ---------------- */
 
-  function renderReport(domain, robotsOk, botResults, r, siteInfo) {
+  function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam) {
     lastScore = { domain: domain, total: r.total };
 
     $('scoreValue').textContent = r.total;
     $('scoreDomain').textContent = domain + ' \u00b7 retrieved ' + new Date().toLocaleDateString('en-GB');
+
+    var scannedNowEl = $('scoreScannedNow');
+    if (scannedNowEl) {
+      if (scannedFromParam) {
+        scannedNowEl.textContent = 'Scanned just now \u2014 ' + new Date().toLocaleDateString('en-GB');
+        scannedNowEl.hidden = false;
+      } else {
+        scannedNowEl.hidden = true;
+        scannedNowEl.textContent = '';
+      }
+    }
+
+    var benchmarkEl = $('scoreBenchmark');
+    if (benchmarkEl) {
+      var line = benchmarkLine(r.total);
+      if (line) {
+        benchmarkEl.textContent = line;
+        benchmarkEl.hidden = false;
+      } else {
+        benchmarkEl.hidden = true;
+        benchmarkEl.textContent = '';
+      }
+    }
 
     function bar(fillId, valId, val, max) {
       $(fillId).style.width = Math.round((val / max) * 100) + '%';
@@ -241,9 +300,10 @@
 
   function shareScore() {
     if (!lastScore) return;
-    var text = lastScore.domain + ' scored ' + lastScore.total + '/100 on AI visibility. Scan yours free \u2014 no signup: ' + CONFIG.shareUrl;
+    var shareUrl = CONFIG.shareUrl + '?scan=' + encodeURIComponent(lastScore.domain);
+    var text = lastScore.domain + ' scored ' + lastScore.total + '/100 on AI readiness \u2014 ' + shareUrl;
     if (navigator.share) {
-      navigator.share({ title: 'Answerable. \u2014 AI visibility score', text: text, url: CONFIG.shareUrl }).catch(function () {});
+      navigator.share({ title: 'Answerable. \u2014 AI visibility score', text: text, url: shareUrl }).catch(function () {});
     } else {
       navigator.clipboard.writeText(text).then(function () {
         showToast('Score copied \u2014 paste it anywhere.');
@@ -269,5 +329,17 @@
       });
     });
   }
+
+  /* ---------------- URL-driven scan (?scan=domain) ---------------- */
+
+  (function initFromUrl() {
+    var raw = new URLSearchParams(window.location.search).get('scan');
+    if (!raw) return;
+    var domain = normalizeDomain(raw);
+    if (!domain) return;
+    input.value = domain;
+    pendingIsParamScan = true;
+    runScan();
+  }());
 
 }());
