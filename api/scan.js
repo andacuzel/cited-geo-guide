@@ -8,6 +8,8 @@
    Usage: GET /api/scan?domain=example.com
    ===================================================================== */
 
+const { checkRateLimit } = require('./_rateLimit');
+
 const BOTS = [
   { ua: 'GPTBot',          desc: 'OpenAI training' },
   { ua: 'ChatGPT-User',    desc: 'ChatGPT live browsing' },
@@ -258,6 +260,18 @@ function scoreAll(robotsOk, llmsOk, sitemapOk, botResults, sig) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
+
+  var rl = await checkRateLimit(req);
+  if (rl.limited) {
+    res.setHeader('Retry-After', String(rl.retryAfter));
+    res.status(429).json({
+      error: rl.scope === 'hour'
+        ? 'You’ve hit the hourly scan limit. Try again in a little while.'
+        : 'You’ve hit the daily scan limit. Try again tomorrow.',
+      limit: rl.scope
+    });
+    return;
+  }
 
   var rawDomain = (req.query && req.query.domain) || null;
   if (!rawDomain) {

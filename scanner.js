@@ -81,6 +81,11 @@
       var res = await fetch('/api/scan?domain=' + encodeURIComponent(domain));
       var data = await res.json();
 
+      if (res.status === 429) {
+        setStatus(data.error || 'You\u2019ve hit the scan limit. Try again in a little while.', true);
+        return;
+      }
+
       if (!res.ok || data.error) {
         throw new Error(data.error || ('Scan failed (HTTP ' + res.status + ')'));
       }

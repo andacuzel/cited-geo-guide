@@ -101,6 +101,7 @@
         <div class="doc-section">
           <h2 class="doc-section__heading">What we store</h2>
           <p>Nothing, today. There are no accounts, no email collection, and no scan history. A scan result exists in your browser for as long as the page stays open.</p>
+          <p>The one exception: to stop abuse of the scanner, we keep a one-way hash of your IP address paired with a request counter, purely to enforce a rate limit. It expires automatically within a day, isn't linked to which domains were scanned, and is never stored as a raw IP address.</p>
           <div class="callout callout--gold">
             <p class="callout__label">Will change</p>
             <p>This section will be updated when score history ships. Until then, nothing is retained after your browser tab closes.</p>
