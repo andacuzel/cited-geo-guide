@@ -10,14 +10,24 @@
 
    Usage:
      node scripts/ingest-playbooks.js
+     node scripts/ingest-playbooks.js --allow-legacy-lengths
 
    Exits non-zero if any file fails validation, or if app.js fails
    `node --check` after the rewrite.
+
+   --allow-legacy-lengths downgrades ONLY the three word-count-range
+   checks (Strategic Shift, strategy items, pitfall items) from errors
+   to warnings — for migrating pre-existing content that predates this
+   validator without rewriting it. Every other rule (escaping,
+   structure/counts, banned words, scanner-label whitelist) is still a
+   hard failure. Do not pass this flag for new content.
    ===================================================================== */
 
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+
+const ALLOW_LEGACY_LENGTHS = process.argv.indexOf('--allow-legacy-lengths') !== -1;
 
 const ROOT = path.resolve(__dirname, '..');
 const PLAYBOOKS_DIR = path.join(ROOT, 'content', 'playbooks');
@@ -148,7 +158,12 @@ function hasAnyValidLabel(text) {
   });
 }
 
-function validateEntry(id, rawSource, entry, errors) {
+function validateEntry(id, rawSource, entry, errors, warnings) {
+  // Word-count-range violations go to `warnings` instead of `errors`
+  // when --allow-legacy-lengths is set; every other check always uses
+  // `errors` regardless of the flag.
+  var lengthTarget = ALLOW_LEGACY_LENGTHS ? warnings : errors;
+
   if (!entry || typeof entry !== 'object') {
     errors.push('Module does not export an object.');
     return;
@@ -198,7 +213,7 @@ function validateEntry(id, rawSource, entry, errors) {
   } else {
     var shiftWords = wordCount(shiftPs.join(' '));
     if (shiftWords < 140 || shiftWords > 190) {
-      errors.push('"The Strategic Shift" paragraphs total ' + shiftWords + ' words; must be 140-190.');
+      lengthTarget.push('"The Strategic Shift" paragraphs total ' + shiftWords + ' words; must be 140-190.');
     }
     var p2Text = stripTags(shiftPs[1]);
     if (!hasAnyValidLabel(p2Text)) {
@@ -223,7 +238,7 @@ function validateEntry(id, rawSource, entry, errors) {
         }
         var words = wordCount(inner);
         if (words < 55 || words > 85) {
-          errors.push('Strategy item ' + (i + 1) + ' has ' + words + ' words; must be 55-85.');
+          lengthTarget.push('Strategy item ' + (i + 1) + ' has ' + words + ' words; must be 55-85.');
         }
         if (hasAnyValidLabel(stripTags(inner))) anyLabelInStrategies = true;
         checkScannerRefs(stripTags(inner), errors, 'strategy item ' + (i + 1));
@@ -246,7 +261,7 @@ function validateEntry(id, rawSource, entry, errors) {
       pitfallLis.forEach(function (li, i) {
         var words = wordCount(li);
         if (words < 20 || words > 35) {
-          errors.push('Pitfall item ' + (i + 1) + ' has ' + words + ' words; must be 20-35.');
+          lengthTarget.push('Pitfall item ' + (i + 1) + ' has ' + words + ' words; must be 20-35.');
         }
       });
     }
@@ -481,7 +496,8 @@ function main() {
       return;
     }
 
-    validateEntry(id, rawSource, entry, errors);
+    var warnings = [];
+    validateEntry(id, rawSource, entry, errors, warnings);
 
     if (errors.length > 0) {
       results.push({ id: id, ok: false, errors: errors });
@@ -490,14 +506,15 @@ function main() {
     }
 
     appSource = upsertEntry(appSource, targetObject, id, entry);
-    results.push({ id: id, ok: true, targetObject: targetObject });
+    results.push({ id: id, ok: true, targetObject: targetObject, warnings: warnings });
     anyValid = true;
   });
 
   console.log('');
   results.forEach(function (r) {
     if (r.ok) {
-      console.log('PASS  ' + r.id + '  -> ' + r.targetObject);
+      console.log('PASS  ' + r.id + '  -> ' + r.targetObject + (r.warnings.length ? '  (' + r.warnings.length + ' warning' + (r.warnings.length > 1 ? 's' : '') + ')' : ''));
+      r.warnings.forEach(function (w) { console.log('        ! ' + w); });
     } else {
       console.log('FAIL  ' + r.id);
       r.errors.forEach(function (e) { console.log('        - ' + e); });
