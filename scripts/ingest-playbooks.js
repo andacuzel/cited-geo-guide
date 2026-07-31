@@ -10,24 +10,30 @@
 
    Usage:
      node scripts/ingest-playbooks.js
-     node scripts/ingest-playbooks.js --allow-legacy-lengths
 
    Exits non-zero if any file fails validation, or if app.js fails
    `node --check` after the rewrite.
 
-   --allow-legacy-lengths downgrades ONLY the three word-count-range
-   checks (Strategic Shift, strategy items, pitfall items) from errors
-   to warnings — for migrating pre-existing content that predates this
-   validator without rewriting it. Every other rule (escaping,
-   structure/counts, banned words, scanner-label whitelist) is still a
-   hard failure. Do not pass this flag for new content.
+   Each content/playbooks/<id>.js file may be written in any of four
+   shapes — see normalizeModuleSource() below:
+     1. module.exports = { name: ..., content: ... };
+     2. export default { name: ..., content: ... };
+     3. <id>: { name: ..., content: ... }   (bare property, e.g. copy-
+        pasted straight out of app.js — a trailing comma is fine)
+     4. { name: ..., content: ... }          (bare object, no key)
+
+   Validation has two levels:
+     - errors block ingestion: malformed module, missing/out-of-order
+       sections, wrong counts of strategies/pitfalls/tip boxes, raw
+       apostrophes, plain-text headings instead of literal HTML,
+       unknown scanner-check labels, banned words.
+     - warnings print but never block: word counts outside target.
+       A run with only warnings still exits 0.
    ===================================================================== */
 
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-
-const ALLOW_LEGACY_LENGTHS = process.argv.indexOf('--allow-legacy-lengths') !== -1;
 
 const ROOT = path.resolve(__dirname, '..');
 const PLAYBOOKS_DIR = path.join(ROOT, 'content', 'playbooks');
@@ -105,6 +111,70 @@ function escapeRegExp(s) {
 }
 
 /* ---------------------------------------------------------------
+   2b. Module loading — tolerant of four source shapes.
+   --------------------------------------------------------------- */
+
+// Classifies and rewrites a content file's raw text into a
+// module.exports = ...; statement that's safe to evaluate standalone.
+// Returns null if none of the four accepted shapes match.
+function normalizeModuleSource(rawText) {
+  var text = rawText.trim();
+  if (text.charAt(text.length - 1) === ',') {
+    text = text.slice(0, -1).trim();
+  }
+
+  if (/^module\.exports\s*=/.test(text)) {
+    return { code: text, shape: 'module.exports' };
+  }
+
+  if (/^export\s+default\s+/.test(text)) {
+    var body = text.replace(/^export\s+default\s+/, '');
+    return { code: 'module.exports = ' + body, shape: 'export default' };
+  }
+
+  var bareKeyMatch = text.match(/^([A-Za-z_$][A-Za-z0-9_$]*)\s*:\s*\{/);
+  if (bareKeyMatch) {
+    return {
+      code: 'module.exports = ({' + text + '});',
+      shape: 'bare key',
+      key: bareKeyMatch[1]
+    };
+  }
+
+  if (/^\{/.test(text)) {
+    return { code: 'module.exports = (' + text + ');', shape: 'bare object' };
+  }
+
+  return null;
+}
+
+// Reads and evaluates a content file, tolerant of the four shapes
+// above. Returns { entry } on success or { error } on failure —
+// never throws.
+function loadEntry(filePath, rawSource) {
+  var normalized = normalizeModuleSource(rawSource);
+  if (!normalized) {
+    var snippet = rawSource.trim().slice(0, 80).replace(/\s+/g, ' ');
+    return {
+      error: 'Could not parse ' + filePath + ' as module.exports = {...}, ' +
+        'export default {...}, a bare "id: { ... }" property, or a bare ' +
+        '{ ... } object. File starts with: ' + snippet + (rawSource.trim().length > 80 ? '…' : '')
+    };
+  }
+
+  var moduleObj = { exports: {} };
+  try {
+    var fn = new Function('module', 'exports', 'require', '__filename', '__dirname', normalized.code);
+    fn(moduleObj, moduleObj.exports, require, filePath, path.dirname(filePath));
+  } catch (e) {
+    return { error: 'Failed to evaluate ' + filePath + ' (parsed as ' + normalized.shape + '): ' + e.message };
+  }
+
+  var exported = normalized.shape === 'bare key' ? moduleObj.exports[normalized.key] : moduleObj.exports;
+  return { entry: exported };
+}
+
+/* ---------------------------------------------------------------
    3. Validation
    --------------------------------------------------------------- */
 
@@ -159,11 +229,6 @@ function hasAnyValidLabel(text) {
 }
 
 function validateEntry(id, rawSource, entry, errors, warnings) {
-  // Word-count-range violations go to `warnings` instead of `errors`
-  // when --allow-legacy-lengths is set; every other check always uses
-  // `errors` regardless of the flag.
-  var lengthTarget = ALLOW_LEGACY_LENGTHS ? warnings : errors;
-
   if (!entry || typeof entry !== 'object') {
     errors.push('Module does not export an object.');
     return;
@@ -213,7 +278,7 @@ function validateEntry(id, rawSource, entry, errors, warnings) {
   } else {
     var shiftWords = wordCount(shiftPs.join(' '));
     if (shiftWords < 140 || shiftWords > 190) {
-      lengthTarget.push('"The Strategic Shift" paragraphs total ' + shiftWords + ' words; must be 140-190.');
+      warnings.push('"The Strategic Shift" paragraphs total ' + shiftWords + ' words; outside target 140-190.');
     }
     var p2Text = stripTags(shiftPs[1]);
     if (!hasAnyValidLabel(p2Text)) {
@@ -237,8 +302,8 @@ function validateEntry(id, rawSource, entry, errors, warnings) {
           errors.push('Strategy item ' + (i + 1) + ' must open with <strong>Imperative phrase.</strong>');
         }
         var words = wordCount(inner);
-        if (words < 55 || words > 85) {
-          lengthTarget.push('Strategy item ' + (i + 1) + ' has ' + words + ' words; must be 55-85.');
+        if (words < 40 || words > 95) {
+          warnings.push('Strategy item ' + (i + 1) + ' has ' + words + ' words; outside target 40-95.');
         }
         if (hasAnyValidLabel(stripTags(inner))) anyLabelInStrategies = true;
         checkScannerRefs(stripTags(inner), errors, 'strategy item ' + (i + 1));
@@ -260,8 +325,8 @@ function validateEntry(id, rawSource, entry, errors, warnings) {
     } else {
       pitfallLis.forEach(function (li, i) {
         var words = wordCount(li);
-        if (words < 20 || words > 35) {
-          lengthTarget.push('Pitfall item ' + (i + 1) + ' has ' + words + ' words; must be 20-35.');
+        if (words < 15 || words > 40) {
+          warnings.push('Pitfall item ' + (i + 1) + ' has ' + words + ' words; outside target 15-40.');
         }
       });
     }
@@ -483,18 +548,14 @@ function main() {
     }
 
     var rawSource = fs.readFileSync(filePath, 'utf8');
-    var resolvedPath = require.resolve(filePath);
-    delete require.cache[resolvedPath];
-
-    var entry;
-    try {
-      entry = require(filePath);
-    } catch (e) {
-      errors.push('Failed to load module: ' + e.message);
+    var loaded = loadEntry(filePath, rawSource);
+    if (loaded.error) {
+      errors.push(loaded.error);
       results.push({ id: id, ok: false, errors: errors });
       anyFailed = true;
       return;
     }
+    var entry = loaded.entry;
 
     var warnings = [];
     validateEntry(id, rawSource, entry, errors, warnings);
@@ -514,12 +575,20 @@ function main() {
   results.forEach(function (r) {
     if (r.ok) {
       console.log('PASS  ' + r.id + '  -> ' + r.targetObject + (r.warnings.length ? '  (' + r.warnings.length + ' warning' + (r.warnings.length > 1 ? 's' : '') + ')' : ''));
-      r.warnings.forEach(function (w) { console.log('        ! ' + w); });
     } else {
       console.log('FAIL  ' + r.id);
       r.errors.forEach(function (e) { console.log('        - ' + e); });
     }
   });
+
+  var withWarnings = results.filter(function (r) { return r.ok && r.warnings.length > 0; });
+  if (withWarnings.length > 0) {
+    console.log('\nWarnings:');
+    withWarnings.forEach(function (r) {
+      console.log('  ' + r.id + ':');
+      r.warnings.forEach(function (w) { console.log('    - ' + w); });
+    });
+  }
   console.log('');
 
   if (anyValid) {

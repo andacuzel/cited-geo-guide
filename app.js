@@ -338,9 +338,192 @@
         '<div class="expert-tip"><p>[Your strongest strategic opinion on where e-commerce AI visibility is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
         '</div>'
     },
+
+    consumerapps: {
+      name: 'Consumer Apps',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Smartphone users used to browse top charts or read tech press round-ups to find new software. Today, they ask conversational agents for hyper-specific solutions. When someone asks ChatGPT or Perplexity for a habit tracker with offline mode and a one-time fee, the model does not browse your landing page \u2014 it builds a response from App Store listings, Play Store reviews, Product Hunt discussions, and verified subreddits. If your app lacks density across these platforms, you are entirely invisible to the user.</p>' +
+        '<p>If your Answerable scan shows "AI crawler access" failing, this category feels it faster than most \u2014 app discovery relies heavily on third-party aggregators parsing your web footprint. The mandate for consumer app developers: stop relying solely on paid user acquisition and standard store optimization. Start shaping your brand narrative on the external platforms that feed generative models, ensuring your features and pricing are immediately clear to an automated agent.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Seed authentic community discussions.</strong> Generative engines pull heavily from user-generated content to judge an app\u2019s utility. Ensure your core features and use cases are discussed on Product Hunt and relevant subreddits. Answer engines look for genuine user problems solved by your software. Encourage active users to mention specific features in their App Store and Play Store reviews, giving models the exact vocabulary potential new users search for.</li>' +
+        '<li><strong>Structure your marketing site for extraction.</strong> An AI needs to parse your core value proposition instantly. If your report shows "Subheading structure (H2)" failing, you are burying your features. Organize your landing page with clear, semantic headings that separate pricing, privacy policies, and offline capabilities. Clear architecture allows an answer engine to index your software\u2019s specifics without getting lost in promotional copy.</li>' +
+        '<li><strong>Standardize your feature claims.</strong> Models distrust contradictory information. Ensure your App Store description, technical documentation, and landing page present the exact same feature names, subscription tiers, and compatibility requirements. Deploy explicit schema markup on your main site to state operating system requirements and pricing models clearly. This consistency leaves zero ambiguity for an AI when it evaluates your app against a user\u2019s hyper-specific prompt.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in consumer app citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Hiding pricing and subscription details inside the app instead of publishing them clearly on the web where models can index them.</li>' +
+        '<li>Focusing solely on App Store keywords while ignoring the detailed, problem-solving feature discussions in tech press round-ups and relevant Reddit communities.</li>' +
+        '<li>Using vague marketing language on your landing page instead of stating exactly what the app does in plain text.</li>' +
+        '<li>Overlooking the importance of user reviews, which provide the conversational, long-tail phrases that AI engines use to match search intent.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of consumer app-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where consumer apps\u2019 AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+
+    hospitality: {
+      name: 'Hospitality & Travel',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Travelers used to read ten blogs and search OTA listings to find the right stay. Now, they ask an AI agent for a boutique hotel with a pool near the historic district under $250. When a traveler prompts an engine for recommendations, the model bypasses your beautifully designed homepage. It builds a consensus from your Google Business Profile, TripAdvisor ratings, OTA listings, and mentions in the local press. If your property lacks deep, consistent context across these third-party sources, you vanish from the itinerary.</p>' +
+        '<p>If your Answerable scan shows "Structured data (JSON-LD)" failing, this category feels it faster than most \u2014 hospitality searches hinge entirely on confirmed amenities, pricing, and location data. Answer engines require absolute certainty on check-in policies and pet rules before suggesting a stay. The shift for hospitality marketers: stop relying on visual storytelling alone and start feeding models the raw, structured facts they need to confidently answer "best hotel in X" queries.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Dominate your third-party footprint.</strong> Generative models trust consensus over self-published claims. Claim and actively manage your Google Business Profile, TripAdvisor presence, and OTA listings. Encourage guests to mention specific amenities like fast Wi-Fi or a heated pool in their reviews. A dense, positive presence on these sites ensures models associate your property with the exact terms travelers search for.</li>' +
+        '<li><strong>Publish direct answers for amenities.</strong> Avoid burying your check-in times, parking availability, and pet policies inside lengthy paragraphs. Build a dedicated FAQ page that answers these common questions in clear, definitive sentences. An AI crawler needs to extract this information instantly to satisfy user prompts. Format your site to serve as a clean database of facts about your property, stripping away marketing fluff.</li>' +
+        '<li><strong>Standardize your contact signals.</strong> If your report flags "Contact signals" as failing, answer engines cannot verify your legitimacy. Ensure your physical address, phone number, and email are identical across your website, local press mentions, and aggregator profiles. Models average out discrepancies, and conflicting addresses will cause an AI to drop your property from its recommendations. A unified footprint builds algorithmic trust.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in hospitality citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Relying exclusively on heavy imagery and video tours while neglecting the text-based descriptions that AI crawlers require to understand your property.</li>' +
+        '<li>Ignoring your Google Business Profile and TripAdvisor reviews, allowing outdated or incorrect guest feedback to shape the model\u2019s understanding of your hotel.</li>' +
+        '<li>Hiding key policies like parking fees or cancellation terms inside downloadable PDFs that generative models cannot easily parse or index.</li>' +
+        '<li>Using contradictory names or addresses across OTA listings and your own site, forcing answer engines to doubt your core business information.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of hospitality-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where hospitality\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+
+    marketplaces: {
+      name: 'Marketplaces',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Marketplace growth traditionally relied on capturing long-tail keyword traffic and outbidding competitors on paid search. That playbook is shifting as buyers ask conversational agents to filter the noise. When a user asks an AI to compare freelance platforms or find a safe peer-to-peer used car market, the engine does not scroll your category pages. It synthesizes insights from category comparison content, buyer and seller review platforms, and raw discussions on Reddit. If your marketplace lacks a strong reputation across these external nodes, you lose the recommendation.</p>' +
+        '<p>If your Answerable scan shows "Content schema (Article, FAQ\u2026)" failing, this category feels it faster than most \u2014 marketplaces live and die by their inventory visibility. Answer engines demand clear structures to understand the depth and categories of your offerings. The mandate for marketplace operators: stop burying your inventory behind complex search facets. Start exposing your supply liquidity and trust metrics through structured data and independent reviews so an AI can confidently recommend your ecosystem.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Cultivate dual-sided reviews.</strong> Marketplaces require algorithmic trust from both buyers and sellers. Direct your community teams to actively build a presence on independent review platforms and facilitate organic discussions on Reddit. Generative models evaluate the health of your marketplace by scanning these third-party sites for consensus on safety, fee transparency, and customer support. A strong off-site reputation provides the foundational data models use.</li>' +
+        '<li><strong>Expose your inventory structure.</strong> Generative models struggle with deep, gated site architectures. If your report shows "Sitemap declared" as failing, models cannot discover your category hubs. Provide a clean, text-based map of your inventory categories and seller policies, allowing an AI to understand your entire platform without executing internal searches. Build static category comparison content that clearly explains what your marketplace offers.</li>' +
+        '<li><strong>Clarify policies with plain text.</strong> Marketplaces often bury their buyer protection policies, seller fees, and dispute resolution processes in massive legal documents. Extract these core facts into a centralized, easily scannable FAQ format. Answer engines prefer short, declarative sentences when explaining how a platform works to a user. Making your rules unambiguous ensures models can confidently explain your value proposition and safety mechanisms.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in marketplace citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Locking your best seller profiles and inventory behind login walls, preventing AI crawlers from seeing the liquidity that makes your marketplace valuable.</li>' +
+        '<li>Ignoring seller and buyer complaints on external review sites, allowing negative consensus to dominate the training data models consume.</li>' +
+        '<li>Relying on heavy infinite scroll for category pages without providing clear, crawlable pagination or static links for answer engines to follow.</li>' +
+        '<li>Publishing conflicting fee structures across different support pages, causing models to provide inaccurate pricing information to potential new users.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of marketplace-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where marketplaces\u2019 AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
   };
 
-  var professionalData = {};
+  var professionalData = {
+
+    health: {
+      name: 'Health & Wellness',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Patients used to ask friends for doctor recommendations or scroll through generic insurance portals. Now, they query AI agents for specialists matching exact symptoms and coverage. When a patient asks an engine for a local pediatrician taking Cigna with weekend hours, the model is not crawling your static clinic site. It cross-references Zocdoc, Healthgrades, Google Business Profile ratings, and state insurance directories to verify your practice. If your professional footprint is absent from these critical nodes, you disappear from the patient\u2019s options entirely.</p>' +
+        '<p>If your Answerable scan shows "Author / about signals" failing, this category feels it faster than most \u2014 medical queries require the highest tier of algorithmic trust to satisfy safety thresholds. An LLM simply will not recommend a physician it cannot verify. The shift for independent practitioners: stop writing generic wellness advice that models already know. Start verifying your exact credentials, insurance networks, and patient sentiment across the external healthcare platforms that answer engines trust.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Claim your healthcare directory profiles.</strong> Generative models rely on authoritative third-party medical databases to verify your license and specialties. Spend an afternoon updating your Zocdoc and Healthgrades profiles to reflect your exact current address, accepted insurance plans, and practice areas. Models use these platforms as primary fact-checking layers before recommending a provider to a patient searching for a specific treatment.</li>' +
+        '<li><strong>Consolidate your local patient feedback.</strong> Answer engines prioritize practices with consistent, detailed patient reviews. Direct your front desk to hand out review cards pointing patients to your Google Business Profile. Encourage them to mention specific logistical details like wait times, bedside manner, and ease of booking. Models scan this consensus text to answer nuanced prompts about patient experience and clinic reliability.</li>' +
+        '<li><strong>Deploy basic medical structured data.</strong> If your report flags "Structured data (JSON-LD)" as missing, models cannot parse your clinic\u2019s core facts. Use a free online generator to build MedicalBusiness and Physician schema code, then paste it directly into your website builder. This explicit tagging tells an AI exactly who you are, where you practice, and what services you offer without needing a developer.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in health citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Leaving your insurance network lists outdated on your main website, causing models to provide incorrect billing information to patients.</li>' +
+        '<li>Writing extensive medical advice blogs instead of publishing clear, simple FAQs about your clinic hours, parking, and booking policies.</li>' +
+        '<li>Letting your clinic address drift out of sync across Healthgrades and your Google Business Profile, which immediately fractures algorithmic trust.</li>' +
+        '<li>Ignoring unverified profiles on secondary medical directories, allowing automated and incorrect data to pollute the training sets models consume.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of health-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where health\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+
+    localservices: {
+      name: 'Local Services & Trades',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Homeowners used to hunt through direct mailers or search Google for local plumbers, scrolling past ads to find a decent website. Today, they ask conversational agents for a licensed professional with emergency hours and five-star ratings. When a user asks an AI to find a top-rated local electrician for a panel upgrade, the engine ignores your beautifully coded homepage. It synthesizes reviews from your Google Business Profile, Angi, Houzz, Yelp, and local press mentions to build a consensus on your reliability.</p>' +
+        '<p>If your Answerable scan shows "Contact signals" failing, this category feels it faster than most \u2014 local service recommendations are built entirely on verified service areas and immediate contact availability. A model will not suggest a contractor it cannot map. The new mandate for independent tradespeople: stop spending weekends tweaking your website design. Start aligning your core business details across the exact consumer directories and review aggregators that generative models treat as absolute factual ground truth.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Standardize your local business citations.</strong> Answer engines need absolute certainty about your service area. Ensure your business name, phone number, and physical address match perfectly across Yelp, Angi, Houzz, and your Google Business Profile. If you are an event vendor, do the same for The Knot and WeddingWire. Models penalize conflicting data, so a mismatched phone number will cause an AI to drop you from its trusted list.</li>' +
+        '<li><strong>Extract direct answers for service queries.</strong> Avoid burying your pricing models or emergency fees in long paragraphs. If your scan marks "Content schema (Article, FAQ\u2026)" as missing, models cannot confidently quote your terms. Build a simple FAQ page that directly answers common questions about your hourly rates, dispatch fees, and warranty policies. Clear, definitive sentences give an AI the exact text it needs to satisfy a homeowner\u2019s prompt.</li>' +
+        '<li><strong>Drive hyper-specific customer reviews.</strong> Generative models prioritize vendors with dense, descriptive feedback over those with simple star ratings. Send an email to past clients asking them to mention the exact service you performed on their Google Business Profile review. When a homeowner searches for a contractor experienced in installing tankless water heaters, the AI scans these external platforms for those specific keywords to match the prompt.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in local services citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Hiding your service area behind a generic contact form instead of listing the specific towns and zip codes you cover.</li>' +
+        '<li>Using tracking phone numbers on external directories like Yelp or Angi, which confuses models comparing data against your main site.</li>' +
+        '<li>Pasting plain-text testimonials onto your website instead of pointing happy customers to third-party platforms that answer engines inherently trust.</li>' +
+        '<li>Relying on generic homepages without deploying LocalBusiness and Service schema to explicitly tell models exactly what trades you practice.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of local services-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where local services\u2019 AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+
+    realestate: {
+      name: 'Real Estate Agents',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>Home buyers and sellers used to hunt for local realtors on Google, browsing generic agency sites and comparing headshots. Today, they ask conversational agents for hyper-local experts with specific experience. When a family asks an AI to find an agent who specializes in mid-century homes in a specific zip code, the model does not crawl your personal blog. It reads Google Business Profile reviews, Zillow sales histories, Realtor.com agent profiles, and local press mentions to determine who has actual authority. If you lack a dominant presence in those specific channels, you miss the lead entirely.</p>' +
+        '<p>If your Answerable scan shows "Contact signals" failing, this category feels it faster than most \u2014 real estate is a hyper-local, trust-based business where models quickly penalize mismatched phone numbers or missing office addresses. A solo agent cannot outspend a massive national brokerage on paid search ads. The new mandate is to claim your third-party profiles and aggressively align your core contact details across the web, so answer engines recognize you as the definitive local expert they can confidently recommend to a buyer.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Centralize your client testimonials.</strong> Generative engines trust verified third-party reviews far more than the quotes you paste on your homepage. Send your past clients direct links to leave reviews on your Google Business Profile and Zillow profile. Instruct them to mention the specific neighborhoods and property types you helped them with. An AI engine scans these platforms to match your exact expertise to a buyer\u2019s hyper-local search prompt.</li>' +
+        '<li><strong>Fix your local business citations.</strong> Answer engines require absolute certainty about where you work. If your report shows "Structured data (JSON-LD)" failing, models struggle to verify your service area. You can fix this in an afternoon without a developer by using a free schema generator to create LocalBusiness and RealEstateAgent markup. Paste this code into your website builder to explicitly state your office address, phone number, and operating hours.</li>' +
+        '<li><strong>Align your agent profiles.</strong> Inconsistent information fractures an AI model\u2019s confidence in your business. Audit your Realtor.com, Zillow, and local chamber of commerce directories to ensure your name, brokerage affiliation, and contact details match exactly. Answer engines look for a unified digital footprint. A mismatched email address or an outdated phone number across different platforms causes a model to drop you from its list of trusted local recommendations.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in real estate citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Writing generic blog posts about national mortgage rates instead of focusing on hyper-local market updates that answer engines can cite.</li>' +
+        '<li>Leaving your Zillow or Realtor.com profiles empty or incomplete, forcing generative models to guess your recent sales history and neighborhood expertise.</li>' +
+        '<li>Pasting text-only testimonials directly onto your homepage without pointing clients to verified review platforms, which models discount as unverified self-promotion.</li>' +
+        '<li>Using a different phone number on your website than the one listed on your Google Business Profile, destroying algorithmic trust.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of real estate-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where real estate\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+
+    legal: {
+      name: 'Legal Practices',
+      content:
+        '<h3>The Strategic Shift</h3>' +
+        '<p>People facing a legal crisis used to scroll past ads to find a local attorney. Now, they ask AI tools to recommend a lawyer based on exact circumstances. When a user asks an engine for a local attorney experienced in commercial lease disputes, the model does not read your generic homepage. It synthesizes insights from Avvo, Martindale-Hubbell, your Google Business Profile, state bar directories, and practice-area queries. If your practice lacks deep authority in those specific off-site repositories, you are excluded from the answer.</p>' +
+        '<p>If your Answerable scan shows "Author / about signals" failing, this category feels it faster than most \u2014 legal queries demand high authoritative trust, and an LLM will ignore a practitioner it cannot verify. Independent attorneys do not need an enterprise marketing budget to win this space. The new standard is strictly defining your expertise and maintaining a flawless, verified presence across the exact directories and review platforms that generative models treat as factual ground truth.</p>' +
+        '<h3>Top 3 Actionable Strategies</h3>' +
+        '<ul><li><strong>Claim your legal directories.</strong> Models pull heavily from established industry databases to verify your credentials. Spend an afternoon updating your Avvo, Martindale-Hubbell, and state bar directory profiles. Ensure your practice areas, bar admission dates, and disciplinary records are accurate and detailed. Generative engines use these specific platforms as primary fact-checking layers before they ever suggest your name to a user seeking legal representation.</li>' +
+        '<li><strong>Answer specific practice-area queries.</strong> Broad claims about being a trial lawyer give an AI nothing to extract. Build simple, single-topic pages on your site that directly answer specific client questions, like the exact statute of limitations for personal injury in your state. Write in plain, definitive sentences without excessive legalese. Models lift these clear answers verbatim when users ask complex legal questions.</li>' +
+        '<li><strong>Structure your contact and practice data.</strong> Generative models need to read your credentials easily. If your scan marks "Structured data (JSON-LD)" as missing, an AI cannot definitively parse your practice details. Use a free tool to generate LegalService schema and add it to your site. This code directly tells the engine your precise business name, location, and verified contact details, bridging the gap between your site and your external profiles.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--aside"><p>[A pattern you\u2019ve personally observed in legal citation sources \u2014 e.g. a review phrasing that keeps surfacing in AI answers, a client anecdote, a contrarian read. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>' +
+        '<h3>Outdated SEO Pitfalls to Avoid</h3>' +
+        '<ul class="pitfalls"><li>Stuffing your homepage with generic keywords like "best lawyer near me" instead of clearly stating your specific practice areas and jurisdictions.</li>' +
+        '<li>Ignoring your Google Business Profile reviews, allowing a handful of negative or unanswered client experiences to shape a model\u2019s baseline understanding.</li>' +
+        '<li>Publishing long, unstructured essays on case law instead of offering direct, scannable answers to the common practice-area queries clients ask.</li>' +
+        '<li>Listing conflicting office addresses or phone numbers across your state bar directory and Avvo profile, which breaks a model\u2019s confidence.</li>' +
+        '</ul>' +
+        '<div class="expert-tip expert-tip--data"><p>[One number with a source \u2014 e.g. share of legal-category queries answered by AI tools, a review-volume threshold you\u2019ve seen matter, a before/after from a schema rollout. <strong>Replace with a sourced figure.</strong>]</p>' +
+        '</div>' +
+        '<h3>Expert Tip</h3>' +
+        '<div class="expert-tip"><p>[Your strongest strategic opinion on where legal\u2019s AI visibility race is decided over the next 12 months. <strong>This box is for your proprietary point of view.</strong>]</p>' +
+        '</div>'
+    },
+  };
 
   /* ---------------------------------------------------------------
      4. DOM references
