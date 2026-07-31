@@ -21,6 +21,7 @@
    ===================================================================== */
 
 const crypto = require('crypto');
+const { kvPipeline } = require('./_kv');
 
 var HOURLY_LIMIT = 20;
 var HOURLY_TTL = 60 * 60;
@@ -35,32 +36,6 @@ function getClientIp(req) {
   var fwd = req.headers && req.headers['x-forwarded-for'];
   if (fwd) return String(fwd).split(',')[0].trim();
   return (req.socket && req.socket.remoteAddress) || 'unknown';
-}
-
-async function kvPipeline(commands) {
-  var url = process.env.KV_REST_API_URL;
-  var token = process.env.KV_REST_API_TOKEN;
-  if (!url || !token) return null; // not configured — caller fails open
-
-  var ctrl = new AbortController();
-  var t = setTimeout(function () { ctrl.abort(); }, 2000);
-  try {
-    var res = await fetch(url + '/pipeline', {
-      method: 'POST',
-      signal: ctrl.signal,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(commands)
-    });
-    clearTimeout(t);
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (e) {
-    clearTimeout(t);
-    return null;
-  }
 }
 
 /* Resolves to { limited: false } to allow the request, or

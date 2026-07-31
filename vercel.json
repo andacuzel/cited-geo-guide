@@ -4,5 +4,8 @@
     "api/scan.js": {
       "maxDuration": 30
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" }
+  ]
 }
