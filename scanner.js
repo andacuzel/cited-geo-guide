@@ -30,13 +30,6 @@
   var lastScore = null;
   var pendingIsParamScan = false;
 
-  /* Hand-maintained to match the averages shown in the homepage
-     benchmark strip (index.html) — update both together. */
-  var BENCHMARKS = [
-    { label: 'B2B SaaS', avg: 78 },
-    { label: 'Consumer brands', avg: 71 }
-  ];
-
   function esc(s) {
     var d = document.createElement('div');
     d.textContent = s == null ? '' : String(s);
@@ -110,18 +103,24 @@
     } catch (e) { /* URL API unavailable \u2014 leave the address bar as-is */ }
   }
 
+  // window.ANSWERABLE_BENCHMARKS is written by scripts/generate-benchmarks.js
+  // alongside the homepage benchmark section \u2014 see index.html between the
+  // BENCHMARKS:START/END markers. Returns HTML (a trusted string built from
+  // numbers only), or null if the stats aren't available on this page.
   function benchmarkLine(score) {
-    var closest = BENCHMARKS[0];
-    var closestDiff = Math.abs(score - closest.avg);
-    BENCHMARKS.forEach(function (b) {
-      var diff = Math.abs(score - b.avg);
-      if (diff < closestDiff) { closest = b; closestDiff = diff; }
-    });
-    var delta = score - closest.avg;
-    if (delta === 0) return 'That\u2019s right at the ' + closest.label + ' average.';
+    var stats = window.ANSWERABLE_BENCHMARKS;
+    if (!stats || typeof stats.overallAverage !== 'number' || !stats.totalSites) return null;
+
+    var link = ' <a href="/#benchmark-heading">See the benchmark</a>';
+    var sitesPhrase = 'the average of the ' + stats.totalSites + ' sites we\u2019ve scanned';
+    var delta = score - stats.overallAverage;
     var points = Math.abs(delta);
+
+    if (points < 2) {
+      return 'That\u2019s around ' + sitesPhrase + '.' + link;
+    }
     var word = points === 1 ? 'point' : 'points';
-    return 'That\u2019s ' + points + ' ' + word + ' ' + (delta > 0 ? 'above' : 'below') + ' the ' + closest.label + ' average.';
+    return 'That\u2019s ' + points + ' ' + word + ' ' + (delta > 0 ? 'above' : 'below') + ' ' + sitesPhrase + '.' + link;
   }
 
   /* ---------------- Render ---------------- */
@@ -147,7 +146,7 @@
     if (benchmarkEl) {
       var line = benchmarkLine(r.total);
       if (line) {
-        benchmarkEl.textContent = line;
+        benchmarkEl.innerHTML = line;
         benchmarkEl.hidden = false;
       } else {
         benchmarkEl.hidden = true;

@@ -1,0 +1,60 @@
+# DTC & e-commerce brands — category scan list
+# One domain per line. Lines starting with # are ignored.
+# Failed domains are excluded from the stats automatically.
+
+# --- Apparel & footwear ---
+allbirds.com
+warbyparker.com
+everlane.com
+bombas.com
+untuckit.com
+mackweldon.com
+rothys.com
+vuoriclothing.com
+outdoorvoices.com
+tenthousand.cc
+figs.com
+quince.com
+
+# --- Beauty & personal care ---
+glossier.com
+theordinary.com
+drunkelephant.com
+ilia.com
+harrys.com
+hims.com
+curology.com
+billie.com
+lolavie.com
+
+# --- Home & lifestyle ---
+casper.com
+purple.com
+brooklinen.com
+parachutehome.com
+burrow.com
+article.com
+madeindesign.com
+madeincookware.com
+caraway.com
+ourplace.com
+
+# --- Food & beverage ---
+athleticbrewing.com
+liquiddeath.com
+magicspoon.com
+olipop.com
+chomps.com
+graza.co
+fly-by-jing.com
+haus.com
+
+# --- Eyewear, accessories, other ---
+mejuri.com
+ridge.com
+peakdesign.com
+away.com
+cotopaxi.com
+bearaby.com
+hydrojug.com
+lovevery.com

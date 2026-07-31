@@ -1,0 +1,89 @@
+{
+  "category": "dtc-brands",
+  "scannedAt": "2026-07-29",
+  "scanned": 33,
+  "failed": 14,
+  "score": {
+    "average": 71,
+    "median": 70,
+    "lowest": 46,
+    "highest": 87,
+    "averageDiscoverability": 27,
+    "averageTechnical": 17,
+    "averageTrust": 28
+  },
+  "crawlers": {
+    "blockingAtLeastOnePct": 3,
+    "notFullyOpenToAllPct": 97,
+    "perBot": {
+      "GPTBot": {
+        "blocked": 1,
+        "limited": 29,
+        "open": 3
+      },
+      "ChatGPT-User": {
+        "blocked": 0,
+        "limited": 30,
+        "open": 3
+      },
+      "OAI-SearchBot": {
+        "blocked": 0,
+        "limited": 30,
+        "open": 3
+      },
+      "ClaudeBot": {
+        "blocked": 0,
+        "limited": 30,
+        "open": 3
+      },
+      "anthropic-ai": {
+        "blocked": 0,
+        "limited": 31,
+        "open": 2
+      },
+      "PerplexityBot": {
+        "blocked": 0,
+        "limited": 30,
+        "open": 3
+      },
+      "Perplexity-User": {
+        "blocked": 0,
+        "limited": 31,
+        "open": 2
+      },
+      "Google-Extended": {
+        "blocked": 1,
+        "limited": 30,
+        "open": 2
+      },
+      "CCBot": {
+        "blocked": 1,
+        "limited": 31,
+        "open": 1
+      },
+      "Bytespider": {
+        "blocked": 0,
+        "limited": 32,
+        "open": 1
+      }
+    }
+  },
+  "checkFailureRates": {
+    "AI crawler access": 97,
+    "Content schema (Article, FAQ\u2026)": 91,
+    "Single H1 heading": 52,
+    "Meta description": 27,
+    "Author / about signals": 27,
+    "llms.txt present": 24,
+    "Structured data (JSON-LD)": 24,
+    "Organization / WebSite schema": 24,
+    "Page title": 18,
+    "Open Graph tags": 15,
+    "Subheading structure (H2)": 9,
+    "Canonical tag": 6,
+    "html lang attribute": 3,
+    "robots.txt present": 0,
+    "Sitemap declared": 0,
+    "Contact signals": 0
+  }
+}

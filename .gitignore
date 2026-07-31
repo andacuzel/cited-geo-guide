@@ -1,5 +1,8 @@
-# Batch-scan output — company names and scores, not for publishing
-data/
+# Batch-scan output — per-domain raw results (company names + individual
+# scores) stay out of the repo. Aggregate summaries have no company names
+# in them and are what scripts/generate-benchmarks.js reads from, so
+# those and the hand-maintained benchmarks.json index are tracked.
+data/*-raw.json
 
 # OS
 .DS_Store

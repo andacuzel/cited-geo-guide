@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=23" />
+  <link rel="stylesheet" href="styles.css?v=24" />
 
   <script type="application/ld+json">
   {
@@ -209,28 +209,62 @@
         </div>
       </section>
 
-      <!-- ---------- Benchmarks ---------- -->
+      <!-- BENCHMARKS:START -->
       <section class="verticals" aria-labelledby="benchmark-heading">
         <div class="section__inner">
           <div class="section-head">
             <p class="kicker">Where does your site land?</p>
-            <h2 id="benchmark-heading" class="section-title">We've scanned 64 sites so far.</h2>
+            <h2 id="benchmark-heading" class="section-title">We’ve scanned 219 sites across 6 categories.</h2>
             <p class="section-sub">Real averages from our own scans. <a href="/methodology">Read the methodology</a>.</p>
           </div>
-          <div class="card-grid">
-            <div class="card card--static">
-              <span class="card__code">B2B SAAS · 31 CRM PLATFORMS</span>
-              <div class="score-entry__value">78<small>/100</small></div>
-              <div class="score-entry__meta">Range 53–91</div>
+          <div class="benchmarks-list">
+            <div class="benchmark-row">
+              <span class="benchmark-row__name">CRM software</span>
+              <span class="benchmark-row__group">B2B SaaS</span>
+              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill benchmark-row__bar-fill--saas" style="width:78%"></div></div></div>
+              <span class="benchmark-row__avg">78<small>/100</small></span>
+              <span class="benchmark-row__n">31 platforms</span>
             </div>
-            <div class="card card--static">
-              <span class="card__code">CONSUMER BRANDS · 33 DTC BRANDS</span>
-              <div class="score-entry__value">71<small>/100</small></div>
-              <div class="score-entry__meta">Range 46–87</div>
+            <div class="benchmark-row">
+              <span class="benchmark-row__name">Cybersecurity</span>
+              <span class="benchmark-row__group">B2B SaaS</span>
+              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill benchmark-row__bar-fill--saas" style="width:78%"></div></div></div>
+              <span class="benchmark-row__avg">78<small>/100</small></span>
+              <span class="benchmark-row__n">46 platforms</span>
+            </div>
+            <div class="benchmark-row">
+              <span class="benchmark-row__name">DevTools &amp; Cloud</span>
+              <span class="benchmark-row__group">B2B SaaS</span>
+              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill benchmark-row__bar-fill--saas" style="width:74%"></div></div></div>
+              <span class="benchmark-row__avg">74<small>/100</small></span>
+              <span class="benchmark-row__n">48 platforms</span>
+            </div>
+            <div class="benchmark-row">
+              <span class="benchmark-row__name">DTC brands</span>
+              <span class="benchmark-row__group">Consumer &amp; e-commerce</span>
+              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill benchmark-row__bar-fill--consumer" style="width:71%"></div></div></div>
+              <span class="benchmark-row__avg">71<small>/100</small></span>
+              <span class="benchmark-row__n">33 brands</span>
+            </div>
+            <div class="benchmark-row">
+              <span class="benchmark-row__name">Hospitality &amp; travel</span>
+              <span class="benchmark-row__group">Consumer &amp; e-commerce</span>
+              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill benchmark-row__bar-fill--consumer" style="width:71%"></div></div></div>
+              <span class="benchmark-row__avg">71<small>/100</small></span>
+              <span class="benchmark-row__n">21 venues</span>
+            </div>
+            <div class="benchmark-row">
+              <span class="benchmark-row__name">Consumer apps</span>
+              <span class="benchmark-row__group">Consumer &amp; e-commerce</span>
+              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill benchmark-row__bar-fill--consumer" style="width:65%"></div></div></div>
+              <span class="benchmark-row__avg">65<small>/100</small></span>
+              <span class="benchmark-row__n">40 apps</span>
             </div>
           </div>
         </div>
       </section>
+      <script>window.ANSWERABLE_BENCHMARKS = {"totalSites":219,"totalCategories":6,"overallAverage":73};</script>
+      <!-- BENCHMARKS:END -->
 
       <!-- ---------- Report ---------- -->
       <section class="report-section" id="scanReport" hidden aria-label="Scan report">
@@ -360,7 +394,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="app.js?v=24"></script>
-  <script src="scanner.js?v=25"></script>
+  <script src="scanner.js?v=26"></script>
   <script src="nav.js?v=1"></script>
 </body>
 </html>

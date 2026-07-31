@@ -1,0 +1,8 @@
+[
+  { "category": "crm", "label": "CRM software", "track": "B2B SaaS", "note": "platforms" },
+  { "category": "cybersecurity", "label": "Cybersecurity", "track": "B2B SaaS", "note": "platforms" },
+  { "category": "devtools", "label": "DevTools & Cloud", "track": "B2B SaaS", "note": "platforms" },
+  { "category": "dtc-brands", "label": "DTC brands", "track": "Consumer & e-commerce", "note": "brands" },
+  { "category": "consumer-apps", "label": "Consumer apps", "track": "Consumer & e-commerce", "note": "apps" },
+  { "category": "hospitality", "label": "Hospitality & travel", "track": "Consumer & e-commerce", "note": "venues" }
+]

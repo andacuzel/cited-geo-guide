@@ -1,0 +1,91 @@
+{
+  "category": "hospitality",
+  "scannedAt": "2026-07-31",
+  "scanned": 21,
+  "failed": 23,
+  "score": {
+    "average": 71,
+    "median": 71,
+    "lowest": 58,
+    "highest": 93,
+    "averageDiscoverability": 26,
+    "averageTechnical": 17,
+    "averageTrust": 29
+  },
+  "crawlers": {
+    "blockingAtLeastOnePct": 5,
+    "notFullyOpenToAllPct": 86,
+    "perBot": {
+      "GPTBot": {
+        "blocked": 1,
+        "limited": 17,
+        "open": 3
+      },
+      "ChatGPT-User": {
+        "blocked": 0,
+        "limited": 17,
+        "open": 4
+      },
+      "OAI-SearchBot": {
+        "blocked": 0,
+        "limited": 17,
+        "open": 4
+      },
+      "ClaudeBot": {
+        "blocked": 0,
+        "limited": 18,
+        "open": 3
+      },
+      "anthropic-ai": {
+        "blocked": 0,
+        "limited": 18,
+        "open": 3
+      },
+      "PerplexityBot": {
+        "blocked": 0,
+        "limited": 17,
+        "open": 4
+      },
+      "Perplexity-User": {
+        "blocked": 0,
+        "limited": 18,
+        "open": 3
+      },
+      "Google-Extended": {
+        "blocked": 1,
+        "limited": 17,
+        "open": 3
+      },
+      "CCBot": {
+        "blocked": 1,
+        "limited": 17,
+        "open": 3
+      },
+      "Bytespider": {
+        "blocked": 0,
+        "limited": 18,
+        "open": 3
+      }
+    }
+  },
+  "checkFailureRates": {
+    "AI crawler access (0/10 open)": 100,
+    "AI crawler access (3/10 open)": 100,
+    "llms.txt present": 76,
+    "Content schema (Article, FAQ…)": 76,
+    "Organization / WebSite schema": 43,
+    "Single H1 heading": 38,
+    "Open Graph tags": 33,
+    "Structured data (JSON-LD)": 29,
+    "Author / about signals": 19,
+    "Meta description": 14,
+    "Canonical tag": 10,
+    "Page title": 10,
+    "html lang attribute": 5,
+    "Subheading structure (H2)": 5,
+    "robots.txt present": 0,
+    "Sitemap declared": 0,
+    "Contact signals": 0,
+    "AI crawler access (10/10 open)": 0
+  }
+}

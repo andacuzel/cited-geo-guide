@@ -1,0 +1,56 @@
+# Hospitality & travel — category scan list
+# One domain per line. Failed domains are excluded from stats.
+
+# --- Global chains ---
+marriott.com
+hilton.com
+hyatt.com
+ihg.com
+accor.com
+wyndhamhotels.com
+choicehotels.com
+radissonhotels.com
+melia.com
+nh-hotels.com
+barcelo.com
+scandichotels.com
+
+# --- Luxury ---
+fourseasons.com
+ritzcarlton.com
+mandarinoriental.com
+peninsula.com
+rosewoodhotels.com
+belmond.com
+aman.com
+sixsenses.com
+oneandonlyresorts.com
+raffles.com
+
+# --- Design & boutique ---
+citizenm.com
+acehotel.com
+standardhotels.com
+25hours-hotels.com
+mamashelter.com
+sohohouse.com
+hoxtonhotels.com
+nobuhotels.com
+edition-hotels.com
+sonder.com
+
+# --- Budget & hostels ---
+premierinn.com
+travelodge.co.uk
+motel-one.com
+generatorhostels.com
+a-o.com
+meininger-hotels.com
+
+# --- Regional & resort ---
+rixos.com
+divanhotels.com
+titanic.com.tr
+clubmed.com
+sandals.com
+atlantis.com

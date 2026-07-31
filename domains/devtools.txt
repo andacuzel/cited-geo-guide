@@ -1,0 +1,69 @@
+# DevTools & Cloud — category scan list
+# One domain per line. Failed domains are excluded from stats.
+# Deliberately avoids domains already used in the cybersecurity list.
+
+# --- Platforms & hosting ---
+vercel.com
+netlify.com
+heroku.com
+render.com
+railway.app
+fly.io
+digitalocean.com
+linode.com
+scaleway.com
+platform.sh
+
+# --- Source, CI & delivery ---
+github.com
+gitlab.com
+bitbucket.org
+circleci.com
+jenkins.io
+buildkite.com
+harness.io
+launchdarkly.com
+split.io
+
+# --- Containers & infrastructure ---
+docker.com
+kubernetes.io
+hashicorp.com
+pulumi.com
+ansible.com
+puppet.com
+chef.io
+
+# --- Databases & data layer ---
+mongodb.com
+redis.io
+postgresql.org
+supabase.com
+planetscale.com
+neon.tech
+cockroachlabs.com
+prisma.io
+clickhouse.com
+timescale.com
+
+# --- Observability ---
+datadoghq.com
+newrelic.com
+sentry.io
+honeycomb.io
+grafana.com
+prometheus.io
+pagerduty.com
+
+# --- APIs & developer services ---
+twilio.com
+postman.com
+auth0.com
+clerk.com
+algolia.com
+
+# --- Editors & workspaces ---
+jetbrains.com
+replit.com
+codesandbox.io
+stackblitz.com

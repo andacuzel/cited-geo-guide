@@ -1,0 +1,60 @@
+# Consumer apps — category scan list
+# One domain per line. Failed domains are excluded from stats.
+
+# --- Learning & language ---
+duolingo.com
+babbel.com
+busuu.com
+memrise.com
+elsaspeak.com
+blinkist.com
+brilliant.org
+khanacademy.org
+
+# --- Health, fitness & wellbeing ---
+headspace.com
+calm.com
+strava.com
+whoop.com
+ouraring.com
+myfitnesspal.com
+loseit.com
+yazio.com
+freeletics.com
+peloton.com
+flo.health
+sleepcycle.com
+
+# --- Productivity & notes ---
+todoist.com
+notion.com
+obsidian.md
+bear.app
+culturedcode.com
+readwise.io
+raycast.com
+superhuman.com
+
+# --- Media & audio ---
+spotify.com
+pocketcasts.com
+overcast.fm
+audible.com
+libro.fm
+endel.io
+
+# --- Finance & everyday ---
+monzo.com
+revolut.com
+n26.com
+ynab.com
+splitwise.com
+
+# --- Photo, creative & misc ---
+vsco.co
+darkroom.co
+halide.cam
+forestapp.cc
+dayoneapp.com
+letterboxd.com
+goodreads.com

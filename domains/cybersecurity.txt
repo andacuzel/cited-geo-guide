@@ -1,0 +1,64 @@
+# Cybersecurity — category scan list
+# One domain per line. Failed domains are excluded from stats.
+
+# --- Endpoint & platform ---
+crowdstrike.com
+sentinelone.com
+paloaltonetworks.com
+fortinet.com
+checkpoint.com
+sophos.com
+trendmicro.com
+bitdefender.com
+eset.com
+malwarebytes.com
+kaspersky.com
+withsecure.com
+
+# --- Cloud & network security ---
+zscaler.com
+netskope.com
+wiz.io
+orca.security
+lacework.com
+cloudflare.com
+akamai.com
+imperva.com
+
+# --- Identity & access ---
+okta.com
+cyberark.com
+1password.com
+dashlane.com
+keepersecurity.com
+jumpcloud.com
+duo.com
+
+# --- Vulnerability & appsec ---
+rapid7.com
+tenable.com
+qualys.com
+snyk.io
+veracode.com
+checkmarx.com
+sonarsource.com
+semgrep.dev
+
+# --- Email & human risk ---
+proofpoint.com
+mimecast.com
+abnormalsecurity.com
+knowbe4.com
+
+# --- Detection, response & compliance ---
+darktrace.com
+arcticwolf.com
+huntress.com
+expel.com
+vanta.com
+drata.com
+secureframe.com
+hackerone.com
+bugcrowd.com
+splunk.com
+elastic.co

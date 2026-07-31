@@ -1,0 +1,91 @@
+{
+  "category": "consumer-apps",
+  "scannedAt": "2026-07-31",
+  "scanned": 40,
+  "failed": 6,
+  "score": {
+    "average": 65,
+    "median": 63,
+    "lowest": 30,
+    "highest": 97,
+    "averageDiscoverability": 25,
+    "averageTechnical": 15,
+    "averageTrust": 24
+  },
+  "crawlers": {
+    "blockingAtLeastOnePct": 18,
+    "notFullyOpenToAllPct": 83,
+    "perBot": {
+      "GPTBot": {
+        "blocked": 4,
+        "limited": 27,
+        "open": 9
+      },
+      "ChatGPT-User": {
+        "blocked": 1,
+        "limited": 30,
+        "open": 9
+      },
+      "OAI-SearchBot": {
+        "blocked": 0,
+        "limited": 31,
+        "open": 9
+      },
+      "ClaudeBot": {
+        "blocked": 2,
+        "limited": 29,
+        "open": 9
+      },
+      "anthropic-ai": {
+        "blocked": 1,
+        "limited": 30,
+        "open": 9
+      },
+      "PerplexityBot": {
+        "blocked": 0,
+        "limited": 31,
+        "open": 9
+      },
+      "Perplexity-User": {
+        "blocked": 0,
+        "limited": 31,
+        "open": 9
+      },
+      "Google-Extended": {
+        "blocked": 2,
+        "limited": 29,
+        "open": 9
+      },
+      "CCBot": {
+        "blocked": 1,
+        "limited": 30,
+        "open": 9
+      },
+      "Bytespider": {
+        "blocked": 3,
+        "limited": 30,
+        "open": 7
+      }
+    }
+  },
+  "checkFailureRates": {
+    "AI crawler access (0/10 open)": 100,
+    "AI crawler access (9/10 open)": 100,
+    "Content schema (Article, FAQ…)": 80,
+    "llms.txt present": 73,
+    "Organization / WebSite schema": 68,
+    "Structured data (JSON-LD)": 63,
+    "Single H1 heading": 50,
+    "Meta description": 25,
+    "Canonical tag": 20,
+    "Author / about signals": 20,
+    "Page title": 18,
+    "Open Graph tags": 18,
+    "Contact signals": 18,
+    "Sitemap declared": 13,
+    "html lang attribute": 10,
+    "Subheading structure (H2)": 10,
+    "robots.txt present": 8,
+    "AI crawler access (10/10 open)": 0
+  }
+}
