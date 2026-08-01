@@ -10,9 +10,10 @@
      <!-- BENCHMARKS:START -->
      <!-- BENCHMARKS:END -->
 
-   creating the markers (replacing the old hand-written section) on
-   the first run. Re-running is safe — it replaces the block in place,
-   never duplicates it.
+   — a compact band just above the footer (a big Gloock overall average
+   plus a dense inline row per category), creating the markers there if
+   they're missing. Re-running is safe — it replaces the block in
+   place, never duplicates it.
 
    No figure here is hand-typed: averages, sample sizes and the total
    scanned count all come from the summary files at generation time.
@@ -36,8 +37,8 @@ const END_MARKER = '<!-- BENCHMARKS:END -->';
 // (styles.css: "B2B SaaS is always --navy-800, consumer brands are
 // always --gold. Do not remix these per report.").
 const TRACK_FILL_CLASS = {
-  'B2B SaaS': 'benchmark-row__bar-fill--saas',
-  'Consumer & e-commerce': 'benchmark-row__bar-fill--consumer'
+  'B2B SaaS': 'benchmark-strip__cat-fill--saas',
+  'Consumer & e-commerce': 'benchmark-strip__cat-fill--consumer'
 };
 
 function esc(s) {
@@ -100,18 +101,15 @@ function buildRows(entries) {
   return { rows: rows, errors: errors };
 }
 
-function renderRow(row) {
+function renderCat(row) {
   const fillClass = TRACK_FILL_CLASS[row.track];
   const width = Math.max(0, Math.min(100, row.average));
-  const sampleText = row.scanned + (row.note ? ' ' + row.note : '');
   return (
-    '            <div class="benchmark-row">\n' +
-    '              <span class="benchmark-row__name">' + esc(row.label) + '</span>\n' +
-    '              <span class="benchmark-row__group">' + esc(row.track) + '</span>\n' +
-    '              <div class="benchmark-row__bar"><div class="benchmark-row__bar-track"><div class="benchmark-row__bar-fill ' + fillClass + '" style="width:' + width + '%"></div></div></div>\n' +
-    '              <span class="benchmark-row__avg">' + row.average + '<small>/100</small></span>\n' +
-    '              <span class="benchmark-row__n">' + esc(sampleText) + '</span>\n' +
-    '            </div>'
+    '            <span class="benchmark-strip__cat">\n' +
+    '              <span class="benchmark-strip__cat-name">' + esc(row.label) + '</span>\n' +
+    '              <span class="benchmark-strip__cat-bar"><span class="benchmark-strip__cat-fill ' + fillClass + '" style="width:' + width + '%"></span></span>\n' +
+    '              <span class="benchmark-strip__cat-score">' + row.average + '</span>\n' +
+    '            </span>'
   );
 }
 
@@ -124,10 +122,10 @@ function renderBlock(rows) {
     rows.reduce(function (sum, r) { return sum + r.average * r.scanned; }, 0) / totalSites
   );
 
-  const heading = 'We’ve scanned ' + totalSites + ' sites across ' + totalCategories +
-    ' categor' + (totalCategories === 1 ? 'y' : 'ies') + '.';
+  const sentence = 'We’ve scanned ' + totalSites + ' sites across ' + totalCategories +
+    ' categor' + (totalCategories === 1 ? 'y' : 'ies') + '. The average is ' + overallAverage + '/100.';
 
-  const rowsHtml = rows.map(renderRow).join('\n');
+  const catsHtml = rows.map(renderCat).join('\n');
 
   const stats = JSON.stringify({
     totalSites: totalSites,
@@ -137,15 +135,17 @@ function renderBlock(rows) {
 
   return (
     START_MARKER + '\n' +
-    '      <section class="verticals" aria-labelledby="benchmark-heading">\n' +
+    '      <section class="benchmark-strip" aria-labelledby="benchmark-heading">\n' +
     '        <div class="section__inner">\n' +
-    '          <div class="section-head">\n' +
-    '            <p class="kicker">Where does your site land?</p>\n' +
-    '            <h2 id="benchmark-heading" class="section-title">' + esc(heading) + '</h2>\n' +
-    '            <p class="section-sub">Real averages from our own scans. <a href="/methodology">Read the methodology</a>.</p>\n' +
+    '          <div class="benchmark-strip__top">\n' +
+    '            <div class="benchmark-strip__avg">' + overallAverage + '<small>/100</small></div>\n' +
+    '            <div class="benchmark-strip__summary">\n' +
+    '              <h2 id="benchmark-heading" class="benchmark-strip__text">' + esc(sentence) + '</h2>\n' +
+    '              <a href="/methodology" class="benchmark-strip__link">Read the methodology</a>\n' +
+    '            </div>\n' +
     '          </div>\n' +
-    '          <div class="benchmarks-list">\n' +
-    rowsHtml + '\n' +
+    '          <div class="benchmark-strip__cats">\n' +
+    catsHtml + '\n' +
     '          </div>\n' +
     '        </div>\n' +
     '      </section>\n' +
@@ -154,10 +154,10 @@ function renderBlock(rows) {
   );
 }
 
-// Replaces content between existing markers; on the very first run
-// (no markers yet) replaces the old hand-written section instead, so
-// the migration doesn't leave a duplicate. Falls back to inserting
-// before the Report section, then before </main>, if neither is found.
+// Replaces content between existing markers. If the markers are
+// missing (e.g. a fresh checkout that never had them), inserts a fresh
+// pair just above the footer — that's the band's permanent home —
+// falling back to right before </main> if no footer is found either.
 function spliceIntoIndex(html, block) {
   const startIdx = html.indexOf(START_MARKER);
   const endIdx = html.indexOf(END_MARKER);
@@ -165,21 +165,16 @@ function spliceIntoIndex(html, block) {
     return html.slice(0, startIdx) + block + html.slice(endIdx + END_MARKER.length);
   }
 
-  const legacyRe = /(?:<!--\s*-+\s*Benchmarks\s*-+\s*-->\s*\n\s*)?<section class="verticals" aria-labelledby="benchmark-heading">[\s\S]*?<\/section>/;
-  if (legacyRe.test(html)) {
-    return html.replace(legacyRe, block);
-  }
-
-  const reportComment = '<!-- ---------- Report ---------- -->';
-  if (html.indexOf(reportComment) !== -1) {
-    return html.replace(reportComment, block + '\n\n      ' + reportComment);
+  const footerRe = /<footer class="site-footer"/;
+  if (footerRe.test(html)) {
+    return html.replace(footerRe, block + '\n\n      <footer class="site-footer"');
   }
 
   if (html.indexOf('</main>') !== -1) {
     return html.replace('</main>', '  ' + block + '\n\n    </main>');
   }
 
-  throw new Error('Could not find BENCHMARKS markers, the legacy benchmark section, the Report comment, or </main> in index.html.');
+  throw new Error('Could not find BENCHMARKS markers, <footer class="site-footer">, or </main> in index.html.');
 }
 
 function main() {

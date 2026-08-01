@@ -4,23 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Answerable. — Page Not Found</title>
-  <meta name="description" content="This page doesn't exist. Scan your site instead, or find your track: B2B SaaS, consumer brands, or local professionals." />
-  <meta name="robots" content="noindex, follow" />
-  <link rel="canonical" href="https://answerable-app.vercel.app/" />
+  <title>Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?</title>
+  <meta name="description" content="Scan whether AI shopping agents can find your product, read your price, and complete a purchase. What UCP is, what your llms.txt actually says, and what agentic commerce means for your store." />
+  <meta name="keywords" content="agentic commerce, UCP, Universal Commerce Protocol, AI shopping agents, llms.txt, AI visibility, GEO for e-commerce" />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/agentic-commerce" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Answerable. — Page Not Found" />
-  <meta property="og:description" content="This page doesn't exist. Scan your site instead." />
-  <meta property="og:url" content="https://answerable-app.vercel.app/" />
+  <meta property="og:title" content="Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?" />
+  <meta property="og:description" content="Scan whether AI shopping agents can find your product, read your price, and complete a purchase. What UCP is, and what agentic commerce means for your store." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/agentic-commerce" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Answerable. — Page Not Found" />
-  <meta name="twitter:description" content="This page doesn't exist. Scan your site instead." />
+  <meta name="twitter:title" content="Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?" />
+  <meta name="twitter:description" content="Scan whether AI shopping agents can find your product, read your price, and complete a purchase." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -30,6 +32,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css?v=26" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is UCP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "UCP, the Universal Commerce Protocol, is a discovery standard that lets AI shopping agents find a store's catalog, pricing and availability in a structured format. An agent looks for it at a fixed location, /.well-known/ucp, on a store's domain. If the endpoint exists and is well-formed, an agent can act on it directly instead of relying on a general-purpose crawl of the storefront."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Shopify write my llms.txt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, automatically, for every store it hosts. In the Shopify-generated files Answerable examined for its own research, none mentioned what the brand sells, who it's for, or what sets it apart — the file describes Shopify's own commerce-protocol instructions, not the brand behind the store. Having the file is not the same as having said anything in it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is agentic commerce?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Agentic commerce is a shopping agent finding, evaluating and completing a purchase on a person's behalf, inside a chat interface rather than a browser. It depends on machine-readable product data and a checkout path a program can complete, not just a webpage a person can read."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I make my store readable to AI shopping agents?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Start with the same foundation that makes any site readable to AI systems: confirm AI crawlers are not blocked in robots.txt, and that price, availability and product identifiers are marked up in structured data, not just rendered visually. Beyond that, a UCP endpoint at /.well-known/ucp gives an agent a direct, structured way to find your catalog instead of inferring it from a general crawl."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -85,16 +128,21 @@
 
   <main id="main">
 
-    <!-- ---------- 404 + scan form ---------- -->
+    <!-- ---------- Headline + scan form ---------- -->
     <section class="hero" id="scan" aria-labelledby="hero-heading">
       <div class="section__inner">
         <div>
-          <p class="kicker">404 &middot; Not found</p>
-          <h1 id="hero-heading" class="hero__title">This page isn't here. Scan the one that is.</h1>
-          <p class="hero__sub">The link brought you nowhere. Enter your domain and see whether AI crawlers can find the page that matters.</p>
+          <p class="kicker">Agentic commerce</p>
+          <h1 id="hero-heading" class="hero__title">Can an AI agent find your product, read the price, and buy it?</h1>
+          <p class="hero__sub">
+            Shopping agents are starting to complete purchases without a
+            person clicking through. Scan your store the way an agent
+            would — for AI crawler access, machine-readable pricing, and
+            a path to checkout a program can actually follow.
+          </p>
 
           <form class="hero__form" id="scanForm">
-            <input type="text" class="field" id="scanInput" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
+            <input type="text" class="field" id="scanInput" placeholder="yourstore.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
             <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
           </form>
           <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.</p>
@@ -150,50 +198,48 @@
       </div>
     </section>
 
-    <!-- ---------- Where you meant to go ---------- -->
-    <section class="verticals" aria-labelledby="lost-heading">
+    <!-- ---------- What agentic commerce means ---------- -->
+    <section class="verticals" aria-labelledby="what-heading">
       <div class="section__inner">
-        <div class="section-head">
-          <p class="kicker">Or go straight to</p>
-          <h2 id="lost-heading" class="section-title">Pick up where you meant to.</h2>
+        <div class="doc-section">
+          <h2 id="what-heading" class="doc-section__heading">What agentic commerce means</h2>
+          <p>A shopping agent is software that finds, evaluates and buys a product on a person's behalf, inside a chat interface rather than a browser tab. Instead of returning a list of links, it reads product data directly, picks a match, and can complete the purchase without the person ever visiting your site.</p>
+          <p>Agent-driven checkout depends on a discovery step called the Universal Commerce Protocol, or UCP. An agent looks for a UCP endpoint at a fixed location — <code>/.well-known/ucp</code> — on your domain, not something it has to guess or infer from your homepage. If that endpoint exists and describes your catalog, price and availability in a structured, machine-readable format, an agent can act on it directly. If it does not, the agent has nothing to act on, regardless of how the site looks to a person.</p>
         </div>
+      </div>
+    </section>
 
-        <div class="card-grid">
-          <a href="/for-saas" class="card">
-            <span class="card__name">B2B SaaS</span>
-            <span class="card__desc">Software companies competing for AI shortlists.</span>
-            <span class="card__cta">Choose this track
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-          <a href="/for-brands" class="card">
-            <span class="card__name">Consumer &amp; e-commerce brands</span>
-            <span class="card__desc">Products people ask AI about before buying.</span>
-            <span class="card__cta">Choose this track
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-          <a href="/for-professionals" class="card">
-            <span class="card__name">Local &amp; independent professionals</span>
-            <span class="card__desc">Practices and services people find through AI.</span>
-            <span class="card__cta">Choose this track
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-          <a href="/tools" class="card">
-            <span class="card__name">Tools</span>
-            <span class="card__desc">Standalone tools for the fixes the scanner finds most often.</span>
-            <span class="card__cta">Open tools
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-          <a href="/research" class="card">
-            <span class="card__name">Research</span>
-            <span class="card__desc">What we find when we scan real sites.</span>
-            <span class="card__cta">Read the research
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
+    <!-- ---------- What we check and why ---------- -->
+    <section class="verticals" aria-labelledby="checks-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="checks-heading" class="doc-section__heading">What determines agent-readiness, and why it matters</h2>
+          <p>Two of the checks below already run in every free scan. The commerce-specific ones — UCP discovery and checkout completability — are what we're building next, so a scan today measures the general foundation an agent needs, not the full agentic-commerce picture yet.</p>
+
+          <div class="results-content__body">
+            <h3>AI crawler access</h3>
+            <p>If GPTBot, ClaudeBot or Perplexity's crawlers are blocked in robots.txt, an agent cannot read your catalog at all, regardless of what it contains. Already part of every Answerable scan.</p>
+
+            <h3>Structured product data</h3>
+            <p>Price, availability and product identifiers need to be machine-readable, not just visible in a rendered page a person could read. This overlaps with the structured-data check already in the free scan, though it does not yet verify Product or Offer schema specifically.</p>
+
+            <h3>UCP endpoint</h3>
+            <p>A shopping agent looks for <code>/.well-known/ucp</code> before it looks at your homepage. Without it, there is no structured entry point for an agent to act on — only a page built for a person to read.</p>
+
+            <h3>A completable checkout path</h3>
+            <p>An agent that can find your product but not buy it stops short of the sale. Whether checkout itself can be completed by a program, not just a person clicking through, is what agentic commerce ultimately depends on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- The llms.txt finding ---------- -->
+    <section aria-label="Research finding">
+      <div class="section__inner">
+        <div class="research-quote">
+          <p class="research-quote__text">76% of DTC brands have an llms.txt file. Almost none of them wrote it.</p>
+          <p class="research-quote__context">Shopify generates the file automatically for every store it hosts — the files we read by hand never mentioned what the brand sells.</p>
+          <a href="/research/llms-txt-adoption-2026" class="btn btn--ghost">Read the full finding</a>
         </div>
       </div>
     </section>
