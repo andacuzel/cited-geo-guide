@@ -4,45 +4,56 @@
 User-agent: GPTBot
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: anthropic-ai
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: Perplexity-User
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: Google-Extended
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: CCBot
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: Bytespider
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /app/
 
 Sitemap: https://answerable-app.vercel.app/sitemap.xml

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crawl — internal</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="../styles.css?v=29" />
+  <style>
+    body { max-width: 880px; margin: 48px auto 96px; padding: 0 20px; }
+    h1 { font-size: 28px; margin-bottom: 6px; }
+    .crawl-note { color: var(--ink-faint); font-family: var(--font-mono); font-size: 12px; margin-bottom: 28px; }
+    .crawl-form { display: flex; gap: 10px; }
+    .crawl-form .field { flex: 1; }
+    .crawl-progress { margin-top: 24px; }
+    .crawl-progress__track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+    .crawl-progress__fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.3s ease; }
+    .crawl-status { margin-top: 10px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+    .crawl-status.is-error { color: var(--risk); }
+    #output[hidden] { display: none; }
+    #output {
+      margin-top: 24px;
+      background: var(--navy-950);
+      color: #d7e2ea;
+      padding: 20px;
+      border-radius: var(--radius);
+      overflow: auto;
+      max-height: 70vh;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Full-site crawl</h1>
+  <p class="crawl-note">Unlisted diagnostic viewer — not linked, not indexed, not in the sitemap. Raw aggregated JSON only; the real report page comes later.</p>
+
+  <div class="crawl-form">
+    <input type="text" id="domainInput" class="field" placeholder="example.com" autocomplete="off" spellcheck="false" />
+    <button type="button" id="startBtn" class="btn btn--primary">Start crawl</button>
+  </div>
+
+  <div class="crawl-progress" id="progressWrap" hidden>
+    <div class="crawl-progress__track"><div class="crawl-progress__fill" id="progressFill"></div></div>
+    <p class="crawl-status" id="statusText"></p>
+  </div>
+
+  <pre id="output" hidden></pre>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var domainInput = document.getElementById('domainInput');
+    var startBtn = document.getElementById('startBtn');
+    var progressWrap = document.getElementById('progressWrap');
+    var progressFill = document.getElementById('progressFill');
+    var statusText = document.getElementById('statusText');
+    var output = document.getElementById('output');
+
+    function setProgress(done, total) {
+      var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      progressFill.style.width = pct + '%';
+    }
+
+    function setError(message) {
+      statusText.textContent = 'Error: ' + message;
+      statusText.classList.add('is-error');
+      startBtn.disabled = false;
+    }
+
+    async function pollStep(jobId) {
+      var res, data;
+      try {
+        res = await fetch('/api/crawl-step?id=' + encodeURIComponent(jobId));
+        data = await res.json();
+      } catch (e) {
+        setError(e.message || 'network error');
+        return;
+      }
+      if (!res.ok) {
+        setError(data.error || ('HTTP ' + res.status));
+        return;
+      }
+
+      setProgress(data.pagesDone, data.pageCount);
+      statusText.textContent = data.pagesDone + ' / ' + data.pageCount + ' pages scanned — ' + data.status;
+
+      if (data.status === 'done') {
+        output.hidden = false;
+        output.textContent = JSON.stringify(data, null, 2);
+        startBtn.disabled = false;
+        return;
+      }
+
+      setTimeout(function () { pollStep(jobId); }, 250);
+    }
+
+    async function start() {
+      var domain = domainInput.value.trim();
+      if (!domain) return;
+
+      startBtn.disabled = true;
+      output.hidden = true;
+      output.textContent = '';
+      statusText.classList.remove('is-error');
+      progressWrap.hidden = false;
+      setProgress(0, 1);
+      statusText.textContent = 'Discovering pages…';
+
+      var res, data;
+      try {
+        res = await fetch('/api/crawl-start?domain=' + encodeURIComponent(domain));
+        data = await res.json();
+      } catch (e) {
+        setError(e.message || 'network error');
+        return;
+      }
+      if (!res.ok) {
+        setError(data.error || ('HTTP ' + res.status));
+        return;
+      }
+
+      setProgress(0, data.pageCount);
+      statusText.textContent = '0 / ' + data.pageCount + ' pages scanned — pending';
+      pollStep(data.jobId);
+    }
+
+    startBtn.addEventListener('click', start);
+    domainInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') start();
+    });
+  })();
+  </script>
+
+</body>
+</html>

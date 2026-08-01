@@ -3,6 +3,12 @@
   "functions": {
     "api/scan.js": {
       "maxDuration": 30
+    },
+    "api/crawl-start.js": {
+      "maxDuration": 30
+    },
+    "api/crawl-step.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
