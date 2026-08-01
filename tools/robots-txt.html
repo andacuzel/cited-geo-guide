@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../styles.css?v=23" />
+  <link rel="stylesheet" href="../styles.css?v=29" />
 
   <script type="application/ld+json">
   {
@@ -110,6 +110,7 @@
           </div>
         </div>
         <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
         <a href="/research" class="site-nav__link">Research</a>
         <a href="/about" class="site-nav__link">About</a>
         <a href="/pro" class="site-nav__link">Pro</a>
@@ -121,6 +122,7 @@
         <a href="/for-brands" class="site-nav__link">Brands</a>
         <a href="/for-professionals" class="site-nav__link">Professionals</a>
         <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
         <a href="/research" class="site-nav__link">Research</a>
         <a href="/about" class="site-nav__link">About</a>
         <a href="/pro" class="site-nav__link">Pro</a>
@@ -131,13 +133,25 @@
 
   <main id="main">
 
-    <section class="verticals" aria-labelledby="tool-heading">
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
       <div class="section__inner">
-        <div class="section-head">
-          <p class="kicker">Free tool</p>
-          <h1 id="tool-heading" class="section-title">AI robots.txt Generator</h1>
-          <p class="section-sub">Choose which AI crawlers can read your site, then copy or download a ready-to-use robots.txt file. Nothing is sent anywhere — this runs entirely in your browser.</p>
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Free tool</p>
+            <h1 class="page-banner__title">AI robots.txt Generator</h1>
+            <p class="page-banner__desc">Choose which AI crawlers can read your site, then copy or download a ready-to-use robots.txt file. Nothing is sent anywhere.</p>
+          </div>
+          <pre class="page-banner__code" aria-hidden="true">User-agent: ClaudeBot
+Allow: /
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/</pre>
         </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-label="Generator">
 
         <div class="robots-gen__grid">
           <div class="crawler-list" id="crawlerList" aria-label="AI crawlers">

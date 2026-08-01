@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=26" />
+  <link rel="stylesheet" href="styles.css?v=29" />
 
   <script type="application/ld+json">
   {
@@ -108,13 +108,23 @@
 
   <main id="main">
 
-    <section class="verticals" aria-labelledby="about-heading">
+    <!-- ---------- Page banner ---------- -->
+    <section aria-labelledby="about-heading">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Who's behind this</p>
+            <h1 id="about-heading" class="page-banner__title">Andaç Üzel</h1>
+            <p class="page-banner__desc">Content strategist turned builder — ten years on both sides of content, now building the tool he wished existed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-label="Biography">
       <div class="section__inner">
         <div class="about-grid">
           <div>
-            <p class="kicker">Who's behind this</p>
-            <h1 id="about-heading" class="section-title">Andaç Üzel</h1>
-
             <div class="about-bio">
               <p>Hi, I'm Andaç Üzel.</p>
               <p>For over ten years I've worked on both sides of content: telling stories and producing the work itself, and sitting with technical teams to make sure that work gets found. I spent the first four years of my career as a content editor and content manager at some of Turkey's largest digital media platforms. Then content marketing pulled me in, and I followed it. Six years later, that path has taken me through B2B SaaS, pharma, and manufacturing.</p>

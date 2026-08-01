@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../styles.css?v=26" />
+  <link rel="stylesheet" href="../styles.css?v=29" />
 
   <script type="application/ld+json">
   {
@@ -103,14 +103,21 @@
 
   <main id="main">
 
-    <section class="verticals" aria-labelledby="research-heading">
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
       <div class="section__inner">
-        <div class="section-head">
-          <p class="kicker">Research</p>
-          <h1 id="research-heading" class="section-title">What we find when we scan real sites.</h1>
-          <p class="section-sub">Category-by-category scans, published as we run them. Real numbers, sourced methodology, no rounding.</p>
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Research</p>
+            <h1 class="page-banner__title">What we find when we scan real sites.</h1>
+            <p class="page-banner__desc">Category-by-category scans, published as we run them. Real numbers, sourced methodology, no rounding.</p>
+          </div>
         </div>
+      </div>
+    </section>
 
+    <section class="verticals" aria-label="Research reports">
+      <div class="section__inner">
         <div class="research-index-list">
           <a href="/research/llms-txt-adoption-2026" class="research-index-item">
             <p class="research-index-item__meta">Research &middot; 001 &middot; 29 July 2026</p>

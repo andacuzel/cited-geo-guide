@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../styles.css?v=26" />
+  <link rel="stylesheet" href="../styles.css?v=29" />
 
   <script type="application/ld+json">
   {
@@ -116,13 +116,23 @@
 
   <main id="main">
 
-    <!-- ================= REPORT HEADER ================= -->
-    <section class="report-header" aria-labelledby="report-heading">
+    <!-- ---------- Page banner ---------- -->
+    <section aria-labelledby="report-heading">
       <div class="section__inner">
-        <p class="kicker">Research · 001</p>
-        <h1 id="report-heading" class="report-header__title">Who controls your brand's AI representation?</h1>
-        <p class="report-header__dek">We scanned 64 sites and found blocking is rare: 10% of B2B sites and 3% of consumer brands restrict AI crawlers. The larger gap is what those crawlers find once they're inside.</p>
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Research</p>
+            <h1 id="report-heading" class="page-banner__title">Who controls your brand's AI representation?</h1>
+            <p class="page-banner__desc">We scanned 64 sites and found blocking is rare: 10% of B2B sites and 3% of consumer brands restrict AI crawlers. The larger gap is what those crawlers find once they're inside.</p>
+          </div>
+          <span class="page-banner__num" aria-hidden="true">001</span>
+        </div>
+      </div>
+    </section>
 
+    <!-- ================= REPORT META ================= -->
+    <section aria-label="Report metadata">
+      <div class="section__inner">
         <div class="report-byline">
           <a href="/about">Andaç Üzel</a>
           <span>Published 29 July 2026</span>

@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=26" />
+  <link rel="stylesheet" href="styles.css?v=29" />
 
   <script type="application/ld+json">
   {
@@ -211,6 +211,54 @@
         </div>
       </section>
 
+      <!-- ---------- Capabilities ---------- -->
+      <section class="verticals" aria-labelledby="capabilities-heading">
+        <div class="section__inner">
+          <div class="section-head">
+            <p class="kicker">How the scan works</p>
+            <h2 id="capabilities-heading" class="section-title">Sixteen checks. Three pillars. One fix list.</h2>
+          </div>
+          <div class="capability-grid">
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18.5" r="1.5"/><path d="M8.5 15a5 5 0 017 0M5.3 11.8a9.5 9.5 0 0113.4 0"/></svg></span>
+                <span class="capability-card__weight">40%</span>
+              </div>
+              <p class="capability-card__kicker">Discoverability</p>
+              <h3 class="capability-card__q">Can AI crawlers reach you?</h3>
+              <p class="capability-card__desc">robots.txt policy and sitemap access for 10 AI crawlers, plus llms.txt.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 7L4 12l4.5 5M15.5 7L20 12l-4.5 5M13.5 5.5l-3 13"/></svg></span>
+                <span class="capability-card__weight">20%</span>
+              </div>
+              <p class="capability-card__kicker">Technical foundation</p>
+              <h3 class="capability-card__q">Can machines parse your pages?</h3>
+              <p class="capability-card__desc">Canonical, language, title, description, Open Graph and structured data.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7l4 4v12.5a.5.5 0 01-.5.5h-10.5a.5.5 0 01-.5-.5V4a.5.5 0 01.5-.5z"/><path d="M13.5 3.5V8h4"/><path d="M9 14.5l2 2 4-4.5"/></svg></span>
+                <span class="capability-card__weight">40%</span>
+              </div>
+              <p class="capability-card__kicker">Content &amp; trust</p>
+              <h3 class="capability-card__q">Do you look like a credible source?</h3>
+              <p class="capability-card__desc">Heading structure, Organization schema, author and contact signals.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a3.5 3.5 0 00-4.6 4.4L4.5 16.3a1.5 1.5 0 002.1 2.1l5.6-5.6a3.5 3.5 0 004.4-4.6l-2.5 2.5-2-2 2.6-2.4z"/></svg></span>
+                <span class="capability-card__weight">16 checks</span>
+              </div>
+              <p class="capability-card__kicker">The fix</p>
+              <h3 class="capability-card__q">What do you do about it?</h3>
+              <p class="capability-card__desc">Every finding ranked by impact, with copy-paste JSON-LD and robots.txt generated from your own site's data.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- Report ---------- -->
       <section class="report-section" id="scanReport" hidden aria-label="Scan report">
         <div class="section__inner">
@@ -283,44 +331,24 @@
         </div>
       </section>
 
-      <!-- ---------- Agentic commerce ---------- -->
-      <section aria-label="Agentic commerce">
-        <div class="section__inner">
-          <div class="commerce-band">
-            <div class="commerce-band__grid">
-              <div>
-                <p class="kicker kicker--on-navy">Agentic commerce</p>
-                <h2>Can an AI agent find your product, read the price, and buy it?</h2>
-                <p class="commerce-band__lede">Shopping agents find products through the Universal Commerce Protocol, not your storefront. We check whether your UCP endpoint exists, whether price and stock are machine-readable, and whether an agent can complete checkout on its own.</p>
-                <a href="/agentic-commerce" class="btn btn--gold commerce-band__cta">Learn about agentic commerce</a>
-              </div>
-
-              <div class="answer-mock answer-mock--standalone" aria-hidden="true">
-                <div class="answer-mock__head">
-                  <span class="answer-mock__label">SHOPPING AGENT</span>
-                </div>
-                <p class="answer-mock__query">“Find wireless earbuds under $100 with free returns.”</p>
-                <div class="answer-mock__response">
-                  <p>Based on live price and stock data, three stores can fulfill this now:</p>
-                  <ol>
-                    <li><span class="answer-mock__brand">Store A — $79</span><span class="cited-badge">In stock · UCP</span></li>
-                    <li><span class="answer-mock__brand">Store B — $89</span><span class="cited-badge">In stock · UCP</span></li>
-                    <li><span class="answer-mock__brand">Store C — $94</span><span class="cited-badge">2 left · UCP</span></li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- Research teaser ---------- -->
+      <!-- ---------- Research ---------- -->
       <section aria-label="Research">
         <div class="section__inner">
-          <div class="research-quote">
-            <p class="research-quote__text">76% of DTC brands have an llms.txt file. Almost none of them wrote it.</p>
-            <p class="research-quote__context">Their platform generated the file by default, and it says nothing about the brand.</p>
-            <a href="/research/llms-txt-adoption-2026" class="btn btn--ghost">Read the full finding</a>
+          <div class="research-block">
+            <div class="research-block__intro">
+              <p class="kicker">Research</p>
+              <h2 class="research-block__heading">The Answerable Research Series</h2>
+              <p class="research-block__lede">Original data from our own scans, published as we run them — not a one-off report, an ongoing record.</p>
+              <a href="/research" class="btn btn--ghost">Browse the research index</a>
+            </div>
+            <a href="/research/llms-txt-adoption-2026" class="research-card">
+              <span class="research-card__num">Report 001</span>
+              <h3 class="research-card__title">Who Controls Your Brand's AI Representation?</h3>
+              <span class="research-card__date">29 July 2026</span>
+              <div class="research-card__stat">76<small>%</small></div>
+              <p class="research-card__statline">of DTC brands have an llms.txt file they didn't write themselves</p>
+              <span class="research-card__link">Read the full report →</span>
+            </a>
           </div>
         </div>
       </section>
@@ -399,6 +427,49 @@
       </section>
       <script>window.ANSWERABLE_BENCHMARKS = {"totalSites":219,"totalCategories":6,"overallAverage":73};</script>
       <!-- BENCHMARKS:END -->
+
+      <!-- ---------- Agentic commerce ---------- -->
+      <section aria-label="Agentic commerce">
+        <div class="section__inner">
+          <div class="commerce-strip">
+            <div class="commerce-strip__grid">
+              <div>
+                <p class="kicker">Agentic commerce</p>
+                <h2>Can an AI agent buy from you?</h2>
+                <p class="commerce-strip__lede">Shopping agents find products through the Universal Commerce Protocol, not your storefront. If your prices and stock aren't machine-readable, an agent has nothing to act on.</p>
+                <a href="/agentic-commerce" class="btn btn--primary commerce-strip__cta">Learn about agentic commerce</a>
+              </div>
+
+              <div class="commerce-mock" aria-hidden="true">
+                <div class="commerce-mock__search">
+                  <svg class="commerce-mock__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4.3-4.3"/></svg>
+                  <span class="commerce-mock__search-text">Find wireless earbuds under $100 with free returns</span>
+                </div>
+                <div class="commerce-mock__results">
+                  <div class="commerce-mock__row">
+                    <span class="commerce-mock__name">Store A — Wireless Earbuds Pro</span>
+                    <span class="commerce-mock__price">$79</span>
+                    <span class="commerce-mock__avail">In stock</span>
+                    <span class="commerce-mock__badge">UCP</span>
+                  </div>
+                  <div class="commerce-mock__row">
+                    <span class="commerce-mock__name">Store B — SoundClip Air</span>
+                    <span class="commerce-mock__price">$89</span>
+                    <span class="commerce-mock__avail">2 left</span>
+                    <span class="commerce-mock__badge">UCP</span>
+                  </div>
+                  <div class="commerce-mock__row commerce-mock__row--unreadable">
+                    <span class="commerce-mock__name">Store C — EchoBuds 2</span>
+                    <span class="commerce-mock__price">$74</span>
+                    <span class="commerce-mock__avail">Unknown</span>
+                    <span class="commerce-mock__badge commerce-mock__badge--missing">Not agent-readable</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- ---------- Site footer ---------- -->
       <footer class="site-footer" aria-label="Footer">

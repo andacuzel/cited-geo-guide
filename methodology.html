@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=26" />
+  <link rel="stylesheet" href="styles.css?v=29" />
 
   <script type="application/ld+json">
   {
@@ -120,14 +120,21 @@
 
   <main id="main">
 
-    <section class="verticals" aria-labelledby="methodology-heading">
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
       <div class="section__inner">
-        <div class="section-head">
-          <p class="kicker">Methodology</p>
-          <h1 id="methodology-heading" class="section-title">How the score is built.</h1>
-          <p class="section-sub">Every point value below is exactly what runs in the live scan. Nothing here is rounded, hidden or simplified for marketing.</p>
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Methodology</p>
+            <h1 class="page-banner__title">How the score is built.</h1>
+            <p class="page-banner__desc">Every point value below is exactly what runs in the live scan. Nothing here is rounded, hidden or simplified for marketing.</p>
+          </div>
         </div>
+      </div>
+    </section>
 
+    <section class="verticals" aria-label="Scoring detail">
+      <div class="section__inner">
         <div class="doc-section">
 
           <h2 class="doc-section__heading">The three pillars</h2>
