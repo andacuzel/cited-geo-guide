@@ -1185,7 +1185,6 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 }
 
 .case-study-figure__chart { display: block; width: 100%; height: auto; }
-.case-study-figure__chart--narrow { display: none; }
 
 @media (max-width: 920px) {
   .case-study-block { padding: 36px 28px; }
@@ -1194,8 +1193,6 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 @media (max-width: 640px) {
   .case-study-block { padding: 28px 22px; margin: 32px 0; }
-  .case-study-figure__chart--wide { display: none; }
-  .case-study-figure__chart--narrow { display: block; }
   .case-study-figure__stat-num { font-size: 48px; }
 }
 
