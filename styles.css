@@ -1546,6 +1546,39 @@ code {
   line-height: 1.4;
   color: var(--navy-950);
 }
+/* Optional attribution line — client/interview quotes only, on their
+   own line in mono, not part of the italic quote itself. */
+.report-pullquote .report-pullquote__attribution {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+/* Results table — case studies only so far; plain and dense, no new
+   visual language beyond existing borders/mono figures. */
+.report-table-wrap { overflow-x: auto; margin: 28px 0; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.report-table th, .report-table td { padding: 12px 16px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.report-table th:first-child, .report-table td:first-child { text-align: left; }
+.report-table th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+.report-table td { font-family: var(--font-mono); color: var(--ink); }
+.report-table td:first-child { font-family: var(--font-body); }
+.report-table tr:last-child { border-top: 2px solid var(--navy-950); }
+.report-table tr:last-child td { font-weight: 700; color: var(--navy-950); border-bottom: none; }
+
+@media (max-width: 640px) {
+  .report-table { font-size: 13.5px; }
+  .report-table th, .report-table td { padding: 10px 12px; }
+}
 
 /* Figure component — the reusable core */
 .report-figure {
