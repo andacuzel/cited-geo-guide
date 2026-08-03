@@ -476,8 +476,8 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 /* ----------------------------- Report panel ----------------------------- */
 
-.report-section { padding: 0 0 96px; }
-.report-section[hidden] { display: none; }
+#scanReport { padding: 0 0 96px; }
+#scanReport[hidden] { display: none; }
 
 .report-panel {
   background: var(--white);
