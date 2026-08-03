@@ -1134,6 +1134,71 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   .page-banner__icon, .page-banner__code, .page-banner__num { display: none; }
 }
 
+/* ----------------------------- Case study teaser (homepage) -----------------------------
+   Sits directly before the Pro band and hands off to it: this is the first
+   proof of movement over time on the page, which is what Pro sells.
+   Distinctiveness comes from the figure, not a new surface colour — the
+   panel itself is the same white/border/shadow treatment used elsewhere. */
+
+.case-study-block {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 56px;
+  margin: 48px 0;
+}
+
+.case-study-block__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "text figure";
+  gap: 64px;
+  align-items: center;
+}
+.case-study-block__text { grid-area: text; }
+.case-study-block__figure { grid-area: figure; }
+
+.case-study-block__heading {
+  margin-top: 14px;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.16;
+  color: var(--navy-950);
+}
+.case-study-block .report-pullquote { margin: 26px 0; }
+.case-study-block__text .btn { margin-top: 6px; }
+
+.case-study-figure__stat { margin-bottom: 24px; }
+.case-study-figure__stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 5.5vw, 76px);
+  line-height: 1;
+  color: var(--gold-deep);
+}
+.case-study-figure__stat-label {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.case-study-figure__chart { display: block; width: 100%; height: auto; }
+.case-study-figure__chart--narrow { display: none; }
+
+@media (max-width: 920px) {
+  .case-study-block { padding: 36px 28px; }
+  .case-study-block__grid { grid-template-columns: 1fr; grid-template-areas: "figure" "text"; gap: 36px; }
+}
+
+@media (max-width: 640px) {
+  .case-study-block { padding: 28px 22px; margin: 32px 0; }
+  .case-study-figure__chart--wide { display: none; }
+  .case-study-figure__chart--narrow { display: block; }
+  .case-study-figure__stat-num { font-size: 48px; }
+}
+
 /* ----------------------------- Pro band (full-bleed navy) ----------------------------- */
 
 .pro-band {
@@ -1697,6 +1762,8 @@ code {
 .chart-label { font-family: var(--font-mono, monospace); fill: var(--ink-soft); }
 .chart-label--faint { fill: var(--ink-faint); }
 .chart-value { font-family: var(--font-mono, monospace); fill: var(--ink); font-weight: 600; }
+.chart-value--faint { fill: var(--ink-faint); }
+.chart-value--strong { fill: var(--navy-950); font-weight: 700; }
 .chart-annotation { font-family: var(--font-mono, monospace); fill: var(--gold-deep); }
 .chart-leader { stroke: var(--gold-deep); stroke-width: 1; fill: none; }
 
