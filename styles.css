@@ -156,6 +156,7 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   background: rgba(238, 241, 245, 0.9);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
+  transition: background var(--t), border-color var(--t);
 }
 .site-header__inner {
   max-width: var(--content-width);
@@ -171,6 +172,7 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   font-family: var(--font-display);
   font-size: 24px;
   color: var(--navy-950);
+  transition: color var(--t);
 }
 .logo__dot { color: var(--gold); }
 
@@ -281,6 +283,31 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   pointer-events: none;
 }
 
+/* Homepage-only: the header sits directly on the navy hero field below
+   it, so it reads as navy too — same colour, no border, no seam. JS
+   (nav.js) adds .site-header--scrolled once the hero has scrolled out
+   of view, which swaps it back to the standard light header via the
+   higher-specificity compound rule below. With no JS the header stays
+   navy, which is legible against the hero and against the lighter
+   sections further down the page. */
+.site-header--hero-navy {
+  background: var(--navy-950);
+  border-bottom-color: transparent;
+}
+.site-header--hero-navy .logo__mark { color: var(--white); }
+.site-header--hero-navy .site-nav__link { color: rgba(255, 255, 255, 0.7); }
+.site-header--hero-navy .site-nav__link:hover { color: var(--gold-soft); border-color: var(--gold-soft); }
+.site-header--hero-navy .mobile-nav__fade { background: rgba(11, 21, 38, 0.9); }
+
+.site-header--hero-navy.site-header--scrolled {
+  background: rgba(238, 241, 245, 0.9);
+  border-bottom-color: var(--line);
+}
+.site-header--hero-navy.site-header--scrolled .logo__mark { color: var(--navy-950); }
+.site-header--hero-navy.site-header--scrolled .site-nav__link { color: var(--ink-soft); }
+.site-header--hero-navy.site-header--scrolled .site-nav__link:hover { color: var(--ink); border-color: var(--gold); }
+.site-header--hero-navy.site-header--scrolled .mobile-nav__fade { background: rgba(238, 241, 245, 0.9); }
+
 /* ----------------------------- Sections ----------------------------- */
 
 .section__inner {
@@ -378,6 +405,21 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .scan__retry { margin-top: 10px; display: none; }
 .scan__retry.is-visible { display: inline-flex; }
 
+/* Homepage hero as a navy field — a distinct surface, not a continuation
+   of the page. Ends where the capabilities block begins; the colour
+   change is the divider, so no rule/border here. The scan input and
+   gold button are left untouched: white-on-navy and gold-on-navy are
+   already the strongest pairings the palette has. */
+.hero--navy { background: var(--navy-950); }
+.hero--navy .hero__title { color: var(--white); }
+.hero--navy .hero__title em { color: var(--gold-soft); }
+.hero--navy .hero__sub { color: rgba(255, 255, 255, 0.72); }
+.hero--navy .hero__fineprint { color: rgba(255, 255, 255, 0.55); }
+.hero--navy .hero__figure b { color: var(--white); }
+.hero--navy .hero__figure span { color: rgba(255, 255, 255, 0.55); }
+.hero--navy .scan__status { color: rgba(255, 255, 255, 0.72); }
+.hero--navy .scan__status.is-error { color: #E8998C; } /* --risk, lightened for legibility on navy — no existing token covers this */
+
 /* --- Hero visual --- */
 
 .hero__visual { position: relative; min-height: 380px; }
@@ -473,6 +515,24 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
    positioned two-layer stack (e.g. the agentic commerce band), sitting in
    normal flow instead of pinned to a .hero__visual ancestor. */
 .answer-mock--standalone { position: static; width: 100%; }
+
+/* Inverted variant — the homepage hero only, once the hero is navy: a
+   white plate reads as the lit object against a dark field, which is
+   closer to what the copy argues than a navy-on-navy plate that used
+   to disappear. .answer-mock__response/__brand and .cited-badge are
+   also reused on pro.html against a navy .bot-console — scoped here so
+   that usage is untouched. */
+.answer-mock--inverted { background: var(--white); border: 1px solid var(--line); }
+.answer-mock--inverted .answer-mock__label { color: var(--gold-deep); }
+.answer-mock--inverted .answer-mock__query { color: var(--navy-950); }
+.answer-mock--inverted .answer-mock__response p { color: var(--ink-soft); }
+.answer-mock--inverted .answer-mock__response li { background: var(--bg); border-color: var(--line); }
+.answer-mock--inverted .answer-mock__brand { color: var(--ink); }
+.answer-mock--inverted .cited-badge { color: var(--gold-deep); }
+
+/* The faded SERP card drops further back against navy so it reads as a
+   ghost rather than competing with the (now white) answer-engine plate. */
+.hero--navy .search-mock { opacity: 0.3; }
 
 /* ----------------------------- Report panel ----------------------------- */
 

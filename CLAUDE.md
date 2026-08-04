@@ -89,11 +89,20 @@ One shadow token, panels and the answer-mock plate only. One transition:
 150ms ease, on opacity/color/border only. Section headers are a short
 uppercase mono kicker in gold plus a Gloock title.
 
+The homepage header starts transparent-on-navy over the hero (white
+wordmark, gold-soft nav links) and switches to the standard light
+header, via a single scroll-triggered class swap, once the hero has
+scrolled out of view. No JS means it stays navy — legible against the
+hero and against the lighter sections below it. Every other page keeps
+the light header always; don't extend the navy header treatment there.
+
 **Never:** gradients · numbered section headers (01/02/03) · hover
 lift or scale · pill (999px) shapes · emoji in product surfaces ·
 centered body text · cream or warm backgrounds · Inter, Fraunces,
 IBM Plex, Space Grotesk, Sora, Manrope, DM Sans, Playfair, or
-JetBrains Mono · more than one full-bleed navy band per page.
+JetBrains Mono · more than one full-bleed navy band per page — except
+the homepage, which pairs a navy hero field with the one navy band
+mid-page (Pro). Every other page keeps the single-band rule.
 
 ## Voice
 

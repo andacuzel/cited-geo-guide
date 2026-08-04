@@ -61,3 +61,27 @@
     if (!container.contains(e.target)) close();
   });
 })();
+
+/* =====================================================================
+   Homepage hero header — the header starts in its navy state (see
+   .site-header--hero-navy in styles.css) and switches to the normal
+   light header once the hero has scrolled out from behind it. Only
+   .site-header--hero-navy exists on the homepage, so this is a no-op
+   everywhere else. With no JS the header simply stays navy, which is
+   legible against both the hero and the lighter sections below it.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  var header = document.querySelector('.site-header--hero-navy');
+  var hero = document.getElementById('scan');
+  if (!header || !hero) return;
+
+  function update() {
+    var pastHero = hero.getBoundingClientRect().bottom <= header.offsetHeight;
+    header.classList.toggle('site-header--scrolled', pastHero);
+  }
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+})();
