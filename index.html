@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=33" />
+  <link rel="stylesheet" href="styles.css?v=34" />
 
   <script type="application/ld+json">
   {
@@ -259,8 +259,29 @@
         </div>
       </section>
 
+      <!-- ---------- Scan progress ---------- -->
+      <section id="scanProgress" hidden aria-label="Scan progress" aria-live="polite">
+        <div class="section__inner">
+          <div class="report-panel scan-progress">
+
+            <div class="scan-progress__stages" id="scanProgressStages">
+              <p class="scan-progress__domain" id="scanProgressDomain"></p>
+              <ul class="scan-progress__list" id="scanProgressList"></ul>
+              <div class="score-bar__track scan-progress__bar-track"><div class="score-bar__fill" id="scanProgressBarFill"></div></div>
+              <p class="scan-progress__context" id="scanProgressContext"></p>
+            </div>
+
+            <div class="scan-progress__error" id="scanProgressError" hidden>
+              <p class="scan-progress__error-text" id="scanProgressErrorText"></p>
+              <button type="button" class="btn btn--ghost" id="scanProgressRetry">Try again</button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- Report ---------- -->
-      <section class="report-section" id="scanReport" hidden aria-label="Scan report">
+      <section id="scanReport" hidden aria-label="Scan report">
         <div class="section__inner">
           <div class="report-panel">
 
@@ -288,10 +309,10 @@
               </div>
             </div>
 
-            <details class="scan-details">
-              <summary>All 16 checks &amp; point values</summary>
-              <div class="scan-details__body" id="checksBody"></div>
-            </details>
+            <div class="scan-checks">
+              <h3 class="scan-actions__title">All 16 checks</h3>
+              <div class="checks-grid" id="checksBody"></div>
+            </div>
 
             <div class="scan-actions">
               <h3 class="scan-actions__title">What to fix first</h3>

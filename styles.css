@@ -476,8 +476,8 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 /* ----------------------------- Report panel ----------------------------- */
 
-#scanReport { padding: 0 0 96px; }
-#scanReport[hidden] { display: none; }
+#scanReport, #scanProgress { padding: 0 0 96px; }
+#scanReport[hidden], #scanProgress[hidden] { display: none; }
 
 .report-panel {
   background: var(--white);
@@ -531,6 +531,53 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 .score-entry__share { margin-top: 24px; }
 
+/* Scan progress — replaces the report area while a scan is running.
+   Reuses .report-panel and the .score-bar__track/__fill track for the
+   progress bar; only the stage list and states below are new. */
+
+.scan-progress__stages, .scan-progress__error { max-width: 460px; }
+
+.scan-progress__domain {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--navy-950);
+  margin-bottom: 26px;
+  word-break: break-all;
+}
+
+.scan-progress__list { list-style: none; display: grid; gap: 14px; margin-bottom: 22px; }
+.scan-progress__item { display: flex; align-items: center; gap: 12px; }
+.scan-progress__marker {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--white);
+  transition: border-color var(--t), background-color var(--t);
+}
+.scan-progress__label { font-size: 15px; color: var(--ink-faint); transition: color var(--t); }
+
+.scan-progress__item.is-active .scan-progress__marker { border-color: var(--gold); background: var(--gold); }
+.scan-progress__item.is-active .scan-progress__label { color: var(--ink); font-weight: 600; }
+.scan-progress__item.is-done .scan-progress__marker { border-color: var(--ok); background: var(--ok); }
+.scan-progress__item.is-done .scan-progress__label { color: var(--ink-soft); }
+
+.scan-progress__bar-track { margin-bottom: 14px; }
+
+.scan-progress__context {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  min-height: 1.4em;
+}
+
+.scan-progress__error-text { font-size: 15px; color: var(--risk); margin-bottom: 16px; }
+
 /* Bot matrix plate */
 
 .bot-console {
@@ -552,16 +599,20 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   color: rgba(255, 255, 255, 0.45);
   margin-bottom: 10px;
 }
-.bot-row {
-  display: flex;
-  align-items: baseline;
-  gap: 11px;
-  flex-wrap: wrap;
-  padding: 8px 0;
-  border-top: 1px solid var(--line-on-navy);
-  font-size: 12.5px;
+.bot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
 }
-.bot-row__name { min-width: 136px; color: var(--white); font-weight: 600; font-family: var(--font-body); font-size: 13px; }
+.bot-card { padding: 8px 0; border-top: 1px solid var(--line-on-navy); }
+.bot-card__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.bot-card__name { color: var(--white); font-weight: 600; font-family: var(--font-body); font-size: 13px; }
+.bot-card__rule {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.42);
+}
 
 .bot-chip {
   font-size: 10.5px;
@@ -570,19 +621,11 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
   border-radius: 4px;
   padding: 2px 8px;
   font-weight: 500;
+  flex-shrink: 0;
 }
 .bot-chip--open { background: var(--ok-tint); color: var(--ok); }
 .bot-chip--partial { background: var(--warn-tint); color: var(--gold-deep); }
 .bot-chip--block { background: var(--risk-tint); color: var(--risk); }
-
-.bot-row__rule {
-  flex-basis: 100%;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.42);
-}
-@media (min-width: 700px) {
-  .bot-row__rule { flex-basis: auto; flex: 1; text-align: right; }
-}
 
 .bot-console__link {
   margin-top: 12px;
@@ -594,28 +637,18 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .bot-console__link a { color: var(--gold-soft); text-decoration: underline; text-underline-offset: 2px; }
 .bot-console__link a:hover { color: var(--gold); }
 
-/* Checks */
+/* Checks — grouped by pillar, each group its own local grid so the
+   layout reads as structure rather than one long reflowed list. */
 
-.scan-details { margin-top: 32px; border-top: 1px solid var(--line); }
-.scan-details summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 16px 0;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  transition: color var(--t);
+.scan-checks { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--line); }
+
+.checks-grid { display: grid; gap: 22px; }
+.checks-group .kicker { margin-bottom: 10px; }
+.checks-group__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px 24px;
 }
-.scan-details summary:hover { color: var(--ink); }
-.scan-details summary::-webkit-details-marker { display: none; }
-.scan-details summary::after { content: '+'; color: var(--ink-faint); }
-.scan-details[open] summary::after { content: '\2013'; }
-.scan-details__body { padding: 2px 0 18px; }
 
 .check-row {
   display: flex;
@@ -642,7 +675,7 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 
 .scan-actions { margin-top: 36px; }
 .scan-actions__title { font-size: 24px; margin-bottom: 14px; }
-.scan-actions__list { list-style: none; display: grid; gap: 12px; }
+.scan-actions__list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
 .action-item {
   background: var(--bg);
@@ -681,10 +714,35 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 }
 .action-item__why { margin-top: 5px; font-size: 14px; color: var(--ink-soft); max-width: 640px; }
 
-/* Copy-paste fixes */
+/* Copy-paste fixes — collapsed behind a toggle; snippets matter most
+   to readers who have already been through the findings above them. */
 
 .fix-snippets { margin-top: 36px; }
-.fix-snippets__title { font-size: 24px; margin-bottom: 14px; }
+
+.fix-snippets__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: none;
+  border-left: none;
+  border-right: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color var(--t);
+}
+.fix-snippets__toggle:hover { color: var(--gold-deep); }
+.fix-snippets__chevron { flex-shrink: 0; transition: transform var(--t); }
+.fix-snippets__toggle[aria-expanded="true"] .fix-snippets__chevron { transform: rotate(180deg); }
+
+.fix-snippets__body { padding-top: 18px; }
 
 .fix-snippet {
   background: var(--navy-950);
@@ -1445,10 +1503,15 @@ code {
 
 /* ----------------------------- Responsive ----------------------------- */
 
+@media (max-width: 1024px) {
+  .checks-group__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 920px) {
   .hero__grid { grid-template-columns: 1fr; gap: 44px; }
   .hero__visual { min-height: 340px; }
   .scan-report__grid { grid-template-columns: 1fr; gap: 28px; }
+  .scan-actions__list { grid-template-columns: 1fr; }
   .card-grid { grid-template-columns: repeat(2, 1fr); }
   .pro-band__grid { grid-template-columns: 1fr; gap: 36px; }
   .robots-gen__grid { grid-template-columns: 1fr; }
@@ -1470,6 +1533,9 @@ code {
   .search-mock { width: 88%; }
   .answer-mock { width: 100%; padding: 22px 20px; }
   .score-bar { grid-template-columns: 104px 1fr 48px; font-size: 13px; }
+  .checks-group__grid { grid-template-columns: 1fr; }
+  .bot-grid { grid-template-columns: 1fr; }
+  .scan-progress__domain { font-size: 17px; }
 }
 
 /* ----------------------------- Print (PDF export) ----------------------------- */

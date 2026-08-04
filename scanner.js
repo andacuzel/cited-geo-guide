@@ -57,6 +57,122 @@
     return d;
   }
 
+  /* ---------------- Scan progress panel ----------------
+     Stages mirror the real, sequential work lib/scanner.js performs
+     for a single-page scan: robots.txt, llms.txt, sitemap declaration,
+     the homepage fetch, then scoring. There's one HTTP round trip to
+     /api/scan (no per-stage server signal), so stages 1-4 advance on
+     a fixed minimum timer — an honest reflection of work already in
+     flight, not a fabricated percentage. Only the last stage is gated
+     on the real response: it never shows done before the scan has
+     actually succeeded. */
+
+  var STAGES = [
+    { label: 'Reading robots.txt', context: 'This file tells AI crawlers what they’re allowed to access.' },
+    { label: 'Checking llms.txt', context: 'An emerging standard some sites use to describe themselves to AI systems.' },
+    { label: 'Looking for a sitemap', context: 'A sitemap lets crawlers discover every page on a site, not just the homepage.' },
+    { label: 'Fetching the homepage', context: 'The homepage is parsed for structured data, headings and metadata.' },
+    { label: 'Scoring 16 checks', context: 'Every check is weighted across three pillars: discoverability, technical foundation and trust.' }
+  ];
+  var STAGE_MIN_MS = 500;
+
+  var progressSection = $('scanProgress');
+  var progressStages = $('scanProgressStages');
+  var progressError = $('scanProgressError');
+  var progressDomain = $('scanProgressDomain');
+  var progressList = $('scanProgressList');
+  var progressBarFill = $('scanProgressBarFill');
+  var progressContext = $('scanProgressContext');
+  var progressErrorText = $('scanProgressErrorText');
+  var progressRetryBtn = $('scanProgressRetry');
+
+  function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
+
+  function buildStageList() {
+    if (!progressList) return;
+    progressList.innerHTML = STAGES.map(function (s) {
+      return '<li class="scan-progress__item is-pending">' +
+        '<span class="scan-progress__marker" aria-hidden="true"></span>' +
+        '<span class="scan-progress__label">' + esc(s.label) + '</span></li>';
+    }).join('');
+  }
+
+  function setStageState(i, state) {
+    if (!progressList) return;
+    var item = progressList.children[i];
+    if (!item) return;
+    item.className = 'scan-progress__item is-' + state;
+    var marker = item.querySelector('.scan-progress__marker');
+    if (marker) marker.textContent = state === 'done' ? '✓' : '';
+  }
+
+  function updateProgressBar(doneCount) {
+    if (!progressBarFill) return;
+    progressBarFill.style.width = Math.round((doneCount / STAGES.length) * 100) + '%';
+  }
+
+  function showProgressPanel(domain) {
+    if (!progressSection) return;
+    buildStageList();
+    if (progressDomain) progressDomain.textContent = domain;
+    updateProgressBar(0);
+    if (progressContext) progressContext.textContent = '';
+    if (progressStages) progressStages.hidden = false;
+    if (progressError) progressError.hidden = true;
+    progressSection.hidden = false;
+    report.hidden = true;
+    setStatus('');
+    progressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showProgressError(message) {
+    if (!progressSection) return;
+    if (progressStages) progressStages.hidden = true;
+    if (progressError) {
+      progressError.hidden = false;
+      if (progressErrorText) progressErrorText.textContent = message;
+    }
+  }
+
+  function hideProgressPanel() {
+    if (progressSection) progressSection.hidden = true;
+  }
+
+  // Runs the fetch and the staged reveal side by side. Stages before
+  // the last complete on a fixed minimum timer; the last stage waits
+  // on whichever finishes later — the timer or the real response —
+  // and only marks itself done if that response actually succeeded.
+  async function runStagedScan(fetchPromise) {
+    for (var i = 0; i < STAGES.length; i++) {
+      setStageState(i, 'active');
+      if (progressContext) progressContext.textContent = STAGES[i].context;
+
+      if (i < STAGES.length - 1) {
+        await sleep(STAGE_MIN_MS);
+        setStageState(i, 'done');
+        updateProgressBar(i + 1);
+      } else {
+        var pair = await Promise.all([sleep(STAGE_MIN_MS), fetchPromise]);
+        var outcome = pair[1];
+        if (outcome.networkOk && outcome.res.ok && !outcome.data.error) {
+          setStageState(i, 'done');
+          updateProgressBar(STAGES.length);
+        }
+        return outcome;
+      }
+    }
+  }
+
+  function startFetch(domain) {
+    return fetch('/api/scan?domain=' + encodeURIComponent(domain))
+      .then(function (res) {
+        return res.json()
+          .catch(function () { return {}; })
+          .then(function (data) { return { networkOk: true, res: res, data: data }; });
+      })
+      .catch(function (err) { return { networkOk: false, error: err }; });
+  }
+
   /* ---------------- Scan flow ---------------- */
 
   async function runScan() {
@@ -67,27 +183,33 @@
     pendingIsParamScan = false;
 
     scanBtn.disabled = true;
-    report.hidden = true;
+    showProgressPanel(domain);
 
     try {
-      setStatus('Scanning\u2026');
-      var res = await fetch('/api/scan?domain=' + encodeURIComponent(domain));
-      var data = await res.json();
+      var fetchPromise = startFetch(domain);
+      var outcome = await runStagedScan(fetchPromise);
 
-      if (res.status === 429) {
-        setStatus(data.error || 'You\u2019ve hit the scan limit. Try again in a little while.', true);
+      if (!outcome.networkOk) {
+        showProgressError('Scan failed: ' + (outcome.error && outcome.error.message ? outcome.error.message : 'connection error'));
         return;
       }
 
+      var res = outcome.res, data = outcome.data;
+
+      if (res.status === 429) {
+        showProgressError(data.error || 'You’ve hit the scan limit. Try again in a little while.');
+        return;
+      }
       if (!res.ok || data.error) {
-        throw new Error(data.error || ('Scan failed (HTTP ' + res.status + ')'));
+        showProgressError('Scan failed: ' + (data.error || ('HTTP ' + res.status)));
+        return;
       }
 
+      hideProgressPanel();
       renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan);
       updateShareableUrl(data.domain);
-      setStatus('');
     } catch (err) {
-      setStatus('Scan failed: ' + (err && err.message ? err.message : 'connection error'), true);
+      showProgressError('Scan failed: ' + (err && err.message ? err.message : 'connection error'));
     } finally {
       scanBtn.disabled = false;
     }
@@ -100,11 +222,11 @@
       var url = new URL(window.location.href);
       url.searchParams.set('scan', domain);
       history.replaceState(null, '', url.toString());
-    } catch (e) { /* URL API unavailable \u2014 leave the address bar as-is */ }
+    } catch (e) { /* URL API unavailable — leave the address bar as-is */ }
   }
 
   // window.ANSWERABLE_BENCHMARKS is written by scripts/generate-benchmarks.js
-  // alongside the homepage benchmark section \u2014 see index.html between the
+  // alongside the homepage benchmark section — see index.html between the
   // BENCHMARKS:START/END markers. Returns HTML (a trusted string built from
   // numbers only), or null if the stats aren't available on this page.
   function benchmarkLine(score) {
@@ -112,29 +234,35 @@
     if (!stats || typeof stats.overallAverage !== 'number' || !stats.totalSites) return null;
 
     var link = ' <a href="/#benchmark-heading">See the benchmark</a>';
-    var sitesPhrase = 'the average of the ' + stats.totalSites + ' sites we\u2019ve scanned';
+    var sitesPhrase = 'the average of the ' + stats.totalSites + ' sites we’ve scanned';
     var delta = score - stats.overallAverage;
     var points = Math.abs(delta);
 
     if (points < 2) {
-      return 'That\u2019s around ' + sitesPhrase + '.' + link;
+      return 'That’s around ' + sitesPhrase + '.' + link;
     }
     var word = points === 1 ? 'point' : 'points';
-    return 'That\u2019s ' + points + ' ' + word + ' ' + (delta > 0 ? 'above' : 'below') + ' ' + sitesPhrase + '.' + link;
+    return 'That’s ' + points + ' ' + word + ' ' + (delta > 0 ? 'above' : 'below') + ' ' + sitesPhrase + '.' + link;
   }
 
   /* ---------------- Render ---------------- */
+
+  var PILLARS = [
+    { cat: 'discover', label: 'Discoverability' },
+    { cat: 'tech', label: 'Technical' },
+    { cat: 'trust', label: 'Content & trust' }
+  ];
 
   function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam) {
     lastScore = { domain: domain, total: r.total };
 
     $('scoreValue').textContent = r.total;
-    $('scoreDomain').textContent = domain + ' \u00b7 retrieved ' + new Date().toLocaleDateString('en-GB');
+    $('scoreDomain').textContent = domain + ' · retrieved ' + new Date().toLocaleDateString('en-GB');
 
     var scannedNowEl = $('scoreScannedNow');
     if (scannedNowEl) {
       if (scannedFromParam) {
-        scannedNowEl.textContent = 'Scanned just now \u2014 ' + new Date().toLocaleDateString('en-GB');
+        scannedNowEl.textContent = 'Scanned just now — ' + new Date().toLocaleDateString('en-GB');
         scannedNowEl.hidden = false;
       } else {
         scannedNowEl.hidden = true;
@@ -167,23 +295,29 @@
       partial: '<span class="bot-chip bot-chip--partial">Limited</span>',
       block: '<span class="bot-chip bot-chip--block">Blocked</span>'
     };
-    var botHtml = '<div class="bot-console__label">' + esc(domain) + '/robots.txt \u2014 AI crawler policy</div>';
-    if (!robotsOk) botHtml += '<div class="bot-console__note"># no robots.txt found \u2192 all crawlers have default access</div>';
-    botResults.forEach(function (b) {
-      botHtml += '<div class="bot-row"><span class="bot-row__name">' + esc(b.name) + '</span>' + chip[b.state] +
-        '<span class="bot-row__rule">' + esc(b.rule) + ' \u00b7 ' + esc(b.desc) + '</span></div>';
-    });
+    var botHtml = '<div class="bot-console__label">' + esc(domain) + '/robots.txt — AI crawler policy</div>';
+    if (!robotsOk) botHtml += '<div class="bot-console__note"># no robots.txt found → all crawlers have default access</div>';
+    botHtml += '<div class="bot-grid">' + botResults.map(function (b) {
+      var ruleLine = b.state !== 'open'
+        ? '<span class="bot-card__rule">' + esc(b.rule) + ' · ' + esc(b.desc) + '</span>'
+        : '';
+      return '<div class="bot-card"><div class="bot-card__top"><span class="bot-card__name">' + esc(b.name) + '</span>' + chip[b.state] + '</div>' + ruleLine + '</div>';
+    }).join('') + '</div>';
     if (botResults.some(function (b) { return b.state !== 'open'; })) {
       botHtml += '<div class="bot-console__link">Fix this: <a href="/tools/robots-txt">generate a corrected robots.txt</a></div>';
     }
     $('botConsole').innerHTML = botHtml;
 
-    $('checksBody').innerHTML = r.checks.map(function (c) {
-      var passed = c.ok || c.pts >= c.max * 0.8;
-      return '<div class="check-row ' + (passed ? 'is-ok' : 'is-fail') + '">' +
-        '<span class="check-row__mark">' + (passed ? '\u2713' : '\u2717') + '</span>' +
-        '<span>' + esc(c.label) + '</span>' +
-        '<span class="check-row__pts">' + c.pts + '/' + c.max + '</span></div>';
+    $('checksBody').innerHTML = PILLARS.map(function (p) {
+      var rows = r.checks.filter(function (c) { return c.cat === p.cat; }).map(function (c) {
+        var passed = c.ok || c.pts >= c.max * 0.8;
+        return '<div class="check-row ' + (passed ? 'is-ok' : 'is-fail') + '">' +
+          '<span class="check-row__mark">' + (passed ? '✓' : '✗') + '</span>' +
+          '<span>' + esc(c.label) + '</span>' +
+          '<span class="check-row__pts">' + c.pts + '/' + c.max + '</span></div>';
+      }).join('');
+      return '<div class="checks-group"><p class="kicker">' + esc(p.label) + '</p>' +
+        '<div class="checks-group__grid">' + rows + '</div></div>';
     }).join('');
 
     var missed = r.checks
@@ -193,7 +327,7 @@
 
     $('actionsList').innerHTML = missed.length === 0
       ? '<li class="action-item"><div class="action-item__top"><span class="action-item__label">Every check passed.</span></div>' +
-        '<p class="action-item__why">Next frontier: whether your content actually gets cited inside AI answers \u2014 that\u2019s what the playbooks below are for.</p></li>'
+        '<p class="action-item__why">Next frontier: whether your content actually gets cited inside AI answers — that’s what the playbooks below are for.</p></li>'
       : missed.map(function (c) {
           var level = c.gain >= 6 ? ['high', 'High impact'] : c.gain >= 3 ? ['mid', 'Medium impact'] : ['low', 'Low impact'];
           return '<li class="action-item action-item--' + level[0] + '"><div class="action-item__top">' +
@@ -238,7 +372,7 @@
     var blockedBots = (botResults || []).filter(function (b) { return b.state !== 'open'; });
     if (blockedBots.length > 0) {
       var today = new Date().toISOString().slice(0, 10);
-      var lines = ['# Generated by Answerable on ' + today + ' \u2014 allows the AI crawlers currently blocked or limited'];
+      var lines = ['# Generated by Answerable on ' + today + ' — allows the AI crawlers currently blocked or limited'];
       blockedBots.forEach(function (b) {
         lines.push('User-agent: ' + b.name);
         lines.push('Allow: /');
@@ -297,19 +431,25 @@
       return;
     }
 
-    container.innerHTML = '<h3 class="fix-snippets__title">Copy-paste fixes</h3>' +
-      blocks.map(function (b, i) {
-        return '<div class="fix-snippet">' +
-          '<div class="fix-snippet__head">' +
-            '<span class="fix-snippet__label">' + esc(b.label) + '</span>' +
-            '<button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" data-index="' + i + '">' +
-              '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>' +
-              'Copy' +
-            '</button>' +
-          '</div>' +
-          '<pre class="fix-snippet__code">' + esc(b.code) + '</pre>' +
-        '</div>';
-      }).join('');
+    container.innerHTML =
+      '<button type="button" class="fix-snippets__toggle" id="fixSnippetsToggle" aria-expanded="false" aria-controls="fixSnippetsBody">' +
+        '<span>Copy-paste fixes (' + blocks.length + ')</span>' +
+        '<svg class="fix-snippets__chevron" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</button>' +
+      '<div class="fix-snippets__body" id="fixSnippetsBody" hidden>' +
+        blocks.map(function (b, i) {
+          return '<div class="fix-snippet">' +
+            '<div class="fix-snippet__head">' +
+              '<span class="fix-snippet__label">' + esc(b.label) + '</span>' +
+              '<button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" data-index="' + i + '">' +
+                '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>' +
+                'Copy' +
+              '</button>' +
+            '</div>' +
+            '<pre class="fix-snippet__code">' + esc(b.code) + '</pre>' +
+          '</div>';
+        }).join('') +
+      '</div>';
 
     container.hidden = false;
   }
@@ -319,12 +459,12 @@
   function shareScore() {
     if (!lastScore) return;
     var shareUrl = CONFIG.shareUrl + '?scan=' + encodeURIComponent(lastScore.domain);
-    var text = lastScore.domain + ' scored ' + lastScore.total + '/100 on AI readiness \u2014 ' + shareUrl;
+    var text = lastScore.domain + ' scored ' + lastScore.total + '/100 on AI readiness — ' + shareUrl;
     if (navigator.share) {
-      navigator.share({ title: 'Answerable. \u2014 AI visibility score', text: text, url: shareUrl }).catch(function () {});
+      navigator.share({ title: 'Answerable. — AI visibility score', text: text, url: shareUrl }).catch(function () {});
     } else {
       navigator.clipboard.writeText(text).then(function () {
-        showToast('Score copied \u2014 paste it anywhere.');
+        showToast('Score copied — paste it anywhere.');
       });
     }
   }
@@ -333,17 +473,26 @@
 
   form.addEventListener('submit', function (e) { e.preventDefault(); runScan(); });
   retryBtn.addEventListener('click', function () { runScan(); });
+  if (progressRetryBtn) progressRetryBtn.addEventListener('click', function () { runScan(); });
   $('shareBtn').addEventListener('click', shareScore);
 
   var fixSnippets = $('fixSnippets');
   if (fixSnippets) {
     fixSnippets.addEventListener('click', function (e) {
+      var toggle = e.target.closest('.fix-snippets__toggle');
+      if (toggle) {
+        var body = $('fixSnippetsBody');
+        var expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        if (body) body.hidden = expanded;
+        return;
+      }
       var btn = e.target.closest('.fix-snippet__copy');
       if (!btn) return;
       var pre = btn.closest('.fix-snippet').querySelector('.fix-snippet__code');
       if (!pre) return;
       navigator.clipboard.writeText(pre.textContent).then(function () {
-        showToast('Snippet copied \u2014 paste it into your <head>.');
+        showToast('Snippet copied — paste it into your <head>.');
       });
     });
   }
