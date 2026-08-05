@@ -254,7 +254,7 @@
   ];
 
   function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam) {
-    lastScore = { domain: domain, total: r.total };
+    lastScore = { domain: domain, total: r.total, checks: r.checks, botResults: botResults };
 
     $('scoreValue').textContent = r.total;
     $('scoreDomain').textContent = domain + ' · retrieved ' + new Date().toLocaleDateString('en-GB');
@@ -454,17 +454,75 @@
     container.hidden = false;
   }
 
-  /* ---------------- Share ---------------- */
+  /* ---------------- Share ----------------
+     The share text leads with whatever's most interesting in the scan
+     result, not a bare score:
+       1. Any blocked/limited AI crawler — the most concrete finding.
+       2. Otherwise, the highest-impact failing check, if it's "High
+          impact" by the same >=6pt threshold the report itself uses.
+       3. Otherwise, a small number of low-impact gaps only — brag copy.
+       4. Every check passed — perfect-score copy.
+     Short, per-check clauses for case 2, written to read naturally
+     after "<domain> ...". Only covers checks that can be the reason a
+     score isn't perfect while every crawler is open — "AI crawler
+     access" itself is excluded, since case 1 already handles that. */
+  var SHARE_FINDINGS = {
+    'robots.txt present': 'has no robots.txt, so AI crawlers can’t find its access rules',
+    'llms.txt present': 'has no llms.txt, the file some AI systems check for a content map',
+    'Sitemap declared': 'has no sitemap declared, so crawlers can’t discover its pages',
+    'Canonical tag': 'has no canonical tag, risking duplicate-content confusion',
+    'html lang attribute': 'has no declared language, so AI systems can misread its content',
+    'Page title': 'has a page title AI systems can’t use as a clean source label',
+    'Meta description': 'has no usable meta description for AI systems to summarize it by',
+    'Open Graph tags': 'has no Open Graph tags, so shared previews read inconsistently',
+    'Structured data (JSON-LD)': 'has no structured data, so machines can’t label its content',
+    'Single H1 heading': 'has an unclear heading structure, leaving its topic ambiguous',
+    'Subheading structure (H2)': 'has no subheadings, making its content hard to quote',
+    'Organization / WebSite schema': 'has no Organization schema, so AI systems can’t verify who’s behind it',
+    'Content schema (Article, FAQ…)': 'has no content schema, so AI systems can’t tell what this page is',
+    'Author / about signals': 'has no author or about signals AI systems can verify',
+    'Contact signals': 'has no contact signals, a baseline trust marker'
+  };
+
+  function buildShareText(domain, r, botResults) {
+    var blocked = botResults.filter(function (b) { return b.state !== 'open'; });
+    if (blocked.length > 0) {
+      return blocked.length + ' of ' + botResults.length + ' AI crawlers are blocked from reading ' + domain + '. Score: ' + r.total + '/100.';
+    }
+
+    var missed = r.checks
+      .filter(function (c) { return c.pts < c.max; })
+      .map(function (c) { return { label: c.label, gain: c.max - c.pts }; })
+      .sort(function (a, b) { return b.gain - a.gain; });
+
+    if (missed.length === 0) {
+      return domain + ' passes all ' + r.checks.length + ' AI readiness checks. ' + r.total + '/100.';
+    }
+
+    var top = missed[0];
+    var finding = SHARE_FINDINGS[top.label];
+    if (top.gain >= 6 && finding) {
+      return domain + ' ' + finding + '. AI readiness: ' + r.total + '/100.';
+    }
+
+    return domain + ' scores ' + r.total + '/100 for AI readiness. GPTBot, ClaudeBot and PerplexityBot can all read it.';
+  }
 
   function shareScore() {
     if (!lastScore) return;
     var shareUrl = CONFIG.shareUrl + '?scan=' + encodeURIComponent(lastScore.domain);
-    var text = lastScore.domain + ' scored ' + lastScore.total + '/100 on AI readiness — ' + shareUrl;
+    var text = buildShareText(lastScore.domain, lastScore, lastScore.botResults);
+    var title = 'Answerable — AI readiness scan';
+
     if (navigator.share) {
-      navigator.share({ title: 'Answerable. — AI visibility score', text: text, url: shareUrl }).catch(function () {});
+      // url is its own field — the text must not also contain it, or
+      // targets that concatenate text+url (WhatsApp among them) show
+      // the link twice.
+      navigator.share({ title: title, text: text, url: shareUrl }).catch(function () {});
     } else {
-      navigator.clipboard.writeText(text).then(function () {
-        showToast('Score copied — paste it anywhere.');
+      // No separate url field here, so it's appended to the text once.
+      navigator.clipboard.writeText(text + ' ' + shareUrl).then(function () {
+        showToast('Result and link copied.');
       });
     }
   }
