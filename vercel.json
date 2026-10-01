@@ -9,6 +9,9 @@
     },
     "api/crawl-step.js": {
       "maxDuration": 30
+    },
+    "api/mcp.js": {
+      "maxDuration": 60
     }
   },
   "rewrites": [
