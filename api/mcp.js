@@ -133,30 +133,6 @@ function findVertical(slug) {
 
 /* ---------------- JSON-LD builders (generate_schema) ---------------- */
 
-// lib/scanner.js's parseSignals() pulls title/meta-description straight
-// out of raw HTML by regex and doesn't decode entities — fine for
-// scoring (it only checks presence/length), but generate_schema hands
-// these values back as literal JSON-LD text, so a scanned page's
-// "&#x27;" would otherwise appear verbatim in the output. Decoded here,
-// not in parseSignals, so the public scan endpoint's behavior is
-// untouched.
-var NAMED_ENTITIES = {
-  amp: '&', lt: '<', gt: '>', quot: '"', apos: '\'', nbsp: ' ',
-  rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“',
-  mdash: '—', ndash: '–', hellip: '…'
-};
-
-function decodeEntities(str) {
-  return String(str).replace(/&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z]+);/g, function (m, ent) {
-    if (ent.charAt(0) === '#') {
-      var isHex = ent.charAt(1) === 'x' || ent.charAt(1) === 'X';
-      var code = isHex ? parseInt(ent.slice(2), 16) : parseInt(ent.slice(1), 10);
-      return isNaN(code) ? m : String.fromCodePoint(code);
-    }
-    return Object.prototype.hasOwnProperty.call(NAMED_ENTITIES, ent) ? NAMED_ENTITIES[ent] : m;
-  });
-}
-
 var SCHEMA_TYPE_LABEL = {
   organization: 'Organization and WebSite',
   faqpage: 'FAQPage',
@@ -556,11 +532,7 @@ var HANDLERS = {
       return { isError: true, text: 'Could not read the homepage at https://' + domain + '/ (' + (pageRes.kind || pageRes.error || 'unknown error') + '). Confirm the domain is correct and reachable, then try again.' };
     }
     var sig = scanner.parseSignals(pageRes.text);
-    var schema = buildSchema(type, domain, {
-      title: decodeEntities(sig.title),
-      metaDesc: decodeEntities(sig.metaDesc),
-      lang: sig.lang
-    });
+    var schema = buildSchema(type, domain, { title: sig.title, metaDesc: sig.metaDesc, lang: sig.lang });
 
     var text = SCHEMA_TYPE_LABEL[type] + ' JSON-LD for ' + domain + ', ready to paste inside a <script type="application/ld+json"> tag in the page’s <head>:\n\n' +
       JSON.stringify(schema, null, 2);
