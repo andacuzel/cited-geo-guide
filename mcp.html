@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — MCP Server for Claude, Cursor and Other AI Tools</title>
+  <meta name="description" content="Connect Answerable's AI-visibility scanner, fix generators and vertical playbooks to Claude, Cursor or any MCP client. Eight free, read-only tools, copy-paste setup, nothing stored." />
+  <meta name="keywords" content="MCP server, Model Context Protocol, Claude MCP, Cursor MCP, AI visibility API, GEO tools, AEO tools" />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/mcp" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
+  <meta property="og:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Eight free, read-only tools, nothing stored." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/mcp" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
+  <meta name="twitter:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Eight free, read-only tools, nothing stored." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=35" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Answerable MCP Server",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "description": "An MCP server exposing Answerable's AI-visibility scanner, fix generators and vertical playbooks as tools for Claude, Cursor and other MCP clients.",
+        "url": "https://answerable-app.vercel.app/mcp",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is MCP?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MCP (Model Context Protocol) is an open standard that lets an AI assistant call external tools directly, instead of a person copying results between a website and a chat window. Connecting Answerable's MCP server gives Claude, Cursor or any other MCP client direct access to the scanner, the fix generators and the playbooks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does connecting the MCP server cost anything?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All eight tools are free. The three that scan a live site share the same rate limit as the public scanner on answerable-app.vercel.app."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is anything stored when a tool is called?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The server keeps no record of which domains were scanned or which client called it. The only state it keeps is a one-way hash of the caller's IP address, used solely to enforce the rate limit, the same mechanism the public scanner already uses."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <div class="nav-dropdown">
+          <button type="button" class="site-nav__link nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+            Playbooks
+            <svg class="nav-dropdown__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown__menu">
+            <a href="/for-saas" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">B2B SaaS</span>
+              <span class="nav-dropdown__item-desc">Software companies competing for AI shortlists</span>
+            </a>
+            <a href="/for-brands" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Consumer &amp; e-commerce brands</span>
+              <span class="nav-dropdown__item-desc">Products people ask AI about before buying</span>
+            </a>
+            <a href="/for-professionals" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Local &amp; independent professionals</span>
+              <span class="nav-dropdown__item-desc">Practices and services people find through AI</span>
+            </a>
+          </div>
+        </div>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Brands</a>
+        <a href="/for-professionals" class="site-nav__link">Professionals</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">MCP server</p>
+            <h1 class="page-banner__title">Answerable, from inside your tools.</h1>
+            <p class="page-banner__desc">Scan a site, generate a fix, or read a playbook without leaving Claude or Cursor. Eight tools, the same scanner and data as the website, called directly from an AI assistant.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- What this connects ---------- -->
+    <section class="verticals" aria-labelledby="what-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="what-heading" class="doc-section__heading">What this connects</h2>
+          <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as eight callable tools instead of a page. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, or read one of the fourteen vertical playbooks, without a person copying anything between a browser tab and a chat window.</p>
+          <p>Every tool is read-only and non-destructive. None of them write to your site, send a message, or change an account anywhere. Three tools — scan_site, compare_sites, generate_schema — make an outbound request to the domain you give them, the same as the public scanner. The other five work entirely from this project's own data and fetch nothing external.</p>
+          <p>Like the scanner itself, every tool measures AI readiness: whether a crawler can reach a page, and whether its signals give a model reason to trust it. None of them measure whether an assistant currently mentions a brand in a live answer — that depends on the prompt, the session and the model's training data, and no tool here can observe or promise it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Connect it ---------- -->
+    <section class="verticals" aria-labelledby="connect-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="connect-heading" class="doc-section__heading">Connect it</h2>
+          <p>The server speaks MCP over Streamable HTTP at a single URL: <code>https://answerable-app.vercel.app/api/mcp</code>. No API key, no account.</p>
+
+          <div class="results-content__body">
+            <h3>Claude Code (CLI)</h3>
+            <p>Run once, from any directory:</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head">
+              <span class="fix-snippet__label">Terminal</span>
+              <div class="fix-snippet__actions">
+                <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy">
+                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
+                  Copy
+                </button>
+              </div>
+            </div>
+            <pre class="fix-snippet__code">claude mcp add --transport http answerable https://answerable-app.vercel.app/api/mcp</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>Claude Desktop, or any JSON-config MCP client</h3>
+            <p>Add this to the client's MCP config file (for Claude Desktop, <code>claude_desktop_config.json</code>):</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head">
+              <span class="fix-snippet__label">claude_desktop_config.json</span>
+              <div class="fix-snippet__actions">
+                <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy">
+                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
+                  Copy
+                </button>
+              </div>
+            </div>
+            <pre class="fix-snippet__code">{
+  "mcpServers": {
+    "answerable": {
+      "url": "https://answerable-app.vercel.app/api/mcp"
+    }
+  }
+}</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>Cursor</h3>
+            <p>Add the same shape to <code>.cursor/mcp.json</code> (project) or <code>~/.cursor/mcp.json</code> (global):</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head">
+              <span class="fix-snippet__label">.cursor/mcp.json</span>
+              <div class="fix-snippet__actions">
+                <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy">
+                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
+                  Copy
+                </button>
+              </div>
+            </div>
+            <pre class="fix-snippet__code">{
+  "mcpServers": {
+    "answerable": {
+      "url": "https://answerable-app.vercel.app/api/mcp"
+    }
+  }
+}</pre>
+          </div>
+
+          <p>Restart the client, or reload its MCP connections, then ask it to scan a domain, compare two sites, or pull up a playbook.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Tools ---------- -->
+    <section class="verticals" aria-labelledby="tools-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="tools-heading" class="doc-section__heading">Eight tools</h2>
+          <p>Each one below shows what it needs, what it fetches, and one real example call and response.</p>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Scanning</h2>
+
+          <div class="results-content__body">
+            <h3>scan_site</h3>
+            <p><strong>Fetches:</strong> the live domain &middot; <strong>Needs:</strong> <code>domain</code> (bare hostname, e.g. <code>example.com</code>)</p>
+            <p>Scans a domain's public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability, technical foundation, and content &amp; trust. Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable's own benchmark data.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "scan_site", "arguments": { "domain": "example.com" } }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">AI readiness scan — example.com
+
+Score: 29/100
+  Discoverability:      26/40
+  Technical foundation: 3/20
+  Content &amp; trust:      0/40
+
+That's 44 points below the average of the 219 sites we've scanned (73/100).
+
+AI crawler access: 10/10 open.
+
+Failed checks, highest point value first:
+  - Organization / WebSite schema (0/8 pts): Add Organization schema — Defines your brand as a verifiable entity — the base layer of trust.
+  - Author / about signals (0/8 pts): Add an about page and author information — AI systems weigh source credibility through ownership signals.
+  - Contact signals (0/8 pts): Add a contact page or email link — Reachability is a baseline trust marker.
+  (11 more failed checks follow in a real response)
+
+Passed: AI crawler access (10/10 open), Page title.</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>compare_sites</h3>
+            <p><strong>Fetches:</strong> two live domains, one after the other &middot; <strong>Needs:</strong> <code>domain_a</code>, <code>domain_b</code></p>
+            <p>Scans two domains — sequentially, never in parallel — and reports both scores plus every check where they differ. Useful for comparing your site against a named competitor.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "compare_sites", "arguments": { "domain_a": "example.com", "domain_b": "wikipedia.org" } }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
+            <pre class="fix-snippet__code">Comparing example.com and wikipedia.org
+
+example.com: 29/100 (Discoverability 26/40, Technical 3/20, Content &amp; trust 0/40)
+wikipedia.org: 44/100 (Discoverability 23/40, Technical 10/20, Content &amp; trust 11/40)
+
+Where they differ (9 of 16 checks):
+  robots.txt present — example.com: 0/4   wikipedia.org: 4/4
+  Sitemap declared — example.com: 0/6   wikipedia.org: 6/6
+  AI crawler access — example.com: 26/26   wikipedia.org: 13/26
+  html lang attribute — example.com: 0/3   wikipedia.org: 3/3
+  Page title — example.com: 3/3   wikipedia.org: 0/3
+  Meta description — example.com: 0/4   wikipedia.org: 4/4
+  Open Graph tags — example.com: 0/3   wikipedia.org: 3/3
+  Single H1 heading — example.com: 0/6   wikipedia.org: 6/6
+  Subheading structure (H2) — example.com: 0/5   wikipedia.org: 5/5</pre>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Fixes</h2>
+
+          <div class="results-content__body">
+            <h3>generate_schema</h3>
+            <p><strong>Fetches:</strong> the live domain's homepage &middot; <strong>Needs:</strong> <code>domain</code>, <code>type</code> (<code>organization</code>, <code>faqpage</code>, <code>article</code> or <code>product</code>)</p>
+            <p>Fetches a domain's homepage for its real title, meta description and declared language, then returns ready-to-paste JSON-LD of the requested type. Fields the scan cannot know — a FAQ's actual questions, a product's real price — come back as clearly bracketed placeholders, never invented values.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "generate_schema", "arguments": { "domain": "example.com", "type": "organization" } }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
+            <pre class="fix-snippet__code">Organization and WebSite JSON-LD for example.com, ready to paste inside a &lt;script type="application/ld+json"&gt; tag in the page's &lt;head&gt;:
+
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "[Your company name]",
+      "url": "https://example.com",
+      "description": "[A one-sentence description of your business]"
+    },
+    {
+      "@type": "WebSite",
+      "name": "Example Domain",
+      "url": "https://example.com",
+      "inLanguage": "[e.g. en]"
+    }
+  ]
+}</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>generate_robots_txt</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>allow</code> and/or <code>block</code> (arrays of tracked crawler names), optional <code>sitemap_url</code></p>
+            <p>Builds a robots.txt file that explicitly allows or blocks named AI crawlers from the tracked list of 10, plus an optional Sitemap line. Call list_ai_crawlers first for the exact tracked names.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "generate_robots_txt",
+    "arguments": {
+      "allow": ["GPTBot", "ClaudeBot", "PerplexityBot"],
+      "block": ["Bytespider", "CCBot"],
+      "sitemap_url": "https://example.com/sitemap.xml"
+    }
+  }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
+            <pre class="fix-snippet__code">robots.txt — paste this at your site root (e.g. https://yoursite.com/robots.txt):
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://example.com/sitemap.xml</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>generate_llms_txt</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>name</code>, <code>description</code>, optional <code>key_pages</code> (array of <code>url</code> + <code>description</code>)</p>
+            <p>Builds an llms.txt file — the emerging convention that gives AI systems a curated map of a site — from a name, a one-sentence description and a list of key pages.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "generate_llms_txt",
+    "arguments": {
+      "name": "Example Co",
+      "description": "A sample company used for documentation.",
+      "key_pages": [
+        { "url": "https://example.com/pricing", "description": "Plans and pricing" },
+        { "url": "https://example.com/docs", "description": "Product documentation" }
+      ]
+    }
+  }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
+            <pre class="fix-snippet__code">llms.txt — paste this at your site root (e.g. https://yoursite.com/llms.txt):
+
+# Example Co
+
+&gt; A sample company used for documentation.
+
+## Pages
+- [Plans and pricing](https://example.com/pricing)
+- [Product documentation](https://example.com/docs)</pre>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Knowledge</h2>
+
+          <div class="results-content__body">
+            <h3>get_playbook</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>vertical</code> (one of 14 slugs, e.g. <code>crm</code>, <code>ecommerce</code>, <code>legal</code>)</p>
+            <p>Returns the full GEO/AEO playbook for one of Answerable's fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Read live from this project's own content file, so it always matches what a visitor to the site sees.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "get_playbook", "arguments": { "vertical": "crm" } }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">CRM Software (B2B SaaS)
+
+## The Strategic Shift
+
+For a decade, CRM buyers built their shortlist by Googling "best CRM for small business" and skimming ten blue links. That research layer is collapsing into a single AI-generated answer. When a sales-ops lead asks ChatGPT, Perplexity, or Gemini to compare HubSpot, Salesforce, and Pipedrive, the model is not crawling your homepage in real time — it is synthesizing a response from training data, indexed reviews, and structured signals it has learned to trust.
+
+If your CRM brand is not in that trusted signal set, you do not lose a ranking position. You disappear from the conversation. If your Answerable scan shows "AI crawler access" or "Organization / WebSite schema" failing, this category feels it faster than most.
+
+(trimmed — a real response continues with Top 3 Actionable Strategies, Outdated Pitfalls to Avoid, and an expert-tip placeholder)</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>get_benchmark</h3>
+            <p><strong>Fetches:</strong> nothing (archived scan data) &middot; <strong>Needs:</strong> nothing, or <code>category</code></p>
+            <p>Returns Answerable's own archived scan data for one category — average, median and range of scores, pillar breakdowns, crawler-blocking rates and the most common failed checks — or a ranked summary across every category when called with no argument.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "get_benchmark", "arguments": {} }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
+            <pre class="fix-snippet__code">AI readiness benchmarks across 6 categories (219 sites scanned, weighted average 73/100):
+
+  78/100  CRM software  (B2B SaaS, 31 platforms, scanned 2026-07-29)
+  78/100  Cybersecurity  (B2B SaaS, 46 platforms, scanned 2026-07-31)
+  74/100  DevTools &amp; Cloud  (B2B SaaS, 48 platforms, scanned 2026-07-31)
+  71/100  DTC brands  (Consumer &amp; e-commerce, 33 brands, scanned 2026-07-29)
+  71/100  Hospitality &amp; travel  (Consumer &amp; e-commerce, 21 venues, scanned 2026-07-31)
+  65/100  Consumer apps  (Consumer &amp; e-commerce, 40 apps, scanned 2026-07-31)
+
+Call get_benchmark with a category for the full breakdown: crm, cybersecurity, devtools, dtc-brands, consumer-apps, hospitality.</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3>list_ai_crawlers</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
+            <p>Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it actually means, and this project's robots.txt generator's default for it. Use before generate_robots_txt if you need the exact tracked names.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "list_ai_crawlers", "arguments": {} }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">The 10 AI crawlers Answerable tracks:
+
+GPTBot (OpenAI)
+  OpenAI's crawler for training GPT models. Allowing it means your pages can shape what ChatGPT knows.
+  This project's robots.txt generator defaults it to: Allow.
+
+ClaudeBot (Anthropic)
+  Anthropic's crawler for training Claude models. Allowing it means your pages can shape what Claude knows.
+  This project's robots.txt generator defaults it to: Allow.
+
+Bytespider (ByteDance)
+  ByteDance's crawler, used to gather AI training data. Many site owners block it over aggressive crawling behavior.
+  This project's robots.txt generator defaults it to: Disallow.
+
+(7 more crawlers follow in a real response: ChatGPT-User, OAI-SearchBot, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, CCBot)</pre>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="callout">
+            <p class="callout__label">Errors are specific</p>
+            <p>Calling generate_schema with an invalid type returns: <code>"type" must be one of: organization, faqpage, article, product (got "invalid").</code> Calling a tool name the server doesn't recognize returns a JSON-RPC error naming it, with the full tool list. Nothing fails silently or returns a generic message.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Privacy ---------- -->
+    <section class="verticals" aria-labelledby="privacy-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="privacy-heading" class="doc-section__heading">Privacy</h2>
+          <p>The same rule as the public scanner applies here: nothing is stored about who calls a tool.</p>
+          <p>The three tools that scan a live domain — scan_site, compare_sites, generate_schema — fetch directly from that domain, the same way the public scanner does. They don't route through a third-party proxy, and the fetched content is used only to build the response handed back to the calling tool. It isn't logged or retained anywhere.</p>
+          <p>To enforce the same rate limit the public scanner uses, the server keeps a one-way hash of the caller's IP address paired with a request counter. It expires automatically within a day, isn't linked to which domain was scanned or which tool was called, and the raw IP address is never stored. No other identifying information is recorded: no client name, no API key, no account, no log of individual tool calls.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Scan reminder ---------- -->
+    <section aria-label="Scan reminder">
+      <div class="section__inner">
+        <div class="scan-bridge">
+          <p class="scan-bridge__text">Prefer a browser? Run the same scan on the website.</p>
+          <a href="/" class="btn btn--primary">Scan your site free</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+          <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="/privacy" class="site-nav__link">Privacy</a>
+          <a href="/terms" class="site-nav__link">Terms</a>
+        </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      'use strict';
+      document.querySelectorAll('.fix-snippet__copy').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var code = btn.closest('.fix-snippet').querySelector('.fix-snippet__code');
+          navigator.clipboard.writeText(code.textContent).then(function () {
+            var toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = 'Copied.';
+            toast.classList.add('is-visible');
+            setTimeout(function () { toast.classList.remove('is-visible'); }, 2600);
+          });
+        });
+      });
+    }());
+  </script>
+  <script src="nav.js?v=2"></script>
+</body>
+</html>
