@@ -6,68 +6,10 @@
 (function () {
   'use strict';
 
-  var CRAWLERS = [
-    {
-      ua: 'GPTBot',
-      vendor: 'OpenAI',
-      defaultAllow: true,
-      desc: 'OpenAI\u2019s crawler for training GPT models. Allowing it means your pages can shape what ChatGPT knows.'
-    },
-    {
-      ua: 'ChatGPT-User',
-      vendor: 'OpenAI',
-      defaultAllow: true,
-      desc: 'Used when ChatGPT browses live to answer a question. Allowing it means ChatGPT can read and cite your page in real time.'
-    },
-    {
-      ua: 'OAI-SearchBot',
-      vendor: 'OpenAI',
-      defaultAllow: true,
-      desc: 'Powers ChatGPT\u2019s search feature. Allowing it means your pages can surface in ChatGPT search results.'
-    },
-    {
-      ua: 'ClaudeBot',
-      vendor: 'Anthropic',
-      defaultAllow: true,
-      desc: 'Anthropic\u2019s crawler for training Claude models. Allowing it means your pages can shape what Claude knows.'
-    },
-    {
-      ua: 'anthropic-ai',
-      vendor: 'Anthropic',
-      defaultAllow: true,
-      desc: 'An older Anthropic user agent, same purpose as ClaudeBot. Allowing it covers legacy Anthropic crawler requests.'
-    },
-    {
-      ua: 'PerplexityBot',
-      vendor: 'Perplexity',
-      defaultAllow: true,
-      desc: 'Perplexity\u2019s indexing crawler. Allowing it means your content can be cited in Perplexity\u2019s answers.'
-    },
-    {
-      ua: 'Perplexity-User',
-      vendor: 'Perplexity',
-      defaultAllow: true,
-      desc: 'Used when Perplexity fetches a page live to answer a question. Allowing it means Perplexity can read your page in real time.'
-    },
-    {
-      ua: 'Google-Extended',
-      vendor: 'Google',
-      defaultAllow: true,
-      desc: 'Controls AI training access separate from Search indexing. Allowing it means Google can use your content to train Gemini and other AI features.'
-    },
-    {
-      ua: 'CCBot',
-      vendor: 'Common Crawl',
-      defaultAllow: true,
-      desc: 'Common Crawl\u2019s crawler, whose public dataset trains many AI models. Allowing it means your content may train models beyond any single company.'
-    },
-    {
-      ua: 'Bytespider',
-      vendor: 'ByteDance',
-      defaultAllow: false,
-      desc: 'ByteDance\u2019s crawler, used to gather AI training data. Many site owners block it over aggressive crawling behavior.'
-    }
-  ];
+  // Shared with api/mcp.js (list_ai_crawlers, generate_robots_txt) via
+  // lib/crawlers.js, loaded as a <script> before this file \u2014 see that
+  // file for the data and why it's not duplicated here.
+  var CRAWLERS = window.ANSWERABLE_CRAWLERS || [];
 
   var $ = function (id) { return document.getElementById(id); };
 
