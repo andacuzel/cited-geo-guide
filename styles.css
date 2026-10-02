@@ -2565,3 +2565,57 @@ code {
   .scene-anim .sq__chip--first { opacity: 1 !important; }
   .scene-anim .scene__refresh { transform: none !important; }
 }
+
+/* =====================================================================
+   Benchmarks (scripts/generate-benchmark-pages.js)
+   Additions only. Bars use the research reports' mapping: --navy-800 for
+   B2B SaaS, --gold for consumer and e-commerce.
+   ===================================================================== */
+
+.chart-bar--limited { fill: var(--line); }
+.chart-bar--blocked { fill: var(--risk); }
+.chart-seg-text { font-family: var(--font-mono, monospace); font-size: 11px; font-weight: 600; }
+.chart-seg-text--light { fill: var(--white); }
+.chart-seg-text--dark { fill: var(--navy-950); }
+
+.report-cite__url { margin-top: 10px; font-size: 14px; color: var(--ink-soft); word-break: break-all; }
+.report-cite__url a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.report-cite__row[hidden] { display: none; }
+.report-section a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+.bm-legend { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-bottom: 8px; font-size: 13px; color: var(--ink-soft); }
+.bm-legend__item { display: inline-flex; align-items: center; gap: 8px; }
+.bm-legend__swatch { display: block; width: 14px; height: 14px; border-radius: 3px; }
+.bm-list { list-style: none; margin: 0; padding: 0; }
+.bm-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) 92px;
+  gap: 6px 28px;
+  align-items: center;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.bm-row__name a {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.15;
+  color: var(--navy-950);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 4px;
+}
+.bm-row__name a:hover { color: var(--gold-deep); }
+.bm-row__track { display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); }
+.bm-row__bar { height: 14px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bm-row__fill { display: block; height: 100%; border-radius: 3px; }
+.bm-fill--b2b { background: var(--navy-800); }
+.bm-fill--dtc { background: var(--gold); }
+.bm-row__score { font-family: var(--font-display); font-size: 34px; line-height: 1; color: var(--navy-950); text-align: right; }
+.bm-row__score small { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+.bm-row__meta { grid-column: 1 / -1; margin: 0; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+@media (max-width: 640px) {
+  .bm-row { grid-template-columns: minmax(0, 1fr) 92px; }
+  .bm-row__bar { grid-column: 1 / -1; grid-row: 2; }
+  .bm-row__score { grid-column: 2; grid-row: 1; }
+  .bm-row__meta { grid-row: 3; }
+}
