@@ -7,7 +7,7 @@
     "average": 71,
     "median": 71,
     "lowest": 58,
-    "highest": 93,
+    "highest": 96,
     "averageDiscoverability": 26,
     "averageTechnical": 17,
     "averageTrust": 29
@@ -80,8 +80,8 @@
     "Author / about signals": 19,
     "Meta description": 14,
     "Canonical tag": 10,
-    "Page title": 10,
     "html lang attribute": 5,
+    "Page title": 5,
     "Subheading structure (H2)": 5,
     "robots.txt present": 0,
     "Sitemap declared": 0,

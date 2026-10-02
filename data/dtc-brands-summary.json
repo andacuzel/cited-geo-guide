@@ -4,7 +4,7 @@
   "scanned": 33,
   "failed": 14,
   "score": {
-    "average": 71,
+    "average": 72,
     "median": 70,
     "lowest": 46,
     "highest": 87,
@@ -77,7 +77,7 @@
     "llms.txt present": 24,
     "Structured data (JSON-LD)": 24,
     "Organization / WebSite schema": 24,
-    "Page title": 18,
+    "Page title": 15,
     "Open Graph tags": 15,
     "Subheading structure (H2)": 9,
     "Canonical tag": 6,

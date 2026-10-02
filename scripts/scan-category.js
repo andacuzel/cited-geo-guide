@@ -160,4 +160,6 @@ async function main() {
   console.log(`\nWritten to data/${category}-raw.json and data/${category}-summary.json`);
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { summarize };

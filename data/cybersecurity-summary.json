@@ -5,9 +5,9 @@
   "failed": 4,
   "score": {
     "average": 78,
-    "median": 81,
+    "median": 82,
     "lowest": 55,
-    "highest": 97,
+    "highest": 100,
     "averageDiscoverability": 28,
     "averageTechnical": 18,
     "averageTrust": 33
@@ -77,7 +77,7 @@
     "Structured data (JSON-LD)": 24,
     "Meta description": 22,
     "Single H1 heading": 20,
-    "Page title": 17,
+    "Page title": 11,
     "Open Graph tags": 7,
     "Subheading structure (H2)": 4,
     "html lang attribute": 2,
