@@ -381,7 +381,9 @@
       blocks.push({ label: 'AI crawler access', code: lines.join('\n') });
     }
 
-    var orgCheck = checks.filter(function (c) { return c.label === 'Organization / WebSite schema'; })[0];
+    // lib/schema.js is a separate script. If a page forgot to load it, skip
+    // the JSON-LD blocks rather than lose the whole report.
+    var orgCheck = schema && checks.filter(function (c) { return c.label === 'Organization / WebSite schema'; })[0];
     if (orgCheck && !orgCheck.ok) {
       blocks.push({
         label: orgCheck.label,
@@ -389,7 +391,7 @@
       });
     }
 
-    var contentCheck = checks.filter(function (c) { return c.label === 'Content schema (Article, FAQ…)'; })[0];
+    var contentCheck = schema && checks.filter(function (c) { return c.label === 'Content schema (Article, FAQ…)'; })[0];
     if (contentCheck && !contentCheck.ok) {
       blocks.push({
         label: contentCheck.label,
