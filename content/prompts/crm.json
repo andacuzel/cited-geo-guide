@@ -76,7 +76,7 @@
       "text": "Which CRMs are best for sales teams that work mostly from mobile?"
     }
   ],
-  "brandsNote": "Lexicon for competitor extraction. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count when written as \"<Name> CRM\", in bold, as a heading, or as a list-item label.",
+  "brandsNote": "Lexicon for competitor extraction. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count when written as \"<Name> CRM\", in bold, as a heading, or as a list-item label. Sales-engagement and prospecting tools (Outreach, Salesloft, Apollo.io) are deliberately left out: they are adjacent to CRMs, not alternatives.",
   "brands": [
     {
       "name": "Salesforce",
@@ -319,10 +319,6 @@
       "ambiguous": true
     },
     {
-      "name": "Apollo.io",
-      "domain": "apollo.io"
-    },
-    {
       "name": "Ontraport",
       "domain": "ontraport.com"
     },
@@ -348,15 +344,6 @@
       "aliases": [
         "BoomTown"
       ]
-    },
-    {
-      "name": "Salesloft",
-      "domain": "salesloft.com"
-    },
-    {
-      "name": "Outreach",
-      "domain": "outreach.io",
-      "ambiguous": true
     }
   ]
 }

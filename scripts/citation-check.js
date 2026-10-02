@@ -35,12 +35,12 @@
    Key: GEMINI_API_KEY in the environment or in .env.local (gitignored).
 
    Output (data/citations/):
-     <brand>-<date>-<mode>.json       parsed results and summary
-     <brand>-<date>-<mode>.raw.jsonl  every raw response, one per line; the
+     <brand>-<date>-<model>-<mode>.json       parsed results and summary
+     <brand>-<date>-<model>-<mode>.raw.jsonl  every raw response, one per line; the
                                       parsed file is rebuilt from it, and
                                       each parsed run points at its line.
-   The mode is in the file name because a grounded and an ungrounded run
-   on the same day must never share a file.
+   The model and mode are in the file name because runs that differ in
+   either, on the same day, must never share a file.
    ===================================================================== */
 
 const fs = require('fs');
@@ -103,7 +103,7 @@ function makeMatcher(brand) {
       regexes.push(new RegExp('\\[' + p + E));
     }
   }
-  return (text) => {
+  const match = (text) => {
     let best = -1;
     for (const re of regexes) {
       const m = re.exec(text);
@@ -111,6 +111,22 @@ function makeMatcher(brand) {
     }
     return best;
   };
+
+  // "Featured": named in a heading, list label, table cell or bold text,
+  // rather than only in running prose. A proxy for being offered as an
+  // answer, since a name in an aside ("lighter tools like X") still counts
+  // as a mention.
+  const flags = brand.ambiguous ? '' : 'i';
+  const structural = terms.map((t) => {
+    const p = termPattern(t);
+    return new RegExp(
+      '^#{1,6}[^\\n]*' + B + p + E +
+      '|^\\s*(?:\\d+\\.|[-*\\u2022])\\s+\\**\\s*' + B + p + E +
+      '|^\\s*\\|[^\\n]*' + B + p + E +
+      '|\\*\\*[^*\\n]*' + B + p + E + '[^*\\n]*\\*\\*', flags + 'm');
+  });
+  match.structural = (text) => structural.some((re) => re.test(text));
+  return match;
 }
 
 const TLDS = 'com|org|net|io|co|ai|app|dev|edu|gov|us|uk|de|fr|eu|ca|au|nl|se|in|tech|so|ly|me|tv|cloud|software|xyz';
@@ -181,18 +197,24 @@ function answerText(response) {
   return parts.filter((p) => typeof p.text === 'string' && !p.thought).map((p) => p.text).join('');
 }
 
-const LABEL_STOP = /^(best for|ideal for|pros|cons|key features?|why|pricing|price|integrations?|strengths?|weaknesses?|top pick|considerations?|overall|summary|conclusion|note|bottom line|good for|great for|features?|use case|cost|free plan|verdict|recommendation|tip|example|how|what|who|when|where)\b/i;
+const LABEL_STOP = /^(choose|pick|catch|go with|final|quick|tip|best for|ideal for|pros|cons|key features?|why|pricing|price|integrations?|strengths?|weaknesses?|top pick|considerations?|overall|summary|conclusion|note|bottom line|good for|great for|features?|use case|cost|free plan|verdict|recommendation|tip|example|how|what|who|when|where)\b/i;
 
 // Names written like product names that are not in the lexicon. Informational
 // only: they never enter share of voice. They show where the lexicon is thin.
-function unlistedCandidates(text, knownMatchers) {
+function unlistedCandidates(text, knownMatchers, knownNames) {
   const out = new Set();
   const re = /^[ \t]*(?:#{1,6}[ \t]*(?:\d+\.[ \t]*)?|(?:\d+\.|[-*•])[ \t]+)\*{0,2}([A-Z][^*\n:()–—]{1,40}?)\*{0,2}[ \t]*(?:[:(–—]|$|\*\*)/gm;
   let m;
   while ((m = re.exec(text))) {
-    const name = m[1].replace(/[*_:]+$/g, '').trim();
-    if (!name || name.split(/\s+/).length > 4 || LABEL_STOP.test(name)) continue;
+    const name = m[1].replace(/[*_:]+$/g, '').replace(/^The\s+/, '').trim();
+    const words = name.split(/\s+/);
+    if (!name || words.length > 3 || LABEL_STOP.test(name)) continue;
+    // Product names are Title Case (or carry a digit); labels like
+    // "All-in-one feel" and "Best if" are not.
+    if (!words.every((w) => /^[A-Z0-9]/.test(w) || /^(of|and|for|&)$/.test(w))) continue;
     if (knownMatchers.some((k) => k(name) !== -1)) continue;
+    // Ambiguous names only match in context, so also drop exact lexicon names.
+    if (knownNames && knownNames.has(name.toLowerCase())) continue;
     out.add(name);
   }
   return [...out];
@@ -217,6 +239,7 @@ function parseRun(response, ctx) {
   return {
     mentioned,
     mentionPos: mentioned ? target : null,
+    featured: mentioned && ctx.targetMatcher.structural(text),
     competitors: competitors.map((c) => c.name),
     // Model-stated: whatever the model typed. Unverified in both modes.
     modelStatedDomains: stated,
@@ -227,7 +250,7 @@ function parseRun(response, ctx) {
     domainInSources: grounded ? g.sources.some((s) => s.domain && hostMatches(s.domain, ctx.domain)) : null,
     searched: grounded ? g.searched : null,
     searchQueries: grounded ? g.queries.length : 0,
-    unlisted: unlistedCandidates(text, ctx.allMatchers),
+    unlisted: unlistedCandidates(text, ctx.allMatchers, ctx.knownNames),
     answerChars: text.length,
   };
 }
@@ -307,6 +330,8 @@ function buildOutput(meta, raw, promptSet, opts) {
       runs: n,
       mentioned: k,
       mentionRate: enough ? round(k / n) : null,
+      featured: runs.filter((x) => x.featured).length,
+      featuredRate: enough ? round(runs.filter((x) => x.featured).length / n) : null,
       variance: enough ? round(binaryVariance(k, n)) : null,
       stable: enough ? k === 0 || k === n : null,
       domainCited: cited,
@@ -369,6 +394,9 @@ function buildOutput(meta, raw, promptSet, opts) {
     sweeps: sweeps.length,
     promptsPerSweep: nPrompts,
   };
+  const featRates = sweeps.map((s) => s.rows.filter((x) => x.featured).length / nPrompts);
+  overall.featuredRate = round(mean(featRates));
+  overall.featuredRange = rangeOf(featRates);
   overall.spread = round(overall.range.max - overall.range.min);
   overall.wide = overall.spread >= WIDE_SPREAD;
   if (overall.wide) {
@@ -491,6 +519,7 @@ function makeContext(meta, promptSet) {
     targetMatcher,
     competitors,
     allMatchers: [targetMatcher].concat(competitors.map((c) => c.match)),
+    knownNames: new Set((promptSet.brands || []).concat([targetBrand]).flatMap((b) => [b.name].concat(b.aliases || [])).map((n) => n.toLowerCase())),
     vendorDomains: (promptSet.brands || []).map((b) => b.domain).filter(Boolean).concat([meta.domain]),
   };
 }
@@ -616,6 +645,9 @@ async function callGemini(prompt, cfg, pacer) {
     if (res.status === 429) {
       const info = parseRetryDelay(json, res.headers);
       pacer.limited(info.ms, info.quotaId);
+      if (cfg.grounded && info.ms === null && !info.quotaId) {
+        throw new Stop('Grounded call rejected with a quota error and no retry hint. Google Search grounding is not available on this project, which is what a free-tier project returns. Enable billing on the Google Cloud project (with a spend cap), or run without --grounded.');
+      }
       if (info.perDay) throw new Stop('Daily quota reached (' + (info.quotaId || msg) + '). Re-run with the same --date to resume.');
       const wait = Math.max(info.ms || 0, pacer.delay);
       if (wait > MAX_WAIT_MS) throw new Stop(`Rate limit asks for a ${Math.round(wait / 1000)}s wait. Stopping; re-run with the same --date to resume.`);
@@ -699,12 +731,13 @@ function printReport(out) {
   for (const p of out.prompts) {
     const rate = p.mentionRate === null ? 'n/a ' : pct(p.mentionRate).padStart(4);
     const flag = p.stable === false ? '  unstable' : '';
-    console.log(`  ${p.id}  ${p.mentioned}/${p.runs}  ${rate}  var ${p.variance === null ? 'n/a' : p.variance.toFixed(2)}${flag}  ${p.text.slice(0, 52)}`);
+    console.log(`  ${p.id}  ${p.mentioned}/${p.runs} feat ${p.featured}  ${rate}  var ${p.variance === null ? 'n/a' : p.variance.toFixed(2)}${flag}  ${p.text.slice(0, 52)}`);
   }
   out.warnings.forEach((w) => console.log('\n! ' + w));
   if (!out.summary) return;
   const s = out.summary;
-  console.log(`\nOverall mention rate: ${pct(s.overall.mentionRate)}  (range ${pct(s.overall.range.min)} to ${pct(s.overall.range.max)} across ${s.overall.sweeps} sweeps: ${s.overall.bySweep.map(pct).join(', ')})`);
+  console.log(`\nFeatured (heading, list label, table or bold; not prose only): ${pct(s.overall.featuredRate)}  (range ${pct(s.overall.featuredRange.min)} to ${pct(s.overall.featuredRange.max)})`);
+  console.log(`Overall mention rate: ${pct(s.overall.mentionRate)}  (range ${pct(s.overall.range.min)} to ${pct(s.overall.range.max)} across ${s.overall.sweeps} sweeps: ${s.overall.bySweep.map(pct).join(', ')})`);
   console.log('\nShare of voice (appearance rate / share, range of share across sweeps):');
   s.competitors.slice(0, 15).forEach((c) => {
     console.log(`  ${(c.isTarget ? '> ' : '  ') + c.name.padEnd(24)} ${pct(c.appearanceRate).padStart(4)}  ${pct(c.shareOfVoice).padStart(4)}  ${pct(c.shareRange.min)}-${pct(c.shareRange.max)}${c.wide ? '  wide' : ''}`);
@@ -796,7 +829,7 @@ async function main() {
   const prompts = promptSet.prompts.filter((p) => !args.prompts || args.prompts.includes(p.id));
   if (!prompts.length) throw new Error('No prompts match --prompts.');
 
-  const base = path.join(OUT_DIR, `${slug(args.brand)}-${date}-${mode}`);
+  const base = path.join(OUT_DIR, `${slug(args.brand)}-${date}-${slug(args.model)}-${mode}`);
   const rawPath = base + '.raw.jsonl';
   fs.mkdirSync(OUT_DIR, { recursive: true });
   if (args.fresh && fs.existsSync(rawPath)) fs.unlinkSync(rawPath);
