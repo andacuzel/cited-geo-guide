@@ -3,23 +3,360 @@
   "description": "Buying-intent category queries for CRM software. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
   "prompts": [
-    { "id": "crm-01", "text": "What's the best CRM for a 40-person outbound sales team?" },
-    { "id": "crm-02", "text": "Which CRM should a 10-person startup use that won't need a consultant to set up?" },
-    { "id": "crm-03", "text": "What are the best CRMs that integrate natively with Slack?" },
-    { "id": "crm-04", "text": "Which CRM is best for a small business that sells mostly over email and phone?" },
-    { "id": "crm-05", "text": "What's a good free CRM for a freelancer or solo consultant?" },
-    { "id": "crm-06", "text": "Which CRM works best for a B2B SaaS company with a product-led sales motion?" },
-    { "id": "crm-07", "text": "What CRM do mid-market companies with 200 to 500 employees usually choose?" },
-    { "id": "crm-08", "text": "Which CRMs have the best built-in email sequencing and call tracking?" },
-    { "id": "crm-09", "text": "What are the best CRM options for a real estate team?" },
-    { "id": "crm-10", "text": "Which CRM is easiest for a non-technical sales team to adopt?" },
-    { "id": "crm-11", "text": "What are the most affordable CRMs that still have workflow automation?" },
-    { "id": "crm-12", "text": "Which CRM has the best reporting and sales forecasting for a VP of Sales?" },
-    { "id": "crm-13", "text": "What CRM should an agency use to manage clients and deals together?" },
-    { "id": "crm-14", "text": "Which CRMs integrate well with Google Workspace and Gmail?" },
-    { "id": "crm-15", "text": "What are the best enterprise-grade CRMs that cost less than the market leader?" },
-    { "id": "crm-16", "text": "Which CRM is best for managing a long, multi-stakeholder enterprise sales cycle?" },
-    { "id": "crm-17", "text": "What's the best CRM for a company that wants sales and marketing in one tool?" },
-    { "id": "crm-18", "text": "Which CRMs are best for sales teams that work mostly from mobile?" }
+    {
+      "id": "crm-01",
+      "text": "What's the best CRM for a 40-person outbound sales team?"
+    },
+    {
+      "id": "crm-02",
+      "text": "Which CRM should a 10-person startup use that won't need a consultant to set up?"
+    },
+    {
+      "id": "crm-03",
+      "text": "What are the best CRMs that integrate natively with Slack?"
+    },
+    {
+      "id": "crm-04",
+      "text": "Which CRM is best for a small business that sells mostly over email and phone?"
+    },
+    {
+      "id": "crm-05",
+      "text": "What's a good free CRM for a freelancer or solo consultant?"
+    },
+    {
+      "id": "crm-06",
+      "text": "Which CRM works best for a B2B SaaS company with a product-led sales motion?"
+    },
+    {
+      "id": "crm-07",
+      "text": "What CRM do mid-market companies with 200 to 500 employees usually choose?"
+    },
+    {
+      "id": "crm-08",
+      "text": "Which CRMs have the best built-in email sequencing and call tracking?"
+    },
+    {
+      "id": "crm-09",
+      "text": "What are the best CRM options for a real estate team?"
+    },
+    {
+      "id": "crm-10",
+      "text": "Which CRM is easiest for a non-technical sales team to adopt?"
+    },
+    {
+      "id": "crm-11",
+      "text": "What are the most affordable CRMs that still have workflow automation?"
+    },
+    {
+      "id": "crm-12",
+      "text": "Which CRM has the best reporting and sales forecasting for a VP of Sales?"
+    },
+    {
+      "id": "crm-13",
+      "text": "What CRM should an agency use to manage clients and deals together?"
+    },
+    {
+      "id": "crm-14",
+      "text": "Which CRMs integrate well with Google Workspace and Gmail?"
+    },
+    {
+      "id": "crm-15",
+      "text": "What are the best enterprise-grade CRMs that cost less than the market leader?"
+    },
+    {
+      "id": "crm-16",
+      "text": "Which CRM is best for managing a long, multi-stakeholder enterprise sales cycle?"
+    },
+    {
+      "id": "crm-17",
+      "text": "What's the best CRM for a company that wants sales and marketing in one tool?"
+    },
+    {
+      "id": "crm-18",
+      "text": "Which CRMs are best for sales teams that work mostly from mobile?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count when written as \"<Name> CRM\", in bold, as a heading, or as a list-item label.",
+  "brands": [
+    {
+      "name": "Salesforce",
+      "domain": "salesforce.com",
+      "aliases": [
+        "Sales Cloud",
+        "Salesforce Sales Cloud"
+      ]
+    },
+    {
+      "name": "HubSpot",
+      "domain": "hubspot.com",
+      "aliases": [
+        "HubSpot CRM",
+        "HubSpot Sales Hub"
+      ]
+    },
+    {
+      "name": "Pipedrive",
+      "domain": "pipedrive.com"
+    },
+    {
+      "name": "Zoho CRM",
+      "domain": "zoho.com",
+      "aliases": [
+        "Zoho",
+        "Zoho Bigin",
+        "Bigin"
+      ]
+    },
+    {
+      "name": "Freshsales",
+      "domain": "freshworks.com",
+      "aliases": [
+        "Freshworks CRM",
+        "Freshworks"
+      ]
+    },
+    {
+      "name": "monday.com",
+      "domain": "monday.com",
+      "aliases": [
+        "monday CRM",
+        "monday sales CRM"
+      ]
+    },
+    {
+      "name": "Zendesk Sell",
+      "domain": "zendesk.com",
+      "aliases": [
+        "Zendesk"
+      ]
+    },
+    {
+      "name": "Close",
+      "domain": "close.com",
+      "aliases": [
+        "Close CRM"
+      ],
+      "ambiguous": true
+    },
+    {
+      "name": "Copper",
+      "domain": "copper.com",
+      "aliases": [
+        "Copper CRM"
+      ],
+      "ambiguous": true
+    },
+    {
+      "name": "Insightly",
+      "domain": "insightly.com"
+    },
+    {
+      "name": "Nutshell",
+      "domain": "nutshell.com"
+    },
+    {
+      "name": "Keap",
+      "domain": "keap.com",
+      "aliases": [
+        "Infusionsoft"
+      ]
+    },
+    {
+      "name": "ActiveCampaign",
+      "domain": "activecampaign.com"
+    },
+    {
+      "name": "SugarCRM",
+      "domain": "sugarcrm.com",
+      "aliases": [
+        "Sugar CRM"
+      ]
+    },
+    {
+      "name": "Vtiger",
+      "domain": "vtiger.com"
+    },
+    {
+      "name": "Nimble",
+      "domain": "nimble.com",
+      "aliases": [
+        "Nimble CRM"
+      ],
+      "ambiguous": true
+    },
+    {
+      "name": "Capsule",
+      "domain": "capsulecrm.com",
+      "aliases": [
+        "Capsule CRM"
+      ],
+      "ambiguous": true
+    },
+    {
+      "name": "Less Annoying CRM",
+      "domain": "lessannoyingcrm.com"
+    },
+    {
+      "name": "Streak",
+      "domain": "streak.com",
+      "aliases": [
+        "Streak CRM"
+      ],
+      "ambiguous": true
+    },
+    {
+      "name": "Salesflare",
+      "domain": "salesflare.com"
+    },
+    {
+      "name": "OnePageCRM",
+      "domain": "onepagecrm.com",
+      "aliases": [
+        "One Page CRM"
+      ]
+    },
+    {
+      "name": "Bitrix24",
+      "domain": "bitrix24.com"
+    },
+    {
+      "name": "EspoCRM",
+      "domain": "espocrm.com"
+    },
+    {
+      "name": "SuiteCRM",
+      "domain": "suitecrm.com"
+    },
+    {
+      "name": "Odoo",
+      "domain": "odoo.com"
+    },
+    {
+      "name": "Creatio",
+      "domain": "creatio.com"
+    },
+    {
+      "name": "Pipeliner CRM",
+      "domain": "pipelinersales.com",
+      "aliases": [
+        "Pipeliner"
+      ]
+    },
+    {
+      "name": "Teamgate",
+      "domain": "teamgate.com"
+    },
+    {
+      "name": "Agile CRM",
+      "domain": "agilecrm.com"
+    },
+    {
+      "name": "Microsoft Dynamics 365",
+      "domain": "dynamics.microsoft.com",
+      "aliases": [
+        "Dynamics 365",
+        "Dynamics CRM",
+        "Microsoft Dynamics"
+      ]
+    },
+    {
+      "name": "SAP Sales Cloud",
+      "domain": "sap.com",
+      "aliases": [
+        "SAP CRM",
+        "SAP Customer Experience",
+        "SAP C4C"
+      ]
+    },
+    {
+      "name": "Oracle CRM",
+      "domain": "oracle.com",
+      "aliases": [
+        "Oracle Fusion CRM",
+        "Oracle Sales",
+        "Oracle Advertising and CX"
+      ]
+    },
+    {
+      "name": "NetSuite CRM",
+      "domain": "netsuite.com",
+      "aliases": [
+        "NetSuite"
+      ]
+    },
+    {
+      "name": "Maximizer",
+      "domain": "maximizer.com",
+      "aliases": [
+        "Maximizer CRM"
+      ]
+    },
+    {
+      "name": "Efficy",
+      "domain": "efficy.com"
+    },
+    {
+      "name": "Teamleader",
+      "domain": "teamleader.eu",
+      "aliases": [
+        "Teamleader Focus"
+      ]
+    },
+    {
+      "name": "weclapp",
+      "domain": "weclapp.com"
+    },
+    {
+      "name": "Attio",
+      "domain": "attio.com"
+    },
+    {
+      "name": "Folk",
+      "domain": "folk.app",
+      "aliases": [
+        "folk CRM"
+      ],
+      "ambiguous": true
+    },
+    {
+      "name": "Apollo.io",
+      "domain": "apollo.io"
+    },
+    {
+      "name": "Ontraport",
+      "domain": "ontraport.com"
+    },
+    {
+      "name": "Follow Up Boss",
+      "domain": "followupboss.com"
+    },
+    {
+      "name": "LionDesk",
+      "domain": "liondesk.com"
+    },
+    {
+      "name": "Wise Agent",
+      "domain": "wiseagent.com"
+    },
+    {
+      "name": "Real Geeks",
+      "domain": "realgeeks.com"
+    },
+    {
+      "name": "kvCORE",
+      "domain": "kvcore.com",
+      "aliases": [
+        "BoomTown"
+      ]
+    },
+    {
+      "name": "Salesloft",
+      "domain": "salesloft.com"
+    },
+    {
+      "name": "Outreach",
+      "domain": "outreach.io",
+      "ambiguous": true
+    }
   ]
 }

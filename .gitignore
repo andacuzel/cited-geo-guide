@@ -16,3 +16,6 @@ node_modules/
 # Env / secrets
 .env
 .env.local
+
+# Citation-tracking local state (learned rate limit, monthly query ledger)
+data/citations/_state/
