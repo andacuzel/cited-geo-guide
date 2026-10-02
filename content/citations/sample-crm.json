@@ -1,0 +1,243 @@
+{
+  "label": "a mid-market CRM brand",
+  "vertical": "crm",
+  "model": "gemini-3.5-flash-lite",
+  "date": "2026-10-02",
+  "mode": "ungrounded",
+  "runsPerPrompt": 5,
+  "promptCount": 18,
+  "note": "One model on one date, without web search. This is what that model said in these runs, not a measure of AI visibility in general. Per run: featured = named in a heading, list label, table or bold text; named = named only in running prose; absent = not named. Group: always = named in every run, never = named in none, unstable = otherwise.",
+  "prompts": [
+    {
+      "id": "crm-01",
+      "question": "What's the best CRM for a 40-person outbound sales team?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-02",
+      "question": "Which CRM should a 10-person startup use that won't need a consultant to set up?",
+      "group": "always",
+      "runs": [
+        "featured",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-03",
+      "question": "What are the best CRMs that integrate natively with Slack?",
+      "group": "always",
+      "runs": [
+        "featured",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-04",
+      "question": "Which CRM is best for a small business that sells mostly over email and phone?",
+      "group": "unstable",
+      "runs": [
+        "absent",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-05",
+      "question": "What's a good free CRM for a freelancer or solo consultant?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-06",
+      "question": "Which CRM works best for a B2B SaaS company with a product-led sales motion?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-07",
+      "question": "What CRM do mid-market companies with 200 to 500 employees usually choose?",
+      "group": "unstable",
+      "runs": [
+        "named",
+        "absent",
+        "named",
+        "featured",
+        "named"
+      ]
+    },
+    {
+      "id": "crm-08",
+      "question": "Which CRMs have the best built-in email sequencing and call tracking?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-09",
+      "question": "What are the best CRM options for a real estate team?",
+      "group": "unstable",
+      "runs": [
+        "featured",
+        "absent",
+        "featured",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-10",
+      "question": "Which CRM is easiest for a non-technical sales team to adopt?",
+      "group": "always",
+      "runs": [
+        "featured",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-11",
+      "question": "What are the most affordable CRMs that still have workflow automation?",
+      "group": "unstable",
+      "runs": [
+        "featured",
+        "absent",
+        "absent",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-12",
+      "question": "Which CRM has the best reporting and sales forecasting for a VP of Sales?",
+      "group": "unstable",
+      "runs": [
+        "absent",
+        "absent",
+        "featured",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-13",
+      "question": "What CRM should an agency use to manage clients and deals together?",
+      "group": "always",
+      "runs": [
+        "featured",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-14",
+      "question": "Which CRMs integrate well with Google Workspace and Gmail?",
+      "group": "always",
+      "runs": [
+        "featured",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    },
+    {
+      "id": "crm-15",
+      "question": "What are the best enterprise-grade CRMs that cost less than the market leader?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-16",
+      "question": "Which CRM is best for managing a long, multi-stakeholder enterprise sales cycle?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-17",
+      "question": "What's the best CRM for a company that wants sales and marketing in one tool?",
+      "group": "never",
+      "runs": [
+        "absent",
+        "absent",
+        "absent",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "id": "crm-18",
+      "question": "Which CRMs are best for sales teams that work mostly from mobile?",
+      "group": "always",
+      "runs": [
+        "featured",
+        "featured",
+        "featured",
+        "featured",
+        "featured"
+      ]
+    }
+  ],
+  "overall": {
+    "mentionRate": 0.4889,
+    "range": {
+      "min": 0.3889,
+      "max": 0.5556
+    },
+    "sweeps": 5,
+    "bySweep": [
+      0.5,
+      0.3889,
+      0.5556,
+      0.5,
+      0.5
+    ]
+  }
+}
