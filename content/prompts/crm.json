@@ -1,0 +1,25 @@
+{
+  "vertical": "crm",
+  "description": "Buying-intent category queries for CRM software. No brand names: the brand under test either appears in the answer or it does not.",
+  "version": 1,
+  "prompts": [
+    { "id": "crm-01", "text": "What's the best CRM for a 40-person outbound sales team?" },
+    { "id": "crm-02", "text": "Which CRM should a 10-person startup use that won't need a consultant to set up?" },
+    { "id": "crm-03", "text": "What are the best CRMs that integrate natively with Slack?" },
+    { "id": "crm-04", "text": "Which CRM is best for a small business that sells mostly over email and phone?" },
+    { "id": "crm-05", "text": "What's a good free CRM for a freelancer or solo consultant?" },
+    { "id": "crm-06", "text": "Which CRM works best for a B2B SaaS company with a product-led sales motion?" },
+    { "id": "crm-07", "text": "What CRM do mid-market companies with 200 to 500 employees usually choose?" },
+    { "id": "crm-08", "text": "Which CRMs have the best built-in email sequencing and call tracking?" },
+    { "id": "crm-09", "text": "What are the best CRM options for a real estate team?" },
+    { "id": "crm-10", "text": "Which CRM is easiest for a non-technical sales team to adopt?" },
+    { "id": "crm-11", "text": "What are the most affordable CRMs that still have workflow automation?" },
+    { "id": "crm-12", "text": "Which CRM has the best reporting and sales forecasting for a VP of Sales?" },
+    { "id": "crm-13", "text": "What CRM should an agency use to manage clients and deals together?" },
+    { "id": "crm-14", "text": "Which CRMs integrate well with Google Workspace and Gmail?" },
+    { "id": "crm-15", "text": "What are the best enterprise-grade CRMs that cost less than the market leader?" },
+    { "id": "crm-16", "text": "Which CRM is best for managing a long, multi-stakeholder enterprise sales cycle?" },
+    { "id": "crm-17", "text": "What's the best CRM for a company that wants sales and marketing in one tool?" },
+    { "id": "crm-18", "text": "Which CRMs are best for sales teams that work mostly from mobile?" }
+  ]
+}
