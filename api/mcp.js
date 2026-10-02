@@ -1,8 +1,10 @@
 /* =====================================================================
    /api/mcp — Answerable's MCP server.
 
-   Exposes the scanner and the playbook/benchmark content as 8 MCP
-   tools, all read-only, over a single JSON-RPC-over-HTTP endpoint.
+   Exposes the scanner, the playbook/benchmark content and the citation
+   tracking content as MCP tools (the registry, TOOLS below, is the one
+   place that says how many), all read-only, over a single
+   JSON-RPC-over-HTTP endpoint.
 
    SPEC TARGET & A DELIBERATE COMPATIBILITY CHOICE
    -------------------------------------------------------------------
@@ -55,10 +57,17 @@
    (scan_site, compare_sites, generate_schema) share the exact counter
    api/scan.js uses (api/_rateLimit.js — 20/hour, 100/day per caller).
    compare_sites consumes two units, one per constituent scan, since it
-   performs two real fetches. The five tools that only read this
-   project's own static content (generate_robots_txt, generate_llms_txt,
-   get_playbook, get_benchmark, list_ai_crawlers) are not rate limited —
-   there is no third party to protect from them.
+   performs two real fetches. The tools that only read this project's own
+   static content (generate_robots_txt, generate_llms_txt, get_playbook,
+   get_benchmark, list_ai_crawlers, get_citation_prompts,
+   get_citation_sample) are not rate limited — there is no third party to
+   protect from them.
+
+   THERE IS NO TOOL THAT RUNS A LIVE CITATION CHECK, on purpose. One run
+   is about 90 model calls at about five seconds each, far past this
+   function's time limit, and it would spend a model quota that nothing
+   stops strangers from draining. get_citation_prompts hands a person the
+   questions and a protocol to run in their own assistant instead.
 
    No caller identity is stored anywhere; api/_rateLimit.js keeps only a
    SHA-256 hash of the caller's IP behind a short TTL counter, same as
@@ -72,6 +81,7 @@ const scanner = require('../lib/scanner');
 const schemaLib = require('../lib/schema');
 const playbooks = require('../lib/playbooks');
 const CRAWLERS = require('../lib/crawlers');
+const citation = require('../lib/citation-content');
 
 const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
 const SERVER_INFO = { name: 'answerable', title: 'Answerable', version: '1.0.0' };
@@ -424,6 +434,29 @@ var TOOLS = [
     description: 'Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it actually means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.',
     inputSchema: { type: 'object', properties: {} },
     annotations: { title: 'List tracked AI crawlers', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
+    name: 'get_citation_prompts',
+    title: 'Get citation questions for a vertical',
+    description: 'Returns the set of buying-intent questions Answerable uses to test whether an AI assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions contain no brand names. Read-only: it reads a content file and queries no model. There is deliberately no tool that runs the check for you: a run is about 90 model calls at about five seconds each, far past this server’s time limit, and it would spend a quota anyone could drain. Question sets exist for: ' + citation.verticalsWithSets().join(', ') + '. Other verticals are valid but have no questions yet and return a message saying so. Use when the user asks how to check whether an assistant names their brand, or wants the questions for their category.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        vertical: {
+          type: 'string',
+          description: 'A vertical slug. Valid: ' + citation.verticals().join(', ') + '. Question sets exist for: ' + citation.verticalsWithSets().join(', ') + '.'
+        }
+      },
+      required: ['vertical']
+    },
+    annotations: { title: 'Get citation questions for a vertical', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
+    name: 'get_citation_sample',
+    title: 'Get the anonymised citation sample',
+    description: 'Returns Answerable’s anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and a note on the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand, domain or competitor. Read-only: it reads a content file and queries no model. Use when the user wants to see what a citation result looks like, or asks how much the same question varies between tries.',
+    inputSchema: { type: 'object', properties: {} },
+    annotations: { title: 'Get the anonymised citation sample', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }
 ];
 
@@ -654,6 +687,14 @@ var HANDLERS = {
       lines.push('');
     });
     return { isError: false, text: lines.join('\n').replace(/\n+$/, '') };
+  },
+
+  get_citation_prompts: async function (args) {
+    return citation.promptsFor(args && args.vertical);
+  },
+
+  get_citation_sample: async function () {
+    return citation.sampleText();
   }
 
 };
@@ -886,3 +927,7 @@ module.exports = async (req, res) => {
     res.status(200).json(rpcResult(id, toolResult({ isError: true, text: 'Unexpected server error. Please try again.' })));
   }
 };
+
+// The registry, for lib/mcp-docs.js (which derives the tool count shown in mcp.html).
+module.exports.TOOLS = TOOLS;
+module.exports.HANDLERS = HANDLERS;
