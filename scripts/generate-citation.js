@@ -5,10 +5,11 @@
    Reads content/citations/sample-crm.json and writes static HTML for the
    two citation-tracking surfaces, the way generate-benchmarks.js does:
 
-     index.html            the block between
+     index.html            the gold block between
                              <!-- CITATION-BAND:START --> ... END
                            (created just before the scan-progress
-                           section if the markers are missing)
+                           section if the markers are missing): one big
+                           number and one question asked five times
      citation-tracking.html  every region between
                              <!-- CITATION-MATRIX:START --> ... END
                              <!-- CITATION-CTA:START --> ... END
@@ -22,8 +23,9 @@
    sweep are recomputed from the per-run marks) and refuses to write if
    they disagree.
 
-   The matrix is plain HTML. citation-matrix.js only replays the fill
-   once on first view; without it the finished matrix is already there.
+   The matrix and the five tries are plain HTML. citation-matrix.js only
+   replays them once on first view; without it the finished state is
+   already there.
 
    Usage:
      node scripts/generate-citation.js
@@ -49,7 +51,6 @@ const GROUPS = [
 const STATE_NAME = { featured: 'named and featured', named: 'named', absent: 'not named' };
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const HOME_ROWS_PER_GROUP = 3;
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -156,16 +157,12 @@ function legendDot(state) {
   return '<span class="cm-dot cm-dot--' + state + '" aria-hidden="true"></span>';
 }
 
-// opts.id: unique id stem; opts.limit: rows per group to show (omit for all)
+// opts.id: unique id stem; opts.large: the bigger page version
 function renderMatrix(s, d, opts) {
   const id = opts.id;
-  const limit = opts.limit || Infinity;
-  let rowsShown = 0;
   const groupsHtml = GROUPS.map(function (g) {
     const rows = d.by[g.key];
-    const slice = rows.slice(0, limit);
-    rowsShown += slice.length;
-    const rowsHtml = slice.map(function (p) {
+    const rowsHtml = rows.map(function (p) {
       return (
         '            <li class="cm__row">\n' +
         '              <span class="cm__q">' + esc(p.question.replace(/'/g, '\u2019')) + '</span>\n' +
@@ -173,12 +170,10 @@ function renderMatrix(s, d, opts) {
         '            </li>'
       );
     }).join('\n');
-    const more = rows.length - slice.length;
     return (
       '          <div class="cm__group">\n' +
       '            <h3 class="cm__heading"><span>' + esc(g.label) + '</span><span class="cm__count">' + rows.length + '</span></h3>\n' +
       '            <ol class="cm__rows">\n' + rowsHtml + '\n            </ol>\n' +
-      (more > 0 ? '            <p class="cm__more">+' + more + ' more</p>\n' : '') +
       '          </div>'
     );
   }).join('\n');
@@ -187,7 +182,7 @@ function renderMatrix(s, d, opts) {
   const desc = 'Each row is one question and each dot one run. ' +
     d.f.alwaysCount + ' questions named the brand in every run, ' + d.f.unstableCount + ' in some runs and not others, and ' +
     d.f.neverCount + ' in none. Overall the brand was named in ' + d.f.rate + ' of answers.' +
-    (rowsShown < s.promptCount ? ' This view shows ' + rowsShown + ' of the ' + s.promptCount + ' questions.' : '');
+    '';
 
   return (
     '        <figure class="cm ' + (opts.large ? 'cm--large' : '') + '" id="' + id + '" aria-labelledby="' + id + '-title" aria-describedby="' + id + '-desc">\n' +
@@ -222,33 +217,70 @@ function ctaButton() {
    Homepage block
    --------------------------------------------------------------------- */
 
+
+// Copy that names the buyer is only right for a vertical we have worded it for.
+const BUYER = { crm: 'software buyer' };
+
+// The unstable question whose tries sit closest to a 50/50 split between named
+// and not named. Ties go to the one that flips most often between tries (the
+// most back and forth), then to the first in the file.
+function pickTries(s, d) {
+  const named = (r) => r !== 'absent';
+  const flips = (runs) => runs.reduce(function (n, r, i) { return i && named(r) !== named(runs[i - 1]) ? n + 1 : n; }, 0);
+  const pool = d.by.unstable.map(function (p, i) {
+    const k = p.runs.filter(named).length;
+    return { p: p, i: i, off: Math.abs(k / p.runs.length - 0.5), flips: flips(p.runs) };
+  });
+  if (!pool.length) throw new Error('The sample has no unstable question to show as "one question, five tries".');
+  pool.sort(function (a, b) { return a.off - b.off || b.flips - a.flips || a.i - b.i; });
+  return pool[0].p;
+}
+
+function tryRow(state, n) {
+  const named = state !== 'absent';
+  return (
+    '                <li class="tries__row">\n' +
+    '                  <span class="tries__label">Try ' + n + '</span>\n' +
+    '                  <span class="tries__chip tries__chip--' + (named ? 'named' : 'absent') + '"><span class="tries__mark" aria-hidden="true"></span>' + (named ? 'Named' : 'Not named') + '</span>\n' +
+    '                </li>'
+  );
+}
+
 const BAND_START = '<!-- CITATION-BAND:START -->';
 const BAND_END = '<!-- CITATION-BAND:END -->';
 
 function renderBand(s, d) {
   const f = d.f;
-  const headline = 'Named in ' + f.rate + ' of answers. Invisible for ' + f.neverCount + ' of ' + f.promptCount + ' questions.';
-  const lede = 'The free scan tells you whether AI systems can read your site. A citation run asks a model the questions your buyers ask, ' +
-    f.runsWord + ' times each, and records whether you’re named.';
-  const meta = 'Sample run · ' + f.label + ' · ' + f.model + ' · ' + f.promptCount + ' questions × ' + f.runs + ' runs · ' + f.monthYear;
+  const buyer = BUYER[s.vertical];
+  if (!buyer) throw new Error('No buyer wording for vertical "' + s.vertical + '" in BUYER.');
+  const pick = pickTries(s, d);
+  const noun = f.label.replace(/^an?\s+/i, '');
+  const lede = 'We asked one AI model ' + f.promptCount + ' questions a ' + buyer + ' might ask. A real ' + noun +
+    ' was left out of every answer to ' + f.neverCount + ' of them, and appeared only some of the time on ' + f.unstableCount + ' more.';
+  const meta = f.labelCap + ' · ' + f.model + ' · ' + f.dateLong + ' · each question asked ' + f.runs + ' times';
+  const rows = pick.runs.map(function (r, i) { return tryRow(r, i + 1); }).join('\n');
   return (
     BAND_START + '\n' +
-    '      <section class="citation-block" id="citation" aria-labelledby="citation-heading">\n' +
+    '      <section class="cite-gold" id="citation" aria-labelledby="citation-heading">\n' +
     '        <div class="section__inner">\n' +
-    '          <div class="citation-panel">\n' +
-    '            <div class="citation-panel__copy">\n' +
-    '              <p class="kicker">Early access · Citation tracking</p>\n' +
-    '              <h2 id="citation-heading" class="citation-panel__title">' + esc(headline) + '</h2>\n' +
-    '              <p class="citation-panel__lede">' + esc(lede) + '</p>\n' +
-    '              <p class="citation-panel__meta">' + esc(meta) + '</p>\n' +
-    '              <div class="citation-panel__actions">\n' +
-    '                ' + ctaButton() + '\n' +
-    '                <a class="citation-panel__link" href="/citation-tracking">How it works</a>\n' +
-    '              </div>\n' +
+    '          <p class="cite-gold__kicker">Early access · Citation tracking</p>\n' +
+    '          <div class="cite-gold__grid">\n' +
+    '            <div class="cite-gold__lead">\n' +
+    '              <h2 id="citation-heading" class="cite-gold__title"><span class="cite-gold__num">' + esc(f.neverCount) + '</span><span class="cite-gold__rest">questions your buyers asked. The answer didn’t include you.</span></h2>\n' +
+    '              <p class="cite-gold__lede">' + esc(lede) + '</p>\n' +
     '            </div>\n' +
-    '            <div class="citation-panel__matrix">\n' +
-    renderMatrix(s, d, { id: 'cm-home', limit: HOME_ROWS_PER_GROUP }) + '\n' +
+    '            <figure class="tries" id="cite-tries" aria-labelledby="cite-tries-q">\n' +
+    '              <p class="tries__q" id="cite-tries-q">' + esc(pick.question.replace(/'/g, '’')) + '</p>\n' +
+    '              <ol class="tries__list">\n' + rows + '\n              </ol>\n' +
+    '              <p class="tries__caption">Same question. Same AI. ' + esc(f.runsWordCap) + ' different answers.</p>\n' +
+    '            </figure>\n' +
+    '          </div>\n' +
+    '          <div class="cite-gold__foot">\n' +
+    '            <div class="cite-gold__actions">\n' +
+    '              <a class="btn btn--primary" href="' + mailto() + '">Find out where you’re missing</a>\n' +
+    '              <a class="cite-gold__link" href="/citation-tracking">See the full breakdown</a>\n' +
     '            </div>\n' +
+    '            <p class="cite-gold__meta">' + esc(meta) + '</p>\n' +
     '          </div>\n' +
     '        </div>\n' +
     '      </section>\n' +

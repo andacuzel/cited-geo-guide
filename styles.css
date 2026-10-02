@@ -2205,13 +2205,13 @@ code {
 }
 
 /* =====================================================================
-   Citation tracking: the dot matrix and its homepage block
+   Citation tracking: the dot matrix (page) and the gold block (homepage)
 
-   One component (.cm) on two surfaces. The finished matrix is plain
-   HTML; citation-matrix.js only replays the fill once on first view.
-   The second and last motion exception (see CLAUDE.md): the only thing
-   that animates is a dot changing from an empty ring to its final state
-   (colour and border, 150ms), row by row, once.
+   Both are plain HTML; citation-matrix.js only replays them once on
+   first view. The second and last motion exception (see CLAUDE.md):
+   on the page, a dot changes from an empty ring to its final state
+   (colour and border, 150ms), row by row; on the homepage, the five
+   tries fade in one at a time (opacity, 150ms), 0.4s apart.
    ===================================================================== */
 
 .cm { margin: 0; }
@@ -2304,39 +2304,6 @@ code {
 .cm--large .cm__dots { gap: 14px; }
 .cm--large .cm__row { padding: 12px 0; }
 
-/* Homepage block: a white panel on the base background. */
-.citation-block { padding: 0 0 96px; }
-.citation-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: 56px;
-  align-items: start;
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 48px;
-}
-.citation-panel__title { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.12; text-wrap: balance; }
-.citation-panel__lede { margin-top: 18px; max-width: 460px; font-size: 16.5px; color: var(--ink-soft); }
-.citation-panel__meta {
-  margin: 22px 0 0;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--ink-faint);
-}
-.citation-panel__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 24px; }
-.citation-panel__link {
-  color: var(--ink);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: var(--gold);
-  text-underline-offset: 4px;
-  transition: color var(--t);
-}
-.citation-panel__link:hover { color: var(--gold-deep); }
-
 /* Page: the large matrix and its readout. */
 .cm-panel { padding: 40px; }
 .cm-readout {
@@ -2367,16 +2334,166 @@ code {
 .citation-note a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
 .scan-bridge .btn + .citation-note { margin-top: 20px; }
 
-@media (max-width: 920px) {
-  .citation-panel { grid-template-columns: 1fr; gap: 36px; padding: 36px 32px; }
-  .citation-panel__matrix { order: -1; }
-}
 @media (max-width: 640px) {
-  .citation-block { padding-bottom: 64px; }
-  .citation-panel { padding: 26px 20px; }
   .cm__row { grid-template-columns: 1fr; }
   .cm-panel { padding: 26px 20px; }
   .cm-readout { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+
+/* Homepage: the gold block. One huge number, one question asked five times.
+   Full-bleed --gold, every word on it solid --navy-950: no translucent navy,
+   no gold-soft, no white. The scale makes it different, not a new colour. */
+.cite-gold {
+  background: var(--gold);
+  color: var(--navy-950);
+  padding: 104px 0 96px;
+}
+.cite-gold__kicker {
+  margin: 0 0 40px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--navy-950);
+}
+.cite-gold__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 72px;
+  align-items: center;
+}
+.cite-gold__title {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  margin: 0;
+  color: var(--navy-950);
+}
+.cite-gold__num {
+  font-family: var(--font-display);
+  font-size: clamp(160px, 22vw, 320px);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  color: var(--navy-950);
+}
+.cite-gold__rest {
+  max-width: 330px;
+  padding-bottom: 6px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.6vw, 36px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--navy-950);
+  text-wrap: balance;
+}
+.cite-gold__lede {
+  margin: 36px 0 0;
+  max-width: 560px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--navy-950);
+}
+
+/* One question, five tries. */
+.tries {
+  margin: 0;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 32px 26px;
+  color: var(--ink);
+}
+.tries__q {
+  margin: 0 0 22px;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 27px);
+  line-height: 1.22;
+  color: var(--navy-950);
+}
+.tries__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.tries__row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+.tries__label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy-950);
+}
+.tries__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  justify-self: start;
+  width: fit-content;
+  padding: 5px 12px 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  transition: opacity var(--t);
+}
+.tries__mark {
+  display: block;
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50%;
+}
+.tries__chip--named .tries__mark { background: var(--gold); border: 2px solid var(--gold); }
+.tries__chip--absent .tries__mark { border: 1.5px solid var(--ink-faint); }
+.tries__caption {
+  margin: 18px 0 0;
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1.25;
+  color: var(--navy-950);
+  text-wrap: balance;
+}
+
+/* The replay: before first view, the outcomes are not drawn yet. */
+.cm-anim .tries:not(.is-played) .tries__chip:not(.is-on) { opacity: 0; }
+
+.cite-gold__foot { margin-top: 56px; }
+.cite-gold__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+.cite-gold__link {
+  font-weight: 600;
+  color: var(--navy-950);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+.cite-gold__meta {
+  margin: 22px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--navy-950);
+}
+
+@media (max-width: 920px) {
+  .cite-gold { padding: 72px 0 64px; }
+  .cite-gold__grid { grid-template-columns: 1fr; gap: 44px; align-items: start; }
+  .cite-gold__kicker { margin-bottom: 28px; }
+}
+@media (max-width: 640px) {
+  .cite-gold { padding: 52px 0 48px; }
+  .cite-gold__kicker { margin-bottom: 22px; }
+  .cite-gold__title { gap: 18px; }
+  .cite-gold__rest { font-size: 24px; padding-bottom: 2px; }
+  .cite-gold__lede { margin-top: 26px; font-size: 17px; }
+  .cite-gold__foot { margin-top: 40px; }
+  .tries { padding: 24px 20px 22px; }
 }
 
 @media print {

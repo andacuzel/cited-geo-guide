@@ -122,6 +122,13 @@ the homepage, which has a navy hero field plus two navy bands mid-page
 (the MCP announcement, then Pro). Every other page keeps the
 single-band rule. No fourth navy surface, and no new surface colour.
 
+**Gold on the homepage:** `--gold` is a surface in two places only: the
+contained commerce strip, and one full-bleed gold band, the citation
+block, directly after the capabilities block. Every word on the gold
+band is solid `--navy-950`. Never translucent navy, `--gold-soft`,
+`--gold-deep` or white on gold: reduced opacity on gold looks muddy,
+most of all on mobile.
+
 **One animation exception:** the MCP band's conversation on the
 homepage types itself in once, on first view (`mcp-demo.js`), because it
 demonstrates the product rather than decorating it. The content must
@@ -129,13 +136,15 @@ stay complete in the HTML, the replay must do nothing under
 `prefers-reduced-motion`, and nothing else in that block animates. No
 other section gets motion on this basis.
 
-**The second and last exception:** the citation matrix (homepage block
-and `/citation-tracking`, `citation-matrix.js`) fills its dots in once,
-row by row over about 1.5s, on first view, replaying the five runs. Same
-conditions: the finished matrix is plain HTML, the replay does nothing
-under `prefers-reduced-motion`, and only a dot changing from an empty
-ring to its state animates (colour and border, 150ms). There is no
-third exception. The matrix and its homepage block are generated from
+**The second and last exception:** the citation tracking figures
+(`citation-matrix.js`), two of them: the dot matrix on
+`/citation-tracking`, whose dots fill in once, row by row over about
+1.5s, and the five tries in the homepage's gold block, which appear one
+at a time, 0.4s apart. Same conditions for both: the finished figure is
+plain HTML, the replay does nothing under `prefers-reduced-motion`, and
+only the dots (colour and border) or the try chips (opacity), 150ms,
+animate. There is no
+third exception. Both figures are generated from
 `content/citations/sample-crm.json` by `scripts/generate-citation.js`;
 never type a figure into either surface.
 
