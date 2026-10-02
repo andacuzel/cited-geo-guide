@@ -198,6 +198,7 @@
       <div class="section__inner">
         <h2 id="changelog-heading" class="doc-section__heading">Changelog</h2>
         <ol class="changelog-list">
+          <li><span class="n">2026-10-02</span><span>Fixed entity decoding in the page title and meta description parser. Encoded characters such as <code>&amp;amp;</code> were counted at full length, which pushed some titles and descriptions over the length limit and failed the Page title or Meta description check. Across the benchmark corpus, 8 check results on 7 sites flipped from fail to pass. The DTC brands average moved from 71 to 72. No other category average changed, and the overall average stays 73.</span></li>
           <li><span class="n">2026-07-29</span><span>Added <code>llms.txt</code> detection as a new check, bringing the total from 15 to 16. Rebalanced Discoverability: robots.txt 4, llms.txt 4, Sitemap declared 6, AI crawler access 26 (down from 30). Discoverability, Technical foundation and Content &amp; trust totals (40 / 20 / 40) are unchanged.</span></li>
         </ol>
       </div>
