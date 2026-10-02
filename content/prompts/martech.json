@@ -1,7 +1,81 @@
 {
   "vertical": "martech",
-  "description": "",
+  "description": "Buying-intent category queries for marketing technology: email, automation, analytics, attribution and content tools. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "martech-01",
+      "text": "What's the best email marketing platform for a 20-person B2B company?"
+    },
+    {
+      "id": "martech-02",
+      "text": "Which marketing automation tools work well with a small sales team's existing CRM?"
+    },
+    {
+      "id": "martech-03",
+      "text": "How do I choose a customer data platform for a mid-size retailer?"
+    },
+    {
+      "id": "martech-04",
+      "text": "What are the best web analytics tools that respect visitor privacy?"
+    },
+    {
+      "id": "martech-05",
+      "text": "Which social media scheduling tools handle five or more brand accounts without a high price?"
+    },
+    {
+      "id": "martech-06",
+      "text": "What's the best marketing attribution software for a team spending under $50,000 a month on ads?"
+    },
+    {
+      "id": "martech-07",
+      "text": "Which SEO tools are worth paying for if I only have one person doing content?"
+    },
+    {
+      "id": "martech-08",
+      "text": "What are good alternatives to expensive enterprise marketing suites for a growing startup?"
+    },
+    {
+      "id": "martech-09",
+      "text": "Which landing page builders work best for testing offers without a developer?"
+    },
+    {
+      "id": "martech-10",
+      "text": "What should I look for in a marketing automation platform for a nonprofit with a small budget?"
+    },
+    {
+      "id": "martech-11",
+      "text": "Which tools help a small marketing team report results across email, ads and the website in one place?"
+    },
+    {
+      "id": "martech-12",
+      "text": "What's the best tool for managing and approving content across a team of freelancers?"
+    },
+    {
+      "id": "martech-13",
+      "text": "Which email platforms have the best deliverability for newsletters with over 100,000 subscribers?"
+    },
+    {
+      "id": "martech-14",
+      "text": "How do I pick a webinar platform that connects with our marketing automation?"
+    },
+    {
+      "id": "martech-15",
+      "text": "What are the best customer survey and feedback tools for a software company?"
+    },
+    {
+      "id": "martech-16",
+      "text": "Which marketing analytics dashboards are easiest for a non-technical marketing manager?"
+    },
+    {
+      "id": "martech-17",
+      "text": "What's a good tool for A/B testing website headlines on a limited budget?"
+    },
+    {
+      "id": "martech-18",
+      "text": "Which lead-scoring tools work for a team with a short sales cycle?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

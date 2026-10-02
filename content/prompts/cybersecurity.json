@@ -1,7 +1,81 @@
 {
   "vertical": "cybersecurity",
-  "description": "",
+  "description": "Buying-intent category queries for cybersecurity software and services for companies. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "cybersecurity-01",
+      "text": "What's the best endpoint protection for a company with 100 employees and no security team?"
+    },
+    {
+      "id": "cybersecurity-02",
+      "text": "Which password management tools work best for a team that shares many logins?"
+    },
+    {
+      "id": "cybersecurity-03",
+      "text": "How do I choose a vulnerability scanner for a small software company?"
+    },
+    {
+      "id": "cybersecurity-04",
+      "text": "What are the best identity and access management tools for a growing startup?"
+    },
+    {
+      "id": "cybersecurity-05",
+      "text": "Which security awareness training platforms keep employees engaged?"
+    },
+    {
+      "id": "cybersecurity-06",
+      "text": "What's the best way to pick a SIEM tool for a mid-size company with limited staff?"
+    },
+    {
+      "id": "cybersecurity-07",
+      "text": "Which compliance automation tools help a startup get SOC 2 ready faster?"
+    },
+    {
+      "id": "cybersecurity-08",
+      "text": "What are the best email security tools for blocking phishing at a 50-person company?"
+    },
+    {
+      "id": "cybersecurity-09",
+      "text": "Which penetration testing services suit a small company on a budget?"
+    },
+    {
+      "id": "cybersecurity-10",
+      "text": "How should a company with remote staff choose a VPN or secure access tool?"
+    },
+    {
+      "id": "cybersecurity-11",
+      "text": "Which managed security providers work best for a company with no in-house security team?"
+    },
+    {
+      "id": "cybersecurity-12",
+      "text": "What are the best tools for monitoring cloud security across several accounts?"
+    },
+    {
+      "id": "cybersecurity-13",
+      "text": "Which two-factor authentication options work best for a team that travels often?"
+    },
+    {
+      "id": "cybersecurity-14",
+      "text": "What should I look for in a data backup and recovery tool for ransomware protection?"
+    },
+    {
+      "id": "cybersecurity-15",
+      "text": "Which security tools integrate with the ticketing system our IT team already uses?"
+    },
+    {
+      "id": "cybersecurity-16",
+      "text": "What are good alternatives to expensive enterprise security suites for a mid-size business?"
+    },
+    {
+      "id": "cybersecurity-17",
+      "text": "How do I choose a tool to find sensitive data stored in our cloud files?"
+    },
+    {
+      "id": "cybersecurity-18",
+      "text": "Which incident response services are worth retaining for a small company?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

@@ -1,7 +1,81 @@
 {
   "vertical": "legal",
-  "description": "",
+  "description": "Buying-intent category queries for finding lawyers and legal services. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "legal-01",
+      "text": "How do I find a good immigration lawyer near me who speaks Spanish?"
+    },
+    {
+      "id": "legal-02",
+      "text": "What's the best way to find a divorce lawyer near me with fixed-fee options?"
+    },
+    {
+      "id": "legal-03",
+      "text": "Which estate planning attorneys near me are best for a simple will and trust?"
+    },
+    {
+      "id": "legal-04",
+      "text": "How do I find a personal injury lawyer who works on contingency near me?"
+    },
+    {
+      "id": "legal-05",
+      "text": "Who are the best small business lawyers for setting up an LLC in my state?"
+    },
+    {
+      "id": "legal-06",
+      "text": "Which criminal defense lawyers near me have strong reviews and free consultations?"
+    },
+    {
+      "id": "legal-07",
+      "text": "How do I find a family law attorney who offers payment plans?"
+    },
+    {
+      "id": "legal-08",
+      "text": "What should I look for in a lawyer for a landlord and tenant dispute?"
+    },
+    {
+      "id": "legal-09",
+      "text": "Which employment lawyers near me handle wrongful termination cases?"
+    },
+    {
+      "id": "legal-10",
+      "text": "Where can I find an affordable lawyer for a traffic ticket near me?"
+    },
+    {
+      "id": "legal-11",
+      "text": "How do I choose an intellectual property lawyer for a new product?"
+    },
+    {
+      "id": "legal-12",
+      "text": "Which bankruptcy attorneys near me offer free first meetings?"
+    },
+    {
+      "id": "legal-13",
+      "text": "How do I find a real estate attorney near me for a home closing?"
+    },
+    {
+      "id": "legal-14",
+      "text": "What's the best way to find a lawyer who speaks Mandarin in my area?"
+    },
+    {
+      "id": "legal-15",
+      "text": "Which lawyers near me help with child custody and have good reviews?"
+    },
+    {
+      "id": "legal-16",
+      "text": "How do I find a trusted tax attorney for an audit?"
+    },
+    {
+      "id": "legal-17",
+      "text": "Who can help me write a contract for a freelance business, and what should it cost?"
+    },
+    {
+      "id": "legal-18",
+      "text": "Which lawyers near me handle workers' compensation claims on a contingency basis?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

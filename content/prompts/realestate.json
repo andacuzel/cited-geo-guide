@@ -1,7 +1,81 @@
 {
   "vertical": "realestate",
-  "description": "",
+  "description": "Buying-intent category queries for finding real estate agents and property professionals. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "realestate-01",
+      "text": "How do I find a good real estate agent in my city for selling a home quickly?"
+    },
+    {
+      "id": "realestate-02",
+      "text": "Which real estate agents near me specialize in first-time buyers?"
+    },
+    {
+      "id": "realestate-03",
+      "text": "What's the best way to choose a listing agent when selling a condo?"
+    },
+    {
+      "id": "realestate-04",
+      "text": "Who are the top real estate agents near me with strong reviews and recent sales?"
+    },
+    {
+      "id": "realestate-05",
+      "text": "How do I find a buyer's agent who knows the area around good school districts?"
+    },
+    {
+      "id": "realestate-06",
+      "text": "Which local agents handle rental property purchases for small investors?"
+    },
+    {
+      "id": "realestate-07",
+      "text": "What should I ask a real estate agent before signing a listing agreement?"
+    },
+    {
+      "id": "realestate-08",
+      "text": "How do I find an agent who speaks Spanish and works with buyers in my area?"
+    },
+    {
+      "id": "realestate-09",
+      "text": "Which real estate agents near me have experience selling luxury homes?"
+    },
+    {
+      "id": "realestate-10",
+      "text": "What's the best way to find an agent for buying a vacation home on a budget?"
+    },
+    {
+      "id": "realestate-11",
+      "text": "Who are the best agents for selling an inherited house?"
+    },
+    {
+      "id": "realestate-12",
+      "text": "How do I find a property manager near me with fair fees and good reviews?"
+    },
+    {
+      "id": "realestate-13",
+      "text": "Which agents work with buyers who need a lower commission?"
+    },
+    {
+      "id": "realestate-14",
+      "text": "What's the best way to find an agent for relocating to a new city?"
+    },
+    {
+      "id": "realestate-15",
+      "text": "How do I choose between a large brokerage and a small local agent?"
+    },
+    {
+      "id": "realestate-16",
+      "text": "Which real estate agents near me help with downsizing for retirees?"
+    },
+    {
+      "id": "realestate-17",
+      "text": "How do I find an agent who specializes in new construction homes?"
+    },
+    {
+      "id": "realestate-18",
+      "text": "Who are the best agents for selling a home as is?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

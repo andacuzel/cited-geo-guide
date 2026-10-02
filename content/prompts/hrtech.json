@@ -1,7 +1,81 @@
 {
   "vertical": "hrtech",
-  "description": "",
+  "description": "Buying-intent category queries for HR technology: hiring, payroll, onboarding, performance and benefits tools. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "hrtech-01",
+      "text": "What's the best applicant tracking system for a 50-person company that hires about 20 people a year?"
+    },
+    {
+      "id": "hrtech-02",
+      "text": "Which payroll software works best for a company with employees in several states?"
+    },
+    {
+      "id": "hrtech-03",
+      "text": "How do I choose an HR platform for a startup that has no HR department yet?"
+    },
+    {
+      "id": "hrtech-04",
+      "text": "What are the best employee onboarding tools that connect with our existing payroll system?"
+    },
+    {
+      "id": "hrtech-05",
+      "text": "Which performance review software is easiest for managers who dislike paperwork?"
+    },
+    {
+      "id": "hrtech-06",
+      "text": "What's the best time-tracking tool for a team of hourly workers across multiple locations?"
+    },
+    {
+      "id": "hrtech-07",
+      "text": "Which benefits administration platforms work well for companies with under 100 employees?"
+    },
+    {
+      "id": "hrtech-08",
+      "text": "What are the best HR tools for a fully remote company hiring in different countries?"
+    },
+    {
+      "id": "hrtech-09",
+      "text": "How do I pick an employee engagement survey tool that gives useful results?"
+    },
+    {
+      "id": "hrtech-10",
+      "text": "Which recruiting software has the best candidate experience for high-volume hiring?"
+    },
+    {
+      "id": "hrtech-11",
+      "text": "What's a good learning management system for training frontline employees on their phones?"
+    },
+    {
+      "id": "hrtech-12",
+      "text": "Which HR software meets compliance needs for a company handling employee data in several countries?"
+    },
+    {
+      "id": "hrtech-13",
+      "text": "What are affordable alternatives to enterprise HR suites for a growing company?"
+    },
+    {
+      "id": "hrtech-14",
+      "text": "Which scheduling tools work best for restaurants and retail teams with constantly shifting shifts?"
+    },
+    {
+      "id": "hrtech-15",
+      "text": "What should I look for in an HRIS for a company of 200 people?"
+    },
+    {
+      "id": "hrtech-16",
+      "text": "Which background check providers integrate with applicant tracking systems?"
+    },
+    {
+      "id": "hrtech-17",
+      "text": "What's the best way to choose a payroll provider for contractors and full-time staff together?"
+    },
+    {
+      "id": "hrtech-18",
+      "text": "Which tools help small teams manage time off requests without spreadsheets?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

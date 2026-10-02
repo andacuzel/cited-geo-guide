@@ -1,7 +1,81 @@
 {
   "vertical": "marketplaces",
-  "description": "",
+  "description": "Buying-intent category queries for online marketplaces for buying, selling, renting and hiring. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "marketplaces-01",
+      "text": "What's the best online marketplace for selling handmade jewelry?"
+    },
+    {
+      "id": "marketplaces-02",
+      "text": "Which marketplaces charge the lowest fees for selling used electronics?"
+    },
+    {
+      "id": "marketplaces-03",
+      "text": "Where can I hire a reliable freelance designer for a one-time logo project?"
+    },
+    {
+      "id": "marketplaces-04",
+      "text": "What are the best sites for finding a dog walker or pet sitter in my city?"
+    },
+    {
+      "id": "marketplaces-05",
+      "text": "Which marketplaces are safest for buying a used car from a private seller?"
+    },
+    {
+      "id": "marketplaces-06",
+      "text": "What's the best place to sell vintage clothing online?"
+    },
+    {
+      "id": "marketplaces-07",
+      "text": "Which freelance platforms are best for hiring a developer for a small project?"
+    },
+    {
+      "id": "marketplaces-08",
+      "text": "Where can I rent camera gear for a weekend shoot?"
+    },
+    {
+      "id": "marketplaces-09",
+      "text": "What are the best online marketplaces for buying secondhand furniture?"
+    },
+    {
+      "id": "marketplaces-10",
+      "text": "Which platforms let me sell homemade food legally from my kitchen?"
+    },
+    {
+      "id": "marketplaces-11",
+      "text": "What are the best marketplaces for selling digital templates and printables?"
+    },
+    {
+      "id": "marketplaces-12",
+      "text": "Where can I find a tutor for my teenager in math?"
+    },
+    {
+      "id": "marketplaces-13",
+      "text": "Which marketplaces protect buyers best when something arrives damaged?"
+    },
+    {
+      "id": "marketplaces-14",
+      "text": "What are the best apps for renting out my spare parking space?"
+    },
+    {
+      "id": "marketplaces-15",
+      "text": "Which sites are best for buying and selling used textbooks?"
+    },
+    {
+      "id": "marketplaces-16",
+      "text": "Where should a new seller list products to reach the most buyers?"
+    },
+    {
+      "id": "marketplaces-17",
+      "text": "What are good alternatives to the biggest freelance sites for hiring writers?"
+    },
+    {
+      "id": "marketplaces-18",
+      "text": "Which marketplaces are best for finding local handyman help quickly?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

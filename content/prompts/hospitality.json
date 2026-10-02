@@ -1,7 +1,81 @@
 {
   "vertical": "hospitality",
-  "description": "",
+  "description": "Buying-intent category queries for hotels, resorts, restaurants and travel destinations. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "hospitality-01",
+      "text": "What's the best hotel in Lisbon for a family with two young kids?"
+    },
+    {
+      "id": "hospitality-02",
+      "text": "Which boutique hotels in Kyoto are walkable to the main sights?"
+    },
+    {
+      "id": "hospitality-03",
+      "text": "Where should I stay in Rome for a first visit on a mid-range budget?"
+    },
+    {
+      "id": "hospitality-04",
+      "text": "What are the best beach resorts in Mexico for couples that include meals?"
+    },
+    {
+      "id": "hospitality-05",
+      "text": "Which hotels near a major airport offer a free shuttle and late check-out?"
+    },
+    {
+      "id": "hospitality-06",
+      "text": "What are the best restaurants for a group dinner of ten in Chicago?"
+    },
+    {
+      "id": "hospitality-07",
+      "text": "Which small hotels in the Scottish Highlands have good reviews from hikers?"
+    },
+    {
+      "id": "hospitality-08",
+      "text": "What's the best area to stay in Tokyo for someone who doesn't speak Japanese?"
+    },
+    {
+      "id": "hospitality-09",
+      "text": "Which all-inclusive resorts in the Caribbean are best for families with teenagers?"
+    },
+    {
+      "id": "hospitality-10",
+      "text": "Where can I find pet-friendly hotels on the California coast?"
+    },
+    {
+      "id": "hospitality-11",
+      "text": "What are the best bed and breakfasts in Vermont for a fall weekend?"
+    },
+    {
+      "id": "hospitality-12",
+      "text": "Which hotels in Paris are quiet but still close to the metro?"
+    },
+    {
+      "id": "hospitality-13",
+      "text": "What's the best vacation rental area in Barcelona for a group of six?"
+    },
+    {
+      "id": "hospitality-14",
+      "text": "Which ski resorts in the Alps are best for beginners on a budget?"
+    },
+    {
+      "id": "hospitality-15",
+      "text": "What are the best hotels for a business trip in Singapore under $250 a night?"
+    },
+    {
+      "id": "hospitality-16",
+      "text": "Which spa hotels in Iceland are worth the price?"
+    },
+    {
+      "id": "hospitality-17",
+      "text": "What should I look for in a hotel for a family reunion of 25 people?"
+    },
+    {
+      "id": "hospitality-18",
+      "text": "Which travel destinations are best for a relaxing week in October?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

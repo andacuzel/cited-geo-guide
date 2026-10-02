@@ -1,7 +1,81 @@
 {
   "vertical": "consumerapps",
-  "description": "",
+  "description": "Buying-intent category queries for consumer mobile and web apps. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "consumerapps-01",
+      "text": "What's the best budgeting app for couples who share expenses?"
+    },
+    {
+      "id": "consumerapps-02",
+      "text": "Which meditation apps are worth paying for?"
+    },
+    {
+      "id": "consumerapps-03",
+      "text": "What's the best app for learning Spanish as a complete beginner?"
+    },
+    {
+      "id": "consumerapps-04",
+      "text": "Which note-taking apps work well across a phone, tablet and laptop?"
+    },
+    {
+      "id": "consumerapps-05",
+      "text": "What are the best fitness apps for working out at home without equipment?"
+    },
+    {
+      "id": "consumerapps-06",
+      "text": "Which photo-editing apps are easiest for beginners?"
+    },
+    {
+      "id": "consumerapps-07",
+      "text": "What's the best language learning app for adults with only 10 minutes a day?"
+    },
+    {
+      "id": "consumerapps-08",
+      "text": "Which apps help me track my sleep without a wearable?"
+    },
+    {
+      "id": "consumerapps-09",
+      "text": "What are the best free apps for planning a trip with friends?"
+    },
+    {
+      "id": "consumerapps-10",
+      "text": "Which to-do list apps have the cleanest design?"
+    },
+    {
+      "id": "consumerapps-11",
+      "text": "What's the best app for scanning and organizing receipts?"
+    },
+    {
+      "id": "consumerapps-12",
+      "text": "Which parental control apps work well for young kids?"
+    },
+    {
+      "id": "consumerapps-13",
+      "text": "What are the best meal planning apps for a family on a budget?"
+    },
+    {
+      "id": "consumerapps-14",
+      "text": "Which budgeting apps are safest for linking my bank account?"
+    },
+    {
+      "id": "consumerapps-15",
+      "text": "What's the best app for tracking subscriptions and canceling the ones I forget?"
+    },
+    {
+      "id": "consumerapps-16",
+      "text": "Which video call apps work best for large groups on a slow connection?"
+    },
+    {
+      "id": "consumerapps-17",
+      "text": "What are the best alternatives to the most popular social apps for people who want less noise?"
+    },
+    {
+      "id": "consumerapps-18",
+      "text": "Which reading apps are best for listening to books on a long commute?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

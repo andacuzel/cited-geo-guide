@@ -1,7 +1,81 @@
 {
   "vertical": "health",
-  "description": "",
+  "description": "Buying-intent category queries for finding health and wellness practitioners (never medical advice). No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "health-01",
+      "text": "How do I find a primary care doctor near me who is accepting new patients?"
+    },
+    {
+      "id": "health-02",
+      "text": "Who is a good therapist near me who offers evening appointments?"
+    },
+    {
+      "id": "health-03",
+      "text": "Where can I find a dentist near me who takes my insurance?"
+    },
+    {
+      "id": "health-04",
+      "text": "Which physical therapists near me have strong reviews for sports injuries?"
+    },
+    {
+      "id": "health-05",
+      "text": "How do I find a Spanish-speaking pediatrician in my area?"
+    },
+    {
+      "id": "health-06",
+      "text": "What's the best way to find a therapist who offers sliding-scale pricing?"
+    },
+    {
+      "id": "health-07",
+      "text": "Who are the best dermatologists near me with short wait times?"
+    },
+    {
+      "id": "health-08",
+      "text": "How can I find a chiropractor nearby with good reviews and clear prices?"
+    },
+    {
+      "id": "health-09",
+      "text": "Where can I find a nutritionist near me who works with athletes?"
+    },
+    {
+      "id": "health-10",
+      "text": "How do I choose a dentist for a child who is nervous about appointments?"
+    },
+    {
+      "id": "health-11",
+      "text": "Which optometrists near me offer same-week eye exams?"
+    },
+    {
+      "id": "health-12",
+      "text": "How do I find a licensed massage therapist near me with weekend hours?"
+    },
+    {
+      "id": "health-13",
+      "text": "Who are the most highly rated acupuncturists in my city?"
+    },
+    {
+      "id": "health-14",
+      "text": "Where can I find a family therapist who offers sessions online?"
+    },
+    {
+      "id": "health-15",
+      "text": "How do I find a physical therapist who takes my insurance and is close to my office?"
+    },
+    {
+      "id": "health-16",
+      "text": "What's the best way to find a women's health doctor near me with good reviews?"
+    },
+    {
+      "id": "health-17",
+      "text": "How do I find a personal trainer near me who works with beginners over 50?"
+    },
+    {
+      "id": "health-18",
+      "text": "Which urgent care clinics near me are open late on weekends?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }

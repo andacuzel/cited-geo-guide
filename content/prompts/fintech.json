@@ -1,7 +1,81 @@
 {
   "vertical": "fintech",
-  "description": "",
+  "description": "Buying-intent category queries for financial technology for businesses: accounting, payments, cards, billing and spend tools. No brand names: the brand under test either appears in the answer or it does not.",
   "version": 1,
-  "prompts": [],
+  "prompts": [
+    {
+      "id": "fintech-01",
+      "text": "What's the best accounting software for a small business with five employees?"
+    },
+    {
+      "id": "fintech-02",
+      "text": "Which invoicing tools work best for freelancers who bill clients in several currencies?"
+    },
+    {
+      "id": "fintech-03",
+      "text": "How do I choose a payment processor for an online store with low margins?"
+    },
+    {
+      "id": "fintech-04",
+      "text": "What are the best expense management tools for a 30-person company?"
+    },
+    {
+      "id": "fintech-05",
+      "text": "Which business bank accounts have the lowest fees for a new startup?"
+    },
+    {
+      "id": "fintech-06",
+      "text": "What's the best corporate card for a company that spends mostly on software and ads?"
+    },
+    {
+      "id": "fintech-07",
+      "text": "Which bookkeeping services work well for e-commerce sellers with high transaction volume?"
+    },
+    {
+      "id": "fintech-08",
+      "text": "What are the best tools for managing accounts payable that connect to our accounting software?"
+    },
+    {
+      "id": "fintech-09",
+      "text": "How do I pick a billing platform for a subscription software company?"
+    },
+    {
+      "id": "fintech-10",
+      "text": "Which payroll and tax filing tools are best for a small business in a single state?"
+    },
+    {
+      "id": "fintech-11",
+      "text": "What's the best way to accept international payments without high currency fees?"
+    },
+    {
+      "id": "fintech-12",
+      "text": "Which budgeting and forecasting tools suit a startup preparing for a funding round?"
+    },
+    {
+      "id": "fintech-13",
+      "text": "What are good alternatives to traditional banks for a small business that needs a line of credit?"
+    },
+    {
+      "id": "fintech-14",
+      "text": "Which fraud-prevention tools work best for an online business with a small team?"
+    },
+    {
+      "id": "fintech-15",
+      "text": "Which tools make it easiest to collect late payments from business customers?"
+    },
+    {
+      "id": "fintech-16",
+      "text": "What should I look for in a financial planning tool for a company with a few investors?"
+    },
+    {
+      "id": "fintech-17",
+      "text": "Which cap table and equity management tools are best for an early-stage startup?"
+    },
+    {
+      "id": "fintech-18",
+      "text": "What's the best way to choose accounting software for a nonprofit?"
+    }
+  ],
+  "brandsNote": "Lexicon for competitor extraction. Empty: no lexicon has been built for this vertical yet, and no brand names are invented here. A name matches case-insensitively at word boundaries, using the name plus any aliases. Entries marked ambiguous are common English words and only count in a name-like position (bold, a heading or a list-item label).",
   "brands": []
 }
