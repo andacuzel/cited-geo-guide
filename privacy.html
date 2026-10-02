@@ -98,6 +98,7 @@
         <div class="doc-section">
           <h2 class="doc-section__heading">What the scanner fetches</h2>
           <p>When you scan a domain, Answerable fetches four public files from that domain: <code>robots.txt</code>, <code>sitemap.xml</code>, <code>llms.txt</code>, and the homepage. All four are public by definition &mdash; nothing behind a login, nothing private. We fetch whatever domain you type in, whether or not it's yours.</p>
+          <p>The two free tools fetch less. The llms.txt checker reads one file, <code>llms.txt</code>, from the domain you enter. The schema generator reads that domain's homepage for its title, description and language. Neither keeps what it reads, and both share the scanner's rate limit described below.</p>
         </div>
 
         <div class="doc-section">

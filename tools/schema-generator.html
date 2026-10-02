@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Schema Generator: JSON-LD Prefilled From Your Own Site</title>
+  <meta name="description" content="Scan your domain for its real title, description and language, then edit ready-to-paste JSON-LD for Organization, FAQPage, Article, Product or LocalBusiness. Free, no signup." />
+  <meta name="keywords" content="schema generator, JSON-LD generator, Organization schema, FAQPage schema, Product schema, LocalBusiness schema, structured data, GEO, AEO" />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/tools/schema-generator" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — Schema Generator: JSON-LD Prefilled From Your Own Site" />
+  <meta property="og:description" content="Prefilled JSON-LD for Organization, FAQPage, Article, Product and LocalBusiness, built from your own homepage. Free, no signup." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/tools/schema-generator" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Schema Generator: JSON-LD Prefilled From Your Own Site" />
+  <meta name="twitter:description" content="Prefilled JSON-LD for Organization, FAQPage, Article, Product and LocalBusiness, built from your own homepage. Free, no signup." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../styles.css?v=37" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Schema Generator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "description": "A free tool that scans a domain for its real title, description and language, then prefills editable JSON-LD for Organization, FAQPage, Article, Product and LocalBusiness.",
+        "url": "https://answerable-app.vercel.app/tools/schema-generator",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is schema markup?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Schema markup is structured data, usually written as JSON-LD, that tells machines what a page is about: an organization, a product, an article, a set of questions. It sits in the page's code and is invisible to visitors. Search engines and AI systems can read it without guessing from the layout."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where does JSON-LD go?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Paste the script tag into the head of the page it describes. Organization and WebSite markup belongs on the homepage, Article on the article, Product on the product page, FAQPage on the page that shows the questions, and LocalBusiness on the page for that location. Most site builders have a field for custom head code."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will schema markup get me cited in AI answers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No one can promise that. Schema removes guesswork about what a page is. It does not decide whether an answer engine cites you. Answerable measures whether the markup is present, not what any assistant says about you."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the bracketed placeholders?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Anything the scan could not know, such as your company name, a real price or your opening hours, appears as a bracketed placeholder instead of an invented value. Replace each one before you publish. The counter under the output shows how many are left."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <div class="nav-dropdown">
+          <button type="button" class="site-nav__link nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+            Playbooks
+            <svg class="nav-dropdown__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown__menu">
+            <a href="/for-saas" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">B2B SaaS</span>
+              <span class="nav-dropdown__item-desc">Software companies competing for AI shortlists</span>
+            </a>
+            <a href="/for-brands" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Consumer &amp; e-commerce brands</span>
+              <span class="nav-dropdown__item-desc">Products people ask AI about before buying</span>
+            </a>
+            <a href="/for-professionals" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Local &amp; independent professionals</span>
+              <span class="nav-dropdown__item-desc">Practices and services people find through AI</span>
+            </a>
+          </div>
+        </div>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Brands</a>
+        <a href="/for-professionals" class="site-nav__link">Professionals</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Free tool</p>
+            <h1 class="page-banner__title">Schema Generator</h1>
+            <p class="page-banner__desc">Enter your domain and your real title, description and language are already in the form. Edit from there, copy the JSON-LD, paste it into your page.</p>
+          </div>
+          <pre class="page-banner__code" aria-hidden="true">{
+  "@type": "Organization",
+  "name": "...",
+  "url": "..."
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals schema-gen" aria-label="Generator">
+      <div class="section__inner">
+        <form class="tool-form" id="schemaForm" novalidate>
+          <div class="tool-form__field">
+            <label class="tool-label" for="schemaDomain">Domain</label>
+            <input type="text" class="field" id="schemaDomain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
+          </div>
+          <button type="submit" class="btn btn--primary" id="schemaScanBtn">Prefill from site</button>
+        </form>
+        <p class="tool-hint">Reads your homepage&rsquo;s title, description and language, then fills in what it finds. Nothing is stored. Skip it to start from placeholders.</p>
+        <div class="tool-status" id="schemaStatus" role="status" aria-live="polite"></div>
+
+        <div class="type-picker" id="typePicker" role="group" aria-label="Schema type" style="margin-bottom: 24px;">
+          <button type="button" class="type-picker__btn" data-type="organization" aria-pressed="true">Organization</button>
+          <button type="button" class="type-picker__btn" data-type="faqpage" aria-pressed="false">FAQPage</button>
+          <button type="button" class="type-picker__btn" data-type="article" aria-pressed="false">Article</button>
+          <button type="button" class="type-picker__btn" data-type="product" aria-pressed="false">Product</button>
+          <button type="button" class="type-picker__btn" data-type="localbusiness" aria-pressed="false">LocalBusiness</button>
+        </div>
+
+        <div class="robots-gen__grid">
+          <div class="schema-form" id="schemaFields">
+            <!-- Rendered by schema-generator.js from lib/schema.js -->
+            <noscript>This generator needs JavaScript to build the form.</noscript>
+          </div>
+
+          <div class="schema-gen__out">
+            <div class="fix-snippet">
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">JSON-LD</span>
+                <div class="fix-snippet__actions">
+                  <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" id="schemaCopyBtn">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
+                    Copy
+                  </button>
+                  <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" id="schemaDownloadBtn">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v6m0 0L5.5 5.5M8 8l2.5-2.5M3.5 11h9"/></svg>
+                    Download
+                  </button>
+                </div>
+              </div>
+              <pre class="fix-snippet__code" id="schemaOutput" tabindex="0" aria-label="Generated JSON-LD"></pre>
+            </div>
+            <p class="schema-gen__meta" id="schemaMeta" role="status" aria-live="polite"></p>
+            <p class="schema-gen__paste" id="schemaPaste"></p>
+            <p class="schema-gen__paste">Copy includes the script tag. Download saves the JSON-LD alone. Check the result at <a href="https://validator.schema.org/" rel="noopener">validator.schema.org</a>.</p>
+          </div>
+        </div>
+
+        <div class="doc-section" style="margin-top: 72px;">
+          <h2 class="doc-section__heading">Common questions</h2>
+          <h3 class="faq-q">What is schema markup?</h3>
+          <p>Schema markup is structured data, usually written as JSON-LD, that tells machines what a page is about: an organization, a product, an article, a set of questions. It sits in the page's code and is invisible to visitors. Search engines and AI systems can read it without guessing from the layout.</p>
+          <h3 class="faq-q">Where does JSON-LD go?</h3>
+          <p>Paste the script tag into the head of the page it describes. Organization and WebSite markup belongs on the homepage, Article on the article, Product on the product page, FAQPage on the page that shows the questions, and LocalBusiness on the page for that location. Most site builders have a field for custom head code.</p>
+          <h3 class="faq-q">Will schema markup get me cited in AI answers?</h3>
+          <p>No one can promise that. Schema removes guesswork about what a page is. It does not decide whether an answer engine cites you. Answerable measures whether the markup is present, not what any assistant says about you.</p>
+          <h3 class="faq-q">What are the bracketed placeholders?</h3>
+          <p>Anything the scan could not know, such as your company name, a real price or your opening hours, appears as a bracketed placeholder instead of an invented value. Replace each one before you publish. The counter under the output shows how many are left.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Scan reminder">
+      <div class="section__inner">
+        <div class="scan-bridge">
+          <p class="scan-bridge__text">Not sure which schema your site is missing? Scan it.</p>
+          <a href="/" class="btn btn--primary">Scan your site free</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+          <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="/privacy" class="site-nav__link">Privacy</a>
+          <a href="/terms" class="site-nav__link">Terms</a>
+        </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../lib/schema.js?v=1"></script>
+  <script src="../nav.js?v=2"></script>
+  <script src="schema-generator.js?v=1"></script>
+</body>
+</html>

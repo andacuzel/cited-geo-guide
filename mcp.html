@@ -246,7 +246,7 @@
           <h2 class="doc-section__heading">Scanning</h2>
 
           <div class="results-content__body">
-            <h3>scan_site</h3>
+            <h3 id="scan_site">scan_site</h3>
             <p><strong>Fetches:</strong> the live domain &middot; <strong>Needs:</strong> <code>domain</code> (bare hostname, e.g. <code>example.com</code>)</p>
             <p>Scans a domain's public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability, technical foundation, and content &amp; trust. Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable's own benchmark data.</p>
           </div>
@@ -282,7 +282,7 @@ Passed: AI crawler access (10/10 open), Page title.</pre>
           </div>
 
           <div class="results-content__body">
-            <h3>compare_sites</h3>
+            <h3 id="compare_sites">compare_sites</h3>
             <p><strong>Fetches:</strong> two live domains, one after the other &middot; <strong>Needs:</strong> <code>domain_a</code>, <code>domain_b</code></p>
             <p>Scans two domains — sequentially, never in parallel — and reports both scores plus every check where they differ. Useful for comparing your site against a named competitor.</p>
           </div>
@@ -319,8 +319,8 @@ Where they differ (9 of 16 checks):
           <h2 class="doc-section__heading">Fixes</h2>
 
           <div class="results-content__body">
-            <h3>generate_schema</h3>
-            <p><strong>Fetches:</strong> the live domain's homepage &middot; <strong>Needs:</strong> <code>domain</code>, <code>type</code> (<code>organization</code>, <code>faqpage</code>, <code>article</code> or <code>product</code>)</p>
+            <h3 id="generate_schema">generate_schema</h3>
+            <p><strong>Fetches:</strong> the live domain's homepage &middot; <strong>Needs:</strong> <code>domain</code>, <code>type</code> (<code>organization</code>, <code>faqpage</code>, <code>article</code>, <code>product</code> or <code>localbusiness</code>)</p>
             <p>Fetches a domain's homepage for its real title, meta description and declared language, then returns ready-to-paste JSON-LD of the requested type. Fields the scan cannot know — a FAQ's actual questions, a product's real price — come back as clearly bracketed placeholders, never invented values.</p>
           </div>
           <div class="fix-snippet">
@@ -356,7 +356,7 @@ Where they differ (9 of 16 checks):
           </div>
 
           <div class="results-content__body">
-            <h3>generate_robots_txt</h3>
+            <h3 id="generate_robots_txt">generate_robots_txt</h3>
             <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>allow</code> and/or <code>block</code> (arrays of tracked crawler names), optional <code>sitemap_url</code></p>
             <p>Builds a robots.txt file that explicitly allows or blocks named AI crawlers from the tracked list of 10, plus an optional Sitemap line. Call list_ai_crawlers first for the exact tracked names.</p>
           </div>
@@ -399,7 +399,7 @@ Sitemap: https://example.com/sitemap.xml</pre>
           </div>
 
           <div class="results-content__body">
-            <h3>generate_llms_txt</h3>
+            <h3 id="generate_llms_txt">generate_llms_txt</h3>
             <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>name</code>, <code>description</code>, optional <code>key_pages</code> (array of <code>url</code> + <code>description</code>)</p>
             <p>Builds an llms.txt file — the emerging convention that gives AI systems a curated map of a site — from a name, a one-sentence description and a list of key pages.</p>
           </div>
@@ -440,7 +440,7 @@ Sitemap: https://example.com/sitemap.xml</pre>
           <h2 class="doc-section__heading">Knowledge</h2>
 
           <div class="results-content__body">
-            <h3>get_playbook</h3>
+            <h3 id="get_playbook">get_playbook</h3>
             <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>vertical</code> (one of 14 slugs, e.g. <code>crm</code>, <code>ecommerce</code>, <code>legal</code>)</p>
             <p>Returns the full GEO/AEO playbook for one of Answerable's fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Read live from this project's own content file, so it always matches what a visitor to the site sees.</p>
           </div>
@@ -467,7 +467,7 @@ If your CRM brand is not in that trusted signal set, you do not lose a ranking p
           </div>
 
           <div class="results-content__body">
-            <h3>get_benchmark</h3>
+            <h3 id="get_benchmark">get_benchmark</h3>
             <p><strong>Fetches:</strong> nothing (archived scan data) &middot; <strong>Needs:</strong> nothing, or <code>category</code></p>
             <p>Returns Answerable's own archived scan data for one category — average, median and range of scores, pillar breakdowns, crawler-blocking rates and the most common failed checks — or a ranked summary across every category when called with no argument.</p>
           </div>
@@ -495,7 +495,7 @@ Call get_benchmark with a category for the full breakdown: crm, cybersecurity, d
           </div>
 
           <div class="results-content__body">
-            <h3>list_ai_crawlers</h3>
+            <h3 id="list_ai_crawlers">list_ai_crawlers</h3>
             <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
             <p>Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it actually means, and this project's robots.txt generator's default for it. Use before generate_robots_txt if you need the exact tracked names.</p>
           </div>

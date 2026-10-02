@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — llms.txt Checker: Is Your llms.txt Yours?</title>
+  <meta name="description" content="Paste a domain to check its llms.txt: whether it exists, how it is built, whether it names your brand, and whether it reads like a platform default. Free, no signup." />
+  <meta name="keywords" content="llms.txt checker, llms.txt validator, llms.txt Shopify, AI visibility, GEO, AEO" />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/tools/llms-txt-checker" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — llms.txt Checker: Is Your llms.txt Yours?" />
+  <meta property="og:description" content="Check whether a site's llms.txt exists, how it is built, and whether it reads like a platform default or the brand's own file. Free, no signup." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/tools/llms-txt-checker" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — llms.txt Checker: Is Your llms.txt Yours?" />
+  <meta name="twitter:description" content="Check whether a site's llms.txt exists, how it is built, and whether it reads like a platform default or the brand's own file. Free, no signup." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../styles.css?v=37" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "llms.txt Checker",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "description": "A free tool that checks a domain's llms.txt: whether it exists, how it is built, whether it names the brand, and whether it reads like a platform default.",
+        "url": "https://answerable-app.vercel.app/tools/llms-txt-checker",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is llms.txt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "llms.txt is a plain text file at the root of a site, written in markdown, that tells AI systems what the site is about and which pages matter. It is a young convention, proposed at llmstxt.org. This checker measures what the file contains. It does not measure whether any AI system reads it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does my platform write my llms.txt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Some do. Shopify generates an llms.txt automatically for every store it hosts, so the file at /llms.txt may be Shopify's rather than yours. We have only confirmed that pattern for Shopify, so the checker only looks for Shopify's fingerprints."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the checker decide a file is a platform default?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It looks for Shopify's fingerprints in the text: references to shop.app or a Shop skill, commerce protocol and endpoint documentation, and platform marketing links. It also looks for any description of the brand. Several fingerprints with no brand description reads as a platform default. It is a pattern match and can be wrong, which is why \"unclear\" is a possible answer."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What should an llms.txt say about my brand?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A title with your name, a one-sentence summary of what you are and who you serve, and sections that link to the pages that matter most, such as products, pricing, policies or documentation. The Answerable MCP server's generate_llms_txt tool builds that layout from a name, a description and a list of pages."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <div class="nav-dropdown">
+          <button type="button" class="site-nav__link nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+            Playbooks
+            <svg class="nav-dropdown__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown__menu">
+            <a href="/for-saas" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">B2B SaaS</span>
+              <span class="nav-dropdown__item-desc">Software companies competing for AI shortlists</span>
+            </a>
+            <a href="/for-brands" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Consumer &amp; e-commerce brands</span>
+              <span class="nav-dropdown__item-desc">Products people ask AI about before buying</span>
+            </a>
+            <a href="/for-professionals" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Local &amp; independent professionals</span>
+              <span class="nav-dropdown__item-desc">Practices and services people find through AI</span>
+            </a>
+          </div>
+        </div>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Brands</a>
+        <a href="/for-professionals" class="site-nav__link">Professionals</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Free tool</p>
+            <h1 class="page-banner__title">llms.txt Checker</h1>
+            <p class="page-banner__desc">Paste a domain. See whether its llms.txt exists, how it is built, and whether it reads like the brand's own file or a platform default.</p>
+          </div>
+          <pre class="page-banner__code" aria-hidden="true"># Your brand
+&gt; What you are.
+## Pages
+- [Pricing](/pricing)</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-label="Checker">
+      <div class="section__inner">
+        <form class="tool-form" id="llmsForm" novalidate>
+          <div class="tool-form__field">
+            <label class="tool-label" for="llmsDomain">Domain</label>
+            <input type="text" class="field" id="llmsDomain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="tool-form__field tool-form__field--narrow">
+            <label class="tool-label" for="llmsBrand">Brand name (optional)</label>
+            <input type="text" class="field" id="llmsBrand" placeholder="e.g. Allbirds" autocomplete="off" />
+          </div>
+          <button type="submit" class="btn btn--primary" id="llmsBtn">Check llms.txt</button>
+        </form>
+        <p class="tool-hint">Reads one public file, <code>https://yourdomain.com/llms.txt</code>. Nothing is stored. Try <button type="button" class="tool-example" data-domain="allbirds.com">allbirds.com</button> or <button type="button" class="tool-example" data-domain="vercel.com">vercel.com</button>.</p>
+        <div class="tool-status" id="llmsStatus" role="status" aria-live="polite"></div>
+
+        <div id="llmsResult" hidden></div>
+
+        <div class="tool-panel">
+          <p class="tool-panel__title">The evidence</p>
+          <p>Shopify writes an llms.txt automatically for every store it hosts. We read two of those files by hand, Magic Spoon's and Allbirds'. The structure and phrasing were nearly identical, and neither said what the brand sells, who it is for or what sets it apart. Both pointed AI agents to Shopify's shopping skill and commerce protocol.</p>
+          <p>76% of the DTC sites in our report had an llms.txt, against 55% of the B2B sites. Two files is not every store, which is why this checker reads yours instead of assuming.</p>
+          <p><a href="/research/llms-txt-adoption-2026">Read the research report →</a></p>
+        </div>
+
+        <div class="doc-section" style="margin-top: 56px;">
+          <h2 class="doc-section__heading">Common questions</h2>
+          <h3 class="faq-q">What is llms.txt?</h3>
+          <p>llms.txt is a plain text file at the root of a site, written in markdown, that tells AI systems what the site is about and which pages matter. It is a young convention, proposed at llmstxt.org. This checker measures what the file contains. It does not measure whether any AI system reads it.</p>
+          <h3 class="faq-q">Does my platform write my llms.txt?</h3>
+          <p>Some do. Shopify generates an llms.txt automatically for every store it hosts, so the file at /llms.txt may be Shopify's rather than yours. We have only confirmed that pattern for Shopify, so the checker only looks for Shopify's fingerprints.</p>
+          <h3 class="faq-q">How does the checker decide a file is a platform default?</h3>
+          <p>It looks for Shopify's fingerprints in the text: references to shop.app or a Shop skill, commerce protocol and endpoint documentation, and platform marketing links. It also looks for any description of the brand. Several fingerprints with no brand description reads as a platform default. It is a pattern match and can be wrong, which is why "unclear" is a possible answer.</p>
+          <h3 class="faq-q">What should an llms.txt say about my brand?</h3>
+          <p>A title with your name, a one-sentence summary of what you are and who you serve, and sections that link to the pages that matter most, such as products, pricing, policies or documentation. The Answerable MCP server's <a href="/mcp#generate_llms_txt"><code>generate_llms_txt</code></a> tool builds that layout from a name, a description and a list of pages.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Scan reminder">
+      <div class="section__inner">
+        <div class="scan-bridge">
+          <p class="scan-bridge__text">The scan checks llms.txt with 15 other signals. See the whole picture.</p>
+          <a href="/" class="btn btn--primary">Scan your site free</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+          <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="/privacy" class="site-nav__link">Privacy</a>
+          <a href="/terms" class="site-nav__link">Terms</a>
+        </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../nav.js?v=2"></script>
+  <script src="llms-txt-checker.js?v=1"></script>
+</body>
+</html>

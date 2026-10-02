@@ -134,7 +134,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; margin: 0; 
 .btn--ghost-on-navy { background: transparent; color: var(--white); border-color: var(--line-on-navy); }
 .btn--ghost-on-navy:hover { border-color: var(--gold-soft); color: var(--gold-soft); }
 
-input.field {
+input.field, select.field, textarea.field {
   font-family: var(--font-mono);
   font-size: 15px;
   color: var(--ink);
@@ -144,8 +144,10 @@ input.field {
   padding: 13px 16px;
   transition: border-color var(--t);
 }
-input.field::placeholder { color: var(--ink-faint); }
-input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+input.field::placeholder, textarea.field::placeholder { color: var(--ink-faint); }
+input.field:focus, select.field:focus, textarea.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+textarea.field { resize: vertical; min-height: 84px; font-size: 14px; line-height: 1.5; }
+select.field { appearance: auto; cursor: pointer; }
 
 /* ----------------------------- Header ----------------------------- */
 
@@ -1498,6 +1500,124 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 }
 @media print {
   .mcp-band.is-armed [data-step] { opacity: 1; visibility: visible; }
+}
+
+/* ----------------------------- Tool pages (llms.txt checker, schema generator) -----------------------------
+   Built from the robots.txt generator's parts: .robots-gen__grid for the
+   two-column layout and .fix-snippet for the dark plate with copy and
+   download. Everything here is the form and result furniture around them. */
+
+.tool-form { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+.tool-form__field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 220px; min-width: 0; }
+.tool-form__field--narrow { flex: 0 1 240px; }
+.tool-label { font-size: 13px; color: var(--ink-soft); }
+.tool-hint { margin-top: 12px; font-size: 13px; color: var(--ink-faint); }
+button.tool-example {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+button.tool-example:hover { color: var(--gold-deep); }
+.faq-q { margin: 28px 0 8px; font-size: 20px; }
+.faq-q:first-of-type { margin-top: 20px; }
+.doc-section a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.tool-status { min-height: 22px; margin: 14px 0 18px; font-size: 14px; color: var(--ink-soft); }
+.tool-status.is-error { color: var(--risk); }
+
+.tool-panel {
+  margin-top: 24px;
+  padding: 28px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.tool-panel__title {
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.tool-panel p { font-size: 15px; color: var(--ink-soft); }
+.tool-panel p + p { margin-top: 10px; }
+.tool-panel .callout { margin-top: 20px; }
+.tool-panel .callout a, .tool-panel p a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+.verdict {
+  padding: 22px 24px;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--line);
+  background: var(--bg);
+}
+.verdict--default { border-left-color: var(--gold-deep); background: var(--warn-tint); }
+.verdict--custom { border-left-color: var(--ok); background: var(--ok-tint); }
+.verdict__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.verdict__word { margin-top: 6px; font-size: clamp(28px, 3.4vw, 38px); line-height: 1.1; color: var(--navy-950); }
+.verdict__summary { margin-top: 10px; font-size: 15.5px; color: var(--ink-soft); max-width: 640px; }
+.verdict__caveat { margin-top: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+
+.tool-evidence { display: block; margin-top: 3px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); overflow-wrap: anywhere; }
+.tool-sections { list-style: none; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+.tool-sections li { padding: 4px 0; overflow-wrap: anywhere; }
+.tool-sections li[data-level="3"] { padding-left: 16px; }
+.tool-sections li[data-level="4"], .tool-sections li[data-level="5"], .tool-sections li[data-level="6"] { padding-left: 32px; }
+
+.type-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.type-picker__btn {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 16px;
+  color: var(--ink-soft);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--t), border-color var(--t);
+}
+.type-picker__btn:hover { border-color: var(--ink); color: var(--ink); }
+.type-picker__btn[aria-pressed="true"] { background: var(--navy-950); border-color: var(--navy-950); color: var(--white); }
+
+.schema-form { padding: 22px 24px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.sf-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.sf-field:last-child { margin-bottom: 0; }
+.sf-field__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sf-tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--gold-deep); }
+.sf-faq { padding: 14px 0; border-top: 1px solid var(--bg); display: flex; flex-direction: column; gap: 8px; }
+.sf-faq:first-of-type { border-top: none; padding-top: 0; }
+.sf-faq__remove { align-self: flex-start; font-size: 13px; color: var(--ink-faint); text-decoration: underline; cursor: pointer; }
+.sf-faq__remove:hover { color: var(--risk); }
+.sf-add { margin-top: 4px; align-self: flex-start; }
+.sf-hours { display: grid; grid-template-columns: 96px 1fr 1fr; gap: 8px; align-items: center; }
+.sf-hours__day { font-size: 14px; color: var(--ink-soft); }
+
+.schema-gen .robots-gen__grid > * { min-width: 0; }
+.sf-hours input.field { min-width: 0; width: 100%; padding: 11px 10px; }
+.schema-gen__out { position: sticky; top: 84px; }
+.schema-gen .fix-snippet__code { max-height: 560px; }
+.schema-gen__meta { margin-top: 14px; font-size: 14px; color: var(--ink-soft); }
+.schema-gen__meta strong { color: var(--ink); }
+.schema-gen__paste { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.schema-gen__paste code { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink); }
+
+@media (max-width: 920px) {
+  .schema-gen__out { position: static; }
+}
+@media (max-width: 640px) {
+  .tool-panel { padding: 22px 18px; }
+  .schema-form { padding: 18px; }
+  .sf-hours { grid-template-columns: 78px 1fr 1fr; }
+  .tool-form .btn { width: 100%; justify-content: center; }
 }
 
 /* ----------------------------- Site footer ----------------------------- */
