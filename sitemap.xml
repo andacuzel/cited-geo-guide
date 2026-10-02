@@ -75,4 +75,7 @@
   <url>
     <loc>https://answerable-app.vercel.app/benchmarks/hospitality</loc>
   </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/compare</loc>
+  </url>
 </urlset>
