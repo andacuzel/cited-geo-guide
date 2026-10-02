@@ -101,8 +101,16 @@ lift or scale · pill (999px) shapes · emoji in product surfaces ·
 centered body text · cream or warm backgrounds · Inter, Fraunces,
 IBM Plex, Space Grotesk, Sora, Manrope, DM Sans, Playfair, or
 JetBrains Mono · more than one full-bleed navy band per page — except
-the homepage, which pairs a navy hero field with the one navy band
-mid-page (Pro). Every other page keeps the single-band rule.
+the homepage, which has a navy hero field plus two navy bands mid-page
+(the MCP announcement, then Pro). Every other page keeps the
+single-band rule. No fourth navy surface, and no new surface colour.
+
+**One animation exception:** the MCP band's conversation on the
+homepage types itself in once, on first view (`mcp-demo.js`), because it
+demonstrates the product rather than decorating it. The content must
+stay complete in the HTML, the replay must do nothing under
+`prefers-reduced-motion`, and nothing else in that block animates. No
+other section gets motion on this basis.
 
 ## Voice
 
