@@ -42,9 +42,26 @@ vercel.json           function config (maxDuration 30)
 
 Constraints that must not be broken:
 - **Vanilla HTML/CSS/JS only.** No React, no build step, no bundler.
-- **Zero paid dependencies.** Vercel Hobby, free tiers only. If a change
-  would incur cost, stop and say so instead of implementing it.
+- **Zero marginal cost, with a spend cap.** This replaces the old "zero
+  paid dependencies" rule; do not revert it on the grounds of that rule.
+  Every feature must run inside a free monthly allowance, with a spending
+  cap set at the provider, so that normal use costs nothing and a mistake
+  cannot cost much. If a change would spend beyond an allowance or has no
+  cap, stop and say so instead of implementing it.
+  - **Gemini citation tracking** (`scripts/citation-check.js`): needs a
+    billing-enabled Google Cloud project, because Google Search grounding
+    is not available on the free tier. Grounding is billed per search
+    query beyond 5,000 free per month, shared across Gemini 3.x models
+    (Google pricing page, checked 2 Oct 2026). It is therefore OFF unless
+    `--grounded` is passed, the script keeps a local query ledger and
+    stops at the free allowance, and a spend cap must stay set in Google
+    Cloud. Ungrounded runs stay on the free tier.
+  - **Vercel** moves from Hobby to a paid plan when payment goes live.
+    That is planned, not a violation. Until then, keep within Hobby limits
+    (12 functions, current count 7 non-underscore).
 - **No secrets in the repo.** Environment variables only.
+- `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
+  gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.
 - The server identifies as a normal browser User-Agent. Do not revert
   to a bot UA — bot UAs get blocked by WAFs and the scan silently fails.
@@ -177,5 +194,5 @@ Never fill an expert-tip placeholder. Those are the owner's, by design.
   the site deployable.
 - Write conventional, plain commit messages describing the change.
 - When a task is ambiguous, ask once, then proceed.
-- When something would cost money, break a constraint above, or make a
+- When something would spend past a free allowance, break a constraint above, or make a
   claim the product cannot support, say so instead of doing it.
