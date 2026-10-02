@@ -228,6 +228,44 @@ function formatScanResult(domain, scanResult, overall) {
   return lines.join('\n');
 }
 
+function formatCommerce(c) {
+  if (!c) return '';
+  var fired = c.signals.filter(function (s) { return s.fired === true; });
+  var firedList = fired.map(function (s) { return s.label; }).join('; ');
+
+  if (!c.detected) {
+    if (fired.length === 0) return '';
+    return '\nCommerce checks: not treated as a store (' + fired.length + ' of ' + c.signals.length + ' signals fired, ' + c.threshold + ' needed): ' + firedList + '.';
+  }
+
+  var lines = [''];
+  lines.push('Agentic commerce readiness (scored separately, not part of the ' + 'score above)');
+  lines.push('Treated as a store: ' + fired.length + ' of ' + c.signals.length + ' signals fired: ' + firedList + '.');
+  lines.push('Sub-score: ' + c.subScore.earned + '/' + c.subScore.max + (c.subScore.complete ? '' : ' (product data was not assessed, so it is out of the total)'));
+
+  if (c.ucp.state === 'valid') {
+    lines.push('  UCP endpoint: found. Version ' + c.ucp.version + '; supports ' + c.ucp.supportedVersions.join(', ') + '; capabilities: ' + c.ucp.capabilities.join(', ') + '.');
+  } else {
+    lines.push('  UCP endpoint: not found at /.well-known/ucp. ' + c.ucp.detail);
+  }
+
+  var p = c.product;
+  if (p.state === 'checked') {
+    var present = ['name', 'price', 'availability', 'image'].filter(function (f) { return p.fields[f]; });
+    var missing = ['name', 'price', 'availability', 'image'].filter(function (f) { return !p.fields[f]; });
+    lines.push('  Structured product data: ' + p.present + '/4 on ' + p.url + ' (found via ' + p.source + ').');
+    if (!p.found) lines.push('    No Product schema was found on that page.');
+    else lines.push('    ' + p.schemaType + ' schema (' + p.schemaSource + '). Present: ' + (present.join(', ') || 'none') + (missing.length ? '. Missing: ' + missing.join(', ') : '') + '.');
+  } else {
+    lines.push('  Structured product data: not assessed. ' + p.detail + (p.url ? ' URL: ' + p.url : ''));
+  }
+
+  if (c.llms) {
+    lines.push('  llms.txt authorship: ' + (c.llms.verdict || 'no file') + '. ' + c.llms.summary + (c.llms.caveat ? ' ' + c.llms.caveat : ''));
+  }
+  return lines.join('\n');
+}
+
 // The bot-access check's label embeds a live open-count (e.g. "AI
 // crawler access (6/10 open)"), which differs between two domains even
 // though it is "the same check" — strip that suffix for comparison.
@@ -270,7 +308,7 @@ var TOOLS = [
   {
     name: 'scan_site',
     title: 'Scan a site for AI readiness',
-    description: 'Scans a domain’s public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability (can AI crawlers reach it), technical foundation (can machines parse it), and content & trust (does it look like a credible source). Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable’s own benchmark data. Call this first for any domain. It fetches the live site, so avoid calling it in a tight loop for the same domain.',
+    description: 'Scans a domain’s public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability (can AI crawlers reach it), technical foundation (can machines parse it), and content & trust (does it look like a credible source). Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable’s own benchmark data. If the site looks like a store (two or more of five signals), it also reports a separate agentic-commerce sub-score: whether a UCP merchant profile exists at /.well-known/ucp, whether one product page has Product schema with name, price, availability and image, and whether the llms.txt looks like a platform default. That sub-score is never part of the 100. Call this first for any domain. It fetches the live site (a store scan reads up to one extra product page), so avoid calling it in a tight loop for the same domain.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -408,7 +446,7 @@ var HANDLERS = {
     var scanResult = await scanner.scanPage('https://' + domain + '/');
     if (!scanResult.ok) return { isError: true, text: scanFailureMessage(domain, scanResult) };
 
-    return { isError: false, text: formatScanResult(domain, scanResult, computeOverallBenchmark()) };
+    return { isError: false, text: formatScanResult(domain, scanResult, computeOverallBenchmark()) + formatCommerce(scanResult.commerce) };
   },
 
   compare_sites: async function (args, req) {
@@ -423,12 +461,12 @@ var HANDLERS = {
 
     var rl1 = await checkRateLimit(req);
     if (rl1.limited) return { isError: true, text: rateLimitMessage(rl1) };
-    var scanA = await scanner.scanPage('https://' + a + '/');
+    var scanA = await scanner.scanPage('https://' + a + '/', { commerce: false });
     if (!scanA.ok) return { isError: true, text: scanFailureMessage(a, scanA) };
 
     var rl2 = await checkRateLimit(req);
     if (rl2.limited) return { isError: true, text: rateLimitMessage(rl2) };
-    var scanB = await scanner.scanPage('https://' + b + '/');
+    var scanB = await scanner.scanPage('https://' + b + '/', { commerce: false });
     if (!scanB.ok) return { isError: true, text: scanFailureMessage(b, scanB) };
 
     return { isError: false, text: formatCompareResult(a, scanA, b, scanB) };

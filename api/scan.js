@@ -72,7 +72,8 @@ module.exports = async (req, res) => {
       robotsOk: scanResult.robotsOk,
       botResults: scanResult.botResults,
       result: scanResult.result,
-      siteInfo: scanResult.siteInfo
+      siteInfo: scanResult.siteInfo,
+      commerce: scanResult.commerce
     });
   } catch (err) {
     console.error('[scan] unhandled error for', domain, '—', err && err.stack ? err.stack : err);
