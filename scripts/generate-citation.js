@@ -3,13 +3,10 @@
    scripts/generate-citation.js
 
    Reads content/citations/sample-crm.json and writes static HTML for the
-   two citation-tracking surfaces, the way generate-benchmarks.js does:
+   /citation-tracking page, the way generate-benchmarks.js does. (The
+   homepage teaser is hand-written, shows no data and does not read this
+   file.)
 
-     index.html            the gold block between
-                             <!-- CITATION-BAND:START --> ... END
-                           (created just before the scan-progress
-                           section if the markers are missing): one big
-                           number and one question asked five times
      citation-tracking.html  every region between
                              <!-- CITATION-MATRIX:START --> ... END
                              <!-- CITATION-CTA:START --> ... END
@@ -18,14 +15,13 @@
                            plus every inline figure written as
                              <!--c:key-->value<!--/c-->
 
-   No figure on either surface is typed by hand. The script also checks
+   No figure on the page is typed by hand. The script also checks
    the sample against itself (group labels, the overall rate and each
    sweep are recomputed from the per-run marks) and refuses to write if
    they disagree.
 
-   The matrix and the five tries are plain HTML. citation-matrix.js only
-   replays them once on first view; without it the finished state is
-   already there.
+   The matrix is plain HTML. citation-matrix.js only replays the fill once
+   on first view; without it the finished matrix is already there.
 
    Usage:
      node scripts/generate-citation.js
@@ -36,7 +32,6 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
-const INDEX_HTML = path.join(ROOT, 'index.html');
 const PAGE_HTML = path.join(ROOT, 'citation-tracking.html');
 
 // The address on privacy.html and terms.html. scanner.js still carries a
@@ -213,80 +208,6 @@ function ctaButton() {
   return '<a class="btn btn--primary" href="' + mailto() + '">Request a run for your brand</a>';
 }
 
-/* ---------------------------------------------------------------------
-   Homepage block
-   --------------------------------------------------------------------- */
-
-
-// Copy that names the buyer is only right for a vertical we have worded it for.
-const BUYER = { crm: 'software buyer' };
-
-// The unstable question whose tries sit closest to a 50/50 split between named
-// and not named. Ties go to the one that flips most often between tries (the
-// most back and forth), then to the first in the file.
-function pickTries(s, d) {
-  const named = (r) => r !== 'absent';
-  const flips = (runs) => runs.reduce(function (n, r, i) { return i && named(r) !== named(runs[i - 1]) ? n + 1 : n; }, 0);
-  const pool = d.by.unstable.map(function (p, i) {
-    const k = p.runs.filter(named).length;
-    return { p: p, i: i, off: Math.abs(k / p.runs.length - 0.5), flips: flips(p.runs) };
-  });
-  if (!pool.length) throw new Error('The sample has no unstable question to show as "one question, five tries".');
-  pool.sort(function (a, b) { return a.off - b.off || b.flips - a.flips || a.i - b.i; });
-  return pool[0].p;
-}
-
-function tryRow(state, n) {
-  const named = state !== 'absent';
-  return (
-    '                <li class="tries__row">\n' +
-    '                  <span class="tries__label">Try ' + n + '</span>\n' +
-    '                  <span class="tries__chip tries__chip--' + (named ? 'named' : 'absent') + '"><span class="tries__mark" aria-hidden="true"></span>' + (named ? 'Named' : 'Not named') + '</span>\n' +
-    '                </li>'
-  );
-}
-
-const BAND_START = '<!-- CITATION-BAND:START -->';
-const BAND_END = '<!-- CITATION-BAND:END -->';
-
-function renderBand(s, d) {
-  const f = d.f;
-  const buyer = BUYER[s.vertical];
-  if (!buyer) throw new Error('No buyer wording for vertical "' + s.vertical + '" in BUYER.');
-  const pick = pickTries(s, d);
-  const noun = f.label.replace(/^an?\s+/i, '');
-  const lede = 'We asked one AI model ' + f.promptCount + ' questions a ' + buyer + ' might ask. A real ' + noun +
-    ' was left out of every answer to ' + f.neverCount + ' of them, and appeared only some of the time on ' + f.unstableCount + ' more.';
-  const meta = f.labelCap + ' · ' + f.model + ' · ' + f.dateLong + ' · each question asked ' + f.runs + ' times';
-  const rows = pick.runs.map(function (r, i) { return tryRow(r, i + 1); }).join('\n');
-  return (
-    BAND_START + '\n' +
-    '      <section class="cite-gold" id="citation" aria-labelledby="citation-heading">\n' +
-    '        <div class="section__inner">\n' +
-    '          <p class="cite-gold__kicker">Early access · Citation tracking</p>\n' +
-    '          <div class="cite-gold__grid">\n' +
-    '            <div class="cite-gold__lead">\n' +
-    '              <h2 id="citation-heading" class="cite-gold__title"><span class="cite-gold__num">' + esc(f.neverCount) + '</span><span class="cite-gold__rest">questions your buyers asked. The answer didn’t include you.</span></h2>\n' +
-    '              <p class="cite-gold__lede">' + esc(lede) + '</p>\n' +
-    '            </div>\n' +
-    '            <figure class="tries" id="cite-tries" aria-labelledby="cite-tries-q">\n' +
-    '              <p class="tries__q" id="cite-tries-q">' + esc(pick.question.replace(/'/g, '’')) + '</p>\n' +
-    '              <ol class="tries__list">\n' + rows + '\n              </ol>\n' +
-    '              <p class="tries__caption">Same question. Same AI. ' + esc(f.runsWordCap) + ' different answers.</p>\n' +
-    '            </figure>\n' +
-    '          </div>\n' +
-    '          <div class="cite-gold__foot">\n' +
-    '            <div class="cite-gold__actions">\n' +
-    '              <a class="btn btn--primary" href="' + mailto() + '">Find out where you’re missing</a>\n' +
-    '              <a class="cite-gold__link" href="/citation-tracking">See the full breakdown</a>\n' +
-    '            </div>\n' +
-    '            <p class="cite-gold__meta">' + esc(meta) + '</p>\n' +
-    '          </div>\n' +
-    '        </div>\n' +
-    '      </section>\n' +
-    '      ' + BAND_END
-  );
-}
 
 /* ---------------------------------------------------------------------
    FAQ: one source for the visible section and the JSON-LD
@@ -373,24 +294,9 @@ function main() {
   }
   const d = derive(sample);
 
-  // Homepage band: replace between markers, or insert before scan-progress.
-  let index = fs.readFileSync(INDEX_HTML, 'utf8');
-  const band = renderBand(sample, d);
-  const a = index.indexOf(BAND_START);
-  const b = index.indexOf(BAND_END);
-  if (a !== -1 && b !== -1 && b > a) {
-    index = index.slice(0, a) + band + index.slice(b + BAND_END.length);
-  } else {
-    const anchor = '      <!-- ---------- Scan progress ---------- -->';
-    if (index.indexOf(anchor) === -1) throw new Error('Could not find the scan-progress anchor in index.html.');
-    index = index.replace(anchor, band + '\n\n' + anchor);
-  }
-  fs.writeFileSync(INDEX_HTML, index, 'utf8');
-
   // The page: matrix, CTA, FAQ regions and inline figures.
   if (!fs.existsSync(PAGE_HTML)) {
-    console.log('Wrote the homepage block. citation-tracking.html does not exist yet, so the page was skipped.');
-    return;
+    throw new Error('citation-tracking.html does not exist.');
   }
   let page = fs.readFileSync(PAGE_HTML, 'utf8');
   const items = faq(sample, d);

@@ -2343,16 +2343,34 @@ code {
   .cm-readout { flex-direction: column; align-items: flex-start; gap: 14px; }
 }
 
-/* Homepage: the gold block. One huge number, one question asked five times.
-   Full-bleed --gold, every word on it solid --navy-950: no translucent navy,
-   no gold-soft, no white. The scale makes it different, not a new colour. */
-.cite-gold {
+/* =====================================================================
+   Homepage teaser: the gold block, "questions everywhere"
+
+   Full-bleed --gold, every word on it solid --navy-950 (no translucent
+   navy, no gold-soft, no white). Text on the left; on the right eight
+   buyer questions scattered directly on the gold, no containing panel.
+   The scene is an illustration and says so.
+
+   The static composition is the HTML: eight cards, each already resolved
+   to its first answer. Motion is added on top (see "The loop") and only
+   when <html> carries .scene-anim (teaser-scene.js and the snippet in
+   <head>), so reduced motion and no-JavaScript visitors keep the static
+   state.
+   ===================================================================== */
+
+.teaser {
   background: var(--gold);
   color: var(--navy-950);
-  padding: 104px 0 96px;
+  padding: 112px 0;
 }
-.cite-gold__kicker {
-  margin: 0 0 40px;
+.teaser__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 72px;
+  align-items: center;
+}
+.teaser__kicker {
+  margin: 0 0 20px;
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
@@ -2360,146 +2378,190 @@ code {
   text-transform: uppercase;
   color: var(--navy-950);
 }
-.cite-gold__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 72px;
-  align-items: center;
-}
-.cite-gold__title {
-  display: flex;
-  align-items: flex-end;
-  gap: 28px;
+.teaser__title {
   margin: 0;
-  color: var(--navy-950);
-}
-.cite-gold__num {
-  font-family: var(--font-display);
-  font-size: clamp(160px, 22vw, 320px);
-  font-weight: 400;
-  line-height: 0.8;
-  letter-spacing: -0.02em;
-  color: var(--navy-950);
-}
-.cite-gold__rest {
-  max-width: 330px;
-  padding-bottom: 6px;
-  font-family: var(--font-display);
-  font-size: clamp(24px, 2.6vw, 36px);
-  font-weight: 400;
-  line-height: 1.15;
+  font-size: clamp(40px, 5.4vw, 78px);
+  line-height: 1.04;
+  letter-spacing: 0.005em;
   color: var(--navy-950);
   text-wrap: balance;
 }
-.cite-gold__lede {
-  margin: 36px 0 0;
-  max-width: 560px;
-  font-size: 18px;
+.teaser__lede {
+  margin: 26px 0 0;
+  max-width: 520px;
+  font-size: 19px;
   line-height: 1.5;
   color: var(--navy-950);
 }
-
-/* One question, five tries. */
-.tries {
-  margin: 0;
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 32px 32px 26px;
-  color: var(--ink);
-}
-.tries__q {
-  margin: 0 0 22px;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2vw, 27px);
-  line-height: 1.22;
-  color: var(--navy-950);
-}
-.tries__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.tries__row {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--line);
-}
-.tries__label {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--navy-950);
-}
-.tries__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  justify-self: start;
-  width: fit-content;
-  padding: 5px 12px 5px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--ink);
-  transition: opacity var(--t);
-}
-.tries__mark {
-  display: block;
-  box-sizing: border-box;
-  width: 12px;
-  height: 12px;
-  flex: none;
-  border-radius: 50%;
-}
-.tries__chip--named .tries__mark { background: var(--gold); border: 2px solid var(--gold); }
-.tries__chip--absent .tries__mark { border: 1.5px solid var(--ink-faint); }
-.tries__caption {
-  margin: 18px 0 0;
-  font-family: var(--font-display);
-  font-size: 19px;
-  line-height: 1.25;
-  color: var(--navy-950);
-  text-wrap: balance;
-}
-
-/* The replay: before first view, the outcomes are not drawn yet. */
-.cm-anim .tries:not(.is-played) .tries__chip:not(.is-on) { opacity: 0; }
-
-.cite-gold__foot { margin-top: 56px; }
-.cite-gold__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-.cite-gold__link {
+.teaser__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 34px; }
+.teaser__link {
   font-weight: 600;
   color: var(--navy-950);
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 4px;
 }
-.cite-gold__meta {
+.teaser__caption {
   margin: 22px 0 0;
   font-family: var(--font-mono);
   font-size: 12px;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--navy-950);
 }
 
+/* The scatter: a two-column grid whose cards sit at different heights and
+   widths. A grid cannot overlap, so nothing does. */
+.scene {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+  align-items: start;
+}
+.scene__refresh {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  color: var(--navy-950);
+  pointer-events: none;
+}
+
+.sq {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.sq__text {
+  margin: 0 0 12px;
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--navy-950);
+}
+/* One chip per state, stacked in the same cell so each sizes to its own
+   content and sits left; the animation cross-fades them. */
+.sq__chips { display: grid; }
+.sq__chip {
+  grid-area: 1 / 1;
+  justify-self: start;
+  align-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 11px 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--navy-950);
+}
+.sq__chip--ask { padding-left: 11px; background: var(--bg); }
+.sq__mark {
+  display: block;
+  box-sizing: border-box;
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border-radius: 50%;
+}
+.sq__chip--named .sq__mark { background: var(--gold); border: 2px solid var(--gold); }
+.sq__chip--absent .sq__mark { border: 1.5px solid var(--ink-faint); }
+/* Static state: the first answer shows; "Asking…" and the re-ask answer wait. */
+.sq__chip--ask,
+.sq__chip--second { opacity: 0; }
+
+/* Different heights and widths, so it reads as scattered, not gridded. */
+.sq--1 { margin-top: 0;    width: 88%;  justify-self: start; }
+.sq--2 { margin-top: 54px; width: 96%;  justify-self: end; }
+.sq--3 { margin-top: 22px; width: 100%; justify-self: start; }
+.sq--4 { margin-top: 0;    width: 90%;  justify-self: end; }
+.sq--5 { margin-top: 6px;  width: 94%;  justify-self: start; }
+.sq--6 { margin-top: 30px; width: 100%; justify-self: end; }
+.sq--7 { margin-top: 26px; width: 90%;  justify-self: start; }
+.sq--8 { margin-top: 2px;  width: 96%;  justify-self: end; }
+
+/* The loop, about 14 seconds. One @keyframes drives a registered number,
+   --t, from 0 to 14; each card, chip and the icon derives its opacity or
+   rotation from it. Only opacity and transform ever change.
+     0.4s+   cards fade in, 0.15s apart, each asking
+     2.4s+   each resolves to named or not named, 0.5s apart
+     8.4s    the refresh icon turns once
+     8.9s+   four chips flip, in both directions, 0.3s apart
+     12.8s+  cards fade out; the loop restarts at 14s
+   Paused until the scene is on screen, paused again when it leaves. */
+@property --t { syntax: '<number>'; inherits: true; initial-value: 0; }
+@keyframes scene-clock { from { --t: 0; } to { --t: 14; } }
+
+.sq--1 { --a: 0.4; --r: 2.4; --o: 12.8; --c: 8.9; }
+.sq--2 { --a: 0.55; --r: 2.9; --o: 12.9; --c: 9.2; }
+.sq--3 { --a: 0.7; --r: 3.4; --o: 13.0; }
+.sq--4 { --a: 0.85; --r: 3.9; --o: 13.1; }
+.sq--5 { --a: 1.0; --r: 4.4; --o: 13.2; --c: 9.5; }
+.sq--6 { --a: 1.15; --r: 4.9; --o: 13.3; --c: 9.8; }
+.sq--7 { --a: 1.3; --r: 5.4; --o: 13.4; }
+.sq--8 { --a: 1.45; --r: 5.9; --o: 13.5; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene-anim .scene { animation: scene-clock 14s linear infinite paused; }
+  .scene-anim .scene.is-live { animation-play-state: running; }
+  .scene-anim .sq {
+    --in: clamp(0, calc((var(--t) - var(--a)) / 0.45), 1);
+    --out: clamp(0, calc((var(--o) + 0.5 - var(--t)) / 0.5), 1);
+    --res: clamp(0, calc((var(--t) - var(--r)) / 0.3), 1);
+    --chg: clamp(0, calc((var(--t) - var(--c, 99)) / 0.45), 1);
+    opacity: min(var(--in), var(--out));
+    transform: translateY(calc((1 - var(--in)) * 12px));
+  }
+  .scene-anim .sq__chip--ask { opacity: calc(1 - var(--res)); }
+  .scene-anim .sq__chip--first { opacity: calc(var(--res) * (1 - var(--chg))); }
+  .scene-anim .sq__chip--second { opacity: var(--chg); }
+  .scene-anim .scene__refresh {
+    --p: clamp(0, calc((var(--t) - 8.4) / 0.9), 1);
+    transform: rotate(calc(var(--p) * var(--p) * (3 - 2 * var(--p)) * 360deg));
+  }
+}
+
+@media (max-width: 1024px) {
+  .teaser__grid { gap: 48px; }
+}
 @media (max-width: 920px) {
-  .cite-gold { padding: 72px 0 64px; }
-  .cite-gold__grid { grid-template-columns: 1fr; gap: 44px; align-items: start; }
-  .cite-gold__kicker { margin-bottom: 28px; }
+  .teaser { padding: 80px 0; }
+  .teaser__grid { grid-template-columns: 1fr; gap: 48px; align-items: start; }
 }
 @media (max-width: 640px) {
-  .cite-gold { padding: 52px 0 48px; }
-  .cite-gold__kicker { margin-bottom: 22px; }
-  .cite-gold__title { gap: 18px; }
-  .cite-gold__rest { font-size: 24px; padding-bottom: 2px; }
-  .cite-gold__lede { margin-top: 26px; font-size: 17px; }
-  .cite-gold__foot { margin-top: 40px; }
-  .tries { padding: 24px 20px 22px; }
+  .teaser { padding: 44px 0 40px; }
+  .teaser__kicker { margin-bottom: 14px; }
+  .teaser__title { font-size: 38px; }
+  .teaser__lede { margin-top: 16px; font-size: 16px; line-height: 1.5; }
+  .teaser__actions { margin-top: 22px; gap: 12px 22px; }
+  .teaser__caption { margin-top: 14px; }
+  .teaser__grid { gap: 28px; }
+  /* One column, alternating sides; the last two cards stay out of the way. */
+  .scene { grid-template-columns: 1fr; gap: 9px; }
+  .sq { width: 84%; margin-top: 0; padding: 9px 12px; }
+  .sq--1, .sq--3, .sq--5 { justify-self: start; margin-top: 0; }
+  .sq--2, .sq--4, .sq--6 { justify-self: end; margin-top: 0; }
+  .sq--7, .sq--8 { display: none; }
+  .sq__text { margin-bottom: 7px; font-size: 14px; line-height: 1.3; }
+  .sq__chip { padding: 3px 9px 3px 8px; font-size: 12.5px; }
+  .scene__refresh { width: 30px; height: 30px; }
 }
 
 @media print {
   .cm-anim .cm:not(.is-played) .cm-dot--featured:not(.is-on) { background: var(--gold); border: 2px solid var(--gold); }
   .cm-anim .cm:not(.is-played) .cm-dot--named:not(.is-on) { border: 2px solid var(--gold); }
+}
+
+@media print {
+  .scene-anim .sq { opacity: 1 !important; transform: none !important; }
+  .scene-anim .sq__chip--ask,
+  .scene-anim .sq__chip--second { opacity: 0 !important; }
+  .scene-anim .sq__chip--first { opacity: 1 !important; }
+  .scene-anim .scene__refresh { transform: none !important; }
 }

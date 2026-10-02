@@ -124,7 +124,7 @@ single-band rule. No fourth navy surface, and no new surface colour.
 
 **Gold on the homepage:** `--gold` is a surface in two places only: the
 contained commerce strip, and one full-bleed gold band, the citation
-block, directly after the capabilities block. Every word on the gold
+teaser, directly after the capabilities block. Every word on the gold
 band is solid `--navy-950`. Never translucent navy, `--gold-soft`,
 `--gold-deep` or white on gold: reduced opacity on gold looks muddy,
 most of all on mobile.
@@ -136,17 +136,22 @@ stay complete in the HTML, the replay must do nothing under
 `prefers-reduced-motion`, and nothing else in that block animates. No
 other section gets motion on this basis.
 
-**The second and last exception:** the citation tracking figures
-(`citation-matrix.js`), two of them: the dot matrix on
-`/citation-tracking`, whose dots fill in once, row by row over about
-1.5s, and the five tries in the homepage's gold block, which appear one
-at a time, 0.4s apart. Same conditions for both: the finished figure is
-plain HTML, the replay does nothing under `prefers-reduced-motion`, and
-only the dots (colour and border) or the try chips (opacity), 150ms,
-animate. There is no
-third exception. Both figures are generated from
+**The second and last exception:** citation tracking, two figures.
+(1) The homepage teaser's "questions everywhere" scene (`teaser-scene.js`,
+styles.css "Homepage teaser"): an illustration, labelled as one, that
+loops for about 14s while it is on screen and pauses when it is not. One
+`@keyframes` drives a registered number (`--t`); cards, chips and the
+refresh icon derive their opacity or rotation from it. Only opacity and
+transform change. No gradients, glow, bounce, parallax or confetti.
+(2) The dot matrix on `/citation-tracking` (`citation-matrix.js`), whose
+dots fill in once, row by row over about 1.5s, on first view (colour and
+border, 150ms). Same conditions for both: the finished or static state is
+plain HTML, nothing animates under `prefers-reduced-motion`, without
+JavaScript, or without `@property` support, and nothing else in either
+block moves. There is no third exception. The matrix is generated from
 `content/citations/sample-crm.json` by `scripts/generate-citation.js`;
-never type a figure into either surface.
+never type a figure into it. The homepage teaser shows no data and does
+not read that file.
 
 ## Voice
 

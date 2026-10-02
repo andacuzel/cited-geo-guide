@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>if (window.IntersectionObserver && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' cm-anim';</script>
+  <script>if (window.IntersectionObserver && window.CSS && CSS.registerProperty && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' scene-anim';</script>
 
   <title>Answerable. — AI Visibility Scanner &amp; GEO Playbooks</title>
   <meta name="description" content="Scan your site's AI visibility free — 16 checks, 10 crawlers, live data — then fix it with vertical-specific GEO & AEO playbooks. No email required." />
@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=39" />
+  <link rel="stylesheet" href="styles.css?v=40" />
 
   <script type="application/ld+json">
   {
@@ -260,52 +260,59 @@
         </div>
       </section>
 
-<!-- CITATION-BAND:START -->
-      <section class="cite-gold" id="citation" aria-labelledby="citation-heading">
+      <section class="teaser" id="citation" aria-labelledby="citation-heading">
         <div class="section__inner">
-          <p class="cite-gold__kicker">Early access · Citation tracking</p>
-          <div class="cite-gold__grid">
-            <div class="cite-gold__lead">
-              <h2 id="citation-heading" class="cite-gold__title"><span class="cite-gold__num">7</span><span class="cite-gold__rest">questions your buyers asked. The answer didn’t include you.</span></h2>
-              <p class="cite-gold__lede">We asked one AI model 18 questions a software buyer might ask. A real CRM brand was left out of every answer to 7 of them, and appeared only some of the time on 5 more.</p>
+          <div class="teaser__grid">
+            <div class="teaser__copy">
+              <p class="teaser__kicker">Citation tracking</p>
+              <h2 id="citation-heading" class="teaser__title">Citation tracking is almost here.</h2>
+              <p class="teaser__lede">Ask an AI the same question twice and you can get two different answers. Soon you’ll see exactly when it names your brand, and when it doesn’t.</p>
+              <div class="teaser__actions">
+                <a class="btn btn--primary" href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Get early access</a>
+                <a class="teaser__link" href="/citation-tracking">How it will work</a>
+              </div>
             </div>
-            <figure class="tries" id="cite-tries" aria-labelledby="cite-tries-q">
-              <p class="tries__q" id="cite-tries-q">What are the best CRM options for a real estate team?</p>
-              <ol class="tries__list">
-                <li class="tries__row">
-                  <span class="tries__label">Try 1</span>
-                  <span class="tries__chip tries__chip--named"><span class="tries__mark" aria-hidden="true"></span>Named</span>
-                </li>
-                <li class="tries__row">
-                  <span class="tries__label">Try 2</span>
-                  <span class="tries__chip tries__chip--absent"><span class="tries__mark" aria-hidden="true"></span>Not named</span>
-                </li>
-                <li class="tries__row">
-                  <span class="tries__label">Try 3</span>
-                  <span class="tries__chip tries__chip--named"><span class="tries__mark" aria-hidden="true"></span>Named</span>
-                </li>
-                <li class="tries__row">
-                  <span class="tries__label">Try 4</span>
-                  <span class="tries__chip tries__chip--absent"><span class="tries__mark" aria-hidden="true"></span>Not named</span>
-                </li>
-                <li class="tries__row">
-                  <span class="tries__label">Try 5</span>
-                  <span class="tries__chip tries__chip--absent"><span class="tries__mark" aria-hidden="true"></span>Not named</span>
-                </li>
-              </ol>
-              <p class="tries__caption">Same question. Same AI. Five different answers.</p>
-            </figure>
-          </div>
-          <div class="cite-gold__foot">
-            <div class="cite-gold__actions">
-              <a class="btn btn--primary" href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Find out where you’re missing</a>
-              <a class="cite-gold__link" href="/citation-tracking">See the full breakdown</a>
+            <div class="teaser__scene-wrap">
+              <div class="scene" id="citeScene" role="img" aria-label="Illustration: an AI names a brand for some buyer questions and not for others">
+                <svg class="scene__refresh" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11" stroke-width="1.4"/><path d="M16.2 9.2A5 5 0 0 0 7.6 10.4M7.8 14.8a5 5 0 0 0 8.6-1.2"/><path d="M16.4 6.6v2.8h-2.8M7.6 17.4v-2.8h2.8"/></svg>
+              <div class="sq sq--1 sq--flips" aria-hidden="true">
+                <p class="sq__text">Best CRM for a small sales team?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span><span class="sq__chip sq__chip--absent sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+              </div>
+              <div class="sq sq--2 sq--flips" aria-hidden="true">
+                <p class="sq__text">Which running shoes suit flat feet?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span><span class="sq__chip sq__chip--named sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+              </div>
+              <div class="sq sq--3" aria-hidden="true">
+                <p class="sq__text">Who’s a good immigration lawyer near me?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+              </div>
+              <div class="sq sq--4" aria-hidden="true">
+                <p class="sq__text">Project tool that works well with Slack?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+              </div>
+              <div class="sq sq--5 sq--flips" aria-hidden="true">
+                <p class="sq__text">Best hotel in Lisbon for a family?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span><span class="sq__chip sq__chip--named sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+              </div>
+              <div class="sq sq--6 sq--flips" aria-hidden="true">
+                <p class="sq__text">Which accountant works with freelancers?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span><span class="sq__chip sq__chip--absent sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+              </div>
+              <div class="sq sq--7" aria-hidden="true">
+                <p class="sq__text">Where can I buy a gift for a coffee lover?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+              </div>
+              <div class="sq sq--8" aria-hidden="true">
+                <p class="sq__text">Best password manager for a small team?</p>
+                <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+              </div>
+              </div>
+              <p class="teaser__caption">Illustration. Not real data.</p>
             </div>
-            <p class="cite-gold__meta">A CRM brand · gemini-3.5-flash-lite · October 2, 2026 · each question asked 5 times</p>
           </div>
         </div>
       </section>
-      <!-- CITATION-BAND:END -->
 
       <!-- ---------- Scan progress ---------- -->
       <section id="scanProgress" hidden aria-label="Scan progress" aria-live="polite">
@@ -669,11 +676,11 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="mcp-demo.js?v=1"></script>
-  <script src="citation-matrix.js?v=1" onerror="document.documentElement.classList.remove('cm-anim')"></script>
+  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove('scene-anim')"></script>
   <script src="lib/playbooks.js?v=1"></script>
   <script src="lib/schema.js?v=1"></script>
-  <script src="app.js?v=29"></script>
-  <script src="scanner.js?v=31"></script>
+  <script src="app.js?v=30"></script>
+  <script src="scanner.js?v=32"></script>
   <script src="nav.js?v=2"></script>
 </body>
 </html>
