@@ -38,9 +38,10 @@
        clientCapabilities, must be present and agree, or it is rejected
        with the spec's 400 + -32020 / -32022 / -32602. A request
        declaring an older supported version (2025-06-18 and 2025-11-25
-       clients send the header but no _meta) or declaring nothing at all
-       (which the spec lets a server treat as 2025-03-26) is served as
-       before. ping is answered only on those older requests.
+       clients send the header but no _meta) is served as before. A
+       request declaring no version at all is rejected (-32020);
+       2025-03-26 clients, which sent no header, are not served. ping
+       is answered only on older-version requests.
      - Origin validation (the spec's DNS-rebinding protection) applies
        to locally-bound servers reachable from a browser tab on the
        same machine. This is a public, remote, stateless, read-only
@@ -71,7 +72,7 @@ const scanner = require('../lib/scanner');
 const playbooks = require('../lib/playbooks');
 const CRAWLERS = require('../lib/crawlers');
 
-const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26'];
+const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
 const SERVER_INFO = { name: 'answerable', title: 'Answerable', version: '1.0.0' };
 const SERVER_INSTRUCTIONS = 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). Every tool is read-only and non-destructive.';
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -752,10 +753,11 @@ function isPlainObject(x) { return x && typeof x === 'object' && !Array.isArray(
 // error if it is malformed for that era. Returns { era } or { reject }.
 //   modern  — declares 2026-07-28: header, _meta and mirrored headers are
 //             all required and cross-checked.
-//   legacy  — declares an older version (2025-06-18 / 2025-11-25 send the
-//             MCP-Protocol-Version header but no _meta), or declares
-//             nothing at all, which the spec lets a server treat as
-//             2025-03-26. Served as before, no _meta required.
+//   legacy  — declares an older supported version: 2025-06-18 and
+//             2025-11-25 clients send the MCP-Protocol-Version header but
+//             no _meta. Served as before, no _meta required.
+// A request declaring no version at all is rejected: every supported
+// revision sends the header, and 2025-03-26 (which did not) is not served.
 function classifyRequest(req, body) {
   var method = body.method;
   var params = isPlainObject(body.params) ? body.params : {};
@@ -766,11 +768,9 @@ function classifyRequest(req, body) {
 
   function reject(status, code, message, data) { return { reject: { status: status, code: code, message: message, data: data } }; }
 
-  if (hdrVersion === undefined && metaVersion === undefined) {
-    return { era: 'legacy', version: '2025-03-26' };
-  }
   if (hdrVersion === undefined) {
-    return reject(400, -32020, 'Header mismatch: the MCP-Protocol-Version header is required and was not sent (the request body declares ' + metaVersion + ').');
+    return reject(400, -32020, 'Header mismatch: the MCP-Protocol-Version header is required on every request and was not sent' +
+      (metaVersion !== undefined ? ' (the request body declares ' + metaVersion + ').' : '.'));
   }
   if (metaVersion !== undefined && metaVersion !== hdrVersion) {
     return reject(400, -32020, 'Header mismatch: MCP-Protocol-Version header value \'' + hdrVersion + '\' does not match _meta protocol version \'' + metaVersion + '\'.');
