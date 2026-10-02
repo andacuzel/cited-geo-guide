@@ -12,6 +12,12 @@
     },
     "api/mcp.js": {
       "maxDuration": 60
+    },
+    "api/llms-check.js": {
+      "maxDuration": 30
+    },
+    "api/site-info.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
