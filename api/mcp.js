@@ -31,12 +31,16 @@
        application/json) — never an SSE stream. Nothing this server
        does needs mid-call progress or server-initiated input, so a
        stream was never necessary, in this revision or the last one.
-     - The new `_meta`/`MCP-Protocol-Version`/`Mcp-Method` requirements
-       are read when present but never enforced. Rejecting requests
-       that lack headers most real clients don't send yet would break
-       far more than it would protect, for a public, read-only,
-       unauthenticated, tool-only server with no sessions, resources,
-       prompts, sampling, elicitation or subscriptions to speak of.
+     - Requests are classified per request by the version they declare
+       (see classifyRequest). A request declaring 2026-07-28 is validated
+       strictly: MCP-Protocol-Version, Mcp-Method and (for tools/call)
+       Mcp-Name headers, plus _meta protocolVersion and
+       clientCapabilities, must be present and agree, or it is rejected
+       with the spec's 400 + -32020 / -32022 / -32602. A request
+       declaring an older supported version (2025-06-18 and 2025-11-25
+       clients send the header but no _meta) or declaring nothing at all
+       (which the spec lets a server treat as 2025-03-26) is served as
+       before. ping is answered only on those older requests.
      - Origin validation (the spec's DNS-rebinding protection) applies
        to locally-bound servers reachable from a browser tab on the
        same machine. This is a public, remote, stateless, read-only
@@ -67,7 +71,6 @@ const scanner = require('../lib/scanner');
 const playbooks = require('../lib/playbooks');
 const CRAWLERS = require('../lib/crawlers');
 
-const PROTOCOL_VERSION = '2026-07-28';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26'];
 const SERVER_INFO = { name: 'answerable', title: 'Answerable', version: '1.0.0' };
 const SERVER_INSTRUCTIONS = 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). Every tool is read-only and non-destructive.';
@@ -723,6 +726,94 @@ function toolResult(outcome) {
   });
 }
 
+/* ---------------- per-request validation (2026-07-28) ---------------- */
+
+const MODERN_VERSIONS = ['2026-07-28'];
+const LATEST_LEGACY_VERSION = '2025-11-25';
+const META_VERSION_KEY = 'io.modelcontextprotocol/protocolVersion';
+const META_CAPS_KEY = 'io.modelcontextprotocol/clientCapabilities';
+
+function headerValue(req, name) {
+  var v = req.headers && req.headers[name];
+  if (Array.isArray(v)) v = v.join(', ');
+  return typeof v === 'string' ? v.trim() : undefined;
+}
+
+// Mcp-Name may carry a =?base64?...?= sentinel for non-ASCII values.
+function decodeMcpName(v) {
+  var m = /^=\?base64\?(.*)\?=$/.exec(v);
+  if (!m) return v;
+  try { return Buffer.from(m[1], 'base64').toString('utf8'); } catch (e) { return v; }
+}
+
+function isPlainObject(x) { return x && typeof x === 'object' && !Array.isArray(x); }
+
+// Decides which era a request belongs to and rejects it with the spec's
+// error if it is malformed for that era. Returns { era } or { reject }.
+//   modern  — declares 2026-07-28: header, _meta and mirrored headers are
+//             all required and cross-checked.
+//   legacy  — declares an older version (2025-06-18 / 2025-11-25 send the
+//             MCP-Protocol-Version header but no _meta), or declares
+//             nothing at all, which the spec lets a server treat as
+//             2025-03-26. Served as before, no _meta required.
+function classifyRequest(req, body) {
+  var method = body.method;
+  var params = isPlainObject(body.params) ? body.params : {};
+  var meta = isPlainObject(params._meta) ? params._meta : null;
+
+  var hdrVersion = headerValue(req, 'mcp-protocol-version');
+  var metaVersion = meta && typeof meta[META_VERSION_KEY] === 'string' ? meta[META_VERSION_KEY] : undefined;
+
+  function reject(status, code, message, data) { return { reject: { status: status, code: code, message: message, data: data } }; }
+
+  if (hdrVersion === undefined && metaVersion === undefined) {
+    return { era: 'legacy', version: '2025-03-26' };
+  }
+  if (hdrVersion === undefined) {
+    return reject(400, -32020, 'Header mismatch: the MCP-Protocol-Version header is required and was not sent (the request body declares ' + metaVersion + ').');
+  }
+  if (metaVersion !== undefined && metaVersion !== hdrVersion) {
+    return reject(400, -32020, 'Header mismatch: MCP-Protocol-Version header value \'' + hdrVersion + '\' does not match _meta protocol version \'' + metaVersion + '\'.');
+  }
+  if (SUPPORTED_PROTOCOL_VERSIONS.indexOf(hdrVersion) === -1) {
+    return reject(400, -32022, 'Unsupported protocol version', { supported: SUPPORTED_PROTOCOL_VERSIONS, requested: hdrVersion });
+  }
+  if (MODERN_VERSIONS.indexOf(hdrVersion) === -1) {
+    return { era: 'legacy', version: hdrVersion };
+  }
+
+  // Modern from here on.
+  if (!meta || metaVersion === undefined) {
+    return reject(400, -32602, 'Invalid params: _meta["' + META_VERSION_KEY + '"] is required on every ' + hdrVersion + ' request.');
+  }
+  if (!isPlainObject(meta[META_CAPS_KEY])) {
+    return reject(400, -32602, 'Invalid params: _meta["' + META_CAPS_KEY + '"] is required on every ' + hdrVersion + ' request (an object, {} if the client has none).');
+  }
+  var mcpMethod = headerValue(req, 'mcp-method');
+  if (mcpMethod === undefined) {
+    return reject(400, -32020, 'Header mismatch: the Mcp-Method header is required and was not sent.');
+  }
+  if (mcpMethod !== method) {
+    return reject(400, -32020, 'Header mismatch: Mcp-Method header value \'' + mcpMethod + '\' does not match body value \'' + method + '\'.');
+  }
+  if (method === 'tools/call') {
+    var mcpName = headerValue(req, 'mcp-name');
+    if (mcpName === undefined) {
+      return reject(400, -32020, 'Header mismatch: the Mcp-Name header is required for tools/call and was not sent.');
+    }
+    if (decodeMcpName(mcpName) !== params.name) {
+      return reject(400, -32020, 'Header mismatch: Mcp-Name header value \'' + decodeMcpName(mcpName) + '\' does not match body value \'' + params.name + '\'.');
+    }
+  }
+  return { era: 'modern', version: hdrVersion };
+}
+
+function rpcErrorFull(id, code, message, data) {
+  var e = { jsonrpc: '2.0', id: (id === undefined ? null : id), error: { code: code, message: message } };
+  if (data !== undefined) e.error.data = data;
+  return e;
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
 
@@ -749,11 +840,29 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // initialize and notifications are legacy-only shapes and are never
+  // validated; everything else is classified by the version it declares.
+  var era = 'legacy';
+  if (method !== 'initialize' && method.indexOf('notifications/') !== 0) {
+    var verdict = classifyRequest(req, body);
+    if (verdict.reject) {
+      res.status(verdict.reject.status).json(rpcErrorFull(id, verdict.reject.code, verdict.reject.message, verdict.reject.data));
+      return;
+    }
+    era = verdict.era;
+  }
+
   try {
     if (method === 'initialize') {
       // Legacy handshake, answered for clients that still send it.
+      // Legacy negotiation: echo the client's version when we serve it,
+      // otherwise offer the newest handshake-era version. 2026-07-28 has no
+      // handshake, so it is never the answer to initialize.
+      var requested = body.params && body.params.protocolVersion;
+      var negotiated = (typeof requested === 'string' && SUPPORTED_PROTOCOL_VERSIONS.indexOf(requested) !== -1 && MODERN_VERSIONS.indexOf(requested) === -1)
+        ? requested : LATEST_LEGACY_VERSION;
       res.status(200).json(rpcResult(id, {
-        protocolVersion: PROTOCOL_VERSION,
+        protocolVersion: negotiated,
         capabilities: { tools: {} },
         serverInfo: SERVER_INFO,
         instructions: SERVER_INSTRUCTIONS
@@ -781,7 +890,8 @@ module.exports = async (req, res) => {
       return;
     }
 
-    if (method === 'ping') {
+    if (method === 'ping' && era === 'legacy') {
+      // ping was removed in 2026-07-28; still answered for older clients.
       res.status(200).json(rpcResult(id, { resultType: 'complete' }));
       return;
     }
