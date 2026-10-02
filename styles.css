@@ -1368,6 +1368,138 @@ input.field:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 
 .services-block p { margin-top: 10px; font-size: 14.5px; color: rgba(255, 255, 255, 0.7); }
 .services-block .btn { margin-top: 22px; }
 
+/* ----------------------------- MCP announcement band (homepage) -----------------------------
+   Full-bleed navy, deliberately taller than its neighbours. The distinction
+   comes from content, not a new surface colour: a white conversation panel
+   as the lit object on the navy field, and a navy tool-call plate inside it
+   showing Answerable being called from an assistant.
+
+   The conversation is complete in the HTML. mcp-demo.js, when it runs at
+   all, adds .is-armed to hide the steps and then replays them once; with
+   no JS, or prefers-reduced-motion, the finished state is simply there. */
+
+.mcp-band {
+  background: var(--navy-950);
+  padding: 128px 0;
+  min-height: 860px;
+  display: flex;
+  align-items: center;
+}
+.mcp-band > .section__inner { width: 100%; }
+
+.mcp-band__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+
+.mcp-band__title {
+  color: var(--white);
+  font-size: clamp(36px, 4.6vw, 60px);
+  line-height: 1.04;
+  max-width: 520px;
+}
+.mcp-band__lede {
+  margin-top: 20px;
+  max-width: 460px;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.72);
+}
+.mcp-band__facts {
+  margin-top: 28px;
+  padding-top: 16px;
+  max-width: 460px;
+  border-top: 1px solid var(--line-on-navy);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  color: var(--gold-soft);
+}
+.mcp-band .btn { margin-top: 28px; }
+
+.mcp-chat {
+  margin: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.mcp-chat__head {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.mcp-chat__body { padding: 28px 24px 30px; }
+
+.mcp-msg { display: flex; flex-direction: column; gap: 6px; }
+.mcp-msg--user { align-items: flex-end; }
+.mcp-msg__who {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.mcp-msg__text {
+  max-width: 88%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.mcp-msg--user .mcp-msg__text { background: var(--bg); }
+.mcp-msg--assistant .mcp-msg__text { max-width: 100%; border: 1px solid var(--line); background: var(--white); }
+
+/* The tool-call row: how an MCP client shows a call, set apart from the
+   message bubbles as a compact mono plate. */
+.mcp-call {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 18px 0;
+  padding: 10px 14px;
+  background: var(--navy-950);
+  border: 1px solid rgba(194, 146, 47, 0.4);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55);
+}
+.mcp-call svg { flex-shrink: 0; color: var(--gold-soft); }
+.mcp-call__server { color: var(--gold-soft); }
+.mcp-call__tool { color: var(--white); font-weight: 500; }
+.mcp-call__arg { margin-left: auto; }
+
+/* Replay state. Hidden steps keep their space, so the panel never changes
+   height while the conversation plays. */
+.mcp-band.is-armed [data-step] { opacity: 0; visibility: hidden; }
+.mcp-band.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
+.mcp-type__rest { visibility: hidden; }
+
+@media (max-width: 920px) {
+  .mcp-band { padding: 96px 0; min-height: 0; }
+  .mcp-band__grid { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 640px) {
+  .mcp-band { padding: 72px 0; }
+  .mcp-chat__head { padding: 12px 16px; }
+  .mcp-chat__body { padding: 22px 16px 24px; }
+  .mcp-call__arg { margin-left: 0; }
+}
+@media print {
+  .mcp-band.is-armed [data-step] { opacity: 1; visibility: visible; }
+}
+
 /* ----------------------------- Site footer ----------------------------- */
 
 .site-footer { padding: 48px 0 60px; }
