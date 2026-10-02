@@ -807,7 +807,7 @@ module.exports = async (req, res) => {
       }
       var handler = HANDLERS[toolName];
       if (!handler) {
-        res.status(404).json(rpcError(id, -32601, 'Method not found: no tool named "' + toolName + '". Call tools/list for the available tools: ' +
+        res.status(400).json(rpcError(id, -32602, 'Unknown tool: "' + toolName + '". Call tools/list for the available tools: ' +
           TOOLS.map(function (t) { return t.name; }).join(', ') + '.'));
         return;
       }
