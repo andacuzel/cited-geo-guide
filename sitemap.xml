@@ -54,4 +54,25 @@
   <url>
     <loc>https://answerable-app.vercel.app/terms</loc>
   </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks/crm</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks/cybersecurity</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks/devtools</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks/dtc-brands</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks/consumer-apps</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/benchmarks/hospitality</loc>
+  </url>
 </urlset>
