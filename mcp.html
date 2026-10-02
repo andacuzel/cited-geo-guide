@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Answerable. — MCP Server for Claude, Cursor and Other AI Tools</title>
-  <meta name="description" content="Connect Answerable's AI-visibility scanner, fix generators and vertical playbooks to Claude, Cursor or any MCP client. Eight free, read-only tools, copy-paste setup, nothing stored." />
+  <meta name="description" content="Connect Answerable's AI-visibility scanner, fix generators and vertical playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, copy-paste setup, nothing stored." />
   <meta name="keywords" content="MCP server, Model Context Protocol, Claude MCP, Cursor MCP, AI visibility API, GEO tools, AEO tools" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
@@ -14,7 +14,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
-  <meta property="og:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Eight free, read-only tools, nothing stored." />
+  <meta property="og:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, nothing stored." />
   <meta property="og:url" content="https://answerable-app.vercel.app/mcp" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
@@ -22,7 +22,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
-  <meta name="twitter:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Eight free, read-only tools, nothing stored." />
+  <meta name="twitter:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, nothing stored." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -62,7 +62,7 @@
             "name": "Does connecting the MCP server cost anything?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. All eight tools are free. The three that scan a live site share the same rate limit as the public scanner on answerable-app.vercel.app."
+              "text": "No. All ten tools are free. The three that scan a live site share the same rate limit as the public scanner on answerable-app.vercel.app."
             }
           },
           {
@@ -140,7 +140,7 @@
           <div class="page-banner__body">
             <p class="kicker kicker--on-navy">MCP server</p>
             <h1 class="page-banner__title">Answerable, from inside your tools.</h1>
-            <p class="page-banner__desc">Scan a site, generate a fix, or read a playbook without leaving Claude or Cursor. Eight tools, the same scanner and data as the website, called directly from an AI assistant.</p>
+            <p class="page-banner__desc">Scan a site, generate a fix, or read a playbook without leaving Claude or Cursor. <!--c:toolCountCap-->Ten<!--/c--> tools, the same scanner and data as the website, called directly from an AI assistant.</p>
           </div>
         </div>
       </div>
@@ -151,10 +151,10 @@
       <div class="section__inner">
         <div class="doc-section">
           <h2 id="what-heading" class="doc-section__heading">What this connects</h2>
-          <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as eight callable tools instead of a page. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, or read one of the fourteen vertical playbooks, without a person copying anything between a browser tab and a chat window.</p>
+          <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as <!--c:toolCountLower-->ten<!--/c--> callable tools instead of a page. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, or read one of the fourteen vertical playbooks, without a person copying anything between a browser tab and a chat window.</p>
           <p>Every tool is read-only and non-destructive. None of them write to your site, send a message, or change an account anywhere. Three tools — scan_site, compare_sites, generate_schema — make an outbound request to the domain you give them, the same as the public scanner. The other five work entirely from this project's own data and fetch nothing external.</p>
           <p>Like the scanner itself, every tool measures AI readiness: whether a crawler can reach a page, and whether its signals give a model reason to trust it. None of them measure whether an assistant currently mentions a brand in a live answer — that depends on the prompt, the session and the model's training data, and no tool here can observe or promise it.</p>
-          <p>Measuring that is a different job. <a href="/citation-tracking">Citation tracking</a> asks one model the buying questions in a category, several times each, and records whether it names a brand. It is an early-access report we run for you, not an MCP tool.</p>
+          <p>Measuring that is a different job. Two tools here, <code>get_citation_prompts</code> and <code>get_citation_sample</code>, hand you the questions and an anonymised sample so you can run a check yourself. Running one for you is the early-access <a href="/citation-tracking">citation tracking</a> report. No tool here queries a model for you.</p>
         </div>
       </div>
     </section>
@@ -239,7 +239,7 @@
     <section class="verticals" aria-labelledby="tools-heading">
       <div class="section__inner">
         <div class="doc-section">
-          <h2 id="tools-heading" class="doc-section__heading">Eight tools</h2>
+          <h2 id="tools-heading" class="doc-section__heading"><!--c:toolCountCap-->Ten<!--/c--> tools</h2>
           <p>Each one below shows what it needs, what it fetches, and one real example call and response.</p>
         </div>
 
@@ -526,6 +526,93 @@ Bytespider (ByteDance)
   This project's robots.txt generator defaults it to: Disallow.
 
 (7 more crawlers follow in a real response: ChatGPT-User, OAI-SearchBot, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, CCBot)</pre>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Citation tracking</h2>
+
+          <div class="results-content__body">
+            <h3 id="get_citation_prompts">get_citation_prompts</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>vertical</code> (a vertical slug, e.g. <code>crm</code>)</p>
+            <p>Returns the buying-intent questions Answerable uses to test whether an assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions contain no brand names. Read from this project&rsquo;s own question files. A vertical with no questions yet returns a message that names the verticals that have them.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "get_citation_prompts", "arguments": { "vertical": "crm" } }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">Citation question set: crm (18 questions, set version 1)
+Buying-intent category queries for CRM software. No brand names: the brand under test either appears in the answer or it does not.
+
+1. What's the best CRM for a 40-person outbound sales team?
+2. Which CRM should a 10-person startup use that won't need a consultant to set up?
+3. What are the best CRMs that integrate natively with Slack?
+(15 more questions follow in a real response)
+
+How to run this yourself, in any assistant you have access to:
+1. Pick one assistant and one model, and note its name and today’s date.
+2. Ask each question in a separate, new conversation. Do not reuse a chat: earlier answers change later ones.
+3. Ask every question three to five times, each time in a new conversation.
+4. For each answer, note two things: whether your brand is named at all, and whether it appears in a heading, list label, table or bold text (featured) rather than only in running prose (named only).
+5. Judge the spread, not one answer. A question where you are named in some tries and not others is unstable. One where you are never named is a gap. A single answer is not a finding.
+
+Keep the limits in view: the result describes one assistant on one date. It is not a ranking, it says nothing about other assistants, and it is not a forecast of traffic. Answers move with phrasing and over time.</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3 id="get_citation_sample">get_citation_sample</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
+            <p>Returns the anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand, domain or competitor.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": { "name": "get_citation_sample", "arguments": {} }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">Citation tracking sample: a CRM brand
+Model: gemini-3.5-flash-lite. Date: October 2, 2026. No web search was enabled.
+Each of 18 questions was asked 5 times (5 tries per question), each in its own conversation.
+
+Overall, the brand was named in 49% of answers. Taking one try of every question as a sweep, the rate ranged from 39% to 56% across 5 sweeps. The average hides that spread.
+
+Named in every try (6):
+  - Which CRM should a 10-person startup use that won't need a consultant to set up?
+  - What are the best CRMs that integrate natively with Slack?
+  (4 more)
+
+Unstable, named in some tries and not others (5):
+  - Which CRM is best for a small business that sells mostly over email and phone?
+    tries: not named, featured, featured, featured, featured
+  - What CRM do mid-market companies with 200 to 500 employees usually choose?
+    tries: named only, not named, named only, featured, named only
+  (3 more)
+
+Never named (7):
+  - What's the best CRM for a 40-person outbound sales team?
+  - What's a good free CRM for a freelancer or solo consultant?
+  (5 more)
+
+Featured means named in a heading, list label, table or bold text. Named only means named in running prose, which can include a mention that is not a recommendation.
+
+Limits: this is one model on one date. It is not a ranking, it says nothing about other assistants, and it is not a forecast of traffic. Answers move with phrasing and over time. The sample is anonymised: it names no brand, domain or competitor.</pre>
+          </div>
+
+          <div class="callout">
+            <p class="callout__label">Why there is no tool that runs the check</p>
+            <p>A run asks a model about 90 questions in total, at about five seconds each. That is far past this server&rsquo;s time limit, and it would spend a model quota that nothing stops a stranger from draining. So the tools hand you the questions and the protocol, and you run them in your own assistant. If you want us to run it for you, that is the early-access <a href="/citation-tracking">citation tracking</a> report.</p>
           </div>
         </div>
 
