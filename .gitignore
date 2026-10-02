@@ -19,3 +19,6 @@ node_modules/
 
 # Citation-tracking local state (learned rate limit, monthly query ledger)
 data/citations/_state/
+
+# Overnight development log and report (local only)
+local/
