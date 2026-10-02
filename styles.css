@@ -108,6 +108,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; margin: 0; 
 /* ----------------------------- Buttons & inputs ----------------------------- */
 
 .btn {
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1112,6 +1113,8 @@ select.field { appearance: auto; cursor: pointer; }
   border-radius: 4px;
   padding: 3px 7px;
   white-space: nowrap;
+  justify-self: start;
+  align-self: center;
 }
 .commerce-mock__row--unreadable { opacity: 0.8; }
 .commerce-mock__badge--missing { color: var(--risk); background: var(--risk-tint); }
