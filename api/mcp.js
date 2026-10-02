@@ -70,6 +70,7 @@ const CRAWLERS = require('../lib/crawlers');
 const PROTOCOL_VERSION = '2026-07-28';
 const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26'];
 const SERVER_INFO = { name: 'answerable', title: 'Answerable', version: '1.0.0' };
+const SERVER_INSTRUCTIONS = 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). Every tool is read-only and non-destructive.';
 const DATA_DIR = path.join(__dirname, '..', 'data');
 
 /* ---------------- shared small helpers ---------------- */
@@ -702,14 +703,24 @@ var HANDLERS = {
 
 /* ---------------- JSON-RPC plumbing ---------------- */
 
+var SERVER_INFO_META_KEY = 'io.modelcontextprotocol/serverInfo';
+
+// 2026-07-28: servers SHOULD identify themselves in every result's _meta.
+function withServerInfo(result) {
+  var meta = {};
+  meta[SERVER_INFO_META_KEY] = SERVER_INFO;
+  result._meta = meta;
+  return result;
+}
+
 function rpcResult(id, result) { return { jsonrpc: '2.0', id: id, result: result }; }
 function rpcError(id, code, message) { return { jsonrpc: '2.0', id: (id === undefined ? null : id), error: { code: code, message: message } }; }
 function toolResult(outcome) {
-  return {
+  return withServerInfo({
     resultType: 'complete',
     isError: !!outcome.isError,
     content: [{ type: 'text', text: outcome.text }]
-  };
+  });
 }
 
 module.exports = async (req, res) => {
@@ -745,7 +756,7 @@ module.exports = async (req, res) => {
         protocolVersion: PROTOCOL_VERSION,
         capabilities: { tools: {} },
         serverInfo: SERVER_INFO,
-        instructions: 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). Every tool is read-only and non-destructive.'
+        instructions: SERVER_INSTRUCTIONS
       }));
       return;
     }
@@ -759,12 +770,14 @@ module.exports = async (req, res) => {
     }
 
     if (method === 'server/discover') {
-      res.status(200).json(rpcResult(id, {
+      res.status(200).json(rpcResult(id, withServerInfo({
         resultType: 'complete',
-        protocolVersions: { supported: SUPPORTED_PROTOCOL_VERSIONS },
+        supportedVersions: SUPPORTED_PROTOCOL_VERSIONS,
         capabilities: { tools: {} },
-        serverInfo: SERVER_INFO
-      }));
+        instructions: SERVER_INSTRUCTIONS,
+        ttlMs: 3600000,
+        cacheScope: 'public'
+      })));
       return;
     }
 
@@ -774,12 +787,12 @@ module.exports = async (req, res) => {
     }
 
     if (method === 'tools/list') {
-      res.status(200).json(rpcResult(id, {
+      res.status(200).json(rpcResult(id, withServerInfo({
         resultType: 'complete',
         tools: TOOLS,
         ttlMs: 3600000,
         cacheScope: 'public'
-      }));
+      })));
       return;
     }
 
