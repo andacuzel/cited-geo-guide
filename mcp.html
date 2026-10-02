@@ -154,6 +154,7 @@
           <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as eight callable tools instead of a page. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, or read one of the fourteen vertical playbooks, without a person copying anything between a browser tab and a chat window.</p>
           <p>Every tool is read-only and non-destructive. None of them write to your site, send a message, or change an account anywhere. Three tools — scan_site, compare_sites, generate_schema — make an outbound request to the domain you give them, the same as the public scanner. The other five work entirely from this project's own data and fetch nothing external.</p>
           <p>Like the scanner itself, every tool measures AI readiness: whether a crawler can reach a page, and whether its signals give a model reason to trust it. None of them measure whether an assistant currently mentions a brand in a live answer — that depends on the prompt, the session and the model's training data, and no tool here can observe or promise it.</p>
+          <p>Measuring that is a different job. <a href="/citation-tracking">Citation tracking</a> asks one model the buying questions in a category, several times each, and records whether it names a brand. It is an early-access report we run for you, not an MCP tool.</p>
         </div>
       </div>
     </section>
@@ -563,6 +564,7 @@ Bytespider (ByteDance)
       <div class="section__inner">
         <nav class="site-nav footer-links" aria-label="More">
           <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
           <a href="/privacy" class="site-nav__link">Privacy</a>
           <a href="/terms" class="site-nav__link">Terms</a>
         </nav>
