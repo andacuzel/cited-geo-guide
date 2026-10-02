@@ -69,6 +69,7 @@ const fs = require('fs');
 const path = require('path');
 const { checkRateLimit } = require('./_rateLimit');
 const scanner = require('../lib/scanner');
+const schemaLib = require('../lib/schema');
 const playbooks = require('../lib/playbooks');
 const CRAWLERS = require('../lib/crawlers');
 
@@ -79,12 +80,7 @@ const DATA_DIR = path.join(__dirname, '..', 'data');
 
 /* ---------------- shared small helpers ---------------- */
 
-function normalizeDomain(raw) {
-  var d = (typeof raw === 'string' ? raw : '').trim().toLowerCase();
-  d = d.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
-  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(d)) return null;
-  return d;
-}
+var normalizeDomain = scanner.normalizeDomain;
 
 function rateLimitMessage(rl) {
   return rl.scope === 'hour'
@@ -136,92 +132,12 @@ function findVertical(slug) {
   return null;
 }
 
-/* ---------------- JSON-LD builders (generate_schema) ---------------- */
+/* ---------------- JSON-LD (generate_schema) ---------------- */
+/* The builder lives in lib/schema.js, shared with the scan report and the
+   standalone schema generator, so the three can never drift apart. */
 
-var SCHEMA_TYPE_LABEL = {
-  organization: 'Organization and WebSite',
-  faqpage: 'FAQPage',
-  article: 'Article',
-  product: 'Product'
-};
-
-function buildSchema(type, domain, siteInfo) {
-  var siteUrl = 'https://' + domain;
-  var title = siteInfo.title || '';
-  var metaDesc = siteInfo.metaDesc || '';
-  var lang = siteInfo.lang || '';
-
-  if (type === 'organization') {
-    return {
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'Organization',
-          name: '[Your company name]',
-          url: siteUrl,
-          description: metaDesc || '[A one-sentence description of your business]'
-        },
-        {
-          '@type': 'WebSite',
-          name: title || '[Your site name]',
-          url: siteUrl,
-          inLanguage: lang || '[e.g. en]'
-        }
-      ]
-    };
-  }
-
-  if (type === 'article') {
-    return {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: title || '[Your page title]',
-      description: metaDesc || '[A one-sentence description of this page]',
-      inLanguage: lang || '[e.g. en]',
-      author: { '@type': 'Organization', name: '[Your company name]' },
-      datePublished: '[YYYY-MM-DD]',
-      url: siteUrl
-    };
-  }
-
-  if (type === 'faqpage') {
-    // Nothing about real FAQ content is knowable from a homepage scan.
-    // Every field here is a placeholder on purpose.
-    return {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: '[A real question your visitors actually ask]',
-          acceptedAnswer: { '@type': 'Answer', text: '[The real answer, in plain text]' }
-        },
-        {
-          '@type': 'Question',
-          name: '[A second real question]',
-          acceptedAnswer: { '@type': 'Answer', text: '[The real answer]' }
-        }
-      ]
-    };
-  }
-
-  // product
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: title || '[Your product name]',
-    description: metaDesc || '[A one-sentence product description]',
-    url: siteUrl,
-    brand: { '@type': 'Brand', name: '[Your brand name]' },
-    offers: {
-      '@type': 'Offer',
-      price: '[e.g. 29.99]',
-      priceCurrency: '[e.g. USD]',
-      availability: '[e.g. https://schema.org/InStock]',
-      url: siteUrl
-    }
-  };
-}
+var SCHEMA_TYPE_LABEL = {};
+Object.keys(schemaLib.TYPES).forEach(function (k) { SCHEMA_TYPE_LABEL[k] = schemaLib.TYPES[k].outputLabel; });
 
 /* ---------------- benchmark data (get_benchmark) ---------------- */
 
@@ -388,8 +304,8 @@ var TOOLS = [
         domain: { type: 'string', description: 'A bare domain, e.g. "example.com".' },
         type: {
           type: 'string',
-          enum: ['organization', 'faqpage', 'article', 'product'],
-          description: '"organization" returns Organization + WebSite schema as an @graph; the others each return one schema of that @type.'
+          enum: Object.keys(schemaLib.TYPES),
+          description: '"organization" returns Organization + WebSite schema as an @graph; the others (faqpage, article, product, localbusiness) each return one schema of that @type.'
         }
       },
       required: ['domain', 'type']
@@ -532,12 +448,11 @@ var HANDLERS = {
     var rl = await checkRateLimit(req);
     if (rl.limited) return { isError: true, text: rateLimitMessage(rl) };
 
-    var pageRes = await scanner.fetchText('https://' + domain + '/', 12000, 'page', scanner.DEFAULT_BROWSER_UA);
-    if (!pageRes.ok || !pageRes.text) {
-      return { isError: true, text: 'Could not read the homepage at https://' + domain + '/ (' + (pageRes.kind || pageRes.error || 'unknown error') + '). Confirm the domain is correct and reachable, then try again.' };
+    var info = await scanner.fetchSiteInfo(domain);
+    if (!info.ok) {
+      return { isError: true, text: 'Could not read the homepage at https://' + domain + '/ (' + info.detail + '). Confirm the domain is correct and reachable, then try again.' };
     }
-    var sig = scanner.parseSignals(pageRes.text);
-    var schema = buildSchema(type, domain, { title: sig.title, metaDesc: sig.metaDesc, lang: sig.lang });
+    var schema = schemaLib.buildFromSite(type, domain, info.siteInfo);
 
     var text = SCHEMA_TYPE_LABEL[type] + ' JSON-LD for ' + domain + ', ready to paste inside a <script type="application/ld+json"> tag in the page’s <head>:\n\n' +
       JSON.stringify(schema, null, 2);

@@ -362,10 +362,9 @@
     var container = $('fixSnippets');
     if (!container) return;
 
-    var siteUrl = 'https://' + domain;
-    var title = siteInfo.title || '';
-    var metaDesc = siteInfo.metaDesc || '';
-    var lang = siteInfo.lang || '';
+    // JSON-LD comes from lib/schema.js, shared with the standalone
+    // generator and the MCP server (loaded before this file).
+    var schema = window.ANSWERABLE_SCHEMA;
 
     var blocks = [];
 
@@ -384,44 +383,17 @@
 
     var orgCheck = checks.filter(function (c) { return c.label === 'Organization / WebSite schema'; })[0];
     if (orgCheck && !orgCheck.ok) {
-      var orgLd = {
-        '@context': 'https://schema.org',
-        '@graph': [
-          {
-            '@type': 'Organization',
-            name: '[Your company name]',
-            url: siteUrl,
-            description: metaDesc || '[A one-sentence description of your business]'
-          },
-          {
-            '@type': 'WebSite',
-            name: title || '[Your site name]',
-            url: siteUrl,
-            inLanguage: lang || '[e.g. en]'
-          }
-        ]
-      };
       blocks.push({
         label: orgCheck.label,
-        code: '<script type="application/ld+json">\n' + JSON.stringify(orgLd, null, 2) + '\n<\/script>'
+        code: schema.toScriptTag(schema.buildFromSite('organization', domain, siteInfo))
       });
     }
 
     var contentCheck = checks.filter(function (c) { return c.label === 'Content schema (Article, FAQ…)'; })[0];
     if (contentCheck && !contentCheck.ok) {
-      var articleLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: title || '[Your page title]',
-        description: metaDesc || '[A one-sentence description of this page]',
-        inLanguage: lang || '[e.g. en]',
-        author: { '@type': 'Organization', name: '[Your company name]' },
-        datePublished: '[YYYY-MM-DD]',
-        url: siteUrl
-      };
       blocks.push({
         label: contentCheck.label,
-        code: '<script type="application/ld+json">\n' + JSON.stringify(articleLd, null, 2) + '\n<\/script>'
+        code: schema.toScriptTag(schema.buildFromSite('article', domain, siteInfo))
       });
     }
 
