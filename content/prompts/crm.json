@@ -152,7 +152,8 @@
     },
     {
       "name": "Nutshell",
-      "domain": "nutshell.com"
+      "domain": "nutshell.com",
+      "ambiguous": true
     },
     {
       "name": "Keap",
@@ -340,10 +341,11 @@
     },
     {
       "name": "kvCORE",
-      "domain": "kvcore.com",
-      "aliases": [
-        "BoomTown"
-      ]
+      "domain": "kvcore.com"
+    },
+    {
+      "name": "BoomTown",
+      "domain": "boomtownroi.com"
     }
   ]
 }
