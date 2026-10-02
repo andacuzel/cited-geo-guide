@@ -206,7 +206,7 @@
       }
 
       hideProgressPanel();
-      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan);
+      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan, data.commerce);
       updateShareableUrl(data.domain);
     } catch (err) {
       showProgressError('Scan failed: ' + (err && err.message ? err.message : 'connection error'));
@@ -253,7 +253,7 @@
     { cat: 'trust', label: 'Content & trust' }
   ];
 
-  function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam) {
+  function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam, commerce) {
     lastScore = { domain: domain, total: r.total, checks: r.checks, botResults: botResults };
 
     $('scoreValue').textContent = r.total;
@@ -320,6 +320,8 @@
         '<div class="checks-group__grid">' + rows + '</div></div>';
     }).join('');
 
+    renderCommerce(domain, commerce);
+
     var missed = r.checks
       .filter(function (c) { return c.pts < c.max; })
       .map(function (c) { return { advice: c.advice, why: c.why, gain: c.max - c.pts }; })
@@ -354,6 +356,83 @@
      runScan() or renderReport() again. */
   function renderProOutput(domain, r) {
     // no-op — Pro gating not implemented yet
+  }
+
+  /* ---------------- Agentic commerce readiness ----------------
+     Shown only when the scan treats the site as a store. It has its own
+     sub-score and never changes the score above. */
+
+  function safeUrl(u) { return /^https?:\/\//i.test(u || '') ? u : null; }
+
+  function commerceRow(state, mark, label, value, detailHtml) {
+    return '<div class="check-row' + (state ? ' is-' + state : '') + '">' +
+      '<span class="check-row__mark">' + mark + '</span>' +
+      '<span>' + esc(label) + (detailHtml ? '<span class="tool-evidence">' + detailHtml + '</span>' : '') + '</span>' +
+      (value ? '<span class="check-row__pts">' + esc(value) + '</span>' : '') + '</div>';
+  }
+
+  function renderCommerce(domain, c) {
+    var el = $('commerceBody');
+    if (!el) return;
+    if (!c || !c.detected) { el.hidden = true; el.innerHTML = ''; return; }
+
+    var fired = c.signals.filter(function (s) { return s.fired === true; });
+    var rows = '';
+
+    rows += commerceRow('ok', '✓', 'Detected as a store', fired.length + ' of ' + c.signals.length + ' signals',
+      fired.map(function (s) { return esc(s.label) + (s.evidence ? ' (' + esc(s.evidence) + ')' : ''); }).join('<br>'));
+
+    var ucp = c.ucp;
+    var ucpCheck = c.checks.filter(function (k) { return k.id === 'ucp'; })[0];
+    if (ucp.state === 'valid') {
+      rows += commerceRow('ok', '✓', 'UCP endpoint', ucpCheck.pts + '/' + ucpCheck.max,
+        'Merchant profile found at /.well-known/ucp. Version ' + esc(ucp.version) + '; supports ' + esc(ucp.supportedVersions.join(', ')) +
+        '; ' + ucp.capabilities.length + ' capabilities: ' + esc(ucp.capabilities.join(', ')) + '.');
+    } else {
+      rows += commerceRow('fail', '✗', 'UCP endpoint', ucpCheck.pts + '/' + ucpCheck.max, esc(ucp.detail));
+    }
+
+    var p = c.product;
+    var pCheck = c.checks.filter(function (k) { return k.id === 'product-data'; })[0];
+    var urlHtml = safeUrl(p.url)
+      ? 'Checked <a href="' + esc(p.url).replace(/"/g, '&quot;') + '" target="_blank" rel="noopener noreferrer">' + esc(p.url) + '</a> (found via ' + esc(p.source) + ').'
+      : '';
+    if (p.state === 'checked') {
+      var names = { name: 'name', price: 'price', availability: 'availability', image: 'image' };
+      var have = Object.keys(names).filter(function (k) { return p.fields[k]; });
+      var lack = Object.keys(names).filter(function (k) { return !p.fields[k]; });
+      var detail = urlHtml + '<br>' + (p.found
+        ? esc(p.schemaType) + ' schema (' + esc(p.schemaSource) + '). Present: ' + esc(have.join(', ') || 'none') + (lack.length ? '. Missing: ' + esc(lack.join(', ')) : '') + '.'
+        : 'No Product schema found on that page.');
+      rows += commerceRow(p.present === 4 ? 'ok' : 'fail', p.present === 4 ? '✓' : '✗', 'Structured product data', pCheck.pts + '/' + pCheck.max, detail);
+    } else {
+      rows += commerceRow('', '–', 'Structured product data', 'not assessed', (urlHtml ? urlHtml + '<br>' : '') + esc(p.detail));
+    }
+
+    var l = c.llms;
+    if (l) {
+      var checkerLink = ' <a href="/tools/llms-txt-checker?domain=' + encodeURIComponent(domain) + '">Open the checker</a>';
+      rows += commerceRow('', '–', 'llms.txt authorship (not scored)', l.verdict || 'no file',
+        esc(l.summary) + (l.caveat ? ' ' + esc(l.caveat) : '') + checkerLink);
+    }
+
+    var gaps = c.checks.filter(function (k) { return k.assessed && k.pts < k.max; });
+    var gapsHtml = gaps.length
+      ? '<ul class="scan-actions__list commerce-gaps">' + gaps.map(function (k) {
+          return '<li class="action-item"><div class="action-item__top"><span class="action-item__label">' + esc(k.advice) +
+            '</span><span class="action-item__gain">+' + (k.max - k.pts) + ' pts</span></div><p class="action-item__why">' + esc(k.why) + '</p></li>';
+        }).join('') + '</ul>'
+      : '';
+
+    var sub = c.subScore;
+    el.innerHTML =
+      '<p class="kicker">Commerce only · scored separately</p>' +
+      '<h3 class="scan-actions__title">Agentic commerce readiness</h3>' +
+      '<div class="commerce-score"><span class="commerce-score__value">' + sub.earned + '<small>/' + sub.max + '</small></span>' +
+      '<span class="commerce-score__note">Separate from the score above, which this never changes.' +
+      (sub.complete ? '' : ' Product data could not be assessed, so it is left out of this total.') + '</span></div>' +
+      '<div class="commerce-rows">' + rows + '</div>' + gapsHtml;
+    el.hidden = false;
   }
 
   /* ---------------- Copy-paste fixes ---------------- */

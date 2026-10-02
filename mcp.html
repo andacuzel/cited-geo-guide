@@ -248,7 +248,7 @@
           <div class="results-content__body">
             <h3 id="scan_site">scan_site</h3>
             <p><strong>Fetches:</strong> the live domain &middot; <strong>Needs:</strong> <code>domain</code> (bare hostname, e.g. <code>example.com</code>)</p>
-            <p>Scans a domain's public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability, technical foundation, and content &amp; trust. Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable's own benchmark data.</p>
+            <p>Scans a domain's public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability, technical foundation, and content &amp; trust. Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable's own benchmark data. If the site looks like a store, it also reports a separate commerce sub-score: the UCP endpoint, one product page's schema, and the llms.txt authorship result. That sub-score is never part of the 100.</p>
           </div>
           <div class="fix-snippet">
             <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
@@ -543,7 +543,7 @@ Bytespider (ByteDance)
         <div class="doc-section">
           <h2 id="privacy-heading" class="doc-section__heading">Privacy</h2>
           <p>The same rule as the public scanner applies here: nothing is stored about who calls a tool.</p>
-          <p>The three tools that scan a live domain — scan_site, compare_sites, generate_schema — fetch directly from that domain, the same way the public scanner does. They don't route through a third-party proxy, and the fetched content is used only to build the response handed back to the calling tool. It isn't logged or retained anywhere.</p>
+          <p>The three tools that scan a live domain — scan_site, compare_sites, generate_schema — fetch directly from that domain, the same way the public scanner does. Scanning a store can also read one product page, only where robots.txt allows it. They don't route through a third-party proxy, and the fetched content is used only to build the response handed back to the calling tool. It isn't logged or retained anywhere.</p>
           <p>To enforce the same rate limit the public scanner uses, the server keeps a one-way hash of the caller's IP address paired with a request counter. It expires automatically within a day, isn't linked to which domain was scanned or which tool was called, and the raw IP address is never stored. No other identifying information is recorded: no client name, no API key, no account, no log of individual tool calls.</p>
         </div>
       </div>

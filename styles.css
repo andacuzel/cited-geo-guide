@@ -1502,6 +1502,23 @@ select.field { appearance: auto; cursor: pointer; }
   .mcp-band.is-armed [data-step] { opacity: 1; visibility: visible; }
 }
 
+/* Agentic commerce readiness (scan report, stores only) */
+
+.scan-commerce { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+.scan-commerce[hidden] { display: none; }
+.commerce-score { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 18px; margin: 4px 0 18px; }
+.commerce-score__value { font-family: var(--font-display); font-size: 44px; line-height: 1; color: var(--navy-950); }
+.commerce-score__value small { font-size: 20px; color: var(--ink-faint); }
+.commerce-score__note { font-size: 14px; color: var(--ink-soft); max-width: 560px; }
+.commerce-rows .check-row a, .commerce-gaps + * a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.commerce-rows .tool-evidence a { color: var(--ink-soft); }
+.commerce-gaps { margin-top: 20px; }
+.commerce-rows .check-row > span:nth-child(2) { flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .commerce-rows .check-row { flex-wrap: wrap; }
+  .commerce-rows .check-row__pts { order: 3; flex-basis: 100%; margin-left: 29px; padding-left: 0; }
+}
+
 /* ----------------------------- Tool pages (llms.txt checker, schema generator) -----------------------------
    Built from the robots.txt generator's parts: .robots-gen__grid for the
    two-column layout and .fix-snippet for the dark plate with copy and

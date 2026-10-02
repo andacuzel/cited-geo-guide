@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?</title>
-  <meta name="description" content="Scan whether AI shopping agents can find your product, read your price, and complete a purchase. What UCP is, what your llms.txt actually says, and what agentic commerce means for your store." />
+  <meta name="description" content="Scan whether AI shopping agents can find your product and read your price. What UCP is, what your llms.txt says about your brand, and what agentic commerce means for your store." />
   <meta name="keywords" content="agentic commerce, UCP, Universal Commerce Protocol, AI shopping agents, llms.txt, AI visibility, GEO for e-commerce" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
@@ -14,7 +14,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?" />
-  <meta property="og:description" content="Scan whether AI shopping agents can find your product, read your price, and complete a purchase. What UCP is, and what agentic commerce means for your store." />
+  <meta property="og:description" content="Scan whether AI shopping agents can find your product and read your price. What UCP is, and what agentic commerce means for your store." />
   <meta property="og:url" content="https://answerable-app.vercel.app/agentic-commerce" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
@@ -22,7 +22,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?" />
-  <meta name="twitter:description" content="Scan whether AI shopping agents can find your product, read your price, and complete a purchase." />
+  <meta name="twitter:description" content="Scan whether AI shopping agents can find your product and read your price." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -212,6 +212,8 @@
             <div class="checks-grid" id="checksBody"></div>
           </div>
 
+          <div class="scan-commerce" id="commerceBody" hidden></div>
+
           <div class="scan-actions">
             <h3 class="scan-actions__title">What to fix first</h3>
             <ul class="scan-actions__list" id="actionsList"></ul>
@@ -231,7 +233,7 @@
           <p>A shopping agent is software that finds, evaluates and buys a product on a person's behalf, inside a chat interface rather than a browser tab.</p>
           <p>Instead of returning a list of links, it reads product data directly, picks a match, and can complete the purchase without the person ever visiting your site.</p>
           <p>Agent-driven checkout depends on a discovery step called the Universal Commerce Protocol, or UCP. An agent looks for a UCP endpoint at a fixed location — <code>/.well-known/ucp</code> — not something it has to guess or infer from your homepage.</p>
-          <p>If that endpoint exists and describes your catalog, price and availability in a structured, machine-readable format, an agent can act on it directly.</p>
+          <p>If that endpoint exists, it declares which protocol versions, services and capabilities your store supports, such as checkout, cart and catalog search, and where an agent reaches them. An agent can act on that directly.</p>
           <p>If it does not, the agent has nothing to act on, regardless of how the site looks to a person.</p>
         </div>
       </div>
@@ -243,45 +245,53 @@
         <div class="section-head">
           <p class="kicker">What determines agent-readiness</p>
           <h2 id="checks-heading" class="section-title">Four checks, and why each matters.</h2>
-          <p class="section-sub">Two of these already run in every free scan. The commerce-specific ones are what we're building next.</p>
+          <p class="section-sub">Three run today. Two of them, structured product data and the UCP endpoint, run only when a scan treats your site as a store, and they are scored apart from the 100. The checkout path is in preparation.</p>
         </div>
         <div class="capability-grid">
           <div class="capability-card">
             <div class="capability-card__top">
               <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18.5" r="1.5"/><path d="M8.5 15a5 5 0 017 0M5.3 11.8a9.5 9.5 0 0113.4 0"/></svg></span>
-              <span class="capability-card__weight">In today's scan</span>
+              <span class="capability-card__weight">In every scan</span>
             </div>
             <p class="capability-card__kicker">Discoverability</p>
             <h3 class="capability-card__q">AI crawler access</h3>
-            <p class="capability-card__desc">If GPTBot, ClaudeBot or Perplexity's crawlers are blocked in robots.txt, an agent cannot read your catalog at all, regardless of what it contains.</p>
+            <p class="capability-card__desc">If GPTBot, ClaudeBot or Perplexity's crawlers are blocked in robots.txt, an agent cannot read your catalog at all, regardless of what it contains. Part of the 16-check score.</p>
           </div>
           <div class="capability-card">
             <div class="capability-card__top">
               <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 10h17M9.5 4.5v15"/></svg></span>
-              <span class="capability-card__weight">Partial today</span>
+              <span class="capability-card__weight">Stores only</span>
             </div>
             <p class="capability-card__kicker">Technical foundation</p>
             <h3 class="capability-card__q">Structured product data</h3>
-            <p class="capability-card__desc">Price and availability need to be machine-readable, not just visible on the page. Overlaps with the structured-data check already in the free scan.</p>
+            <p class="capability-card__desc">The scan opens one product page, the first <code>/products/</code> or <code>/product/</code> URL in your sitemap, or a product link on your homepage if there is none. It looks for Product schema with a name, a price, an availability and an image, and shows you the URL so you can check it. <strong>A failure means</strong> the page is readable to a person but not to an agent: it can see a product exists and cannot read what it costs or whether it is in stock. If no product page can be found, or robots.txt disallows it, the check is reported as not assessed, not as a failure.</p>
           </div>
           <div class="capability-card">
             <div class="capability-card__top">
               <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M8 12.5L5.5 15a2.5 2.5 0 003.5 3.5L11.5 16M16 11.5L18.5 9a2.5 2.5 0 00-3.5-3.5L12.5 8"/></svg></span>
-              <span class="capability-card__weight">Coming next</span>
+              <span class="capability-card__weight">Stores only</span>
             </div>
             <p class="capability-card__kicker">Discovery</p>
             <h3 class="capability-card__q">UCP endpoint</h3>
-            <p class="capability-card__desc">A shopping agent looks for <code>/.well-known/ucp</code> before it looks at your homepage. Without it, there's no structured entry point to act on.</p>
+            <p class="capability-card__desc">A shopping agent looks for <code>/.well-known/ucp</code> before it looks at your homepage. The scan fetches it and passes it if it returns a valid merchant profile, then reports the versions and capabilities it declares. <strong>A failure means</strong> there is no structured entry point: an agent has nothing to act on and falls back to reading the storefront. When we checked on 2 October 2026, 24 of the 27 Shopify stores in our benchmark lists published one.</p>
           </div>
           <div class="capability-card">
             <div class="capability-card__top">
               <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg></span>
-              <span class="capability-card__weight">Coming next</span>
+              <span class="capability-card__weight">In preparation</span>
             </div>
             <p class="capability-card__kicker">Checkout</p>
             <h3 class="capability-card__q">A completable checkout path</h3>
             <p class="capability-card__desc">An agent that can find your product but not buy it stops short of the sale. This is what agentic commerce ultimately depends on.</p>
           </div>
+        </div>
+
+        <div class="doc-section" style="margin-top: 56px;">
+          <h2 class="doc-section__heading">How a scan decides it is looking at a store</h2>
+          <p>A scan checks five signals: Product or Offer schema on the homepage, store platform markers in the page or its headers, product or collection URLs in the sitemap, a valid UCP merchant profile, and a cart or checkout link on the homepage. Two or more means the scan treats the site as a store and runs the commerce checks. Fewer means it does not, and the report says nothing more about commerce.</p>
+          <p>The commerce sub-score is out of 8: 4 points for the UCP endpoint, and 1 point each for the name, price, availability and image on the product page. A check that could not run is left out of the total. The sub-score is never added to the 100-point score, so a store and a non-store stay comparable.</p>
+          <p>The product page is the only page beyond your homepage that a scan reads. It is one request, made last and after a pause, with a user agent that names Answerable, and only if your robots.txt allows that path.</p>
+          <p>Detection is a pattern match, and it misses some stores. A store with no platform markers, no product URLs in its sitemap and no cart link on the homepage will not be detected. <a href="/methodology">The methodology page</a> lists every rule.</p>
         </div>
       </div>
     </section>

@@ -170,6 +170,48 @@
       </div>
     </section>
 
+    <!-- ---------- Commerce checks ---------- -->
+    <section class="verticals" aria-labelledby="commerce-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <p class="kicker">Commerce only &middot; scored separately</p>
+          <h2 id="commerce-heading" class="doc-section__heading">Commerce checks</h2>
+          <p>These checks run only when a scan treats the site as a store. They have their own sub-score and are never added to the 100, so a store and a non-store stay comparable and the category benchmarks stay valid.</p>
+
+          <div class="results-content__body">
+            <h3>Detecting a store</h3>
+            <p>A scan looks for five signals. Two or more means it treats the site as a store. The report lists which fired.</p>
+            <div class="check-row"><span>Product or Offer schema on the homepage</span><span class="check-row__pts">signal</span></div>
+            <div class="check-row"><span>Store platform markers in the page, its scripts or its headers</span><span class="check-row__pts">signal</span></div>
+            <div class="check-row"><span>Product or collection URLs in the sitemap</span><span class="check-row__pts">signal</span></div>
+            <div class="check-row"><span>A valid UCP merchant profile at /.well-known/ucp</span><span class="check-row__pts">signal</span></div>
+            <div class="check-row"><span>A cart or checkout link on the homepage</span><span class="check-row__pts">signal</span></div>
+            <p>The sitemap signal needs a real share of the file, not one matching URL: at least 5 product or collection URLs making up 20% of a sitemap, or a child sitemap named for products. Many software sites have a <code>/products/</code> section of marketing pages, and a single match would have called them stores.</p>
+            <p>Platform markers cover Shopify, WooCommerce, BigCommerce, Magento and Salesforce Commerce Cloud. We checked Shopify and Salesforce Commerce Cloud against live stores. The other three use their documented asset paths and have not been checked against a live store of their own.</p>
+
+            <h3>Commerce readiness &mdash; 8 points</h3>
+            <div class="check-row"><span>UCP endpoint</span><span class="check-row__pts">4 pts</span></div>
+            <div class="check-row"><span>Product schema: name</span><span class="check-row__pts">1 pt</span></div>
+            <div class="check-row"><span>Product schema: price</span><span class="check-row__pts">1 pt</span></div>
+            <div class="check-row"><span>Product schema: availability</span><span class="check-row__pts">1 pt</span></div>
+            <div class="check-row"><span>Product schema: image</span><span class="check-row__pts">1 pt</span></div>
+            <p>The UCP check passes when <code>/.well-known/ucp</code> returns JSON with a <code>ucp</code> block that has a version and declares services or capabilities. The report lists the versions and capabilities it finds. A URL that answers with a web page, or with JSON of another shape, does not pass. A failed request is an absent endpoint, never a failed scan.</p>
+            <p>The product check opens one page: the first <code>/products/</code> or <code>/product/</code> URL in the sitemap, following one product sitemap if the sitemap is an index, or else the first product link on the homepage. It reads Product or ProductGroup schema, using the first variant to fill gaps in a ProductGroup, and the report shows the URL it checked. If no product page can be found, if robots.txt disallows the path for AnswerableBot, or if the page cannot be read, the check is reported as not assessed and left out of the total. It is never counted as a failure.</p>
+            <p>The sub-score is shown as points earned out of the points that could be assessed, so a store whose product page could not be read shows a total out of 4.</p>
+
+            <h3>Not scored: llms.txt authorship</h3>
+            <p>For a store, the report also shows what the <a href="/tools/llms-txt-checker">llms.txt checker</a> finds: whether the file looks like a platform default, custom or unclear. It is a pattern match on the text and is never scored.</p>
+
+            <h3>How a scan treats your site</h3>
+            <p>The product page is the only page beyond the homepage that a scan reads. It is one request, made last and after a pause, with a user agent that names Answerable (<code>AnswerableBot</code>), and only where robots.txt allows the path. Sites that show no store signal cost no extra requests.</p>
+
+            <h3>What this detection misses</h3>
+            <p>Detection is a pattern match. On 2 October 2026 we ran the rules over the 156 reachable sites in our benchmark lists. They detected 30 of 34 DTC stores and none of the other 122 sites. The four misses had no platform markers, no product URLs in the sitemap and no cart link on the homepage. The sitemap thresholds were set after two software sites tripped the first version of the rule, so treat that result as a calibration, not an independent test.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ---------- What this scan does not measure ---------- -->
     <section class="pro-band" aria-labelledby="honesty-heading">
       <div class="section__inner">
@@ -186,7 +228,7 @@
         <div class="doc-section">
           <h2 id="data-heading" class="doc-section__heading">How the data is collected</h2>
           <div class="results-content__body">
-            <p>Every scan fetches four things directly from your domain, live, at scan time: public <code>robots.txt</code>, <code>llms.txt</code>, <code>sitemap.xml</code> (if not already declared in robots.txt), and the homepage. All four requests happen inside a single Vercel serverless function — nothing routes through a third-party proxy.</p>
+            <p>Every scan fetches these directly from your domain, live, at scan time: public <code>robots.txt</code>, <code>llms.txt</code>, the UCP profile at <code>/.well-known/ucp</code>, <code>sitemap.xml</code> (if not already declared in robots.txt), and the homepage. If the scan treats the site as a store, it may also read your declared sitemap or one product sitemap, and one product page. All requests happen inside a single Vercel serverless function — nothing routes through a third-party proxy.</p>
             <p>Nothing is stored. There is no database behind the scan. The result exists in your browser for as long as the page stays open, and re-running the scan simply fetches everything again.</p>
             <p>If <code>robots.txt</code> cannot be read at all — a network failure, not a genuine 404 — the scan stops and returns an error rather than guessing. A missing <code>robots.txt</code> (a real 404) is scored as default-open access, which is the true state of that site; a failed <em>fetch</em> is not, and reporting a guessed score in that case would be a fabricated result. We do not fabricate results.</p>
           </div>
@@ -198,6 +240,7 @@
       <div class="section__inner">
         <h2 id="changelog-heading" class="doc-section__heading">Changelog</h2>
         <ol class="changelog-list">
+          <li><span class="n">2026-10-02</span><span>Added two commerce-only checks, structured product data and the UCP endpoint, plus store detection. They form a separate sub-score out of 8 and are never added to the 100, so the 16 checks, their point values and the six category benchmarks are unchanged. A scan of a store now reads at most one product page, after the other requests, with a user agent that names Answerable and only where robots.txt allows it.</span></li>
           <li><span class="n">2026-10-02</span><span>Fixed entity decoding in the page title and meta description parser. Encoded characters such as <code>&amp;amp;</code> were counted at full length, which pushed some titles and descriptions over the length limit and failed the Page title or Meta description check. Across the benchmark corpus, 8 check results on 7 sites flipped from fail to pass. The DTC brands average moved from 71 to 72. No other category average changed, and the overall average stays 73.</span></li>
           <li><span class="n">2026-07-29</span><span>Added <code>llms.txt</code> detection as a new check, bringing the total from 15 to 16. Rebalanced Discoverability: robots.txt 4, llms.txt 4, Sitemap declared 6, AI crawler access 26 (down from 30). Discoverability, Technical foundation and Content &amp; trust totals (40 / 20 / 40) are unchanged.</span></li>
         </ol>
