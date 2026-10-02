@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Compare Two Sites: AI Readiness Side by Side</title>
+  <meta name="description" content="Scan two domains one after the other and see where their AI readiness differs: the score, the three pillars, the checks and the AI crawlers. Free, nothing stored." />
+  <meta name="keywords" content="compare websites AI readiness, AI visibility comparison, competitor AI crawler access, GEO" />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/compare" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — Compare Two Sites: AI Readiness Side by Side" />
+  <meta property="og:description" content="Scan two domains one after the other and see where their AI readiness differs: the score, the three pillars, the checks and the AI crawlers. Free, nothing stored." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/compare" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Compare Two Sites: AI Readiness Side by Side" />
+  <meta name="twitter:description" content="Scan two domains and see where their AI readiness differs." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=42" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Answerable. Compare Two Sites",
+        "url": "https://answerable-app.vercel.app/compare",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "description": "Scan two domains one after the other and see where their AI readiness differs: the score, the three pillars, the checks and the AI crawlers. Free, nothing stored.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Answerable.",
+          "url": "https://answerable-app.vercel.app/"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does the comparison cover?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It runs the same scan as the free scanner on each site and shows where the two results differ: the score out of 100, the three pillar scores, each check and the access state of each AI crawler. Checks and crawlers where both sites match are left out. It reads homepages and public files only."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is anything stored?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The page sends each domain to the scanner, which reads public files from that domain and returns the result. The only thing kept is in your address bar: a link with the two domains, which you can copy or share. To enforce its rate limit the scanner keeps a one-way hash of your IP address and a request counter, which expires within a day and is not linked to the domains scanned."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why are the two sites scanned one after the other?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Each site gets its own full scan, exactly as if you had run the free scanner on it. Running them in turn keeps within the scanner’s rate limit, and it means a problem with one site, such as a timeout, does not stop the other from showing."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <div class="nav-dropdown">
+          <button type="button" class="site-nav__link nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+            Playbooks
+            <svg class="nav-dropdown__caret" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav-dropdown__menu">
+            <a href="/for-saas" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">B2B SaaS</span>
+              <span class="nav-dropdown__item-desc">Software companies competing for AI shortlists</span>
+            </a>
+            <a href="/for-brands" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Consumer &amp; e-commerce brands</span>
+              <span class="nav-dropdown__item-desc">Products people ask AI about before buying</span>
+            </a>
+            <a href="/for-professionals" class="nav-dropdown__item">
+              <span class="nav-dropdown__item-label">Local &amp; independent professionals</span>
+              <span class="nav-dropdown__item-desc">Practices and services people find through AI</span>
+            </a>
+          </div>
+        </div>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/for-saas" class="site-nav__link">B2B SaaS</a>
+        <a href="/for-brands" class="site-nav__link">Brands</a>
+        <a href="/for-professionals" class="site-nav__link">Professionals</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ---------- Page banner ---------- -->
+    <section aria-label="Page header">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Free tool</p>
+            <h1 class="page-banner__title">Compare two sites</h1>
+            <p class="page-banner__desc">Scan two domains, one after the other, and see where their AI readiness differs. The same scanner and checks, side by side.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-label="Comparison">
+      <div class="section__inner">
+        <noscript>
+          <p class="tool-status is-error">Comparing two sites needs JavaScript, because the scans run from this page. The explanation below works without it.</p>
+        </noscript>
+
+        <form class="tool-form" id="cmpForm" novalidate>
+          <div class="tool-form__field">
+            <label class="tool-label" for="cmpA">First site</label>
+            <input type="text" class="field" id="cmpA" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="tool-form__field">
+            <label class="tool-label" for="cmpB">Second site</label>
+            <input type="text" class="field" id="cmpB" placeholder="otherdomain.com" autocomplete="off" spellcheck="false" />
+          </div>
+          <button type="submit" class="btn btn--primary" id="cmpBtn">Compare</button>
+        </form>
+        <p class="tool-hint">Each site is scanned once, first the first site and then the second. Nothing is stored. Allow up to a minute.</p>
+        <div class="tool-status" id="cmpStatus" role="status" aria-live="polite"></div>
+        <ul class="cmp-progress" id="cmpProgress" hidden></ul>
+
+        <div class="cmp-result" id="cmpResult" hidden></div>
+
+        <div class="doc-section" style="margin-top: 56px;">
+          <h2 class="doc-section__heading">What the comparison shows</h2>
+          <p>Each site gets the same scan as the free scanner: a score out of 100, three pillar scores, every check and the access state of each AI crawler. The page lists only the differences. Checks and crawlers where both sites match are left out, and there is no winner and no verdict, only the figures.</p>
+          <p>The scores measure readiness: whether AI crawlers can reach a site and whether its homepage carries the signals machines read. They do not show whether any assistant names either brand in an answer.</p>
+          <p>The MCP server offers the same comparison as its <code>compare_sites</code> tool, for use inside Claude, Cursor and other MCP clients. See the <a href="/mcp">MCP page</a>.</p>
+        </div>
+
+        <div class="doc-section" style="margin-top: 48px;" id="faq">
+          <h2 class="doc-section__heading">Common questions</h2>
+          <h3 class="faq-q">What does the comparison cover?</h3>
+          <p>It runs the same scan as the free scanner on each site and shows where the two results differ: the score out of 100, the three pillar scores, each check and the access state of each AI crawler. Checks and crawlers where both sites match are left out. It reads homepages and public files only.</p>
+          <h3 class="faq-q">Is anything stored?</h3>
+          <p>No. The page sends each domain to the scanner, which reads public files from that domain and returns the result. The only thing kept is in your address bar: a link with the two domains, which you can copy or share. To enforce its rate limit the scanner keeps a one-way hash of your IP address and a request counter, which expires within a day and is not linked to the domains scanned.</p>
+          <h3 class="faq-q">Why are the two sites scanned one after the other?</h3>
+          <p>Each site gets its own full scan, exactly as if you had run the free scanner on it. Running them in turn keeps within the scanner’s rate limit, and it means a problem with one site, such as a timeout, does not stop the other from showing.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+          <a href="/methodology" class="site-nav__link">Methodology</a>
+          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+          <a href="/privacy" class="site-nav__link">Privacy</a>
+          <a href="/terms" class="site-nav__link">Terms</a>
+        </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="compare.js?v=1"></script>
+  <script src="nav.js?v=2"></script>
+</body>
+</html>
