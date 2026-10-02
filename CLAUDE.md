@@ -129,6 +129,16 @@ stay complete in the HTML, the replay must do nothing under
 `prefers-reduced-motion`, and nothing else in that block animates. No
 other section gets motion on this basis.
 
+**The second and last exception:** the citation matrix (homepage block
+and `/citation-tracking`, `citation-matrix.js`) fills its dots in once,
+row by row over about 1.5s, on first view, replaying the five runs. Same
+conditions: the finished matrix is plain HTML, the replay does nothing
+under `prefers-reduced-motion`, and only a dot changing from an empty
+ring to its state animates (colour and border, 150ms). There is no
+third exception. The matrix and its homepage block are generated from
+`content/citations/sample-crm.json` by `scripts/generate-citation.js`;
+never type a figure into either surface.
+
 ## Voice
 
 Declarative editor voice. Short sentences. Numbers before adjectives.
