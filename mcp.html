@@ -229,6 +229,7 @@
           </div>
 
           <p>Restart the client, or reload its MCP connections, then ask it to scan a domain, compare two sites, or pull up a playbook.</p>
+          <p>The server supports MCP protocol versions <code>2026-07-28</code>, <code>2025-11-25</code> and <code>2025-06-18</code>. Every request must send an <code>MCP-Protocol-Version</code> header; a request without one returns <code>400</code>. Clients add it automatically. If you call the endpoint by hand, send that header. For <code>2026-07-28</code> you also need the <code>_meta</code> protocol fields and the <code>Mcp-Method</code> and <code>Mcp-Name</code> headers.</p>
         </div>
       </div>
     </section>
@@ -486,7 +487,7 @@ If your CRM brand is not in that trusted signal set, you do not lose a ranking p
   78/100  CRM software  (B2B SaaS, 31 platforms, scanned 2026-07-29)
   78/100  Cybersecurity  (B2B SaaS, 46 platforms, scanned 2026-07-31)
   74/100  DevTools &amp; Cloud  (B2B SaaS, 48 platforms, scanned 2026-07-31)
-  71/100  DTC brands  (Consumer &amp; e-commerce, 33 brands, scanned 2026-07-29)
+  72/100  DTC brands  (Consumer &amp; e-commerce, 33 brands, scanned 2026-07-29)
   71/100  Hospitality &amp; travel  (Consumer &amp; e-commerce, 21 venues, scanned 2026-07-31)
   65/100  Consumer apps  (Consumer &amp; e-commerce, 40 apps, scanned 2026-07-31)
 
