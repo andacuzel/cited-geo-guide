@@ -2203,3 +2203,183 @@ code {
   .report-section { break-inside: avoid-page; }
   a { color: inherit; text-decoration: underline; }
 }
+
+/* =====================================================================
+   Citation tracking: the dot matrix and its homepage block
+
+   One component (.cm) on two surfaces. The finished matrix is plain
+   HTML; citation-matrix.js only replays the fill once on first view.
+   The second and last motion exception (see CLAUDE.md): the only thing
+   that animates is a dot changing from an empty ring to its final state
+   (colour and border, 150ms), row by row, once.
+   ===================================================================== */
+
+.cm { margin: 0; }
+.cm__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cm__group + .cm__group { margin-top: 26px; }
+.cm__heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--navy-950);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.cm__count { color: var(--gold-deep); }
+.cm__rows { list-style: none; margin: 0; padding: 0; }
+.cm__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 24px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.cm__q { font-size: 14.5px; line-height: 1.4; color: var(--ink); }
+.cm__dots { display: flex; gap: 10px; }
+.cm__more {
+  margin: 0;
+  padding-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.cm-dot {
+  display: block;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-faint);
+  background: transparent;
+  transition: background-color var(--t), border-color var(--t);
+}
+.cm-dot--named { border: 2px solid var(--gold); }
+.cm-dot--featured { border: 2px solid var(--gold); background: var(--gold); }
+
+.cm__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 26px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.cm__key { display: inline-flex; align-items: center; gap: 8px; }
+.cm__meta {
+  margin: 12px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+/* The replay: before first view, every dot is an empty ring. */
+.cm-anim .cm:not(.is-played) .cm__row .cm-dot:not(.is-on) {
+  background: transparent;
+  border: 1.5px solid var(--ink-faint);
+}
+
+.cm--large { max-width: 900px; }
+.cm--large .cm__q { font-size: 16px; }
+.cm--large .cm-dot { width: 18px; height: 18px; }
+.cm--large .cm__dots { gap: 14px; }
+.cm--large .cm__row { padding: 12px 0; }
+
+/* Homepage block: a white panel on the base background. */
+.citation-block { padding: 0 0 96px; }
+.citation-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 56px;
+  align-items: start;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 48px;
+}
+.citation-panel__title { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.12; text-wrap: balance; }
+.citation-panel__lede { margin-top: 18px; max-width: 460px; font-size: 16.5px; color: var(--ink-soft); }
+.citation-panel__meta {
+  margin: 22px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-faint);
+}
+.citation-panel__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 24px; }
+.citation-panel__link {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 4px;
+  transition: color var(--t);
+}
+.citation-panel__link:hover { color: var(--gold-deep); }
+
+/* Page: the large matrix and its readout. */
+.cm-panel { padding: 40px; }
+.cm-readout {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 3px solid var(--navy-950);
+}
+.cm-readout__num {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6vw, 76px);
+  line-height: 1;
+  color: var(--gold-deep);
+}
+.cm-readout__text p { margin: 0; max-width: 560px; font-size: 16px; color: var(--ink-soft); line-height: 1.55; }
+.cm-readout__text .cm-readout__fine { margin-top: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+
+.doc-list { margin: 14px 0 0; padding-left: 20px; font-size: 16px; color: var(--ink-soft); line-height: 1.6; }
+.doc-list li + li { margin-top: 10px; }
+.doc-list strong { color: var(--ink); }
+.doc-section > p + .doc-list,
+.doc-list + p { margin-top: 14px; }
+
+.citation-note { margin-top: 18px; max-width: 560px; font-size: 14.5px; color: var(--ink-soft); }
+.citation-note a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.scan-bridge .btn + .citation-note { margin-top: 20px; }
+
+@media (max-width: 920px) {
+  .citation-panel { grid-template-columns: 1fr; gap: 36px; padding: 36px 32px; }
+  .citation-panel__matrix { order: -1; }
+}
+@media (max-width: 640px) {
+  .citation-block { padding-bottom: 64px; }
+  .citation-panel { padding: 26px 20px; }
+  .cm__row { grid-template-columns: 1fr; }
+  .cm-panel { padding: 26px 20px; }
+  .cm-readout { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+
+@media print {
+  .cm-anim .cm:not(.is-played) .cm-dot--featured:not(.is-on) { background: var(--gold); border: 2px solid var(--gold); }
+  .cm-anim .cm:not(.is-played) .cm-dot--named:not(.is-on) { border: 2px solid var(--gold); }
+}
