@@ -7,6 +7,12 @@
 
    Usage:
      node scripts/scan-category.js domains/crm.txt crm
+     node scripts/scan-category.js --from-raw [category ...]
+
+   --from-raw rebuilds data/<category>-summary.json from the existing
+   data/<category>-raw.json. No scans, no network. With no category it
+   rebuilds every category in data/benchmarks.json. The scan date already in
+   the summary is kept: a rebuild is not a new scan.
 
    Input:  a text file with one domain per line (# comments allowed)
    Output: data/<category>-raw.json   (every scan result)
@@ -40,7 +46,13 @@ async function scanOne(domain) {
   }
 }
 
-function summarize(results, category) {
+// Crawler access is reported under `crawlers`, with blocked, limited and open
+// counts per bot. The scan names the check "AI crawler access (N/10 open)", a
+// different label for each N, and scores any partial result as below maximum,
+// so as a failure rate it would count an ordinary Disallow as a failure.
+const CRAWLER_CHECK = /^AI crawler access/;
+
+function summarize(results, category, opts) {
   const good = results.filter((r) => r.ok);
   const failed = results.filter((r) => !r.ok);
   if (good.length === 0) {
@@ -81,6 +93,7 @@ function summarize(results, category) {
   const checkFails = {};
   good.forEach((r) => {
     r.data.result.checks.forEach((c) => {
+      if (CRAWLER_CHECK.test(c.label)) return;
       if (!checkFails[c.label]) checkFails[c.label] = { failed: 0, of: 0 };
       checkFails[c.label].of++;
       if (c.pts < c.max) checkFails[c.label].failed++;
@@ -91,7 +104,7 @@ function summarize(results, category) {
 
   return {
     category,
-    scannedAt: new Date().toISOString().slice(0, 10),
+    scannedAt: (opts && opts.scannedAt) || new Date().toISOString().slice(0, 10),
     scanned: good.length,
     failed: failed.length,
     score: {
@@ -116,7 +129,26 @@ function summarize(results, category) {
   };
 }
 
+function rebuildFromRaw(requested) {
+  const dir = path.join(process.cwd(), 'data');
+  const cats = requested.length
+    ? requested
+    : JSON.parse(fs.readFileSync(path.join(dir, 'benchmarks.json'), 'utf8')).map((c) => c.category);
+  cats.forEach((category) => {
+    const rawFile = path.join(dir, `${category}-raw.json`);
+    const sumFile = path.join(dir, `${category}-summary.json`);
+    const results = JSON.parse(fs.readFileSync(rawFile, 'utf8'));
+    let scannedAt;
+    try { scannedAt = JSON.parse(fs.readFileSync(sumFile, 'utf8')).scannedAt; } catch (e) { /* no summary yet */ }
+    if (!scannedAt) scannedAt = fs.statSync(rawFile).mtime.toISOString().slice(0, 10);
+    const summary = summarize(results, category, { scannedAt });
+    fs.writeFileSync(sumFile, JSON.stringify(summary, null, 2));
+    console.log(`${category}: rebuilt from ${results.length} raw results, scan date ${scannedAt}`);
+  });
+}
+
 async function main() {
+  if (process.argv[2] === '--from-raw') return rebuildFromRaw(process.argv.slice(3));
   const [listFile, category] = process.argv.slice(2);
   if (!listFile || !category) {
     console.error('Usage: node scripts/scan-category.js <domains.txt> <category>');
