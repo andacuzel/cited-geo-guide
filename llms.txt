@@ -1,0 +1,32 @@
+# Answerable
+
+> Answerable is a free scanner for AI readiness. It checks whether AI crawlers can reach a website and whether its pages carry the signals machines read, scores the domain out of 100 across three weighted pillars, and returns the fixes. It measures readiness, not whether any AI assistant names a brand.
+
+## Scanner
+
+- [Scan a domain](https://answerable-app.vercel.app/): enter a domain and get the score, the failed checks and a copy-paste fix for each. Nothing is stored.
+- [Methodology](https://answerable-app.vercel.app/methodology): the three pillars, all 16 checks with their point values, what the scan does not measure, and the changelog.
+- [Compare two sites](https://answerable-app.vercel.app/compare): scan two domains one after the other and see where the score, checks and crawler access differ.
+
+## Playbooks
+
+- [B2B SaaS](https://answerable-app.vercel.app/for-saas): six category playbooks for CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools.
+- [Consumer and e-commerce brands](https://answerable-app.vercel.app/for-brands): four playbooks for e-commerce, consumer apps, hospitality and marketplaces.
+- [Local and independent professionals](https://answerable-app.vercel.app/for-professionals): four playbooks for real estate, legal, health and wellness, and local services.
+
+## Data and research
+
+- [Benchmarks](https://answerable-app.vercel.app/benchmarks): scan results for six categories of well-known sites, with the sample size and scan date on every page.
+- [Research](https://answerable-app.vercel.app/research): reports on what we find when we scan real sites.
+- [Citation tracking](https://answerable-app.vercel.app/citation-tracking): early access. We ask one model the buying questions in a category, repeat each question, and record whether it names a brand.
+
+## Tools
+
+- [Tools](https://answerable-app.vercel.app/tools): a robots.txt generator, an llms.txt checker and a schema generator, free, no signup.
+- [MCP server](https://answerable-app.vercel.app/mcp): ten free, read-only tools for Claude, Cursor or any MCP client. Endpoint: https://answerable-app.vercel.app/api/mcp
+- [Agentic commerce](https://answerable-app.vercel.app/agentic-commerce): whether AI shopping agents can find a product and read its price.
+
+## About
+
+- [About](https://answerable-app.vercel.app/about): who built Answerable and why.
+- [Pro](https://answerable-app.vercel.app/pro): interpretation of a score for a specific category, competitor comparison and what to fix first.
