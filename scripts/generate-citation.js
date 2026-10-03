@@ -182,7 +182,7 @@ function build(sample) {
     '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
     '  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(ogDesc) + '" />\n' +
     '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
-    '  ' + shell.favicon + '\n\n  ' + shell.fonts.replace(/\n/g, '\n  ') + '\n\n' +
+    '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n' +
     '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
