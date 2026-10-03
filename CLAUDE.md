@@ -58,7 +58,7 @@ Constraints that must not be broken:
     Cloud. Ungrounded runs stay on the free tier.
   - **Vercel** moves from Hobby to a paid plan when payment goes live.
     That is planned, not a violation. Until then, keep within Hobby limits
-    (12 functions, current count 7 non-underscore).
+    (12 functions, current count 8 non-underscore).
 - **No secrets in the repo.** Environment variables only.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
