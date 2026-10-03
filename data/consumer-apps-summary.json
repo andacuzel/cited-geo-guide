@@ -69,8 +69,6 @@
     }
   },
   "checkFailureRates": {
-    "AI crawler access (0/10 open)": 100,
-    "AI crawler access (9/10 open)": 100,
     "Content schema (Article, FAQ…)": 80,
     "llms.txt present": 73,
     "Organization / WebSite schema": 68,
@@ -85,7 +83,6 @@
     "Sitemap declared": 13,
     "html lang attribute": 10,
     "Subheading structure (H2)": 10,
-    "robots.txt present": 8,
-    "AI crawler access (10/10 open)": 0
+    "robots.txt present": 8
   }
 }

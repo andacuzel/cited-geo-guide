@@ -69,8 +69,7 @@
     }
   },
   "checkFailureRates": {
-    "AI crawler access": 97,
-    "Content schema (Article, FAQ\u2026)": 91,
+    "Content schema (Article, FAQ…)": 91,
     "Single H1 heading": 52,
     "Meta description": 27,
     "Author / about signals": 27,
