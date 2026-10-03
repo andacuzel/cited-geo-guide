@@ -56,7 +56,7 @@ const PILLARS = [
   { key: 'averageTrust', name: 'Content & trust', max: 40 }
 ];
 const TOP_CHECKS = 8;
-const SKIP_FOOTER = ['research/llms-txt-adoption-2026.html', 'research/case-study-agaone.html'];
+const SKIP_FOOTER = [];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
