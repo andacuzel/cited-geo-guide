@@ -535,7 +535,7 @@ Bytespider (ByteDance)
           <div class="results-content__body">
             <h3 id="get_citation_prompts">get_citation_prompts</h3>
             <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>vertical</code> (a vertical slug, e.g. <code>crm</code>)</p>
-            <p>Returns the buying-intent questions Answerable uses to test whether an assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions contain no brand names. Read from this project&rsquo;s own question files. A vertical with no questions yet returns a message that names the verticals that have them.</p>
+            <p>Returns the buying-intent questions Answerable uses to test whether an assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions don&rsquo;t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask. Read from this project&rsquo;s own question files. A vertical with no questions yet returns a message that names the verticals that have them.</p>
           </div>
           <div class="fix-snippet">
             <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
@@ -549,7 +549,8 @@ Bytespider (ByteDance)
           <div class="fix-snippet">
             <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
             <pre class="fix-snippet__code">Citation question set: crm (18 questions, set version 1)
-Buying-intent category queries for CRM software. No brand names: the brand under test either appears in the answer or it does not.
+Buying-intent category queries for CRM software.
+The questions don’t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.
 
 1. What's the best CRM for a 40-person outbound sales team?
 2. Which CRM should a 10-person startup use that won't need a consultant to set up?
@@ -569,7 +570,7 @@ Keep the limits in view: the result describes one assistant on one date. It is n
           <div class="results-content__body">
             <h3 id="get_citation_sample">get_citation_sample</h3>
             <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
-            <p>Returns the anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand, domain or competitor.</p>
+            <p>Returns the anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand in the category being measured, no domain and no competitor.</p>
           </div>
           <div class="fix-snippet">
             <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
@@ -607,7 +608,7 @@ Never named (7):
 
 Featured means named in a heading, list label, table or bold text. Named only means named in running prose, which can include a mention that is not a recommendation.
 
-Limits: this is one model on one date. It is not a ranking, it says nothing about other assistants, and it is not a forecast of traffic. Answers move with phrasing and over time. The sample is anonymised: it names no brand, domain or competitor.</pre>
+Limits: this is one model on one date. It is not a ranking, it says nothing about other assistants, and it is not a forecast of traffic. Answers move with phrasing and over time. The sample is anonymised: it names no brand in the category being measured, no domain and no competitor.</pre>
           </div>
 
           <div class="callout">
