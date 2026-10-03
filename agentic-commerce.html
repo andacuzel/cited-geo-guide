@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=40" />
+  <link rel="stylesheet" href="styles.css?v=44" />
 
   <script type="application/ld+json">
   {
@@ -40,26 +40,18 @@
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What is UCP?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "UCP, the Universal Commerce Protocol, is a discovery standard that lets AI shopping agents find a store's catalog, pricing and availability in a structured format. An agent looks for it at a fixed location, /.well-known/ucp, on a store's domain. If the endpoint exists and is well-formed, an agent can act on it directly instead of relying on a general-purpose crawl of the storefront."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Does Shopify write my llms.txt?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, automatically, for every store it hosts. In the Shopify-generated files Answerable examined for its own research, none mentioned what the brand sells, who it's for, or what sets it apart — the file describes Shopify's own commerce-protocol instructions, not the brand behind the store. Having the file is not the same as having said anything in it."
-        }
-      },
-      {
-        "@type": "Question",
         "name": "What is agentic commerce?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Agentic commerce is a shopping agent finding, evaluating and completing a purchase on a person's behalf, inside a chat interface rather than a browser. It depends on machine-readable product data and a checkout path a program can complete, not just a webpage a person can read."
+          "text": "Agentic commerce is a shopping agent finding, evaluating and completing a purchase on a person’s behalf, inside a chat interface rather than a browser. It depends on machine-readable product data and a checkout path a program can complete, not just a webpage a person can read."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is UCP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "UCP, the Universal Commerce Protocol, is a discovery standard that lets AI shopping agents find a store’s catalog, pricing and availability in a structured format. An agent looks for it at a fixed location, /.well-known/ucp, on a store’s domain. If the endpoint exists and is well-formed, an agent can act on it directly instead of relying on a general-purpose crawl of the storefront."
         }
       },
       {
@@ -68,6 +60,22 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Start with the same foundation that makes any site readable to AI systems: confirm AI crawlers are not blocked in robots.txt, and that price, availability and product identifiers are marked up in structured data, not just rendered visually. Beyond that, a UCP endpoint at /.well-known/ucp gives an agent a direct, structured way to find your catalog instead of inferring it from a general crawl."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Shopify write my llms.txt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Shopify serves a default llms.txt for the stores it hosts. In the two we read by hand, the file described the platform’s own commerce instructions and said nothing about the brand. Having the file is not the same as having said anything in it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do the commerce checks change my score out of 100?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The commerce checks are scored separately, out of 8, and are never added to the main 100. They run only when a scan treats your site as a store."
         }
       }
     ]
@@ -107,14 +115,38 @@
 
   <main id="main">
 
-    <!-- ---------- Page banner ---------- -->
+    <!-- ---------- Banner ---------- -->
     <section aria-labelledby="hero-heading">
       <div class="section__inner">
-        <div class="page-banner">
-          <div class="page-banner__body">
+        <div class="page-banner ac-banner">
+          <div class="page-banner__body ac-banner__body">
             <p class="kicker kicker--on-navy">Agentic commerce</p>
-            <h1 id="hero-heading" class="page-banner__title">Can an AI agent find your product, read the price, and buy it?</h1>
-            <p class="page-banner__desc">Shopping agents are starting to complete purchases without a person clicking through. Scan your store the way an agent would.</p>
+            <h1 id="hero-heading" class="page-banner__title">Can an AI agent find your product, read the price and buy it?</h1>
+            <p class="page-banner__desc">Shopping agents read what your store publishes. Scan it the way an agent would.</p>
+            <a href="#scan" class="btn btn--gold">Scan your store</a>
+          </div>
+          <div class="ac-banner__tiles">
+            <div class="ac-tiles" role="img" aria-label="Illustration: three product tiles, each with a name, a price and an availability label. Two carry a UCP badge, one does not.">
+              <div class="ac-tile" aria-hidden="true">
+                <div class="ac-tile__art"><!--icon:bag--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg><!--/icon--><span class="ac-tile__ucp">UCP</span></div>
+                <p class="ac-tile__name">Canvas tote</p>
+                <p class="ac-tile__price">$42</p>
+                <span class="ac-chip">In stock</span>
+              </div>
+              <div class="ac-tile" aria-hidden="true">
+                <div class="ac-tile__art"><!--icon:box--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7.5L12 4l8 3.5v9L12 20l-8-3.5v-9z"/><path d="M4 7.5L12 11l8-3.5M12 11v9"/></svg><!--/icon--><span class="ac-tile__ucp">UCP</span></div>
+                <p class="ac-tile__name">Ceramic mug set</p>
+                <p class="ac-tile__price">$38</p>
+                <span class="ac-chip">In stock</span>
+              </div>
+              <div class="ac-tile" aria-hidden="true">
+                <div class="ac-tile__art"><!--icon:bag--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg><!--/icon--></div>
+                <p class="ac-tile__name">Wool throw</p>
+                <p class="ac-tile__price">$120</p>
+                <span class="ac-chip ac-chip--warn">Pre-order</span>
+              </div>
+            </div>
+            <p class="ac-banner__caption">Illustration. Not real data.</p>
           </div>
         </div>
       </div>
@@ -124,6 +156,11 @@
     <section class="hero hero--tight" id="scan" aria-label="Scan your store">
       <div class="section__inner">
         <div>
+          <div class="ac-scan-head">
+            <p class="kicker">Scan your store</p>
+            <h2 class="section-title">See what an agent would see.</h2>
+            <p class="section-sub">Enter your store&rsquo;s domain. The scan reads robots.txt, llms.txt, your homepage and, for a store, one product page.</p>
+          </div>
           <form class="hero__form" id="scanForm">
             <input type="text" class="field" id="scanInput" placeholder="yourstore.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
             <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
@@ -204,95 +241,220 @@
       </div>
     </section>
 
-    <!-- ---------- What agentic commerce means ---------- -->
-    <section class="verticals" aria-labelledby="what-heading">
+    <!-- ---------- How an agent shops ---------- -->
+    <section class="ac-section" aria-labelledby="flow-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="what-heading" class="doc-section__heading">What agentic commerce means</h2>
-          <p>A shopping agent is software that finds, evaluates and buys a product on a person's behalf, inside a chat interface rather than a browser tab.</p>
-          <p>Instead of returning a list of links, it reads product data directly, picks a match, and can complete the purchase without the person ever visiting your site.</p>
-          <p>Agent-driven checkout depends on a discovery step called the Universal Commerce Protocol, or UCP. An agent looks for a UCP endpoint at a fixed location — <code>/.well-known/ucp</code> — not something it has to guess or infer from your homepage.</p>
-          <p>If that endpoint exists, it declares which protocol versions, services and capabilities your store supports, such as checkout, cart and catalog search, and where an agent reaches them. An agent can act on that directly.</p>
-          <p>If it does not, the agent has nothing to act on, regardless of how the site looks to a person.</p>
+        <div class="section-head">
+          <p class="kicker">How an agent shops</p>
+          <h2 id="flow-heading" class="section-title">Four things an agent has to do.</h2>
+          <p class="section-sub">Each one depends on something your store publishes. Here is what, and which Answerable check covers it today.</p>
         </div>
+        <ol class="ac-flow">
+          <li class="ac-step">
+            <span class="ac-step__icon"><!--icon:search--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg><!--/icon--></span>
+            <h3 class="ac-step__verb">Find</h3>
+            <p class="ac-step__needs">The agent has to reach your catalog. It reads robots.txt and your sitemap, and looks for a UCP profile. UCP, the Universal Commerce Protocol, is a file at <code>/.well-known/ucp</code> that lists the services your store offers and where an agent reaches them.</p>
+            <p class="ac-step__check">Checks: AI crawler access, Sitemap declared, UCP endpoint (stores only). <a href="/methodology#commerce-heading">How they work</a></p>
+          </li>
+          <li class="ac-step">
+            <span class="ac-step__icon"><!--icon:pricetag--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 12.2V4.5a1 1 0 011-1h7.7a1 1 0 01.7.3l7.3 7.3a1 1 0 010 1.4l-7.4 7.4a1 1 0 01-1.4 0l-7.3-7.3a1 1 0 01-.3-.7z"/><circle cx="8.5" cy="8.5" r="1.4"/></svg><!--/icon--></span>
+            <h3 class="ac-step__verb">Read</h3>
+            <p class="ac-step__needs">It needs your product&rsquo;s name, price, availability and an image as structured data, not only drawn on the page.</p>
+            <p class="ac-step__check">Check: Structured product data, read from one product page (stores only). <a href="/methodology#commerce-heading">How it works</a></p>
+          </li>
+          <li class="ac-step">
+            <span class="ac-step__icon"><!--icon:balance--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4v16M7 20h10"/><path d="M5 7.5h14"/><path d="M5 7.5l-2 5a2.2 2.2 0 004 0l-2-5zM19 7.5l-2 5a2.2 2.2 0 004 0l-2-5z"/></svg><!--/icon--></span>
+            <h3 class="ac-step__verb">Compare</h3>
+            <p class="ac-step__needs">To weigh your product against others it needs the same fields in a consistent form, and a plain statement of what your brand is and sells.</p>
+            <p class="ac-step__check">Checks: Structured data (JSON-LD), llms.txt present. The commerce panel also reports whether the llms.txt is your own or a platform default. <a href="/methodology">Methodology</a></p>
+          </li>
+          <li class="ac-step">
+            <span class="ac-step__icon"><!--icon:cart--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 4.5h2.4l2 10.5h10.2l2-7.5H6.6"/><circle cx="9.5" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg><!--/icon--></span>
+            <h3 class="ac-step__verb">Buy</h3>
+            <p class="ac-step__needs">It needs a path it can follow to complete the purchase, such as the cart and checkout capabilities a UCP profile declares.</p>
+            <p class="ac-step__check">Check: the UCP endpoint confirms a profile exists and declares services. A check that follows a checkout path is in preparation. <a href="/methodology#commerce-heading">Methodology</a></p>
+          </li>
+        </ol>
       </div>
     </section>
 
-    <!-- ---------- What we check and why ---------- -->
-    <section class="verticals" aria-labelledby="checks-heading">
+    <!-- ---------- Two stores ---------- -->
+    <section class="ac-section" aria-labelledby="versus-heading">
       <div class="section__inner">
         <div class="section-head">
-          <p class="kicker">What determines agent-readiness</p>
-          <h2 id="checks-heading" class="section-title">Four checks, and why each matters.</h2>
-          <p class="section-sub">Three run today. Two of them, structured product data and the UCP endpoint, run only when a scan treats your site as a store, and they are scored apart from the 100. The checkout path is in preparation.</p>
+          <p class="kicker">The difference</p>
+          <h2 id="versus-heading" class="section-title">Two stores. What can an agent read?</h2>
+          <p class="section-sub">Same product, same price on the page. Only one of them publishes it in a form an agent can use.</p>
+        </div>
+        <div class="ac-versus" role="group" aria-label="Illustration: what an agent can read from two stores">
+          <div class="ac-store">
+            <div class="ac-store__head"><h3 class="ac-store__name">Store A</h3><span class="ac-store__verdict">An agent can act</span></div>
+            <dl class="ac-store__rows">
+            <div class="ac-store__row">
+              <dt>Name</dt>
+              <dd>Canvas tote</dd>
+              <span class="ac-chip">Readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>Price</dt>
+              <dd>$42.00</dd>
+              <span class="ac-chip">Readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>Availability</dt>
+              <dd>In stock</dd>
+              <span class="ac-chip">Readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>Returns terms</dt>
+              <dd>30 days, free returns</dd>
+              <span class="ac-chip">Readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>UCP</dt>
+              <dd>Profile found</dd>
+              <span class="ac-chip">Present</span>
+            </div>
+            </dl>
+          </div>
+          <div class="ac-store">
+            <div class="ac-store__head"><h3 class="ac-store__name">Store B</h3><span class="ac-store__verdict">An agent has to guess</span></div>
+            <dl class="ac-store__rows">
+            <div class="ac-store__row">
+              <dt>Name</dt>
+              <dd>Canvas tote</dd>
+              <span class="ac-chip">Readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>Price</dt>
+              <dd><span class="ac-store__price-img" aria-hidden="true"></span> in an image</dd>
+              <span class="ac-chip ac-chip--risk">Not readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>Availability</dt>
+              <dd class="is-missing">Unknown</dd>
+              <span class="ac-chip ac-chip--risk">Not readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>Returns terms</dt>
+              <dd class="is-missing">Not found</dd>
+              <span class="ac-chip ac-chip--risk">Not readable</span>
+            </div>
+            <div class="ac-store__row">
+              <dt>UCP</dt>
+              <dd class="is-missing">No profile</dd>
+              <span class="ac-chip ac-chip--risk">Absent</span>
+            </div>
+            </dl>
+          </div>
+        </div>
+        <p class="ac-caption">Illustration. Not real data.</p>
+      </div>
+    </section>
+
+    <!-- ---------- What we check ---------- -->
+    <section class="ac-section" aria-labelledby="checks-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">What we check</p>
+          <h2 id="checks-heading" class="section-title">Four things, and what a failure means.</h2>
         </div>
         <div class="capability-grid">
           <div class="capability-card">
             <div class="capability-card__top">
-              <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18.5" r="1.5"/><path d="M8.5 15a5 5 0 017 0M5.3 11.8a9.5 9.5 0 0113.4 0"/></svg></span>
-              <span class="capability-card__weight">In every scan</span>
+              <span class="capability-card__icon"><!--icon:plug--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 3.5v4M15 3.5v4"/><path d="M6.5 7.5h11v3.2a5.5 5.5 0 01-11 0V7.5z"/><path d="M12 16.2V20.5"/></svg><!--/icon--></span>
+              <span class="capability-card__weight">4 of 8 commerce points</span>
             </div>
-            <p class="capability-card__kicker">Discoverability</p>
-            <h3 class="capability-card__q">AI crawler access</h3>
-            <p class="capability-card__desc">If GPTBot, ClaudeBot or Perplexity's crawlers are blocked in robots.txt, an agent cannot read your catalog at all, regardless of what it contains. Part of the 16-check score.</p>
-          </div>
-          <div class="capability-card">
-            <div class="capability-card__top">
-              <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 10h17M9.5 4.5v15"/></svg></span>
-              <span class="capability-card__weight">Stores only</span>
-            </div>
-            <p class="capability-card__kicker">Technical foundation</p>
-            <h3 class="capability-card__q">Structured product data</h3>
-            <p class="capability-card__desc">The scan opens one product page, the first <code>/products/</code> or <code>/product/</code> URL in your sitemap, or a product link on your homepage if there is none. It looks for Product schema with a name, a price, an availability and an image, and shows you the URL so you can check it. <strong>A failure means</strong> the page is readable to a person but not to an agent: it can see a product exists and cannot read what it costs or whether it is in stock. If no product page can be found, or robots.txt disallows it, the check is reported as not assessed, not as a failure.</p>
-          </div>
-          <div class="capability-card">
-            <div class="capability-card__top">
-              <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M8 12.5L5.5 15a2.5 2.5 0 003.5 3.5L11.5 16M16 11.5L18.5 9a2.5 2.5 0 00-3.5-3.5L12.5 8"/></svg></span>
-              <span class="capability-card__weight">Stores only</span>
-            </div>
-            <p class="capability-card__kicker">Discovery</p>
+            <p class="capability-card__kicker">Stores only</p>
             <h3 class="capability-card__q">UCP endpoint</h3>
-            <p class="capability-card__desc">A shopping agent looks for <code>/.well-known/ucp</code> before it looks at your homepage. The scan fetches it and passes it if it returns a valid merchant profile, then reports the versions and capabilities it declares. <strong>A failure means</strong> there is no structured entry point: an agent has nothing to act on and falls back to reading the storefront. When we checked on 2 October 2026, 24 of the 27 Shopify stores in our benchmark lists published one.</p>
+            <p class="capability-card__desc">The scan fetches <code>/.well-known/ucp</code> and passes it if it returns a valid merchant profile. A failure means an agent finds no profile, so it has no declared services to act on.</p>
           </div>
           <div class="capability-card">
             <div class="capability-card__top">
-              <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.3 2.3 4.7-5.1"/></svg></span>
-              <span class="capability-card__weight">In preparation</span>
+              <span class="capability-card__icon"><!--icon:box--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7.5L12 4l8 3.5v9L12 20l-8-3.5v-9z"/><path d="M4 7.5L12 11l8-3.5M12 11v9"/></svg><!--/icon--></span>
+              <span class="capability-card__weight">4 of 8 commerce points</span>
             </div>
-            <p class="capability-card__kicker">Checkout</p>
-            <h3 class="capability-card__q">A completable checkout path</h3>
-            <p class="capability-card__desc">An agent that can find your product but not buy it stops short of the sale. This is what agentic commerce ultimately depends on.</p>
+            <p class="capability-card__kicker">Stores only</p>
+            <h3 class="capability-card__q">Product data</h3>
+            <p class="capability-card__desc">One product page is read for name, price, availability and an image in structured data, one point each. A failure means an agent has to guess the field from the page, or skip the product.</p>
+          </div>
+          <div class="capability-card">
+            <div class="capability-card__top">
+              <span class="capability-card__icon"><!--icon:document--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg><!--/icon--></span>
+              <span class="capability-card__weight">In the main score</span>
+            </div>
+            <p class="capability-card__kicker">Every scan</p>
+            <h3 class="capability-card__q">Trust pages</h3>
+            <p class="capability-card__desc">Contact signals and Author / about signals are checked today. A failure means nothing on the page tells an agent who runs the store. Shipping and returns pages are not checked yet.</p>
+          </div>
+          <div class="capability-card">
+            <div class="capability-card__top">
+              <span class="capability-card__icon"><!--icon:sparse--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 12.5h5"/></svg><!--/icon--></span>
+              <span class="capability-card__weight">Reported, not scored</span>
+            </div>
+            <p class="capability-card__kicker">Stores only</p>
+            <h3 class="capability-card__q">llms.txt authorship</h3>
+            <p class="capability-card__desc">The scan reads your llms.txt and reports whether it reads like your brand&rsquo;s own file or a platform default. A platform default tells an agent nothing about your brand.</p>
           </div>
         </div>
+        <p class="ac-note">The commerce checks are scored separately, out of 8, and are never added to the main 100. How a scan decides it is looking at a store, and where that detection misses, is on the <a href="/methodology#commerce-heading">methodology page</a>.</p>
+      </div>
+    </section>
 
-        <div class="doc-section" style="margin-top: 56px;">
-          <h2 class="doc-section__heading">How a scan decides it is looking at a store</h2>
-          <p>A scan checks five signals: Product or Offer schema on the homepage, store platform markers in the page or its headers, product or collection URLs in the sitemap, a valid UCP merchant profile, and a cart or checkout link on the homepage. Two or more means the scan treats the site as a store and runs the commerce checks. Fewer means it does not, and the report says nothing more about commerce.</p>
-          <p>The commerce sub-score is out of 8: 4 points for the UCP endpoint, and 1 point each for the name, price, availability and image on the product page. A check that could not run is left out of the total. The sub-score is never added to the 100-point score, so a store and a non-store stay comparable.</p>
-          <p>The product page is the only page beyond your homepage that a scan reads. It is one request, made last and after a pause, with a user agent that names Answerable, and only if your robots.txt allows that path.</p>
-          <p>Detection is a pattern match, and it misses some stores. A store with no platform markers, no product URLs in its sitemap and no cart link on the homepage will not be detected. <a href="/methodology">The methodology page</a> lists every rule.</p>
+    <!-- ---------- Research finding ---------- -->
+    <!-- 76 = 100 minus the "llms.txt present" failure rate (24) in data/dtc-brands-summary.json; 33 homepages reached. "Two we read by hand" is from research/llms-txt-adoption-2026. -->
+    <section class="ac-section" aria-label="Research finding">
+      <div class="section__inner">
+        <div class="ac-figure">
+          <div class="ac-figure__num">76<small>%</small></div>
+          <div>
+            <p class="ac-figure__text">of the DTC brand homepages we scanned had an llms.txt.</p>
+            <p class="ac-figure__text">In the two we read by hand, the file was the platform&rsquo;s default and said nothing about the brand.</p>
+            <a href="/research/llms-txt-adoption-2026" class="ac-figure__link">Read the research report</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- The llms.txt finding ---------- -->
-    <section aria-label="Research finding">
+    <!-- ---------- FAQ ---------- -->
+    <section class="ac-section" aria-labelledby="faq-heading">
       <div class="section__inner">
-        <div class="stat-figure">
-          <div class="stat-figure__num">76<small>%</small></div>
-          <p class="stat-figure__label">of DTC brands have an llms.txt file they didn't write — Shopify generates it automatically, and it says nothing about the brand.</p>
-          <a href="/research/llms-txt-adoption-2026" class="stat-figure__link">Read the full report →</a>
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="faq-heading" class="section-title">Agentic commerce, briefly.</h2>
+        </div>
+        <div class="ac-faq">
+          <details>
+            <summary>What is agentic commerce?</summary>
+            <p>Agentic commerce is a shopping agent finding, evaluating and completing a purchase on a person’s behalf, inside a chat interface rather than a browser. It depends on machine-readable product data and a checkout path a program can complete, not just a webpage a person can read.</p>
+          </details>
+          <details>
+            <summary>What is UCP?</summary>
+            <p>UCP, the Universal Commerce Protocol, is a discovery standard that lets AI shopping agents find a store’s catalog, pricing and availability in a structured format. An agent looks for it at a fixed location, /.well-known/ucp, on a store’s domain. If the endpoint exists and is well-formed, an agent can act on it directly instead of relying on a general-purpose crawl of the storefront.</p>
+          </details>
+          <details>
+            <summary>How do I make my store readable to AI shopping agents?</summary>
+            <p>Start with the same foundation that makes any site readable to AI systems: confirm AI crawlers are not blocked in robots.txt, and that price, availability and product identifiers are marked up in structured data, not just rendered visually. Beyond that, a UCP endpoint at /.well-known/ucp gives an agent a direct, structured way to find your catalog instead of inferring it from a general crawl.</p>
+          </details>
+          <details>
+            <summary>Does Shopify write my llms.txt?</summary>
+            <p>Shopify serves a default llms.txt for the stores it hosts. In the two we read by hand, the file described the platform’s own commerce instructions and said nothing about the brand. Having the file is not the same as having said anything in it.</p>
+          </details>
+          <details>
+            <summary>Do the commerce checks change my score out of 100?</summary>
+            <p>No. The commerce checks are scored separately, out of 8, and are never added to the main 100. They run only when a scan treats your site as a store.</p>
+          </details>
         </div>
       </div>
     </section>
 
-    <!-- ---------- Scan reminder ---------- -->
-    <section aria-label="Scan reminder">
+    <!-- ---------- Closing band ---------- -->
+    <section class="pro-band" aria-labelledby="close-heading">
       <div class="section__inner">
-        <div class="scan-bridge">
-          <p class="scan-bridge__text">Ready to see where your store stands?</p>
-          <a href="#scan" class="btn btn--primary">Scan your store free</a>
-        </div>
+        <p class="kicker kicker--on-navy">Your store</p>
+        <h2 id="close-heading">See what an agent would see.</h2>
+        <p class="pro-band__lede">Free, no email, nothing stored. You get the score, the checks that failed and the fix for each.</p>
+        <div class="pro-band__cta"><a href="#scan" class="btn btn--gold">Scan your store free</a></div>
       </div>
     </section>
 

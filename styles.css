@@ -2724,3 +2724,93 @@ code {
 .pb-group__title a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: color 150ms ease, border-color 150ms ease; }
 .pb-group__title a:hover { color: var(--gold-deep); border-color: var(--gold-deep); }
 .pb-group__sub { margin-top: 6px; font-size: 14.5px; color: var(--ink-soft); }
+
+/* ----------------------------- Agentic commerce page (ac-) ----------------------------- */
+.ac-banner { flex-wrap: wrap; gap: 32px 48px; align-items: center; }
+.ac-banner__body { flex: 1 1 340px; max-width: 520px; }
+.ac-banner__tiles { flex: 1 1 380px; max-width: 540px; }
+.ac-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ac-tile { background: var(--navy-900); border: 1px solid var(--line-on-navy); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ac-tile__art { position: relative; aspect-ratio: 1 / 0.82; border: 1px solid var(--line-on-navy); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--gold-soft); }
+.ac-tile__art svg { width: 38%; height: auto; }
+.ac-tile__ucp { position: absolute; top: 6px; right: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--navy-950); background: var(--gold-soft); border-radius: var(--radius-sm); padding: 2px 6px; }
+.ac-tile__name { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.25; }
+.ac-tile__price { font-family: var(--font-mono); font-size: 13px; color: var(--white); }
+.ac-chip { align-self: flex-start; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em; border-radius: var(--radius-sm); padding: 2px 7px; background: var(--ok-tint); color: var(--ok); }
+.ac-chip--warn { background: var(--warn-tint); color: var(--gold-deep); }
+.ac-chip--risk { background: var(--risk-tint); color: var(--risk); }
+.ac-banner__caption { margin-top: 10px; font-family: var(--font-mono); font-size: 11.5px; color: rgba(255, 255, 255, 0.6); }
+.ac-scan-head { padding-bottom: 8px; }
+.ac-scan-head .section-title { font-size: clamp(24px, 2.6vw, 32px); }
+
+.ac-section { padding: 0 0 80px; }
+.ac-flow { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.ac-step { position: relative; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 20px 20px; display: flex; flex-direction: column; }
+.ac-step:not(:last-child)::after { content: "\2192"; position: absolute; right: -22px; top: 30px; width: 16px; text-align: center; font-family: var(--font-mono); font-size: 16px; color: var(--ink-faint); }
+.ac-step__icon { width: 30px; height: 30px; color: var(--navy-800); margin-bottom: 14px; }
+.ac-step__icon svg { width: 100%; height: 100%; }
+.ac-step__verb { font-family: var(--font-display); font-weight: 400; font-size: 22px; color: var(--navy-950); }
+.ac-step__needs { margin-top: 8px; font-size: 14px; line-height: 1.55; color: var(--ink-soft); flex-grow: 1; }
+.ac-step__check { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; color: var(--ink-faint); }
+.ac-step__check a { color: var(--navy-800); text-decoration: underline; text-underline-offset: 3px; transition: color 150ms ease; }
+.ac-step__check a:hover { color: var(--gold-deep); }
+.ac-note { margin-top: 24px; max-width: 760px; font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+.ac-note a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+.ac-versus { margin-top: 32px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.ac-store { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 22px 18px; }
+.ac-store__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.ac-store__name { font-family: var(--font-display); font-weight: 400; font-size: 22px; color: var(--navy-950); }
+.ac-store__verdict { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); text-align: right; }
+.ac-store__rows { margin: 0; padding: 0; }
+.ac-store__row { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.ac-store__row dt { color: var(--ink-faint); font-family: var(--font-mono); font-size: 12px; }
+.ac-store__row dd { margin: 0; color: var(--ink); min-width: 0; }
+.ac-store__row dd.is-missing { color: var(--ink-faint); font-style: italic; }
+.ac-store__price-img { display: inline-block; width: 64px; height: 18px; background: var(--bg); border: 1px dashed var(--line); border-radius: 4px; vertical-align: middle; }
+.ac-caption { margin-top: 14px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); }
+
+.ac-figure { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 36px 32px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px 40px; align-items: center; }
+.ac-figure__num { font-family: var(--font-display); font-size: clamp(72px, 10vw, 128px); line-height: 1; color: var(--gold-deep); }
+.ac-figure__num small { font-size: 0.42em; }
+.ac-figure__text { font-size: clamp(17px, 1.7vw, 20px); line-height: 1.5; color: var(--navy-950); max-width: 560px; }
+.ac-figure__text + .ac-figure__text { margin-top: 12px; font-size: 16px; color: var(--ink-soft); }
+.ac-figure__link { display: inline-block; margin-top: 14px; font-family: var(--font-mono); font-size: 12.5px; color: var(--navy-800); text-decoration: underline; text-underline-offset: 3px; transition: color 150ms ease; }
+.ac-figure__link:hover { color: var(--gold-deep); }
+
+.ac-faq, .ct-faq { margin-top: 28px; max-width: 760px; }
+.ac-faq details, .ct-faq details { border-top: 1px solid var(--line); }
+.ac-faq details:last-child, .ct-faq details:last-child { border-bottom: 1px solid var(--line); }
+.ac-faq summary, .ct-faq summary { cursor: pointer; list-style: none; padding: 18px 28px 18px 0; position: relative; font-family: var(--font-display); font-size: 19px; line-height: 1.3; color: var(--navy-950); }
+.ac-faq summary::-webkit-details-marker, .ct-faq summary::-webkit-details-marker { display: none; }
+.ac-faq summary::after, .ct-faq summary::after { content: "+"; position: absolute; right: 4px; top: 16px; font-family: var(--font-mono); font-size: 18px; color: var(--ink-faint); }
+.ac-faq details[open] summary::after, .ct-faq details[open] summary::after { content: "\2212"; }
+.ac-faq details p, .ct-faq details p { padding: 0 0 18px; font-size: 15.5px; line-height: 1.6; color: var(--ink-soft); max-width: 680px; }
+.ac-faq summary:focus-visible, .ct-faq summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+@media (max-width: 920px) {
+  .ac-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ac-step:nth-child(2)::after { display: none; }
+  .ac-figure { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .ac-banner__body, .ac-banner__tiles { flex-basis: 100%; max-width: none; }
+  .ac-tiles { gap: 8px; }
+  .ac-tile { padding: 8px; }
+  .ac-tile__name { font-size: 12px; }
+  .ac-tile__price { font-size: 12px; }
+  .ac-chip { font-size: 10px; padding: 2px 5px; }
+  .ac-flow { grid-template-columns: 1fr; gap: 32px; }
+  .ac-step:not(:last-child)::after { content: "\2193"; right: auto; left: 50%; top: auto; bottom: -26px; margin-left: -8px; }
+  .ac-versus { grid-template-columns: 1fr; }
+  .ac-store__row { grid-template-columns: 96px minmax(0, 1fr); }
+  .ac-store__row .ac-chip { grid-column: 2; }
+  .ac-figure { padding: 26px 22px 24px; }
+  .ac-section { padding-bottom: 56px; }
+}
+.ac-tile .ac-chip { margin-top: auto; }
+@media (max-width: 640px) {
+  .ac-tile__art svg { width: 32%; margin-top: 12px; }
+  .ac-tile__ucp { top: 4px; right: 4px; font-size: 9px; padding: 1px 4px; }
+  .ac-tile__name { min-height: 2.5em; }
+}
