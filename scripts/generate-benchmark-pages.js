@@ -335,6 +335,7 @@ function footer(scripts) {
     '\n    <footer class="site-footer" aria-label="Footer">\n' +
     '      <div class="section__inner">\n' +
     '        <nav class="site-nav footer-links" aria-label="More">\n' +
+    '          <a href="/playbooks" class="site-nav__link">Playbooks</a>\n' +
     '          <a href="/methodology" class="site-nav__link">Methodology</a>\n' +
     '          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>\n' +
     '          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>\n' +
@@ -390,7 +391,7 @@ function categoryPage(c, overall) {
   const source = 'Source: Answerable scan, ' + dateLong(c.date) + ', ' + c.scanned + ' ' + c.note;
   const title = 'Answerable. — ' + c.label + ': AI Readiness Benchmark';
   const desc = c.label + ': ' + c.scanned + ' ' + c.note + ' scanned on ' + dateLong(c.date) + ', average AI readiness score ' + c.avg + '/100 (range ' + c.low + ' to ' + c.high +
-    '). Pillar scores, most-failed checks and AI crawler access, from homepages only.';
+    '). Pillars, most-failed checks and crawler access.';
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
@@ -484,7 +485,7 @@ function indexPage(all) {
   const first = all.cats.map((c) => c.date).sort()[0];
   const last = all.cats.map((c) => c.date).sort().slice(-1)[0];
   const title = 'Answerable. — AI Readiness Benchmarks by Category';
-  const desc = all.total + ' well-known sites across ' + all.cats.length + ' categories, scanned in ' + monthYear(last) + '. The average AI readiness score is ' + all.overall + '/100. Pick a category to see its pillars, most-failed checks and crawler access.';
+  const desc = all.total + ' well-known sites across ' + all.cats.length + ' categories, scanned in ' + monthYear(last) + '. Average AI readiness score ' + all.overall + '/100. See each category\'s pillars, failed checks and crawler access.';
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
