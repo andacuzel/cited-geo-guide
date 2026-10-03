@@ -419,7 +419,7 @@ var TOOLS = [
   {
     name: 'get_benchmark',
     title: 'Get category benchmark data',
-    description: 'Returns Answerable’s own archived scan data for one category — average, median and range of scores, pillar breakdowns, crawler-blocking rates and the most common failed checks, with sample size and scan date — or a ranked summary across every category when called with no argument. This is archived data, not a live scan, and fetches nothing external.',
+    description: 'Returns Answerable’s own archived scan data for one category — average, median and range of scores, pillar breakdowns, per-crawler blocked, limited and open counts, and the most common failed checks, with sample size and scan date — or a ranked summary across every category when called with no argument. This is archived data, not a live scan, and fetches nothing external.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -663,8 +663,18 @@ var HANDLERS = {
 
     if (summary.crawlers) {
       out.push('');
-      out.push('Crawler access: ' + summary.crawlers.blockingAtLeastOnePct + '% of sites block at least one AI crawler; ' +
-        summary.crawlers.notFullyOpenToAllPct + '% are not fully open to all ten.');
+      out.push('Crawler access: ' + summary.crawlers.blockingAtLeastOnePct + '% of sites block at least one AI crawler.');
+      var perBot = summary.crawlers.perBot;
+      if (perBot && Object.keys(perBot).length) {
+        var names = Object.keys(perBot);
+        var width = names.reduce(function (w, n) { return Math.max(w, n.length); }, 0);
+        out.push('By crawler, in number of sites (' + summary.scanned + ' scanned):');
+        names.forEach(function (n) {
+          var b = perBot[n];
+          out.push('  ' + n + new Array(width - n.length + 1).join(' ') + '  blocked ' + b.blocked + ', limited ' + b.limited + ', open ' + b.open);
+        });
+        out.push('Limited means a bot has at least one Disallow rule that applies to it, which is usually an ordinary path such as an admin area, not a block on the site.');
+      }
     }
 
     if (summary.checkFailureRates) {
