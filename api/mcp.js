@@ -668,7 +668,11 @@ var HANDLERS = {
     }
 
     if (summary.checkFailureRates) {
-      var rates = Object.keys(summary.checkFailureRates).map(function (k) { return { label: k, pct: summary.checkFailureRates[k] }; });
+      // Crawler access is reported above and per crawler elsewhere. Older summaries
+      // stored it here as "AI crawler access (N/10 open)" rows, which are not failure rates.
+      var rates = Object.keys(summary.checkFailureRates)
+        .filter(function (k) { return !/^AI crawler access/i.test(k); })
+        .map(function (k) { return { label: k, pct: summary.checkFailureRates[k] }; });
       rates.sort(function (x, y) { return y.pct - x.pct; });
       out.push('');
       out.push('Failure rate by check:');
