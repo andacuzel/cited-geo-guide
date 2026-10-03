@@ -446,7 +446,7 @@ function categoryPage(c, overall) {
     '          <h3>How the sites were chosen</h3>\n' +
     '          <p>The lists are hand-picked, well-known sites in the category. They are not a random sample, so these figures describe the sites we scanned, not the category as a whole.</p>\n\n' +
     '          <h3>Repeat scans</h3>\n' +
-    '          <p>Rescanning the same lists has moved category averages by about a point.</p>\n\n' +
+    '          <p>In one October 2026 rescan of the same lists, category averages moved by one point or less. Individual sites moved more: about a third changed by 3 to 15 points.</p>\n\n' +
     '          <h3>What this measures</h3>\n' +
     '          <p>Whether AI systems can reach a site, and whether its homepage carries the signals machines read. It does not measure whether any assistant names a brand in an answer. Model responses vary by prompt, session and training data, and no scan of public files can predict them.</p>\n\n' +
     '          <div class="report-limits">\n' +
