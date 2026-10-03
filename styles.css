@@ -2704,3 +2704,10 @@ code {
   .cmp-bar__track { grid-column: 1; }
   .cmp-table th, .cmp-table td { padding: 10px 10px; }
 }
+
+/* Benchmark figures: below 440px the 420-unit drawing would shrink its labels under
+   11px, so it keeps a minimum width and scrolls sideways inside its container. */
+.report-figure__visual--scroll { overflow-x: auto; }
+.report-figure__visual--scroll svg { min-width: 440px; }
+.report-figure__hint { display: none; margin: -8px 0 10px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); }
+@media (max-width: 560px) { .report-figure__hint { display: block; } }

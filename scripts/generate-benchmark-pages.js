@@ -44,7 +44,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
 const SITE = 'https://answerable-app.vercel.app';
-const CSS_VERSION = 41; // bump when styles.css changes
+const CSS_VERSION = 43; // bump when styles.css changes
 
 const TRACKS = {
   'B2B SaaS': { bar: 'chart-bar--b2b', fill: 'bm-fill--b2b', marker: 'var(--navy-800)', onBar: 'chart-seg-text--light' },
@@ -374,7 +374,8 @@ function figureSection(id, heading, lead, label, svg, caption, source) {
     '          <h2 id="' + id + '-heading" class="report-section__heading">' + esc(heading) + '</h2>\n' +
     '          <p>' + esc(lead) + '</p>\n' +
     '          <figure class="report-figure">\n            <p class="report-figure__label">' + esc(label) + '</p>\n' +
-    '            <div class="report-figure__visual">\n' + svg.replace(/^/gm, '              ') + '\n            </div>\n' +
+    '            <p class="report-figure__hint" aria-hidden="true">Scroll sideways to see the whole figure.</p>\n' +
+    '            <div class="report-figure__visual report-figure__visual--scroll" role="group" aria-label="' + esc(label) + ', scrolls sideways on narrow screens" tabindex="0">\n' + svg.replace(/^/gm, '              ') + '\n            </div>\n' +
     '            <figcaption class="report-figure__caption">' + esc(caption) + '</figcaption>\n' +
     '            <p class="report-figure__source">' + esc(source) + '</p>\n          </figure>\n        </div>\n      </div>\n    </section>\n'
   );
