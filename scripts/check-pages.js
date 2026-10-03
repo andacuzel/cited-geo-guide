@@ -60,8 +60,10 @@ function checkPage(name, cfg) {
   if (EMOJI.test(text)) bad('emoji found');
   const banned = text.match(BANNED);
   if (banned) bad('banned word: ' + banned[0]);
-  if (cfg.noWords) { const m = text.match(cfg.noWords); if (m) bad('forbidden word in visible copy: ' + m[0]); }
-  if (cfg.noTerms) { const m = text.match(cfg.noTerms); if (m) bad('forbidden term in visible copy: ' + m[0]); }
+  // The sample's questions are data, quoted as asked; the copy rules apply to everything else.
+  const copy = textOf(html.replace(/<span class="ct-row__q">[\s\S]*?<\/span>/g, ' '));
+  if (cfg.noWords) { const m = copy.match(cfg.noWords); if (m) bad('forbidden word in visible copy: ' + m[0]); }
+  if (cfg.noTerms) { const m = copy.match(cfg.noTerms); if (m) bad('forbidden term in visible copy: ' + m[0]); }
   text.split(/(?<=[.!?])\s+/).forEach(function () {});
   // one em dash per paragraph at most
   (html.match(/<p[\s>][\s\S]*?<\/p>/g) || []).forEach(function (p) {
@@ -74,7 +76,8 @@ function checkPage(name, cfg) {
     if (!ld) bad('no FAQPage JSON-LD');
     else {
       const jq = ld.mainEntity.map((q) => [q.name, q.acceptedAnswer.text]);
-      const hq = (html.match(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/g) || []).map(function (d) {
+      const faqBox = (html.match(/<div class="(?:ac|ct)-faq">([\s\S]*?)\n        <\/div>/) || ['', ''])[1];
+      const hq = (faqBox.match(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/g) || []).map(function (d) {
         const m = d.match(/<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>/);
         return [textOf(m[1]), textOf(m[2])];
       });
