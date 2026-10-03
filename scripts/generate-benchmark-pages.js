@@ -433,7 +433,7 @@ function categoryPage(c, overall) {
     'Ranked from most to least failed. A site fails a check by earning less than its full points, which includes partial credit. AI crawler access is shown by crawler in the next figure instead.' + tieNote(c), source);
   h += figureSection('crawlers', 'Which AI crawlers can get in',
     'Counts of sites, for each of ' + c.bots.length + ' AI crawlers, where it is open, limited or blocked.', 'Fig. 4', fig4(c),
-    'Open: no rule keeps the crawler out. Limited: some paths are disallowed, mostly an ordinary rule such as /wp-admin/, and the rest of the site is open to it. Limited is not a block. Blocked: the whole site is disallowed.', source);
+    'Open: no rule keeps the crawler out. Limited: at least one Disallow rule applies to the crawler, mostly an ordinary path such as /wp-admin/, and the rest of the site is open to it. Limited is not a block, although the scan gives it half credit. Blocked: the whole site is disallowed.', source);
 
   h += (
     '    <section aria-labelledby="methodology-heading">\n      <div class="section__inner">\n        <div class="report-methodology">\n' +
