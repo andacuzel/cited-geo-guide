@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>if (window.IntersectionObserver && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' cm-anim';</script>
+  <script>if (window.IntersectionObserver && window.CSS && CSS.registerProperty && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' scene-anim';</script>
 
   <title>Answerable. — Citation Tracking: Does a Model Name Your Brand?</title>
-  <meta name="description" content="Ask a model the questions your buyers ask, repeat each one, and record whether it names your brand. One model, one date, named on every result. Early access, delivered as a report we run for you." />
+  <meta name="description" content="We ask a model the questions your customers ask, five times each, and show you when your name comes up and when it does not. Early access, run for you." />
   <meta name="keywords" content="citation tracking, AI citations, brand mentions in AI answers, GEO, AI visibility, buying-intent queries" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
@@ -15,7 +15,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — Citation Tracking: Does a Model Name Your Brand?" />
-  <meta property="og:description" content="Ask a model the questions your buyers ask, repeat each one, and record whether it names your brand. Early access, delivered as a report we run for you." />
+  <meta property="og:description" content="We ask a model the questions your customers ask, five times each, and show you when your name comes up and when it does not." />
   <meta property="og:url" content="https://answerable-app.vercel.app/citation-tracking" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
@@ -23,18 +23,17 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — Citation Tracking: Does a Model Name Your Brand?" />
-  <meta name="twitter:description" content="Ask a model the questions your buyers ask, repeat each one, and record whether it names your brand." />
+  <meta name="twitter:description" content="We ask a model the questions your customers ask, five times each, and show you when your name comes up and when it does not." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=40" />
+  <link rel="stylesheet" href="styles.css?v=44" />
 
-  <!-- CITATION-LD:START -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,37 +44,60 @@
         "name": "What is citation tracking?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Citation tracking asks a language model the buying questions people ask in your category and records whether it names your brand. Each question is asked 5 times, because the same question gives different answers. We report how often you are named, and how often you are featured rather than mentioned in passing."
+          "text": "It is a report on whether an AI model names your brand when people ask the questions your buyers ask. We run a fixed set of questions for your category, ask each one five times, and show you when your name comes up and when it does not."
         }
       },
       {
         "@type": "Question",
-        "name": "Why five runs?",
+        "name": "Why ask every question five times?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The same question gives different answers. In the sample run, 5 of 18 questions named the brand in some runs and not in others, and the overall rate ranged from 39% to 56% between sweeps. One run would have reported one of those numbers as the answer. Five runs show the spread. They do not make the rate exact."
+          "text": "Because the same question can get different answers. In the sample, 5 of 18 questions named the brand in some tries and not in others. One try can mislead you. Five show the pattern."
         }
       },
       {
         "@type": "Question",
-        "name": "Which models do you run?",
+        "name": "What does named mean?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Each run uses one named model, and its name and the date are recorded on every result. The sample on this page used gemini-3.5-flash-lite on October 2, 2026. Today we run Gemini models only. A result from one model says nothing about any other assistant, and we do not present one model as AI visibility in general."
+          "text": "Your brand name appears in the answer. We also record whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement."
         }
       },
       {
         "@type": "Question",
-        "name": "How is this different from the free scan?",
+        "name": "Can I run it myself?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The free scan checks whether AI crawlers can reach your site and whether your pages carry the signals machines read. It measures readiness. A citation run asks a model buying questions and records whether it names you. It measures what one model said on one date. The scan is free and self-serve. A citation run is early access, delivered as a report we run for you."
+          "text": "A self-serve version is still to come. Today we run it for you. The question sets are also published on the Answerable MCP server, with a short protocol for running them yourself in any assistant."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which model does it use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The sample used gemini-3.5-flash-lite on October 2, 2026. Today we run Gemini models only. A result describes one model on one date and says nothing about any other assistant."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is it a ranking?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. It records whether a name appears, not where your brand sits against others. Answers shift with the wording of a question and over time, so a result is a picture of one day."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I get early access?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Email us your brand, domain, category and three competitors. We reply by email."
         }
       }
     ]
   }
   </script>
-  <!-- CITATION-LD:END -->
 </head>
 <body>
 
@@ -110,236 +132,264 @@
 
   <main id="main">
 
-    <!-- ---------- Page banner ---------- -->
     <section aria-labelledby="hero-heading">
       <div class="section__inner">
         <div class="page-banner">
           <div class="page-banner__body">
-            <p class="kicker kicker--on-navy">Early access · Citation tracking</p>
-            <h1 id="hero-heading" class="page-banner__title">Ask a model what your buyers ask. Then count how often it names you.</h1>
-            <p class="page-banner__desc">A citation run records whether one model names your brand across the buying questions in your category. Early access, delivered as a report we run for you.</p>
-            <p class="page-banner__desc">A self-serve version is still to come. Today we run it for you.</p>
+            <p class="kicker kicker--on-navy">Citation tracking</p>
+            <h1 id="hero-heading" class="page-banner__title">Does AI name you when your buyers ask?</h1>
+            <p class="page-banner__desc">We ask a model the questions your customers ask, <!--c:triesWord-->five<!--/c--> times each, and show you when your name comes up and when it doesn’t.</p>
+            <a class="btn btn--gold" href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Get early access</a>
+            <p class="ct-banner__note">A self-serve version is still to come. Today we run it for you.</p>
           </div>
+          <span class="page-banner__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10.5L6.5 19.5V16H4V5.5z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>
         </div>
       </div>
     </section>
 
-    <!-- ---------- The sample matrix ---------- -->
-    <section class="verticals" aria-labelledby="sample-heading">
+    <section class="teaser" id="scatter" aria-labelledby="scatter-heading">
+      <div class="section__inner">
+        <div class="teaser__grid">
+          <div class="teaser__copy">
+            <p class="teaser__kicker">The problem with one answer</p>
+            <h2 id="scatter-heading" class="teaser__title">Same question, different answers.</h2>
+            <p class="teaser__lede">Ask an AI the same question twice and you can get two different answers. One try tells you very little. Five tries start to show you a pattern.</p>
+          </div>
+            <div class="teaser__scene-wrap">
+                <div class="scene" id="citeScene" role="img" aria-label="Illustration: an AI names a brand for some buyer questions and not for others">
+                  <svg class="scene__refresh" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11" stroke-width="1.4"/><path d="M16.2 9.2A5 5 0 0 0 7.6 10.4M7.8 14.8a5 5 0 0 0 8.6-1.2"/><path d="M16.4 6.6v2.8h-2.8M7.6 17.4v-2.8h2.8"/></svg>
+                <div class="sq sq--1 sq--flips" aria-hidden="true">
+                  <p class="sq__text">Best CRM for a small sales team?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span><span class="sq__chip sq__chip--absent sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+                </div>
+                <div class="sq sq--2 sq--flips" aria-hidden="true">
+                  <p class="sq__text">Which running shoes suit flat feet?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span><span class="sq__chip sq__chip--named sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+                </div>
+                <div class="sq sq--3" aria-hidden="true">
+                  <p class="sq__text">Who’s a good immigration lawyer near me?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+                </div>
+                <div class="sq sq--4" aria-hidden="true">
+                  <p class="sq__text">Project tool that works well with Slack?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+                </div>
+                <div class="sq sq--5 sq--flips" aria-hidden="true">
+                  <p class="sq__text">Best hotel in Lisbon for a family?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span><span class="sq__chip sq__chip--named sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+                </div>
+                <div class="sq sq--6 sq--flips" aria-hidden="true">
+                  <p class="sq__text">Which accountant works with freelancers?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span><span class="sq__chip sq__chip--absent sq__chip--second"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+                </div>
+                <div class="sq sq--7" aria-hidden="true">
+                  <p class="sq__text">Where can I buy a gift for a coffee lover?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--absent sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Not named</span></div>
+                </div>
+                <div class="sq sq--8" aria-hidden="true">
+                  <p class="sq__text">Best password manager for a small team?</p>
+                  <div class="sq__chips"><span class="sq__chip sq__chip--ask">Asking…</span><span class="sq__chip sq__chip--named sq__chip--first"><span class="sq__mark" aria-hidden="true"></span>Named</span></div>
+                </div>
+                </div>
+                <p class="teaser__caption">Illustration. Not real data.</p>
+              </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ct-section" aria-labelledby="get-heading">
       <div class="section__inner">
         <div class="section-head">
-          <p class="kicker">Sample run</p>
-          <h2 id="sample-heading" class="section-title"><!--c:labelCap-->A CRM brand<!--/c-->, <!--c:promptCount-->18<!--/c--> questions, <!--c:runs-->5<!--/c--> runs each.</h2>
+          <p class="kicker">What you get</p>
+          <h2 id="get-heading" class="section-title">A report you can read in one sitting.</h2>
         </div>
-        <div class="report-panel cm-panel">
-          <!-- CITATION-MATRIX:START -->
-        <figure class="cm cm--large" id="cm-full" aria-labelledby="cm-full-title" aria-describedby="cm-full-desc">
-          <p class="cm__sr" id="cm-full-title">Citation matrix: one model’s answers to 18 buying questions, 5 runs each</p>
-          <p class="cm__sr" id="cm-full-desc">Each row is one question and each dot one run. 6 questions named the brand in every run, 5 in some runs and not others, and 7 in none. Overall the brand was named in 49% of answers.</p>
-          <div class="cm__group">
-            <h3 class="cm__heading"><span>Named in every run</span><span class="cm__count">6</span></h3>
-            <ol class="cm__rows">
-            <li class="cm__row">
-              <span class="cm__q">Which CRM should a 10-person startup use that won’t need a consultant to set up?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
+        <ul class="ct-cards">
+            <li class="ct-card">
+              <span class="ct-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10.5L6.5 19.5V16H4V5.5z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>
+              <h3 class="ct-card__title">The questions your buyers ask</h3>
+              <p class="ct-card__text">A fixed set of buying questions for your category, the ones people type before they choose.</p>
             </li>
-            <li class="cm__row">
-              <span class="cm__q">What are the best CRMs that integrate natively with Slack?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
+            <li class="ct-card">
+              <span class="ct-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.5 11.5V10a3.5 3.5 0 013.5-3.5h10.5"/><path d="M15.5 3.5l3 3-3 3"/><path d="M19.5 12.5V14a3.5 3.5 0 01-3.5 3.5H5.5"/><path d="M8.5 20.5l-3-3 3-3"/></svg></span>
+              <h3 class="ct-card__title">Five tries each</h3>
+              <p class="ct-card__text">Every question is asked five times, each in a new conversation, because one answer can mislead.</p>
             </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRM is easiest for a non-technical sales team to adopt?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
+            <li class="ct-card">
+              <span class="ct-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/><path d="M4.5 4.5l15 15"/></svg></span>
+              <h3 class="ct-card__title">The questions where you’re never named</h3>
+              <p class="ct-card__text">The gaps: questions where your name does not come up in any try.</p>
             </li>
-            <li class="cm__row">
-              <span class="cm__q">What CRM should an agency use to manage clients and deals together?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
+            <li class="ct-card">
+              <span class="ct-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="2.75"/><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5"/><circle cx="17.5" cy="9" r="2.1"/><path d="M14.7 14.3c2.1.4 3.7 2.1 4.3 4.2"/></svg></span>
+              <h3 class="ct-card__title">Who is named instead</h3>
+              <p class="ct-card__text">The other brands that appear in the answers when yours does not.</p>
             </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRMs integrate well with Google Workspace and Gmail?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRMs are best for sales teams that work mostly from mobile?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
-            </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ct-section" aria-labelledby="sample-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">A real example</p>
+          <h2 id="sample-heading" class="section-title"><!--c:labelCap-->A CRM brand<!--/c-->, <!--c:questions-->18<!--/c--> questions, <!--c:triesWord-->five<!--/c--> tries each.</h2>
+          <p class="section-sub">Real answers from <!--c:model-->gemini-3.5-flash-lite<!--/c--> on <!--c:date-->October 2, 2026<!--/c-->, <!--c:triesWord-->five<!--/c--> tries per question. The brand is not named here, and neither are its competitors.</p>
+        </div>
+        <div class="ct-stats">
+          <div class="ct-stat"><p class="ct-stat__num"><!--c:never-->7<!--/c--></p><p class="ct-stat__label">questions where the brand was never named</p></div>
+          <div class="ct-stat"><p class="ct-stat__num"><!--c:unstable-->5<!--/c--></p><p class="ct-stat__label">questions where it appeared only sometimes</p></div>
+          <div class="ct-stat"><p class="ct-stat__num"><!--c:always-->6<!--/c--></p><p class="ct-stat__label">questions where it was named every time</p></div>
+        </div>
+        <div class="report-panel ct-example">
+          <p class="ct-example__label"><!--c:labelCap-->A CRM brand<!--/c--> · <!--c:model-->gemini-3.5-flash-lite<!--/c--> · <!--c:date-->October 2, 2026<!--/c--> · <!--c:triesWord-->five<!--/c--> tries per question</p>
+          <p class="ct-legend"><span class="ct-mark ct-mark--named" aria-hidden="true"></span> Named <span class="ct-mark ct-mark--absent" aria-hidden="true"></span> Not named. Each row is one question, each mark one try. Across all <!--c:totalAnswers-->90<!--/c--> answers the brand was named in <!--c:namedAnswers-->44<!--/c-->.</p>
+          <details class="ct-detail" open data-group="never">
+            <summary><span class="ct-detail__title">Never named</span><span class="ct-detail__count"><!--c:neverCount-->7<!--/c--> questions</span></summary>
+            <p class="ct-detail__intro">These are the gaps. In every try, the answer did not include the brand.</p>
+            <ol class="ct-list">
+              <li class="ct-row"><span class="ct-row__q">What's the best CRM for a 40-person outbound sales team?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What's a good free CRM for a freelancer or solo consultant?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRM works best for a B2B SaaS company with a product-led sales motion?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRMs have the best built-in email sequencing and call tracking?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What are the best enterprise-grade CRMs that cost less than the market leader?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRM is best for managing a long, multi-stakeholder enterprise sales cycle?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What's the best CRM for a company that wants sales and marketing in one tool?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
             </ol>
-          </div>
-          <div class="cm__group">
-            <h3 class="cm__heading"><span>Unstable</span><span class="cm__count">5</span></h3>
-            <ol class="cm__rows">
-            <li class="cm__row">
-              <span class="cm__q">Which CRM is best for a small business that sells mostly over email and phone?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 2: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">What CRM do mid-market companies with 200 to 500 employees usually choose?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--named" role="img" aria-label="run 1: named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--named" role="img" aria-label="run 3: named"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--named" role="img" aria-label="run 5: named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">What are the best CRM options for a real estate team?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">What are the most affordable CRMs that still have workflow automation?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--featured" role="img" aria-label="run 1: named and featured"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 4: named and featured"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 5: named and featured"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRM has the best reporting and sales forecasting for a VP of Sales?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--featured" role="img" aria-label="run 3: named and featured"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
+          </details>
+          <details class="ct-detail" data-group="unstable">
+            <summary><span class="ct-detail__title">Named only sometimes</span><span class="ct-detail__count"><!--c:unstableCount-->5<!--/c--> questions</span></summary>
+            <p class="ct-detail__intro">The same question gave a different answer from one try to the next.</p>
+            <ol class="ct-list">
+              <li class="ct-row"><span class="ct-row__q">Which CRM is best for a small business that sells mostly over email and phone?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What CRM do mid-market companies with 200 to 500 employees usually choose?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What are the best CRM options for a real estate team?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What are the most affordable CRMs that still have workflow automation?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 3: not named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRM has the best reporting and sales forecasting for a VP of Sales?</span><span class="ct-marks"><span class="ct-mark ct-mark--absent" role="img" aria-label="try 1: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 2: not named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 4: not named"></span><span class="ct-mark ct-mark--absent" role="img" aria-label="try 5: not named"></span></span></li>
             </ol>
-          </div>
-          <div class="cm__group">
-            <h3 class="cm__heading"><span>Never named</span><span class="cm__count">7</span></h3>
-            <ol class="cm__rows">
-            <li class="cm__row">
-              <span class="cm__q">What’s the best CRM for a 40-person outbound sales team?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">What’s a good free CRM for a freelancer or solo consultant?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRM works best for a B2B SaaS company with a product-led sales motion?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRMs have the best built-in email sequencing and call tracking?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">What are the best enterprise-grade CRMs that cost less than the market leader?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">Which CRM is best for managing a long, multi-stakeholder enterprise sales cycle?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
-            <li class="cm__row">
-              <span class="cm__q">What’s the best CRM for a company that wants sales and marketing in one tool?</span>
-              <span class="cm__dots"><span class="cm-dot cm-dot--absent" role="img" aria-label="run 1: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 2: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 3: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 4: not named"></span><span class="cm-dot cm-dot--absent" role="img" aria-label="run 5: not named"></span></span>
-            </li>
+          </details>
+          <details class="ct-detail" data-group="always">
+            <summary><span class="ct-detail__title">Named every time</span><span class="ct-detail__count"><!--c:alwaysCount-->6<!--/c--> questions</span></summary>
+            <p class="ct-detail__intro">In every try, the answer included the brand.</p>
+            <ol class="ct-list">
+              <li class="ct-row"><span class="ct-row__q">Which CRM should a 10-person startup use that won't need a consultant to set up?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What are the best CRMs that integrate natively with Slack?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRM is easiest for a non-technical sales team to adopt?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">What CRM should an agency use to manage clients and deals together?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRMs integrate well with Google Workspace and Gmail?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
+              <li class="ct-row"><span class="ct-row__q">Which CRMs are best for sales teams that work mostly from mobile?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
             </ol>
-          </div>
-          <div class="cm__legend">
-            <span class="cm__key"><span class="cm-dot cm-dot--featured" aria-hidden="true"></span>Named and featured</span>
-            <span class="cm__key"><span class="cm-dot cm-dot--named" aria-hidden="true"></span>Named, not featured</span>
-            <span class="cm__key"><span class="cm-dot cm-dot--absent" aria-hidden="true"></span>Not named</span>
-          </div>
-          <p class="cm__meta">gemini-3.5-flash-lite · October 2, 2026 · 5 runs per question</p>
-        </figure>
-        <!-- CITATION-MATRIX:END -->
-          <div class="cm-readout">
-            <p class="cm-readout__num"><!--c:rate-->49%<!--/c--></p>
-            <div class="cm-readout__text">
-              <p>Across <!--c:sweeps-->5<!--/c--> sweeps of all <!--c:promptCount-->18<!--/c--> questions, this brand was named in <!--c:rate-->49%<!--/c--> of answers. Single sweeps ranged from <!--c:rangeMin-->39%<!--/c--> to <!--c:rangeMax-->56%<!--/c-->. A sweep is one run of every question.</p>
-              <p class="cm-readout__fine"><!--c:modeSentence-->No web search was enabled for this run.<!--/c--></p>
-            </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
 
-    <!-- ---------- How a run works ---------- -->
-    <section class="verticals" aria-labelledby="how-heading">
+    <section class="ct-section" aria-labelledby="how-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="how-heading" class="doc-section__heading">How a run works</h2>
-          <p>We keep a fixed set of buying questions for each vertical. They are the questions a buyer asks before choosing a product: the best tool for a team of a given size, which ones connect to an app you already use, what to pick on a budget. The questions don&rsquo;t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.</p>
-          <p>Each question goes to one model <!--c:runsWord-->five<!--/c--> times, with no memory carried between runs. For every answer we record two things: whether your brand is named, and whether it is featured. Featured means named in a heading, a list label, a table or bold text, rather than only inside running prose.</p>
-          <p>Named and featured differ because a name can sit inside a dismissive aside. A line such as &ldquo;teams outgrow basic tools like X&rdquo; names X and does not recommend it. In the sample, <!--c:namedOnlyRuns-->3<!--/c--> of the <!--c:namedRuns-->44<!--/c--> answers that named the brand did so without featuring it. The matrix draws those as rings, not solid dots.</p>
+        <div class="section-head">
+          <p class="kicker">How a run works</p>
+          <h2 id="how-heading" class="section-title">Four steps, and you only do the last one.</h2>
         </div>
+        <ol class="ct-steps">
+          <li class="ct-step">
+            <span class="ct-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8.5 7h11M8.5 12h11M8.5 17h11"/><path d="M4.5 7h.1M4.5 12h.1M4.5 17h.1"/></svg></span>
+            <h3 class="ct-step__title">The questions</h3>
+            <p class="ct-step__text">We use questions that do not name any brand in the category. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.</p>
+          </li>
+          <li class="ct-step">
+            <span class="ct-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.5 11.5V10a3.5 3.5 0 013.5-3.5h10.5"/><path d="M15.5 3.5l3 3-3 3"/><path d="M19.5 12.5V14a3.5 3.5 0 01-3.5 3.5H5.5"/><path d="M8.5 20.5l-3-3 3-3"/></svg></span>
+            <h3 class="ct-step__title">Each asked five times</h3>
+            <p class="ct-step__text">Every question goes to one model five times, each time with no memory of the others.</p>
+          </li>
+          <li class="ct-step">
+            <span class="ct-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span>
+            <h3 class="ct-step__title">We record two things</h3>
+            <p class="ct-step__text">Whether you are named, and whether you appear in a heading, list label, table or bold text.</p>
+          </li>
+          <li class="ct-step">
+            <span class="ct-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span>
+            <h3 class="ct-step__title">You receive the report</h3>
+            <p class="ct-step__text">The questions, the marks for every try, and who is named when you are not.</p>
+          </li>
+        </ol>
       </div>
     </section>
 
-    <!-- ---------- Why five runs ---------- -->
-    <section class="verticals" aria-labelledby="why-heading">
+    <section class="ct-section" aria-labelledby="limits-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="why-heading" class="doc-section__heading">Why <!--c:runsWord-->five<!--/c--> runs</h2>
-          <p>Ask a model the same question twice and the answers differ. One run can show you named or not named by chance, so a single run is never reported as a finding.</p>
-          <p>In the sample, <!--c:unstableCount-->5<!--/c--> of <!--c:promptCount-->18<!--/c--> questions named the brand in some runs and not in others. The overall rate moved between <!--c:rangeMin-->39%<!--/c--> and <!--c:rangeMax-->56%<!--/c--> from one sweep to the next. An average of <!--c:rate-->49%<!--/c--> hides that spread. The matrix shows it.</p>
-          <p><!--c:runsWordCap-->Five<!--/c--> runs show whether an answer is stable. They do not make the rate exact.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------- What a run does not tell you ---------- -->
-    <section class="verticals" aria-labelledby="limits-heading">
-      <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="limits-heading" class="doc-section__heading">What a run does not tell you</h2>
-          <ul class="doc-list">
-            <li><strong>It is one model on one date.</strong> The sample used <!--c:model-->gemini-3.5-flash-lite<!--/c--> on <!--c:dateLong-->October 2, 2026<!--/c-->. It says nothing about any other assistant.</li>
-            <li><strong>Answers move.</strong> A reworded question, or the same question next month, can give a different result.</li>
-            <li><strong>It is not a ranking.</strong> The matrix records whether a name appears, not where your brand sits against the others.</li>
-            <li><strong>It is not a forecast of traffic.</strong> Being named in an answer is not a click, a visit or a sale.</li>
+        <div class="report-panel ct-limits">
+          <p class="kicker">Read this before you act on it</p>
+          <h2 id="limits-heading" class="ct-limits__title">What a run can’t tell you.</h2>
+          <ul class="ct-limits__list">
+            <li><strong>One model, one date.</strong> A result describes one model on the day it was run.</li>
+            <li><strong>Answers shift.</strong> A reworded question, or the same question next month, can give a different result.</li>
+            <li><strong>It is not a ranking.</strong> It records whether a name appears, not where your brand sits against others.</li>
+            <li><strong>Nothing about other assistants.</strong> A result for one says nothing about the rest.</li>
+            <li><strong>No traffic forecast.</strong> Being named is not a prediction of visits or sales.</li>
+            <li><strong>Named is not an endorsement.</strong> A name inside a dismissive aside counts as named.</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- ---------- What you receive ---------- -->
-    <section class="verticals" aria-labelledby="receive-heading">
+    <section class="ct-section" aria-labelledby="faq-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="receive-heading" class="doc-section__heading">What you receive</h2>
-          <p>A report we run for you, for your brand and your category:</p>
-          <ul class="doc-list">
-            <li>The matrix for your brand: every question, <!--c:runsWord-->five<!--/c--> runs each, marked featured, named or absent.</li>
-            <li>The questions that never name you.</li>
-            <li>The questions that name you in some runs and not in others.</li>
-            <li>Who is named instead, with how often. A competitor counts whenever it is named, whether the answer recommends it or warns against it.</li>
-          </ul>
-          <p>This is early access. We run it for you today. There is no dashboard and no self-serve tool yet.</p>
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="faq-heading" class="section-title">Citation tracking, briefly.</h2>
+        </div>
+        <div class="ct-faq">
+          <details>
+            <summary>What is citation tracking?</summary>
+            <p>It is a report on whether an AI model names your brand when people ask the questions your buyers ask. We run a fixed set of questions for your category, ask each one five times, and show you when your name comes up and when it does not.</p>
+          </details>
+          <details>
+            <summary>Why ask every question five times?</summary>
+            <p>Because the same question can get different answers. In the sample, 5 of 18 questions named the brand in some tries and not in others. One try can mislead you. Five show the pattern.</p>
+          </details>
+          <details>
+            <summary>What does named mean?</summary>
+            <p>Your brand name appears in the answer. We also record whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement.</p>
+          </details>
+          <details>
+            <summary>Can I run it myself?</summary>
+            <p>A self-serve version is still to come. Today we run it for you. The question sets are also published on the Answerable MCP server, with a short protocol for running them yourself in any assistant.</p>
+          </details>
+          <details>
+            <summary>Which model does it use?</summary>
+            <p>The sample used gemini-3.5-flash-lite on October 2, 2026. Today we run Gemini models only. A result describes one model on one date and says nothing about any other assistant.</p>
+          </details>
+          <details>
+            <summary>Is it a ranking?</summary>
+            <p>No. It records whether a name appears, not where your brand sits against others. Answers shift with the wording of a question and over time, so a result is a picture of one day.</p>
+          </details>
+          <details>
+            <summary>How do I get early access?</summary>
+            <p>Email us your brand, domain, category and three competitors. We reply by email.</p>
+          </details>
         </div>
       </div>
     </section>
 
-    <!-- ---------- Request ---------- -->
-    <section aria-label="Request a run">
+    <section class="pro-band" aria-labelledby="close-heading">
       <div class="section__inner">
-        <div class="scan-bridge">
-          <p class="scan-bridge__text">Tell us your brand, domain, category and three competitors. We reply by email.</p>
-          <!-- CITATION-CTA:START -->
-            <a class="btn btn--primary" href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Request a run for your brand</a>
-        <!-- CITATION-CTA:END -->
-          <p class="citation-note">The free scan is the first step. It shows whether AI crawlers can reach your site at all. <a href="/#scan">Scan your site free</a>.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------- FAQ ---------- -->
-    <section class="verticals" aria-label="Common questions">
-      <div class="section__inner">
-        <!-- CITATION-FAQ:START -->
-        <div class="doc-section" id="faq">
-          <h2 class="doc-section__heading">Common questions</h2>
-          <h3 class="faq-q">What is citation tracking?</h3>
-          <p>Citation tracking asks a language model the buying questions people ask in your category and records whether it names your brand. Each question is asked 5 times, because the same question gives different answers. We report how often you are named, and how often you are featured rather than mentioned in passing.</p>
-          <h3 class="faq-q">Why five runs?</h3>
-          <p>The same question gives different answers. In the sample run, 5 of 18 questions named the brand in some runs and not in others, and the overall rate ranged from 39% to 56% between sweeps. One run would have reported one of those numbers as the answer. Five runs show the spread. They do not make the rate exact.</p>
-          <h3 class="faq-q">Which models do you run?</h3>
-          <p>Each run uses one named model, and its name and the date are recorded on every result. The sample on this page used gemini-3.5-flash-lite on October 2, 2026. Today we run Gemini models only. A result from one model says nothing about any other assistant, and we do not present one model as AI visibility in general.</p>
-          <h3 class="faq-q">How is this different from the free scan?</h3>
-          <p>The free scan checks whether AI crawlers can reach your site and whether your pages carry the signals machines read. It measures readiness. A citation run asks a model buying questions and records whether it names you. It measures what one model said on one date. The scan is free and self-serve. A citation run is early access, delivered as a report we run for you.</p>
-        </div>
-        <!-- CITATION-FAQ:END -->
+        <p class="kicker kicker--on-navy">Early access</p>
+        <h2 id="close-heading">Find out when AI names you, and when it doesn’t.</h2>
+        <p class="pro-band__lede">Tell us your brand, domain, category and three competitors. We reply by email.</p>
+        <div class="pro-band__cta"><a class="btn btn--gold" href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Get early access</a></div>
+        <p class="ct-banner__note ct-banner__note--band">A self-serve version is still to come. Today we run it for you.</p>
       </div>
     </section>
 
     <footer class="site-footer" aria-label="Footer">
       <div class="section__inner">
         <nav class="site-nav footer-links" aria-label="More">
-          <a href="/playbooks" class="site-nav__link">Playbooks</a>
-          <a href="/methodology" class="site-nav__link">Methodology</a>
-          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
-          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
-          <a href="/privacy" class="site-nav__link">Privacy</a>
-          <a href="/terms" class="site-nav__link">Terms</a>
-        </nav>
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                </nav>
         <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
       </div>
     </footer>
@@ -348,7 +398,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="citation-matrix.js?v=1" onerror="document.documentElement.classList.remove('cm-anim')"></script>
+  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove('scene-anim')"></script>
   <script src="nav.js?v=2"></script>
 </body>
 </html>

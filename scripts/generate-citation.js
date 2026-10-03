@@ -2,315 +2,361 @@
 /* =====================================================================
    scripts/generate-citation.js
 
-   Reads content/citations/sample-crm.json and writes static HTML for the
-   /citation-tracking page, the way generate-benchmarks.js does. (The
-   homepage teaser is hand-written, shows no data and does not read this
-   file.)
+   Writes citation-tracking.html (the /citation-tracking page) from
+   content/citations/sample-crm.json, so no figure on the page is typed by
+   hand. Every figure that comes from the sample is written as
 
-     citation-tracking.html  every region between
-                             <!-- CITATION-MATRIX:START --> ... END
-                             <!-- CITATION-CTA:START --> ... END
-                             <!-- CITATION-FAQ:START --> ... END   (visible FAQ)
-                             <!-- CITATION-LD:START --> ... END    (FAQPage JSON-LD)
-                           plus every inline figure written as
-                             <!--c:key-->value<!--/c-->
+     <!--c:key-->value<!--/c-->
 
-   No figure on the page is typed by hand. The script also checks
-   the sample against itself (group labels, the overall rate and each
-   sweep are recomputed from the per-run marks) and refuses to write if
-   they disagree.
+   and `--check` recomputes each one from the sample and compares.
 
-   The matrix is plain HTML. citation-matrix.js only replays the fill once
-   on first view; without it the finished matrix is already there.
+   The gold band reuses the homepage scatter exactly: its markup is copied
+   from index.html (the .teaser__scene-wrap block) and the page loads the
+   same teaser-scene.js and CSS classes. There is no second implementation
+   of the loop. The static state is plain HTML, and without JavaScript,
+   without @property support, or under reduced motion nothing moves.
 
-   Usage:
-     node scripts/generate-citation.js
+     node scripts/generate-citation.js            write citation-tracking.html
+     node scripts/generate-citation.js --check    verify the page against the
+                                                  sample; write nothing
    ===================================================================== */
+
+'use strict';
 
 const fs = require('fs');
 const path = require('path');
+const ICONS = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
+const SITE = 'https://answerable-app.vercel.app';
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
-const PAGE_HTML = path.join(ROOT, 'citation-tracking.html');
+const PAGE = path.join(ROOT, 'citation-tracking.html');
+const CSS_VERSION = 44;
+const CONTACT_EMAIL = 'andacuz@gmail.com'; // the address on privacy.html and terms.html
+const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
 
-// The address on privacy.html and terms.html. scanner.js still carries a
-// placeholder (you@example.com) for the "Talk to us" button.
-const CONTACT_EMAIL = 'andacuz@gmail.com';
-
-const GROUPS = [
-  { key: 'always', label: 'Named in every run' },
-  { key: 'unstable', label: 'Unstable' },
-  { key: 'never', label: 'Never named' }
-];
-const STATE_NAME = { featured: 'named and featured', named: 'named', absent: 'not named' };
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-function esc(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-  });
-}
-const pct = (x) => Math.round(x * 100) + '%';
 const word = (n) => (n >= 0 && n < WORDS.length ? WORDS[n] : String(n));
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const c = (key, val) => '<!--c:' + key + '-->' + val + '<!--/c-->';
 
 /* ---------------------------------------------------------------------
-   Load, check, derive
+   Load the sample and derive every figure
    --------------------------------------------------------------------- */
 
-function load() {
-  if (!fs.existsSync(SAMPLE)) {
-    throw new Error('content/citations/sample-crm.json not found. Nothing to render.');
-  }
-  return JSON.parse(fs.readFileSync(SAMPLE, 'utf8'));
+function longDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) throw new Error('sample date is not YYYY-MM-DD: ' + iso);
+  return MONTHS[+m[2] - 1] + ' ' + (+m[3]) + ', ' + m[1];
 }
 
-function check(s) {
-  const errors = [];
-  ['label', 'model', 'date', 'mode', 'runsPerPrompt', 'promptCount', 'prompts', 'overall'].forEach(function (k) {
-    if (s[k] == null) errors.push('missing field: ' + k);
-  });
-  if (errors.length) return errors;
-  if (s.prompts.length !== s.promptCount) errors.push('promptCount ' + s.promptCount + ' but ' + s.prompts.length + ' prompts');
-
-  const named = (r) => r !== 'absent';
-  let namedRuns = 0;
-  s.prompts.forEach(function (p) {
-    if (p.runs.length !== s.runsPerPrompt) errors.push(p.id + ': ' + p.runs.length + ' runs, expected ' + s.runsPerPrompt);
-    p.runs.forEach(function (r) { if (!STATE_NAME[r]) errors.push(p.id + ': unknown run state "' + r + '"'); });
-    const k = p.runs.filter(named).length;
-    const group = k === p.runs.length ? 'always' : k === 0 ? 'never' : 'unstable';
-    if (group !== p.group) errors.push(p.id + ': group "' + p.group + '" but its runs say "' + group + '"');
-    namedRuns += k;
-  });
-
-  const total = s.promptCount * s.runsPerPrompt;
-  if (Math.abs(namedRuns / total - s.overall.mentionRate) > 0.0006) {
-    errors.push('overall.mentionRate ' + s.overall.mentionRate + ' but the runs give ' + (namedRuns / total).toFixed(4));
-  }
-  const sweeps = [];
-  for (let r = 0; r < s.runsPerPrompt; r++) {
-    sweeps.push(s.prompts.filter(function (p) { return named(p.runs[r]); }).length / s.promptCount);
-  }
-  if (!s.overall.bySweep || s.overall.bySweep.length !== sweeps.length ||
-      s.overall.bySweep.some(function (x, i) { return Math.abs(x - sweeps[i]) > 0.0006; })) {
-    errors.push('overall.bySweep does not match the runs');
-  }
-  if (Math.abs(Math.min.apply(null, sweeps) - s.overall.range.min) > 0.0006 ||
-      Math.abs(Math.max.apply(null, sweeps) - s.overall.range.max) > 0.0006) {
-    errors.push('overall.range does not match the sweeps');
-  }
-  return errors;
-}
-
+// Everything the page shows that comes from the sample. `--check` calls this
+// again, independently of the page text, and compares.
 function derive(s) {
-  const by = { always: [], unstable: [], never: [] };
-  s.prompts.forEach(function (p) { by[p.group].push(p); });
-  const all = [].concat.apply([], s.prompts.map(function (p) { return p.runs; }));
-  const d = new Date(s.date + 'T12:00:00Z');
-  const modeSentence = s.mode === 'ungrounded'
-    ? 'No web search was enabled for this run.'
-    : 'Web search was enabled for this run.';
-  const f = {
+  const tries = s.runsPerPrompt;
+  const named = (r) => r === 'featured' || r === 'named'; // the page says "named"; the finer split is not shown
+  const groupOf = (p) => {
+    const n = p.runs.filter(named).length;
+    return n === tries ? 'always' : n === 0 ? 'never' : 'unstable';
+  };
+  s.prompts.forEach(function (p) {
+    if (p.runs.length !== tries) throw new Error(p.id + ': ' + p.runs.length + ' runs, expected ' + tries);
+    if (groupOf(p) !== p.group) throw new Error(p.id + ': group "' + p.group + '" disagrees with its runs');
+  });
+  if (s.promptCount !== s.prompts.length) throw new Error('promptCount disagrees with the prompts');
+  const by = { never: [], unstable: [], always: [] };
+  s.prompts.forEach((p) => by[p.group].push(p));
+  const totalAnswers = s.prompts.length * tries;
+  const namedAnswers = s.prompts.reduce((n, p) => n + p.runs.filter(named).length, 0);
+  return {
     label: s.label,
     labelCap: cap(s.label),
     model: s.model,
-    mode: s.mode,
-    modeSentence: modeSentence,
-    dateLong: MONTHS[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear(),
-    monthYear: MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(),
-    runs: String(s.runsPerPrompt),
-    runsWord: word(s.runsPerPrompt),
-    runsWordCap: cap(word(s.runsPerPrompt)),
-    promptCount: String(s.promptCount),
-    sweeps: String(s.runsPerPrompt),
-    rate: pct(s.overall.mentionRate),
-    rangeMin: pct(s.overall.range.min),
-    rangeMax: pct(s.overall.range.max),
-    alwaysCount: String(by.always.length),
-    unstableCount: String(by.unstable.length),
-    neverCount: String(by.never.length),
-    featuredRuns: String(all.filter(function (r) { return r === 'featured'; }).length),
-    namedOnlyRuns: String(all.filter(function (r) { return r === 'named'; }).length),
-    namedRuns: String(all.filter(function (r) { return r !== 'absent'; }).length),
-    totalRuns: String(all.length)
+    date: longDate(s.date),
+    tries: tries,
+    triesWord: word(tries),
+    questions: s.prompts.length,
+    never: by.never.length,
+    unstable: by.unstable.length,
+    always: by.always.length,
+    namedAnswers: namedAnswers,
+    totalAnswers: totalAnswers,
+    by: by
   };
-  return { f: f, by: by };
 }
 
 /* ---------------------------------------------------------------------
-   The matrix: one component, two sizes
+   Copy. One list drives both the visible FAQ and the FAQPage JSON-LD.
    --------------------------------------------------------------------- */
 
-function dot(state, n) {
-  return '<span class="cm-dot cm-dot--' + state + '" role="img" aria-label="run ' + n + ': ' + STATE_NAME[state] + '"></span>';
-}
-
-function legendDot(state) {
-  return '<span class="cm-dot cm-dot--' + state + '" aria-hidden="true"></span>';
-}
-
-// opts.id: unique id stem; opts.large: the bigger page version
-function renderMatrix(s, d, opts) {
-  const id = opts.id;
-  const groupsHtml = GROUPS.map(function (g) {
-    const rows = d.by[g.key];
-    const rowsHtml = rows.map(function (p) {
-      return (
-        '            <li class="cm__row">\n' +
-        '              <span class="cm__q">' + esc(p.question.replace(/'/g, '\u2019')) + '</span>\n' +
-        '              <span class="cm__dots">' + p.runs.map(function (r, i) { return dot(r, i + 1); }).join('') + '</span>\n' +
-        '            </li>'
-      );
-    }).join('\n');
-    return (
-      '          <div class="cm__group">\n' +
-      '            <h3 class="cm__heading"><span>' + esc(g.label) + '</span><span class="cm__count">' + rows.length + '</span></h3>\n' +
-      '            <ol class="cm__rows">\n' + rowsHtml + '\n            </ol>\n' +
-      '          </div>'
-    );
-  }).join('\n');
-
-  const title = 'Citation matrix: one model’s answers to ' + s.promptCount + ' buying questions, ' + s.runsPerPrompt + ' runs each';
-  const desc = 'Each row is one question and each dot one run. ' +
-    d.f.alwaysCount + ' questions named the brand in every run, ' + d.f.unstableCount + ' in some runs and not others, and ' +
-    d.f.neverCount + ' in none. Overall the brand was named in ' + d.f.rate + ' of answers.' +
-    '';
-
-  return (
-    '        <figure class="cm ' + (opts.large ? 'cm--large' : '') + '" id="' + id + '" aria-labelledby="' + id + '-title" aria-describedby="' + id + '-desc">\n' +
-    '          <p class="cm__sr" id="' + id + '-title">' + esc(title) + '</p>\n' +
-    '          <p class="cm__sr" id="' + id + '-desc">' + esc(desc) + '</p>\n' +
-    groupsHtml + '\n' +
-    '          <div class="cm__legend">\n' +
-    '            <span class="cm__key">' + legendDot('featured') + 'Named and featured</span>\n' +
-    '            <span class="cm__key">' + legendDot('named') + 'Named, not featured</span>\n' +
-    '            <span class="cm__key">' + legendDot('absent') + 'Not named</span>\n' +
-    '          </div>\n' +
-    '          <p class="cm__meta">' + esc(d.f.model) + ' · ' + esc(d.f.dateLong) + ' · ' + d.f.runs + ' runs per question</p>\n' +
-    '        </figure>'
-  );
-}
-
-/* ---------------------------------------------------------------------
-   Calls to action
-   --------------------------------------------------------------------- */
-
-function mailto() {
-  const subject = 'Citation run request';
-  const body = 'Brand:\r\nDomain:\r\nCategory:\r\nThree competitors:\r\n';
-  return 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&amp;body=' + encodeURIComponent(body);
-}
-
-function ctaButton() {
-  return '<a class="btn btn--primary" href="' + mailto() + '">Request a run for your brand</a>';
-}
-
-
-/* ---------------------------------------------------------------------
-   FAQ: one source for the visible section and the JSON-LD
-   --------------------------------------------------------------------- */
-
-function faq(s, d) {
-  const f = d.f;
+function faq(d) {
   return [
-    {
-      q: 'What is citation tracking?',
-      a: 'Citation tracking asks a language model the buying questions people ask in your category and records whether it names your brand. Each question is asked ' +
-        f.runs + ' times, because the same question gives different answers. We report how often you are named, and how often you are featured rather than mentioned in passing.'
-    },
-    {
-      q: 'Why ' + f.runsWord + ' runs?',
-      a: 'The same question gives different answers. In the sample run, ' + f.unstableCount + ' of ' + f.promptCount +
-        ' questions named the brand in some runs and not in others, and the overall rate ranged from ' + f.rangeMin + ' to ' + f.rangeMax +
-        ' between sweeps. One run would have reported one of those numbers as the answer. ' + cap(f.runsWord) + ' runs show the spread. They do not make the rate exact.'
-    },
-    {
-      q: 'Which models do you run?',
-      a: 'Each run uses one named model, and its name and the date are recorded on every result. The sample on this page used ' + f.model + ' on ' + f.dateLong +
-        '. Today we run Gemini models only. A result from one model says nothing about any other assistant, and we do not present one model as AI visibility in general.'
-    },
-    {
-      q: 'How is this different from the free scan?',
-      a: 'The free scan checks whether AI crawlers can reach your site and whether your pages carry the signals machines read. It measures readiness. A citation run asks a model buying questions and records whether it names you. It measures what one model said on one date. The scan is free and self-serve. A citation run is early access, delivered as a report we run for you.'
-    }
+    ['What is citation tracking?',
+      'It is a report on whether an AI model names your brand when people ask the questions your buyers ask. We run a fixed set of questions for your category, ask each one ' + d.triesWord + ' times, and show you when your name comes up and when it does not.'],
+    ['Why ask every question ' + d.triesWord + ' times?',
+      'Because the same question can get different answers. In the sample, ' + d.unstable + ' of ' + d.questions + ' questions named the brand in some tries and not in others. One try can mislead you. ' + cap(d.triesWord) + ' show the pattern.'],
+    ['What does named mean?',
+      'Your brand name appears in the answer. We also record whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement.'],
+    ['Can I run it myself?',
+      'A self-serve version is still to come. Today we run it for you. The question sets are also published on the Answerable MCP server, with a short protocol for running them yourself in any assistant.'],
+    ['Which model does it use?',
+      'The sample used ' + d.model + ' on ' + d.date + '. Today we run Gemini models only. A result describes one model on one date and says nothing about any other assistant.'],
+    ['Is it a ranking?',
+      'No. It records whether a name appears, not where your brand sits against others. Answers shift with the wording of a question and over time, so a result is a picture of one day.'],
+    ['How do I get early access?',
+      'Email us your brand, domain, category and three competitors. We reply by email.']
   ];
 }
 
-function renderFaqHtml(items) {
-  return (
-    '        <div class="doc-section" id="faq">\n' +
-    '          <h2 class="doc-section__heading">Common questions</h2>\n' +
-    items.map(function (i) {
-      return '          <h3 class="faq-q">' + esc(i.q) + '</h3>\n          <p>' + esc(i.a) + '</p>';
-    }).join('\n') + '\n' +
-    '        </div>'
-  );
+const card = (icon, title, text) =>
+  '            <li class="ct-card">\n              <span class="ct-card__icon">' + ICONS.svg(icon) + '</span>\n' +
+  '              <h3 class="ct-card__title">' + title + '</h3>\n              <p class="ct-card__text">' + text + '</p>\n            </li>\n';
+
+const step = (icon, title, text) =>
+  '          <li class="ct-step">\n            <span class="ct-step__icon">' + ICONS.svg(icon) + '</span>\n' +
+  '            <h3 class="ct-step__title">' + title + '</h3>\n            <p class="ct-step__text">' + text + '</p>\n          </li>\n';
+
+function marks(p) {
+  return '<span class="ct-marks">' + p.runs.map(function (r, i) {
+    const n = r === 'featured' || r === 'named';
+    return '<span class="ct-mark ' + (n ? 'ct-mark--named' : 'ct-mark--absent') + '" role="img" aria-label="try ' + (i + 1) + ': ' + (n ? 'named' : 'not named') + '"></span>';
+  }).join('') + '</span>';
 }
 
-function renderFaqLd(items) {
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: items.map(function (i) {
-      return { '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } };
-    })
+function group(key, title, intro, list, open) {
+  return '          <details class="ct-detail"' + (open ? ' open' : '') + ' data-group="' + key + '">\n' +
+    '            <summary><span class="ct-detail__title">' + title + '</span><span class="ct-detail__count">' + c(key + 'Count', list.length) + ' questions</span></summary>\n' +
+    '            <p class="ct-detail__intro">' + intro + '</p>\n            <ol class="ct-list">\n' +
+    list.map((p) => '              <li class="ct-row"><span class="ct-row__q">' + esc(p.question) + '</span>' + marks(p) + '</li>').join('\n') + '\n' +
+    '            </ol>\n          </details>\n';
+}
+
+function shellParts() {
+  const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
+  const about = read('about.html');
+  const grab = (src, re, what) => { const m = src.match(re); if (!m) throw new Error('could not find ' + what); return m[0]; };
+  const index = read('index.html');
+  const wrap = grab(index, /<div class="teaser__scene-wrap">[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>\s*<\/div>/, 'the homepage scatter (teaser__scene-wrap) in index.html');
+  return {
+    favicon: grab(about, /<link rel="icon"[^>]*>/, 'favicon'),
+    fonts: grab(about, /<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
+    sceneSnippet: grab(index, /<script>if \(window\.IntersectionObserver && window\.CSS && CSS\.registerProperty[^<]*<\/script>/, 'the scene-anim head snippet'),
+    header: grab(about, /<header class="site-header">[\s\S]*?<\/header>/, 'header'),
+    footerNav: grab(about, /<nav class="site-nav footer-links"[\s\S]*?<\/nav>/, 'footer nav'),
+    scene: wrap
   };
-  return '  <script type="application/ld+json">\n  ' + JSON.stringify(ld, null, 2).replace(/\n/g, '\n  ') + '\n  </script>';
 }
 
 /* ---------------------------------------------------------------------
-   Splicing
+   The page
    --------------------------------------------------------------------- */
 
-function splice(html, name, block, required, indent) {
-  const start = '<!-- ' + name + ':START -->';
-  const end = '<!-- ' + name + ':END -->';
-  const a = html.indexOf(start);
-  const b = html.indexOf(end);
-  if (a === -1 || b === -1 || b < a) {
-    if (required) throw new Error('Markers for ' + name + ' are missing.');
-    return null;
-  }
-  return html.slice(0, a) + start + '\n' + block + '\n' + (indent == null ? '        ' : indent) + end + html.slice(b + end.length);
+function build(sample) {
+  const d = derive(sample);
+  const shell = shellParts();
+  const title = 'Answerable. — Citation Tracking: Does a Model Name Your Brand?';
+  const desc = 'We ask a model the questions your customers ask, ' + d.triesWord + ' times each, and show you when your name comes up and when it does not. Early access, run for you.';
+  const ogDesc = 'We ask a model the questions your customers ask, ' + d.triesWord + ' times each, and show you when your name comes up and when it does not.';
+  if (desc.length < 120 || desc.length > 165) throw new Error('description is ' + desc.length + ' characters');
+  const questions = faq(d);
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions.map((q) => ({ '@type': 'Question', name: q[0], acceptedAnswer: { '@type': 'Answer', text: q[1] } }))
+  };
+  const t = d.triesWord;
+
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
+    '  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n' +
+    '  ' + shell.sceneSnippet + '\n\n' +
+    '  <title>' + esc(title) + '</title>\n' +
+    '  <meta name="description" content="' + esc(desc) + '" />\n' +
+    '  <meta name="keywords" content="citation tracking, AI citations, brand mentions in AI answers, GEO, AI visibility, buying-intent queries" />\n' +
+    '  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n' +
+    '  <link rel="canonical" href="' + SITE + '/citation-tracking" />\n\n' +
+    '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n' +
+    '  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(ogDesc) + '" />\n' +
+    '  <meta property="og:url" content="' + SITE + '/citation-tracking" />\n  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n\n' +
+    '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
+    '  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(ogDesc) + '" />\n' +
+    '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
+    '  ' + shell.favicon + '\n\n  ' + shell.fonts.replace(/\n/g, '\n  ') + '\n\n' +
+    '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
+    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n</head>\n<body>\n\n' +
+    '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
+    '  <main id="main">\n\n' +
+
+    // 1. Banner
+    '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner">\n          <div class="page-banner__body">\n' +
+    '            <p class="kicker kicker--on-navy">Citation tracking</p>\n' +
+    '            <h1 id="hero-heading" class="page-banner__title">Does AI name you when your buyers ask?</h1>\n' +
+    '            <p class="page-banner__desc">We ask a model the questions your customers ask, ' + c('triesWord', t) + ' times each, and show you when your name comes up and when it doesn’t.</p>\n' +
+    '            <a class="btn btn--gold" href="' + MAILTO + '">Get early access</a>\n' +
+    '            <p class="ct-banner__note">A self-serve version is still to come. Today we run it for you.</p>\n' +
+    '          </div>\n          <span class="page-banner__icon" aria-hidden="true">' + ICONS.svg('chat') + '</span>\n        </div>\n      </div>\n    </section>\n\n' +
+
+    // 2. Gold band: the homepage scatter, unchanged
+    '    <section class="teaser" id="scatter" aria-labelledby="scatter-heading">\n      <div class="section__inner">\n        <div class="teaser__grid">\n          <div class="teaser__copy">\n' +
+    '            <p class="teaser__kicker">The problem with one answer</p>\n' +
+    '            <h2 id="scatter-heading" class="teaser__title">Same question, different answers.</h2>\n' +
+    '            <p class="teaser__lede">Ask an AI the same question twice and you can get two different answers. One try tells you very little. ' + cap(t) + ' tries start to show you a pattern.</p>\n' +
+    '          </div>\n            ' + shell.scene.replace(/\n/g, '\n  ') + '\n        </div>\n      </div>\n    </section>\n\n' +
+
+    // 3. What you get
+    '    <section class="ct-section" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What you get</p>\n          <h2 id="get-heading" class="section-title">A report you can read in one sitting.</h2>\n        </div>\n        <ul class="ct-cards">\n' +
+    card('chat', 'The questions your buyers ask', 'A fixed set of buying questions for your category, the ones people type before they choose.') +
+    card('repeat', cap(t) + ' tries each', 'Every question is asked ' + t + ' times, each in a new conversation, because one answer can mislead.') +
+    card('eyeoff', 'The questions where you’re never named', 'The gaps: questions where your name does not come up in any try.') +
+    card('people', 'Who is named instead', 'The other brands that appear in the answers when yours does not.') +
+    '        </ul>\n      </div>\n    </section>\n\n' +
+
+    // 4. A real example
+    '    <section class="ct-section" aria-labelledby="sample-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">A real example</p>\n' +
+    '          <h2 id="sample-heading" class="section-title">' + c('labelCap', d.labelCap) + ', ' + c('questions', d.questions) + ' questions, ' + c('triesWord', t) + ' tries each.</h2>\n' +
+    '          <p class="section-sub">Real answers from ' + c('model', d.model) + ' on ' + c('date', d.date) + ', ' + c('triesWord', t) + ' tries per question. The brand is not named here, and neither are its competitors.</p>\n' +
+    '        </div>\n' +
+    '        <div class="ct-stats">\n' +
+    '          <div class="ct-stat"><p class="ct-stat__num">' + c('never', d.never) + '</p><p class="ct-stat__label">questions where the brand was never named</p></div>\n' +
+    '          <div class="ct-stat"><p class="ct-stat__num">' + c('unstable', d.unstable) + '</p><p class="ct-stat__label">questions where it appeared only sometimes</p></div>\n' +
+    '          <div class="ct-stat"><p class="ct-stat__num">' + c('always', d.always) + '</p><p class="ct-stat__label">questions where it was named every time</p></div>\n' +
+    '        </div>\n' +
+    '        <div class="report-panel ct-example">\n' +
+    '          <p class="ct-example__label">' + c('labelCap', d.labelCap) + ' · ' + c('model', d.model) + ' · ' + c('date', d.date) + ' · ' + c('triesWord', t) + ' tries per question</p>\n' +
+    '          <p class="ct-legend"><span class="ct-mark ct-mark--named" aria-hidden="true"></span> Named <span class="ct-mark ct-mark--absent" aria-hidden="true"></span> Not named. Each row is one question, each mark one try. Across all ' + c('totalAnswers', d.totalAnswers) + ' answers the brand was named in ' + c('namedAnswers', d.namedAnswers) + '.</p>\n' +
+    group('never', 'Never named', 'These are the gaps. In every try, the answer did not include the brand.', d.by.never, true) +
+    group('unstable', 'Named only sometimes', 'The same question gave a different answer from one try to the next.', d.by.unstable, false) +
+    group('always', 'Named every time', 'In every try, the answer included the brand.', d.by.always, false) +
+    '        </div>\n      </div>\n    </section>\n\n' +
+
+    // 5. How a run works
+    '    <section class="ct-section" aria-labelledby="how-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How a run works</p>\n          <h2 id="how-heading" class="section-title">Four steps, and you only do the last one.</h2>\n        </div>\n        <ol class="ct-steps">\n' +
+    step('list', 'The questions', 'We use questions that do not name any brand in the category. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.') +
+    step('repeat', 'Each asked ' + t + ' times', 'Every question goes to one model ' + t + ' times, each time with no memory of the others.') +
+    step('search', 'We record two things', 'Whether you are named, and whether you appear in a heading, list label, table or bold text.') +
+    step('report', 'You receive the report', 'The questions, the marks for every try, and who is named when you are not.') +
+    '        </ol>\n      </div>\n    </section>\n\n' +
+
+    // 6. What a run can't tell you
+    '    <section class="ct-section" aria-labelledby="limits-heading">\n      <div class="section__inner">\n        <div class="report-panel ct-limits">\n          <p class="kicker">Read this before you act on it</p>\n          <h2 id="limits-heading" class="ct-limits__title">What a run can’t tell you.</h2>\n          <ul class="ct-limits__list">\n' +
+    '            <li><strong>One model, one date.</strong> A result describes one model on the day it was run.</li>\n' +
+    '            <li><strong>Answers shift.</strong> A reworded question, or the same question next month, can give a different result.</li>\n' +
+    '            <li><strong>It is not a ranking.</strong> It records whether a name appears, not where your brand sits against others.</li>\n' +
+    '            <li><strong>Nothing about other assistants.</strong> A result for one says nothing about the rest.</li>\n' +
+    '            <li><strong>No traffic forecast.</strong> Being named is not a prediction of visits or sales.</li>\n' +
+    '            <li><strong>Named is not an endorsement.</strong> A name inside a dismissive aside counts as named.</li>\n' +
+    '          </ul>\n        </div>\n      </div>\n    </section>\n\n' +
+
+    // 7. FAQ
+    '    <section class="ct-section" aria-labelledby="faq-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Questions</p>\n          <h2 id="faq-heading" class="section-title">Citation tracking, briefly.</h2>\n        </div>\n        <div class="ct-faq">\n' +
+    questions.map((q) => '          <details>\n            <summary>' + esc(q[0]) + '</summary>\n            <p>' + esc(q[1]) + '</p>\n          </details>').join('\n') + '\n' +
+    '        </div>\n      </div>\n    </section>\n\n' +
+
+    // closing band
+    '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Early access</p>\n' +
+    '        <h2 id="close-heading">Find out when AI names you, and when it doesn’t.</h2>\n' +
+    '        <p class="pro-band__lede">Tell us your brand, domain, category and three competitors. We reply by email.</p>\n' +
+    '        <div class="pro-band__cta"><a class="btn btn--gold" href="' + MAILTO + '">Get early access</a></div>\n' +
+    '        <p class="ct-banner__note ct-banner__note--band">A self-serve version is still to come. Today we run it for you.</p>\n' +
+    '      </div>\n    </section>\n\n' +
+
+    '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
+    '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
+    '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
+    '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }
 
-function fillInline(html, values) {
-  return html.replace(/<!--c:([A-Za-z]+)-->[\s\S]*?<!--\/c-->/g, function (m, key) {
-    if (!(key in values)) throw new Error('Unknown inline figure key: ' + key);
-    return '<!--c:' + key + '-->' + esc(values[key]) + '<!--/c-->';
+/* ---------------------------------------------------------------------
+   --check: every figure on the page equals the sample file
+   --------------------------------------------------------------------- */
+
+const decode = (s) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'');
+
+function check(sample) {
+  const problems = [];
+  const bad = (m) => problems.push(m);
+  const html = fs.readFileSync(PAGE, 'utf8');
+  const d = derive(sample);
+
+  // 1. The page is exactly what the generator writes from the sample.
+  if (html !== build(sample)) bad('citation-tracking.html is not what the generator writes from the sample; run the generator');
+
+  // 2. Every <!--c:key--> figure equals the value recomputed from the sample.
+  const expect = {
+    labelCap: d.labelCap, model: d.model, date: d.date, triesWord: d.triesWord, questions: String(d.questions),
+    never: String(d.never), unstable: String(d.unstable), always: String(d.always),
+    neverCount: String(d.never), unstableCount: String(d.unstable), alwaysCount: String(d.always),
+    namedAnswers: String(d.namedAnswers), totalAnswers: String(d.totalAnswers)
+  };
+  const seen = {};
+  const re = /<!--c:([A-Za-z]+)-->([\s\S]*?)<!--\/c-->/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    seen[m[1]] = (seen[m[1]] || 0) + 1;
+    if (!(m[1] in expect)) { bad('unknown figure ' + m[1]); continue; }
+    if (decode(m[2]) !== expect[m[1]]) bad('figure ' + m[1] + ' is "' + m[2] + '", the sample gives "' + expect[m[1]] + '"');
+  }
+  Object.keys(expect).forEach(function (k) { if (!seen[k]) bad('figure ' + k + ' never appears on the page'); });
+
+  // 3. The question list: every question, in its group, with its own marks.
+  s2: {
+    const rows = [];
+    const dre = /<details class="ct-detail"[^>]*data-group="([a-z]+)">([\s\S]*?)<\/details>/g;
+    let g;
+    while ((g = dre.exec(html)) !== null) {
+      const rre = /<li class="ct-row"><span class="ct-row__q">([\s\S]*?)<\/span><span class="ct-marks">([\s\S]*?)<\/span><\/li>/g;
+      let r;
+      while ((r = rre.exec(g[2])) !== null) {
+        const dots = (r[2].match(/ct-mark--(named|absent)/g) || []).map((x) => x.slice(9));
+        rows.push({ group: g[1], q: decode(r[1]), dots: dots });
+      }
+    }
+    if (rows.length !== sample.prompts.length) bad('the page lists ' + rows.length + ' questions, the sample has ' + sample.prompts.length);
+    sample.prompts.forEach(function (p) {
+      const row = rows.filter((x) => x.q === p.question)[0];
+      if (!row) { bad('question missing from the page: ' + p.question); return; }
+      if (row.group !== p.group) bad('"' + p.question + '" is under ' + row.group + ', the sample says ' + p.group);
+      const want = p.runs.map((x) => (x === 'absent' ? 'absent' : 'named'));
+      if (row.dots.join() !== want.join()) bad('marks for "' + p.question + '" are ' + row.dots.join() + ', the sample says ' + want.join());
+    });
+    const open = (html.match(/<details class="ct-detail"( open)? data-group="([a-z]+)"/g) || []).filter((x) => /open/.test(x)).map((x) => x.match(/data-group="([a-z]+)"/)[1]);
+    if (open.join() !== 'never') bad('only "Never named" should be open by default, found: ' + open.join());
+  }
+
+  // 4. Every count written as a number or a word next to tries/times is the sample's.
+  const text = decode(html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '));
+  (text.match(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(tries|times)\b/gi) || []).forEach(function (x) {
+    const n = x.split(/\s+/)[0].toLowerCase();
+    if (n !== d.triesWord && n !== String(d.tries)) bad('"' + x + '" is not the sample\'s ' + d.tries + ' tries');
   });
+
+  // 4b. Figures quoted inside the FAQ text (and its JSON-LD) are the sample's too.
+  const fq = text.match(/In the sample, (\d+) of (\d+) questions named the brand in some tries/);
+  if (!fq || +fq[1] !== d.unstable || +fq[2] !== d.questions) bad('the FAQ states "' + (fq ? fq[0] : 'nothing') + '", the sample gives ' + d.unstable + ' of ' + d.questions);
+
+  // 5. The scatter's static state is in the HTML and is the homepage's, byte for byte.
+  const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const scene = (index.match(/<div class="scene" id="citeScene"[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>/) || [''])[0];
+  const strip = (s) => s.replace(/\s+/g, ' ');
+  if (!scene || strip(html).indexOf(strip(scene)) === -1) bad('the scatter markup differs from the homepage\'s');
+  if ((html.match(/class="sq sq--\d/g) || []).length !== 8) bad('expected eight scatter cards in the static HTML');
+  if (html.indexOf('src="teaser-scene.js') === -1) bad('teaser-scene.js is not loaded');
+
+  if (problems.length) { console.error('FAIL (' + problems.length + '):\n  ' + problems.join('\n  ')); process.exit(1); }
+  console.log('OK: every figure on the page equals the sample (' + d.never + ' never, ' + d.unstable + ' sometimes, ' + d.always + ' always, ' + d.namedAnswers + ' of ' + d.totalAnswers + ' answers named), ' + sample.prompts.length + ' questions with their marks, scatter identical to the homepage.');
 }
 
 function main() {
-  const sample = load();
-  const errors = check(sample);
-  if (errors.length) {
-    console.error('content/citations/sample-crm.json is inconsistent:\n');
-    errors.forEach(function (e) { console.error('  - ' + e); });
-    process.exit(1);
-  }
+  const sample = JSON.parse(fs.readFileSync(SAMPLE, 'utf8'));
+  if (process.argv.indexOf('--check') !== -1) return check(sample);
+  fs.writeFileSync(PAGE, build(sample), 'utf8');
   const d = derive(sample);
-
-  // The page: matrix, CTA, FAQ regions and inline figures.
-  if (!fs.existsSync(PAGE_HTML)) {
-    throw new Error('citation-tracking.html does not exist.');
-  }
-  let page = fs.readFileSync(PAGE_HTML, 'utf8');
-  const items = faq(sample, d);
-  page = splice(page, 'CITATION-MATRIX', renderMatrix(sample, d, { id: 'cm-full', large: true }), true);
-  page = splice(page, 'CITATION-CTA', '            ' + ctaButton(), true);
-  page = splice(page, 'CITATION-FAQ', renderFaqHtml(items), true);
-  page = splice(page, 'CITATION-LD', renderFaqLd(items), true, '  ');
-  page = fillInline(page, d.f);
-  fs.writeFileSync(PAGE_HTML, page, 'utf8');
-
-  console.log('Rendered from content/citations/sample-crm.json:');
-  console.log('  ' + d.f.rate + ' overall (' + d.f.rangeMin + ' to ' + d.f.rangeMax + ' across ' + d.f.sweeps + ' sweeps)');
-  console.log('  ' + d.f.alwaysCount + ' always, ' + d.f.unstableCount + ' unstable, ' + d.f.neverCount + ' never, of ' + d.f.promptCount + ' questions');
-  console.log('  ' + d.f.model + ', ' + d.f.dateLong + ', ' + d.f.mode);
+  console.log('citation-tracking.html written from content/citations/sample-crm.json');
+  console.log('  ' + d.never + ' never, ' + d.unstable + ' sometimes, ' + d.always + ' always, of ' + d.questions + ' questions; ' + d.namedAnswers + ' of ' + d.totalAnswers + ' answers named');
+  console.log('  ' + d.model + ', ' + d.date + ', ' + d.tries + ' tries per question');
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { build: build, derive: derive };
