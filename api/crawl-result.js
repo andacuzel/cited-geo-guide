@@ -39,6 +39,7 @@ function jobToResult(job) {
     pagesDone: job.pages_done,
     retentionDays: Math.round(TTL_SECONDS / 86400),
     discovery: job.discovery || null,
+    executiveSummary: job.executiveSummary || null,
     summary: job.summary || null,
     siteContext: job.siteContext ? {
       robotsOk: !!job.siteContext.robotsOk,
