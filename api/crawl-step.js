@@ -208,3 +208,5 @@ module.exports = async (req, res) => {
     res.status(500).json({ error: 'Unexpected server error. Please try again.' });
   }
 };
+
+module.exports.buildSummary = buildSummary;
