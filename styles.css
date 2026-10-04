@@ -3215,3 +3215,9 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 .ct-all__summary::after { content: "+"; position: absolute; right: 4px; top: 8px; font-size: 18px; color: var(--ink-faint); }
 .ct-all[open] > .ct-all__summary::after { content: "\2212"; }
 .ct-all__summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.rp-ba { margin-top: 24px; }
+.rp-ba__title { margin-top: 8px; }
+.rp-ba__table { width: 100%; }
+.rp-ba__table th[scope="row"] { font-weight: 400; color: var(--ink); text-align: left; }
+.rp-ba__table th[scope="row"] { font-family: var(--font-body); font-size: 14.5px; text-transform: none; letter-spacing: 0; }
+.rp-ba + .rp-head { margin-top: 28px; }

@@ -60,6 +60,11 @@ Constraints that must not be broken:
     That is planned, not a violation. Until then, keep within Hobby limits
     (12 functions, current count 9 non-underscore).
 - **No secrets in the repo.** Environment variables only.
+- **Report summaries.** The executive summary of a crawl report is written
+  from aggregated figures only (`lib/report-facts.js`), by rules or by a model
+  that only rephrases them, and every model reply is validated against the
+  facts (`lib/summary.js`). No page content, URL or domain goes to the model.
+  `privacy.html` says so; keep both in step. Do not send anything else.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.
