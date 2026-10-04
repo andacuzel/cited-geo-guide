@@ -23,6 +23,8 @@
 
 'use strict';
 
+const siteChrome = require('./site-chrome.js');
+
 const fs = require('fs');
 const path = require('path');
 const ICONS = require('../lib/icons.js');
@@ -31,7 +33,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://answerable-app.vercel.app';
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 45;
+const CSS_VERSION = 48;
 const CONTACT_EMAIL = 'andacuz@gmail.com'; // the address on privacy.html and terms.html
 const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
 
@@ -184,7 +186,7 @@ function build(sample) {
     '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n' +
     '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
-    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n</head>\n<body>\n\n' +
+    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
     '  <main id="main">\n\n' +
 
@@ -225,9 +227,11 @@ function build(sample) {
     '        <div class="report-panel ct-example">\n' +
     '          <p class="ct-example__label">' + c('labelCap', d.labelCap) + ' · ' + c('model', d.model) + ' · ' + c('date', d.date) + ' · ' + c('triesWord', t) + ' tries per question</p>\n' +
     '          <p class="ct-legend"><span class="ct-mark ct-mark--named" aria-hidden="true"></span> Named <span class="ct-mark ct-mark--absent" aria-hidden="true"></span> Not named. Each row is one question, each mark one try. Across all ' + c('totalAnswers', d.totalAnswers) + ' answers the brand was named in ' + c('namedAnswers', d.namedAnswers) + '.</p>\n' +
+    '          <details class="ct-all" open><summary class="ct-all__summary">All ' + c('questions', d.questions) + ' questions, ' + c('triesWord', t) + ' tries each</summary>\n' +
     group('never', 'Never named', 'These are the gaps. In every try, the answer did not include the brand.', d.by.never, true) +
     group('unstable', 'Named only sometimes', 'The same question gave a different answer from one try to the next.', d.by.unstable, false) +
     group('always', 'Named every time', 'In every try, the answer included the brand.', d.by.always, false) +
+    '          </details>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
 
     // 5. How a run works
@@ -264,7 +268,7 @@ function build(sample) {
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
     '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
-    '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
+    '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }
 
 /* ---------------------------------------------------------------------

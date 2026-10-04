@@ -38,13 +38,14 @@
    ===================================================================== */
 
 const fs = require('fs');
+const siteChrome = require('./site-chrome.js');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
 const SITE = 'https://answerable-app.vercel.app';
-const CSS_VERSION = 43; // bump when styles.css changes
+const CSS_VERSION = 48; // bump when styles.css changes
 
 const TRACKS = {
   'B2B SaaS': { bar: 'chart-bar--b2b', fill: 'bm-fill--b2b', marker: 'var(--navy-800)', onBar: 'chart-seg-text--light' },
@@ -325,6 +326,7 @@ function head(title, desc, url, ld) {
     sh.icon + '\n\n' + sh.fonts + '\n\n' +
     '  <link rel="stylesheet" href="../styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n  ' + JSON.stringify(ld, null, 2).replace(/\n/g, '\n  ') + '\n  </script>\n' +
+    siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n' +
     '</head>\n<body>\n  <a class="skip-link" href="#main">Skip to content</a>\n\n' +
     sh.header + '\n\n  <main id="main">\n'
   );
@@ -341,6 +343,7 @@ function footer(scripts) {
     '          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>\n' +
     '          <a href="/privacy" class="site-nav__link">Privacy</a>\n' +
     '          <a href="/terms" class="site-nav__link">Terms</a>\n' +
+    siteChrome.contactLine('          ') + '\n' +
     '        </nav>\n' +
     '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n' +
     '      </div>\n    </footer>\n\n  </main>\n\n' +

@@ -25,12 +25,14 @@
 
 'use strict';
 
+const siteChrome = require('./site-chrome.js');
+
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://answerable-app.vercel.app';
-const CSS_VERSION = 45; // bump when styles.css changes
+const CSS_VERSION = 48; // bump when styles.css changes
 const PLAYBOOKS = require('../lib/playbooks.js');
 const ICONS = require('../lib/icons.js');
 
@@ -152,13 +154,14 @@ function shellParts() {
   };
 }
 
-function card(c) {
+function card(c, trackTitle) {
   return '            <a href="' + c.href + '" class="card">\n' +
     '              <div class="card__top">\n' +
     '                <span class="card__code">' + esc(c.code) + '</span>\n' +
     '                <span class="card__badge card__badge--live">Live</span>\n' +
     '              </div>\n' +
     '              <span class="card__icon">' + ICONS.svg(c.id) + '</span>\n' +
+    '              <span class="pb-card__track">' + esc(trackTitle) + '</span>\n' +
     '              <span class="card__name">' + esc(c.name) + '</span>\n' +
     '              <span class="card__desc">' + esc(c.description) + '</span>\n' +
     '              <span class="card__cta">Read the playbook\n' +
@@ -200,7 +203,7 @@ function build() {
       '            <h2 id="pb-' + g.track.page + '" class="pb-group__title"><a href="/' + g.track.page + '">' + esc(g.track.title) + '</a></h2>\n' +
       '            <p class="pb-group__sub">' + esc(g.track.sub) + ' ' + g.cards.length + ' playbooks.</p>\n' +
       '          </div>\n' +
-      '          <div class="card-grid">\n' + g.cards.map(card).join('\n') + '          </div>\n' +
+      '          <div class="card-grid">\n' + g.cards.map(function (c) { return card(c, g.track.title); }).join('\n') + '          </div>\n' +
       '        </div>\n' +
       '      </section>\n';
   }).join('\n');
@@ -223,7 +226,7 @@ function build() {
     '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n' +
     '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
-    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n</head>\n<body>\n\n' +
+    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
     '  <main id="main">\n\n' +
     '    <section aria-label="Page header">\n      <div class="section__inner">\n        <div class="page-banner">\n' +

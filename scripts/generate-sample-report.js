@@ -13,6 +13,8 @@
 
 'use strict';
 
+const siteChrome = require('./site-chrome.js');
+
 const fs = require('fs');
 const path = require('path');
 const render = require('../lib/report-render.js');
@@ -61,7 +63,7 @@ function build(data) {
     '  <meta property="og:url" content="' + SITE + '/sample-report" />\n  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n' +
     '  <meta name="twitter:card" content="summary_large_image" />\n  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(desc) + '" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
-    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n</head>\n<body>\n\n' +
+    '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
     '  <main id="main">\n' + body.replace(/\n$/, '') + '\n' +
     '    <div class="rp-body rp-body--foot"><p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p></div>\n\n    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
