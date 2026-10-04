@@ -217,6 +217,7 @@ async function handler(req, res) {
       candidates = await discoverFromHomepageLinks(base, CRAWLER_UA);
     }
 
+    var discoverySource = (ctx.sitemapOk && ctx.sitemapUrls.length > 0 && candidates.length > 0) ? 'sitemap' : 'homepage-links';
     var pageUrls = prioritizeAndCap(candidates, homepageUrl, ctx.robots, host);
 
     var jobId = generateJobId();
@@ -227,6 +228,8 @@ async function handler(req, res) {
       pages: pageUrls.map(function (url) { return { url: url, status: 'pending' }; }),
       pages_done: 0,
       created_at: new Date().toISOString(),
+      // How many candidate URLs discovery found before the cap, so a report can say whether it sampled.
+      discovery: { source: discoverySource, candidates: candidates.length },
       siteContext: {
         robotsOk: ctx.robotsOk,
         llmsOk: ctx.llmsOk,

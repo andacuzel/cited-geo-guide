@@ -21,6 +21,7 @@
    (both are simply absent), so the 404 says both.
    ===================================================================== */
 
+const path = require('path');
 const { checkRateLimit } = require('./_rateLimit');
 const { getJob, TTL_SECONDS } = require('./_crawlStore');
 
@@ -37,6 +38,7 @@ function jobToResult(job) {
     pageCount: job.pages.length,
     pagesDone: job.pages_done,
     retentionDays: Math.round(TTL_SECONDS / 86400),
+    discovery: job.discovery || null,
     summary: job.summary || null,
     siteContext: job.siteContext ? {
       robotsOk: !!job.siteContext.robotsOk,
@@ -103,7 +105,10 @@ async function handler(req, res) {
     return;
   }
 
-  res.status(200).json(jobToResult(loaded.job));
+  var out = jobToResult(loaded.job);
+  // The average of every site in the published benchmarks, read from the summaries at request time.
+  try { out.benchmark = require('../lib/report-facts').benchmarkFromData(path.join(__dirname, '..', 'data')); } catch (e) { out.benchmark = null; }
+  res.status(200).json(out);
 }
 
 module.exports = handler;
