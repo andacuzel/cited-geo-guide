@@ -80,7 +80,11 @@ function verify(data, f) {
   if (JSON.stringify(f.priorities.map((p) => p.label)) !== JSON.stringify(rank.map((r) => r.l))) bad('priorities ' + f.priorities.map((p) => p.label) + ' vs ' + rank.map((r) => r.l));
   f.priorities.forEach((p) => { const c = f.checks.filter((x) => x.label === p.label)[0]; if (p.gain !== c.gainIfFixedEverywhere || p.failingPages !== c.failingPages || p.of !== n) bad('priority facts ' + p.label); });
   // working
-  const everywhere = f.checks.filter((c) => c.failingPages === 0).map((c) => c.label).sort();
+  if (f.verdict.benchmark && f.verdict.homepageVsBenchmark !== f.verdict.homepage - f.verdict.benchmark.average) bad('homepageVsBenchmark');
+  if (f.counts.likelyShared !== f.checks.filter((c) => !siteLevel(c.label) && c.failingPages / n >= 0.8 && c.failingPages > 0).length) bad('counts.likelyShared');
+  if (f.counts.failingChecks + f.counts.passingEverywhere !== f.checks.filter((c) => !siteLevel(c.label)).length) bad('counts');
+  if (f.crawlers.limited !== (data.siteContext.botResults || []).filter((b) => b.state === 'partial').length) bad('crawlers.limited');
+  const everywhere = f.checks.filter((c) => c.failingPages === 0 && !siteLevel(c.label)).map((c) => c.label).sort();
   if (JSON.stringify(f.working.slice().sort()) !== JSON.stringify(everywhere)) bad('working');
   // fixes: unique snippets, and each lists exactly the pages that need it
   const codes = f.fixes.map((x) => x.kind + '\n' + x.code);
