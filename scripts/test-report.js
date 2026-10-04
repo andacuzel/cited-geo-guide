@@ -23,6 +23,7 @@ const SITE_LEVEL = ['robots.txt present', 'llms.txt present', 'Sitemap declared'
 const siteLevel = (l) => SITE_LEVEL.some((s) => l.indexOf(s) === 0);
 let pass = 0; const fails = [];
 const t = (name, ok, extra) => { if (ok) pass++; else fails.push(name + (extra ? ' :: ' + extra : '')); console.log((ok ? '  ok  ' : '  FAIL ') + name + (ok ? '' : '  ' + (extra || ''))); };
+const decode = (x) => x.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
 const mean = (xs) => Math.round(xs.reduce((a, b) => a + b, 0) / xs.length);
 
 function figs(html, key) {
@@ -128,6 +129,20 @@ console.log('static page');
 const fresh = render.render(sample, { schema: schema });
   t('sample-report.html carries every figure the renderer produces for the sample, in order', ['avg', 'homeScore', 'gap', 'pagesRead', 'pagesFailed', 'pillar-discover', 'pillar-tech', 'pillar-trust', 'page-score', 'page-failed', 'check-failing', 'hidden-failing'].every((k) => JSON.stringify(figs(page, k)) === JSON.stringify(figs(fresh, k)) && figs(page, k).length > 0));
 t('the banner states the date and the domain of the crawl', page.indexOf(render.longDate(sample.createdAt)) !== -1 && page.indexOf('real crawl of our own site, ' + sample.domain) !== -1);
+
+// Before and after: every figure equals the two frozen crawls.
+{
+  const before = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/pro/sample-before.json'), 'utf8'));
+  const mean = (d) => Math.round(d.pages.filter((p) => p.status === 'ok').reduce((n, p) => n + p.result.total, 0) / d.pages.filter((p) => p.status === 'ok').length);
+  const bAvg = mean(before), aAvg = mean(sample);
+  console.log('before and after');
+  t('before and after site-wide scores equal the two crawls', figs(page, 'ba-before')[0] === String(bAvg) && figs(page, 'ba-after')[0] === String(aAvg), figs(page, 'ba-before') + ' ' + figs(page, 'ba-after'));
+  t('the change equals after minus before', figs(page, 'ba-change')[0] === (aAvg - bAvg > 0 ? '+' + (aAvg - bAvg) : String(aAvg - bAvg)));
+  const cnt = (d, l) => d.pages.filter((p) => p.status === 'ok' && p.result.checks.some((c) => c.label === l && !c.ok)).length;
+  const rowsBA = (page.match(/<tr><th scope="row">[^<]*<\/th><td class="rp-num"><span data-fig="ba-row-before">\d+<\/span>[\s\S]*?<\/tr>/g) || []);
+  t('every before and after row equals the failing-page counts in the two crawls', rowsBA.length > 0 && rowsBA.every((r) => { const l = decode(r.match(/<th scope="row">([^<]*)</)[1]); return r.match(/data-fig="ba-row-before">(\d+)/)[1] === String(cnt(before, l)) && r.match(/data-fig="ba-row-after">(\d+)/)[1] === String(cnt(sample, l)); }));
+  t('the sample carries its own executive summary, labelled', !!sample.executiveSummary && /Summary written by/.test(sample.executiveSummary.label) && !!before.executiveSummary);
+}
 
 console.log('\n' + pass + ' passed' + (fails.length ? ', ' + fails.length + ' failed' : ''));
 if (fails.length) { console.error('\n' + fails.join('\n')); process.exit(1); }

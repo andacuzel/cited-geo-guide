@@ -50,8 +50,27 @@ function build(data) {
   const shell = shellParts();
   const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Sample report: a real crawl of ' + data.domain, description: desc, url: SITE + '/sample-report', dateCreated: String(data.createdAt).slice(0, 10) };
 
+  const before = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'pro', 'sample-before.json'), 'utf8'));
+  const bm = factsLib.benchmarkFromData(path.join(ROOT, 'data'));
+  const fAfter = factsLib.facts(Object.assign({}, data, { benchmark: bm }), { schema: schema });
+  const fBefore = factsLib.facts(Object.assign({}, before, { benchmark: bm }), { schema: schema });
+  const dateBefore = render.longDate(before.createdAt);
+  const change = fAfter.verdict.siteWide - fBefore.verdict.siteWide;
+  const signed = (n) => (n > 0 ? '+' + n : String(n));
+  const labels = Array.from(new Set(fBefore.checks.concat(fAfter.checks).filter((c) => !c.siteLevel).map((c) => c.label)));
+  const find = (f, l) => f.checks.filter((c) => c.label === l)[0];
+  const rowsBA = labels.map((l) => ({ l: l, b: find(fBefore, l) ? find(fBefore, l).failingPages : 0, a: find(fAfter, l) ? find(fAfter, l).failingPages : 0 })).filter((r) => r.b > 0 || r.a > 0).sort((x, y) => y.b - x.b || y.a - x.a || (x.l < y.l ? -1 : 1));
+  const beforeAfter = '<section class="rp-ba" aria-labelledby="rp-ba-h">\n<h2 id="rp-ba-h" class="rp-h3 rp-ba__title">Before and after</h2>\n' +
+    '<p class="rp-note">We crawled our own site twice: on ' + esc(dateBefore) + ' and on ' + esc(date) + '. Between the two we added Organization and WebSite JSON-LD to every page that lacked it, put a Contact link in every footer and turned an existing line into an H2 on six pages. We changed pages, not the scanner and not the scoring. Both crawls are published as they came out.</p>\n' +
+    '<ul class="rp-kpis rp-kpis--three">\n' +
+    '<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="ba-before">' + fBefore.verdict.siteWide + '</span></span><span class="rp-kpi__label">Before, site-wide<br /><small>' + esc(dateBefore) + ', ' + fBefore.coverage.pagesRead + ' pages, homepage ' + fBefore.verdict.homepage + ', gap ' + signed(fBefore.verdict.gap) + '</small></span></li>\n' +
+    '<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="ba-after">' + fAfter.verdict.siteWide + '</span></span><span class="rp-kpi__label">After, site-wide<br /><small>' + esc(date) + ', ' + fAfter.coverage.pagesRead + ' pages, homepage ' + fAfter.verdict.homepage + ', gap ' + signed(fAfter.verdict.gap) + '</small></span></li>\n' +
+    '<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="ba-change">' + signed(change) + '</span></span><span class="rp-kpi__label">Change<br /><small>points, site-wide average</small></span></li>\n</ul>\n' +
+    '<div class="rp-matrixwrap"><table class="rp-table rp-ba__table"><caption class="rp-vh">Pages failing each check, before and after</caption><thead><tr><th scope="col">Check</th><th scope="col" class="rp-num">Before</th><th scope="col" class="rp-num">After</th></tr></thead><tbody>\n' +
+    rowsBA.map((r) => '<tr><th scope="row">' + esc(r.l) + '</th><td class="rp-num"><span data-fig="ba-row-before">' + r.b + '</span> of ' + fBefore.coverage.pagesRead + '</td><td class="rp-num"><span data-fig="ba-row-after">' + r.a + '</span> of ' + fAfter.coverage.pagesRead + '</td></tr>').join('\n') + '\n</tbody></table></div>\n' +
+    '<p class="rp-note">The number of pages differs because the site grew between the crawls. Pages still failing are listed in the report below. Two of them, the research report and the case study, are not ours to edit here.</p>\n</section>\n';
   const banner = '<div class="rp-sample-banner">\n        <p class="rp-kicker">Sample report</p>\n' +
-    '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. It is the second crawl: the first found meta descriptions that were too long, we fixed those, and this is the result. Nothing in it has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n';
+    '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. We crawled it earlier on ' + esc(dateBefore) + ', fixed what that crawl found, and crawled again. Both results are below. Nothing in either has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n' + beforeAfter;
   const withBm = Object.assign({}, data, { benchmark: factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
   const citationSample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'citations', 'sample-crm.json'), 'utf8'));
   const body = render.render(withBm, { schema: schema, label: 'Sample report', bannerHtml: banner, citation: { result: citationPanel.fromSample(citationSample), sample: true } });
