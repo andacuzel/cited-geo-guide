@@ -17,12 +17,13 @@ const fs = require('fs');
 const path = require('path');
 const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
+const factsLib = require('../lib/report-facts.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://answerable-app.vercel.app';
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
-const CSS_VERSION = 45;
+const CSS_VERSION = 47;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function shellParts() {
@@ -46,6 +47,11 @@ function build(data) {
   const shell = shellParts();
   const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Sample report: a real crawl of ' + data.domain, description: desc, url: SITE + '/sample-report', dateCreated: String(data.createdAt).slice(0, 10) };
 
+  const banner = '<div class="rp-sample-banner">\n        <p class="rp-kicker">Sample report</p>\n' +
+    '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. It is the second crawl: the first found meta descriptions that were too long, we fixed those, and this is the result. Nothing in it has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n';
+  const withBm = Object.assign({}, data, { benchmark: factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
+  const body = render.render(withBm, { schema: schema, label: 'Sample report', bannerHtml: banner });
+
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\n' +
     '  <title>' + esc(title) + '</title>\n  <meta name="description" content="' + esc(desc) + '" />\n' +
     '  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n  <link rel="canonical" href="' + SITE + '/sample-report" />\n\n' +
@@ -55,14 +61,10 @@ function build(data) {
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
-    '  <main id="main">\n    <div class="rp-page-wrap">\n' +
-    '      <div class="rp-sample-banner">\n        <p class="rp-kicker">Sample report</p>\n' +
-    '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. It is the second crawl: the first found meta descriptions that were too long, we fixed those, and this is the result. Nothing in it has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n' +
-    render.render(data, { schema: schema }).replace(/^/gm, '      ').replace(/\n {6}$/, '\n') +
-    '      <p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p>\n' +
-    '    </div>\n\n    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n  </main>\n\n' +
-    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-ui.js?v=1"></script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
+    '  <main id="main">\n' + body.replace(/\n$/, '') + '\n' +
+    '    <div class="rp-body rp-body--foot"><p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p></div>\n\n    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
+    '        <p class="site-footer__coda">\u00A9 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n  </main>\n\n' +
+    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-ui.js?v=2"></script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }
 
 function ensureSitemap() {

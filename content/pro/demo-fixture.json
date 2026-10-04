@@ -2162,5 +2162,12 @@
    "status": "failed",
    "error": "timeout"
   }
- ]
+ ],
+ "benchmark": {
+  "average": 73,
+  "sites": 219,
+  "categories": 6,
+  "scannedFrom": "2026-07-29",
+  "scannedTo": "2026-07-31"
+ }
 }
