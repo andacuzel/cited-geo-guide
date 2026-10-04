@@ -4627,5 +4627,48 @@
     "lang": "en"
    }
   }
- ]
+ ],
+ "executiveSummary": {
+  "headline": "Readiness assessment for 27 pages",
+  "situation": "The site-wide score is 69. The homepage score is 87, which is 14 points higher than the benchmark average of 73 across 219 sites. Exactly 26 pages fail at least one check.",
+  "priorities": [
+   {
+    "title": "Contact signals",
+    "why": "Fixing this check adds 5.3 points to the site-wide score.",
+    "where": "18 of 27 pages",
+    "effort": "typically one link",
+    "gain_pts": 5.3,
+    "fact_ref": "check:Contact signals"
+   },
+   {
+    "title": "Organization / WebSite schema",
+    "why": "This is likely a shared template issue affecting 26 pages.",
+    "where": "26 of 27 pages",
+    "effort": "typically one template change",
+    "gain_pts": 7.7,
+    "fact_ref": "check:Organization / WebSite schema"
+   },
+   {
+    "title": "Content schema (Article, FAQ…)",
+    "why": "Fixing this check adds 3 points to the site-wide score.",
+    "where": "16 of 27 pages",
+    "effort": "typically markup for each page type",
+    "gain_pts": 3,
+    "fact_ref": "check:Content schema (Article, FAQ…)"
+   }
+  ],
+  "working": "Author / about signals, Canonical tag, Meta description, Open Graph tags, Single H1 heading, and html lang attribute work properly on all read pages.",
+  "caveats": [
+   "This measures readiness, meaning whether pages can be reached and read, and does not show whether any AI assistant names the site.",
+   "A crawler marked limited has an ordinary Disallow rule that applies, such as an admin path.",
+   "The crawl read 27 pages with 0 failed fetches.",
+   "There are 10 limited crawlers and 0 blocked crawlers."
+  ],
+  "source": {
+   "kind": "model",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-10-04"
+  },
+  "label": "Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them"
+ }
 }

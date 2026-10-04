@@ -73,6 +73,19 @@
       startBtn.disabled = false;
     }
 
+    // Final stage: the executive summary is written (and stored on the job) before the report is opened.
+    async function writeSummary(jobId) {
+      statusText.textContent = 'Writing the summary…';
+      try {
+        var res = await fetch('/api/crawl-summarize?id=' + encodeURIComponent(jobId));
+        var body = await res.json();
+        statusText.textContent = res.ok
+          ? 'Done. ' + (body.summary && body.summary.label ? body.summary.label + '. ' : '') + 'Report: /app/report?id=' + jobId
+          : 'Crawl done. The summary could not be written (' + (body.error || res.status) + '). Report: /app/report?id=' + jobId;
+      } catch (e) {
+        statusText.textContent = 'Crawl done. The summary could not be written. Report: /app/report?id=' + jobId;
+      }
+    }
     async function pollStep(jobId) {
       var res, data;
       try {
@@ -91,6 +104,7 @@
       statusText.textContent = data.pagesDone + ' / ' + data.pageCount + ' pages scanned — ' + data.status;
 
       if (data.status === 'done') {
+        await writeSummary(jobId);
         output.hidden = false;
         output.textContent = JSON.stringify(data, null, 2);
         startBtn.disabled = false;
