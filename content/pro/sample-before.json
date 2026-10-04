@@ -1,253 +1,214 @@
 {
  "domain": "answerable-app.vercel.app",
  "status": "done",
- "createdAt": "2026-10-04T10:48:00.311Z",
- "pageCount": 28,
- "pagesDone": 28,
+ "createdAt": "2026-10-03T14:04:20.829Z",
+ "pageCount": 27,
+ "pagesDone": 27,
  "retentionDays": 90,
- "discovery": {
-  "source": "sitemap",
-  "candidates": 28
- },
- "executiveSummary": {
-  "headline": "Readiness report for 28 pages",
-  "situation": "The site-wide score is 83. The benchmark average is 73, and the homepage score is 87.",
-  "priorities": [
-   {
-    "title": "Content schema (Article, FAQ…)",
-    "why": "Fixing this check adds 3 points to the site-wide score.",
-    "where": "17 of 28 pages",
-    "effort": "typically markup for each page type",
-    "gain_pts": 3,
-    "fact_ref": "check:Content schema (Article, FAQ…)"
-   },
-   {
-    "title": "Subheading structure (H2)",
-    "why": "Fixing this check adds 0.7 points to the site-wide score.",
-    "where": "4 of 28 pages",
-    "effort": "typically copy on each page",
-    "gain_pts": 0.7,
-    "fact_ref": "check:Subheading structure (H2)"
-   },
-   {
-    "title": "Organization / WebSite schema",
-    "why": "Fixing this check adds 0.6 points to the site-wide score.",
-    "where": "2 of 28 pages",
-    "effort": "typically one template change",
-    "gain_pts": 0.6,
-    "fact_ref": "check:Organization / WebSite schema"
-   }
-  ],
-  "working": "Author / about signals and canonical tag are working.",
-  "caveats": [
-   "This measures readiness, meaning whether pages can be reached and read, and does not show whether any AI assistant names the site.",
-   "A crawler marked limited has an ordinary Disallow rule that applies, such as an admin path.",
-   "The crawl read 28 pages.",
-   "There are 10 limited crawlers."
-  ],
-  "source": {
-   "kind": "model",
-   "model": "gemini-3.5-flash-lite",
-   "date": "2026-10-04"
-  },
-  "label": "Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them"
- },
  "summary": {
-  "pagesScanned": 28,
+  "pagesScanned": 27,
   "pagesFailed": 0,
   "failedUrls": [],
-  "average": 83,
+  "average": 69,
   "averageDiscoverability": 27,
   "averageTechnical": 20,
-  "averageTrust": 36,
+  "averageTrust": 22,
   "checkAggregates": {
    "robots.txt present": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "llms.txt present": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "Sitemap declared": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "AI crawler access (0/10 open)": {
     "passed": 0,
-    "failed": 28
+    "failed": 27
    },
    "Canonical tag": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "html lang attribute": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "Page title": {
-    "passed": 27,
+    "passed": 26,
     "failed": 1
    },
    "Meta description": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "Open Graph tags": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "Structured data (JSON-LD)": {
-    "passed": 28,
-    "failed": 0
+    "passed": 25,
+    "failed": 2
    },
    "Single H1 heading": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "Subheading structure (H2)": {
-    "passed": 24,
-    "failed": 4
+    "passed": 17,
+    "failed": 10
    },
    "Organization / WebSite schema": {
-    "passed": 26,
-    "failed": 2
+    "passed": 1,
+    "failed": 26
    },
    "Content schema (Article, FAQ…)": {
     "passed": 11,
-    "failed": 17
+    "failed": 16
    },
    "Author / about signals": {
-    "passed": 28,
+    "passed": 27,
     "failed": 0
    },
    "Contact signals": {
-    "passed": 28,
-    "failed": 0
+    "passed": 9,
+    "failed": 18
    }
   },
   "pagesWorstFirst": [
+   {
+    "url": "https://answerable-app.vercel.app/about",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/for-saas",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/for-brands",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/for-professionals",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/tools",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/research",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks",
+    "total": 61
+   },
+   {
+    "url": "https://answerable-app.vercel.app/playbooks",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/tools/robots-txt",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks/crm",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/tools/llms-txt-checker",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks/cybersecurity",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/tools/schema-generator",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks/devtools",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks/dtc-brands",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks/consumer-apps",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/benchmarks/hospitality",
+    "total": 66
+   },
+   {
+    "url": "https://answerable-app.vercel.app/privacy",
+    "total": 71
+   },
+   {
+    "url": "https://answerable-app.vercel.app/terms",
+    "total": 71
+   },
+   {
+    "url": "https://answerable-app.vercel.app/compare",
+    "total": 71
+   },
    {
     "url": "https://answerable-app.vercel.app/research/case-study-agaone",
     "total": 76
    },
    {
-    "url": "https://answerable-app.vercel.app/tools",
-    "total": 77
+    "url": "https://answerable-app.vercel.app/mcp",
+    "total": 79
    },
    {
-    "url": "https://answerable-app.vercel.app/research",
-    "total": 77
+    "url": "https://answerable-app.vercel.app/citation-tracking",
+    "total": 79
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks",
-    "total": 77
+    "url": "https://answerable-app.vercel.app/agentic-commerce",
+    "total": 79
+   },
+   {
+    "url": "https://answerable-app.vercel.app/methodology",
+    "total": 79
    },
    {
     "url": "https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
     "total": 79
    },
    {
-    "url": "https://answerable-app.vercel.app/about",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/for-saas",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/for-brands",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/for-professionals",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/privacy",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/terms",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/playbooks",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/sample-report",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/tools/robots-txt",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/benchmarks/crm",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/benchmarks/cybersecurity",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/benchmarks/devtools",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/benchmarks/dtc-brands",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/benchmarks/consumer-apps",
-    "total": 82
-   },
-   {
-    "url": "https://answerable-app.vercel.app/benchmarks/hospitality",
-    "total": 82
-   },
-   {
     "url": "https://answerable-app.vercel.app/",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/mcp",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/citation-tracking",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/agentic-commerce",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/methodology",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/compare",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/tools/llms-txt-checker",
-    "total": 87
-   },
-   {
-    "url": "https://answerable-app.vercel.app/tools/schema-generator",
     "total": 87
    }
   ],
   "homepageOnlyScore": 87,
-  "siteVsHomepageDelta": -4,
+  "siteVsHomepageDelta": -18,
   "homepagePassesButMostFail": [
    {
+    "label": "Organization / WebSite schema",
+    "failedOnPct": 100,
+    "failedOn": 26,
+    "of": 26
+   },
+   {
     "label": "Content schema (Article, FAQ…)",
-    "failedOnPct": 63,
-    "failedOn": 17,
-    "of": 27
+    "failedOnPct": 62,
+    "failedOn": 16,
+    "of": 26
+   },
+   {
+    "label": "Contact signals",
+    "failedOnPct": 69,
+    "failedOn": 18,
+    "of": 26
    }
   ]
  },
@@ -587,8 +548,8 @@
      {
       "cat": "trust",
       "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
+      "ok": false,
+      "pts": 0,
       "max": 5,
       "advice": "Break content into H2 sections",
       "why": "Sectioned content is far easier for AI systems to quote."
@@ -596,8 +557,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -623,8 +584,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -632,8 +593,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — About Andaç Üzel",
@@ -748,8 +709,8 @@
      {
       "cat": "trust",
       "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
+      "ok": false,
+      "pts": 0,
       "max": 5,
       "advice": "Break content into H2 sections",
       "why": "Sectioned content is far easier for AI systems to quote."
@@ -757,8 +718,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -784,8 +745,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -793,8 +754,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — B2B SaaS GEO & AEO Playbooks",
@@ -909,8 +870,8 @@
      {
       "cat": "trust",
       "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
+      "ok": false,
+      "pts": 0,
       "max": 5,
       "advice": "Break content into H2 sections",
       "why": "Sectioned content is far easier for AI systems to quote."
@@ -918,8 +879,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -945,8 +906,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -954,8 +915,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — Consumer & E-commerce Brand GEO & AEO Playbooks",
@@ -1070,8 +1031,8 @@
      {
       "cat": "trust",
       "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
+      "ok": false,
+      "pts": 0,
       "max": 5,
       "advice": "Break content into H2 sections",
       "why": "Sectioned content is far easier for AI systems to quote."
@@ -1079,8 +1040,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -1106,8 +1067,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -1115,8 +1076,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — Local & Independent Professional GEO & AEO Playbooks",
@@ -1240,8 +1201,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -1267,8 +1228,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -1276,8 +1237,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 30,
-    "total": 77
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — Free AI Visibility Tools",
@@ -1401,8 +1362,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -1437,8 +1398,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 32,
+    "total": 79
    },
    "siteInfo": {
     "title": "Answerable. — MCP Server for Claude, Cursor and Other AI Tools",
@@ -1562,8 +1523,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -1598,8 +1559,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 32,
+    "total": 79
    },
    "siteInfo": {
     "title": "Answerable. — Citation Tracking: Does a Model Name Your Brand?",
@@ -1723,8 +1684,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -1759,8 +1720,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 32,
+    "total": 79
    },
    "siteInfo": {
     "title": "Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?",
@@ -1884,8 +1845,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -1920,8 +1881,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 32,
+    "total": 79
    },
    "siteInfo": {
     "title": "Answerable. — Methodology: How the AI Visibility Score Is Calculated",
@@ -2045,8 +2006,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -2072,8 +2033,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -2081,8 +2042,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 30,
-    "total": 77
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — Research",
@@ -2179,8 +2140,8 @@
      {
       "cat": "tech",
       "label": "Structured data (JSON-LD)",
-      "ok": true,
-      "pts": 3,
+      "ok": false,
+      "pts": 0,
       "max": 3,
       "advice": "Add JSON-LD structured data",
       "why": "Explicitly labels your content for machines."
@@ -2206,8 +2167,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -2241,13 +2202,13 @@
      }
     ],
     "discover": 27,
-    "tech": 20,
-    "trust": 35,
-    "total": 82
+    "tech": 17,
+    "trust": 27,
+    "total": 71
    },
    "siteInfo": {
     "title": "Answerable. — Privacy",
-    "metaDesc": "What Answerable's scanner fetches, what it stores, and what it doesn't collect. Plain-language privacy policy.",
+    "metaDesc": "What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect. Plain-language privacy policy.",
     "lang": "en"
    }
   },
@@ -2340,8 +2301,8 @@
      {
       "cat": "tech",
       "label": "Structured data (JSON-LD)",
-      "ok": true,
-      "pts": 3,
+      "ok": false,
+      "pts": 0,
       "max": 3,
       "advice": "Add JSON-LD structured data",
       "why": "Explicitly labels your content for machines."
@@ -2367,8 +2328,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -2402,9 +2363,9 @@
      }
     ],
     "discover": 27,
-    "tech": 20,
-    "trust": 35,
-    "total": 82
+    "tech": 17,
+    "trust": 27,
+    "total": 71
    },
    "siteInfo": {
     "title": "Answerable. — Terms",
@@ -2528,8 +2489,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -2555,8 +2516,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -2564,8 +2525,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 30,
-    "total": 77
+    "trust": 14,
+    "total": 61
    },
    "siteInfo": {
     "title": "Answerable. — AI Readiness Benchmarks by Category",
@@ -2689,8 +2650,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -2716,8 +2677,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -2725,8 +2686,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 24,
+    "total": 71
    },
    "siteInfo": {
     "title": "Answerable. — Compare Two Sites: AI Readiness Side by Side",
@@ -2850,8 +2811,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -2877,8 +2838,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -2886,173 +2847,12 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — GEO and AEO Playbooks for 14 Categories",
     "metaDesc": "Fourteen GEO and AEO playbooks for B2B SaaS, consumer and e-commerce brands and local professionals. Pick your category and read the playbook for it.",
-    "lang": "en"
-   }
-  },
-  {
-   "url": "https://answerable-app.vercel.app/sample-report",
-   "status": "ok",
-   "result": {
-    "checks": [
-     {
-      "cat": "discover",
-      "label": "robots.txt present",
-      "ok": true,
-      "pts": 4,
-      "max": 4,
-      "advice": "Add a robots.txt file at your site root",
-      "why": "AI crawlers read your access policy from this file."
-     },
-     {
-      "cat": "discover",
-      "label": "llms.txt present",
-      "ok": true,
-      "pts": 4,
-      "max": 4,
-      "advice": "Add an llms.txt file at your site root",
-      "why": "An emerging standard that gives AI systems a curated map of your content."
-     },
-     {
-      "cat": "discover",
-      "label": "Sitemap declared",
-      "ok": true,
-      "pts": 6,
-      "max": 6,
-      "advice": "Declare a Sitemap: line in robots.txt",
-      "why": "Sitemaps let crawlers discover your content completely."
-     },
-     {
-      "cat": "discover",
-      "label": "AI crawler access (0/10 open)",
-      "ok": false,
-      "pts": 13,
-      "max": 26,
-      "advice": "Review robots.txt rules for blocked AI crawlers",
-      "why": "Every blocked crawler removes you from that platform’s answers."
-     },
-     {
-      "cat": "tech",
-      "label": "Canonical tag",
-      "ok": true,
-      "pts": 4,
-      "max": 4,
-      "advice": "Add rel=canonical to your homepage",
-      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
-     },
-     {
-      "cat": "tech",
-      "label": "html lang attribute",
-      "ok": true,
-      "pts": 3,
-      "max": 3,
-      "advice": "Declare a language, e.g. <html lang=\"en\">",
-      "why": "Lets AI systems classify your content’s language correctly."
-     },
-     {
-      "cat": "tech",
-      "label": "Page title",
-      "ok": true,
-      "pts": 3,
-      "max": 3,
-      "advice": "Write a descriptive 10–70 character title",
-      "why": "Answer engines frequently use the title as your source label."
-     },
-     {
-      "cat": "tech",
-      "label": "Meta description",
-      "ok": true,
-      "pts": 4,
-      "max": 4,
-      "advice": "Write a 50–170 character meta description",
-      "why": "The machine-readable summary of your page."
-     },
-     {
-      "cat": "tech",
-      "label": "Open Graph tags",
-      "ok": true,
-      "pts": 3,
-      "max": 3,
-      "advice": "Add og:title and og:description",
-      "why": "Keeps previews and shared representations consistent."
-     },
-     {
-      "cat": "tech",
-      "label": "Structured data (JSON-LD)",
-      "ok": true,
-      "pts": 3,
-      "max": 3,
-      "advice": "Add JSON-LD structured data",
-      "why": "Explicitly labels your content for machines."
-     },
-     {
-      "cat": "trust",
-      "label": "Single H1 heading",
-      "ok": true,
-      "pts": 6,
-      "max": 6,
-      "advice": "Use exactly one H1 on the page",
-      "why": "Makes the page’s main topic unambiguous."
-     },
-     {
-      "cat": "trust",
-      "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
-      "max": 5,
-      "advice": "Break content into H2 sections",
-      "why": "Sectioned content is far easier for AI systems to quote."
-     },
-     {
-      "cat": "trust",
-      "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
-      "max": 8,
-      "advice": "Add Organization schema",
-      "why": "Defines your brand as a verifiable entity — the base layer of trust."
-     },
-     {
-      "cat": "trust",
-      "label": "Content schema (Article, FAQ…)",
-      "ok": false,
-      "pts": 0,
-      "max": 5,
-      "advice": "Add Article or FAQPage schema",
-      "why": "Declares content type and raises citation likelihood."
-     },
-     {
-      "cat": "trust",
-      "label": "Author / about signals",
-      "ok": true,
-      "pts": 8,
-      "max": 8,
-      "advice": "Add an about page and author information",
-      "why": "AI systems weigh source credibility through ownership signals."
-     },
-     {
-      "cat": "trust",
-      "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
-      "max": 8,
-      "advice": "Add a contact page or email link",
-      "why": "Reachability is a baseline trust marker."
-     }
-    ],
-    "discover": 27,
-    "tech": 20,
-    "trust": 35,
-    "total": 82
-   },
-   "siteInfo": {
-    "title": "Answerable. — Sample report: a real crawl of our own site",
-    "metaDesc": "A real full-site crawl of answerable-app.vercel.app, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes.",
     "lang": "en"
    }
   },
@@ -3172,8 +2972,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -3199,8 +2999,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -3208,8 +3008,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "AI robots.txt Generator — Control Which AI Crawlers Access Your Site",
@@ -3494,8 +3294,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -3521,8 +3321,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -3530,8 +3330,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — CRM software: AI Readiness Benchmark",
@@ -3646,8 +3446,8 @@
      {
       "cat": "trust",
       "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
+      "ok": false,
+      "pts": 0,
       "max": 5,
       "advice": "Break content into H2 sections",
       "why": "Sectioned content is far easier for AI systems to quote."
@@ -3655,8 +3455,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -3682,8 +3482,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -3691,8 +3491,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — llms.txt Checker: Is Your llms.txt Yours?",
@@ -3977,8 +3777,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -4004,8 +3804,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -4013,8 +3813,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — Cybersecurity: AI Readiness Benchmark",
@@ -4129,8 +3929,8 @@
      {
       "cat": "trust",
       "label": "Subheading structure (H2)",
-      "ok": true,
-      "pts": 5,
+      "ok": false,
+      "pts": 0,
       "max": 5,
       "advice": "Break content into H2 sections",
       "why": "Sectioned content is far easier for AI systems to quote."
@@ -4138,8 +3938,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -4165,8 +3965,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -4174,8 +3974,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 40,
-    "total": 87
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — Schema Generator: JSON-LD Prefilled From Your Own Site",
@@ -4299,8 +4099,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -4326,8 +4126,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -4335,8 +4135,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — DevTools & Cloud: AI Readiness Benchmark",
@@ -4460,8 +4260,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -4487,8 +4287,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -4496,8 +4296,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — DTC brands: AI Readiness Benchmark",
@@ -4621,8 +4421,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -4648,8 +4448,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -4657,8 +4457,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — Consumer apps: AI Readiness Benchmark",
@@ -4782,8 +4582,8 @@
      {
       "cat": "trust",
       "label": "Organization / WebSite schema",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add Organization schema",
       "why": "Defines your brand as a verifiable entity — the base layer of trust."
@@ -4809,8 +4609,8 @@
      {
       "cat": "trust",
       "label": "Contact signals",
-      "ok": true,
-      "pts": 8,
+      "ok": false,
+      "pts": 0,
       "max": 8,
       "advice": "Add a contact page or email link",
       "why": "Reachability is a baseline trust marker."
@@ -4818,8 +4618,8 @@
     ],
     "discover": 27,
     "tech": 20,
-    "trust": 35,
-    "total": 82
+    "trust": 19,
+    "total": 66
    },
    "siteInfo": {
     "title": "Answerable. — Hospitality & travel: AI Readiness Benchmark",
@@ -4828,11 +4628,47 @@
    }
   }
  ],
- "benchmark": {
-  "average": 73,
-  "sites": 219,
-  "categories": 6,
-  "scannedFrom": "2026-07-29",
-  "scannedTo": "2026-07-31"
+ "executiveSummary": {
+  "headline": "Readiness assessment for 27 pages",
+  "situation": "The site-wide score is 69. The homepage score is 87, which is 14 points higher than the benchmark average of 73 across 219 sites. Exactly 26 pages fail at least one check.",
+  "priorities": [
+   {
+    "title": "Contact signals",
+    "why": "Fixing this check adds 5.3 points to the site-wide score.",
+    "where": "18 of 27 pages",
+    "effort": "typically one link",
+    "gain_pts": 5.3,
+    "fact_ref": "check:Contact signals"
+   },
+   {
+    "title": "Organization / WebSite schema",
+    "why": "This is likely a shared template issue affecting 26 pages.",
+    "where": "26 of 27 pages",
+    "effort": "typically one template change",
+    "gain_pts": 7.7,
+    "fact_ref": "check:Organization / WebSite schema"
+   },
+   {
+    "title": "Content schema (Article, FAQ…)",
+    "why": "Fixing this check adds 3 points to the site-wide score.",
+    "where": "16 of 27 pages",
+    "effort": "typically markup for each page type",
+    "gain_pts": 3,
+    "fact_ref": "check:Content schema (Article, FAQ…)"
+   }
+  ],
+  "working": "Author / about signals, Canonical tag, Meta description, Open Graph tags, Single H1 heading, and html lang attribute work properly on all read pages.",
+  "caveats": [
+   "This measures readiness, meaning whether pages can be reached and read, and does not show whether any AI assistant names the site.",
+   "A crawler marked limited has an ordinary Disallow rule that applies, such as an admin path.",
+   "The crawl read 27 pages with 0 failed fetches.",
+   "There are 10 limited crawlers and 0 blocked crawlers."
+  ],
+  "source": {
+   "kind": "model",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-10-04"
+  },
+  "label": "Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them"
  }
 }
