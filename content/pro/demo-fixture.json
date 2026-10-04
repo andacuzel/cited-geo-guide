@@ -1,0 +1,2166 @@
+{
+ "domain": "demo-store.example",
+ "status": "done",
+ "createdAt": "2026-10-03T14:04:20.829Z",
+ "pageCount": 13,
+ "pagesDone": 13,
+ "retentionDays": 90,
+ "summary": {
+  "pagesScanned": 12,
+  "pagesFailed": 1,
+  "failedUrls": [
+   {
+    "url": "https://demo-store.example/archive/old-page",
+    "error": "timeout"
+   }
+  ],
+  "average": 70,
+  "averageDiscoverability": 27,
+  "averageTechnical": 20,
+  "averageTrust": 23,
+  "checkAggregates": {
+   "robots.txt present": {
+    "passed": 12,
+    "failed": 0
+   },
+   "llms.txt present": {
+    "passed": 12,
+    "failed": 0
+   },
+   "Sitemap declared": {
+    "passed": 12,
+    "failed": 0
+   },
+   "AI crawler access (0/10 open)": {
+    "passed": 0,
+    "failed": 12
+   },
+   "Canonical tag": {
+    "passed": 12,
+    "failed": 0
+   },
+   "html lang attribute": {
+    "passed": 12,
+    "failed": 0
+   },
+   "Page title": {
+    "passed": 11,
+    "failed": 1
+   },
+   "Meta description": {
+    "passed": 12,
+    "failed": 0
+   },
+   "Open Graph tags": {
+    "passed": 12,
+    "failed": 0
+   },
+   "Structured data (JSON-LD)": {
+    "passed": 11,
+    "failed": 1
+   },
+   "Single H1 heading": {
+    "passed": 12,
+    "failed": 0
+   },
+   "Subheading structure (H2)": {
+    "passed": 8,
+    "failed": 4
+   },
+   "Organization / WebSite schema": {
+    "passed": 1,
+    "failed": 11
+   },
+   "Content schema (Article, FAQ…)": {
+    "passed": 5,
+    "failed": 7
+   },
+   "Author / about signals": {
+    "passed": 12,
+    "failed": 0
+   },
+   "Contact signals": {
+    "passed": 5,
+    "failed": 7
+   }
+  },
+  "pagesWorstFirst": [
+   {
+    "url": "https://demo-store.example/about",
+    "total": 61
+   },
+   {
+    "url": "https://demo-store.example/for-saas",
+    "total": 61
+   },
+   {
+    "url": "https://demo-store.example/for-brands",
+    "total": 61
+   },
+   {
+    "url": "https://demo-store.example/tools",
+    "total": 61
+   },
+   {
+    "url": "https://demo-store.example/benchmarks/dtc-brands",
+    "total": 66
+   },
+   {
+    "url": "https://demo-store.example/benchmarks/hospitality",
+    "total": 66
+   },
+   {
+    "url": "https://demo-store.example/terms",
+    "total": 71
+   },
+   {
+    "url": "https://demo-store.example/compare",
+    "total": 71
+   },
+   {
+    "url": "https://demo-store.example/research/case-study-agaone",
+    "total": 76
+   },
+   {
+    "url": "https://demo-store.example/agentic-commerce",
+    "total": 79
+   },
+   {
+    "url": "https://demo-store.example/research/llms-txt-adoption-2026",
+    "total": 79
+   },
+   {
+    "url": "https://demo-store.example/",
+    "total": 87
+   }
+  ],
+  "homepageOnlyScore": 87,
+  "siteVsHomepageDelta": -17,
+  "homepagePassesButMostFail": [
+   {
+    "label": "Organization / WebSite schema",
+    "failedOnPct": 100,
+    "failedOn": 11,
+    "of": 11
+   },
+   {
+    "label": "Content schema (Article, FAQ…)",
+    "failedOnPct": 64,
+    "failedOn": 7,
+    "of": 11
+   },
+   {
+    "label": "Contact signals",
+    "failedOnPct": 64,
+    "failedOn": 7,
+    "of": 11
+   }
+  ]
+ },
+ "siteContext": {
+  "robotsOk": true,
+  "llmsOk": true,
+  "sitemapOk": true,
+  "botResults": [
+   {
+    "name": "GPTBot",
+    "desc": "OpenAI training",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "ChatGPT-User",
+    "desc": "ChatGPT live browsing",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "OAI-SearchBot",
+    "desc": "ChatGPT search index",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "ClaudeBot",
+    "desc": "Anthropic crawler",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "anthropic-ai",
+    "desc": "Anthropic (legacy UA)",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "PerplexityBot",
+    "desc": "Perplexity index",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "Perplexity-User",
+    "desc": "Perplexity live access",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "Google-Extended",
+    "desc": "Gemini training access",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "CCBot",
+    "desc": "Common Crawl",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   },
+   {
+    "name": "Bytespider",
+    "desc": "ByteDance crawler",
+    "state": "partial",
+    "rule": "Disallow: /admin/ (+1 more) · bot-specific rule"
+   }
+  ]
+ },
+ "pages": [
+  {
+   "url": "https://demo-store.example/",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 40,
+    "total": 87
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO & AEO playbooks. No email required.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/about",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 14,
+    "total": 61
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Andaç Üzel built Answerable after ten years in content editing and content marketing. Why the free version covers most of what you need, and what Pro is for.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/for-saas",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 14,
+    "total": 61
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Six GEO and AEO playbooks for B2B SaaS: CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools. Fixes grounded in each category's citation sources.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/for-brands",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 14,
+    "total": 61
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Four GEO and AEO playbooks for consumer and e-commerce brands: e-commerce, consumer apps, hospitality and marketplaces. Fixes grounded in each category's sources.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/tools",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 14,
+    "total": 61
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup. No signup.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/agentic-commerce",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 32,
+    "total": 79
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Scan whether AI shopping agents can find your product and read your price. What UCP is, what your llms.txt says about your brand, and what agentic commerce means.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/terms",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": false,
+      "pts": 0,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 17,
+    "trust": 27,
+    "total": 71
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Terms for using Answerable's free AI visibility scanner: provided as-is, scores are guidance not guarantees, and only scan domains you're authorized to check.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/compare",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 24,
+    "total": 71
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Scan two domains one after the other and see where their AI readiness differs: the score, the three pillars, the checks and the AI crawlers. Free, nothing stored.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/research/llms-txt-adoption-2026",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 32,
+    "total": 79
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "We scanned 64 sites across B2B SaaS and consumer brands. Blocking AI crawlers is rare. What those crawlers find once they're in is where the two categories split.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/research/case-study-agaone",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": false,
+      "pts": 0,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 17,
+    "trust": 32,
+    "total": 76
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "AgaOne Commodities scanned their new corporate sites after launch, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/benchmarks/dtc-brands",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 19,
+    "total": 66
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "DTC brands: 33 brands scanned on July 29, 2026, average AI readiness score 72/100 (range 46 to 87). Pillars, most-failed checks and crawler access.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/benchmarks/hospitality",
+   "status": "ok",
+   "result": {
+    "checks": [
+     {
+      "cat": "discover",
+      "label": "robots.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add a robots.txt file at your site root",
+      "why": "AI crawlers read your access policy from this file."
+     },
+     {
+      "cat": "discover",
+      "label": "llms.txt present",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add an llms.txt file at your site root",
+      "why": "An emerging standard that gives AI systems a curated map of your content."
+     },
+     {
+      "cat": "discover",
+      "label": "Sitemap declared",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Declare a Sitemap: line in robots.txt",
+      "why": "Sitemaps let crawlers discover your content completely."
+     },
+     {
+      "cat": "discover",
+      "label": "AI crawler access (0/10 open)",
+      "ok": false,
+      "pts": 13,
+      "max": 26,
+      "advice": "Review robots.txt rules for blocked AI crawlers",
+      "why": "Every blocked crawler removes you from that platform’s answers."
+     },
+     {
+      "cat": "tech",
+      "label": "Canonical tag",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Add rel=canonical to your homepage",
+      "why": "Tells machines the definitive URL and prevents duplicate-content ambiguity."
+     },
+     {
+      "cat": "tech",
+      "label": "html lang attribute",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Declare a language, e.g. <html lang=\"en\">",
+      "why": "Lets AI systems classify your content’s language correctly."
+     },
+     {
+      "cat": "tech",
+      "label": "Page title",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Write a descriptive 10–70 character title",
+      "why": "Answer engines frequently use the title as your source label."
+     },
+     {
+      "cat": "tech",
+      "label": "Meta description",
+      "ok": true,
+      "pts": 4,
+      "max": 4,
+      "advice": "Write a 50–170 character meta description",
+      "why": "The machine-readable summary of your page."
+     },
+     {
+      "cat": "tech",
+      "label": "Open Graph tags",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add og:title and og:description",
+      "why": "Keeps previews and shared representations consistent."
+     },
+     {
+      "cat": "tech",
+      "label": "Structured data (JSON-LD)",
+      "ok": true,
+      "pts": 3,
+      "max": 3,
+      "advice": "Add JSON-LD structured data",
+      "why": "Explicitly labels your content for machines."
+     },
+     {
+      "cat": "trust",
+      "label": "Single H1 heading",
+      "ok": true,
+      "pts": 6,
+      "max": 6,
+      "advice": "Use exactly one H1 on the page",
+      "why": "Makes the page’s main topic unambiguous."
+     },
+     {
+      "cat": "trust",
+      "label": "Subheading structure (H2)",
+      "ok": true,
+      "pts": 5,
+      "max": 5,
+      "advice": "Break content into H2 sections",
+      "why": "Sectioned content is far easier for AI systems to quote."
+     },
+     {
+      "cat": "trust",
+      "label": "Organization / WebSite schema",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add Organization schema",
+      "why": "Defines your brand as a verifiable entity — the base layer of trust."
+     },
+     {
+      "cat": "trust",
+      "label": "Content schema (Article, FAQ…)",
+      "ok": false,
+      "pts": 0,
+      "max": 5,
+      "advice": "Add Article or FAQPage schema",
+      "why": "Declares content type and raises citation likelihood."
+     },
+     {
+      "cat": "trust",
+      "label": "Author / about signals",
+      "ok": true,
+      "pts": 8,
+      "max": 8,
+      "advice": "Add an about page and author information",
+      "why": "AI systems weigh source credibility through ownership signals."
+     },
+     {
+      "cat": "trust",
+      "label": "Contact signals",
+      "ok": false,
+      "pts": 0,
+      "max": 8,
+      "advice": "Add a contact page or email link",
+      "why": "Reachability is a baseline trust marker."
+     }
+    ],
+    "discover": 27,
+    "tech": 20,
+    "trust": 19,
+    "total": 66
+   },
+   "siteInfo": {
+    "title": "Demo store page",
+    "metaDesc": "Hospitality & travel: 21 venues scanned on July 31, 2026, average AI readiness score 71/100 (range 58 to 96). Pillars, most-failed checks and crawler access.",
+    "lang": "en"
+   }
+  },
+  {
+   "url": "https://demo-store.example/archive/old-page",
+   "status": "failed",
+   "error": "timeout"
+  }
+ ]
+}

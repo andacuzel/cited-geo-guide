@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Sample report: a real crawl of our own site</title>
+  <meta name="description" content="A real full-site crawl of answerable-app.vercel.app, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes." />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/sample-report" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — Sample report: a real crawl of our own site" />
+  <meta property="og:description" content="A real full-site crawl of answerable-app.vercel.app, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/sample-report" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Sample report: a real crawl of our own site" />
+  <meta name="twitter:description" content="A real full-site crawl of answerable-app.vercel.app, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=45" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Sample report: a real crawl of answerable-app.vercel.app",
+    "description": "A real full-site crawl of answerable-app.vercel.app, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes.",
+    "url": "https://answerable-app.vercel.app/sample-report",
+    "dateCreated": "2026-10-03"
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="rp-page-wrap">
+      <div class="rp-sample-banner">
+        <p class="rp-kicker">Sample report</p>
+        <p><strong>This is a real crawl of our own site, answerable-app.vercel.app, run on October 3, 2026.</strong> 27 pages, read 1.5 seconds apart, with robots.txt respected. It is the second crawl: the first found meta descriptions that were too long, we fixed those, and this is the result. Nothing in it has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>
+      </div>
+      <div class="rp-report" data-domain="answerable-app.vercel.app">
+      <header class="rp-head"><p class="rp-kicker">AI readiness report, full site</p><h1 class="rp-title">answerable-app.vercel.app</h1><p class="rp-meta">Crawled October 3, 2026. <span data-fig="pagesRead2">27</span> pages read. One crawl, one date.</p></header>
+      <div class="rp-layout">
+      <aside class="rp-summary" aria-label="Summary">
+        <p class="rp-kicker">Site-wide score</p>
+        <p class="rp-score"><span class="rp-score__num"><span data-fig="avg">69</span></span><span class="rp-score__of">/100</span></p>
+        <p class="rp-score__sub">average of <span data-fig="pagesRead">27</span> pages read</p>
+        <dl class="rp-facts">
+          <div><dt>Homepage only</dt><dd><span data-fig="homeScore">87</span></dd></div>
+          <div><dt>Gap</dt><dd><span data-fig="gap">-18</span></dd></div>
+          <div><dt>Not fetched</dt><dd><span data-fig="pagesFailed">0</span></dd></div>
+        </dl>
+        <p class="rp-gap">The homepage scores 87. The average across 27 pages is 69, 18 points lower. A scan of the homepage alone would not show that.</p>
+        <p class="rp-kicker rp-kicker--spaced">Three pillars, site average</p>
+        <ul class="rp-pillars">
+          <li><span class="rp-pillars__name">Discoverability</span><span class="rp-bar" aria-hidden="true"><span class="rp-bar__fill" style="width:68%"></span></span><span class="rp-pillars__val"><span data-fig="pillar-discover">27</span>/40</span></li>
+          <li><span class="rp-pillars__name">Technical foundation</span><span class="rp-bar" aria-hidden="true"><span class="rp-bar__fill" style="width:100%"></span></span><span class="rp-pillars__val"><span data-fig="pillar-tech">20</span>/20</span></li>
+          <li><span class="rp-pillars__name">Content &amp; trust</span><span class="rp-bar" aria-hidden="true"><span class="rp-bar__fill" style="width:55%"></span></span><span class="rp-pillars__val"><span data-fig="pillar-trust">22</span>/40</span></li>
+        </ul>
+      </aside>
+      <div class="rp-main">
+      <section class="rp-section" aria-labelledby="rp-pages-h">
+        <h2 id="rp-pages-h" class="rp-h2">Pages, worst first</h2>
+        <p class="rp-note">Failed checks counts the 12 checks that belong to a page. The 4 site-level checks are listed once, below.</p>
+        <div class="rp-tablewrap"><table class="rp-table" data-sortable>
+          <thead><tr><th scope="col" data-sort="text">Page</th><th scope="col" data-sort="num" class="rp-num">Score</th><th scope="col" data-sort="num" class="rp-num">Failed checks</th></tr></thead>
+          <tbody>
+            <tr><td data-v="/about"><a href="#rp-page-0">/about</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/benchmarks"><a href="#rp-page-1">/benchmarks</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/for-brands"><a href="#rp-page-2">/for-brands</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/for-professionals"><a href="#rp-page-3">/for-professionals</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/for-saas"><a href="#rp-page-4">/for-saas</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/research"><a href="#rp-page-5">/research</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/tools"><a href="#rp-page-6">/tools</a></td><td class="rp-num" data-v="61" data-fig="page-score">61</td><td class="rp-num" data-v="4" data-fig="page-failed">4</td></tr>
+            <tr><td data-v="/benchmarks/consumer-apps"><a href="#rp-page-7">/benchmarks/consumer-apps</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/benchmarks/crm"><a href="#rp-page-8">/benchmarks/crm</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/benchmarks/cybersecurity"><a href="#rp-page-9">/benchmarks/cybersecurity</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/benchmarks/devtools"><a href="#rp-page-10">/benchmarks/devtools</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/benchmarks/dtc-brands"><a href="#rp-page-11">/benchmarks/dtc-brands</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/benchmarks/hospitality"><a href="#rp-page-12">/benchmarks/hospitality</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/playbooks"><a href="#rp-page-13">/playbooks</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/tools/llms-txt-checker"><a href="#rp-page-14">/tools/llms-txt-checker</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/tools/robots-txt"><a href="#rp-page-15">/tools/robots-txt</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/tools/schema-generator"><a href="#rp-page-16">/tools/schema-generator</a></td><td class="rp-num" data-v="66" data-fig="page-score">66</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/privacy"><a href="#rp-page-17">/privacy</a></td><td class="rp-num" data-v="71" data-fig="page-score">71</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/terms"><a href="#rp-page-18">/terms</a></td><td class="rp-num" data-v="71" data-fig="page-score">71</td><td class="rp-num" data-v="3" data-fig="page-failed">3</td></tr>
+            <tr><td data-v="/compare"><a href="#rp-page-19">/compare</a></td><td class="rp-num" data-v="71" data-fig="page-score">71</td><td class="rp-num" data-v="2" data-fig="page-failed">2</td></tr>
+            <tr><td data-v="/research/case-study-agaone"><a href="#rp-page-20">/research/case-study-agaone</a></td><td class="rp-num" data-v="76" data-fig="page-score">76</td><td class="rp-num" data-v="2" data-fig="page-failed">2</td></tr>
+            <tr><td data-v="/agentic-commerce"><a href="#rp-page-21">/agentic-commerce</a></td><td class="rp-num" data-v="79" data-fig="page-score">79</td><td class="rp-num" data-v="1" data-fig="page-failed">1</td></tr>
+            <tr><td data-v="/citation-tracking"><a href="#rp-page-22">/citation-tracking</a></td><td class="rp-num" data-v="79" data-fig="page-score">79</td><td class="rp-num" data-v="1" data-fig="page-failed">1</td></tr>
+            <tr><td data-v="/mcp"><a href="#rp-page-23">/mcp</a></td><td class="rp-num" data-v="79" data-fig="page-score">79</td><td class="rp-num" data-v="1" data-fig="page-failed">1</td></tr>
+            <tr><td data-v="/methodology"><a href="#rp-page-24">/methodology</a></td><td class="rp-num" data-v="79" data-fig="page-score">79</td><td class="rp-num" data-v="1" data-fig="page-failed">1</td></tr>
+            <tr><td data-v="/research/llms-txt-adoption-2026"><a href="#rp-page-25">/research/llms-txt-adoption-2026</a></td><td class="rp-num" data-v="79" data-fig="page-score">79</td><td class="rp-num" data-v="1" data-fig="page-failed">1</td></tr>
+            <tr><td data-v="/"><a href="#rp-page-26">/</a></td><td class="rp-num" data-v="87" data-fig="page-score">87</td><td class="rp-num" data-v="0" data-fig="page-failed">0</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+      <section class="rp-section" aria-labelledby="rp-checks-h">
+        <h2 id="rp-checks-h" class="rp-h2">Checks that fail, by number of pages</h2>
+        <ul class="rp-checklist">
+          <li><span class="rp-checklist__text"><strong>Organization / WebSite schema</strong> fails on <span data-fig="check-failing">26</span> of <span data-fig="check-of">27</span> pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:96%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Contact signals</strong> fails on <span data-fig="check-failing">18</span> of <span data-fig="check-of">27</span> pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:67%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Content schema (Article, FAQ…)</strong> fails on <span data-fig="check-failing">16</span> of <span data-fig="check-of">27</span> pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:59%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Subheading structure (H2)</strong> fails on <span data-fig="check-failing">10</span> of <span data-fig="check-of">27</span> pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:37%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Structured data (JSON-LD)</strong> fails on <span data-fig="check-failing">2</span> of <span data-fig="check-of">27</span> pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:7%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Page title</strong> fails on <span data-fig="check-failing">1</span> of <span data-fig="check-of">27</span> pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:4%"></span></span></li>
+        </ul>
+        <p class="rp-note">Pass on every page read: Author / about signals, Canonical tag, Meta description, Open Graph tags, Single H1 heading, html lang attribute.</p>
+      </section>
+      <section class="rp-section" aria-labelledby="rp-hidden-h">
+        <h2 id="rp-hidden-h" class="rp-h2">Pass on the homepage, fail on most other pages</h2>
+        <p class="rp-note">A single-page scan reads the homepage only, so it cannot see these.</p>
+        <ul class="rp-checklist">
+          <li><span class="rp-checklist__text"><strong>Organization / WebSite schema</strong> passes on the homepage and fails on <span data-fig="hidden-failing">26</span> of <span data-fig="hidden-of">26</span> other pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:100%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Contact signals</strong> passes on the homepage and fails on <span data-fig="hidden-failing">18</span> of <span data-fig="hidden-of">26</span> other pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:69%"></span></span></li>
+          <li><span class="rp-checklist__text"><strong>Content schema (Article, FAQ…)</strong> passes on the homepage and fails on <span data-fig="hidden-failing">16</span> of <span data-fig="hidden-of">26</span> other pages</span><span class="rp-bar rp-bar--risk" aria-hidden="true"><span class="rp-bar__fill" style="width:62%"></span></span></li>
+        </ul>
+      </section>
+      <section class="rp-section" aria-labelledby="rp-site-h">
+        <h2 id="rp-site-h" class="rp-h2">Site-level checks</h2>
+        <p class="rp-note">These describe the whole site and read the same on every page.</p>
+        <ul class="rp-sitechecks">
+          <li class="is-pass"><span class="rp-sitechecks__state">Pass</span><span><strong>robots.txt present</strong></span></li>
+          <li class="is-pass"><span class="rp-sitechecks__state">Pass</span><span><strong>llms.txt present</strong></span></li>
+          <li class="is-pass"><span class="rp-sitechecks__state">Pass</span><span><strong>Sitemap declared</strong></span></li>
+          <li class="is-fail"><span class="rp-sitechecks__state">Fails</span><span><strong>AI crawler access</strong> <span class="rp-sitechecks__advice">Review robots.txt rules for blocked AI crawlers</span></span></li>
+        </ul>
+        <p class="rp-note">10 AI crawlers have at least one Disallow rule that applies. That is often an ordinary path such as an admin area, not a block on the site. The scan gives it half credit.</p>
+        <details class="rp-snippet"><summary>Copy-paste fix: robots.txt</summary><pre class="rp-code"># Allows the AI crawlers that are limited or blocked today
+      User-agent: GPTBot
+      Allow: /
+      
+      User-agent: ChatGPT-User
+      Allow: /
+      
+      User-agent: OAI-SearchBot
+      Allow: /
+      
+      User-agent: ClaudeBot
+      Allow: /
+      
+      User-agent: anthropic-ai
+      Allow: /
+      
+      User-agent: PerplexityBot
+      Allow: /
+      
+      User-agent: Perplexity-User
+      Allow: /
+      
+      User-agent: Google-Extended
+      Allow: /
+      
+      User-agent: CCBot
+      Allow: /
+      
+      User-agent: Bytespider
+      Allow: /</pre></details>
+      </section>
+      <section class="rp-section" aria-labelledby="rp-failed-h">
+        <h2 id="rp-failed-h" class="rp-h2">Pages that could not be fetched: <span data-fig="failedCount">0</span></h2>
+        <p class="rp-note">None. Every page in the crawl was fetched.</p>
+      </section>
+      <section class="rp-section" aria-labelledby="rp-detail-h">
+        <h2 id="rp-detail-h" class="rp-h2">Page detail</h2>
+        <p class="rp-note">Each page with its failed checks, what to do, and copy-paste fixes where Answerable can write one.</p>
+        <div class="rp-details">
+          <details class="rp-page" id="rp-page-0"><summary><span class="rp-page__url">/about</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Andaç Üzel built Answerable after ten years in content editing and content marketing. Why the free version covers most of what you need, and what Pro is for.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — About Andaç Üzel&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — About Andaç Üzel&quot;,
+        &quot;description&quot;: &quot;Andaç Üzel built Answerable after ten years in content editing and content marketing. Why the free version covers most of what you need, and what Pro is for.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-1"><summary><span class="rp-page__url">/benchmarks</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;219 well-known sites across 6 categories, scanned in July 2026. Average AI readiness score 73/100. See each category's pillars, failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — AI Readiness Benchmarks by Category&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — AI Readiness Benchmarks by Category&quot;,
+        &quot;description&quot;: &quot;219 well-known sites across 6 categories, scanned in July 2026. Average AI readiness score 73/100. See each category's pillars, failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-2"><summary><span class="rp-page__url">/for-brands</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Four GEO and AEO playbooks for consumer and e-commerce brands: e-commerce, consumer apps, hospitality and marketplaces. Fixes grounded in each category's sources.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Consumer &amp; E-commerce Brand GEO &amp; AEO Playbooks&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Consumer &amp; E-commerce Brand GEO &amp; AEO Playbooks&quot;,
+        &quot;description&quot;: &quot;Four GEO and AEO playbooks for consumer and e-commerce brands: e-commerce, consumer apps, hospitality and marketplaces. Fixes grounded in each category's sources.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-3"><summary><span class="rp-page__url">/for-professionals</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Four GEO and AEO playbooks for local and independent professionals: real estate, legal, health and wellness, and local services. Grounded in each category's sources.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Local &amp; Independent Professional GEO &amp; AEO Playbooks&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Local &amp; Independent Professional GEO &amp; AEO Playbooks&quot;,
+        &quot;description&quot;: &quot;Four GEO and AEO playbooks for local and independent professionals: real estate, legal, health and wellness, and local services. Grounded in each category's sources.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-4"><summary><span class="rp-page__url">/for-saas</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Six GEO and AEO playbooks for B2B SaaS: CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools. Fixes grounded in each category's citation sources.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — B2B SaaS GEO &amp; AEO Playbooks&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — B2B SaaS GEO &amp; AEO Playbooks&quot;,
+        &quot;description&quot;: &quot;Six GEO and AEO playbooks for B2B SaaS: CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools. Fixes grounded in each category's citation sources.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-5"><summary><span class="rp-page__url">/research</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Answerable's research series: what we find when we scan real sites for AI visibility, category by category.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Research&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Research&quot;,
+        &quot;description&quot;: &quot;Answerable's research series: what we find when we scan real sites for AI visibility, category by category.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-6"><summary><span class="rp-page__url">/tools</span><span class="rp-page__meta">score 61, 4 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup. No signup.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Free AI Visibility Tools&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Free AI Visibility Tools&quot;,
+        &quot;description&quot;: &quot;Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup. No signup.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-7"><summary><span class="rp-page__url">/benchmarks/consumer-apps</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Consumer apps: 40 apps scanned on July 31, 2026, average AI readiness score 65/100 (range 30 to 97). Pillars, most-failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Consumer apps: AI Readiness Benchmark&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Consumer apps: AI Readiness Benchmark&quot;,
+        &quot;description&quot;: &quot;Consumer apps: 40 apps scanned on July 31, 2026, average AI readiness score 65/100 (range 30 to 97). Pillars, most-failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-8"><summary><span class="rp-page__url">/benchmarks/crm</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;CRM software: 31 platforms scanned on July 29, 2026, average AI readiness score 78/100 (range 53 to 91). Pillars, most-failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — CRM software: AI Readiness Benchmark&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — CRM software: AI Readiness Benchmark&quot;,
+        &quot;description&quot;: &quot;CRM software: 31 platforms scanned on July 29, 2026, average AI readiness score 78/100 (range 53 to 91). Pillars, most-failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-9"><summary><span class="rp-page__url">/benchmarks/cybersecurity</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Cybersecurity: 46 platforms scanned on July 31, 2026, average AI readiness score 78/100 (range 55 to 100). Pillars, most-failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Cybersecurity: AI Readiness Benchmark&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Cybersecurity: AI Readiness Benchmark&quot;,
+        &quot;description&quot;: &quot;Cybersecurity: 46 platforms scanned on July 31, 2026, average AI readiness score 78/100 (range 55 to 100). Pillars, most-failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-10"><summary><span class="rp-page__url">/benchmarks/devtools</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;DevTools &amp; Cloud: 48 platforms scanned on July 31, 2026, average AI readiness score 74/100 (range 40 to 100). Pillars, most-failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — DevTools &amp; Cloud: AI Readiness Benchmark&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — DevTools &amp; Cloud: AI Readiness Benchmark&quot;,
+        &quot;description&quot;: &quot;DevTools &amp; Cloud: 48 platforms scanned on July 31, 2026, average AI readiness score 74/100 (range 40 to 100). Pillars, most-failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-11"><summary><span class="rp-page__url">/benchmarks/dtc-brands</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;DTC brands: 33 brands scanned on July 29, 2026, average AI readiness score 72/100 (range 46 to 87). Pillars, most-failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — DTC brands: AI Readiness Benchmark&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — DTC brands: AI Readiness Benchmark&quot;,
+        &quot;description&quot;: &quot;DTC brands: 33 brands scanned on July 29, 2026, average AI readiness score 72/100 (range 46 to 87). Pillars, most-failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-12"><summary><span class="rp-page__url">/benchmarks/hospitality</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Hospitality &amp; travel: 21 venues scanned on July 31, 2026, average AI readiness score 71/100 (range 58 to 96). Pillars, most-failed checks and crawler access.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Hospitality &amp; travel: AI Readiness Benchmark&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Hospitality &amp; travel: AI Readiness Benchmark&quot;,
+        &quot;description&quot;: &quot;Hospitality &amp; travel: 21 venues scanned on July 31, 2026, average AI readiness score 71/100 (range 58 to 96). Pillars, most-failed checks and crawler access.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-13"><summary><span class="rp-page__url">/playbooks</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Fourteen GEO and AEO playbooks for B2B SaaS, consumer and e-commerce brands and local professionals. Pick your category and read the playbook for it.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — GEO and AEO Playbooks for 14 Categories&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — GEO and AEO Playbooks for 14 Categories&quot;,
+        &quot;description&quot;: &quot;Fourteen GEO and AEO playbooks for B2B SaaS, consumer and e-commerce brands and local professionals. Pick your category and read the playbook for it.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-14"><summary><span class="rp-page__url">/tools/llms-txt-checker</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Paste a domain to check its llms.txt: whether it exists, how it is built, whether it names your brand, and whether it reads like a platform default. Free, no signup.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — llms.txt Checker: Is Your llms.txt Yours?&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-15"><summary><span class="rp-page__url">/tools/robots-txt</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Choose which of the 10 major AI crawlers, including GPTBot, ClaudeBot and PerplexityBot, can access your site, then copy a ready-to-use robots.txt file. Free.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;AI robots.txt Generator — Control Which AI Crawlers Access Your Site&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-16"><summary><span class="rp-page__url">/tools/schema-generator</span><span class="rp-page__meta">score 66, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Subheading structure (H2)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Break content into H2 sections</span> <span class="rp-fails__why">Sectioned content is far easier for AI systems to quote.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Scan your domain for its real title, description and language, then edit ready-to-paste JSON-LD for Organization, FAQPage, Article, Product or LocalBusiness.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Schema Generator: JSON-LD Prefilled From Your Own Site&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-17"><summary><span class="rp-page__url">/privacy</span><span class="rp-page__meta">score 71, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Structured data (JSON-LD)</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Add JSON-LD structured data</span> <span class="rp-fails__why">Explicitly labels your content for machines.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect. Plain-language privacy policy.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Privacy&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Privacy&quot;,
+        &quot;description&quot;: &quot;What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect. Plain-language privacy policy.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-18"><summary><span class="rp-page__url">/terms</span><span class="rp-page__meta">score 71, 3 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Structured data (JSON-LD)</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Add JSON-LD structured data</span> <span class="rp-fails__why">Explicitly labels your content for machines.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Content schema (Article, FAQ…)</strong> <span class="rp-fails__pts">0/5</span><br /><span class="rp-fails__advice">Add Article or FAQPage schema</span> <span class="rp-fails__why">Declares content type and raises citation likelihood.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Terms for using Answerable's free AI visibility scanner: provided as-is, scores are guidance not guarantees, and only scan domains you're authorized to check.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Terms&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+            <details class="rp-snippet"><summary>Copy-paste fix: Article JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@type&quot;: &quot;Article&quot;,
+        &quot;headline&quot;: &quot;Answerable. — Terms&quot;,
+        &quot;description&quot;: &quot;Terms for using Answerable's free AI visibility scanner: provided as-is, scores are guidance not guarantees, and only scan domains you're authorized to check.&quot;,
+        &quot;inLanguage&quot;: &quot;en&quot;,
+        &quot;author&quot;: {
+          &quot;@type&quot;: &quot;Organization&quot;,
+          &quot;name&quot;: &quot;[Your company name]&quot;
+        },
+        &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+        &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-19"><summary><span class="rp-page__url">/compare</span><span class="rp-page__meta">score 71, 2 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+              <li><strong>Contact signals</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add a contact page or email link</span> <span class="rp-fails__why">Reachability is a baseline trust marker.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Scan two domains one after the other and see where their AI readiness differs: the score, the three pillars, the checks and the AI crawlers. Free, nothing stored.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Compare Two Sites: AI Readiness Side by Side&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-20"><summary><span class="rp-page__url">/research/case-study-agaone</span><span class="rp-page__meta">score 76, 2 failed checks</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Page title</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Write a descriptive 10–70 character title</span> <span class="rp-fails__why">Answer engines frequently use the title as your source label.</span></li>
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;AgaOne Commodities scanned their new corporate sites after launch, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Two Sites, Launched With Good SEO, Invisible to AI Crawlers&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-21"><summary><span class="rp-page__url">/agentic-commerce</span><span class="rp-page__meta">score 79, 1 failed check</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Scan whether AI shopping agents can find your product and read your price. What UCP is, what your llms.txt says about your brand, and what agentic commerce means.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-22"><summary><span class="rp-page__url">/citation-tracking</span><span class="rp-page__meta">score 79, 1 failed check</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;We ask a model the questions your customers ask, five times each, and show you when your name comes up and when it does not. Early access, run for you.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Citation Tracking: Does a Model Name Your Brand?&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-23"><summary><span class="rp-page__url">/mcp</span><span class="rp-page__meta">score 79, 1 failed check</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, copy-paste setup, nothing stored.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — MCP Server for Claude, Cursor and Other AI Tools&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-24"><summary><span class="rp-page__url">/methodology</span><span class="rp-page__meta">score 79, 1 failed check</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;How Answerable's AI visibility score is built: three weighted pillars, all 16 checks and their points, what the scan does not measure, and how data is collected.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Methodology: How the AI Visibility Score Is Calculated&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-25"><summary><span class="rp-page__url">/research/llms-txt-adoption-2026</span><span class="rp-page__meta">score 79, 1 failed check</span></summary>
+            <ul class="rp-fails">
+              <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+            </ul>
+            <details class="rp-snippet"><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+      {
+        &quot;@context&quot;: &quot;https://schema.org&quot;,
+        &quot;@graph&quot;: [
+          {
+            &quot;@type&quot;: &quot;Organization&quot;,
+            &quot;name&quot;: &quot;[Your company name]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;description&quot;: &quot;We scanned 64 sites across B2B SaaS and consumer brands. Blocking AI crawlers is rare. What those crawlers find once they're in is where the two categories split.&quot;
+          },
+          {
+            &quot;@type&quot;: &quot;WebSite&quot;,
+            &quot;name&quot;: &quot;Answerable. — Who Controls Your Brand's AI Representation?&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;
+          }
+        ]
+      }
+      &lt;/script&gt;</pre></details>
+          </details>
+          <details class="rp-page" id="rp-page-26"><summary><span class="rp-page__url">/</span><span class="rp-page__meta">score 87, 0 failed checks</span></summary>
+            <p class="rp-note">No page-level check fails here.</p>
+          </details>
+        </div>
+      </section>
+      </div>
+      </div>
+      </div>
+      <p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p>
+    </div>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="lib/report-ui.js?v=1"></script>
+  <script src="nav.js?v=2"></script>
+</body>
+</html>

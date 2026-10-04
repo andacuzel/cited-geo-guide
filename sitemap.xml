@@ -81,4 +81,7 @@
   <url>
     <loc>https://answerable-app.vercel.app/playbooks</loc>
   </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/sample-report</loc>
+  </url>
 </urlset>
