@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Answerable. — Privacy</title>
-  <meta name="description" content="What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect. Plain-language privacy policy." />
+  <meta name="description" content="What Answerable's scanner fetches, what it stores, and what it doesn't collect. Plain-language privacy policy." />
   <meta name="keywords" content="Answerable privacy, privacy policy" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
@@ -14,7 +14,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — Privacy" />
-  <meta property="og:description" content="What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect." />
+  <meta property="og:description" content="What Answerable's scanner fetches, what it stores, and what it doesn't collect." />
   <meta property="og:url" content="https://answerable-app.vercel.app/privacy" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
@@ -22,7 +22,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — Privacy" />
-  <meta name="twitter:description" content="What Answerable's scanner fetches, what it stores (nothing), and what it doesn't collect." />
+  <meta name="twitter:description" content="What Answerable's scanner fetches, what it stores, and what it doesn't collect." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -82,9 +82,10 @@
 
         <div class="doc-section">
           <h2 class="doc-section__heading">What we store</h2>
-          <p>Nothing, today. There are no accounts, no email collection, and no scan history. A scan result exists in your browser for as long as the page stays open.</p>
-          <p>The one exception: to stop abuse of the scanner, we keep a one-way hash of your IP address paired with a request counter, purely to enforce a rate limit. It expires automatically within a day, isn't linked to which domains were scanned, and is never stored as a raw IP address.</p>
-          <p>Separately, we count visits from known AI crawlers (GPTBot, ClaudeBot, PerplexityBot and similar) to our own site, so we can publish real data on how often they show up. This is aggregate counts by crawler and by day only &mdash; never a per-visit log, and nothing about human visitors is recorded at all.</p>
+          <p>Almost nothing, today. There are no accounts, no email collection, and no scan history. A scan result exists in your browser for as long as the page stays open.</p>
+          <p>The exception is a full-site crawl, the engine behind the planned Pro report. It is not part of the public scanner yet, but its address is open. A crawl stores the domain, the list of pages it chose, and each page&rsquo;s result, under a random 128-bit id, for 90 days after its last step. Nothing about who started it is stored with it, and nobody can list or search crawls: you need the id.</p>
+          <p>The one exception: to stop abuse of the scanner, we keep a one-way hash of your IP address paired with a request counter, purely to enforce a rate limit. It expires automatically within a day (the hourly counter within an hour), isn't linked to which domains were scanned, and is never stored as a raw IP address.</p>
+          <p>Separately, we count visits from known AI crawlers (GPTBot, ClaudeBot, PerplexityBot and similar) to our own site, so we can publish real data on how often they show up. This is two aggregate counts: visits per crawler per day, and how often each page of our site was requested by those crawlers. It is never a per-visit log, and nothing about human visitors is recorded at all.</p>
           <div class="callout callout--gold">
             <p class="callout__label">Will change</p>
             <p>This section will be updated when score history ships. Until then, nothing is retained after your browser tab closes.</p>
