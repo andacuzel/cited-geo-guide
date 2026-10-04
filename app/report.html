@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crawl report</title>
+  <meta name="description" content="A full-site crawl report. Unlisted: reached only by its link." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css?v=45" />
+</head>
+<body>
+  <div class="rp-appbar">
+    <div class="rp-appbar__inner">
+      <a href="/" class="logo" aria-label="Answerable. home"><span class="logo__mark">Answerable<span class="logo__dot">.</span></span></a>
+      <div class="rp-bar-actions rp-noprint">
+        <span class="rp-appbar__label" id="reportLabel">Crawl report</span>
+        <span class="rp-appbar__demo" id="demoBadge" hidden>Demo data</span>
+        <button type="button" class="btn btn--ghost" id="printBtn" hidden>Print or save as PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="rp-page-wrap" id="main">
+    <noscript><p class="rp-state">This report needs JavaScript to load. The same layout is published as a static page at <a href="/sample-report">/sample-report</a>.</p></noscript>
+    <div id="reportRoot" aria-live="polite"><p class="rp-state">Loading the report&hellip;</p></div>
+  </main>
+
+  <script src="../lib/schema.js?v=1"></script>
+  <script src="../lib/report-render.js?v=1"></script>
+  <script src="../lib/report-ui.js?v=1"></script>
+  <script src="report.js?v=1"></script>
+</body>
+</html>
