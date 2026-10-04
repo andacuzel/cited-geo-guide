@@ -3204,3 +3204,14 @@ code {
   .rp-cit-groups { padding: 4px 14px; }
   .rp-cit-q { min-width: 160px; }
 }
+h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-spacing: 0; }
+.pb-card__track { display: block; margin-bottom: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-faint); }
+.ac-scan { padding-bottom: 32px; }
+.ac-scan .hero__fineprint { margin-top: 10px; }
+.ac-banner { margin-bottom: 40px; }
+.ct-all { margin-top: 4px; }
+.ct-all__summary { cursor: pointer; list-style: none; padding: 10px 28px 10px 0; position: relative; font-family: var(--font-mono); font-size: 12.5px; color: var(--navy-800); }
+.ct-all__summary::-webkit-details-marker { display: none; }
+.ct-all__summary::after { content: "+"; position: absolute; right: 4px; top: 8px; font-size: 18px; color: var(--ink-faint); }
+.ct-all[open] > .ct-all__summary::after { content: "\2212"; }
+.ct-all__summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

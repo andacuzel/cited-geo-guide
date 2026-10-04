@@ -31,7 +31,38 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=40" />
+  <link rel="stylesheet" href="styles.css?v=48" />
+  <!-- SITE-SCHEMA:START -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://answerable-app.vercel.app/#org",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
+        "founder": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://answerable-app.vercel.app/#website",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "publisher": {
+          "@id": "https://answerable-app.vercel.app/#org"
+        },
+        "author": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:END -->
 </head>
 <body>
 
@@ -133,6 +164,7 @@
           <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
           <a href="/privacy" class="site-nav__link">Privacy</a>
           <a href="/terms" class="site-nav__link">Terms</a>
+          <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
         </nav>
         <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
       </div>

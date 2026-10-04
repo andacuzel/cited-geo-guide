@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=45" />
+  <link rel="stylesheet" href="styles.css?v=48" />
 
   <script type="application/ld+json">
   {
@@ -98,6 +98,37 @@
     ]
   }
   </script>
+  <!-- SITE-SCHEMA:START -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://answerable-app.vercel.app/#org",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
+        "founder": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://answerable-app.vercel.app/#website",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "publisher": {
+          "@id": "https://answerable-app.vercel.app/#org"
+        },
+        "author": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:END -->
 </head>
 <body>
 
@@ -243,6 +274,7 @@
         <div class="report-panel ct-example">
           <p class="ct-example__label"><!--c:labelCap-->A CRM brand<!--/c--> · <!--c:model-->gemini-3.5-flash-lite<!--/c--> · <!--c:date-->October 2, 2026<!--/c--> · <!--c:triesWord-->five<!--/c--> tries per question</p>
           <p class="ct-legend"><span class="ct-mark ct-mark--named" aria-hidden="true"></span> Named <span class="ct-mark ct-mark--absent" aria-hidden="true"></span> Not named. Each row is one question, each mark one try. Across all <!--c:totalAnswers-->90<!--/c--> answers the brand was named in <!--c:namedAnswers-->44<!--/c-->.</p>
+          <details class="ct-all" open><summary class="ct-all__summary">All <!--c:questions-->18<!--/c--> questions, <!--c:triesWord-->five<!--/c--> tries each</summary>
           <details class="ct-detail" open data-group="never">
             <summary><span class="ct-detail__title">Never named</span><span class="ct-detail__count"><!--c:neverCount-->7<!--/c--> questions</span></summary>
             <p class="ct-detail__intro">These are the gaps. In every try, the answer did not include the brand.</p>
@@ -278,6 +310,7 @@
               <li class="ct-row"><span class="ct-row__q">Which CRMs integrate well with Google Workspace and Gmail?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
               <li class="ct-row"><span class="ct-row__q">Which CRMs are best for sales teams that work mostly from mobile?</span><span class="ct-marks"><span class="ct-mark ct-mark--named" role="img" aria-label="try 1: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 2: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 3: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 4: named"></span><span class="ct-mark ct-mark--named" role="img" aria-label="try 5: named"></span></span></li>
             </ol>
+          </details>
           </details>
         </div>
       </div>
@@ -389,6 +422,7 @@
                   <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
                   <a href="/privacy" class="site-nav__link">Privacy</a>
                   <a href="/terms" class="site-nav__link">Terms</a>
+                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
                 </nav>
         <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
       </div>
@@ -399,6 +433,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove('scene-anim')"></script>
+  <script>if (window.matchMedia && matchMedia('(max-width: 640px)').matches) { var a = document.querySelector('.ct-all'); if (a) a.open = false; }</script>
   <script src="nav.js?v=2"></script>
 </body>
 </html>
