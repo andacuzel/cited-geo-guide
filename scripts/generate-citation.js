@@ -31,7 +31,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://answerable-app.vercel.app';
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 44;
+const CSS_VERSION = 45;
 const CONTACT_EMAIL = 'andacuz@gmail.com'; // the address on privacy.html and terms.html
 const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
 

@@ -30,7 +30,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://answerable-app.vercel.app';
-const CSS_VERSION = 44; // bump when styles.css changes
+const CSS_VERSION = 45; // bump when styles.css changes
 const PLAYBOOKS = require('../lib/playbooks.js');
 const ICONS = require('../lib/icons.js');
 
