@@ -18,12 +18,13 @@ const path = require('path');
 const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
 const factsLib = require('../lib/report-facts.js');
+const citationPanel = require('../lib/citation-panel.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://answerable-app.vercel.app';
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
-const CSS_VERSION = 47;
+const CSS_VERSION = 48;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function shellParts() {
@@ -50,7 +51,8 @@ function build(data) {
   const banner = '<div class="rp-sample-banner">\n        <p class="rp-kicker">Sample report</p>\n' +
     '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. It is the second crawl: the first found meta descriptions that were too long, we fixed those, and this is the result. Nothing in it has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n';
   const withBm = Object.assign({}, data, { benchmark: factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
-  const body = render.render(withBm, { schema: schema, label: 'Sample report', bannerHtml: banner });
+  const citationSample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'citations', 'sample-crm.json'), 'utf8'));
+  const body = render.render(withBm, { schema: schema, label: 'Sample report', bannerHtml: banner, citation: { result: citationPanel.fromSample(citationSample), sample: true } });
 
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\n' +
     '  <title>' + esc(title) + '</title>\n  <meta name="description" content="' + esc(desc) + '" />\n' +

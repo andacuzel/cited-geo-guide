@@ -3182,3 +3182,25 @@ code {
 .rp-matrix th, .rp-matrix td { vertical-align: middle; }
 .rp-matrix thead th { vertical-align: bottom; }
 .rp-cluster__head th { vertical-align: middle; }
+
+/* Citations tab (rp-cit) */
+.rp-kpis--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rp-cit-label { margin-top: 8px; font-size: 14.5px; color: var(--ink-soft); max-width: 760px; }
+.rp-cit-lead { margin-top: 14px; font-size: 16px; line-height: 1.6; color: var(--ink); max-width: 760px; }
+.rp-cit-groups { margin-top: 20px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 24px; }
+.rp-cit-tablewrap { overflow-x: auto; margin-bottom: 14px; }
+.rp-cit-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.rp-cit-table thead th { text-align: left; padding: 6px 12px 8px 0; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; color: var(--ink-faint); vertical-align: bottom; }
+.rp-cit-model__name { display: block; color: var(--ink); font-size: 12px; }
+.rp-cit-model__meta { display: block; font-weight: 400; }
+.rp-cit-row th, .rp-cit-row td { padding: 9px 12px 9px 0; border-top: 1px solid var(--line); vertical-align: middle; }
+.rp-cit-q { text-align: left; font-weight: 400; color: var(--ink); min-width: 220px; }
+.rp-cit-table td { white-space: nowrap; }
+.rp-cit-cta { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.rp-cit-cta .rp-note { margin-top: 0; }
+.rp-cit--empty .rp-text { max-width: 640px; }
+@media (max-width: 640px) {
+  .rp-kpis--three { grid-template-columns: 1fr; }
+  .rp-cit-groups { padding: 4px 14px; }
+  .rp-cit-q { min-width: 160px; }
+}
