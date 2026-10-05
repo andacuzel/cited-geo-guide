@@ -154,33 +154,58 @@ const CAPS = {
   print: 'The top bar, with the print button.'
 };
 
-function frame(name, F, extra) {
-  const cap = CITATION_CROPS.indexOf(name) !== -1
-    ? 'Sample from a different brand · ' + fig('cit-model', F.cit.model) + ' · ' + fig('cit-date', F.cit.date) + ' · ' + F.cit.triesWord + ' tries per question'
-    : 'Sample: our own site, ' + fig('date', F.date) + '. ' + esc(CAPS[name]);
+function frame(name, F, extra, opts) {
+  opts = opts || {};
+  const cap = opts.caption || (CITATION_CROPS.indexOf(name) !== -1
+    ? 'Sample from a different brand \u00B7 ' + fig('cit-model', F.cit.model) + ' \u00B7 ' + fig('cit-date', F.cit.date) + ' \u00B7 ' + F.cit.triesWord + ' tries per question'
+    : 'Sample: our own site, ' + fig('date', F.date) + '. ' + esc(CAPS[name]));
+  const crop = opts.plain ? cropHtml(name).replace(/ data-fig="[^"]*"/g, '') : cropHtml(name);
   return '<figure class="pro-shot pro-shot--' + name + (extra ? ' ' + extra : '') + '">\n' +
-    '<div role="img" aria-label="' + esc(alts(F)[name]) + '"><div class="pro-shot__view" inert>\n' + cropHtml(name) + '\n</div></div>\n' +
+    '<div role="img" aria-label="' + esc(alts(F)[name]) + '"><div class="pro-shot__view" inert>\n' + crop + '\n</div></div>\n' +
     '<figcaption class="pro-shot__cap">' + cap + '</figcaption>\n</figure>';
 }
 
 /* ---------- the homepage band ---------- */
 
+// The texture: a partial, hard-edged grid zone built from an SVG <pattern>, plus two small clusters of cells.
+// All coordinates are fixed (a 28px tile, whole cells), nothing is random. Cells: [column, row, 'fill' | 'line'].
+const TILE = 28;
+const CLUSTER_TR = [[1, 0, 'fill'], [2, 0, 'fill'], [2, 1, 'fill'], [3, 1, 'fill'], [4, 2, 'fill'], [0, 1, 'line'], [3, 2, 'line']];
+const CLUSTER_BL = [[0, 2, 'fill'], [1, 2, 'fill'], [1, 3, 'fill'], [3, 3, 'fill'], [2, 3, 'line']];
+
+function cells(list) {
+  return list.map((c) => c[2] === 'fill'
+    ? '<rect class="pro-band-cell pro-band-cell--fill" x="' + c[0] * TILE + '" y="' + c[1] * TILE + '" width="' + TILE + '" height="' + TILE + '"/>'
+    : '<rect class="pro-band-cell pro-band-cell--line" x="' + (c[0] * TILE + 0.5) + '" y="' + (c[1] * TILE + 0.5) + '" width="' + (TILE - 1) + '" height="' + (TILE - 1) + '"/>').join('');
+}
+
+function texture() {
+  const svgAttrs = ' aria-hidden="true" focusable="false"';
+  const cluster = (name, list) => '<svg class="pro-band-cluster pro-band-cluster--' + name + '" viewBox="0 0 140 112" width="140" height="112"' + svgAttrs + '>' + cells(list) + '</svg>';
+  return '<div class="pro-band-zone" aria-hidden="true"><svg width="100%" height="100%"' + svgAttrs + '><defs><pattern id="pro-band-grid" width="' + TILE + '" height="' + TILE + '" patternUnits="userSpaceOnUse"><path class="pro-band-line" d="M0.5 0V' + TILE + 'M0 0.5H' + TILE + '"/></pattern></defs><rect width="100%" height="100%" fill="url(#pro-band-grid)"/></svg></div>\n' +
+    cluster('tr', CLUSTER_TR) + '\n' + cluster('bl', CLUSTER_BL);
+}
+
 function band(F) {
-  // One idea (the gap), one visual (the matrix), one action. Nothing else, so the band hooks and /pro tells the story.
+  // One idea, one visual, one action, no score and no stat: the page tells the rest.
+  const point = (ic, label) => '<li>' + icons.svg(ic, { cls: 'pro-band-points__icon' }) + '<span>' + label + '</span></li>';
+  const caption = 'Sample: our own site, ' + esc(F.date) + '. From the worst page to its fix.';
   return START + '\n' +
-    '      <section class="pro-mkt" id="pro" aria-labelledby="pro-heading">\n' +
+    '      <section class="pro-mkt pro-band-hero" id="pro" aria-labelledby="pro-heading">\n' +
     '        <div class="section__inner">\n' +
     '          <div class="pro-mkt__grid">\n' +
     '            <div class="pro-mkt__text">\n' +
     '              <p class="kicker kicker--on-navy">Pro</p>\n' +
-    '              <h2 id="pro-heading">Your homepage isn\'t your site.</h2>\n' +
-    '              <p class="pro-flow" aria-label="Homepage score, then whole-site score"><span class="pro-flow__num">' + fig('homepage', F.homepage) + '</span>' + icons.svg('arrow', { cls: 'pro-flow__arrow' }) + '<span class="pro-flow__num">' + fig('site', F.site) + '</span></p>\n' +
-    '              <p class="pro-mkt__nums">Homepage, then whole site. A real crawl of our own site, ' + fig('date', F.date) + '.</p>\n' +
-    '              <p class="pro-mkt__lede">Pro reads up to ' + fig('cap', F.cap) + ' pages, then asks a model your buyers\' questions and records when your name comes up.</p>\n' +
+    '              <h2 id="pro-heading">Everything the free scan can\'t see.</h2>\n' +
+    '              <p class="pro-mkt__lede">Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
+    '              <ul class="pro-band-points">' + point('layers', 'Beyond the homepage') + point('question', 'Your buyers\' questions') + point('report', 'A report to hand over') + '</ul>\n' +
     '              <p class="pro-mkt__actions"><a href="/pro" class="btn btn--gold">See what Pro includes</a></p>\n' +
     '              <p class="pro-mkt__price">One-time purchase. No subscription.</p>\n' +
     '            </div>\n' +
-    '            ' + indent(frame('matrix', F, 'pro-shot--desktop'), '            ') + '\n' +
+    '            <div class="pro-band-visual">\n' +
+    '              ' + indent(texture(), '              ') + '\n' +
+    '              ' + indent(frame('pages', F, 'pro-shot--desktop', { caption: caption, plain: true }), '              ') + '\n' +
+    '            </div>\n' +
     '          </div>\n' +
     '        </div>\n' +
     '      </section>\n      ' + END;
@@ -404,19 +429,31 @@ function check() {
   [['pro.html', page], ['the homepage band', bandHtml]].forEach(function (s) {
     const got = readFigs(s[1]);
     const keys = Object.keys(got);
-    if (!keys.length) bad(s[0] + ' shows no figures');
+    if (!keys.length && s[0] === 'pro.html') bad(s[0] + ' shows no figures');
     keys.forEach(function (k) {
       if (!(k in want)) { bad(s[0] + ': figure "' + k + '" has no recomputation'); return; }
       got[k].forEach(function (v) { if (String(v) !== String(want[k])) bad(s[0] + ': ' + k + ' reads ' + v + ', the source gives ' + want[k]); });
     });
   });
-  ['cap', 'homepage', 'site', 'date'].forEach((k) => { if (!readFigs(bandHtml)[k]) bad('the band does not show ' + k); });
-  // The band is a hook: one idea, one crop, one action. Nothing about citations, no second link.
+  // The band is a hook: one idea, one crop, one action, no score and no stat.
   const interactive = (bandHtml.match(/<(a|button)\b/g) || []).length;
   if (interactive !== 1) bad('the band has ' + interactive + ' links or buttons, it must have exactly one');
   if (!/<a href="\/pro" class="btn btn--gold">See what Pro includes<\/a>/.test(bandHtml)) bad('the band\'s one action is not the gold "See what Pro includes" button to /pro');
-  if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--matrix') === -1) bad('the band must carry exactly one crop, the heat matrix');
-  if (/cit-|citation|Named in|Never named/i.test(bandHtml.replace(/asks a model your buyers' questions and records when your name comes up/, ''))) bad('the band mentions citation results; the homepage has its own citation block');
+  if (/data-fig=/.test(bandHtml)) bad('the band carries a data-fig attribute; it shows no figure');
+  const bandTexts = [['kicker', /<p class="kicker[^"]*">([^<]*)<\/p>/], ['headline', /<h2[^>]*>([^<]*)<\/h2>/], ['sentence', /<p class="pro-mkt__lede">([^<]*)<\/p>/]].map((x) => [x[0], (x[1].exec(bandHtml) || [0, ''])[1]]);
+  ((/<ul class="pro-band-points">([\s\S]*?)<\/ul>/.exec(bandHtml) || [0, ''])[1].match(/<li>[\s\S]*?<\/li>/g) || []).forEach((li) => bandTexts.push(['label', textOf(li.replace(/<svg[\s\S]*?<\/svg>/, ''))]));
+  if (bandTexts.length !== 6) bad('the band should have a kicker, a headline, a sentence and three labels');
+  bandTexts.forEach((t) => { if (!t[1] || /\d/.test(t[1])) bad('the band ' + t[0] + ' is empty or contains a digit: "' + t[1] + '"'); });
+  if (bandHtml.indexOf('Everything the free scan can\'t see.') === -1 || bandHtml.indexOf('Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.') === -1) bad('the band headline or sentence changed');
+  if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--pages') === -1) bad('the band must carry exactly one crop, the pages explorer');
+  if (bandHtml.indexOf('<figcaption class="pro-shot__cap">Sample: our own site, ' + want.date + '. From the worst page to its fix.</figcaption>') === -1) bad('the band crop caption is wrong');
+  if (!/<ul class="pro-band-points">(<li><svg[^>]*>[\s\S]*?<\/svg><span>[^<]+<\/span><\/li>){3}<\/ul>/.test(bandHtml)) bad('the band needs a <ul> of three icon-and-label items');
+  // The texture: an inline SVG pattern, and no gradient function anywhere in the stylesheet, nor a pattern anywhere else.
+  if (!/<svg[^>]*aria-hidden="true"[\s\S]*?<pattern /.test(bandHtml)) bad('the band texture is not an aria-hidden inline SVG with a <pattern>');
+  if ((bandHtml.match(/class="pro-band-cell /g) || []).length !== 12 || (bandHtml.match(/pro-band-cell--fill/g) || []).length !== 9 || (bandHtml.match(/pro-band-cell--line/g) || []).length !== 3) bad('the texture needs nine filled cells and three outlined cells');
+  if (/gradient\s*\(/i.test(fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8'))) bad('styles.css contains a gradient function');
+  if (/<pattern\b/.test(page) || /<pattern\b/.test(index.replace(bandHtml, ''))) bad('the grid texture appears outside the Pro band');
+  try { require('child_process').execSync('git diff --quiet HEAD -- pro.html', { cwd: ROOT, stdio: 'ignore' }); } catch (e) { if (e.status === 1) bad('pro.html differs from the committed version; the band work must not touch it'); }
   ['cap', 'homepage', 'site', 'hidden', 'failing-others', 'others', 'cit-pct', 'cit-never', 'cit-questions', 'cit-model', 'cit-date', 'date', 'case-before1', 'case-before2', 'case-after1', 'case-after2'].forEach((k) => { if (!readFigs(page)[k]) bad('pro.html does not show ' + k); });
   if (F.cit.tries !== want.tries) bad('tries: ' + F.cit.tries + ' against ' + want.tries);
   if (F.case.gain !== want.caseGain) bad('case study gain: ' + F.case.gain + ' against ' + want.caseGain);

@@ -70,6 +70,12 @@ Constraints that must not be broken:
   come from the sample data and the real renderer; rerun
   `scripts/capture-pro-shots.js` whenever the dashboard changes, then
   `scripts/generate-pro.js`.
+- **One texture, one place.** The homepage Pro band carries a single SVG-pattern
+  grid texture, partial and hard-edged, built from a `<pattern>` rather than a
+  gradient. No other surface may use it, and no CSS gradient function appears
+  anywhere in the stylesheet.
+- **Never pair two scores with an arrow.** It reads as a score drop. The Pro band
+  shows no scores; the page shows the homepage and whole-site scores side by side.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.

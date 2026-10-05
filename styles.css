@@ -3414,3 +3414,43 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
   .pro-card { padding: 20px 18px; }
   .pro-flow { gap: 12px; }
 }
+
+/* ----------------------------- Homepage Pro band: texture and points (.pro-band-) -----------------------------
+   One texture, one place. A square grid on a 28px tile, drawn by an inline SVG <pattern>,
+   in a hard-edged zone that starts at the left edge of the right column and runs to the viewport's right edge.
+   Static: nine filled cells and three outlined cells at fixed coordinates, partly hidden by the crop. */
+.pro-band-hero { position: relative; overflow: hidden; --pro-band-pad: 80px; }
+.pro-band-hero .pro-mkt__grid { grid-template-rows: auto; align-items: start; }
+.pro-band-points { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.pro-band-points li { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; color: rgba(255, 255, 255, 0.85); }
+.pro-band-points__icon { flex: none; width: 20px; height: 20px; color: var(--gold-soft); }
+
+.pro-band-visual { grid-column: 2; grid-row: 1; position: relative; width: 100%; width: round(down, 100%, 28px); min-width: 0; justify-self: start; }
+.pro-band-zone { position: absolute; z-index: 0; top: -84px; bottom: calc(-1 * var(--pro-band-pad) - 28px); left: 0; right: calc(-1 * ((100vw - min(100vw, var(--content-width))) / 2 + 32px + 28px)); }
+.pro-band-zone svg { display: block; width: 100%; height: 100%; }
+.pro-band-line { fill: none; stroke: var(--line-on-navy); stroke-width: 1; stroke-opacity: 0.6; }
+.pro-band-cell--fill { fill: var(--gold); fill-opacity: 0.2; }
+.pro-band-cell--line { fill: none; stroke: var(--gold); stroke-opacity: 0.5; stroke-width: 1; }
+.pro-band-cluster { position: absolute; z-index: 1; width: 140px; height: 112px; }
+.pro-band-cluster--tr { top: -56px; right: -84px; }
+.pro-band-cluster--bl { left: 0; bottom: -56px; }
+.pro-band-visual .pro-shot { position: relative; z-index: 2; display: flex; flex-direction: column; height: 504px; grid-column: auto; grid-row: auto; align-self: auto; box-shadow: var(--shadow); }
+.pro-band-visual .pro-shot__view { flex: none; height: 448px; max-height: none; }
+.pro-band-visual .pro-shot__cap { flex: none; height: 54px; overflow: hidden; }
+
+@media (max-width: 920px) {
+  .pro-band-hero { --pro-band-pad: 56px; }
+  .pro-band-visual { grid-column: 1; grid-row: auto; }
+  .pro-band-zone { top: -24px; bottom: calc(-1 * var(--pro-band-pad)); left: calc(-1 * ((100vw - min(100vw, var(--content-width))) / 2 + 32px)); right: calc(-1 * ((100vw - min(100vw, var(--content-width))) / 2 + 32px + 28px)); }
+  .pro-band-cluster--tr { display: none; }
+  .pro-band-cluster--bl { bottom: -32px; }
+}
+@media (max-width: 640px) {
+  .pro-band-hero { padding-top: 96px; }
+  .pro-band-visual { display: contents; }
+  .pro-band-zone { top: 0; bottom: auto; height: 72px; left: 0; right: 0; }
+  .pro-band-cluster { display: none; }
+}
+@media (max-width: 640px) {
+  .pro-band-visual .pro-shot { display: none; }
+}
