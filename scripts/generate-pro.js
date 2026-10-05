@@ -140,6 +140,7 @@ function alts(F) {
     fixes: 'Fixes tab from the sample crawl. Each distinct snippet appears once with the number of pages it applies to and a Copy button.' + (F.fixFirst ? ' The first is ' + F.fixFirst.label + ', applying to ' + F.fixFirst.pages.length + ' pages.' : ''),
     print: 'The top bar of the sample dashboard: the domain ' + F.domain + ', the crawl date ' + F.date + ' and a Print or save as PDF button.',
     citations: 'Citations tab of the dashboard, filled with the published sample for a CRM brand, not a result for our site. ' + c.model + ', ' + c.date + ', ' + c.triesWord + ' tries per question. Three figures: ' + c.never + ' questions never named, ' + c.unstable + ' named only sometimes, ' + c.always + ' named every time. Below them, the questions that never named the brand, each with ' + c.triesWord + ' marks, one per try.',
+    'band-explorer': 'The sample dashboard for our own site, ' + F.domain + ': the navy top bar, the five tabs Summary, Pages, Checks, Fixes and Citations with Pages selected, the pages list worst first starting with ' + F.worstPath + ' at ' + F.worstScore + ' out of 100, and the detail pane with that page\'s failed checks and an open copy-paste fix.',
     tries: 'The same citation sample with the group named only sometimes open. Each of the ' + c.unstable + ' questions shows ' + c.triesWord + ' marks, one per try, and the marks differ from try to try.'
   };
 }
@@ -151,7 +152,8 @@ const CAPS = {
   matrix: 'Which pages fail which checks.',
   pages: 'Pages, worst first, and the page selected.',
   fixes: 'Two of the fixes.',
-  print: 'The top bar, with the print button.'
+  print: 'The top bar, with the print button.',
+  'band-explorer': 'From the worst page to its fix.'
 };
 
 function frame(name, F, extra, opts) {
@@ -167,44 +169,63 @@ function frame(name, F, extra, opts) {
 
 /* ---------- the homepage band ---------- */
 
-// The texture: a partial, hard-edged grid zone built from an SVG <pattern>, plus two small clusters of cells.
-// All coordinates are fixed (a 28px tile, whole cells), nothing is random. Cells: [column, row, 'fill' | 'line'].
-const TILE = 28;
-const CLUSTER_TR = [[1, 0, 'fill'], [2, 0, 'fill'], [2, 1, 'fill'], [3, 1, 'fill'], [4, 2, 'fill'], [0, 1, 'line'], [3, 2, 'line']];
-const CLUSTER_BL = [[0, 2, 'fill'], [1, 2, 'fill'], [1, 3, 'fill'], [3, 3, 'fill'], [2, 3, 'line']];
+// The texture: a field of page glyphs in a lighter navy zone, drawn by an inline SVG <pattern> (no gradient).
+// Glyph 44x56, pitch 64x80, alternate rows shifted half a pitch. Highlights sit at fixed coordinates, nothing
+// is random. Left-anchored coordinates are in the zone's own space (x from its left edge, which is the crop's
+// left edge); right-anchored ones are offsets from its right edge, always a whole number of pitches so they
+// land on the same grid (the zone is rounded up to a multiple of 64px in the stylesheet).
+const GW = 44, GH = 56, PX = 64, PY = 80;
+// [x, y, kind]; kind: corner (gold square on the glyph), gold (solid gold, navy lines), navy (filled --navy-800)
+const HL_WIDE = [[522, 12, 'corner'], [586, 12, 'corner'], [650, 12, 'corner'], [682, 92, 'corner'], [650, 172, 'corner'], [42, 572, 'corner'], [10, 652, 'corner'], [74, 652, 'corner'], [170, 572, 'corner'], [202, 652, 'corner'], [234, 572, 'corner'],
+  [618, 92, 'gold'], [106, 572, 'gold'], [138, 652, 'gold'],
+  [714, 12, 'navy'], [746, 92, 'navy'], [586, 172, 'navy'], [298, 572, 'navy'], [266, 652, 'navy']];
+const HL_WIDE_RIGHT = [[-22, 252, 'corner'], [-22, 412, 'navy']];
+const HL_STACK = [[42, 572, 'corner'], [106, 572, 'gold'], [170, 572, 'corner'], [234, 572, 'navy'], [298, 572, 'corner'], [362, 572, 'navy'], [426, 572, 'corner']];
+const HL_STACK_RIGHT = [[-54, 172, 'navy'], [-22, 252, 'corner']];
+const HL_STRIP = [[10, 12, 'corner'], [138, 12, 'gold'], [202, 12, 'navy'], [266, 12, 'corner'], [330, 12, 'corner'], [106, 92, 'corner'], [234, 92, 'navy']];
+const HL_STRIP_RIGHT = [[-54, 12, 'corner']];
 
-function cells(list) {
-  return list.map((c) => c[2] === 'fill'
-    ? '<rect class="pro-band-cell pro-band-cell--fill" x="' + c[0] * TILE + '" y="' + c[1] * TILE + '" width="' + TILE + '" height="' + TILE + '"/>'
-    : '<rect class="pro-band-cell pro-band-cell--line" x="' + (c[0] * TILE + 0.5) + '" y="' + (c[1] * TILE + 0.5) + '" width="' + (TILE - 1) + '" height="' + (TILE - 1) + '"/>').join('');
+function glyph(x, y) {
+  return '<rect class="pro-band-glyph" x="' + (x + 0.75) + '" y="' + (y + 0.75) + '" width="' + (GW - 1.5) + '" height="' + (GH - 1.5) + '" rx="3"/>' +
+    '<rect class="pro-band-glyph-ink" x="' + (x + 7) + '" y="' + (y + 9) + '" width="18" height="4" rx="1"/>' +
+    '<rect class="pro-band-glyph-ink" x="' + (x + 7) + '" y="' + (y + 21) + '" width="30" height="3" rx="1"/>' +
+    '<rect class="pro-band-glyph-ink" x="' + (x + 7) + '" y="' + (y + 29) + '" width="22" height="3" rx="1"/>';
 }
+function highlight(c) {
+  const x = c[0], y = c[1];
+  if (c[2] === 'corner') return '<rect class="pro-band-hl-corner" x="' + (x + 31) + '" y="' + (y + 1.5) + '" width="12" height="12"/>';
+  if (c[2] === 'gold') return '<rect class="pro-band-hl-gold" x="' + x + '" y="' + y + '" width="' + GW + '" height="' + GH + '" rx="3"/>' +
+    '<rect class="pro-band-hl-ink" x="' + (x + 7) + '" y="' + (y + 9) + '" width="18" height="4" rx="1"/><rect class="pro-band-hl-ink" x="' + (x + 7) + '" y="' + (y + 21) + '" width="30" height="3" rx="1"/><rect class="pro-band-hl-ink" x="' + (x + 7) + '" y="' + (y + 29) + '" width="22" height="3" rx="1"/>';
+  return '<rect class="pro-band-hl-navy" x="' + x + '" y="' + y + '" width="' + GW + '" height="' + GH + '" rx="3"/>' + glyph(x, y);
+}
+const group = (name, left, right) => '<g class="pro-band-hl pro-band-hl--' + name + '">' + left.map(highlight).join('') + '<svg x="100%" y="0" width="1" height="1" overflow="visible">' + right.map(highlight).join('') + '</svg></g>';
 
 function texture() {
-  const svgAttrs = ' aria-hidden="true" focusable="false"';
-  const cluster = (name, list) => '<svg class="pro-band-cluster pro-band-cluster--' + name + '" viewBox="0 0 140 112" width="140" height="112"' + svgAttrs + '>' + cells(list) + '</svg>';
-  return '<div class="pro-band-zone" aria-hidden="true"><svg width="100%" height="100%"' + svgAttrs + '><defs><pattern id="pro-band-grid" width="' + TILE + '" height="' + TILE + '" patternUnits="userSpaceOnUse"><path class="pro-band-line" d="M0.5 0V' + TILE + 'M0 0.5H' + TILE + '"/></pattern></defs><rect width="100%" height="100%" fill="url(#pro-band-grid)"/></svg></div>\n' +
-    cluster('tr', CLUSTER_TR) + '\n' + cluster('bl', CLUSTER_BL);
+  const attrs = ' aria-hidden="true" focusable="false"';
+  return '<div class="pro-band-field" aria-hidden="true"><svg width="100%" height="100%"' + attrs + '><defs><pattern id="pro-band-field" width="' + PX + '" height="' + 2 * PY + '" patternUnits="userSpaceOnUse">' +
+    glyph(10, 12) + glyph(42, 12 + PY) + glyph(-22, 12 + PY) + '</pattern></defs><rect width="100%" height="100%" fill="url(#pro-band-field)"/>' +
+    group('wide', HL_WIDE, HL_WIDE_RIGHT) + group('stack', HL_STACK, HL_STACK_RIGHT) + group('strip', HL_STRIP, HL_STRIP_RIGHT) + '</svg></div>';
 }
 
 function band(F) {
   // One idea, one visual, one action, no score and no stat: the page tells the rest.
-  const point = (ic, label) => '<li>' + icons.svg(ic, { cls: 'pro-band-points__icon' }) + '<span>' + label + '</span></li>';
+  const point = (ic, label) => '<li>' + icons.svg(ic, { cls: 'pro-band-list__icon' }) + '<span>' + label + '</span></li>';
   const caption = 'Sample: our own site, ' + esc(F.date) + '. From the worst page to its fix.';
   return START + '\n' +
     '      <section class="pro-mkt pro-band-hero" id="pro" aria-labelledby="pro-heading">\n' +
     '        <div class="section__inner">\n' +
     '          <div class="pro-mkt__grid">\n' +
     '            <div class="pro-mkt__text">\n' +
-    '              <p class="kicker kicker--on-navy">Pro</p>\n' +
+    '              <p class="pro-band-tag">PRO</p>\n' +
     '              <h2 id="pro-heading">Everything the free scan can\'t see.</h2>\n' +
     '              <p class="pro-mkt__lede">Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
-    '              <ul class="pro-band-points">' + point('layers', 'Beyond the homepage') + point('question', 'Your buyers\' questions') + point('report', 'A report to hand over') + '</ul>\n' +
+    '              <ul class="pro-band-list">' + point('layers', 'Beyond the homepage') + point('question', 'Your buyers\' questions') + point('report', 'A report to hand over') + '</ul>\n' +
     '              <p class="pro-mkt__actions"><a href="/pro" class="btn btn--gold">See what Pro includes</a></p>\n' +
     '              <p class="pro-mkt__price">One-time purchase. No subscription.</p>\n' +
     '            </div>\n' +
-    '            <div class="pro-band-visual">\n' +
+    '            <div class="pro-band-stage">\n' +
     '              ' + indent(texture(), '              ') + '\n' +
-    '              ' + indent(frame('pages', F, 'pro-shot--desktop', { caption: caption, plain: true }), '              ') + '\n' +
+    '              ' + indent(frame('band-explorer', F, 'pro-shot--desktop', { caption: caption, plain: true }), '              ') + '\n' +
     '            </div>\n' +
     '          </div>\n' +
     '        </div>\n' +
@@ -440,20 +461,44 @@ function check() {
   if (interactive !== 1) bad('the band has ' + interactive + ' links or buttons, it must have exactly one');
   if (!/<a href="\/pro" class="btn btn--gold">See what Pro includes<\/a>/.test(bandHtml)) bad('the band\'s one action is not the gold "See what Pro includes" button to /pro');
   if (/data-fig=/.test(bandHtml)) bad('the band carries a data-fig attribute; it shows no figure');
-  const bandTexts = [['kicker', /<p class="kicker[^"]*">([^<]*)<\/p>/], ['headline', /<h2[^>]*>([^<]*)<\/h2>/], ['sentence', /<p class="pro-mkt__lede">([^<]*)<\/p>/]].map((x) => [x[0], (x[1].exec(bandHtml) || [0, ''])[1]]);
-  ((/<ul class="pro-band-points">([\s\S]*?)<\/ul>/.exec(bandHtml) || [0, ''])[1].match(/<li>[\s\S]*?<\/li>/g) || []).forEach((li) => bandTexts.push(['label', textOf(li.replace(/<svg[\s\S]*?<\/svg>/, ''))]));
-  if (bandTexts.length !== 6) bad('the band should have a kicker, a headline, a sentence and three labels');
+  const bandTexts = [['tag', /<p class="pro-band-tag">([^<]*)<\/p>/], ['headline', /<h2[^>]*>([^<]*)<\/h2>/], ['sentence', /<p class="pro-mkt__lede">([^<]*)<\/p>/]].map((x) => [x[0], (x[1].exec(bandHtml) || [0, ''])[1]]);
+  ((/<ul class="pro-band-list">([\s\S]*?)<\/ul>/.exec(bandHtml) || [0, ''])[1].match(/<li>[\s\S]*?<\/li>/g) || []).forEach((li) => bandTexts.push(['label', textOf(li.replace(/<svg[\s\S]*?<\/svg>/, ''))]));
+  if (bandTexts.length !== 6) bad('the band should have a tag, a headline, a sentence and three labels');
   bandTexts.forEach((t) => { if (!t[1] || /\d/.test(t[1])) bad('the band ' + t[0] + ' is empty or contains a digit: "' + t[1] + '"'); });
+  if (bandHtml.indexOf('<p class="pro-band-tag">PRO</p>') === -1) bad('the band tag is not "PRO"');
   if (bandHtml.indexOf('Everything the free scan can\'t see.') === -1 || bandHtml.indexOf('Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.') === -1) bad('the band headline or sentence changed');
-  if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--pages') === -1) bad('the band must carry exactly one crop, the pages explorer');
+  if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--band-explorer') === -1) bad('the band must carry exactly one crop, the dashboard explorer');
+  const crop = (bandHtml.match(/<div class="pro-shot__view"[\s\S]*?<\/figure>/) || [''])[0];
+  ['Summary', 'Pages', 'Checks', 'Fixes', 'Citations'].forEach((t) => { if (crop.indexOf('</svg>' + t + '</span>') === -1) bad('the band crop does not show the ' + t + ' tab'); });
+  if ((crop.match(/aria-selected="true"/g) || []).length !== 1 || crop.indexOf('aria-selected="true"><svg') === -1 || !/aria-selected="true">(<svg[^>]*>[\s\S]*?<\/svg>)Pages<\/span>/.test(crop)) bad('the band crop must show Pages as the selected tab');
   if (bandHtml.indexOf('<figcaption class="pro-shot__cap">Sample: our own site, ' + want.date + '. From the worst page to its fix.</figcaption>') === -1) bad('the band crop caption is wrong');
-  if (!/<ul class="pro-band-points">(<li><svg[^>]*>[\s\S]*?<\/svg><span>[^<]+<\/span><\/li>){3}<\/ul>/.test(bandHtml)) bad('the band needs a <ul> of three icon-and-label items');
-  // The texture: an inline SVG pattern, and no gradient function anywhere in the stylesheet, nor a pattern anywhere else.
-  if (!/<svg[^>]*aria-hidden="true"[\s\S]*?<pattern /.test(bandHtml)) bad('the band texture is not an aria-hidden inline SVG with a <pattern>');
-  if ((bandHtml.match(/class="pro-band-cell /g) || []).length !== 12 || (bandHtml.match(/pro-band-cell--fill/g) || []).length !== 9 || (bandHtml.match(/pro-band-cell--line/g) || []).length !== 3) bad('the texture needs nine filled cells and three outlined cells');
-  if (/gradient\s*\(/i.test(fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8'))) bad('styles.css contains a gradient function');
+  if (!/<ul class="pro-band-list">(<li><svg[^>]*>[\s\S]*?<\/svg><span>[^<]+<\/span><\/li>){3}<\/ul>/.test(bandHtml)) bad('the band needs a <ul> of three icon-and-label items');
+  // The texture: an inline SVG pattern of page glyphs, highlights at fixed coordinates, no gradient function anywhere.
+  if (!/<div class="pro-band-field" aria-hidden="true"><svg[^>]*aria-hidden="true"[\s\S]*?<pattern /.test(bandHtml)) bad('the band texture is not an aria-hidden inline SVG with a <pattern>');
+  const wide = (bandHtml.match(/<g class="pro-band-hl pro-band-hl--wide">[\s\S]*?<\/g>/) || [''])[0];
+  const n = (cls) => (wide.match(new RegExp('class="' + cls + '"', 'g')) || []).length;
+  if (n('pro-band-hl-corner') !== 12 || n('pro-band-hl-gold') !== 3 || n('pro-band-hl-navy') !== 6) bad('the wide field needs 12 corner glyphs, 3 gold glyphs and 6 navy glyphs; it has ' + n('pro-band-hl-corner') + ', ' + n('pro-band-hl-gold') + ', ' + n('pro-band-hl-navy'));
+  const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+  if (/gradient\s*\(/i.test(css)) bad('styles.css contains a gradient function');
+  // Outline contrast: --white at the stylesheet's opacity, composited over --navy-900, against --navy-900.
+  const hex = (name) => { const m = new RegExp('--' + name + ':\\s*#([0-9a-fA-F]{6})').exec(css); return m ? [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16)) : null; };
+  const lum = (c) => { const l = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * l[0] + 0.7152 * l[1] + 0.0722 * l[2]; };
+  const opacity = (cls, prop) => { const m = new RegExp('\\.' + cls + '\\s*\\{[^}]*' + prop + ':\\s*([0-9.]+)').exec(css); return m ? parseFloat(m[1]) : NaN; };
+  const white = hex('white'), navy = hex('navy-900');
+  if (!white || !navy) bad('cannot read --white or --navy-900 from the stylesheet');
+  else [['pro-band-glyph', 'stroke-opacity'], ['pro-band-glyph-ink', 'fill-opacity']].forEach((o) => {
+    const a = opacity(o[0], o[1]);
+    const comp = white.map((v, i) => v * a + navy[i] * (1 - a));
+    const l1 = lum(comp), l2 = lum(navy);
+    const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    if (!(ratio >= 3)) bad('.' + o[0] + ' contrast against --navy-900 is ' + ratio.toFixed(2) + ':1, it must be at least 3:1');
+  });
   if (/<pattern\b/.test(page) || /<pattern\b/.test(index.replace(bandHtml, ''))) bad('the grid texture appears outside the Pro band');
-  try { require('child_process').execSync('git diff --quiet HEAD -- pro.html', { cwd: ROOT, stdio: 'ignore' }); } catch (e) { if (e.status === 1) bad('pro.html differs from the committed version; the band work must not touch it'); }
+  try {
+    const cp = require('child_process');
+    const tracked = cp.execSync('git ls-files assets/pro pro.html', { cwd: ROOT }).toString().split('\n').filter(Boolean);
+    cp.execSync('git diff --quiet HEAD -- ' + tracked.join(' '), { cwd: ROOT, stdio: 'ignore' });
+  } catch (e) { if (e.status === 1) bad('pro.html or a tracked file in assets/pro differs from the committed version; the band work must not touch them'); }
   ['cap', 'homepage', 'site', 'hidden', 'failing-others', 'others', 'cit-pct', 'cit-never', 'cit-questions', 'cit-model', 'cit-date', 'date', 'case-before1', 'case-before2', 'case-after1', 'case-after2'].forEach((k) => { if (!readFigs(page)[k]) bad('pro.html does not show ' + k); });
   if (F.cit.tries !== want.tries) bad('tries: ' + F.cit.tries + ' against ' + want.tries);
   if (F.case.gain !== want.caseGain) bad('case study gain: ' + F.case.gain + ' against ' + want.caseGain);

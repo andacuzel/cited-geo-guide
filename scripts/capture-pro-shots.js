@@ -32,6 +32,7 @@ const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
 const factsLib = require('../lib/report-facts.js');
 const citationPanel = require('../lib/citation-panel.js');
+const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
@@ -43,7 +44,7 @@ const PAGE_ROWS = 8;      // pages shown in the list crop
 const FIX_COUNT = 2;      // fix cards shown in the fixes crop
 const CIT_ROWS = 3;       // rows of the open group in the citations crop
 const TRY_ROWS = 3;       // rows of the open group in the tries crop
-const NAMES = ['summary', 'gap', 'matrix', 'pages', 'fixes', 'print', 'citations', 'tries'];
+const NAMES = ['summary', 'gap', 'matrix', 'pages', 'fixes', 'print', 'citations', 'tries', 'band-explorer'];
 
 /* ---------- small markup helpers (the renderer's output is well formed) ---------- */
 
@@ -140,6 +141,19 @@ function crops(data) {
     return keep;
   });
   out.pages = wrap(clean('<div class="rp-pages"><ul class="rp-list">\n' + lis.join('\n') + '\n</ul>\n<div class="rp-pane"><p class="rp-pane__path">' + firstPath + '</p>' + firstDetail + '</div></div>'));
+
+  // band-explorer (homepage Pro band only): the dashboard's navy top bar and its five tabs, Pages selected,
+  // with the pages explorer under them: worst page selected, detail open, one fix snippet visible. The tabs
+  // are built the way lib/report-ui.js builds them, but as inert spans (the band holds one link and no buttons).
+  // Paths get a middle ellipsis (a head that shortens, a tail that stays) so a clipped path still ends in its
+  // last segment; that styling lives in the band's own rules, not in the dashboard.
+  const ellipsis = (li) => li.replace(/(<span class="rp-item__path"[^>]*>)([^<]*)(<\/span>)/, (m, a, t, c) => {
+    const cut = Math.max(0, t.length - 8);
+    return a + '<span class="pro-band-path__head">' + t.slice(0, cut) + '</span><span class="pro-band-path__tail">' + t.slice(cut) + '</span>' + c;
+  });
+  const dashBar = render.topBar({ domain: data.domain, date: data.createdAt, label: 'Sample report' }).replace(' hidden>', '>').replace('<button type="button"', '<span').replace('</button>', '</span>');
+  const tabs = render.TABS.map((t) => '<span class="rp-tab" role="tab" aria-selected="' + (t.id === 'pages' ? 'true' : 'false') + '">' + icons.svg(t.icon) + t.name + '</span>').join('');
+  out['band-explorer'] = '<div class="rp-report rp-js pro-band-dash">\n' + clean(dashBar + '<div class="pro-band-dash__body"><div class="rp-tablist" role="tablist">' + tabs + '</div>\n<div class="rp-pages"><ul class="rp-list">\n' + lis.map(ellipsis).join('\n') + '\n</ul>\n<div class="rp-pane"><p class="rp-pane__path">' + firstPath + '</p>' + firstDetail + '</div></div></div>') + '\n</div>\n';
 
   // Fixes: two cards, the ones that apply to the most pages after the robots.txt block (which lists crawler
   // names; the marketing crops leave product names out). The page lists are folded away.
