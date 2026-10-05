@@ -5,24 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Answerable. — MCP Server for Claude, Cursor and Other AI Tools</title>
-  <meta name="description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free, read-only tools, copy-paste setup, nothing stored." />
+  <meta name="description" content="Use Answerable from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. Thirteen free, read-only tools, nothing stored." />
   <meta name="keywords" content="MCP server, Model Context Protocol, Claude MCP, Cursor MCP, AI visibility API, GEO tools, AEO tools" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://answerable-app.vercel.app/mcp" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
-  <meta property="og:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free, read-only tools, nothing stored." />
+  <meta property="og:description" content="Use Answerable from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. Thirteen free, read-only tools, nothing stored." />
   <meta property="og:url" content="https://answerable-app.vercel.app/mcp" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
-
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
-  <meta name="twitter:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free, read-only tools, nothing stored." />
+  <meta name="twitter:description" content="Use Answerable from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. Thirteen free, read-only tools, nothing stored." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -31,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=48" />
+  <link rel="stylesheet" href="styles.css?v=49" />
 
   <script type="application/ld+json">
   {
@@ -42,9 +39,13 @@
         "name": "Answerable MCP Server",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
-        "description": "An MCP server exposing Answerable's AI-visibility scanner, fix generators and vertical playbooks as tools for Claude, Cursor and other MCP clients.",
+        "description": "An MCP server exposing Answerable’s AI-visibility scanner, fix generators and vertical playbooks as tools for Claude, Cursor and other MCP clients.",
         "url": "https://answerable-app.vercel.app/mcp",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
       },
       {
         "@type": "FAQPage",
@@ -54,23 +55,47 @@
             "name": "What is MCP?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "MCP (Model Context Protocol) is an open standard that lets an AI assistant call external tools directly, instead of a person copying results between a website and a chat window. Connecting Answerable's MCP server gives Claude, Cursor or any other MCP client direct access to the scanner, the fix generators and the playbooks."
+              "text": "MCP, the Model Context Protocol, is an open standard that lets an AI assistant call outside tools directly instead of a person copying results between a website and a chat. Connect Answerable’s server and the assistant can run a scan, build a fix or read a playbook inside the conversation."
             }
           },
           {
             "@type": "Question",
-            "name": "Does connecting the MCP server cost anything?",
+            "name": "Do I need an account?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. All thirteen tools are free. The three that scan a live site are limited per domain, so one site is not fetched repeatedly, and there is a global hourly ceiling."
+              "text": "No. There is no signup, no API key and no login. Add the server address to your client and ask."
             }
           },
           {
             "@type": "Question",
-            "name": "Is anything stored when a tool is called?",
+            "name": "Is it free?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No client identity is stored. The server keeps short-lived counters keyed by the scanned domain, for an hour, to limit repeated fetches of one site. They hold no IP address, client name, API key or account."
+              "text": "All thirteen tools are free, and so are the three prompts. The three tools that scan a live site are limited per domain, so one site is not fetched over and over, and there is a ceiling across all callers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What data does it fetch and keep?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The three tools that scan a live site (scan_site, compare_sites, generate_schema) fetch a domain’s public robots.txt, llms.txt, sitemap and homepage, and for a store one product page where robots.txt allows it. The other ten read our own files and fetch nothing. Nothing about who you are is stored. The server keeps counters keyed by a one-way hash of the scanned domain, which expire within an hour, to limit repeated fetches of one site."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which clients work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Any MCP client that supports servers over HTTP. Setup for Claude, Claude Code and Cursor is above. Custom connectors depend on your plan, so check your client’s help for the current steps."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it tell me whether AI names my brand?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The scan measures readiness: whether crawlers can reach your site and whether its signals give a model reason to trust it. It cannot observe what an assistant says, and a high score does not guarantee a mention. Two tools, get_citation_prompts and get_citation_sample, give you the questions and a real sample, so you can run the check yourself in your own assistant."
             }
           }
         ]
@@ -142,576 +167,402 @@
   </header>
 
   <main id="main">
-
-    <!-- ---------- Page banner ---------- -->
-    <section aria-label="Page header">
+    <section aria-labelledby="hero-heading">
       <div class="section__inner">
-        <div class="page-banner">
-          <div class="page-banner__body">
+        <div class="page-banner mcp-banner">
+          <div class="page-banner__body mcp-banner__body">
             <p class="kicker kicker--on-navy">MCP server</p>
-            <h1 class="page-banner__title">Answerable, from inside your tools.</h1>
-            <p class="page-banner__desc">Scan a site, generate a fix, or read a playbook without leaving Claude or Cursor. <!--c:toolCountCap-->Thirteen<!--/c--> tools, the same scanner and data as the website, called directly from an AI assistant.</p>
+            <h1 id="hero-heading" class="page-banner__title">Use Answerable from inside Claude.</h1>
+            <p class="page-banner__desc">Scan a site, get the fix, read the playbook and the research, without leaving the conversation. Free, no signup.</p>
+            <div class="mcp-banner__actions">
+              <a href="#connect" class="btn btn--gold">Connect it</a>
+              <a href="#tools" class="btn btn--ghost-on-navy">See what it can do</a>
+            </div>
+          </div>
+          <div class="mcp-banner__side">
+            <figure class="mcp-chat" aria-label="Example: a question, the tool it runs and the real output">
+              <div class="mcp-chat__head">Example</div>
+              <div class="mcp-chat__body">
+                <div class="mcp-msg mcp-msg--user">
+                  <span class="mcp-msg__who">You ask</span>
+                  <p class="mcp-msg__text">Scan example.com and tell me what to fix first</p>
+                </div>
+                <div class="mcp-call">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mcp-call__icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                  <span><span class="mcp-call__server">answerable</span> · <span class="mcp-call__tool">scan_site</span></span>
+                  <span class="mcp-call__arg">example.com</span>
+                </div>
+                <div class="mcp-msg mcp-msg--assistant">
+                  <span class="mcp-msg__who">Answerable returns</span>
+                  <div class="mcp-msg__text mcp-excerpt" data-example="scan-example">
+              <span class="mcp-excerpt__line">AI readiness scan — example.com</span>
+              <span class="mcp-excerpt__line">Score: 29/100</span>
+              <span class="mcp-excerpt__line mcp-excerpt__line--in">Discoverability:      26/40</span>
+              <span class="mcp-excerpt__line mcp-excerpt__line--in">Technical foundation: 3/20</span>
+              <span class="mcp-excerpt__line mcp-excerpt__line--in">Content &amp; trust:      0/40</span>
+              <span class="mcp-excerpt__line">That’s 44 points below the average of the 219 sites we’ve scanned (73/100).</span>
+              <span class="mcp-excerpt__line">AI crawler access (10 tracked):</span>
+              <span class="mcp-excerpt__line mcp-excerpt__line--in">GPTBot — Open</span>
+              <span class="mcp-excerpt__line mcp-excerpt__line--in">ChatGPT-User — Open</span>
+                  </div>
+                </div>
+              </div>
+            </figure>
+            <p class="mcp-banner__caption">Real output from the tool, October 5, 2026. Excerpt.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- What this connects ---------- -->
-    <section class="verticals" aria-labelledby="what-heading">
+    <section class="mcp-section" aria-labelledby="ask-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="what-heading" class="doc-section__heading">What this connects</h2>
-          <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as <!--c:toolCountLower-->thirteen<!--/c--> callable tools instead of a page, plus <!--c:promptCountLower-->three<!--/c--> prompts for common workflows. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, read one of the fourteen vertical playbooks, explain how a score is built, cite the research or read a sample report of our own site, without a person copying anything between a browser tab and a chat window.</p>
-          <p>Every tool is read-only and non-destructive. None of them write to your site, send a message, or change an account anywhere. <!--c:liveCountCap-->Three<!--/c--> tools (<!--c:liveToolNames-->scan_site, compare_sites, generate_schema<!--/c-->) make an outbound request to the domain you give them, the same as the public scanner, and are rate limited per domain. The other <!--c:contentCountLower-->ten<!--/c--> work entirely from this project's own data and fetch nothing external.</p>
-          <p>Like the scanner itself, every tool measures AI readiness: whether a crawler can reach a page, and whether its signals give a model reason to trust it. None of them measure whether an assistant currently mentions a brand in a live answer — that depends on the prompt, the session and the model's training data, and no tool here can observe or promise it.</p>
-          <p>Measuring that is a different job. Two tools here, <code>get_citation_prompts</code> and <code>get_citation_sample</code>, hand you the questions and an anonymised sample so you can run a check yourself. Running one for you is the early-access <a href="/citation-tracking">citation tracking</a> report. No tool here queries a model for you.</p>
+        <div class="section-head">
+          <p class="kicker">Ask</p>
+          <h2 id="ask-heading" class="section-title">Ask in plain language.</h2>
+        </div>
+        <div class="mcp-asks">
+          <div class="card card--static mcp-ask">
+            <p class="mcp-ask__text">“Scan example.com and tell me what to fix first”</p>
+            <p class="mcp-ask__run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mcp-ask__arrow" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg><span class="mcp-chip">scan_site</span></p>
+          </div>
+          <div class="card card--static mcp-ask">
+            <p class="mcp-ask__text">“Compare these two sites”</p>
+            <p class="mcp-ask__run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mcp-ask__arrow" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg><span class="mcp-chip">compare_sites</span></p>
+          </div>
+          <div class="card card--static mcp-ask">
+            <p class="mcp-ask__text">“Write me an llms.txt for my business”</p>
+            <p class="mcp-ask__run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mcp-ask__arrow" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg><span class="mcp-chip">generate_llms_txt</span></p>
+          </div>
+          <div class="card card--static mcp-ask">
+            <p class="mcp-ask__text">“Which questions should I test for my category?”</p>
+            <p class="mcp-ask__run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mcp-ask__arrow" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg><span class="mcp-chip">get_citation_prompts</span></p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------- Connect it ---------- -->
-    <section class="verticals" aria-labelledby="connect-heading">
+    <section class="mcp-section" id="tools" aria-labelledby="tools-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="connect-heading" class="doc-section__heading">Connect it</h2>
-          <p>The server speaks MCP over Streamable HTTP at a single URL: <code>https://answerable-app.vercel.app/api/mcp</code>. No API key, no account.</p>
-
-          <div class="results-content__body">
-            <h3>Claude Code (CLI)</h3>
-            <p>Run once, from any directory:</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head">
-              <span class="fix-snippet__label">Terminal</span>
-              <div class="fix-snippet__actions">
-                <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy">
-                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
-                  Copy
-                </button>
-              </div>
-            </div>
-            <pre class="fix-snippet__code">claude mcp add --transport http answerable https://answerable-app.vercel.app/api/mcp</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3>Claude Desktop, or any JSON-config MCP client</h3>
-            <p>Add this to the client's MCP config file (for Claude Desktop, <code>claude_desktop_config.json</code>):</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head">
-              <span class="fix-snippet__label">claude_desktop_config.json</span>
-              <div class="fix-snippet__actions">
-                <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy">
-                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
-                  Copy
-                </button>
-              </div>
-            </div>
-            <pre class="fix-snippet__code">{
-  "mcpServers": {
-    "answerable": {
-      "url": "https://answerable-app.vercel.app/api/mcp"
-    }
-  }
-}</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3>Cursor</h3>
-            <p>Add the same shape to <code>.cursor/mcp.json</code> (project) or <code>~/.cursor/mcp.json</code> (global):</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head">
-              <span class="fix-snippet__label">.cursor/mcp.json</span>
-              <div class="fix-snippet__actions">
-                <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy">
-                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
-                  Copy
-                </button>
-              </div>
-            </div>
-            <pre class="fix-snippet__code">{
-  "mcpServers": {
-    "answerable": {
-      "url": "https://answerable-app.vercel.app/api/mcp"
-    }
-  }
-}</pre>
-          </div>
-
-          <p>Restart the client, or reload its MCP connections, then ask it to scan a domain, compare two sites, or pull up a playbook.</p>
-          <p>The server supports MCP protocol versions <code>2026-07-28</code>, <code>2025-11-25</code> and <code>2025-06-18</code>. Every request must send an <code>MCP-Protocol-Version</code> header; a request without one returns <code>400</code>. Clients add it automatically. If you call the endpoint by hand, send that header. For <code>2026-07-28</code> you also need the <code>_meta</code> protocol fields and the <code>Mcp-Method</code> headers, plus <code>Mcp-Name</code> on <code>tools/call</code> and <code>prompts/get</code>.</p>
+        <div class="section-head">
+          <p class="kicker">Tools</p>
+          <h2 id="tools-heading" class="section-title">What’s inside.</h2>
+          <p class="section-sub">The server has <!--c:toolCountLower-->thirteen<!--/c--> tools in four groups. Every one is read-only.</p>
         </div>
-      </div>
-    </section>
-
-    <!-- ---------- Tools ---------- -->
-    <section class="verticals" aria-labelledby="tools-heading">
-      <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="tools-heading" class="doc-section__heading"><!--c:toolCountCap-->Thirteen<!--/c--> tools</h2>
-          <p>Each one below shows what it needs, what it fetches, and one real example call and response.</p>
-        </div>
-
-        <div class="doc-section">
-          <h2 class="doc-section__heading">Scanning</h2>
-
-          <div class="results-content__body">
-            <h3 id="scan_site">scan_site</h3>
-            <p><strong>Fetches:</strong> the live domain &middot; <strong>Needs:</strong> <code>domain</code> (bare hostname, e.g. <code>example.com</code>)</p>
-            <p>Scans a domain's public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability, technical foundation, and content &amp; trust. Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable's own benchmark data. If the site looks like a store, it also reports a separate commerce sub-score: the UCP endpoint, one product page's schema, and the llms.txt authorship result. That sub-score is never part of the 100.</p>
+        <div class="mcp-group">
+          <div class="mcp-group__head">
+            <span class="mcp-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span>
+            <div>
+              <h3 class="mcp-group__title">Scan</h3>
+              <p class="mcp-group__blurb">Read a live site the way an AI crawler would.</p>
+            </div>
           </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "scan_site", "arguments": { "domain": "example.com" } }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">AI readiness scan — example.com
+          <div class="mcp-tools">
+          <article class="card card--static mcp-tool" id="scan_site">
+            <h4 class="mcp-tool__name">scan_site</h4>
+            <p class="card__desc mcp-tool__line">Score any site out of 100 for AI readiness, with every failed check and its fix.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for scan_site</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">domain</span><span class="mcp-req">required</span></th><td>A bare domain, e.g. &quot;example.com&quot;. No scheme (https://) and no path — the scan always targets the domain root.</td></tr>
+</tbody></table></div>
+                <p class="mcp-more__label">Example</p>
+                <p class="mcp-more__prompt">You ask: “Scan answerable-app.vercel.app and tell me what to fix first”</p>
+                <div class="fix-snippet">
+                  <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 25 lines</span></div>
+                  <pre class="fix-snippet__code" data-example="scan-self">AI readiness scan — answerable-app.vercel.app
 
-Score: 29/100
-  Discoverability:      26/40
-  Technical foundation: 3/20
-  Content &amp; trust:      0/40
+Score: 87/100
+  Discoverability:      27/40
+  Technical foundation: 20/20
+  Content &amp; trust:      40/40
 
-That's 44 points below the average of the 219 sites we've scanned (73/100).
+That’s 14 points above the average of the 219 sites we’ve scanned (73/100).
 
-AI crawler access: 10/10 open.
-
-Failed checks, highest point value first:
-  - Organization / WebSite schema (0/8 pts): Add Organization schema — Defines your brand as a verifiable entity — the base layer of trust.
-  - Author / about signals (0/8 pts): Add an about page and author information — AI systems weigh source credibility through ownership signals.
-  - Contact signals (0/8 pts): Add a contact page or email link — Reachability is a baseline trust marker.
-  (11 more failed checks follow in a real response)
-
-Passed: AI crawler access (10/10 open), Page title.</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="compare_sites">compare_sites</h3>
-            <p><strong>Fetches:</strong> two live domains, one after the other &middot; <strong>Needs:</strong> <code>domain_a</code>, <code>domain_b</code></p>
-            <p>Scans two domains — sequentially, never in parallel — and reports both scores plus every check where they differ. Useful for comparing your site against a named competitor. The same comparison is available as a page: <a href="/compare">Compare two sites</a>.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "compare_sites", "arguments": { "domain_a": "example.com", "domain_b": "wikipedia.org" } }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
-            <pre class="fix-snippet__code">Comparing example.com and wikipedia.org
-
-example.com: 29/100 (Discoverability 26/40, Technical 3/20, Content &amp; trust 0/40)
-wikipedia.org: 44/100 (Discoverability 23/40, Technical 10/20, Content &amp; trust 11/40)
-
-Where they differ (9 of 16 checks):
-  robots.txt present — example.com: 0/4   wikipedia.org: 4/4
-  Sitemap declared — example.com: 0/6   wikipedia.org: 6/6
-  AI crawler access — example.com: 26/26   wikipedia.org: 13/26
-  html lang attribute — example.com: 0/3   wikipedia.org: 3/3
-  Page title — example.com: 3/3   wikipedia.org: 0/3
-  Meta description — example.com: 0/4   wikipedia.org: 4/4
-  Open Graph tags — example.com: 0/3   wikipedia.org: 3/3
-  Single H1 heading — example.com: 0/6   wikipedia.org: 6/6
-  Subheading structure (H2) — example.com: 0/5   wikipedia.org: 5/5</pre>
+AI crawler access (10 tracked):
+  GPTBot — Limited (Disallow: /admin/ (+1 more) · bot-specific rule)
+  ChatGPT-User — Limited (Disallow: /admin/ (+1 more) · bot-specific rule)</pre>
+                </div>
+                <p class="mcp-more__note">Captured October 5, 2026.</p>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="compare_sites">
+            <h4 class="mcp-tool__name">compare_sites</h4>
+            <p class="card__desc mcp-tool__line">Put two sites side by side and see every check where they differ.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for compare_sites</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">domain_a</span><span class="mcp-req">required</span></th><td>The first bare domain, e.g. &quot;example.com&quot;.</td></tr>
+<tr><th scope="row"><span class="mcp-in">domain_b</span><span class="mcp-req">required</span></th><td>The second bare domain, e.g. &quot;competitor.com&quot;. Must differ from domain_a.</td></tr>
+</tbody></table></div>
+              </div>
+            </details>
+          </article>
           </div>
         </div>
-
-        <div class="doc-section">
-          <h2 class="doc-section__heading">Fixes</h2>
-
-          <div class="results-content__body">
-            <h3 id="generate_schema">generate_schema</h3>
-            <p><strong>Fetches:</strong> the live domain's homepage &middot; <strong>Needs:</strong> <code>domain</code>, <code>type</code> (<code>organization</code>, <code>faqpage</code>, <code>article</code>, <code>product</code> or <code>localbusiness</code>)</p>
-            <p>Fetches a domain's homepage for its real title, meta description and declared language, then returns ready-to-paste JSON-LD of the requested type. Fields the scan cannot know — a FAQ's actual questions, a product's real price — come back as clearly bracketed placeholders, never invented values.</p>
+        <div class="mcp-group">
+          <div class="mcp-group__head">
+            <span class="mcp-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span>
+            <div>
+              <h3 class="mcp-group__title">Fix</h3>
+              <p class="mcp-group__blurb">Generate the files that close the gaps.</p>
+            </div>
           </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "generate_schema", "arguments": { "domain": "example.com", "type": "organization" } }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
-            <pre class="fix-snippet__code">Organization and WebSite JSON-LD for example.com, ready to paste inside a &lt;script type="application/ld+json"&gt; tag in the page's &lt;head&gt;:
+          <div class="mcp-tools">
+          <article class="card card--static mcp-tool" id="generate_schema">
+            <h4 class="mcp-tool__name">generate_schema</h4>
+            <p class="card__desc mcp-tool__line">Get paste-ready JSON-LD for your site, with brackets where only you know the facts.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for generate_schema</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">domain</span><span class="mcp-req">required</span></th><td>A bare domain, e.g. &quot;example.com&quot;.</td></tr>
+<tr><th scope="row"><span class="mcp-in">type</span><span class="mcp-req">required</span></th><td>&quot;organization&quot; returns Organization + WebSite schema as an @graph; the others (faqpage, article, product, localbusiness) each return one schema of that @type.</td></tr>
+</tbody></table></div>
+                <p class="mcp-more__label">Example</p>
+                <p class="mcp-more__prompt">You ask: “Write Organization JSON-LD for answerable-app.vercel.app”</p>
+                <div class="fix-snippet">
+                  <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 19 lines</span></div>
+                  <pre class="fix-snippet__code" data-example="schema-self">Organization and WebSite JSON-LD for answerable-app.vercel.app, ready to paste inside a &lt;script type=&quot;application/ld+json&quot;&gt; tag in the page’s &lt;head&gt;:
 
 {
-  "@context": "https://schema.org",
-  "@graph": [
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@graph&quot;: [
     {
-      "@type": "Organization",
-      "name": "[Your company name]",
-      "url": "https://example.com",
-      "description": "[A one-sentence description of your business]"
+      &quot;@type&quot;: &quot;Organization&quot;,
+      &quot;name&quot;: &quot;[Your company name]&quot;,
+      &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+      &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
     },
-    {
-      "@type": "WebSite",
-      "name": "Example Domain",
-      "url": "https://example.com",
-      "inLanguage": "[e.g. en]"
-    }
-  ]
-}</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="generate_robots_txt">generate_robots_txt</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>allow</code> and/or <code>block</code> (arrays of tracked crawler names), optional <code>sitemap_url</code></p>
-            <p>Builds a robots.txt file that explicitly allows or blocks named AI crawlers from the tracked list of 10, plus an optional Sitemap line. Call list_ai_crawlers first for the exact tracked names.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "generate_robots_txt",
-    "arguments": {
-      "allow": ["GPTBot", "ClaudeBot", "PerplexityBot"],
-      "block": ["Bytespider", "CCBot"],
-      "sitemap_url": "https://example.com/sitemap.xml"
-    }
-  }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
-            <pre class="fix-snippet__code">robots.txt — paste this at your site root (e.g. https://yoursite.com/robots.txt):
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-Sitemap: https://example.com/sitemap.xml</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="generate_llms_txt">generate_llms_txt</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>name</code>, <code>description</code>, optional <code>key_pages</code> (array of <code>url</code> + <code>description</code>)</p>
-            <p>Builds an llms.txt file — the emerging convention that gives AI systems a curated map of a site — from a name, a one-sentence description and a list of key pages.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "generate_llms_txt",
-    "arguments": {
-      "name": "Example Co",
-      "description": "A sample company used for documentation.",
-      "key_pages": [
-        { "url": "https://example.com/pricing", "description": "Plans and pricing" },
-        { "url": "https://example.com/docs", "description": "Product documentation" }
-      ]
-    }
-  }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
-            <pre class="fix-snippet__code">llms.txt — paste this at your site root (e.g. https://yoursite.com/llms.txt):
-
-# Example Co
-
-&gt; A sample company used for documentation.
-
-## Pages
-- [Plans and pricing](https://example.com/pricing)
-- [Product documentation](https://example.com/docs)</pre>
+    {</pre>
+                </div>
+                <p class="mcp-more__note">Captured October 5, 2026.</p>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="generate_robots_txt">
+            <h4 class="mcp-tool__name">generate_robots_txt</h4>
+            <p class="card__desc mcp-tool__line">Allow or block named AI crawlers with a robots.txt you can paste as it is.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for generate_robots_txt</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">allow</span><span class="mcp-req">optional</span></th><td>Crawler names to explicitly allow, e.g. [&quot;GPTBot&quot;, &quot;ClaudeBot&quot;]. Must be names from the tracked list.</td></tr>
+<tr><th scope="row"><span class="mcp-in">block</span><span class="mcp-req">optional</span></th><td>Crawler names to explicitly block. Must be names from the tracked list, and must not overlap with &quot;allow&quot;.</td></tr>
+<tr><th scope="row"><span class="mcp-in">sitemap_url</span><span class="mcp-req">optional</span></th><td>Optional absolute sitemap URL to add as a Sitemap: line, e.g. &quot;https://example.com/sitemap.xml&quot;.</td></tr>
+</tbody></table></div>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="generate_llms_txt">
+            <h4 class="mcp-tool__name">generate_llms_txt</h4>
+            <p class="card__desc mcp-tool__line">Write an llms.txt that tells AI systems what your site is and where to start.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for generate_llms_txt</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">name</span><span class="mcp-req">required</span></th><td>The site or product name for the llms.txt header.</td></tr>
+<tr><th scope="row"><span class="mcp-in">description</span><span class="mcp-req">required</span></th><td>A one-sentence summary of what the site is.</td></tr>
+<tr><th scope="row"><span class="mcp-in">key_pages</span><span class="mcp-req">optional</span></th><td>Pages worth pointing an AI system to, most important first.</td></tr>
+</tbody></table></div>
+              </div>
+            </details>
+          </article>
           </div>
         </div>
-
-        <div class="doc-section">
-          <h2 class="doc-section__heading">Knowledge</h2>
-
-          <div class="results-content__body">
-            <h3 id="get_playbook">get_playbook</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> optionally <code>vertical</code> (one of 14 slugs, e.g. <code>crm</code>, <code>ecommerce</code>, <code>legal</code>); with no argument it lists them with their track</p>
-            <p>Returns the full GEO/AEO playbook for one of Answerable's fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Read live from this project's own content file, so it always matches what a visitor to the site sees.</p>
+        <div class="mcp-group">
+          <div class="mcp-group__head">
+            <span class="mcp-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span>
+            <div>
+              <h3 class="mcp-group__title">Learn</h3>
+              <p class="mcp-group__blurb">Read the data, the method and the playbooks behind the score.</p>
+            </div>
           </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "get_playbook", "arguments": { "vertical": "crm" } }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">CRM Software (B2B SaaS)
+          <div class="mcp-tools">
+          <article class="card card--static mcp-tool" id="get_playbook">
+            <h4 class="mcp-tool__name">get_playbook</h4>
+            <p class="card__desc mcp-tool__line">Read the playbook for your vertical: the shift, three strategies and the pitfalls to avoid.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for get_playbook</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">vertical</span><span class="mcp-req">optional</span></th><td>Optional. A vertical slug. B2B SaaS: crm, martech, hrtech, fintech, cybersecurity, devtools. Consumer brands: ecommerce, consumerapps, hospitality, marketplaces. Professionals: health, localservices, realestate, legal. Omit to list them all.</td></tr>
+</tbody></table></div>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="get_benchmark">
+            <h4 class="mcp-tool__name">get_benchmark</h4>
+            <p class="card__desc mcp-tool__line">See where your score sits against the sites in your category.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for get_benchmark</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">category</span><span class="mcp-req">optional</span></th><td>Optional. One of: crm, cybersecurity, devtools, dtc-brands, consumer-apps, hospitality. Omit to get every category.</td></tr>
+</tbody></table></div>
+                <p class="mcp-more__label">Example</p>
+                <p class="mcp-more__prompt">You ask: “How do CRM sites score on AI readiness?”</p>
+                <div class="fix-snippet">
+                  <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 38 lines</span></div>
+                  <pre class="fix-snippet__code" data-example="benchmark-crm">AI readiness benchmark: CRM software (B2B SaaS)
+Scanned 31 platforms as of 2026-07-29 (8 more could not be reached).
 
-## The Strategic Shift
+Score — average 78/100, median 80, range 53–91.
+  Discoverability:      27/40
+  Technical foundation: 18/20
+  Content &amp; trust:      33/40
 
-For a decade, CRM buyers built their shortlist by Googling "best CRM for small business" and skimming ten blue links. That research layer is collapsing into a single AI-generated answer. When a sales-ops lead asks ChatGPT, Perplexity, or Gemini to compare HubSpot, Salesforce, and Pipedrive, the model is not crawling your homepage in real time — it is synthesizing a response from training data, indexed reviews, and structured signals it has learned to trust.
+Crawler access: 10% of sites block at least one AI crawler.
+By crawler, in number of sites (31 scanned):
+  GPTBot           blocked 1, limited 24, open 6
+  ChatGPT-User     blocked 1, limited 24, open 6</pre>
+                </div>
+                <p class="mcp-more__note">Captured October 5, 2026.</p>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="list_ai_crawlers">
+            <h4 class="mcp-tool__name">list_ai_crawlers</h4>
+            <p class="card__desc mcp-tool__line">See the ten AI crawlers we track and what each one is for.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <p class="mcp-more__none">No inputs.</p>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="get_methodology">
+            <h4 class="mcp-tool__name">get_methodology</h4>
+            <p class="card__desc mcp-tool__line">See how the 100 points are built, check by check, and what the score cannot show.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for get_methodology</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">check</span><span class="mcp-req">optional</span></th><td>Optional. A check label exactly as scan_site reports it, e.g. &quot;Page title&quot; or &quot;AI crawler access&quot;. Case does not matter. Omit for the whole methodology.</td></tr>
+</tbody></table></div>
+                <p class="mcp-more__label">Example</p>
+                <p class="mcp-more__prompt">You ask: “How is the Answerable score built?”</p>
+                <div class="fix-snippet">
+                  <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 32 lines</span></div>
+                  <pre class="fix-snippet__code" data-example="methodology">How the Answerable AI readiness score is built: 100 points across 3 pillars and 16 checks. Every point value below is read from the scanner that runs.
 
-If your CRM brand is not in that trusted signal set, you do not lose a ranking position. You disappear from the conversation. If your Answerable scan shows "AI crawler access" or "Organization / WebSite schema" failing, this category feels it faster than most.
+Discoverability: 40 points. Can AI crawlers reach the site at all. Access is the precondition for every other signal.
+  - robots.txt present (4 pts): Whether https://&lt;domain&gt;/robots.txt can be read. A real 404 counts as default-open access; a failed fetch stops the scan. Why it matters: AI crawlers read your access policy from this file.
+  - llms.txt present (4 pts): Whether https://&lt;domain&gt;/llms.txt exists and is a usable text file. Why it matters: An emerging standard that gives AI systems a curated map of your content.
+  - Sitemap declared (6 pts): Whether robots.txt has a Sitemap: line, or /sitemap.xml exists as a urlset or sitemapindex. Why it matters: Sitemaps let crawlers discover your content completely.
+  - AI crawler access (26 pts): For each of the 10 tracked AI crawlers: open (no rule applies), limited (at least one Disallow rule applies, often an ordinary path) or blocked (the whole site is disallowed). Open earns full credit, limited half, blocked none, scaled to the 26 points. Why it matters: Every blocked crawler removes you from that platform’s answers.
 
-(trimmed — a real response continues with Top 3 Actionable Strategies, Outdated Pitfalls to Avoid, and an expert-tip placeholder)</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="get_benchmark">get_benchmark</h3>
-            <p><strong>Fetches:</strong> nothing (archived scan data) &middot; <strong>Needs:</strong> nothing, or <code>category</code></p>
-            <p>Returns Answerable's own archived scan data for one category — average, median and range of scores, pillar breakdowns, per-crawler blocked, limited and open counts, and the most common failed checks — or a ranked summary across every category when called with no argument.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "get_benchmark", "arguments": {} }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response</span></div>
-            <pre class="fix-snippet__code">AI readiness benchmarks across 6 categories (219 sites scanned, weighted average 73/100):
-
-  78/100  CRM software  (B2B SaaS, 31 platforms, scanned 2026-07-29)
-  78/100  Cybersecurity  (B2B SaaS, 46 platforms, scanned 2026-07-31)
-  74/100  DevTools &amp; Cloud  (B2B SaaS, 48 platforms, scanned 2026-07-31)
-  72/100  DTC brands  (Consumer &amp; e-commerce, 33 brands, scanned 2026-07-29)
-  71/100  Hospitality &amp; travel  (Consumer &amp; e-commerce, 21 venues, scanned 2026-07-31)
-  65/100  Consumer apps  (Consumer &amp; e-commerce, 40 apps, scanned 2026-07-31)
-
-Call get_benchmark with a category for the full breakdown: crm, cybersecurity, devtools, dtc-brands, consumer-apps, hospitality.</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="list_ai_crawlers">list_ai_crawlers</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
-            <p>Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it means, and this project's robots.txt generator's default for it. Use before generate_robots_txt if you need the exact tracked names.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "list_ai_crawlers", "arguments": {} }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">The 10 AI crawlers Answerable tracks:
-
-GPTBot (OpenAI)
-  OpenAI's crawler for training GPT models. Allowing it means your pages can shape what ChatGPT knows.
-  This project's robots.txt generator defaults it to: Allow.
-
-ClaudeBot (Anthropic)
-  Anthropic's crawler for training Claude models. Allowing it means your pages can shape what Claude knows.
-  This project's robots.txt generator defaults it to: Allow.
-
-Bytespider (ByteDance)
-  ByteDance's crawler, used to gather AI training data. Many site owners block it over aggressive crawling behavior.
-  This project's robots.txt generator defaults it to: Disallow.
-
-(7 more crawlers follow in a real response: ChatGPT-User, OAI-SearchBot, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, CCBot)</pre>
+Technical foundation: 20 points. Baseline machine-readability hygiene.
+  - Canonical tag (4 pts): Whether the homepage declares a rel=canonical link. Why it matters: Tells machines the definitive URL and prevents duplicate-content ambiguity.
+  - html lang attribute (3 pts): Whether the &lt;html&gt; element declares a language. Why it matters: Lets AI systems classify your content’s language correctly.
+  - Page title (3 pts): Whether the &lt;title&gt; is 10 to 70 characters. Why it matters: Answer engines frequently use the title as your source label.</pre>
+                </div>
+                <p class="mcp-more__note">Captured October 5, 2026.</p>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="get_research">
+            <h4 class="mcp-tool__name">get_research</h4>
+            <p class="card__desc mcp-tool__line">Read our published research, with the figures and how we got them.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for get_research</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">slug</span><span class="mcp-req">optional</span></th><td>Optional. A report slug from the list this tool returns with no argument. Omit to list the reports.</td></tr>
+</tbody></table></div>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="get_sample_report">
+            <h4 class="mcp-tool__name">get_sample_report</h4>
+            <p class="card__desc mcp-tool__line">Open a full-site report on our own site, before and after we fixed what it found.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <p class="mcp-more__none">No inputs.</p>
+              </div>
+            </details>
+          </article>
           </div>
         </div>
-
-        <!-- MCP-DOCS-TOOLS:START -->
-        <div class="doc-section">
-          <h2 class="doc-section__heading">Methodology, research and the sample report</h2>
-
-          <div class="results-content__body">
-            <h3 id="get_methodology">get_methodology</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>check</code> (optional)</p>
-            <p>Explains how the Answerable AI readiness score is built, read from the scanner’s own check registry so it matches what runs. With no argument it returns the three pillars with their weights (they add up to 100), every check with its category, points, what it tests and why it matters, and the limits of the scan: it measures readiness and not whether any assistant names a brand; it gives half credit for a crawler with any applicable Disallow rule, usually an ordinary path; and it reads the homepage only. With a check label it returns that one check in detail. An unknown label returns an error listing the valid labels. Read-only, fetches nothing external. Use when the user asks how a score is calculated, why a check carries the points it does, or what the scan cannot tell them.</p>
+        <div class="mcp-group">
+          <div class="mcp-group__head">
+            <span class="mcp-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.7a2.5 2.5 0 114 2c-.9.6-1.6 1.1-1.6 2.1"/><path d="M12 16.8v.1"/></svg></span>
+            <div>
+              <h3 class="mcp-group__title">Test</h3>
+              <p class="mcp-group__blurb">Check for yourself whether an assistant names a brand.</p>
+            </div>
           </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "get_methodology",
-    "arguments": {
-      "check": "Page title"
-    }
-  }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">Page title (3 points, Technical foundation, which is 20 points in all)
-
-What it tests: Whether the &lt;title&gt; is 10 to 70 characters.
-Why it matters: Answer engines frequently use the title as your source label.
-If it fails: Write a descriptive 10–70 character title.
-
-Limits that apply to every check:
-  - Answerable measures AI readiness: whether AI crawlers can access your content, and whether your on-page signals give a model a reason to trust and cite you.
-  - A perfect score does not guarantee an answer engine will cite you.
-  - A blocked crawler guarantees it cannot.
-  - The crawler-access check gives half credit for a bot that has any Disallow rule applying to it, including ordinary paths such as /admin/.
-  - The product page is the only page beyond the homepage that a scan reads.</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="get_research">get_research</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>slug</code> (optional)</p>
-            <p>Returns Answerable’s published research: with no argument, the list of reports (the llms.txt and crawler study, the AgaOne case study and the benchmark data) with title, date, one-line finding and URL; with a slug, the key findings, the method limits, the URL and a ready line for citing it. Findings are checked against the published pages and data files. Every study measures readiness inputs, not whether any assistant names a brand. Read-only, fetches nothing external. Use when the user wants evidence for a claim about AI crawler access or llms.txt, a statistic to cite, or the reports behind the benchmarks.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "get_research",
-    "arguments": {
-      "slug": "llms-txt-adoption-2026"
-    }
-  }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">Who controls your brand's AI representation? (research, 29 July 2026)
-https://answerable-app.vercel.app/research/llms-txt-adoption-2026
-
-We scanned 64 sites and found blocking is rare: 10% of B2B sites and 3% of consumer brands restrict AI crawlers.
-
-Key findings:
-  1. 76% of consumer brands have an llms.txt file, but the two files we examined by hand were near-identical and said nothing specific about the brand.
-  2. 91% of consumer-brand homepages and 48% of B2B homepages are missing content schema.
-  3. 22 of 85 attempted scans could not complete, blocked by protection that may also stop AI crawlers. The report leaves that question open.
-
-Method and limits:
-  - Homepages only: 64 domains completed a scan out of 85 attempted, 31 B2B and 33 consumer brands.
-  - It does not tell whether the 22 unreachable sites block AI crawlers specifically, or only generic cloud traffic.
-  - The Shopify-generated llms.txt pattern was checked in two files read by hand, Magic Spoon and Allbirds.
-(trimmed: 3 more lines in a real response)</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="get_sample_report">get_sample_report</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
-            <p>Returns the sample Pro report as readable text: a real crawl of Answerable’s own site on a stated date, nothing edited. It gives the whole-site score beside the homepage score, the pillar averages, the top priorities from the executive summary with the label saying what wrote it, the checks failing by number of pages, and the link to the full report. It shows what a full-site crawl adds to a one-page scan. It is our own site, not a customer’s, and it measures readiness, not whether any assistant names the site. Read-only, fetches nothing external. Use when the user asks what a full-site report looks like or what a crawl shows that a homepage scan cannot.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "get_sample_report",
-    "arguments": {}
-  }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">Sample report: a crawl of our own site, answerable-app.vercel.app, run on 4 October 2026. It is not a customer’s report, and nothing in it was edited or improved.
-28 pages read, from a crawl that reads up to 50.
-
-Whole-site score 83 beside homepage score 87 (gap −4 points). 20 of 28 pages fail at least one page-level check.
-Benchmark: the average homepage score across 219 sites in 6 categories is 73. The homepage score here is 14 points above it.
-
-Pillars, site average: Discoverability 27/40, Technical foundation 20/20, Content &amp; trust 36/40.
-
-Where to start (Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them):
-  1. Content schema (Article, FAQ…): 17 of 28 pages, adds 3 points to the site-wide score, typically markup for each page type.
-  2. Subheading structure (H2): 4 of 28 pages, adds 0.7 points to the site-wide score, typically copy on each page.
-  3. Organization / WebSite schema: 2 of 28 pages, adds 0.6 points to the site-wide score, typically one template change.
-Already working: Author / about signals and canonical tag are working.
-
-Checks failing, by number of pages:
-  - Content schema (Article, FAQ…): 17 of 28 pages
-(trimmed: 6 more lines in a real response)</pre>
-          </div>
-
-        </div>
-        <!-- MCP-DOCS-TOOLS:END -->
-
-        <div class="doc-section">
-          <h2 class="doc-section__heading">Citation tracking</h2>
-
-          <div class="results-content__body">
-            <h3 id="get_citation_prompts">get_citation_prompts</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>vertical</code> (a vertical slug, e.g. <code>crm</code>)</p>
-            <p>Returns the buying-intent questions Answerable uses to test whether an assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions don&rsquo;t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask. Read from this project&rsquo;s own question files. A vertical with no questions yet returns a message that names the verticals that have them.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "get_citation_prompts", "arguments": { "vertical": "crm" } }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">Citation question set: crm (18 questions, set version 1)
-Buying-intent category queries for CRM software.
-The questions don’t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.
-
-1. What's the best CRM for a 40-person outbound sales team?
-2. Which CRM should a 10-person startup use that won't need a consultant to set up?
-3. What are the best CRMs that integrate natively with Slack?
-(15 more questions follow in a real response)
-
-How to run this yourself, in any assistant you have access to:
-1. Pick one assistant and one model, and note its name and today’s date.
-2. Ask each question in a separate, new conversation. Do not reuse a chat: earlier answers change later ones.
-3. Ask every question three to five times, each time in a new conversation.
-4. For each answer, note two things: whether your brand is named at all, and whether it appears in a heading, list label, table or bold text (featured) rather than only in running prose (named only).
-5. Judge the spread, not one answer. A question where you are named in some tries and not others is unstable. One where you are never named is a gap. A single answer is not a finding.
-
-Keep the limits in view: the result describes one assistant on one date. It is not a ranking, it says nothing about other assistants, and it is not a forecast of traffic. Answers move with phrasing and over time.</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="get_citation_sample">get_citation_sample</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
-            <p>Returns the anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand in the category being measured, no domain and no competitor.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": { "name": "get_citation_sample", "arguments": {} }
-}</pre>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
-            <pre class="fix-snippet__code">Citation tracking sample: a CRM brand
+          <div class="mcp-tools">
+          <article class="card card--static mcp-tool" id="get_citation_prompts">
+            <h4 class="mcp-tool__name">get_citation_prompts</h4>
+            <p class="card__desc mcp-tool__line">Get the buying-intent questions for your category to try in your own assistant.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <div class="mcp-scroll"><table class="mcp-table">
+<caption class="mcp-vh">Inputs for get_citation_prompts</caption>
+<thead><tr><th scope="col">Input</th><th scope="col">What it takes</th></tr></thead>
+<tbody>
+<tr><th scope="row"><span class="mcp-in">vertical</span><span class="mcp-req">required</span></th><td>A vertical slug. Valid: consumerapps, crm, cybersecurity, devtools, ecommerce, fintech, health, hospitality, hrtech, legal, localservices, marketplaces, martech, realestate. Question sets exist for: consumerapps, crm, cybersecurity, devtools, ecommerce, fintech, health, hospitality, hrtech, legal, localservices, marketplaces, martech, realestate.</td></tr>
+</tbody></table></div>
+              </div>
+            </details>
+          </article>
+          <article class="card card--static mcp-tool" id="get_citation_sample">
+            <h4 class="mcp-tool__name">get_citation_sample</h4>
+            <p class="card__desc mcp-tool__line">See what a citation run looks like: a real, anonymized sample with the spread shown.</p>
+            <details class="mcp-more">
+              <summary>Inputs and example</summary>
+              <div class="mcp-more__body">
+                <p class="mcp-more__label">Inputs</p>
+                <p class="mcp-more__none">No inputs.</p>
+                <p class="mcp-more__label">Example</p>
+                <p class="mcp-more__prompt">You ask: “Show me a sample citation result”</p>
+                <div class="fix-snippet">
+                  <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 38 lines</span></div>
+                  <pre class="fix-snippet__code" data-example="citation-sample">Citation tracking sample: a CRM brand
 Model: gemini-3.5-flash-lite. Date: October 2, 2026. No web search was enabled.
 Each of 18 questions was asked 5 times (5 tries per question), each in its own conversation.
 
@@ -720,147 +571,172 @@ Overall, the brand was named in 49% of answers. Taking one try of every question
 Named in every try (6):
   - Which CRM should a 10-person startup use that won't need a consultant to set up?
   - What are the best CRMs that integrate natively with Slack?
-  (4 more)
-
-Unstable, named in some tries and not others (5):
-  - Which CRM is best for a small business that sells mostly over email and phone?
-    tries: not named, featured, featured, featured, featured
-  - What CRM do mid-market companies with 200 to 500 employees usually choose?
-    tries: named only, not named, named only, featured, named only
-  (3 more)
-
-Never named (7):
-  - What's the best CRM for a 40-person outbound sales team?
-  - What's a good free CRM for a freelancer or solo consultant?
-  (5 more)
-
-Featured means named in a heading, list label, table or bold text. Named only means named in running prose, which can include a mention that is not a recommendation.
-
-Limits: this is one model on one date. It is not a ranking, it says nothing about other assistants, and it is not a forecast of traffic. Answers move with phrasing and over time. The sample is anonymised: it names no brand in the category being measured, no domain and no competitor.</pre>
-          </div>
-
-          <div class="callout">
-            <p class="callout__label">Why there is no tool that runs the check</p>
-            <p>A run asks a model about 90 questions in total, at about five seconds each. That is far past this server&rsquo;s time limit, and it would spend a model quota that nothing stops a stranger from draining. So the tools hand you the questions and the protocol, and you run them in your own assistant. If you want us to run it for you, that is the early-access <a href="/citation-tracking">citation tracking</a> report.</p>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <div class="callout">
-            <p class="callout__label">Errors are specific</p>
-            <p>Calling generate_schema with an invalid type returns: <code>"type" must be one of: organization, faqpage, article, product (got "invalid").</code> Calling a tool name the server doesn't recognize returns a JSON-RPC error naming it, with the full tool list. Nothing fails silently or returns a generic message.</p>
+  - Which CRM is easiest for a non-technical sales team to adopt?
+  - What CRM should an agency use to manage clients and deals together?
+  - Which CRMs integrate well with Google Workspace and Gmail?</pre>
+                </div>
+                <p class="mcp-more__note">Captured October 5, 2026.</p>
+              </div>
+            </details>
+          </article>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MCP-DOCS-PROMPTS:START -->
-    <section class="verticals" aria-labelledby="prompts-heading">
+    <section class="mcp-section" aria-labelledby="flows-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="prompts-heading" class="doc-section__heading"><!--c:promptCountCap-->Three<!--/c--> prompts</h2>
-          <p>Prompts are workflows you start yourself, often as a slash command in the client. Each one asks the assistant to call the tools above in order and to say what the scan does not measure. Clients list them with <code>prompts/list</code> and fetch one with <code>prompts/get</code>, which needs the <code>Mcp-Name</code> header on <code>2026-07-28</code>.</p>
-
-          <div class="results-content__body">
-            <h3 id="prompt-geo_audit">geo_audit</h3>
-            <p><strong>Needs:</strong> <code>domain</code> &middot; <strong>Calls:</strong> <code>scan_site</code>, <code>generate_schema</code>, <code>generate_robots_txt</code>, <code>generate_llms_txt</code>, <code>get_playbook</code>, <code>get_benchmark</code>, <code>list_ai_crawlers</code>, <code>get_methodology</code></p>
-            <p>Scans a domain, compares it with its category benchmark, reads the matching playbook, generates the fixes and returns an ordered plan, then says what the scan does not measure.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example request</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "prompts/get",
-  "params": {
-    "name": "geo_audit",
-    "arguments": {
-      "domain": "example.com"
-    }
-  }
-}</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="prompt-commerce_readiness">commerce_readiness</h3>
-            <p><strong>Needs:</strong> <code>domain</code> &middot; <strong>Calls:</strong> <code>scan_site</code>, <code>generate_schema</code>, <code>generate_llms_txt</code>, <code>get_playbook</code></p>
-            <p>Scans a store, reads the commerce sub-score (UCP endpoint, product schema, llms.txt authorship) and returns what to fix, with a replacement llms.txt if the file is a platform default.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example request</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "prompts/get",
-  "params": {
-    "name": "commerce_readiness",
-    "arguments": {
-      "domain": "example.com"
-    }
-  }
-}</pre>
-          </div>
-
-          <div class="results-content__body">
-            <h3 id="prompt-citation_questions">citation_questions</h3>
-            <p><strong>Needs:</strong> <code>vertical</code>, <code>brand</code> &middot; <strong>Calls:</strong> <code>get_citation_prompts</code>, <code>get_citation_sample</code></p>
-            <p>Returns the buying-intent question set for a vertical and the protocol for running it yourself in any assistant, five tries per question, and what to record.</p>
-          </div>
-          <div class="fix-snippet">
-            <div class="fix-snippet__head"><span class="fix-snippet__label">Example request</span></div>
-            <pre class="fix-snippet__code">{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "prompts/get",
-  "params": {
-    "name": "citation_questions",
-    "arguments": {
-      "vertical": "crm",
-      "brand": "Acme"
-    }
-  }
-}</pre>
-          </div>
-
+        <div class="section-head">
+          <p class="kicker">Prompts</p>
+          <h2 id="flows-heading" class="section-title">Ready-made workflows.</h2>
+          <p class="section-sub">The server has <!--c:promptCountLower-->three<!--/c--> prompts that run several tools in order. Clients list them next to the tools, often as slash commands.</p>
+        </div>
+        <div class="mcp-tools mcp-tools--three">
+          <article class="card card--static mcp-tool mcp-flow" id="prompt-geo_audit">
+            <h3 class="mcp-tool__name">geo_audit</h3>
+            <p class="card__desc mcp-tool__line">A full audit in one go: scan, benchmark, playbook, fixes and an ordered plan.</p>
+            <p class="mcp-flow__calls"><span class="mcp-flow__label">Calls</span><span class="mcp-chip">scan_site</span><span class="mcp-chip">generate_schema</span><span class="mcp-chip">generate_robots_txt</span><span class="mcp-chip">generate_llms_txt</span><span class="mcp-chip">get_playbook</span><span class="mcp-chip">get_benchmark</span><span class="mcp-chip">list_ai_crawlers</span><span class="mcp-chip">get_methodology</span></p>
+          </article>
+          <article class="card card--static mcp-tool mcp-flow" id="prompt-commerce_readiness">
+            <h3 class="mcp-tool__name">commerce_readiness</h3>
+            <p class="card__desc mcp-tool__line">Check a store the way a shopping agent would, then get the fixes.</p>
+            <p class="mcp-flow__calls"><span class="mcp-flow__label">Calls</span><span class="mcp-chip">scan_site</span><span class="mcp-chip">generate_schema</span><span class="mcp-chip">generate_llms_txt</span><span class="mcp-chip">get_playbook</span></p>
+          </article>
+          <article class="card card--static mcp-tool mcp-flow" id="prompt-citation_questions">
+            <h3 class="mcp-tool__name">citation_questions</h3>
+            <p class="card__desc mcp-tool__line">Get the question set and the steps for testing whether an assistant names your brand.</p>
+            <p class="mcp-flow__calls"><span class="mcp-flow__label">Calls</span><span class="mcp-chip">get_citation_prompts</span><span class="mcp-chip">get_citation_sample</span></p>
+          </article>
         </div>
       </div>
     </section>
-    <!-- MCP-DOCS-PROMPTS:END -->
 
-    <!-- MCP-DOCS-LIMITS:START -->
-    <section class="verticals" aria-labelledby="limits-heading">
+    <section class="mcp-section" id="connect" aria-labelledby="connect-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="limits-heading" class="doc-section__heading">Limits</h2>
-          <ul class="doc-list">
-            <li>The tools that scan a live site (<code>scan_site</code>, <code>compare_sites</code>, <code>generate_schema</code>) are rate limited per domain: at most 6 fetches of the same domain an hour, and a global ceiling of 300 live fetches an hour across all callers. The limit is on the target, not on you, because every user of a hosted client shares an address. A limited call says how long to wait.</li>
-            <li><code>compare_sites</code> gives each scan its own deadline. If one site fails or times out, you still get the other site&rsquo;s result and a specific message for the one that failed.</li>
-            <li>The server function has a 60-second time limit, so there is no tool that runs a citation check.</li>
-            <li>Public data only: the scanner reads what a site publishes at its own address, and the content tools read this project&rsquo;s own files. Nothing here reads a private page or logs in anywhere.</li>
-            <li>A readiness score is not a measure of whether any assistant names a brand, and a high score does not guarantee a mention.</li>
+        <div class="section-head">
+          <p class="kicker">Connect</p>
+          <h2 id="connect-heading" class="section-title">Connect it in a minute.</h2>
+          <p class="section-sub">Add this address to your client. No key, no account.</p>
+        </div>
+        <div class="mcp-url">
+          <label class="mcp-vh" for="mcp-url">Server address</label>
+          <input id="mcp-url" class="mcp-url__field" type="text" readonly value="https://answerable-app.vercel.app/api/mcp" spellcheck="false" />
+          <button type="button" class="btn btn--gold mcp-url__copy" hidden>Copy</button>
+        </div>
+        <div class="ac-faq mcp-clients">
+          <details>
+            <summary>Claude</summary>
+            <ol class="mcp-steps">
+              <li>Open Claude and go to Customize, then Connectors.</li>
+              <li>Choose Add, then Add custom connector.</li>
+              <li>Name it Answerable and paste the server address from above.</li>
+              <li>Save it. No authentication is needed.</li>
+              <li>Ask: “Scan example.com and tell me what to fix first.”</li>
+            </ol>
+            <p>Custom connectors depend on your plan. Your client’s help has the current steps.</p>
+          </details>
+          <details>
+            <summary>Claude Code</summary>
+            <ol class="mcp-steps">
+              <li>Run this once, from any directory.</li>
+              <li>Start a session and ask for a scan.</li>
+            </ol>
+            <div class="fix-snippet">
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Terminal</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" hidden><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6.5a2 2 0 00-2-2h-7a2 2 0 00-2 2v7a2 2 0 002 2h2"/></svg> Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code">claude mcp add --transport http answerable https://answerable-app.vercel.app/api/mcp</pre>
+            </div>
+          </details>
+          <details>
+            <summary>Cursor</summary>
+            <ol class="mcp-steps">
+              <li>Open <code>.cursor/mcp.json</code> in your project, or <code>~/.cursor/mcp.json</code> for every project.</li>
+              <li>Add this block.</li>
+              <li>Restart Cursor, or reload its MCP connections.</li>
+            </ol>
+            <div class="fix-snippet">
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">.cursor/mcp.json</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" hidden><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6.5a2 2 0 00-2-2h-7a2 2 0 00-2 2v7a2 2 0 002 2h2"/></svg> Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code">{
+  &quot;mcpServers&quot;: {
+    &quot;answerable&quot;: {
+      &quot;url&quot;: &quot;https://answerable-app.vercel.app/api/mcp&quot;
+    }
+  }
+}</pre>
+            </div>
+          </details>
+          <details>
+            <summary>Other clients</summary>
+            <p>Any client that speaks Streamable HTTP can use the same address. By hand, send <code>MCP-Protocol-Version: 2026-07-28</code> and <code>Mcp-Method</code> on every request, <code>Mcp-Name</code> on <code>tools/call</code> and <code>prompts/get</code>, and the protocol version and client capabilities in <code>_meta</code>; <code>2025-11-25</code> and <code>2025-06-18</code> are also accepted.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="mcp-section" aria-labelledby="expect-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Limits</p>
+          <h2 id="expect-heading" class="section-title">What to expect.</h2>
+        </div>
+        <div class="mcp-expect">
+          <ul class="mcp-expect__list">
+            <li><strong>Read-only.</strong> Every tool reads. None writes to your site, sends a message or changes an account.</li>
+            <li><strong>No signup.</strong> No key, no account, no login.</li>
+            <li><strong>Nothing stored about you.</strong> The server keeps counters for an hour, keyed by the scanned domain. They hold no IP address, client name or account.</li>
+            <li><strong>Live scans are limited.</strong> <!--c:liveCountCap-->Three<!--/c--> tools (<!--c:liveToolNames-->scan_site, compare_sites, generate_schema<!--/c-->) fetch the domain you name, at most six times per domain per hour. The other <!--c:contentCountLower-->ten<!--/c--> work from our own files.</li>
+            <li><strong>Readiness, not presence.</strong> A score says whether AI crawlers can reach a site and whether its signals give a model reason to trust it. It does not say whether an assistant names you.</li>
+            <li><strong>No live citation tool.</strong> A citation run is about 90 model calls, 18 questions asked five times each, and would exceed the function’s time limit. The question sets are free to try in your own assistant.</li>
           </ul>
+          <p class="mcp-expect__links">Read the <a href="/privacy">privacy policy</a> and the <a href="/methodology">methodology</a>.</p>
         </div>
       </div>
     </section>
-    <!-- MCP-DOCS-LIMITS:END -->
 
-    <!-- ---------- Privacy ---------- -->
-    <section class="verticals" aria-labelledby="privacy-heading">
+    <section class="ac-section" aria-labelledby="faq-heading">
       <div class="section__inner">
-        <div class="doc-section">
-          <h2 id="privacy-heading" class="doc-section__heading">Privacy</h2>
-          <p>The same rule as the public scanner applies here: nothing is stored about who calls a tool.</p>
-          <p>The three tools that scan a live domain — scan_site, compare_sites, generate_schema — fetch directly from that domain, the same way the public scanner does. Scanning a store can also read one product page, only where robots.txt allows it. They don't route through a third-party proxy, and the fetched content is used only to build the response handed back to the calling tool. It isn't logged or retained anywhere.</p>
-          <p>To limit load on the sites being fetched, the server keeps short-lived counters keyed by a one-way hash of the scanned domain, and one counter for the current hour across all callers. They expire within an hour. They hold no caller identity: no IP address, no client name, no API key, no account, and no log of individual tool calls. The public web scanner has its own, separate limiter, described in the <a href="/privacy">privacy policy</a>.</p>
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="faq-heading" class="section-title">The MCP server, briefly.</h2>
+        </div>
+        <div class="ac-faq">
+          <details>
+            <summary>What is MCP?</summary>
+            <p>MCP, the Model Context Protocol, is an open standard that lets an AI assistant call outside tools directly instead of a person copying results between a website and a chat. Connect Answerable’s server and the assistant can run a scan, build a fix or read a playbook inside the conversation.</p>
+          </details>
+          <details>
+            <summary>Do I need an account?</summary>
+            <p>No. There is no signup, no API key and no login. Add the server address to your client and ask.</p>
+          </details>
+          <details>
+            <summary>Is it free?</summary>
+            <p>All thirteen tools are free, and so are the three prompts. The three tools that scan a live site are limited per domain, so one site is not fetched over and over, and there is a ceiling across all callers.</p>
+          </details>
+          <details>
+            <summary>What data does it fetch and keep?</summary>
+            <p>The three tools that scan a live site (scan_site, compare_sites, generate_schema) fetch a domain’s public robots.txt, llms.txt, sitemap and homepage, and for a store one product page where robots.txt allows it. The other ten read our own files and fetch nothing. Nothing about who you are is stored. The server keeps counters keyed by a one-way hash of the scanned domain, which expire within an hour, to limit repeated fetches of one site.</p>
+          </details>
+          <details>
+            <summary>Which clients work?</summary>
+            <p>Any MCP client that supports servers over HTTP. Setup for Claude, Claude Code and Cursor is above. Custom connectors depend on your plan, so check your client’s help for the current steps.</p>
+          </details>
+          <details>
+            <summary>Does it tell me whether AI names my brand?</summary>
+            <p>No. The scan measures readiness: whether crawlers can reach your site and whether its signals give a model reason to trust it. It cannot observe what an assistant says, and a high score does not guarantee a mention. Two tools, get_citation_prompts and get_citation_sample, give you the questions and a real sample, so you can run the check yourself in your own assistant.</p>
+          </details>
         </div>
       </div>
     </section>
 
-    <!-- ---------- Scan reminder ---------- -->
     <section aria-label="Scan reminder">
       <div class="section__inner">
         <div class="scan-bridge">
-          <p class="scan-bridge__text">Prefer a browser? Run the same scan on the website.</p>
+          <h2 class="scan-bridge__text">Prefer the browser?</h2>
           <a href="/" class="btn btn--primary">Scan your site free</a>
         </div>
       </div>
@@ -869,20 +745,19 @@ Limits: this is one model on one date. It is not a ranking, it says nothing abou
     <footer class="site-footer" aria-label="Footer">
       <div class="section__inner">
         <nav class="site-nav footer-links" aria-label="More">
-          <a href="/playbooks" class="site-nav__link">Playbooks</a>
-          <a href="/methodology" class="site-nav__link">Methodology</a>
-          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
-          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
-          <a href="/trust" class="site-nav__link">Trust</a>
-          <a href="/changelog" class="site-nav__link">Changelog</a>
-          <a href="/privacy" class="site-nav__link">Privacy</a>
-          <a href="/terms" class="site-nav__link">Terms</a>
-          <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
-        </nav>
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/trust" class="site-nav__link">Trust</a>
+                  <a href="/changelog" class="site-nav__link">Changelog</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+                </nav>
         <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
       </div>
     </footer>
-
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -890,17 +765,26 @@ Limits: this is one model on one date. It is not a ranking, it says nothing abou
   <script>
     (function () {
       'use strict';
+      function toast(msg) {
+        var t = document.getElementById('toast');
+        if (!t) return;
+        t.textContent = msg;
+        t.classList.add('is-visible');
+        setTimeout(function () { t.classList.remove('is-visible'); }, 2600);
+      }
+      function copy(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { toast('Copied.'); });
+      }
+      var urlBtn = document.querySelector('.mcp-url__copy');
+      var field = document.getElementById('mcp-url');
+      if (urlBtn && field && navigator.clipboard) {
+        urlBtn.hidden = false;
+        urlBtn.addEventListener('click', function () { copy(field.value); });
+      }
       document.querySelectorAll('.fix-snippet__copy').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var code = btn.closest('.fix-snippet').querySelector('.fix-snippet__code');
-          navigator.clipboard.writeText(code.textContent).then(function () {
-            var toast = document.getElementById('toast');
-            if (!toast) return;
-            toast.textContent = 'Copied.';
-            toast.classList.add('is-visible');
-            setTimeout(function () { toast.classList.remove('is-visible'); }, 2600);
-          });
-        });
+        if (!navigator.clipboard) return;
+        btn.hidden = false;
+        btn.addEventListener('click', function () { copy(btn.closest('.fix-snippet').querySelector('.fix-snippet__code').textContent); });
       });
     }());
   </script>

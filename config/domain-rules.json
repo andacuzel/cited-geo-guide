@@ -36,6 +36,11 @@
       "note": "entries record what changed on the old host"
     },
     {
+      "match": "^content/mcp-examples\\.json$",
+      "class": "historical",
+      "note": "real output captured from the old host on a stated date; recapture with scripts/capture-mcp-examples.js after the move"
+    },
+    {
       "match": "^docs/domain-day\\.md$",
       "class": "historical",
       "note": "the checklist names the old host on purpose: it is the host that keeps redirecting"
