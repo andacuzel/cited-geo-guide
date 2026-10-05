@@ -26,6 +26,16 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'content', 'research-index.json');
 const BASE = site.baseUrl;
 
+// The cite line exactly as the page prints it (a page's own line can predate a domain change: the case study keeps its line as published).
+const NAMED = { amp: '&', lt: '<', gt: '>', quot: '"', apos: '\'', nbsp: ' ', ldquo: '\u201C', rdquo: '\u201D', lsquo: '\u2018', rsquo: '\u2019', mdash: '\u2014', ndash: '\u2013', hellip: '\u2026' };
+const decode = (x) => x.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => (e[0] === '#' ? String.fromCodePoint(e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10)) : (Object.prototype.hasOwnProperty.call(NAMED, e) ? NAMED[e] : m)));
+function citeFrom(rel) {
+  const html = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  const m = /id="citeLine">([\s\S]*?)<\/p>/.exec(html);
+  if (!m) throw new Error(rel + ': no citeLine');
+  return decode(m[1].replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim();
+}
+
 function benchmarkEntry() {
   const entries = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'benchmarks.json'), 'utf8'));
   const rows = entries.map((e) => ({ e: e, s: JSON.parse(fs.readFileSync(path.join(ROOT, 'data', e.category + '-summary.json'), 'utf8')) })).filter((r) => r.s && r.s.score && r.s.scanned);
@@ -78,7 +88,7 @@ function entries() {
         'The Shopify-generated llms.txt pattern was checked in two files read by hand, Magic Spoon and Allbirds.',
         'It measures inputs, not outcomes: whether any of these signals correlate with being cited in an AI answer is not known.'
       ],
-      cite: 'Andaç Üzel, “Who Controls Your Brand\'s AI Representation?,” Answerable Research, 29 July 2026. ' + BASE + '/research/llms-txt-adoption-2026',
+      cite: citeFrom('research/llms-txt-adoption-2026.html'),
       sources: ['research/llms-txt-adoption-2026.html']
     },
     {
@@ -99,7 +109,7 @@ function entries() {
         'A score of 100 means the site passes all 16 checks Answerable runs today. It does not mean the site will be cited in an AI answer.',
         'The scoring model will get harder, so the same sites are expected to move.'
       ],
-      cite: 'Andaç Üzel, “Two Sites, Launched With Good SEO, Invisible to AI Crawlers,” Answerable Case Studies, August 2026. ' + BASE + '/research/case-study-agaone',
+      cite: citeFrom('research/case-study-agaone.html'),
       sources: ['research/case-study-agaone.html']
     },
     benchmarkEntry()
