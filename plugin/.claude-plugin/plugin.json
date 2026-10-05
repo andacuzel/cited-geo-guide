@@ -1,0 +1,24 @@
+{
+  "name": "answerable",
+  "displayName": "Answerable",
+  "version": "1.0.0",
+  "description": "Audit a site for AI readiness, check a store for agentic-commerce readiness, and write citation-ready content, with the Answerable MCP server and three skills.",
+  "author": {
+    "name": "Andaç Üzel",
+    "url": "https://answerable-app.vercel.app/about"
+  },
+  "homepage": "https://answerable-app.vercel.app/mcp",
+  "keywords": [
+    "ai-readiness",
+    "geo",
+    "aeo",
+    "robots-txt",
+    "llms-txt",
+    "structured-data",
+    "agentic-commerce"
+  ],
+  "documentationUrl": "https://answerable-app.vercel.app/mcp",
+  "supportUrl": "https://answerable-app.vercel.app/trust",
+  "privacyPolicyUrl": "https://answerable-app.vercel.app/privacy",
+  "termsOfServiceUrl": "https://answerable-app.vercel.app/terms"
+}

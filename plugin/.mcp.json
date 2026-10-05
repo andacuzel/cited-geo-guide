@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "answerable": {
+      "type": "http",
+      "url": "https://answerable-app.vercel.app/api/mcp"
+    }
+  }
+}
