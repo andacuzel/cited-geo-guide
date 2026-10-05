@@ -4,25 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Answerable. — Free AI Visibility Tools</title>
-  <meta name="description" content="Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup. No signup." />
-  <meta name="keywords" content="AI visibility tools, robots.txt generator, llms.txt checker, schema generator, AI crawlers, GEO, AEO" />
+  <title>Answerable. — Free AI Readiness Tools</title>
+  <meta name="description" content="Free tools for AI readiness: check your llms.txt, generate a robots.txt or JSON-LD, and compare two sites. No signup, no email, no accounts." />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://answerable-app.vercel.app/tools" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Answerable. — Free AI Visibility Tools" />
-  <meta property="og:description" content="Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup." />
+  <meta property="og:title" content="Answerable. — Free AI Readiness Tools" />
+  <meta property="og:description" content="Free tools for AI readiness: check your llms.txt, generate a robots.txt or JSON-LD, and compare two sites. No signup, no email, no accounts." />
   <meta property="og:url" content="https://answerable-app.vercel.app/tools" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
-
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Answerable. — Free AI Visibility Tools" />
-  <meta name="twitter:description" content="Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup." />
+  <meta name="twitter:title" content="Answerable. — Free AI Readiness Tools" />
+  <meta name="twitter:description" content="Free tools for AI readiness: check your llms.txt, generate a robots.txt or JSON-LD, and compare two sites. No signup, no email, no accounts." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -31,24 +27,104 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../styles.css?v=48" />
+  <link rel="stylesheet" href="../styles.css?v=50" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Free AI Visibility Tools",
-    "description": "Free tools for AI visibility, including an AI-aware robots.txt generator, an llms.txt checker and a schema generator.",
+    "name": "Free AI Readiness Tools",
+    "description": "Free tools for AI readiness: check an llms.txt, generate a robots.txt or JSON-LD, compare two sites.",
     "url": "https://answerable-app.vercel.app/tools",
     "mainEntity": {
       "@type": "ItemList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "AI robots.txt Generator" },
-        { "@type": "ListItem", "position": 2, "name": "MCP Server" },
-        { "@type": "ListItem", "position": 3, "name": "llms.txt Checker" },
-        { "@type": "ListItem", "position": 4, "name": "Schema Generator" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "llms.txt checker",
+          "url": "https://answerable-app.vercel.app/tools/llms-txt-checker"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Compare two sites",
+          "url": "https://answerable-app.vercel.app/compare"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "robots.txt generator",
+          "url": "https://answerable-app.vercel.app/tools/robots-txt"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Schema generator",
+          "url": "https://answerable-app.vercel.app/tools/schema-generator"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Free scan",
+          "url": "https://answerable-app.vercel.app/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "MCP Server",
+          "url": "https://answerable-app.vercel.app/mcp"
+        }
       ]
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are the tools free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every tool on this page is free and works without an account."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need an account?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. There are no accounts and no email collection. Open a tool and use it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What do the tools store?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nothing about what you enter. The robots.txt generator runs in your browser and sends nothing. The llms.txt checker, the schema generator and the comparison send the domain you type to our server, which reads public files from that domain and returns the result without keeping it. To enforce a rate limit, the server keeps a one-way hash of your IP address with a request counter, which expires within a day. The privacy policy has the detail."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How are they different from the free scan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The scan reads a site and scores it, so it finds what is missing. The tools act on one finding at a time: check a file, generate the fix, compare two sites. Scan first, then open the tool that fits the finding."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do the tools say whether AI names my brand?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. They measure readiness: whether crawlers can reach a site and whether its files and markup give a model something to read. None of them can show whether an assistant names you in an answer."
+        }
+      }
+    ]
   }
   </script>
   <!-- SITE-SCHEMA:START -->
@@ -115,107 +191,256 @@
   </header>
 
   <main id="main">
-
-    <!-- ---------- Page banner ---------- -->
-    <section aria-label="Page header">
+    <section aria-labelledby="hero-heading">
       <div class="section__inner">
-        <div class="page-banner">
-          <div class="page-banner__body">
+        <div class="page-banner tools-banner">
+          <div class="page-banner__body tools-banner__body">
             <p class="kicker kicker--on-navy">Free tools</p>
-            <h1 class="page-banner__title">AI Visibility Tools</h1>
-            <p class="page-banner__desc">Standalone tools for the fixes the scanner finds most often. No signup, nothing stored.</p>
+            <h1 id="hero-heading" class="page-banner__title">Free tools that fix what AI can’t read.</h1>
+            <p class="page-banner__desc">Check a file, generate the fix, compare two sites. No signup.</p>
+            <div class="tools-banner__actions">
+              <a href="/#scan" class="btn btn--gold">Scan your site</a>
+              <a href="/mcp" class="tools-banner__link">Use them from Claude</a>
+            </div>
           </div>
-          <pre class="page-banner__code" aria-hidden="true">User-agent: GPTBot
-Allow: /
-User-agent: *
-Disallow: /admin/
-Sitemap: /sitemap.xml</pre>
+          <div class="tools-tiles" aria-hidden="true">
+            <span class="tools-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span>
+            <span class="tools-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4v16M7 20h10"/><path d="M5 7.5h14"/><path d="M5 7.5l-2 5a2.2 2.2 0 004 0l-2-5zM19 7.5l-2 5a2.2 2.2 0 004 0l-2-5z"/></svg></span>
+            <span class="tools-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/><path d="M4.5 4.5l15 15"/></svg></span>
+            <span class="tools-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 6.5L4 12l5 5.5M15 6.5l5 5.5-5 5.5"/></svg></span>
+            <span class="tools-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="verticals" aria-label="Tool list">
-
-        <div class="card-grid">
-          <a href="/tools/robots-txt" class="card">
-            <div class="card__top">
-              <span class="card__code">TOOL / RBT</span>
-              <span class="card__badge card__badge--live">Live</span>
-            </div>
-            <span class="card__name">robots.txt Generator</span>
-            <span class="card__desc">Choose which AI crawlers can access your site, then copy or download a ready-to-use robots.txt file.</span>
-            <span class="card__cta">Open the tool
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-
-          <a href="/mcp" class="card">
-            <div class="card__top">
-              <span class="card__code">TOOL / MCP</span>
-              <span class="card__badge card__badge--live">Live</span>
-            </div>
-            <span class="card__name">MCP Server</span>
-            <span class="card__desc">Connect the scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free tools, nothing stored.</span>
-            <span class="card__cta">Open the tool
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-
-          <a href="/tools/llms-txt-checker" class="card">
-            <div class="card__top">
-              <span class="card__code">TOOL / LLM</span>
-              <span class="card__badge card__badge--live">Live</span>
-            </div>
-            <span class="card__name">llms.txt Checker</span>
-            <span class="card__desc">Check whether a site's llms.txt exists, how it is built, and whether it reads like the brand's own file or a platform default.</span>
-            <span class="card__cta">Open the tool
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-          <a href="/compare" class="card">
-            <div class="card__top">
-              <span class="card__code">TOOL / CMP</span>
-              <span class="card__badge card__badge--live">Live</span>
-            </div>
-            <span class="card__name">Compare Two Sites</span>
-            <span class="card__desc">Scan two domains one after the other and see where their AI readiness score, checks and crawler access differ.</span>
-            <span class="card__cta">Open the tool
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
-
-
-          <a href="/tools/schema-generator" class="card">
-            <div class="card__top">
-              <span class="card__code">TOOL / SCH</span>
-              <span class="card__badge card__badge--live">Live</span>
-            </div>
-            <span class="card__name">Schema Generator</span>
-            <span class="card__desc">Scan your domain, then edit prefilled JSON-LD for Organization, FAQPage, Article, Product or LocalBusiness.</span>
-            <span class="card__cta">Open the tool
-              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </a>
+    <section class="tools-section" aria-labelledby="flow-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Scan to tool</p>
+          <h2 id="flow-heading" class="section-title">From finding to fix.</h2>
+          <p class="section-sub">Each row is a finding as the scan report words it, and the tool that resolves it.</p>
         </div>
+        <ul class="tools-flow">
+          <li><a class="card tools-flow__row" href="/tools/robots-txt">
+            <span class="tools-flow__finding"><span class="tools-flow__label">AI crawler access</span><span class="tools-flow__text">Review robots.txt rules for blocked AI crawlers</span></span>
+            <span class="tools-flow__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg></span>
+            <span class="tools-flow__tool"><span class="tools-flow__ticon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/><path d="M4.5 4.5l15 15"/></svg></span>robots.txt generator</span>
+          </a></li>
+          <li><a class="card tools-flow__row" href="/tools/schema-generator">
+            <span class="tools-flow__finding"><span class="tools-flow__label">Organization / WebSite schema</span><span class="tools-flow__text">Add Organization schema</span></span>
+            <span class="tools-flow__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg></span>
+            <span class="tools-flow__tool"><span class="tools-flow__ticon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 6.5L4 12l5 5.5M15 6.5l5 5.5-5 5.5"/></svg></span>Schema generator</span>
+          </a></li>
+          <li><a class="card tools-flow__row" href="/tools/llms-txt-checker">
+            <span class="tools-flow__finding"><span class="tools-flow__label">llms.txt authorship (not scored)</span><span class="tools-flow__text">platform default</span></span>
+            <span class="tools-flow__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg></span>
+            <span class="tools-flow__tool"><span class="tools-flow__ticon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span>llms.txt checker</span>
+          </a></li>
+          <li><a class="card tools-flow__row" href="/compare">
+            <span class="tools-flow__finding"><span class="tools-flow__label">Two sites</span><span class="tools-flow__text">Compare two sites</span></span>
+            <span class="tools-flow__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg></span>
+            <span class="tools-flow__tool"><span class="tools-flow__ticon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4v16M7 20h10"/><path d="M5 7.5h14"/><path d="M5 7.5l-2 5a2.2 2.2 0 004 0l-2-5zM19 7.5l-2 5a2.2 2.2 0 004 0l-2-5z"/></svg></span>Compare two sites</span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="tools-section" id="group-check" aria-labelledby="group-check-heading">
+      <div class="section__inner">
+        <div class="tools-group__head">
+          <span class="tools-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <div>
+            <h2 id="group-check-heading" class="tools-group__title">Check.</h2>
+            <p class="tools-group__blurb">Read a file or a site and see what is really there.</p>
+          </div>
+        </div>
+        <p class="tools-group__caption">Previews are illustrations.</p>
+        <div class="tools-grid">
+        <article class="card card--static tools-card" id="llms-txt-checker">
+        <div class="tools-pv" aria-hidden="true">
+          <div class="tools-pv__field"><span class="tools-pv__input">yourbrand.com</span><span class="tools-pv__btn">Check</span></div>
+          <div class="tools-pv__chips"><span class="tools-pv__chip tools-pv__chip--ok">Custom</span><span class="tools-pv__chip tools-pv__chip--warn">Platform default</span><span class="tools-pv__chip tools-pv__chip--muted">Unclear</span></div>
+        </div>
+          <div class="tools-card__top"><span class="tools-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span><span class="tools-card__name">llms.txt checker</span></div>
+          <h3 class="tools-card__headline">Is your llms.txt really yours?</h3>
+          <p class="tools-card__desc">Find out whether the file on your site was written for your brand or shipped by your platform.</p>
+          <dl class="tools-io">
+            <div><dt>You give it</dt><dd>A domain.</dd></div>
+            <div><dt>You get</dt><dd>Whether the file exists, how it is built and whether it names your brand or reads like a platform default.</dd></div>
+          </dl>
+          <ul class="tools-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
+          <a href="/tools/llms-txt-checker" class="btn btn--primary tools-card__btn">Open the checker</a>
+        </article>
+        <article class="card card--static tools-card" id="compare">
+        <div class="tools-pv" aria-hidden="true">
+          <div class="tools-pv__cols tools-pv__cols--head"><span></span><span class="tools-pv__colhead">Your site</span><span class="tools-pv__colhead">Another site</span></div>
+          <div class="tools-pv__cols"><span class="tools-pv__name">AI crawler access</span><span class="tools-pv__chip tools-pv__chip--ok">Open</span><span class="tools-pv__chip tools-pv__chip--warn">Limited</span></div>
+          <div class="tools-pv__cols"><span class="tools-pv__name">Structured data (JSON-LD)</span><span class="tools-pv__chip tools-pv__chip--ok">Present</span><span class="tools-pv__chip tools-pv__chip--risk">Missing</span></div>
+          <div class="tools-pv__cols"><span class="tools-pv__name">llms.txt present</span><span class="tools-pv__chip tools-pv__chip--ok">Present</span><span class="tools-pv__chip tools-pv__chip--risk">Missing</span></div>
+        </div>
+          <div class="tools-card__top"><span class="tools-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4v16M7 20h10"/><path d="M5 7.5h14"/><path d="M5 7.5l-2 5a2.2 2.2 0 004 0l-2-5zM19 7.5l-2 5a2.2 2.2 0 004 0l-2-5z"/></svg></span><span class="tools-card__name">Compare two sites</span></div>
+          <h3 class="tools-card__headline">Put two sites side by side.</h3>
+          <p class="tools-card__desc">See where you and another site differ, check by check.</p>
+          <dl class="tools-io">
+            <div><dt>You give it</dt><dd>Two domains.</dd></div>
+            <div><dt>You get</dt><dd>Both scores and every check, and every AI crawler, where the two sites differ.</dd></div>
+          </dl>
+          <ul class="tools-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
+          <a href="/compare" class="btn btn--primary tools-card__btn">Compare two sites</a>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools-section" id="group-generate" aria-labelledby="group-generate-heading">
+      <div class="section__inner">
+        <div class="tools-group__head">
+          <span class="tools-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span>
+          <div>
+            <h2 id="group-generate-heading" class="tools-group__title">Generate.</h2>
+            <p class="tools-group__blurb">Build the fix from your own choices or your own site.</p>
+          </div>
+        </div>
+        <p class="tools-group__caption">Previews are illustrations.</p>
+        <div class="tools-grid">
+        <article class="card card--static tools-card" id="robots-txt">
+        <div class="tools-pv" aria-hidden="true">
+          <div class="tools-pv__row"><span class="tools-pv__name">GPTBot</span><span class="tools-pv__chip tools-pv__chip--ok">Allow</span></div>
+          <div class="tools-pv__row"><span class="tools-pv__name">ClaudeBot</span><span class="tools-pv__chip tools-pv__chip--ok">Allow</span></div>
+          <div class="tools-pv__row"><span class="tools-pv__name">CCBot</span><span class="tools-pv__chip tools-pv__chip--risk">Block</span></div>
+          <div class="tools-pv__row"><span class="tools-pv__name">Bytespider</span><span class="tools-pv__chip tools-pv__chip--risk">Block</span></div>
+        </div>
+          <div class="tools-card__top"><span class="tools-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/><path d="M4.5 4.5l15 15"/></svg></span><span class="tools-card__name">robots.txt generator</span></div>
+          <h3 class="tools-card__headline">Decide which AI crawlers get in.</h3>
+          <p class="tools-card__desc">Pick the crawlers you allow and copy the file.</p>
+          <dl class="tools-io">
+            <div><dt>You give it</dt><dd>The AI crawlers you want in and the ones you want out.</dd></div>
+            <div><dt>You get</dt><dd>A robots.txt file to copy or download.</dd></div>
+          </dl>
+          <ul class="tools-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li><li class="tools-chip">Runs in your browser</li></ul>
+          <a href="/tools/robots-txt" class="btn btn--primary tools-card__btn">Open the generator</a>
+        </article>
+        <article class="card card--static tools-card" id="schema-generator">
+        <div class="tools-pv" aria-hidden="true">
+          <div class="tools-pv__frow"><span class="tools-pv__flabel">Name</span><span class="tools-pv__bar tools-pv__bar--wide"></span></div>
+          <div class="tools-pv__frow"><span class="tools-pv__flabel">Description</span><span class="tools-pv__bar tools-pv__bar--wide"></span></div>
+          <div class="tools-pv__frow"><span class="tools-pv__flabel">Language</span><span class="tools-pv__bar tools-pv__bar--narrow"></span></div>
+          <div class="tools-pv__chips"><span class="tools-pv__type tools-pv__type--on">Organization</span><span class="tools-pv__type">FAQPage</span><span class="tools-pv__type">Article</span><span class="tools-pv__type">Product</span><span class="tools-pv__type">LocalBusiness</span></div>
+        </div>
+          <div class="tools-card__top"><span class="tools-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 6.5L4 12l5 5.5M15 6.5l5 5.5-5 5.5"/></svg></span><span class="tools-card__name">Schema generator</span></div>
+          <h3 class="tools-card__headline">Tell machines who you are.</h3>
+          <p class="tools-card__desc">JSON-LD prefilled from your own site, ready to paste.</p>
+          <dl class="tools-io">
+            <div><dt>You give it</dt><dd>A domain and the type of markup you want.</dd></div>
+            <div><dt>You get</dt><dd>JSON-LD with the title, description and language read from your homepage, and brackets where only you know the facts.</dd></div>
+          </dl>
+          <ul class="tools-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
+          <a href="/tools/schema-generator" class="btn btn--primary tools-card__btn">Open the generator</a>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools-section" id="group-start-here" aria-labelledby="group-start-here-heading">
+      <div class="section__inner">
+        <div class="tools-group__head">
+          <span class="tools-group__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></svg></span>
+          <div>
+            <h2 id="group-start-here-heading" class="tools-group__title">Start here.</h2>
+            <p class="tools-group__blurb">The scan finds the gaps. The tools close them, one at a time.</p>
+          </div>
+        </div>
+        <p class="tools-group__caption">Previews are illustrations.</p>
+        <div class="tools-grid">
+        <article class="card card--static tools-card" id="scan">
+        <div class="tools-pv" aria-hidden="true">
+          <div class="tools-pv__field"><span class="tools-pv__input">yourdomain.com</span><span class="tools-pv__btn">Scan free</span></div>
+          <div class="tools-pv__chips"><span class="tools-pv__chip tools-pv__chip--ok">Pass</span><span class="tools-pv__chip tools-pv__chip--warn">Fix ready</span><span class="tools-pv__chip tools-pv__chip--risk">Blocked</span></div>
+        </div>
+          <div class="tools-card__top"><span class="tools-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span><span class="tools-card__name">Free scan</span></div>
+          <h3 class="tools-card__headline">Start with a free scan.</h3>
+          <p class="tools-card__desc">Read a site the way an AI crawler would and get the fix for every finding.</p>
+          <dl class="tools-io">
+            <div><dt>You give it</dt><dd>A domain.</dd></div>
+            <div><dt>You get</dt><dd>A score out of 100, the access state of each tracked AI crawler and every failed check with its fix.</dd></div>
+          </dl>
+          <ul class="tools-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
+          <a href="/#scan" class="btn btn--gold tools-card__btn">Scan your site</a>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools-section" aria-labelledby="claude-heading">
+      <div class="section__inner">
+        <div class="card card--static tools-claude">
+          <span class="tools-claude__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 3.5v4M15 3.5v4"/><path d="M6.5 7.5h11v3.2a5.5 5.5 0 01-11 0V7.5z"/><path d="M12 16.2V20.5"/></svg></span>
+          <div class="tools-claude__body">
+            <h2 id="claude-heading" class="tools-claude__title">Use them from Claude</h2>
+            <p class="tools-claude__text">The scanner, the fix generators and the playbooks also run as tools inside Claude, Cursor and other MCP clients.</p>
+          </div>
+          <a href="/mcp" class="btn btn--ghost tools-claude__btn">See the MCP server</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="ac-section" aria-labelledby="faq-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="faq-heading" class="section-title">The tools, briefly.</h2>
+        </div>
+        <div class="ac-faq">
+          <details>
+            <summary>Are the tools free?</summary>
+            <p>Yes. Every tool on this page is free and works without an account.</p>
+          </details>
+          <details>
+            <summary>Do I need an account?</summary>
+            <p>No. There are no accounts and no email collection. Open a tool and use it.</p>
+          </details>
+          <details>
+            <summary>What do the tools store?</summary>
+            <p>Nothing about what you enter. The robots.txt generator runs in your browser and sends nothing. The llms.txt checker, the schema generator and the comparison send the domain you type to our server, which reads public files from that domain and returns the result without keeping it. To enforce a rate limit, the server keeps a one-way hash of your IP address with a request counter, which expires within a day. The <a href="/privacy">privacy policy</a> has the detail.</p>
+          </details>
+          <details>
+            <summary>How are they different from the free scan?</summary>
+            <p>The scan reads a site and scores it, so it finds what is missing. The tools act on one finding at a time: check a file, generate the fix, compare two sites. Scan first, then open the tool that fits the finding.</p>
+          </details>
+          <details>
+            <summary>Do the tools say whether AI names my brand?</summary>
+            <p>No. They measure readiness: whether crawlers can reach a site and whether its files and markup give a model something to read. None of them can show whether an assistant names you in an answer.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Scan reminder">
+      <div class="section__inner">
+        <div class="scan-bridge">
+          <h2 class="scan-bridge__text">Not sure which tool you need? Scan your site first.</h2>
+          <a href="/#scan" class="btn btn--primary">Scan your site free</a>
+        </div>
+      </div>
     </section>
 
     <footer class="site-footer" aria-label="Footer">
       <div class="section__inner">
         <nav class="site-nav footer-links" aria-label="More">
-          <a href="/playbooks" class="site-nav__link">Playbooks</a>
-          <a href="/methodology" class="site-nav__link">Methodology</a>
-          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
-          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
-          <a href="/trust" class="site-nav__link">Trust</a>
-          <a href="/changelog" class="site-nav__link">Changelog</a>
-          <a href="/privacy" class="site-nav__link">Privacy</a>
-          <a href="/terms" class="site-nav__link">Terms</a>
-          <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
-        </nav>
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/trust" class="site-nav__link">Trust</a>
+                  <a href="/changelog" class="site-nav__link">Changelog</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+                </nav>
         <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
       </div>
     </footer>
-
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
