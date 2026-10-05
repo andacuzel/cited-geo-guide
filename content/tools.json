@@ -1,0 +1,127 @@
+{
+  "groups": [
+    { "name": "Check", "icon": "check", "blurb": "Read a file or a site and see what is really there." },
+    { "name": "Generate", "icon": "wrench", "blurb": "Build the fix from your own choices or your own site." },
+    { "name": "Start here", "icon": "arrow", "blurb": "The scan finds the gaps. The tools close them, one at a time." }
+  ],
+  "tools": [
+    {
+      "slug": "llms-txt-checker",
+      "kind": "tool",
+      "file": "tools/llms-txt-checker.html",
+      "url": "/tools/llms-txt-checker",
+      "name": "llms.txt checker",
+      "group": "Check",
+      "icon": "document",
+      "headline": "Is your llms.txt really yours?",
+      "description": "Find out whether the file on your site was written for your brand or shipped by your platform.",
+      "give": "A domain.",
+      "get": "Whether the file exists, how it is built and whether it names your brand or reads like a platform default.",
+      "button": "Open the checker",
+      "chips": ["No signup", "Free"],
+      "inventory": {
+        "scripts": ["tools/llms-txt-checker.js"],
+        "network": ["GET /api/llms-check?domain=: the server reads one llms.txt from the domain you enter"],
+        "stores": "nothing in the browser; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
+      },
+      "preview": { "kind": "field", "placeholder": "yourbrand.com", "button": "Check", "chips": [["Custom", "ok"], ["Platform default", "warn"], ["Unclear", "muted"]] }
+    },
+    {
+      "slug": "compare",
+      "kind": "tool",
+      "file": "compare.html",
+      "url": "/compare",
+      "name": "Compare two sites",
+      "group": "Check",
+      "icon": "balance",
+      "headline": "Put two sites side by side.",
+      "description": "See where you and another site differ, check by check.",
+      "give": "Two domains.",
+      "get": "Both scores and every check, and every AI crawler, where the two sites differ.",
+      "button": "Compare two sites",
+      "chips": ["No signup", "Free"],
+      "inventory": {
+        "scripts": ["compare.js"],
+        "network": ["GET /api/scan?domain=, once per site, one after the other"],
+        "stores": "nothing in the browser beyond the two domains in the address bar; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
+      },
+      "preview": { "kind": "columns", "heads": ["Your site", "Another site"], "rows": [["AI crawler access", ["Open", "ok"], ["Limited", "warn"]], ["Structured data (JSON-LD)", ["Present", "ok"], ["Missing", "risk"]], ["llms.txt present", ["Present", "ok"], ["Missing", "risk"]]] }
+    },
+    {
+      "slug": "robots-txt",
+      "kind": "tool",
+      "file": "tools/robots-txt.html",
+      "url": "/tools/robots-txt",
+      "name": "robots.txt generator",
+      "group": "Generate",
+      "icon": "eyeoff",
+      "headline": "Decide which AI crawlers get in.",
+      "description": "Pick the crawlers you allow and copy the file.",
+      "give": "The AI crawlers you want in and the ones you want out.",
+      "get": "A robots.txt file to copy or download.",
+      "button": "Open the generator",
+      "chips": ["No signup", "Free", "Runs in your browser"],
+      "inventory": {
+        "scripts": ["tools/robots-txt.js", "lib/crawlers.js"],
+        "network": [],
+        "stores": "nothing; the file is built in the page and copied or downloaded from it"
+      },
+      "preview": { "kind": "crawlers", "rows": [["GPTBot", ["Allow", "ok"]], ["ClaudeBot", ["Allow", "ok"]], ["CCBot", ["Block", "risk"]], ["Bytespider", ["Block", "risk"]]] }
+    },
+    {
+      "slug": "schema-generator",
+      "kind": "tool",
+      "file": "tools/schema-generator.html",
+      "url": "/tools/schema-generator",
+      "name": "Schema generator",
+      "group": "Generate",
+      "icon": "devtools",
+      "headline": "Tell machines who you are.",
+      "description": "JSON-LD prefilled from your own site, ready to paste.",
+      "give": "A domain and the type of markup you want.",
+      "get": "JSON-LD with the title, description and language read from your homepage, and brackets where only you know the facts.",
+      "button": "Open the generator",
+      "chips": ["No signup", "Free"],
+      "inventory": {
+        "scripts": ["tools/schema-generator.js", "lib/schema.js"],
+        "network": ["GET /api/site-info?domain=: the server reads the homepage of the domain you enter"],
+        "stores": "nothing in the browser; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
+      },
+      "preview": { "kind": "fields", "rows": [["Name", "wide"], ["Description", "wide"], ["Language", "narrow"]], "types": ["Organization", "FAQPage", "Article", "Product", "LocalBusiness"] }
+    },
+    {
+      "slug": "scan",
+      "kind": "scan",
+      "file": "index.html",
+      "url": "/#scan",
+      "name": "Free scan",
+      "group": "Start here",
+      "icon": "search",
+      "headline": "Start with a free scan.",
+      "description": "Read a site the way an AI crawler would and get the fix for every finding.",
+      "give": "A domain.",
+      "get": "A score out of 100, the access state of each tracked AI crawler and every failed check with its fix.",
+      "button": "Scan your site",
+      "chips": ["No signup", "Free"],
+      "inventory": {
+        "scripts": ["scanner.js", "app.js"],
+        "network": ["GET /api/scan?domain="],
+        "stores": "nothing in the browser; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
+      },
+      "preview": { "kind": "field", "placeholder": "yourdomain.com", "button": "Scan free", "chips": [["Pass", "ok"], ["Fix ready", "warn"], ["Blocked", "risk"]] }
+    }
+  ],
+  "flow": [
+    { "label": "AI crawler access", "text": "Review robots.txt rules for blocked AI crawlers", "tool": "robots-txt", "advice": true },
+    { "label": "Organization / WebSite schema", "text": "Add Organization schema", "tool": "schema-generator", "advice": true },
+    { "label": "llms.txt authorship (not scored)", "text": "platform default", "tool": "llms-txt-checker" },
+    { "label": "Two sites", "text": "Compare two sites", "tool": "compare" }
+  ],
+  "next": {
+    "robots-txt": { "text": "Put the file at the root of your site, then {scan} to check it. To see where you stand against another site, {compare}.", "links": { "scan": ["/#scan", "scan again"], "compare": ["/compare", "compare the two"] } },
+    "schema-generator": { "text": "Paste the JSON-LD into the head of your page, then {scan} to check it. Next, see whether your {llms} is yours.", "links": { "scan": ["/#scan", "scan again"], "llms": ["/tools/llms-txt-checker", "llms.txt"] } },
+    "llms-txt-checker": { "text": "{scan} to see how llms.txt sits beside the other checks. If the file is a platform default, the {mcp} can draft a replacement. Check every line of it.", "links": { "scan": ["/#scan", "Scan your site"], "mcp": ["/mcp", "MCP server"] } },
+    "compare": { "text": "Where the other site is ahead on crawler access, use the {robots}. Where it is ahead on structured data, use the {schema}. Where it has a file you lack, use the {llms}.", "links": { "robots": ["/tools/robots-txt", "robots.txt generator"], "schema": ["/tools/schema-generator", "schema generator"], "llms": ["/tools/llms-txt-checker", "llms.txt checker"] } }
+  },
+  "mcpCard": { "line": "The scanner, the fix generators and the playbooks also run as tools inside Claude, Cursor and other MCP clients.", "button": "See the MCP server" }
+}
