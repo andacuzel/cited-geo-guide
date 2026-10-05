@@ -3221,3 +3221,28 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 .rp-ba__table th[scope="row"] { font-weight: 400; color: var(--ink); text-align: left; }
 .rp-ba__table th[scope="row"] { font-family: var(--font-body); font-size: 14.5px; text-transform: none; letter-spacing: 0; }
 .rp-ba + .rp-head { margin-top: 28px; }
+
+/* ----------------------------- Pro screenshot crops (.pro-shot) -----------------------------
+   A frame around a crop of the real dashboard: the markup in assets/pro/*.frag, written by
+   scripts/capture-pro-shots.js from the sample crawl. The frame crops (fixed height, hard edge),
+   the dashboard's own rp-* rules style what is inside. 1px border, 10px radius, a thin mono
+   caption bar, no window chrome. The view is decoration for a labelled image: not interactive. */
+.pro-shot { margin: 0; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; min-width: 0; }
+.pro-shot__view { background: var(--bg); padding: 16px; max-height: var(--pro-h, 360px); overflow: hidden; pointer-events: none; user-select: none; }
+.pro-shot__view .rp-report { min-width: 0; }
+.pro-shot__cap { margin: 0; padding: 9px 14px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 12px; line-height: 1.45; color: var(--ink-soft); background: var(--white); }
+.pro-shot .rp-top { position: static; }
+.pro-shot .rp-top__inner { padding: 14px 16px; }
+.pro-shot--print .pro-shot__view { padding: 0; }
+.pro-shot .rp-exec { margin-top: 0; }
+@media (min-width: 901px) {
+  .pro-shot .rp-js .rp-pages { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 14px; margin-top: 0; }
+  .pro-shot .rp-js .rp-item.is-open .rp-detail { display: none; }
+  .pro-shot .rp-pane { position: static; padding: 16px 18px; }
+}
+@media (max-width: 900px) {
+  .pro-shot .rp-pane { display: none; }
+}
+@media (max-width: 640px) {
+  .pro-shot--desktop { display: none; }
+}

@@ -1,4 +1,4 @@
-/* Results dashboard: loads one crawl by id (?id=...) from /api/crawl-result, or the demo fixture (?demo=1),
+/* Results dashboard: loads one crawl by id (?id=...) from /api/crawl-result, the demo fixture (?demo=1) or the sample crawl of our own site (?sample=1),
    and renders it with lib/report-render.js, the same renderer the static /sample-report uses.
    When a finished crawl has no executive summary yet, the final stage "Writing the summary" asks
    /api/crawl-summarize for one before the report appears; if that fails the report shows the summary
@@ -56,6 +56,17 @@
         draw(r.body, true, cit);
       });
     }).catch(function () { state('The demo could not be loaded.', true); });
+  } else if (params.get('sample') === '1') {
+    // The frozen real crawl of our own site (content/pro/sample-report.json), as the static /sample-report shows it.
+    getJson('../content/citations/sample-crm.json').then(function (c) {
+      var cit = c.ok ? { result: window.ANSWERABLE_CITATION_PANEL.fromSample(c.body), sample: true } : null;
+      getJson('../content/pro/sample-report.json').then(function (r) {
+        if (!r.ok) { state('The sample could not be loaded.', true); return; }
+        root.innerHTML = R.render(r.body, { schema: window.ANSWERABLE_SCHEMA, label: 'Sample report', citation: cit });
+        window.ANSWERABLE_REPORT_UI.init(root.querySelector('.rp-report'));
+        document.title = 'Sample report: ' + r.body.domain;
+      });
+    }).catch(function () { state('The sample could not be loaded.', true); });
   } else {
     var id = params.get('id');
     if (!id) state('This page needs a report link. A link looks like /app/report?id=… and comes from the crawl that made the report.', true);

@@ -1,0 +1,3 @@
+<div class="rp-report rp-js">
+<header class="rp-top"><div class="rp-top__inner"><span class="logo rp-top__logo"><span class="logo__mark">Answerable<span class="logo__dot">.</span></span></span><div class="rp-top__meta"><span class="rp-top__domain">answerable-app.vercel.app</span><span class="rp-top__date">Crawled October 4, 2026</span><span class="rp-top__label">Sample report</span></div><button type="button" class="rp-top__print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5"/><path d="M7 17H4.5v-6.5h15V17H17"/><path d="M7 14h10v6H7z"/></svg>Print or save as PDF</button></div></header>
+</div>
