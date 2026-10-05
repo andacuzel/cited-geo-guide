@@ -30,7 +30,7 @@ const path = require('path');
 const ICONS = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const SITE = 'https://answerable-app.vercel.app';
+const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
 const CSS_VERSION = 48;

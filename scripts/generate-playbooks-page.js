@@ -31,7 +31,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const SITE = 'https://answerable-app.vercel.app';
+const SITE = require('../lib/site-config.js').baseUrl;
 const CSS_VERSION = 48; // bump when styles.css changes
 const PLAYBOOKS = require('../lib/playbooks.js');
 const ICONS = require('../lib/icons.js');

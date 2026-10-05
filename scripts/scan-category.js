@@ -27,7 +27,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const API_BASE = process.env.ANSWERABLE_API || 'https://answerable-app.vercel.app';
+const API_BASE = process.env.ANSWERABLE_API || require('../lib/site-config.js').baseUrl;
 const DELAY_MS = 2000;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

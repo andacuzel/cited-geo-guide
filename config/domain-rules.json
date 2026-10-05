@@ -1,0 +1,113 @@
+{
+  "_about": "How scripts/set-domain.js classifies every occurrence of the old host. Order matters: file rules first, then line rules, first match wins. rewrite = change it. historical = never change it (a record of a crawl or scan of the old host). protected = change only with --include-protected, and only inside URL literals. Anything that matches nothing is unclassified: it is reported, not changed, and the run exits 2.",
+  "skipDirs": [
+    "node_modules",
+    ".git",
+    "local",
+    ".claude",
+    "asset",
+    "domains",
+    "supabase"
+  ],
+  "textExtensions": [
+    ".html",
+    ".js",
+    ".json",
+    ".txt",
+    ".xml",
+    ".md",
+    ".frag",
+    ".css"
+  ],
+  "fileRules": [
+    {
+      "match": "^data/",
+      "class": "historical",
+      "note": "archived scans"
+    },
+    {
+      "match": "^content/pro/",
+      "class": "historical",
+      "note": "crawls of the old host, frozen"
+    },
+    {
+      "match": "^content/changelog\\.json$",
+      "class": "historical",
+      "note": "entries record what changed on the old host"
+    },
+    {
+      "match": "^docs/domain-day\\.md$",
+      "class": "historical",
+      "note": "the checklist names the old host on purpose: it is the host that keeps redirecting"
+    },
+    {
+      "match": "^assets/pro/",
+      "class": "historical",
+      "note": "crops of the frozen sample crawl"
+    },
+    {
+      "match": "^(api/scan\\.js|lib/scanner\\.js|scanner\\.js|app\\.js)$",
+      "class": "protected",
+      "note": "scanner code: URL literals only, with --include-protected"
+    },
+    {
+      "match": "^(site\\.config\\.json|lib/site-config\\.js)$",
+      "class": "rewrite",
+      "note": "the source of the address (the fallback in lib/site-config.js too)"
+    },
+    {
+      "match": "^(plugin/|docs/mcp-submission\\.md$|content/research-index\\.json$)",
+      "class": "rewrite",
+      "note": "generated from site.config.json"
+    },
+    {
+      "match": "^(llms\\.txt|\\.well-known/security\\.txt|sitemap\\.xml|robots\\.txt)$",
+      "class": "rewrite",
+      "note": "files that state the address"
+    }
+  ],
+  "lineRules": [
+    {
+      "class": "historical",
+      "files": "\\.html$",
+      "pattern": "rp-|data-domain|pro-shot|&quot;|crawl of|crawl of our own site|full-site crawl|our own site, ",
+      "note": "markup and sentences built from the frozen sample crawl"
+    },
+    {
+      "class": "historical",
+      "files": "^research/case-study-agaone\\.html$",
+      "pattern": "citeLine|report-cite",
+      "note": "the case study's citation line is as published"
+    },
+    {
+      "class": "rewrite",
+      "files": "\\.html$",
+      "pattern": "<link rel=\"canonical\"|<meta property=\"og:(url|image)\"|<meta name=\"twitter:image\"",
+      "note": "canonical and share tags"
+    },
+    {
+      "class": "rewrite",
+      "files": "\\.html$",
+      "pattern": "\"(@id|url|mainEntityOfPage|image|logo|sameAs|homepage)\"\\s*:\\s*(\\{ )?\"?(\"@id\": )?\"?https?://",
+      "note": "JSON-LD identifiers and URLs"
+    },
+    {
+      "class": "rewrite",
+      "files": "\\.html$",
+      "pattern": "report-cite",
+      "note": "citation lines that give a page's own URL"
+    },
+    {
+      "class": "rewrite",
+      "files": "^mcp\\.html$",
+      "pattern": ".",
+      "note": "connection snippets and the links in example responses"
+    },
+    {
+      "class": "rewrite",
+      "files": "\\.js$",
+      "pattern": "const SITE = |API_BASE = |ANSWERABLE_API|FALLBACK = ",
+      "note": "script defaults"
+    }
+  ]
+}

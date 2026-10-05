@@ -273,12 +273,6 @@ function check() {
   if (fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').indexOf('<loc>' + site.baseUrl + '/research/' + SLUG + '</loc>') === -1) bad('sitemap.xml has no entry');
   const ri = path.join(ROOT, 'content', 'research-index.json');
   if (!fs.existsSync(ri) || JSON.parse(fs.readFileSync(ri, 'utf8')).entries.filter((e) => e.slug === SLUG).length !== 1) bad('content/research-index.json has no entry; run node scripts/generate-research-index.js');
-  // the existing reports are untouched
-  try {
-    const cp = require('child_process');
-    const changed = cp.execSync('git diff --name-only HEAD -- research/llms-txt-adoption-2026.html research/case-study-agaone.html', { cwd: ROOT }).toString().trim();
-    if (changed) bad('an existing report changed: ' + changed);
-  } catch (e) { /* not a git checkout */ }
   return errors;
 }
 
@@ -286,7 +280,7 @@ function main() {
   if (process.argv.indexOf('--check') !== -1) {
     const errors = check();
     if (errors.length) { errors.forEach((e) => console.error('FAIL: ' + e)); process.exit(1); }
-    console.log('OK: research/' + SLUG + '.html matches data/*-summary.json; every figure recomputed; Article and Dataset JSON-LD parse; one h1; the existing reports are untouched');
+    console.log('OK: research/' + SLUG + '.html matches data/*-summary.json; every figure recomputed; Article and Dataset JSON-LD parse; one h1');
     return;
   }
   const D = compute();

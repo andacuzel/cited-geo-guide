@@ -44,7 +44,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
-const SITE = 'https://answerable-app.vercel.app';
+const SITE = require('../lib/site-config.js').baseUrl;
 const CSS_VERSION = 48; // bump when styles.css changes
 
 const TRACKS = {

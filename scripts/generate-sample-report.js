@@ -23,7 +23,7 @@ const factsLib = require('../lib/report-facts.js');
 const citationPanel = require('../lib/citation-panel.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const SITE = 'https://answerable-app.vercel.app';
+const SITE = require('../lib/site-config.js').baseUrl;
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
 const CSS_VERSION = 48;
