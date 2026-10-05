@@ -49,6 +49,31 @@
       ]
     },
     {
+      "slug": "crawler-access-2026",
+      "kind": "research",
+      "title": "Which AI crawlers do sites block? 219 homepages, six categories",
+      "date": "2026-10-05",
+      "dateLabel": "5 October 2026",
+      "url": "https://answerable-app.vercel.app/research/crawler-access-2026",
+      "summary": "We read the robots.txt of 219 homepages in six categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path.",
+      "findings": [
+        "Across 6 categories, the share of homepages that block at least one tracked AI crawler runs from 2% (Cybersecurity and DevTools & Cloud) to 18% (Consumer apps).",
+        "Bytespider is the most-blocked crawler, on 8 of 219 homepages (4%). OAI-SearchBot and PerplexityBot are the least-blocked, each on 1 (under 1%).",
+        "Of the 2190 crawler-and-homepage pairs, 2% are blocked, 80% are limited by an applicable Disallow rule and 18% are open."
+      ],
+      "limits": [
+        "Homepages only, from hand-picked well-known sites, not a random sample.",
+        "One scan date per category. The October 2026 rescan moved category averages by one point or less.",
+        "59 sites that could not be reached are excluded and counted.",
+        "A limited result means an applicable Disallow rule, usually an ordinary path, and is not a block."
+      ],
+      "cite": "Andaç Üzel, “Which AI crawlers do sites block? 219 homepages, six categories,” Answerable Research, 5 October 2026. https://answerable-app.vercel.app/research/crawler-access-2026",
+      "sources": [
+        "research/crawler-access-2026.html",
+        "data/"
+      ]
+    },
+    {
       "slug": "benchmarks",
       "kind": "benchmark",
       "title": "AI readiness benchmarks",

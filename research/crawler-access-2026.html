@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Which AI crawlers do sites block? 219 homepages, six categories</title>
+  <meta name="description" content="We read the robots.txt of 219 homepages in six categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path." />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/research/crawler-access-2026" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Answerable. — Which AI crawlers do sites block? 219 homepages, six categories" />
+  <meta property="og:description" content="We read the robots.txt of 219 homepages in six categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/research/crawler-access-2026" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Which AI crawlers do sites block? 219 homepages, six categories" />
+  <meta name="twitter:description" content="We read the robots.txt of 219 homepages in six categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../styles.css?v=55" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://answerable-app.vercel.app/research/crawler-access-2026#article",
+        "headline": "Which AI crawlers do sites block? 219 homepages, six categories",
+        "description": "We read the robots.txt of 219 homepages in six categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path.",
+        "author": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        },
+        "publisher": {
+          "@id": "https://answerable-app.vercel.app/#org"
+        },
+        "datePublished": "2026-10-05",
+        "dateModified": "2026-10-05",
+        "url": "https://answerable-app.vercel.app/research/crawler-access-2026",
+        "mainEntityOfPage": "https://answerable-app.vercel.app/research/crawler-access-2026"
+      },
+      {
+        "@type": "Dataset",
+        "name": "Answerable AI crawler access, 219 homepages in six categories, July 2026",
+        "description": "For each of 219 homepages, whether robots.txt blocks, limits or leaves open each of 10 tracked AI crawlers, grouped by category.",
+        "temporalCoverage": "2026-07-29/2026-07-31",
+        "creator": {
+          "@id": "https://answerable-app.vercel.app/#org"
+        },
+        "variableMeasured": "robots.txt access state (blocked, limited, open) for 10 AI crawlers",
+        "url": "https://answerable-app.vercel.app/research/crawler-access-2026"
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:START -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://answerable-app.vercel.app/#org",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
+        "founder": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://answerable-app.vercel.app/#website",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "publisher": {
+          "@id": "https://answerable-app.vercel.app/#org"
+        },
+        "author": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:END -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section aria-labelledby="hero-heading">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Research</p>
+            <h1 id="hero-heading" class="page-banner__title">Which AI crawlers do sites block? 219 homepages, six categories.</h1>
+            <p class="page-banner__desc">The share of homepages that block each tracked AI crawler, by category, and how many only limit it with a Disallow rule. Computed from the benchmark scans, no new scans.</p>
+          </div>
+          <span class="page-banner__num" aria-hidden="true">002</span>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Report metadata">
+      <div class="section__inner">
+        <div class="report-byline">
+          <a href="/about">Andaç Üzel</a>
+          <span>Published 5 October 2026</span>
+          <span>Last updated 5 October 2026</span>
+        </div>
+
+        <div class="hero__figures report-stats" aria-label="Report scope">
+          <div class="hero__figure"><b>219</b><span>homepages scanned</span></div>
+          <div class="hero__figure"><b>6</b><span>categories</span></div>
+          <div class="hero__figure"><b>10</b><span>AI crawlers</span></div>
+          <div class="hero__figure"><b>Jul 2026</b><span>scan window</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Key findings">
+      <div class="section__inner">
+        <div class="report-findings">
+          <p class="report-findings__label">Key findings</p>
+          <ol>
+            <li><span class="report-findings__num">1</span><p>Across 6 categories, the share of homepages that block at least one tracked AI crawler runs from 2% (Cybersecurity and DevTools &amp; Cloud) to 18% (Consumer apps).</p></li>
+            <li><span class="report-findings__num">2</span><p>Bytespider is the most-blocked crawler, on 8 of 219 homepages (4%). OAI-SearchBot and PerplexityBot are the least-blocked, each on 1 (under 1%).</p></li>
+            <li><span class="report-findings__num">3</span><p>Of the 2190 crawler-and-homepage pairs, 2% are blocked, 80% are limited by an applicable Disallow rule and 18% are open.</p></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="section-01-heading">
+      <div class="section__inner">
+        <div class="report-section">
+          <p class="report-section__num">01</p>
+          <h2 id="section-01-heading" class="report-section__heading">Which crawlers are blocked</h2>
+          <p>We read the robots.txt of every homepage that completed a scan and checked it against each of 10 tracked AI crawlers. A crawler counts as blocked when the file disallows the whole site for it.</p>
+          <p>Bytespider is blocked most often, on 8 of 219 homepages (4%).</p>
+          <figure class="report-figure">
+            <p class="report-figure__label">Fig. 1</p>
+            <div class="report-figure__visual">
+              <svg viewBox="0 0 420 384" role="img" aria-labelledby="fig1-title fig1-desc" xmlns="http://www.w3.org/2000/svg">
+              <title id="fig1-title">Share of homepages blocking each tracked AI crawler</title>
+              <desc id="fig1-desc">Bytespider 4% (8 of 219). CCBot 3% (7 of 219). GPTBot 3% (7 of 219). Google-Extended 2% (5 of 219). ClaudeBot 2% (4 of 219). anthropic-ai 2% (4 of 219). ChatGPT-User 1% (2 of 219). Perplexity-User 1% (2 of 219). OAI-SearchBot under 1% (1 of 219). PerplexityBot under 1% (1 of 219).</desc>
+              <text x="10" y="31" class="chart-label" font-size="13">Bytespider</text>
+              <rect class="chart-track" x="130" y="20" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="20" width="92" height="14" rx="3"/>
+              <text x="228" y="31" class="chart-value" font-size="13">4%</text>
+              <text x="10" y="61" class="chart-label" font-size="13">CCBot</text>
+              <rect class="chart-track" x="130" y="50" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="50" width="69" height="14" rx="3"/>
+              <text x="205" y="61" class="chart-value" font-size="13">3%</text>
+              <text x="10" y="91" class="chart-label" font-size="13">GPTBot</text>
+              <rect class="chart-track" x="130" y="80" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="80" width="69" height="14" rx="3"/>
+              <text x="205" y="91" class="chart-value" font-size="13">3%</text>
+              <text x="10" y="121" class="chart-label" font-size="13">Google-Extended</text>
+              <rect class="chart-track" x="130" y="110" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="110" width="46" height="14" rx="3"/>
+              <text x="182" y="121" class="chart-value" font-size="13">2%</text>
+              <text x="10" y="151" class="chart-label" font-size="13">ClaudeBot</text>
+              <rect class="chart-track" x="130" y="140" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="140" width="46" height="14" rx="3"/>
+              <text x="182" y="151" class="chart-value" font-size="13">2%</text>
+              <text x="10" y="181" class="chart-label" font-size="13">anthropic-ai</text>
+              <rect class="chart-track" x="130" y="170" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="170" width="46" height="14" rx="3"/>
+              <text x="182" y="181" class="chart-value" font-size="13">2%</text>
+              <text x="10" y="211" class="chart-label" font-size="13">ChatGPT-User</text>
+              <rect class="chart-track" x="130" y="200" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="200" width="23" height="14" rx="3"/>
+              <text x="159" y="211" class="chart-value" font-size="13">1%</text>
+              <text x="10" y="241" class="chart-label" font-size="13">Perplexity-User</text>
+              <rect class="chart-track" x="130" y="230" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="230" width="23" height="14" rx="3"/>
+              <text x="159" y="241" class="chart-value" font-size="13">1%</text>
+              <text x="10" y="271" class="chart-label" font-size="13">OAI-SearchBot</text>
+              <rect class="chart-track" x="130" y="260" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="260" width="1" height="14" rx="3"/>
+              <text x="137" y="271" class="chart-value" font-size="13"><1%</text>
+              <text x="10" y="301" class="chart-label" font-size="13">PerplexityBot</text>
+              <rect class="chart-track" x="130" y="290" width="230" height="14" rx="3"/>
+              <rect class="r2-bar--all" x="130" y="290" width="1" height="14" rx="3"/>
+              <text x="137" y="301" class="chart-value" font-size="13"><1%</text>
+              <text x="10" y="358" class="chart-label chart-label--faint" font-size="12">Filled = homepages whose robots.txt disallows the</text>
+              <text x="10" y="373" class="chart-label chart-label--faint" font-size="12">whole site for that crawler. n=219.</text>
+              </svg>
+            </div>
+            <figcaption class="report-figure__caption">Blocked share by crawler, across all 6 categories. Each bar is a count of homepages out of 219.</figcaption>
+            <p class="report-figure__source">Source: Answerable scans, 29 July 2026 to 31 July 2026, n=219</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="section-02-heading">
+      <div class="section__inner">
+        <div class="report-section">
+          <p class="report-section__num">02</p>
+          <h2 id="section-02-heading" class="report-section__heading">Blocking by category</h2>
+          <p>The categories differ in how many of their homepages block at least one tracked crawler. B2B categories are navy and consumer categories are gold.</p>
+          <figure class="report-figure">
+            <p class="report-figure__label">Fig. 2</p>
+            <div class="report-figure__visual">
+              <svg viewBox="0 0 420 284" role="img" aria-labelledby="fig2-title fig2-desc" xmlns="http://www.w3.org/2000/svg">
+              <title id="fig2-title">Share of homepages blocking at least one tracked AI crawler, by category</title>
+              <desc id="fig2-desc">Consumer apps 18% of 40 homepages. CRM software 10% of 31 homepages. Hospitality &amp; travel 5% of 21 homepages. DTC brands 3% of 33 homepages. Cybersecurity 2% of 46 homepages. DevTools &amp; Cloud 2% of 48 homepages.</desc>
+              <rect x="10" y="2" width="8" height="8" class="chart-bar--b2b"/>
+              <text x="22" y="10" class="chart-label" font-size="13">B2B SaaS</text>
+              <rect x="110" y="2" width="8" height="8" class="chart-bar--dtc"/>
+              <text x="122" y="10" class="chart-label" font-size="13">Consumer</text>
+              <text x="10" y="43" class="chart-label" font-size="13">Consumer apps · n=40</text>
+              <rect class="chart-track" x="228" y="32" width="140" height="14" rx="3"/>
+              <rect class="chart-bar--dtc" x="228" y="32" width="140" height="14" rx="3"/>
+              <text x="374" y="43" class="chart-value" font-size="13">18%</text>
+              <text x="10" y="73" class="chart-label" font-size="13">CRM software · n=31</text>
+              <rect class="chart-track" x="228" y="62" width="140" height="14" rx="3"/>
+              <rect class="chart-bar--b2b" x="228" y="62" width="77.8" height="14" rx="3"/>
+              <text x="311.8" y="73" class="chart-value" font-size="13">10%</text>
+              <text x="10" y="103" class="chart-label" font-size="13">Hospitality &amp; travel · n=21</text>
+              <rect class="chart-track" x="228" y="92" width="140" height="14" rx="3"/>
+              <rect class="chart-bar--dtc" x="228" y="92" width="38.9" height="14" rx="3"/>
+              <text x="272.9" y="103" class="chart-value" font-size="13">5%</text>
+              <text x="10" y="133" class="chart-label" font-size="13">DTC brands · n=33</text>
+              <rect class="chart-track" x="228" y="122" width="140" height="14" rx="3"/>
+              <rect class="chart-bar--dtc" x="228" y="122" width="23.3" height="14" rx="3"/>
+              <text x="257.3" y="133" class="chart-value" font-size="13">3%</text>
+              <text x="10" y="163" class="chart-label" font-size="13">Cybersecurity · n=46</text>
+              <rect class="chart-track" x="228" y="152" width="140" height="14" rx="3"/>
+              <rect class="chart-bar--b2b" x="228" y="152" width="15.6" height="14" rx="3"/>
+              <text x="249.6" y="163" class="chart-value" font-size="13">2%</text>
+              <text x="10" y="193" class="chart-label" font-size="13">DevTools &amp; Cloud · n=48</text>
+              <rect class="chart-track" x="228" y="182" width="140" height="14" rx="3"/>
+              <rect class="chart-bar--b2b" x="228" y="182" width="15.6" height="14" rx="3"/>
+              <text x="249.6" y="193" class="chart-value" font-size="13">2%</text>
+              <text x="10" y="258" class="chart-label chart-label--faint" font-size="12">Filled = share of homepages blocking at least one</text>
+              <text x="10" y="273" class="chart-label chart-label--faint" font-size="12">of the 10 tracked crawlers.</text>
+              </svg>
+            </div>
+            <figcaption class="report-figure__caption">Share of each category’s homepages that block at least one of the 10 tracked crawlers.</figcaption>
+            <p class="report-figure__source">Source: Answerable scans, 29 July 2026 to 31 July 2026, n=219</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="section-03-heading">
+      <div class="section__inner">
+        <div class="report-section">
+          <p class="report-section__num">03</p>
+          <h2 id="section-03-heading" class="report-section__heading">Blocked, limited and open</h2>
+          <p>Most pairs of crawler and homepage are neither blocked nor fully open. They are limited: at least one Disallow rule applies to that crawler. That is usually an ordinary path such as an admin area or a search page, not a block on the site.</p>
+          <p>1761 of the 2190 pairs are limited, 41 are blocked and 388 are open.</p>
+          <figure class="report-figure">
+            <p class="report-figure__label">Fig. 3</p>
+            <div class="report-figure__visual">
+              <svg viewBox="0 0 420 542" role="img" aria-labelledby="fig3-title fig3-desc" xmlns="http://www.w3.org/2000/svg">
+              <title id="fig3-title">Blocked, limited and open, for each tracked AI crawler</title>
+              <desc id="fig3-desc">Bytespider: blocked 8, limited 177, open 34 of 219. CCBot: blocked 7, limited 175, open 37 of 219. GPTBot: blocked 7, limited 172, open 40 of 219. Google-Extended: blocked 5, limited 175, open 39 of 219. anthropic-ai: blocked 4, limited 177, open 38 of 219. ClaudeBot: blocked 4, limited 175, open 40 of 219. Perplexity-User: blocked 2, limited 179, open 38 of 219. ChatGPT-User: blocked 2, limited 176, open 41 of 219. OAI-SearchBot: blocked 1, limited 178, open 40 of 219. PerplexityBot: blocked 1, limited 177, open 41 of 219.</desc>
+              <rect x="10" y="2" width="8" height="8" class="r2-bar--blocked"/>
+              <text x="22" y="10" class="chart-label" font-size="13">Blocked</text>
+              <rect x="100" y="2" width="8" height="8" class="r2-bar--limited"/>
+              <text x="112" y="10" class="chart-label" font-size="13">Limited</text>
+              <rect x="190" y="2" width="8" height="8" class="chart-track"/>
+              <text x="202" y="10" class="chart-label" font-size="13">Open</text>
+              <text x="10" y="41" class="chart-label" font-size="13">Bytespider</text>
+              <rect class="chart-track" x="130" y="30" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="139.9" y="30" width="218.2" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="30" width="9.9" height="14" rx="3"/>
+              <text x="130" y="60" class="chart-label chart-label--faint" font-size="12">blocked 8 · limited 177 · open 34</text>
+              <text x="10" y="85" class="chart-label" font-size="13">CCBot</text>
+              <rect class="chart-track" x="130" y="74" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="138.6" y="74" width="215.8" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="74" width="8.6" height="14" rx="3"/>
+              <text x="130" y="104" class="chart-label chart-label--faint" font-size="12">blocked 7 · limited 175 · open 37</text>
+              <text x="10" y="129" class="chart-label" font-size="13">GPTBot</text>
+              <rect class="chart-track" x="130" y="118" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="138.6" y="118" width="212.1" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="118" width="8.6" height="14" rx="3"/>
+              <text x="130" y="148" class="chart-label chart-label--faint" font-size="12">blocked 7 · limited 172 · open 40</text>
+              <text x="10" y="173" class="chart-label" font-size="13">Google-Extended</text>
+              <rect class="chart-track" x="130" y="162" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="136.2" y="162" width="215.8" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="162" width="6.2" height="14" rx="3"/>
+              <text x="130" y="192" class="chart-label chart-label--faint" font-size="12">blocked 5 · limited 175 · open 39</text>
+              <text x="10" y="217" class="chart-label" font-size="13">anthropic-ai</text>
+              <rect class="chart-track" x="130" y="206" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="134.9" y="206" width="218.2" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="206" width="4.9" height="14" rx="3"/>
+              <text x="130" y="236" class="chart-label chart-label--faint" font-size="12">blocked 4 · limited 177 · open 38</text>
+              <text x="10" y="261" class="chart-label" font-size="13">ClaudeBot</text>
+              <rect class="chart-track" x="130" y="250" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="134.9" y="250" width="215.8" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="250" width="4.9" height="14" rx="3"/>
+              <text x="130" y="280" class="chart-label chart-label--faint" font-size="12">blocked 4 · limited 175 · open 40</text>
+              <text x="10" y="305" class="chart-label" font-size="13">Perplexity-User</text>
+              <rect class="chart-track" x="130" y="294" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="132.5" y="294" width="220.7" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="294" width="2.5" height="14" rx="3"/>
+              <text x="130" y="324" class="chart-label chart-label--faint" font-size="12">blocked 2 · limited 179 · open 38</text>
+              <text x="10" y="349" class="chart-label" font-size="13">ChatGPT-User</text>
+              <rect class="chart-track" x="130" y="338" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="132.5" y="338" width="217" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="338" width="2.5" height="14" rx="3"/>
+              <text x="130" y="368" class="chart-label chart-label--faint" font-size="12">blocked 2 · limited 176 · open 41</text>
+              <text x="10" y="393" class="chart-label" font-size="13">OAI-SearchBot</text>
+              <rect class="chart-track" x="130" y="382" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="131.2" y="382" width="219.5" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="382" width="1.5" height="14" rx="3"/>
+              <text x="130" y="412" class="chart-label chart-label--faint" font-size="12">blocked 1 · limited 178 · open 40</text>
+              <text x="10" y="437" class="chart-label" font-size="13">PerplexityBot</text>
+              <rect class="chart-track" x="130" y="426" width="270" height="14" rx="3"/>
+              <rect class="r2-bar--limited" x="131.2" y="426" width="218.2" height="14"/>
+              <rect class="r2-bar--blocked" x="130" y="426" width="1.5" height="14" rx="3"/>
+              <text x="130" y="456" class="chart-label chart-label--faint" font-size="12">blocked 1 · limited 177 · open 41</text>
+              <text x="10" y="516" class="chart-label chart-label--faint" font-size="12">Bars are shares of the 219 homepages.</text>
+              <text x="10" y="531" class="chart-label chart-label--faint" font-size="12">Limited means an applicable Disallow rule.</text>
+              </svg>
+            </div>
+            <figcaption class="report-figure__caption">Blocked, limited and open for each tracked crawler. “Limited” means an applicable Disallow rule, usually an ordinary path, not a block.</figcaption>
+            <p class="report-figure__source">Source: Answerable scans, 29 July 2026 to 31 July 2026, n=219</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="methodology-heading">
+      <div class="section__inner">
+        <div class="report-methodology">
+          <h2 id="methodology-heading">Methodology and limitations</h2>
+
+          <h3>What we scanned</h3>
+          <p>219 homepages completed a scan in six categories: 125 B2B and 94 consumer. 59 more could not be reached and are excluded from every figure.</p>
+
+          <h3>What we pulled</h3>
+          <p>For each homepage, its robots.txt, retrieved live on its category’s scan date: CRM software 29 July 2026, Cybersecurity 31 July 2026, DevTools & Cloud 31 July 2026, DTC brands 29 July 2026, Consumer apps 31 July 2026 and Hospitality & travel 31 July 2026.</p>
+
+          <h3>What this measures</h3>
+          <p>What a site’s robots.txt says to each tracked AI crawler. It does not measure whether a crawler obeys the file, or whether any assistant names a brand in a live answer.</p>
+
+          <div class="report-limits">
+            <p class="r2-limits__label">What this doesn’t tell you</p>
+            <ul>
+              <li>Anything beyond homepages. Each site was read once, at its homepage.</li>
+              <li>How common blocking is across the web. The sites are hand-picked well-known names in each category, not a random sample.</li>
+              <li>How the sites look today. Each category has one scan date. The October 2026 rescan of the same six lists moved category averages by one point or less (see the methodology changelog).</li>
+              <li>Anything about the 59 sites that could not be reached, which are counted here and left out.</li>
+              <li>Whether a limited result is harmful. It means an applicable Disallow rule, usually an ordinary path, and is not a block.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="cite-heading">
+      <div class="section__inner">
+        <div class="report-cite">
+          <p id="cite-heading" class="report-cite__label">How to cite this</p>
+          <p class="report-cite__line" id="citeLine">Andaç Üzel, “Which AI crawlers do sites block? 219 homepages, six categories,” Answerable Research, 5 October 2026. https://answerable-app.vercel.app/research/crawler-access-2026</p>
+          <div class="report-cite__row">
+            <button type="button" class="btn btn--ghost" id="citeCopyBtn">
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
+              Copy citation
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Closing">
+      <div class="section__inner">
+        <div class="report-closing">
+          <p>If you want to see what your own robots.txt says to each of these crawlers, run the free scan.</p>
+          <a href="/" class="btn btn--primary">Scan your site free</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/trust" class="site-nav__link">Trust</a>
+                  <a href="/changelog" class="site-nav__link">Changelog</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+                </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../nav.js?v=2"></script>
+  <script src="../research.js?v=1"></script>
+</body>
+</html>

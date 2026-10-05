@@ -3564,3 +3564,9 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 @media (max-width: 640px) {
   .tr-row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
 }
+
+/* ----------------------------- Research 002: crawler access (.r2-) ----------------------------- */
+.r2-bar--all { fill: var(--navy-950); }
+.r2-bar--blocked { fill: var(--risk); }
+.r2-bar--limited { fill: var(--ink-faint); }
+.r2-limits__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--risk); margin-bottom: 12px; }
