@@ -94,6 +94,12 @@ Constraints that must not be broken:
   the generator stops. The excerpts come from `content/mcp-examples.json`, captured from the
   live server with `scripts/capture-mcp-examples.js`; recapture after the tools or the host
   change. `node scripts/generate-mcp-page.js --check` must pass.
+- **`tools/index.html` is generated from `content/tools.json`.** A new tool page needs an
+  entry there (benefit headline, give and get lines, chips, group, icon), or
+  `node scripts/generate-tools-page.js --check` fails. A tool earns the chip "Runs in your
+  browser" only if its scripts make no network request; the check reads the scripts. The
+  generator also writes the "Next step" block between `<!-- NEXT:START -->` and
+  `<!-- NEXT:END -->` on each tool page; edit the text in `content/tools.json`, never in the page.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.
