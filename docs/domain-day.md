@@ -81,7 +81,13 @@ claude mcp add --transport http answerable NEW/api/mcp
 
 Claude on the web and desktop: open the connector's settings, change the server URL to `NEW/api/mcp`, and reconnect. The plugin's `.mcp.json` already carries the new URL after step 4.
 
-Run `bash local/live-mcp-check.sh` against the new URL (edit its `URL` line) to confirm `tools/list`, `prompts/list` and a content tool answer.
+Confirm the new endpoint answers:
+
+```bash
+curl -s NEW/api/mcp -H 'Content-Type: application/json' -H 'Accept: application/json' \
+  -H 'MCP-Protocol-Version: 2026-07-28' -H 'Mcp-Method: tools/list' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{}}}}' | head -c 300
+```
 
 ## 8. Search Console and Bing Webmaster
 

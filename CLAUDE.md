@@ -76,6 +76,18 @@ Constraints that must not be broken:
   no CSS gradient function appears anywhere in the stylesheet.
 - **Never pair two scores with an arrow.** It reads as a score drop. The Pro band
   shows no scores; the page shows the homepage and whole-site scores side by side.
+- **Never hardcode the host.** New code reads the address from `site.config.json`
+  (through `lib/site-config.js`), so `scripts/set-domain.js` can move the site in one
+  command. A literal old-host URL needs a rule in `config/domain-rules.json`.
+- **Counts come from registries.** Tool, prompt, check, vertical and page counts are
+  derived from their registry (`api/mcp.js` TOOLS and PROMPTS, the scanner's check
+  list, `lib/playbooks.js`), never typed. Every new MCP tool is added to the registry,
+  the harness, `mcp.html` (`scripts/generate-mcp-docs.js` fills the new ones) and
+  `scripts/generate-mcp-submission.js`, which stops if a tool has no example.
+- **Changelog entries come from real commits.** `content/changelog.json` lists only
+  what a visitor or an MCP user can see, one plain factual sentence per entry, with
+  the commit hashes as refs. `scripts/generate-changelog.js --check` fails on a ref
+  that is not a commit or a date that is not the newest ref's date.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.
