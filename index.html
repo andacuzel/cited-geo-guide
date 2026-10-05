@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=48" />
+  <link rel="stylesheet" href="styles.css?v=49" />
 
   <script type="application/ld+json">
   {
@@ -520,26 +520,53 @@
       </section>
 
       <!-- ---------- Pro band ---------- -->
-      <section class="pro-band" id="pro" aria-labelledby="pro-heading">
+      <!-- PRO-BAND:START -->
+      <section class="pro-mkt" id="pro" aria-labelledby="pro-heading">
         <div class="section__inner">
-          <div class="pro-band__grid">
-            <div>
-              <p class="kicker kicker--on-navy">Free vs. Pro</p>
-              <h2 id="pro-heading">Free tells you your score. Pro tells you what it means.</h2>
-              <p class="pro-band__lede">The scan is free and hands you the fix. Answerable Pro tells you what your score means for your category, and what to do first.</p>
-              <ul>
-                <li>Your scan interpreted through your vertical's playbook</li>
-                <li>Your score against your category benchmark, not a generic average</li>
-                <li>A named competitor comparison</li>
-                <li>A prioritized fix order for your specific findings</li>
-                <li>Exportable, built to forward to your team</li>
-              </ul>
-              <p class="pro-band__price">One-time purchase. No subscription.</p>
-              <a href="/pro" class="btn btn--gold pro-band__cta">See Answerable Pro</a>
-              <p class="pro-band__sample"><a href="/sample-report">See a real report. No signup.</a></p>
+          <div class="pro-mkt__grid">
+            <div class="pro-mkt__text">
+              <p class="kicker kicker--on-navy">Pro</p>
+              <h2 id="pro-heading">Your homepage isn't your site.</h2>
+              <p class="pro-mkt__lede">The free scan reads one page. Pro reads up to <span data-fig="pro-cap">50</span> and shows what the homepage hides.</p>
+              <p class="pro-mkt__nums">Real crawl of our own site: homepage <span data-fig="pro-homepage">87</span>, whole site <span data-fig="pro-site">83</span>.</p>
+              <p class="pro-mkt__actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="/pro" class="pro-mkt__link">What Pro includes</a></p>
+              <p class="pro-mkt__price">One-time purchase. No subscription.</p>
             </div>
-
-            <div class="services-block">
+            <figure class="pro-shot pro-shot--matrix pro-shot--desktop">
+            <div role="img" aria-label="Heat matrix from the sample crawl. One row per page, one column per check, a filled square where a page fails a check and a hollow one where it passes. 4 of the 12 page-level checks fail on at least one page."><div class="pro-shot__view" inert>
+            <div class="rp-report rp-js">
+            <div class="rp-matrixwrap"><table class="rp-matrix">
+            <thead><tr><th scope="col" class="rp-matrix__corner">Page</th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Canonical</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Language</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Title</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Description</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Open Graph</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">JSON-LD</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">H1</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">H2</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Org schema</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Content schema</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">About</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Contact</span></th></tr></thead>
+            <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/benchmarks</span><span class="rp-cluster__meta">6 pages, average 82</span></th></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/consumer-apps</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/crm</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/cybersecurity</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/devtools</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/dtc-brands</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/hospitality</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            </tbody>
+            <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/tools</span><span class="rp-cluster__meta">2 pages, average 87, no failing checks</span></th></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/tools/llms-txt-checker</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/tools/schema-generator</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            </tbody>
+            <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/research</span><span class="rp-cluster__meta">1 page, average 76</span></th></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/research/case-study-agaone</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            </tbody>
+            <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/benchmarks</span><span class="rp-cluster__meta">1 page, average 77</span></th></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            </tbody>
+            <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/research</span><span class="rp-cluster__meta">1 page, average 77</span></th></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/research</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            </tbody>
+            <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/tools</span><span class="rp-cluster__meta">1 page, average 77</span></th></tr>
+            <tr class="rp-matrix__row"><th scope="row"><span >/tools</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+            </tbody>
+            </table></div>
+            </div>
+            </div></div>
+            <figcaption class="pro-shot__cap">Sample, answerable-app.vercel.app, October 4, 2026. Which pages fail which checks. The top of the matrix.</figcaption>
+            </figure>
+            <div class="services-block pro-mkt__services">
               <h3>Need this done for you?</h3>
               <p>From schema rollout to citation-source strategy. We implement it end to end.</p>
               <a href="#" id="agencyLink" class="btn btn--gold">Talk to us</a>
@@ -547,6 +574,7 @@
           </div>
         </div>
       </section>
+      <!-- PRO-BAND:END -->
 
       <!-- BENCHMARKS:START -->
       <section class="benchmark-strip" aria-labelledby="benchmark-heading">
@@ -663,8 +691,8 @@
   <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove('scene-anim')"></script>
   <script src="lib/playbooks.js?v=1"></script>
   <script src="lib/schema.js?v=1"></script>
-  <script src="app.js?v=30"></script>
-  <script src="scanner.js?v=32"></script>
+  <script src="app.js?v=31"></script>
+  <script src="scanner.js?v=33"></script>
   <script src="nav.js?v=2"></script>
 </body>
 </html>
