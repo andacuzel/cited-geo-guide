@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Answerable. — MCP Server for Claude, Cursor and Other AI Tools</title>
-  <meta name="description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, copy-paste setup, nothing stored." />
+  <meta name="description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free, read-only tools, copy-paste setup, nothing stored." />
   <meta name="keywords" content="MCP server, Model Context Protocol, Claude MCP, Cursor MCP, AI visibility API, GEO tools, AEO tools" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
@@ -14,7 +14,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
-  <meta property="og:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, nothing stored." />
+  <meta property="og:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free, read-only tools, nothing stored." />
   <meta property="og:url" content="https://answerable-app.vercel.app/mcp" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
@@ -22,7 +22,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Answerable. — MCP Server for Claude, Cursor and Other AI Tools" />
-  <meta name="twitter:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, nothing stored." />
+  <meta name="twitter:description" content="Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Thirteen free, read-only tools, nothing stored." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -62,7 +62,7 @@
             "name": "Does connecting the MCP server cost anything?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. All ten tools are free. The three that scan a live site share the same rate limit as the public scanner on answerable-app.vercel.app."
+              "text": "No. All thirteen tools are free. The three that scan a live site are limited per domain, so one site is not fetched repeatedly, and there is a global hourly ceiling."
             }
           },
           {
@@ -70,7 +70,7 @@
             "name": "Is anything stored when a tool is called?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. The server keeps no record of which domains were scanned or which client called it. The only state it keeps is a one-way hash of the caller's IP address, used solely to enforce the rate limit, the same mechanism the public scanner already uses."
+              "text": "No client identity is stored. The server keeps short-lived counters keyed by the scanned domain, for an hour, to limit repeated fetches of one site. They hold no IP address, client name, API key or account."
             }
           }
         ]
@@ -150,7 +150,7 @@
           <div class="page-banner__body">
             <p class="kicker kicker--on-navy">MCP server</p>
             <h1 class="page-banner__title">Answerable, from inside your tools.</h1>
-            <p class="page-banner__desc">Scan a site, generate a fix, or read a playbook without leaving Claude or Cursor. <!--c:toolCountCap-->Ten<!--/c--> tools, the same scanner and data as the website, called directly from an AI assistant.</p>
+            <p class="page-banner__desc">Scan a site, generate a fix, or read a playbook without leaving Claude or Cursor. <!--c:toolCountCap-->Thirteen<!--/c--> tools, the same scanner and data as the website, called directly from an AI assistant.</p>
           </div>
         </div>
       </div>
@@ -161,8 +161,8 @@
       <div class="section__inner">
         <div class="doc-section">
           <h2 id="what-heading" class="doc-section__heading">What this connects</h2>
-          <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as <!--c:toolCountLower-->ten<!--/c--> callable tools instead of a page. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, or read one of the fourteen vertical playbooks, without a person copying anything between a browser tab and a chat window.</p>
-          <p>Every tool is read-only and non-destructive. None of them write to your site, send a message, or change an account anywhere. Three tools — scan_site, compare_sites, generate_schema — make an outbound request to the domain you give them, the same as the public scanner. The other five work entirely from this project's own data and fetch nothing external.</p>
+          <p>The Answerable MCP server exposes the same scanner, fix generators and playbook content as the website, as <!--c:toolCountLower-->thirteen<!--/c--> callable tools instead of a page, plus <!--c:promptCountLower-->three<!--/c--> prompts for common workflows. Point an MCP client at it and the assistant can run a scan, build a robots.txt or llms.txt file, generate placeholder-safe JSON-LD, read one of the fourteen vertical playbooks, explain how a score is built, cite the research or read a sample report of our own site, without a person copying anything between a browser tab and a chat window.</p>
+          <p>Every tool is read-only and non-destructive. None of them write to your site, send a message, or change an account anywhere. <!--c:liveCountCap-->Three<!--/c--> tools (<!--c:liveToolNames-->scan_site, compare_sites, generate_schema<!--/c-->) make an outbound request to the domain you give them, the same as the public scanner, and are rate limited per domain. The other <!--c:contentCountLower-->ten<!--/c--> work entirely from this project's own data and fetch nothing external.</p>
           <p>Like the scanner itself, every tool measures AI readiness: whether a crawler can reach a page, and whether its signals give a model reason to trust it. None of them measure whether an assistant currently mentions a brand in a live answer — that depends on the prompt, the session and the model's training data, and no tool here can observe or promise it.</p>
           <p>Measuring that is a different job. Two tools here, <code>get_citation_prompts</code> and <code>get_citation_sample</code>, hand you the questions and an anonymised sample so you can run a check yourself. Running one for you is the early-access <a href="/citation-tracking">citation tracking</a> report. No tool here queries a model for you.</p>
         </div>
@@ -240,7 +240,7 @@
           </div>
 
           <p>Restart the client, or reload its MCP connections, then ask it to scan a domain, compare two sites, or pull up a playbook.</p>
-          <p>The server supports MCP protocol versions <code>2026-07-28</code>, <code>2025-11-25</code> and <code>2025-06-18</code>. Every request must send an <code>MCP-Protocol-Version</code> header; a request without one returns <code>400</code>. Clients add it automatically. If you call the endpoint by hand, send that header. For <code>2026-07-28</code> you also need the <code>_meta</code> protocol fields and the <code>Mcp-Method</code> and <code>Mcp-Name</code> headers.</p>
+          <p>The server supports MCP protocol versions <code>2026-07-28</code>, <code>2025-11-25</code> and <code>2025-06-18</code>. Every request must send an <code>MCP-Protocol-Version</code> header; a request without one returns <code>400</code>. Clients add it automatically. If you call the endpoint by hand, send that header. For <code>2026-07-28</code> you also need the <code>_meta</code> protocol fields and the <code>Mcp-Method</code> headers, plus <code>Mcp-Name</code> on <code>tools/call</code> and <code>prompts/get</code>.</p>
         </div>
       </div>
     </section>
@@ -249,7 +249,7 @@
     <section class="verticals" aria-labelledby="tools-heading">
       <div class="section__inner">
         <div class="doc-section">
-          <h2 id="tools-heading" class="doc-section__heading"><!--c:toolCountCap-->Ten<!--/c--> tools</h2>
+          <h2 id="tools-heading" class="doc-section__heading"><!--c:toolCountCap-->Thirteen<!--/c--> tools</h2>
           <p>Each one below shows what it needs, what it fetches, and one real example call and response.</p>
         </div>
 
@@ -452,7 +452,7 @@ Sitemap: https://example.com/sitemap.xml</pre>
 
           <div class="results-content__body">
             <h3 id="get_playbook">get_playbook</h3>
-            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>vertical</code> (one of 14 slugs, e.g. <code>crm</code>, <code>ecommerce</code>, <code>legal</code>)</p>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> optionally <code>vertical</code> (one of 14 slugs, e.g. <code>crm</code>, <code>ecommerce</code>, <code>legal</code>); with no argument it lists them with their track</p>
             <p>Returns the full GEO/AEO playbook for one of Answerable's fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Read live from this project's own content file, so it always matches what a visitor to the site sees.</p>
           </div>
           <div class="fix-snippet">
@@ -538,6 +538,124 @@ Bytespider (ByteDance)
 (7 more crawlers follow in a real response: ChatGPT-User, OAI-SearchBot, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, CCBot)</pre>
           </div>
         </div>
+
+        <!-- MCP-DOCS-TOOLS:START -->
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Methodology, research and the sample report</h2>
+
+          <div class="results-content__body">
+            <h3 id="get_methodology">get_methodology</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>check</code> (optional)</p>
+            <p>Explains how the Answerable AI readiness score is built, read from the scanner’s own check registry so it matches what runs. With no argument it returns the three pillars with their weights (they add up to 100), every check with its category, points, what it tests and why it matters, and the limits of the scan: it measures readiness and not whether any assistant names a brand; it gives half credit for a crawler with any applicable Disallow rule, usually an ordinary path; and it reads the homepage only. With a check label it returns that one check in detail. An unknown label returns an error listing the valid labels. Read-only, fetches nothing external. Use when the user asks how a score is calculated, why a check carries the points it does, or what the scan cannot tell them.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "get_methodology",
+    "arguments": {
+      "check": "Page title"
+    }
+  }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">Page title (3 points, Technical foundation, which is 20 points in all)
+
+What it tests: Whether the &lt;title&gt; is 10 to 70 characters.
+Why it matters: Answer engines frequently use the title as your source label.
+If it fails: Write a descriptive 10–70 character title.
+
+Limits that apply to every check:
+  - Answerable measures AI readiness: whether AI crawlers can access your content, and whether your on-page signals give a model a reason to trust and cite you.
+  - A perfect score does not guarantee an answer engine will cite you.
+  - A blocked crawler guarantees it cannot.
+  - The crawler-access check gives half credit for a bot that has any Disallow rule applying to it, including ordinary paths such as /admin/.
+  - The product page is the only page beyond the homepage that a scan reads.</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3 id="get_research">get_research</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> <code>slug</code> (optional)</p>
+            <p>Returns Answerable’s published research: with no argument, the list of reports (the llms.txt and crawler study, the AgaOne case study and the benchmark data) with title, date, one-line finding and URL; with a slug, the key findings, the method limits, the URL and a ready line for citing it. Findings are checked against the published pages and data files. Every study measures readiness inputs, not whether any assistant names a brand. Read-only, fetches nothing external. Use when the user wants evidence for a claim about AI crawler access or llms.txt, a statistic to cite, or the reports behind the benchmarks.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "get_research",
+    "arguments": {
+      "slug": "llms-txt-adoption-2026"
+    }
+  }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">Who controls your brand's AI representation? (research, 29 July 2026)
+https://answerable-app.vercel.app/research/llms-txt-adoption-2026
+
+We scanned 64 sites and found blocking is rare: 10% of B2B sites and 3% of consumer brands restrict AI crawlers.
+
+Key findings:
+  1. 76% of consumer brands have an llms.txt file, but the two files we examined by hand were near-identical and said nothing specific about the brand.
+  2. 91% of consumer-brand homepages and 48% of B2B homepages are missing content schema.
+  3. 22 of 85 attempted scans could not complete, blocked by protection that may also stop AI crawlers. The report leaves that question open.
+
+Method and limits:
+  - Homepages only: 64 domains completed a scan out of 85 attempted, 31 B2B and 33 consumer brands.
+  - It does not tell whether the 22 unreachable sites block AI crawlers specifically, or only generic cloud traffic.
+  - The Shopify-generated llms.txt pattern was checked in two files read by hand, Magic Spoon and Allbirds.
+(trimmed: 3 more lines in a real response)</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3 id="get_sample_report">get_sample_report</h3>
+            <p><strong>Fetches:</strong> nothing &middot; <strong>Needs:</strong> nothing</p>
+            <p>Returns the sample Pro report as readable text: a real crawl of Answerable’s own site on a stated date, nothing edited. It gives the whole-site score beside the homepage score, the pillar averages, the top priorities from the executive summary with the label saying what wrote it, the checks failing by number of pages, and the link to the full report. It shows what a full-site crawl adds to a one-page scan. It is our own site, not a customer’s, and it measures readiness, not whether any assistant names the site. Read-only, fetches nothing external. Use when the user asks what a full-site report looks like or what a crawl shows that a homepage scan cannot.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example call</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "get_sample_report",
+    "arguments": {}
+  }
+}</pre>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example response (trimmed)</span></div>
+            <pre class="fix-snippet__code">Sample report: a crawl of our own site, answerable-app.vercel.app, run on 4 October 2026. It is not a customer’s report, and nothing in it was edited or improved.
+28 pages read, from a crawl that reads up to 50.
+
+Whole-site score 83 beside homepage score 87 (gap −4 points). 20 of 28 pages fail at least one page-level check.
+Benchmark: the average homepage score across 219 sites in 6 categories is 73. The homepage score here is 14 points above it.
+
+Pillars, site average: Discoverability 27/40, Technical foundation 20/20, Content &amp; trust 36/40.
+
+Where to start (Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them):
+  1. Content schema (Article, FAQ…): 17 of 28 pages, adds 3 points to the site-wide score, typically markup for each page type.
+  2. Subheading structure (H2): 4 of 28 pages, adds 0.7 points to the site-wide score, typically copy on each page.
+  3. Organization / WebSite schema: 2 of 28 pages, adds 0.6 points to the site-wide score, typically one template change.
+Already working: Author / about signals and canonical tag are working.
+
+Checks failing, by number of pages:
+  - Content schema (Article, FAQ…): 17 of 28 pages
+(trimmed: 6 more lines in a real response)</pre>
+          </div>
+
+        </div>
+        <!-- MCP-DOCS-TOOLS:END -->
 
         <div class="doc-section">
           <h2 class="doc-section__heading">Citation tracking</h2>
@@ -636,6 +754,96 @@ Limits: this is one model on one date. It is not a ranking, it says nothing abou
       </div>
     </section>
 
+    <!-- MCP-DOCS-PROMPTS:START -->
+    <section class="verticals" aria-labelledby="prompts-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="prompts-heading" class="doc-section__heading"><!--c:promptCountCap-->Three<!--/c--> prompts</h2>
+          <p>Prompts are workflows you start yourself, often as a slash command in the client. Each one asks the assistant to call the tools above in order and to say what the scan does not measure. Clients list them with <code>prompts/list</code> and fetch one with <code>prompts/get</code>, which needs the <code>Mcp-Name</code> header on <code>2026-07-28</code>.</p>
+
+          <div class="results-content__body">
+            <h3 id="prompt-geo_audit">geo_audit</h3>
+            <p><strong>Needs:</strong> <code>domain</code> &middot; <strong>Calls:</strong> <code>scan_site</code>, <code>generate_schema</code>, <code>generate_robots_txt</code>, <code>generate_llms_txt</code>, <code>get_playbook</code>, <code>get_benchmark</code>, <code>list_ai_crawlers</code>, <code>get_methodology</code></p>
+            <p>Scans a domain, compares it with its category benchmark, reads the matching playbook, generates the fixes and returns an ordered plan, then says what the scan does not measure.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example request</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "prompts/get",
+  "params": {
+    "name": "geo_audit",
+    "arguments": {
+      "domain": "example.com"
+    }
+  }
+}</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3 id="prompt-commerce_readiness">commerce_readiness</h3>
+            <p><strong>Needs:</strong> <code>domain</code> &middot; <strong>Calls:</strong> <code>scan_site</code>, <code>generate_schema</code>, <code>generate_llms_txt</code>, <code>get_playbook</code></p>
+            <p>Scans a store, reads the commerce sub-score (UCP endpoint, product schema, llms.txt authorship) and returns what to fix, with a replacement llms.txt if the file is a platform default.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example request</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "prompts/get",
+  "params": {
+    "name": "commerce_readiness",
+    "arguments": {
+      "domain": "example.com"
+    }
+  }
+}</pre>
+          </div>
+
+          <div class="results-content__body">
+            <h3 id="prompt-citation_questions">citation_questions</h3>
+            <p><strong>Needs:</strong> <code>vertical</code>, <code>brand</code> &middot; <strong>Calls:</strong> <code>get_citation_prompts</code>, <code>get_citation_sample</code></p>
+            <p>Returns the buying-intent question set for a vertical and the protocol for running it yourself in any assistant, five tries per question, and what to record.</p>
+          </div>
+          <div class="fix-snippet">
+            <div class="fix-snippet__head"><span class="fix-snippet__label">Example request</span></div>
+            <pre class="fix-snippet__code">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "prompts/get",
+  "params": {
+    "name": "citation_questions",
+    "arguments": {
+      "vertical": "crm",
+      "brand": "Acme"
+    }
+  }
+}</pre>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- MCP-DOCS-PROMPTS:END -->
+
+    <!-- MCP-DOCS-LIMITS:START -->
+    <section class="verticals" aria-labelledby="limits-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="limits-heading" class="doc-section__heading">Limits</h2>
+          <ul class="doc-list">
+            <li>The tools that scan a live site (<code>scan_site</code>, <code>compare_sites</code>, <code>generate_schema</code>) are rate limited per domain: at most 6 fetches of the same domain an hour, and a global ceiling of 300 live fetches an hour across all callers. The limit is on the target, not on you, because every user of a hosted client shares an address. A limited call says how long to wait.</li>
+            <li><code>compare_sites</code> gives each scan its own deadline. If one site fails or times out, you still get the other site&rsquo;s result and a specific message for the one that failed.</li>
+            <li>The server function has a 60-second time limit, so there is no tool that runs a citation check.</li>
+            <li>Public data only: the scanner reads what a site publishes at its own address, and the content tools read this project&rsquo;s own files. Nothing here reads a private page or logs in anywhere.</li>
+            <li>A readiness score is not a measure of whether any assistant names a brand, and a high score does not guarantee a mention.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <!-- MCP-DOCS-LIMITS:END -->
+
     <!-- ---------- Privacy ---------- -->
     <section class="verticals" aria-labelledby="privacy-heading">
       <div class="section__inner">
@@ -643,7 +851,7 @@ Limits: this is one model on one date. It is not a ranking, it says nothing abou
           <h2 id="privacy-heading" class="doc-section__heading">Privacy</h2>
           <p>The same rule as the public scanner applies here: nothing is stored about who calls a tool.</p>
           <p>The three tools that scan a live domain — scan_site, compare_sites, generate_schema — fetch directly from that domain, the same way the public scanner does. Scanning a store can also read one product page, only where robots.txt allows it. They don't route through a third-party proxy, and the fetched content is used only to build the response handed back to the calling tool. It isn't logged or retained anywhere.</p>
-          <p>To enforce the same rate limit the public scanner uses, the server keeps a one-way hash of the caller's IP address paired with a request counter. It expires automatically within a day, isn't linked to which domain was scanned or which tool was called, and the raw IP address is never stored. No other identifying information is recorded: no client name, no API key, no account, no log of individual tool calls.</p>
+          <p>To limit load on the sites being fetched, the server keeps short-lived counters keyed by a one-way hash of the scanned domain, and one counter for the current hour across all callers. They expire within an hour. They hold no caller identity: no IP address, no client name, no API key, no account, and no log of individual tool calls. The public web scanner has its own, separate limiter, described in the <a href="/privacy">privacy policy</a>.</p>
         </div>
       </div>
     </section>

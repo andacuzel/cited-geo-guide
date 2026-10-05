@@ -23,7 +23,7 @@
 ## Tools
 
 - [Tools](https://answerable-app.vercel.app/tools): a robots.txt generator, an llms.txt checker and a schema generator, free, no signup.
-- [MCP server](https://answerable-app.vercel.app/mcp): ten free, read-only tools for Claude, Cursor or any MCP client. Endpoint: https://answerable-app.vercel.app/api/mcp
+- [MCP server](https://answerable-app.vercel.app/mcp): thirteen free, read-only tools for Claude, Cursor or any MCP client. Endpoint: https://answerable-app.vercel.app/api/mcp
 - [Agentic commerce](https://answerable-app.vercel.app/agentic-commerce): whether AI shopping agents can find a product and read its price.
 
 ## About
