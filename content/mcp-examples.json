@@ -1,0 +1,142 @@
+{
+  "capturedAt": "2026-10-05",
+  "endpoint": "https://answerable-app.vercel.app/api/mcp",
+  "protocolVersion": "2026-07-28",
+  "examples": [
+    {
+      "id": "scan-self",
+      "tool": "scan_site",
+      "arguments": {
+        "domain": "answerable-app.vercel.app"
+      },
+      "prompt": "Scan answerable-app.vercel.app and tell me what to fix first",
+      "lines": [
+        "AI readiness scan — answerable-app.vercel.app",
+        "",
+        "Score: 87/100",
+        "  Discoverability:      27/40",
+        "  Technical foundation: 20/20",
+        "  Content & trust:      40/40",
+        "",
+        "That’s 14 points above the average of the 219 sites we’ve scanned (73/100).",
+        "",
+        "AI crawler access (10 tracked):",
+        "  GPTBot — Limited (Disallow: /admin/ (+1 more) · bot-specific rule)",
+        "  ChatGPT-User — Limited (Disallow: /admin/ (+1 more) · bot-specific rule)"
+      ],
+      "totalLines": 25
+    },
+    {
+      "id": "methodology",
+      "tool": "get_methodology",
+      "arguments": {},
+      "prompt": "How is the Answerable score built?",
+      "lines": [
+        "How the Answerable AI readiness score is built: 100 points across 3 pillars and 16 checks. Every point value below is read from the scanner that runs.",
+        "",
+        "Discoverability: 40 points. Can AI crawlers reach the site at all. Access is the precondition for every other signal.",
+        "  - robots.txt present (4 pts): Whether https://<domain>/robots.txt can be read. A real 404 counts as default-open access; a failed fetch stops the scan. Why it matters: AI crawlers read your access policy from this file.",
+        "  - llms.txt present (4 pts): Whether https://<domain>/llms.txt exists and is a usable text file. Why it matters: An emerging standard that gives AI systems a curated map of your content.",
+        "  - Sitemap declared (6 pts): Whether robots.txt has a Sitemap: line, or /sitemap.xml exists as a urlset or sitemapindex. Why it matters: Sitemaps let crawlers discover your content completely.",
+        "  - AI crawler access (26 pts): For each of the 10 tracked AI crawlers: open (no rule applies), limited (at least one Disallow rule applies, often an ordinary path) or blocked (the whole site is disallowed). Open earns full credit, limited half, blocked none, scaled to the 26 points. Why it matters: Every blocked crawler removes you from that platform’s answers.",
+        "",
+        "Technical foundation: 20 points. Baseline machine-readability hygiene.",
+        "  - Canonical tag (4 pts): Whether the homepage declares a rel=canonical link. Why it matters: Tells machines the definitive URL and prevents duplicate-content ambiguity.",
+        "  - html lang attribute (3 pts): Whether the <html> element declares a language. Why it matters: Lets AI systems classify your content’s language correctly.",
+        "  - Page title (3 pts): Whether the <title> is 10 to 70 characters. Why it matters: Answer engines frequently use the title as your source label."
+      ],
+      "totalLines": 32
+    },
+    {
+      "id": "benchmark-crm",
+      "tool": "get_benchmark",
+      "arguments": {
+        "category": "crm"
+      },
+      "prompt": "How do CRM sites score on AI readiness?",
+      "lines": [
+        "AI readiness benchmark: CRM software (B2B SaaS)",
+        "Scanned 31 platforms as of 2026-07-29 (8 more could not be reached).",
+        "",
+        "Score — average 78/100, median 80, range 53–91.",
+        "  Discoverability:      27/40",
+        "  Technical foundation: 18/20",
+        "  Content & trust:      33/40",
+        "",
+        "Crawler access: 10% of sites block at least one AI crawler.",
+        "By crawler, in number of sites (31 scanned):",
+        "  GPTBot           blocked 1, limited 24, open 6",
+        "  ChatGPT-User     blocked 1, limited 24, open 6"
+      ],
+      "totalLines": 38
+    },
+    {
+      "id": "citation-sample",
+      "tool": "get_citation_sample",
+      "arguments": {},
+      "prompt": "Show me a sample citation result",
+      "lines": [
+        "Citation tracking sample: a CRM brand",
+        "Model: gemini-3.5-flash-lite. Date: October 2, 2026. No web search was enabled.",
+        "Each of 18 questions was asked 5 times (5 tries per question), each in its own conversation.",
+        "",
+        "Overall, the brand was named in 49% of answers. Taking one try of every question as a sweep, the rate ranged from 39% to 56% across 5 sweeps. The average hides that spread.",
+        "",
+        "Named in every try (6):",
+        "  - Which CRM should a 10-person startup use that won't need a consultant to set up?",
+        "  - What are the best CRMs that integrate natively with Slack?",
+        "  - Which CRM is easiest for a non-technical sales team to adopt?",
+        "  - What CRM should an agency use to manage clients and deals together?",
+        "  - Which CRMs integrate well with Google Workspace and Gmail?"
+      ],
+      "totalLines": 38
+    },
+    {
+      "id": "schema-self",
+      "tool": "generate_schema",
+      "arguments": {
+        "domain": "answerable-app.vercel.app",
+        "type": "organization"
+      },
+      "prompt": "Write Organization JSON-LD for answerable-app.vercel.app",
+      "lines": [
+        "Organization and WebSite JSON-LD for answerable-app.vercel.app, ready to paste inside a <script type=\"application/ld+json\"> tag in the page’s <head>:",
+        "",
+        "{",
+        "  \"@context\": \"https://schema.org\",",
+        "  \"@graph\": [",
+        "    {",
+        "      \"@type\": \"Organization\",",
+        "      \"name\": \"[Your company name]\",",
+        "      \"url\": \"https://answerable-app.vercel.app\",",
+        "      \"description\": \"Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO & AEO playbooks. No email required.\"",
+        "    },",
+        "    {"
+      ],
+      "totalLines": 19
+    },
+    {
+      "id": "scan-example",
+      "tool": "scan_site",
+      "arguments": {
+        "domain": "example.com"
+      },
+      "prompt": "Scan example.com and tell me what to fix first",
+      "lines": [
+        "AI readiness scan — example.com",
+        "",
+        "Score: 29/100",
+        "  Discoverability:      26/40",
+        "  Technical foundation: 3/20",
+        "  Content & trust:      0/40",
+        "",
+        "That’s 44 points below the average of the 219 sites we’ve scanned (73/100).",
+        "",
+        "AI crawler access (10 tracked):",
+        "  GPTBot — Open",
+        "  ChatGPT-User — Open"
+      ],
+      "totalLines": 38
+    }
+  ]
+}

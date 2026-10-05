@@ -1,0 +1,34 @@
+{
+  "groups": [
+    { "name": "Scan", "icon": "search", "blurb": "Read a live site the way an AI crawler would." },
+    { "name": "Fix", "icon": "wrench", "blurb": "Generate the files that close the gaps." },
+    { "name": "Learn", "icon": "document", "blurb": "Read the data, the method and the playbooks behind the score." },
+    { "name": "Test", "icon": "question", "blurb": "Check for yourself whether an assistant names a brand." }
+  ],
+  "tools": {
+    "scan_site": { "group": "Scan", "line": "Score any site out of 100 for AI readiness, with every failed check and its fix." },
+    "compare_sites": { "group": "Scan", "line": "Put two sites side by side and see every check where they differ." },
+    "generate_schema": { "group": "Fix", "line": "Get paste-ready JSON-LD for your site, with brackets where only you know the facts." },
+    "generate_robots_txt": { "group": "Fix", "line": "Allow or block named AI crawlers with a robots.txt you can paste as it is." },
+    "generate_llms_txt": { "group": "Fix", "line": "Write an llms.txt that tells AI systems what your site is and where to start." },
+    "get_playbook": { "group": "Learn", "line": "Read the playbook for your vertical: the shift, three strategies and the pitfalls to avoid." },
+    "get_benchmark": { "group": "Learn", "line": "See where your score sits against the sites in your category." },
+    "get_methodology": { "group": "Learn", "line": "See how the 100 points are built, check by check, and what the score cannot show." },
+    "get_research": { "group": "Learn", "line": "Read our published research, with the figures and how we got them." },
+    "get_sample_report": { "group": "Learn", "line": "Open a full-site report on our own site, before and after we fixed what it found." },
+    "list_ai_crawlers": { "group": "Learn", "line": "See the ten AI crawlers we track and what each one is for." },
+    "get_citation_prompts": { "group": "Test", "line": "Get the buying-intent questions for your category to try in your own assistant." },
+    "get_citation_sample": { "group": "Test", "line": "See what a citation run looks like: a real, anonymized sample with the spread shown." }
+  },
+  "prompts": {
+    "geo_audit": { "line": "A full audit in one go: scan, benchmark, playbook, fixes and an ordered plan." },
+    "commerce_readiness": { "line": "Check a store the way a shopping agent would, then get the fixes." },
+    "citation_questions": { "line": "Get the question set and the steps for testing whether an assistant names your brand." }
+  },
+  "asks": [
+    { "text": "Scan example.com and tell me what to fix first", "tool": "scan_site" },
+    { "text": "Compare these two sites", "tool": "compare_sites" },
+    { "text": "Write me an llms.txt for my business", "tool": "generate_llms_txt" },
+    { "text": "Which questions should I test for my category?", "tool": "get_citation_prompts" }
+  ]
+}
