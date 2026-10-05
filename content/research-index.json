@@ -1,0 +1,75 @@
+{
+  "site": "https://answerable-app.vercel.app",
+  "entries": [
+    {
+      "slug": "llms-txt-adoption-2026",
+      "kind": "research",
+      "title": "Who controls your brand's AI representation?",
+      "date": "2026-07-29",
+      "dateLabel": "29 July 2026",
+      "url": "https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+      "summary": "We scanned 64 sites and found blocking is rare: 10% of B2B sites and 3% of consumer brands restrict AI crawlers.",
+      "findings": [
+        "76% of consumer brands have an llms.txt file, but the two files we examined by hand were near-identical and said nothing specific about the brand.",
+        "91% of consumer-brand homepages and 48% of B2B homepages are missing content schema.",
+        "22 of 85 attempted scans could not complete, blocked by protection that may also stop AI crawlers. The report leaves that question open."
+      ],
+      "limits": [
+        "Homepages only: 64 domains completed a scan out of 85 attempted, 31 B2B and 33 consumer brands.",
+        "It does not tell whether the 22 unreachable sites block AI crawlers specifically, or only generic cloud traffic.",
+        "The Shopify-generated llms.txt pattern was checked in two files read by hand, Magic Spoon and Allbirds.",
+        "It measures inputs, not outcomes: whether any of these signals correlate with being cited in an AI answer is not known."
+      ],
+      "cite": "Andaç Üzel, “Who Controls Your Brand's AI Representation?,” Answerable Research, 29 July 2026. https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+      "sources": [
+        "research/llms-txt-adoption-2026.html"
+      ]
+    },
+    {
+      "slug": "case-study-agaone",
+      "kind": "case-study",
+      "title": "Two sites, launched with good SEO, invisible to AI crawlers",
+      "date": "2026-08",
+      "dateLabel": "August 2026",
+      "url": "https://answerable-app.vercel.app/research/case-study-agaone",
+      "summary": "AgaOne Commodities scanned two new corporate sites, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.",
+      "findings": [
+        "Both sites scored in the mid-fifties before the work: 58 and 55.",
+        "One site reached 100 out of 100 on the checks Answerable runs today. The other reached 89.",
+        "The average gain was 38 points across 2 sites and 16 checks."
+      ],
+      "limits": [
+        "Two sites from one company, published with permission: a case study, not a sample.",
+        "A score of 100 means the site passes all 16 checks Answerable runs today. It does not mean the site will be cited in an AI answer.",
+        "The scoring model will get harder, so the same sites are expected to move."
+      ],
+      "cite": "Andaç Üzel, “Two Sites, Launched With Good SEO, Invisible to AI Crawlers,” Answerable Case Studies, August 2026. https://answerable-app.vercel.app/research/case-study-agaone",
+      "sources": [
+        "research/case-study-agaone.html"
+      ]
+    },
+    {
+      "slug": "benchmarks",
+      "kind": "benchmark",
+      "title": "AI readiness benchmarks",
+      "date": "2026-07-31",
+      "dateLabel": "31 July 2026",
+      "url": "https://answerable-app.vercel.app/benchmarks",
+      "summary": "The average AI readiness score across 219 homepages in 6 categories is 73 out of 100.",
+      "findings": [
+        "We scanned 219 homepages in 6 categories. The average score is 73 out of 100.",
+        "CRM software scores highest, 78 out of 100. Consumer apps scores lowest, 65 out of 100."
+      ],
+      "limits": [
+        "Homepages only, from hand-picked well-known sites in each category, not a random sample.",
+        "One scan date per category. A rescan in October 2026 moved category averages by one point or less.",
+        "It measures readiness, not whether any assistant names a brand."
+      ],
+      "cite": "Answerable, \"AI readiness benchmarks,\" 31 July 2026. https://answerable-app.vercel.app/benchmarks",
+      "sources": [
+        "benchmarks/index.html",
+        "data/"
+      ]
+    }
+  ]
+}
