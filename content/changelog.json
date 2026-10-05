@@ -243,6 +243,22 @@
         "b9c43ef",
         "2a34670"
       ]
+    },
+    {
+      "date": "2026-10-05",
+      "text": "Added the trust page and this changelog, a security.txt file, and a Trust and Changelog link in every footer.",
+      "refs": [
+        "1fec022",
+        "912d134",
+        "eade0c0"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "text": "Published research 002, which AI crawlers do sites block, from 219 homepages in six categories.",
+      "refs": [
+        "0066ed3"
+      ]
     }
   ]
 }
