@@ -455,7 +455,7 @@ var TOOLS = [
   {
     name: 'list_ai_crawlers',
     title: 'List tracked AI crawlers',
-    description: 'Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it actually means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.',
+    description: 'Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.',
     inputSchema: { type: 'object', properties: {} },
     annotations: { title: 'List tracked AI crawlers', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },

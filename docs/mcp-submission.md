@@ -90,7 +90,7 @@ Answerable measures AI readiness: whether AI crawlers can reach and read a websi
 
 ### `list_ai_crawlers`
 
-**List tracked AI crawlers.** Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it actually means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.
+**List tracked AI crawlers.** Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.
 
 - Parameters: _none_
 - Annotations: readOnlyHint true, destructiveHint false, idempotentHint true, openWorldHint false (reads this project's own files)
