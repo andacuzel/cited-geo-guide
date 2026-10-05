@@ -54,14 +54,18 @@
    RATE LIMITING
    -------------------------------------------------------------------
    The three tools that fetch a live, arbitrary third-party domain
-   (scan_site, compare_sites, generate_schema) share the exact counter
-   api/scan.js uses (api/_rateLimit.js — 20/hour, 100/day per caller).
-   compare_sites consumes two units, one per constituent scan, since it
-   performs two real fetches. The tools that only read this project's own
-   static content (generate_robots_txt, generate_llms_txt, get_playbook,
-   get_benchmark, list_ai_crawlers, get_citation_prompts,
-   get_citation_sample) are not rate limited — there is no third party to
-   protect from them.
+   (scan_site, compare_sites, generate_schema) are limited per target domain
+   and by a global hourly ceiling (lib/mcp-limits.js: 6 fetches of one domain
+   an hour, 300 live fetches an hour in all, both configurable in that one
+   file). It is not limited per caller IP: every user of an Anthropic-hosted
+   client shares a few addresses, so a per-IP limit would throttle strangers
+   for each other's calls. /api/scan keeps its own per-IP limiter. The tools
+   that only read this project's own content (generate_robots_txt,
+   generate_llms_txt, get_playbook, get_benchmark, get_methodology,
+   get_research, get_sample_report, list_ai_crawlers, get_citation_prompts,
+   get_citation_sample) are not limited: there is no third party to protect.
+   compare_sites consumes one unit per domain. If the counter store is
+   unavailable the limiter fails open.
 
    THERE IS NO TOOL THAT RUNS A LIVE CITATION CHECK, on purpose. One run
    is about 90 model calls at about five seconds each, far past this
@@ -69,14 +73,16 @@
    stops strangers from draining. get_citation_prompts hands a person the
    questions and a protocol to run in their own assistant instead.
 
-   No caller identity is stored anywhere; api/_rateLimit.js keeps only a
-   SHA-256 hash of the caller's IP behind a short TTL counter, same as
-   the public scan endpoint.
+   No caller identity is stored anywhere; the counters are keyed by a hash of
+   the scanned domain (or the current hour) and expire after an hour.
    ===================================================================== */
 
 const fs = require('fs');
 const path = require('path');
-const { checkRateLimit } = require('./_rateLimit');
+const mcpLimits = require('../lib/mcp-limits');
+const methodology = require('../lib/methodology');
+const mcpContent = require('../lib/mcp-content');
+const mcpPrompts = require('../lib/mcp-prompts');
 const scanner = require('../lib/scanner');
 const schemaLib = require('../lib/schema');
 const playbooks = require('../lib/playbooks');
@@ -85,21 +91,40 @@ const citation = require('../lib/citation-content');
 
 const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
 const SERVER_INFO = { name: 'answerable', title: 'Answerable', version: '1.0.0' };
-const SERVER_INSTRUCTIONS = 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). Every tool is read-only and non-destructive.';
+const SERVER_INSTRUCTIONS = 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). It also serves the scoring methodology, the research, a sample report of our own site, the vertical playbooks and the citation question sets, and three prompts for common workflows. Every tool is read-only and non-destructive. It measures readiness, not whether any assistant names a brand.';
 const DATA_DIR = path.join(__dirname, '..', 'data');
 
 /* ---------------- shared small helpers ---------------- */
 
 var normalizeDomain = scanner.normalizeDomain;
 
-function rateLimitMessage(rl) {
-  return rl.scope === 'hour'
-    ? 'Rate limit reached: this server allows 20 scans per hour per caller. Try again in a little while.'
-    : 'Rate limit reached: this server allows 100 scans per day per caller. Try again tomorrow.';
+// Limits a live fetch of one domain. Resolves to an error outcome, or null to go ahead.
+async function liveLimit(domain) {
+  var rl = await mcpLimits.checkLiveLimit(domain);
+  return rl.limited ? { isError: true, text: rl.message } : null;
+}
+
+// One scan with its own deadline, so two sequential scans finish inside the function limit even if a site
+// stalls. The scan itself cannot be cancelled, so it is simply abandoned when the deadline passes.
+var SCAN_DEADLINE_MS = parseInt(process.env.MCP_SCAN_DEADLINE_MS, 10) || 20000;
+function withDeadline(promise, ms) {
+  var timer;
+  var deadline = new Promise(function (resolve) {
+    timer = setTimeout(function () { resolve({ ok: false, stage: 'deadline', kind: 'timed out after ' + Math.round(ms / 1000) + ' seconds' }); }, ms);
+  });
+  return Promise.race([promise, deadline]).then(function (r) { clearTimeout(timer); return r; }, function (e) { clearTimeout(timer); return { ok: false, stage: 'error', kind: (e && e.message) || 'scan error' }; });
+}
+
+function failureLine(domain, scanResult) {
+  if (scanResult.stage === 'limit') return domain + ' was not scanned: ' + scanResult.kind;
+  return domain + ' was not scanned: ' + scanFailureMessage(domain, scanResult);
 }
 
 function scanFailureMessage(domain, scanResult) {
   var detail = scanResult.kind || scanResult.error || 'unknown error';
+  if (scanResult.stage === 'deadline') {
+    return 'The scan of https://' + domain + '/ took too long (' + detail + '), so there is no reliable result. Try again, or scan the domain on its own.';
+  }
   if (scanResult.stage === 'robots') {
     return 'Could not read https://' + domain + '/robots.txt (' + detail + '), so the score would not be reliable. Confirm the domain is correct and reachable, then try again.';
   }
@@ -403,16 +428,15 @@ var TOOLS = [
   {
     name: 'get_playbook',
     title: 'Get a vertical playbook',
-    description: 'Returns the full GEO/AEO playbook for one of Answerable’s fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Read live from this project’s own content file, so it matches what a visitor to the site sees. Fetches nothing external.',
+    description: 'Returns the full GEO/AEO playbook for one of Answerable’s fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Called with no argument it returns the list of the fourteen verticals with their track (B2B SaaS, consumer and e-commerce brands, local and independent professionals), so call it with no argument first when you do not know which vertical fits. Read from this project’s own content file, so it matches what a visitor to the site sees. Fetches nothing external. Use after scan_site to turn a failed check into the strategy that applies to the site’s category.',
     inputSchema: {
       type: 'object',
       properties: {
         vertical: {
           type: 'string',
-          description: 'A vertical slug. B2B SaaS: crm, martech, hrtech, fintech, cybersecurity, devtools. Consumer brands: ecommerce, consumerapps, hospitality, marketplaces. Professionals: health, localservices, realestate, legal.'
+          description: 'Optional. A vertical slug. B2B SaaS: crm, martech, hrtech, fintech, cybersecurity, devtools. Consumer brands: ecommerce, consumerapps, hospitality, marketplaces. Professionals: health, localservices, realestate, legal. Omit to list them all.'
         }
-      },
-      required: ['vertical']
+      }
     },
     annotations: { title: 'Get a vertical playbook', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
@@ -457,6 +481,37 @@ var TOOLS = [
     description: 'Returns Answerable’s anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and a note on the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand in the category being measured, no domain and no competitor. Read-only: it reads a content file and queries no model. Use when the user wants to see what a citation result looks like, or asks how much the same question varies between tries.',
     inputSchema: { type: 'object', properties: {} },
     annotations: { title: 'Get the anonymised citation sample', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
+    name: 'get_methodology',
+    title: 'Get the scoring methodology',
+    description: 'Explains how the Answerable AI readiness score is built, read from the scanner’s own check registry so it matches what runs. With no argument it returns the three pillars with their weights (they add up to 100), every check with its category, points, what it tests and why it matters, and the limits of the scan: it measures readiness and not whether any assistant names a brand; it gives half credit for a crawler with any applicable Disallow rule, usually an ordinary path; and it reads the homepage only. With a check label it returns that one check in detail. An unknown label returns an error listing the valid labels. Read-only, fetches nothing external. Use when the user asks how a score is calculated, why a check carries the points it does, or what the scan cannot tell them.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        check: { type: 'string', description: 'Optional. A check label exactly as scan_site reports it, e.g. "Page title" or "AI crawler access". Case does not matter. Omit for the whole methodology.' }
+      }
+    },
+    annotations: { title: 'Get the scoring methodology', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
+    name: 'get_research',
+    title: 'Get Answerable research',
+    description: 'Returns Answerable’s published research: with no argument, the list of reports (the llms.txt and crawler study, the AgaOne case study and the benchmark data) with title, date, one-line finding and URL; with a slug, the key findings, the method limits, the URL and a ready line for citing it. Findings are checked against the published pages and data files. Every study measures readiness inputs, not whether any assistant names a brand. Read-only, fetches nothing external. Use when the user wants evidence for a claim about AI crawler access or llms.txt, a statistic to cite, or the reports behind the benchmarks.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        slug: { type: 'string', description: 'Optional. A report slug from the list this tool returns with no argument. Omit to list the reports.' }
+      }
+    },
+    annotations: { title: 'Get Answerable research', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
+    name: 'get_sample_report',
+    title: 'Get the sample full-site report',
+    description: 'Returns the sample Pro report as readable text: a real crawl of Answerable’s own site on a stated date, nothing edited. It gives the whole-site score beside the homepage score, the pillar averages, the top priorities from the executive summary with the label saying what wrote it, the checks failing by number of pages, and the link to the full report. It shows what a full-site crawl adds to a one-page scan. It is our own site, not a customer’s, and it measures readiness, not whether any assistant names the site. Read-only, fetches nothing external. Use when the user asks what a full-site report looks like or what a crawl shows that a homepage scan cannot.',
+    inputSchema: { type: 'object', properties: {} },
+    annotations: { title: 'Get the sample full-site report', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }
 ];
 
@@ -473,8 +528,8 @@ var HANDLERS = {
       return { isError: true, text: 'Invalid or missing "domain". Expected a bare hostname, e.g. "example.com" — no scheme, no path.' };
     }
 
-    var rl = await checkRateLimit(req);
-    if (rl.limited) return { isError: true, text: rateLimitMessage(rl) };
+    var limited = await liveLimit(domain);
+    if (limited) return limited;
 
     var scanResult = await scanner.scanPage('https://' + domain + '/');
     if (!scanResult.ok) return { isError: true, text: scanFailureMessage(domain, scanResult) };
@@ -492,15 +547,24 @@ var HANDLERS = {
       return { isError: true, text: '"domain_a" and "domain_b" must be different domains — both normalized to "' + a + '".' };
     }
 
-    var rl1 = await checkRateLimit(req);
-    if (rl1.limited) return { isError: true, text: rateLimitMessage(rl1) };
-    var scanA = await scanner.scanPage('https://' + a + '/', { commerce: false });
-    if (!scanA.ok) return { isError: true, text: scanFailureMessage(a, scanA) };
+    var limA = await liveLimit(a);
+    if (limA) return limA;
+    var scanA = await withDeadline(scanner.scanPage('https://' + a + '/', { commerce: false }), SCAN_DEADLINE_MS);
 
-    var rl2 = await checkRateLimit(req);
-    if (rl2.limited) return { isError: true, text: rateLimitMessage(rl2) };
-    var scanB = await scanner.scanPage('https://' + b + '/', { commerce: false });
-    if (!scanB.ok) return { isError: true, text: scanFailureMessage(b, scanB) };
+    var scanB;
+    var limB = await liveLimit(b);
+    if (limB) scanB = { ok: false, stage: 'limit', kind: limB.text };
+    else scanB = await withDeadline(scanner.scanPage('https://' + b + '/', { commerce: false }), SCAN_DEADLINE_MS);
+
+    if (!scanA.ok && !scanB.ok) {
+      return { isError: true, text: 'Neither site could be scanned.\n' + failureLine(a, scanA) + '\n' + failureLine(b, scanB) };
+    }
+    if (!scanA.ok || !scanB.ok) {
+      // One result is better than none: return the site that worked and say exactly why the other did not.
+      var goodDomain = scanA.ok ? a : b, good = scanA.ok ? scanA : scanB;
+      var badDomain = scanA.ok ? b : a, bad = scanA.ok ? scanB : scanA;
+      return { isError: false, text: 'Only ' + goodDomain + ' could be compared. ' + failureLine(badDomain, bad) + '\n\n' + formatScanResult(goodDomain, good, computeOverallBenchmark()) };
+    }
 
     return { isError: false, text: formatCompareResult(a, scanA, b, scanB) };
   },
@@ -516,8 +580,8 @@ var HANDLERS = {
       return { isError: true, text: '"type" must be one of: ' + validTypes.join(', ') + ' (got ' + JSON.stringify(type === undefined ? null : type) + ').' };
     }
 
-    var rl = await checkRateLimit(req);
-    if (rl.limited) return { isError: true, text: rateLimitMessage(rl) };
+    var limitedSchema = await liveLimit(domain);
+    if (limitedSchema) return limitedSchema;
 
     var info = await scanner.fetchSiteInfo(domain);
     if (!info.ok) {
@@ -601,9 +665,7 @@ var HANDLERS = {
 
   get_playbook: async function (args) {
     var vertical = args && typeof args.vertical === 'string' ? args.vertical.trim() : '';
-    if (!vertical) {
-      return { isError: true, text: '"vertical" is required. Valid verticals: ' + ALL_VERTICALS.join(', ') + '.' };
-    }
+    if (!vertical) return mcpContent.playbookList();
     var found = findVertical(vertical);
     if (!found) {
       return { isError: true, text: 'Unknown vertical "' + vertical + '". Valid verticals: ' + ALL_VERTICALS.join(', ') + '.' };
@@ -709,6 +771,22 @@ var HANDLERS = {
 
   get_citation_sample: async function () {
     return citation.sampleText();
+  },
+
+  get_methodology: async function (args) {
+    var check = args && typeof args.check === 'string' ? args.check.trim() : '';
+    if (!check) return { isError: false, text: methodology.overview() };
+    var found = methodology.findCheck(check);
+    if (!found) return { isError: true, text: 'Unknown check "' + check + '". Valid check labels: ' + methodology.labels().join('; ') + '.' };
+    return { isError: false, text: methodology.detail(found) };
+  },
+
+  get_research: async function (args) {
+    return mcpContent.research(args && args.slug);
+  },
+
+  get_sample_report: async function () {
+    return mcpContent.sampleReport();
   }
 
 };
@@ -804,10 +882,10 @@ function classifyRequest(req, body) {
   if (mcpMethod !== method) {
     return reject(400, -32020, 'Header mismatch: Mcp-Method header value \'' + mcpMethod + '\' does not match body value \'' + method + '\'.');
   }
-  if (method === 'tools/call') {
+  if (method === 'tools/call' || method === 'prompts/get') {
     var mcpName = headerValue(req, 'mcp-name');
     if (mcpName === undefined) {
-      return reject(400, -32020, 'Header mismatch: the Mcp-Name header is required for tools/call and was not sent.');
+      return reject(400, -32020, 'Header mismatch: the Mcp-Name header is required for ' + method + ' and was not sent.');
     }
     if (decodeMcpName(mcpName) !== params.name) {
       return reject(400, -32020, 'Header mismatch: Mcp-Name header value \'' + decodeMcpName(mcpName) + '\' does not match body value \'' + params.name + '\'.');
@@ -871,7 +949,7 @@ module.exports = async (req, res) => {
         ? requested : LATEST_LEGACY_VERSION;
       res.status(200).json(rpcResult(id, {
         protocolVersion: negotiated,
-        capabilities: { tools: {} },
+        capabilities: { tools: {}, prompts: {} },
         serverInfo: SERVER_INFO,
         instructions: SERVER_INSTRUCTIONS
       }));
@@ -890,7 +968,7 @@ module.exports = async (req, res) => {
       res.status(200).json(rpcResult(id, withServerInfo({
         resultType: 'complete',
         supportedVersions: SUPPORTED_PROTOCOL_VERSIONS,
-        capabilities: { tools: {} },
+        capabilities: { tools: {}, prompts: { listChanged: false } },
         instructions: SERVER_INSTRUCTIONS,
         ttlMs: 3600000,
         cacheScope: 'public'
@@ -911,6 +989,31 @@ module.exports = async (req, res) => {
         ttlMs: 3600000,
         cacheScope: 'public'
       })));
+      return;
+    }
+
+    if (method === 'prompts/list') {
+      res.status(200).json(rpcResult(id, withServerInfo({
+        resultType: 'complete',
+        prompts: mcpPrompts.list(),
+        ttlMs: 3600000,
+        cacheScope: 'public'
+      })));
+      return;
+    }
+
+    if (method === 'prompts/get') {
+      var pParams = (body.params && typeof body.params === 'object') ? body.params : {};
+      if (typeof pParams.name !== 'string' || !pParams.name) {
+        res.status(400).json(rpcError(id, -32602, 'Invalid params: "name" is required for prompts/get.'));
+        return;
+      }
+      var got = mcpPrompts.get(pParams.name, pParams.arguments);
+      if (!got.ok) {
+        res.status(400).json(rpcError(id, -32602, got.message));
+        return;
+      }
+      res.status(200).json(rpcResult(id, withServerInfo({ resultType: 'complete', description: got.description, messages: got.messages })));
       return;
     }
 
@@ -935,7 +1038,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    res.status(404).json(rpcError(id, -32601, 'Method not found: "' + method + '". This server implements initialize, server/discover, tools/list, tools/call and ping.'));
+    res.status(404).json(rpcError(id, -32601, 'Method not found: "' + method + '". This server implements initialize, server/discover, tools/list, tools/call, prompts/list, prompts/get and ping.'));
   } catch (err) {
     console.error('[mcp] unhandled error for method', method, '—', err && err.stack ? err.stack : err);
     res.status(200).json(rpcResult(id, toolResult({ isError: true, text: 'Unexpected server error. Please try again.' })));
@@ -945,3 +1048,4 @@ module.exports = async (req, res) => {
 // The registry, for lib/mcp-docs.js (which derives the tool count shown in mcp.html).
 module.exports.TOOLS = TOOLS;
 module.exports.HANDLERS = HANDLERS;
+module.exports.PROMPTS = mcpPrompts.PROMPTS;
