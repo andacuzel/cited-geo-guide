@@ -4,25 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Answerable. — Pro: What Your Score Means</title>
-  <meta name="description" content="The scan is free and hands you the fix. Pro explains what your score means for your category, adds a named competitor comparison and what to fix first. One-time purchase." />
-  <meta name="keywords" content="Answerable Pro, AI visibility report, GEO, AEO, competitor comparison" />
+  <title>Answerable. — Pro: Your homepage isn't your site</title>
+  <meta name="description" content="Pro crawls up to 50 pages of your site and shows what the homepage hides: the whole-site score, the pages that fail and every fix once." />
+  <meta name="keywords" content="Answerable Pro, AI readiness report, full-site crawl, GEO, AEO" />
   <meta name="author" content="Answerable." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://answerable-app.vercel.app/pro" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Answerable. — Pro: What Your Score Means" />
-  <meta property="og:description" content="The scan is free and hands you the fix. Pro tells you what your score means for your category, a named competitor comparison, and what to fix first." />
+  <meta property="og:title" content="Answerable. — Pro: Your homepage isn't your site" />
+  <meta property="og:description" content="Pro crawls up to 50 pages of your site and shows what the homepage hides: the whole-site score, the pages that fail and every fix once." />
   <meta property="og:url" content="https://answerable-app.vercel.app/pro" />
   <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
   <meta property="og:site_name" content="Answerable." />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Answerable. — Pro: What Your Score Means" />
-  <meta name="twitter:description" content="The scan is free and hands you the fix. Pro tells you what your score means for your category, a named competitor comparison, and what to fix first." />
+  <meta name="twitter:title" content="Answerable. — Pro: Your homepage isn't your site" />
+  <meta name="twitter:description" content="Pro crawls up to 50 pages of your site and shows what the homepage hides: the whole-site score, the pages that fail and every fix once." />
   <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=48" />
+  <link rel="stylesheet" href="styles.css?v=49" />
 
   <script type="application/ld+json">
   {
@@ -43,7 +43,31 @@
         "name": "What do I get with Answerable Pro?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Your scan interpreted through your vertical's playbook, your score compared against your category benchmark instead of a generic average, a named competitor comparison, a prioritized fix order for your specific findings, and an exportable report built to forward to your team."
+          "text": "A crawl of up to 50 pages of your site, and a report built from it: an executive summary, the whole-site score beside the homepage score, a heat matrix of which pages fail which checks, a page-by-page explorer, every fix once with the pages it applies to, and a printable version."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is this different from the free scan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to 50 pages and shows what the homepage hides: the whole-site score beside the homepage score, the checks that pass on the homepage and fail elsewhere, and every fix once with the pages it applies to. Comparing two sites is free at /compare."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the sample report?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A real crawl of our own site, answerable-app.vercel.app, run on October 4, 2026: 28 pages. Nothing in it was edited or improved, and our own pages still fail some checks. The report says which. Open it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it measure whether AI names me?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Pro measures readiness: whether crawlers can reach and read your pages. It does not show whether a model names your brand. Citation tracking, a separate report we run for you, asks a model the questions your customers ask and shows when your name comes up."
         }
       },
       {
@@ -52,14 +76,6 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Yes. Answerable Pro is a single one-time purchase. There is no subscription and no recurring billing."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How is this different from the free scan?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The free scan tells you your score and hands you the fix: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro tells you what that score means for your category: a benchmark comparison, a named competitor comparison, and a prioritized order to work through your findings."
         }
       },
       {
@@ -138,131 +154,319 @@
 
   <main id="main">
 
-    <!-- ---------- Page banner ---------- -->
+    <!-- ---------- Banner ---------- -->
     <section aria-labelledby="pro-heading">
       <div class="section__inner">
         <div class="page-banner">
           <div class="page-banner__body">
-            <p class="kicker kicker--on-navy">Free vs. Pro</p>
-            <h1 id="pro-heading" class="page-banner__title">Free tells you your score. Pro tells you what it means.</h1>
-            <p class="page-banner__desc">The scan is free and hands you the fix. Answerable Pro tells you what your score means for your category, and what to do first.</p>
+            <p class="kicker kicker--on-navy">Pro</p>
+            <h1 id="pro-heading" class="page-banner__title">Your homepage isn't your site.</h1>
+            <p class="page-banner__desc">The free scan reads one page. Pro crawls up to <span data-fig="pro-cap">50</span> and shows what the homepage hides.</p>
+            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A" class="btn btn--ghost-on-navy">Get early access</a></div>
           </div>
+          <span class="page-banner__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span>
         </div>
       </div>
     </section>
 
-    <!-- ---------- What stays free forever ---------- -->
-    <section class="verticals" aria-labelledby="free-heading">
+    <!-- ---------- The gap ---------- -->
+    <section class="verticals" aria-labelledby="gap-heading">
       <div class="section__inner">
         <div class="section-head">
-          <p class="kicker">Always free</p>
-          <h2 id="free-heading" class="section-title">Diagnosis is free. Prescription is Pro.</h2>
+          <p class="kicker">The gap</p>
+          <h2 id="gap-heading" class="section-title">One site, two scores.</h2>
+        </div>
+        <div class="pro-gap">
+          <div class="pro-gap__fig"><span class="pro-gap__label">Homepage</span><span class="pro-gap__num"><span data-fig="pro-homepage">87</span></span></div>
+          <div class="pro-gap__fig"><span class="pro-gap__label">Whole site</span><span class="pro-gap__num"><span data-fig="pro-site">83</span></span></div>
+        </div>
+        <p class="pro-gap__cap">A real crawl of answerable-app.vercel.app, October 4, 2026. Nothing edited.</p>
+        <p class="pro-gap__text">Pages other than the homepage fail checks the homepage passes: <span data-fig="pro-hidden">4</span> checks, failing on <span data-fig="pro-failing-others">20</span> of the <span data-fig="pro-others">27</span> other pages.</p>
+      </div>
+    </section>
+
+    <!-- ---------- What you get ---------- -->
+    <section class="verticals" aria-labelledby="get-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">What you get</p>
+          <h2 id="get-heading" class="section-title">The report, in the order you read it.</h2>
+        </div>
+        <div class="pro-row">
+          <div class="pro-row__text">
+            <span class="pro-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span>
+            <h3 class="pro-row__title">Start with the answer.</h3>
+            <p class="pro-row__body">The report opens with the site-wide score beside the homepage score, then the top three checks to fix first, each with the points it adds and a typical effort. A short summary leads, labeled with what wrote it.</p>
+          </div>
+          <figure class="pro-shot pro-shot--summary">
+          <div role="img" aria-label="Sample dashboard summary for answerable-app.vercel.app. Headline: Readiness report for 28 pages. The site-wide score is 83. The benchmark average is 73, and the homepage score is 87. Label under it: Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them. Four figures: site-wide score 83, homepage score 87, gap −4, and 20 pages with a failure."><div class="pro-shot__view" inert>
+          <div class="rp-report rp-js">
+          <div data-shot="summary">
+          <article class="rp-exec"><p class="rp-kicker">Executive summary</p>
+          <p class="rp-exec__headline">Readiness report for 28 pages</p>
+          <p class="rp-exec__text">The site-wide score is 83. The benchmark average is 73, and the homepage score is 87.</p>
+          <p class="rp-exec__label" data-fig="summary-label">Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them</p>
+          </article>
+          <ul class="rp-kpis">
+          <li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="avg">83</span></span><span class="rp-kpi__label">Site-wide score<br /><small>average of <span data-fig="pagesRead">28</span> pages, out of 100</small></span></li>
+          <li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="homeScore">87</span></span><span class="rp-kpi__label">Homepage score<br /><small>what a single-page scan reports</small></span></li>
+          <li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="gap">-4</span></span><span class="rp-kpi__label">Gap<br /><small>site-wide minus homepage, in points</small></span></li>
+          <li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="kpi-failing">20</span></span><span class="rp-kpi__label">Pages with a failure<br /><small>of 28 read, at least one page-level check</small></span></li>
+          </ul>
+          </div>
+          </div>
+          </div></div>
+          <figcaption class="pro-shot__cap">Sample, answerable-app.vercel.app, October 4, 2026. The executive summary and four figures.</figcaption>
+          </figure>
+        </div>
+        <div class="pro-row pro-row--flip">
+          <div class="pro-row__text">
+            <span class="pro-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span>
+            <h3 class="pro-row__title">See which problems are one template, not fifty pages.</h3>
+            <p class="pro-row__body">One row per page, one column per check. A column filled all the way down is likely a shared template: an inference from how many pages fail, not something we observed. In this crawl <span data-fig="pro-failing-checks">4</span> of <span data-fig="pro-columns">12</span> page-level checks fail anywhere, and no column fills all the way down.</p>
+          </div>
+          <figure class="pro-shot pro-shot--matrix pro-shot--desktop">
+          <div role="img" aria-label="Heat matrix from the sample crawl. One row per page, one column per check, a filled square where a page fails a check and a hollow one where it passes. 4 of the 12 page-level checks fail on at least one page."><div class="pro-shot__view" inert>
+          <div class="rp-report rp-js">
+          <div class="rp-matrixwrap"><table class="rp-matrix">
+          <thead><tr><th scope="col" class="rp-matrix__corner">Page</th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Canonical</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Language</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Title</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Description</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Open Graph</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">JSON-LD</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">H1</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">H2</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Org schema</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Content schema</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">About</span></th><th scope="col" class="rp-colhead"><span class="rp-colhead__text">Contact</span></th></tr></thead>
+          <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/benchmarks</span><span class="rp-cluster__meta">6 pages, average 82</span></th></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/consumer-apps</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/crm</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/cybersecurity</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/devtools</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/dtc-brands</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks/hospitality</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          </tbody>
+          <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/tools</span><span class="rp-cluster__meta">2 pages, average 87, no failing checks</span></th></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/tools/llms-txt-checker</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/tools/schema-generator</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          </tbody>
+          <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/research</span><span class="rp-cluster__meta">1 page, average 76</span></th></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/research/case-study-agaone</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          </tbody>
+          <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/benchmarks</span><span class="rp-cluster__meta">1 page, average 77</span></th></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/benchmarks</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          </tbody>
+          <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/research</span><span class="rp-cluster__meta">1 page, average 77</span></th></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/research</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          </tbody>
+          <tbody class="rp-cluster"><tr class="rp-cluster__head"><th scope="rowgroup" colspan="13"><span class="rp-cluster__name">/tools</span><span class="rp-cluster__meta">1 page, average 77</span></th></tr>
+          <tr class="rp-matrix__row"><th scope="row"><span >/tools</span></th><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--fail" data-cell="fail"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td><td><span class="rp-cell rp-cell--pass" data-cell="pass"></span></td></tr>
+          </tbody>
+          </table></div>
+          </div>
+          </div></div>
+          <figcaption class="pro-shot__cap">Sample, answerable-app.vercel.app, October 4, 2026. Which pages fail which checks. The top of the matrix.</figcaption>
+          </figure>
+        </div>
+        <div class="pro-row">
+          <div class="pro-row__text">
+            <span class="pro-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span>
+            <h3 class="pro-row__title">From the worst page to its fix in two clicks.</h3>
+            <p class="pro-row__body">Pages are listed worst first. Select one to see the checks it fails, then open its copy-paste fix. Search by path, or filter by a failing check or a section.</p>
+          </div>
+          <figure class="pro-shot pro-shot--pages">
+          <div role="img" aria-label="Pages explorer from the sample crawl. The list shows pages worst first, starting with /research/case-study-agaone at 76 out of 100. The pane beside it shows the checks that page fails and an open copy-paste fix."><div class="pro-shot__view" inert>
+          <div class="rp-report rp-js">
+          <div class="rp-pages"><ul class="rp-list">
+          <li class="rp-item is-selected is-open"><span class="rp-item__row"><span class="rp-item__path">/research/case-study-agaone</span><span class="rp-item__score" data-fig="page-score">76</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
+          <div class="rp-detail"><p class="rp-detail__top"><span class="rp-detail__score"><strong>76</strong><span>/100</span></span><span class="rp-detail__open">Open this page<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M17 13.5V18a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h4.5"/></svg></span></p>
+          <ul class="rp-fails">
+          <li><strong>Page title</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Write a descriptive 10–70 character title</span> <span class="rp-fails__why">Answer engines frequently use the title as your source label.</span></li>
+          <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+          </ul>
+          <details class="rp-snippet" open><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+          {
+            &quot;@context&quot;: &quot;https://schema.org&quot;,
+            &quot;@graph&quot;: [
+              {
+                &quot;@type&quot;: &quot;Organization&quot;,
+                &quot;name&quot;: &quot;[Your company name]&quot;,
+                &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+                &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
+              },
+              {
+                &quot;@type&quot;: &quot;WebSite&quot;,
+                &quot;name&quot;: &quot;Answerable. — AI Visibility Scanner &amp; GEO Playbooks&quot;,
+                &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+                &quot;inLanguage&quot;: &quot;en&quot;
+              }
+            ]
+          }
+          &lt;/script&gt;</pre></details>
+          </div>
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/benchmarks</span><span class="rp-item__score" data-fig="page-score">77</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
+          
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/research</span><span class="rp-item__score" data-fig="page-score">77</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
+          
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/tools</span><span class="rp-item__score" data-fig="page-score">77</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
+          
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/research/llms-txt-adoption-2026</span><span class="rp-item__score" data-fig="page-score">79</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
+          
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/about</span><span class="rp-item__score" data-fig="page-score">82</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
+          
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/benchmarks/consumer-apps</span><span class="rp-item__score" data-fig="page-score">82</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
+          
+          </li>
+          <li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/benchmarks/crm</span><span class="rp-item__score" data-fig="page-score">82</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
+          
+          </li>
+          </ul>
+          <div class="rp-pane"><p class="rp-pane__path">/research/case-study-agaone</p><div class="rp-detail"><p class="rp-detail__top"><span class="rp-detail__score"><strong>76</strong><span>/100</span></span><span class="rp-detail__open">Open this page<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M17 13.5V18a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h4.5"/></svg></span></p>
+          <ul class="rp-fails">
+          <li><strong>Page title</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Write a descriptive 10–70 character title</span> <span class="rp-fails__why">Answer engines frequently use the title as your source label.</span></li>
+          <li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
+          </ul>
+          <details class="rp-snippet" open><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+          {
+            &quot;@context&quot;: &quot;https://schema.org&quot;,
+            &quot;@graph&quot;: [
+              {
+                &quot;@type&quot;: &quot;Organization&quot;,
+                &quot;name&quot;: &quot;[Your company name]&quot;,
+                &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+                &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
+              },
+              {
+                &quot;@type&quot;: &quot;WebSite&quot;,
+                &quot;name&quot;: &quot;Answerable. — AI Visibility Scanner &amp; GEO Playbooks&quot;,
+                &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+                &quot;inLanguage&quot;: &quot;en&quot;
+              }
+            ]
+          }
+          &lt;/script&gt;</pre></details>
+          </div></div></div>
+          </div>
+          </div></div>
+          <figcaption class="pro-shot__cap">Sample, answerable-app.vercel.app, October 4, 2026. Pages, worst first, and the page selected.</figcaption>
+          </figure>
+        </div>
+        <div class="pro-row pro-row--flip">
+          <div class="pro-row__text">
+            <span class="pro-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span>
+            <h3 class="pro-row__title">Every fix once, with the pages it applies to.</h3>
+            <p class="pro-row__body">Identical snippets appear once, with the pages they apply to and a Copy button. JSON-LD uses placeholders where a fact is unknown: fill them in, don't publish a placeholder.</p>
+          </div>
+          <figure class="pro-shot pro-shot--fixes">
+          <div role="img" aria-label="Fixes tab from the sample crawl. Each distinct snippet appears once with the number of pages it applies to and a Copy button. The first is robots.txt, applying to 28 pages."><div class="pro-shot__view" inert>
+          <div class="rp-report rp-js">
+          <div>
+          <article class="rp-fix"><div class="rp-fix__head"><h3 class="rp-fix__title">robots.txt</h3><p class="rp-fix__applies">Applies to <strong data-fig="fix-pages">28</strong> pages</p></div>
+          <pre class="rp-code"># Allows the AI crawlers that are limited or blocked today
+          User-agent: GPTBot
+          Allow: /
+          
+          User-agent: ChatGPT-User
+          Allow: /
+          
+          User-agent: OAI-SearchBot
+          Allow: /
+          
+          User-agent: ClaudeBot
+          Allow: /
+          
+          User-agent: anthropic-ai
+          Allow: /
+          
+          User-agent: PerplexityBot
+          Allow: /
+          
+          User-agent: Perplexity-User
+          Allow: /
+          
+          User-agent: Google-Extended
+          Allow: /
+          
+          User-agent: CCBot
+          Allow: /
+          
+          User-agent: Bytespider
+          Allow: /</pre>
+          <details class="rp-subdetails"><summary>Pages this applies to</summary></details></article>
+          <article class="rp-fix"><div class="rp-fix__head"><h3 class="rp-fix__title">Article JSON-LD</h3><p class="rp-fix__applies">Applies to <strong data-fig="fix-pages">1</strong> page</p></div>
+          <pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+          {
+            &quot;@context&quot;: &quot;https://schema.org&quot;,
+            &quot;@type&quot;: &quot;Article&quot;,
+            &quot;headline&quot;: &quot;Answerable. — About Andaç Üzel&quot;,
+            &quot;description&quot;: &quot;Andaç Üzel built Answerable after ten years in content editing and content marketing. Why the free version covers most of what you need, and what Pro is for.&quot;,
+            &quot;inLanguage&quot;: &quot;en&quot;,
+            &quot;author&quot;: {
+              &quot;@type&quot;: &quot;Organization&quot;,
+              &quot;name&quot;: &quot;[Your company name]&quot;
+            },
+            &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
+            &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;
+          }
+          &lt;/script&gt;</pre>
+          <details class="rp-subdetails"><summary>Pages this applies to</summary></details></article>
+          </div>
+          </div>
+          </div></div>
+          <figcaption class="pro-shot__cap">Sample, answerable-app.vercel.app, October 4, 2026. The first two fixes.</figcaption>
+          </figure>
+        </div>
+        <div class="pro-row">
+          <div class="pro-row__text">
+            <span class="pro-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5"/><path d="M7 17H4.5v-6.5h15V17H17"/><path d="M7 14h10v6H7z"/></svg></span>
+            <h3 class="pro-row__title">Hand it to your developer as a PDF.</h3>
+            <p class="pro-row__body">Print or save as PDF opens every section and drops the controls, so the printout is the whole report: summary, pages, checks and fixes.</p>
+          </div>
+          <figure class="pro-shot pro-shot--print">
+          <div role="img" aria-label="The top bar of the sample dashboard: the domain answerable-app.vercel.app, the crawl date October 4, 2026 and a Print or save as PDF button."><div class="pro-shot__view" inert>
+          <div class="rp-report rp-js">
+          <header class="rp-top"><div class="rp-top__inner"><span class="logo rp-top__logo"><span class="logo__mark">Answerable<span class="logo__dot">.</span></span></span><div class="rp-top__meta"><span class="rp-top__domain">answerable-app.vercel.app</span><span class="rp-top__date">Crawled October 4, 2026</span><span class="rp-top__label">Sample report</span></div><button type="button" class="rp-top__print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5"/><path d="M7 17H4.5v-6.5h15V17H17"/><path d="M7 14h10v6H7z"/></svg>Print or save as PDF</button></div></header>
+          </div>
+          </div></div>
+          <figcaption class="pro-shot__cap">Sample, answerable-app.vercel.app, October 4, 2026. The top bar, with the print button.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Free versus Pro ---------- -->
+    <section class="verticals" aria-labelledby="vs-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Free vs. Pro</p>
+          <h2 id="vs-heading" class="section-title">Free reads a page. Pro reads the site.</h2>
           <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>
         </div>
-        <div class="results-content__body">
-          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>The full scan, every time you run it</span></div>
-          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>All 16 checks and their exact point values</span></div>
-          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>The AI crawler access matrix, 10 crawlers deep</span></div>
-          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>Copy-paste fixes for schema and robots.txt</span></div>
-          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>Every category playbook: B2B SaaS, consumer brands, local professionals</span></div>
-          <div class="check-row is-ok"><span class="check-row__mark">✓</span><span>Both free tools: the robots.txt generator and the llms.txt checker</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------- What Pro adds ---------- -->
-    <section class="verticals" aria-labelledby="adds-heading">
-      <div class="section__inner">
-        <div class="section-head">
-          <p class="kicker">What Pro adds</p>
-          <h2 id="adds-heading" class="section-title">Context the free scan can't give you.</h2>
-        </div>
-        <div class="card-grid">
-          <div class="card card--static">
-            <span class="card__code">PRO / 01</span>
-            <span class="card__name">Vertical interpretation</span>
-            <span class="card__desc">Your scan read through your category's playbook, not a generic SEO checklist.</span>
-          </div>
-          <div class="card card--static">
-            <span class="card__code">PRO / 02</span>
-            <span class="card__name">Category benchmark</span>
-            <span class="card__desc">Your score placed against your category's average, not a one-size-fits-all number.</span>
-          </div>
-          <div class="card card--static">
-            <span class="card__code">PRO / 03</span>
-            <span class="card__name">Competitor comparison</span>
-            <span class="card__desc">Named competitors in your category, and whether they're currently cited where you aren't.</span>
-          </div>
-          <div class="card card--static">
-            <span class="card__code">PRO / 04</span>
-            <span class="card__name">Prioritized fix order</span>
-            <span class="card__desc">Your specific findings, ranked by what to fix first.</span>
-          </div>
-          <div class="card card--static">
-            <span class="card__code">PRO / 05</span>
-            <span class="card__name">Exportable report</span>
-            <span class="card__desc">Built to forward to your team, your client, or your boss.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------- Example report ---------- -->
-    <section class="verticals" aria-labelledby="example-heading">
-      <div class="section__inner">
-        <div class="section-head">
-          <p class="kicker">Example report</p>
-          <h2 id="example-heading" class="section-title">What a Pro report looks like.</h2>
-          <p class="section-sub">Placeholder data below, for a fictional domain. Not a real scan.</p>
-          <p class="section-sub"><a href="/sample-report">See a real report. No signup.</a></p>
-        </div>
-
-        <div class="report-panel" aria-label="Example Pro report with placeholder data">
-          <div class="scan-report__grid">
-            <div>
-              <div class="score-entry">
-                <div class="score-entry__value">84<small>/100</small></div>
-                <div class="score-entry__meta">yourbrand.example · example report</div>
-                <div class="score-entry__meta">That's 6 points above the B2B SaaS average.</div>
-              </div>
-              <div class="score-bars">
-                <div class="score-bar"><span>Discoverability</span><div class="score-bar__track"><div class="score-bar__fill" style="width: 95%"></div></div><span class="score-bar__val">38/40</span></div>
-                <div class="score-bar"><span>Technical</span><div class="score-bar__track"><div class="score-bar__fill" style="width: 80%"></div></div><span class="score-bar__val">16/20</span></div>
-                <div class="score-bar"><span>Content &amp; trust</span><div class="score-bar__track"><div class="score-bar__fill" style="width: 75%"></div></div><span class="score-bar__val">30/40</span></div>
-              </div>
-            </div>
-
-            <div class="bot-console" aria-label="Example competitor comparison">
-              <div class="bot-console__label">COMPETITOR COMPARISON — EXAMPLE</div>
-              <div class="answer-mock__response">
-                <ol>
-                  <li><span class="answer-mock__brand">Acme Software</span><span class="cited-badge">Cited · G2</span></li>
-                  <li><span class="answer-mock__brand">Yourbrand.example (you)</span><span class="cited-badge">Not cited</span></li>
-                  <li><span class="answer-mock__brand">Widgetly</span><span class="cited-badge">Cited · Capterra</span></li>
-                  <li><span class="answer-mock__brand">Northwind Tools</span><span class="cited-badge">Cited · Docs</span></li>
-                </ol>
-              </div>
-            </div>
-          </div>
-
-          <div class="scan-actions">
-            <h3 class="scan-actions__title">What to fix first</h3>
-            <ul class="scan-actions__list">
-              <li class="action-item action-item--high">
-                <div class="action-item__top">
-                  <span class="action-item__label"><span class="action-item__tag">High impact</span>Add Organization schema</span>
-                  <span class="action-item__gain">+8 pts</span>
-                </div>
-                <p class="action-item__why">Acme Software and Widgetly both declare Organization schema. It's the base layer of trust models use to decide who to cite.</p>
-              </li>
-              <li class="action-item action-item--mid">
-                <div class="action-item__top">
-                  <span class="action-item__label"><span class="action-item__tag">Medium impact</span>Add author and about signals</span>
-                  <span class="action-item__gain">+5 pts</span>
-                </div>
-                <p class="action-item__why">Northwind Tools ranks above you on this signal alone. Ownership and credibility are cheap to add and heavily weighted.</p>
-              </li>
+        <div class="pro-cols">
+          <div class="pro-col">
+            <p class="kicker">Free</p>
+            <h3 class="pro-col__title">Always free</h3>
+            <ul class="pro-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>One page, scanned on demand</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>All 16 checks, with their point values</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>The AI crawler matrix, 10 crawlers deep</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Copy-paste fixes for schema and robots.txt</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><a href="/compare">Comparing two sites</a></span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Every <a href="/playbooks">playbook</a></span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>All the <a href="/tools">tools</a></span></li>
             </ul>
+            <p class="pro-col__foot"><a href="/" class="btn btn--ghost">Scan your site free</a></p>
+          </div>
+          <div class="pro-col">
+            <p class="kicker">Pro</p>
+            <h3 class="pro-col__title">The whole site</h3>
+            <ul class="pro-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Up to <span data-fig="pro-cap2">50</span> pages in one crawl</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>The whole-site score beside the homepage score</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Pages ranked, worst first</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>The checks that pass on the homepage and fail elsewhere</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Every fix once, with the pages it applies to</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>A printable report</span></li>
+            </ul>
+            <p class="pro-col__foot pro-col__foot--note">One payment. Full Pro report for your domain. <a href="#" class="btn btn--ghost">In preparation</a></p>
           </div>
         </div>
       </div>
@@ -272,28 +476,54 @@
     <section aria-label="Citation tracking">
       <div class="section__inner">
         <div class="scan-bridge">
-          <p class="scan-bridge__text">Want to know whether a model names you? Citation tracking is a separate report we run, in early access.</p>
+          <p class="scan-bridge__text">Want to know whether a model names you? Citation tracking is a separate report we run for you, with one model, in early access.</p>
           <a href="/citation-tracking" class="btn btn--ghost">See citation tracking</a>
         </div>
       </div>
     </section>
 
-    <!-- ---------- Purchase ---------- -->
-    <section aria-label="Purchase">
+    <!-- ---------- Closing band ---------- -->
+    <section class="pro-band" aria-labelledby="close-heading">
       <div class="section__inner">
-        <div class="scan-bridge">
-          <p class="scan-bridge__text">One payment. Full Pro report for your domain.</p>
-          <a href="#" class="btn btn--ghost">In preparation</a>
-        </div>
+        <p class="kicker kicker--on-navy">Pro</p>
+        <h2 id="close-heading">Read a real report before you decide.</h2>
+        <p class="pro-band__lede">One crawl of our own site, 28 pages, unedited. No signup.</p>
+        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="mailto:andacuz@gmail.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A" class="btn btn--ghost-on-navy">Get early access</a></div>
       </div>
     </section>
 
-    <!-- ---------- Scan reminder ---------- -->
-    <section aria-label="Scan reminder">
+    <!-- ---------- FAQ ---------- -->
+    <section class="verticals pro-faq" aria-labelledby="faq-heading">
       <div class="section__inner">
-        <div class="scan-bridge">
-          <p class="scan-bridge__text">Haven't run the free scan yet? Start there.</p>
-          <a href="/" class="btn btn--primary">Scan your site free</a>
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="faq-heading" class="section-title">Pro, briefly.</h2>
+        </div>
+        <div class="ct-faq">
+          <details>
+            <summary>What do I get with Answerable Pro?</summary>
+            <p>A crawl of up to 50 pages of your site, and a report built from it: an executive summary, the whole-site score beside the homepage score, a heat matrix of which pages fail which checks, a page-by-page explorer, every fix once with the pages it applies to, and a printable version.</p>
+          </details>
+          <details>
+            <summary>How is this different from the free scan?</summary>
+            <p>The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to 50 pages and shows what the homepage hides: the whole-site score beside the homepage score, the checks that pass on the homepage and fail elsewhere, and every fix once with the pages it applies to. Comparing two sites is free at <a href="/compare">/compare</a>.</p>
+          </details>
+          <details>
+            <summary>What is the sample report?</summary>
+            <p>A real crawl of our own site, answerable-app.vercel.app, run on October 4, 2026: 28 pages. Nothing in it was edited or improved, and our own pages still fail some checks. The report says which. <a href="/sample-report">Open it.</a></p>
+          </details>
+          <details>
+            <summary>Does it measure whether AI names me?</summary>
+            <p>No. Pro measures readiness: whether crawlers can reach and read your pages. It does not show whether a model names your brand. <a href="/citation-tracking">Citation tracking</a>, a separate report we run for you, asks a model the questions your customers ask and shows when your name comes up.</p>
+          </details>
+          <details>
+            <summary>Is it really a one-time payment?</summary>
+            <p>Yes. Answerable Pro is a single one-time purchase. There is no subscription and no recurring billing.</p>
+          </details>
+          <details>
+            <summary>Do I need an account?</summary>
+            <p>No. There is no account or login. Your report is generated and delivered right after payment.</p>
+          </details>
         </div>
       </div>
     </section>
@@ -301,14 +531,14 @@
     <footer class="site-footer" aria-label="Footer">
       <div class="section__inner">
         <nav class="site-nav footer-links" aria-label="More">
-          <a href="/playbooks" class="site-nav__link">Playbooks</a>
-          <a href="/methodology" class="site-nav__link">Methodology</a>
-          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
-          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
-          <a href="/privacy" class="site-nav__link">Privacy</a>
-          <a href="/terms" class="site-nav__link">Terms</a>
-          <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
-        </nav>
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+                </nav>
         <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
       </div>
     </footer>

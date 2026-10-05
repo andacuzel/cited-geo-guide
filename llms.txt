@@ -29,4 +29,4 @@
 ## About
 
 - [About](https://answerable-app.vercel.app/about): who built Answerable and why.
-- [Pro](https://answerable-app.vercel.app/pro): interpretation of a score for a specific category, competitor comparison and what to fix first.
+- [Pro](https://answerable-app.vercel.app/pro): a full-site crawl, with the whole-site score beside the homepage score, pages ranked, every fix once and a printable report. A real sample of our own site is at /sample-report.
