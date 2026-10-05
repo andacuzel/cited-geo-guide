@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Answerable. — Changelog: What Changed on the Site</title>
+  <meta name="description" content="Every change to the Answerable site, scanner and MCP server that a visitor can see, newest first, with the commits behind it. Scoring changes are in the methodology." />
+  <meta name="author" content="Answerable." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://answerable-app.vercel.app/changelog" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Answerable. — Changelog: What Changed on the Site" />
+  <meta property="og:description" content="Every change to the Answerable site, scanner and MCP server that a visitor can see, newest first, with the commits behind it. Scoring changes are in the methodology." />
+  <meta property="og:url" content="https://answerable-app.vercel.app/changelog" />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta property="og:site_name" content="Answerable." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Answerable. — Changelog: What Changed on the Site" />
+  <meta name="twitter:description" content="Every change to the Answerable site, scanner and MCP server that a visitor can see, newest first, with the commits behind it. Scoring changes are in the methodology." />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=55" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Answerable changelog",
+    "description": "Every change to the Answerable site, scanner and MCP server that a visitor can see, newest first, with the commits behind it. Scoring changes are in the methodology.",
+    "url": "https://answerable-app.vercel.app/changelog"
+  }
+  </script>
+  <!-- SITE-SCHEMA:START -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://answerable-app.vercel.app/#org",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
+        "founder": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://answerable-app.vercel.app/#website",
+        "name": "Answerable.",
+        "url": "https://answerable-app.vercel.app/",
+        "publisher": {
+          "@id": "https://answerable-app.vercel.app/#org"
+        },
+        "author": {
+          "@id": "https://answerable-app.vercel.app/about#person"
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:END -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
+        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section aria-labelledby="hero-heading">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Changelog</p>
+            <h1 id="hero-heading" class="page-banner__title">What changed, and when.</h1>
+            <p class="page-banner__desc">Pages, tools, checks, research and MCP tools that a visitor can see, newest first. Each entry lists the commits behind it.</p>
+          </div>
+          <span class="page-banner__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-labelledby="log-heading">
+      <div class="section__inner">
+        <div class="doc-section">
+          <h2 id="log-heading" class="doc-section__heading">29 changes</h2>
+          <p>Entries are drawn from the project's git history and cover only what a visitor or an MCP user can see. Changes to how the score is calculated are also recorded in the <a href="/methodology#changelog-heading">methodology changelog</a>.</p>
+        </div>
+        <ol class="changelog-list cl-list">
+          <li><span class="n">2026-10-05</span><span>Rebuilt the Pro page and the homepage Pro band around the full-site report and a citation run. <span class="cl-refs"><code>7fa064a</code> <code>0785ea6</code> <code>05c4e83</code> <code>38a0362</code></span></span></li>
+          <li><span class="n">2026-10-05</span><span>Added get_methodology, get_research and get_sample_report, a playbook list and three prompts to the MCP server, and limited live-fetching tools per domain. <span class="cl-refs"><code>b9c43ef</code> <code>2a34670</code></span></span></li>
+          <li><span class="n">2026-10-04</span><span>Published the sample report, a real crawl of our own site, and the results dashboard. <span class="cl-refs"><code>47fc641</code> <code>6f05ee1</code></span></span></li>
+          <li><span class="n">2026-10-04</span><span>Rebuilt the report dashboard with an executive summary, a heat matrix, a pages explorer, fixes and a Citations tab. <span class="cl-refs"><code>31c16d3</code> <code>6064c11</code> <code>c421b82</code> <code>d6c0791</code></span></span></li>
+          <li><span class="n">2026-10-04</span><span>Added Organization and WebSite structured data and a Contact link to our own pages, then crawled our own site again: the whole-site score went from 69 to 83. <span class="cl-refs"><code>65bd2d4</code> <code>cd7dfe4</code> <code>d7aa922</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Added benchmark pages for the six categories. <span class="cl-refs"><code>9c32e39</code> <code>aa6d90c</code> <code>ea12f66</code> <code>3bb0dba</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Added the compare-two-sites page. <span class="cl-refs"><code>c111441</code> <code>5fd2f5c</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Added get_citation_prompts and get_citation_sample to the MCP server, with question sets for all 14 verticals. <span class="cl-refs"><code>2dcad32</code> <code>3c979ca</code> <code>49d95ee</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Removed the crawler-access rows from the benchmark failure rates and showed blocked, limited and open counts per crawler in get_benchmark. <span class="cl-refs"><code>54b3e03</code> <code>41eb518</code> <code>cece4eb</code> <code>a7646aa</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Fixed how the scanner reads a meta description that contains an apostrophe. Scoring changes are listed in the methodology changelog. <span class="cl-refs"><code>762b81b</code> <code>a4e2c42</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Added the playbooks index page and replaced the Playbooks dropdown with a link. <span class="cl-refs"><code>426a505</code> <code>6669302</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Rebuilt the agentic commerce and citation tracking pages. <span class="cl-refs"><code>664dc6a</code> <code>c561596</code></span></span></li>
+          <li><span class="n">2026-10-03</span><span>Added an llms.txt file to the site. <span class="cl-refs"><code>3ba85d6</code></span></span></li>
+          <li><span class="n">2026-10-02</span><span>Fixed how the scanner reads encoded characters in a page title and meta description, and corrected the benchmark data for it. Scoring changes are listed in the methodology changelog. <span class="cl-refs"><code>4f32ecb</code> <code>ca305ad</code> <code>b3b500b</code></span></span></li>
+          <li><span class="n">2026-10-02</span><span>Made the MCP server follow the 2026-07-28 specification and kept compatibility with earlier clients. <span class="cl-refs"><code>016518a</code> <code>246a5eb</code> <code>f3c65b8</code> <code>05a4e1c</code></span></span></li>
+          <li><span class="n">2026-10-02</span><span>Added the llms.txt checker and the schema generator as tool pages. <span class="cl-refs"><code>266f24d</code> <code>ce55294</code></span></span></li>
+          <li><span class="n">2026-10-02</span><span>Added agentic-commerce checks to the scan, scored separately from the 100, and documented them. <span class="cl-refs"><code>9f57782</code> <code>3f49570</code> <code>eb5b8b7</code></span></span></li>
+          <li><span class="n">2026-10-02</span><span>Added the citation tracking page and the homepage teaser, built from an anonymised sample run. <span class="cl-refs"><code>dc72549</code> <code>95d6fbf</code></span></span></li>
+          <li><span class="n">2026-10-01</span><span>Added the MCP server, with tools for scanning, fixes and playbooks, and its documentation page. <span class="cl-refs"><code>ffe931a</code> <code>dbbd86f</code></span></span></li>
+          <li><span class="n">2026-08-03</span><span>Published the first case study, AgaOne Commodities. <span class="cl-refs"><code>0c44600</code> <code>766df6d</code> <code>ae09528</code></span></span></li>
+          <li><span class="n">2026-07-31</span><span>Added per-IP rate limiting to the scan and aggregate counts of AI crawler visits to our own site. <span class="cl-refs"><code>7ce5a69</code> <code>7457481</code></span></span></li>
+          <li><span class="n">2026-07-30</span><span>Published the first research report, on who controls a brand's AI representation, from 64 scanned sites. <span class="cl-refs"><code>7e25d42</code></span></span></li>
+          <li><span class="n">2026-07-30</span><span>Added shareable scan URLs and a benchmark strip to the homepage, and built the Pro page. <span class="cl-refs"><code>9d9e949</code> <code>0dddc92</code></span></span></li>
+          <li><span class="n">2026-07-30</span><span>Added the privacy and terms pages and a 404 page. <span class="cl-refs"><code>8124ff3</code></span></span></li>
+          <li><span class="n">2026-07-29</span><span>Rebranded the site from Cited to Answerable. <span class="cl-refs"><code>48bea6a</code></span></span></li>
+          <li><span class="n">2026-07-29</span><span>Added three audience tracks, B2B SaaS, consumer and e-commerce brands, and local and independent professionals, each with its own playbook index. <span class="cl-refs"><code>9df1d1e</code> <code>eb7b74a</code> <code>f882e5d</code></span></span></li>
+          <li><span class="n">2026-07-29</span><span>Added llms.txt detection to the scan as a new check, bringing it to 16 checks. <span class="cl-refs"><code>8800316</code> <code>4f7ed51</code></span></span></li>
+          <li><span class="n">2026-07-29</span><span>Added copy-paste JSON-LD fixes for failing schema checks, a robots.txt fix for blocked crawlers, and a robots.txt generator page for AI crawlers. <span class="cl-refs"><code>c289691</code> <code>b0d5519</code></span></span></li>
+          <li><span class="n">2026-07-29</span><span>Added the tools directory, the About and Methodology pages, a sitemap and a robots.txt. <span class="cl-refs"><code>957c6b8</code> <code>222fffc</code></span></span></li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="site-footer" aria-label="Footer">
+      <div class="section__inner">
+        <nav class="site-nav footer-links" aria-label="More">
+                  <a href="/playbooks" class="site-nav__link">Playbooks</a>
+                  <a href="/methodology" class="site-nav__link">Methodology</a>
+                  <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
+                  <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+                  <a href="/trust" class="site-nav__link">Trust</a>
+                  <a href="/changelog" class="site-nav__link">Changelog</a>
+                  <a href="/privacy" class="site-nav__link">Privacy</a>
+                  <a href="/terms" class="site-nav__link">Terms</a>
+                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+                </nav>
+        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="nav.js?v=2"></script>
+</body>
+</html>

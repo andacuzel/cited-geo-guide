@@ -1,0 +1,248 @@
+{
+  "entries": [
+    {
+      "date": "2026-07-29",
+      "text": "Rebranded the site from Cited to Answerable.",
+      "refs": [
+        "48bea6a"
+      ]
+    },
+    {
+      "date": "2026-07-29",
+      "text": "Added three audience tracks, B2B SaaS, consumer and e-commerce brands, and local and independent professionals, each with its own playbook index.",
+      "refs": [
+        "9df1d1e",
+        "eb7b74a",
+        "f882e5d"
+      ]
+    },
+    {
+      "date": "2026-07-29",
+      "text": "Added llms.txt detection to the scan as a new check, bringing it to 16 checks.",
+      "refs": [
+        "8800316",
+        "4f7ed51"
+      ]
+    },
+    {
+      "date": "2026-07-29",
+      "text": "Added copy-paste JSON-LD fixes for failing schema checks, a robots.txt fix for blocked crawlers, and a robots.txt generator page for AI crawlers.",
+      "refs": [
+        "c289691",
+        "b0d5519"
+      ]
+    },
+    {
+      "date": "2026-07-29",
+      "text": "Added the tools directory, the About and Methodology pages, a sitemap and a robots.txt.",
+      "refs": [
+        "957c6b8",
+        "222fffc"
+      ]
+    },
+    {
+      "date": "2026-07-30",
+      "text": "Published the first research report, on who controls a brand's AI representation, from 64 scanned sites.",
+      "refs": [
+        "7e25d42"
+      ]
+    },
+    {
+      "date": "2026-07-30",
+      "text": "Added shareable scan URLs and a benchmark strip to the homepage, and built the Pro page.",
+      "refs": [
+        "9d9e949",
+        "0dddc92"
+      ]
+    },
+    {
+      "date": "2026-07-30",
+      "text": "Added the privacy and terms pages and a 404 page.",
+      "refs": [
+        "8124ff3"
+      ]
+    },
+    {
+      "date": "2026-07-31",
+      "text": "Added per-IP rate limiting to the scan and aggregate counts of AI crawler visits to our own site.",
+      "refs": [
+        "7ce5a69",
+        "7457481"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "text": "Published the first case study, AgaOne Commodities.",
+      "refs": [
+        "0c44600",
+        "766df6d",
+        "ae09528"
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "text": "Added the MCP server, with tools for scanning, fixes and playbooks, and its documentation page.",
+      "refs": [
+        "ffe931a",
+        "dbbd86f"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "text": "Fixed how the scanner reads encoded characters in a page title and meta description, and corrected the benchmark data for it. Scoring changes are listed in the methodology changelog.",
+      "refs": [
+        "4f32ecb",
+        "ca305ad",
+        "b3b500b"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "text": "Made the MCP server follow the 2026-07-28 specification and kept compatibility with earlier clients.",
+      "refs": [
+        "016518a",
+        "246a5eb",
+        "f3c65b8",
+        "05a4e1c"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "text": "Added the llms.txt checker and the schema generator as tool pages.",
+      "refs": [
+        "266f24d",
+        "ce55294"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "text": "Added agentic-commerce checks to the scan, scored separately from the 100, and documented them.",
+      "refs": [
+        "9f57782",
+        "3f49570",
+        "eb5b8b7"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "text": "Added the citation tracking page and the homepage teaser, built from an anonymised sample run.",
+      "refs": [
+        "dc72549",
+        "95d6fbf"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Added benchmark pages for the six categories.",
+      "refs": [
+        "9c32e39",
+        "aa6d90c",
+        "ea12f66",
+        "3bb0dba"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Added the compare-two-sites page.",
+      "refs": [
+        "c111441",
+        "5fd2f5c"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Added get_citation_prompts and get_citation_sample to the MCP server, with question sets for all 14 verticals.",
+      "refs": [
+        "2dcad32",
+        "3c979ca",
+        "49d95ee"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Removed the crawler-access rows from the benchmark failure rates and showed blocked, limited and open counts per crawler in get_benchmark.",
+      "refs": [
+        "54b3e03",
+        "41eb518",
+        "cece4eb",
+        "a7646aa"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Fixed how the scanner reads a meta description that contains an apostrophe. Scoring changes are listed in the methodology changelog.",
+      "refs": [
+        "762b81b",
+        "a4e2c42"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Added the playbooks index page and replaced the Playbooks dropdown with a link.",
+      "refs": [
+        "426a505",
+        "6669302"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Rebuilt the agentic commerce and citation tracking pages.",
+      "refs": [
+        "664dc6a",
+        "c561596"
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "text": "Added an llms.txt file to the site.",
+      "refs": [
+        "3ba85d6"
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "text": "Published the sample report, a real crawl of our own site, and the results dashboard.",
+      "refs": [
+        "47fc641",
+        "6f05ee1"
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "text": "Rebuilt the report dashboard with an executive summary, a heat matrix, a pages explorer, fixes and a Citations tab.",
+      "refs": [
+        "31c16d3",
+        "6064c11",
+        "c421b82",
+        "d6c0791"
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "text": "Added Organization and WebSite structured data and a Contact link to our own pages, then crawled our own site again: the whole-site score went from 69 to 83.",
+      "refs": [
+        "65bd2d4",
+        "cd7dfe4",
+        "d7aa922"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "text": "Rebuilt the Pro page and the homepage Pro band around the full-site report and a citation run.",
+      "refs": [
+        "7fa064a",
+        "0785ea6",
+        "05c4e83",
+        "38a0362"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "text": "Added get_methodology, get_research and get_sample_report, a playbook list and three prompts to the MCP server, and limited live-fetching tools per domain.",
+      "refs": [
+        "b9c43ef",
+        "2a34670"
+      ]
+    }
+  ]
+}
