@@ -169,21 +169,30 @@ function frame(name, F, extra, opts) {
 
 /* ---------- the homepage band ---------- */
 
-// The texture: a field of page glyphs in a lighter navy zone, drawn by an inline SVG <pattern> (no gradient).
-// Glyph 44x56, pitch 64x80, alternate rows shifted half a pitch. Highlights sit at fixed coordinates, nothing
-// is random. Left-anchored coordinates are in the zone's own space (x from its left edge, which is the crop's
-// left edge); right-anchored ones are offsets from its right edge, always a whole number of pitches so they
-// land on the same grid (the zone is rounded up to a multiple of 64px in the stylesheet).
+// The texture: a field of page glyphs over the whole band, two layers that are children of the full-bleed
+// band element (nothing inside the 1180px container caps their width). Glyph 44x56, pitch 64x80, alternate
+// rows half a pitch over, drawn by an inline SVG <pattern> in userSpaceOnUse units.
+//   - the faint layer covers the band: outlines only, at LEFT_FIELD_OPACITY, no fills;
+//   - the zone (--navy-900, full intensity) runs from the right column's left edge to the band's right edge.
+// Both patterns are anchored to the band's right edge (x="100%"), so glyph columns line up across the zone's
+// hard edge and the highlights, which live in the zone only, are positioned as offsets from the right edge
+// (dx, a whole number of pitches plus the glyph's phase), from the top edge (y) or from the bottom edge (dy).
+// Nothing is random and nothing is measured from the left.
 const GW = 44, GH = 56, PX = 64, PY = 80;
-// [x, y, kind]; kind: corner (gold square on the glyph), gold (solid gold, navy lines), navy (filled --navy-800)
-const HL_WIDE = [[522, 12, 'corner'], [586, 12, 'corner'], [650, 12, 'corner'], [682, 92, 'corner'], [650, 172, 'corner'], [42, 572, 'corner'], [10, 652, 'corner'], [74, 652, 'corner'], [170, 572, 'corner'], [202, 652, 'corner'], [234, 572, 'corner'],
-  [618, 92, 'gold'], [106, 572, 'gold'], [138, 652, 'gold'],
-  [714, 12, 'navy'], [746, 92, 'navy'], [586, 172, 'navy'], [298, 572, 'navy'], [266, 652, 'navy']];
-const HL_WIDE_RIGHT = [[-22, 252, 'corner'], [-22, 412, 'navy']];
-const HL_STACK = [[42, 572, 'corner'], [106, 572, 'gold'], [170, 572, 'corner'], [234, 572, 'navy'], [298, 572, 'corner'], [362, 572, 'navy'], [426, 572, 'corner']];
-const HL_STACK_RIGHT = [[-54, 172, 'navy'], [-22, 252, 'corner']];
-const HL_STRIP = [[10, 12, 'corner'], [138, 12, 'gold'], [202, 12, 'navy'], [266, 12, 'corner'], [330, 12, 'corner'], [106, 92, 'corner'], [234, 92, 'navy']];
-const HL_STRIP_RIGHT = [[-54, 12, 'corner']];
+// Outline opacity of the left field. 0.12 keeps every text colour in the left column at 4.5:1 or better
+// (3:1 for the headline) against the brightest pixel the field can put behind it, and the outline at 1.4:1
+// against --navy-950, so it is visible. --check asserts both.
+const LEFT_FIELD_OPACITY = 0.12;
+// [dx or x offset from the right edge, y, kind]; kind: corner (gold square on the glyph), gold (solid gold, navy lines), navy (filled --navy-800)
+// Even rows (y = 12 + 160n) sit at dx = -54 - 64k, odd rows (y = 92 + 160n) at dx = -22 - 64k.
+const TOP_KINDS = ['corner', 'navy', 'corner', 'gold', 'corner', 'navy', 'corner', 'corner'];
+const HL_WIDE_TOP = TOP_KINDS.map((k, i) => [-54 - 64 * i, 12, k]);                       // the top row, above the crop at any width
+const HL_WIDE_SIDE = [[-22, 92, 'corner'], [-86, 92, 'corner'], [-54, 172, 'navy'], [-118, 172, 'corner'], [-22, 252, 'gold'], [-86, 252, 'corner'],
+  [-54, 332, 'corner'], [-118, 332, 'corner'], [-22, 412, 'navy'], [-86, 412, 'corner']];  // right of the crop
+const HL_WIDE_BOTTOM = [[-22, -100, 'navy'], [-86, -100, 'gold'], [-150, -100, 'navy']];  // dy from the bottom: a row peeking out below the crop
+const HL_STACK_BOTTOM = ['corner', 'gold', 'corner', 'navy', 'corner', 'navy', 'corner', 'corner', 'gold', 'corner'].map((k, i) => [-22 - 64 * i, -76, k]);
+const HL_STACK_SIDE = [[-22, 252, 'corner'], [-54, 332, 'navy'], [-22, 412, 'corner']];
+const HL_STRIP_TOP = ['corner', 'navy', 'corner', 'gold', 'corner', 'navy'].map((k, i) => [-54 - 64 * i, 12, k]);
 
 function glyph(x, y) {
   return '<rect class="pro-band-glyph" x="' + (x + 0.75) + '" y="' + (y + 0.75) + '" width="' + (GW - 1.5) + '" height="' + (GH - 1.5) + '" rx="3"/>' +
@@ -198,13 +207,16 @@ function highlight(c) {
     '<rect class="pro-band-hl-ink" x="' + (x + 7) + '" y="' + (y + 9) + '" width="18" height="4" rx="1"/><rect class="pro-band-hl-ink" x="' + (x + 7) + '" y="' + (y + 21) + '" width="30" height="3" rx="1"/><rect class="pro-band-hl-ink" x="' + (x + 7) + '" y="' + (y + 29) + '" width="22" height="3" rx="1"/>';
   return '<rect class="pro-band-hl-navy" x="' + x + '" y="' + y + '" width="' + GW + '" height="' + GH + '" rx="3"/>' + glyph(x, y);
 }
-const group = (name, left, right) => '<g class="pro-band-hl pro-band-hl--' + name + '">' + left.map(highlight).join('') + '<svg x="100%" y="0" width="1" height="1" overflow="visible">' + right.map(highlight).join('') + '</svg></g>';
+const anchored = (originY, list) => '<svg x="100%" y="' + originY + '" width="1" height="1" overflow="visible">' + list.map(highlight).join('') + '</svg>';
+const hlGroup = (name, top, bottom) => '<g class="pro-band-hl pro-band-hl--' + name + '">' + anchored('0', top) + (bottom.length ? anchored('100%', bottom) : '') + '</g>';
 
 function texture() {
   const attrs = ' aria-hidden="true" focusable="false"';
-  return '<div class="pro-band-field" aria-hidden="true"><svg width="100%" height="100%"' + attrs + '><defs><pattern id="pro-band-field" width="' + PX + '" height="' + 2 * PY + '" patternUnits="userSpaceOnUse">' +
-    glyph(10, 12) + glyph(42, 12 + PY) + glyph(-22, 12 + PY) + '</pattern></defs><rect width="100%" height="100%" fill="url(#pro-band-field)"/>' +
-    group('wide', HL_WIDE, HL_WIDE_RIGHT) + group('stack', HL_STACK, HL_STACK_RIGHT) + group('strip', HL_STRIP, HL_STRIP_RIGHT) + '</svg></div>';
+  const faintGlyph = (x, y) => '<rect class="pro-band-faint-glyph" stroke-opacity="' + LEFT_FIELD_OPACITY + '" x="' + (x + 0.75) + '" y="' + (y + 0.75) + '" width="' + (GW - 1.5) + '" height="' + (GH - 1.5) + '" rx="3"/>';
+  const tile = (id, inner) => '<defs><pattern id="' + id + '" x="100%" y="0" width="' + PX + '" height="' + 2 * PY + '" patternUnits="userSpaceOnUse">' + inner + '</pattern></defs><rect width="100%" height="100%" fill="url(#' + id + ')"/>';
+  return '<svg class="pro-band-faint" width="100%" height="100%"' + attrs + '>' + tile('pro-band-faint', faintGlyph(10, 12) + faintGlyph(42, 12 + PY) + faintGlyph(-22, 12 + PY)) + '</svg>\n' +
+    '<div class="pro-band-surface" aria-hidden="true"><svg width="100%" height="100%"' + attrs + '>' + tile('pro-band-field', glyph(10, 12) + glyph(42, 12 + PY) + glyph(-22, 12 + PY)) +
+    hlGroup('wide', HL_WIDE_TOP.concat(HL_WIDE_SIDE), HL_WIDE_BOTTOM) + hlGroup('stack', HL_STACK_SIDE, HL_STACK_BOTTOM) + hlGroup('strip', HL_STRIP_TOP, []) + '</svg></div>';
 }
 
 function band(F) {
@@ -213,6 +225,7 @@ function band(F) {
   const caption = 'Sample: our own site, ' + esc(F.date) + '. From the worst page to its fix.';
   return START + '\n' +
     '      <section class="pro-mkt pro-band-hero" id="pro" aria-labelledby="pro-heading">\n' +
+    '        ' + indent(texture(), '        ') + '\n' +
     '        <div class="section__inner">\n' +
     '          <div class="pro-mkt__grid">\n' +
     '            <div class="pro-mkt__text">\n' +
@@ -224,7 +237,6 @@ function band(F) {
     '              <p class="pro-mkt__price">One-time purchase. No subscription.</p>\n' +
     '            </div>\n' +
     '            <div class="pro-band-stage">\n' +
-    '              ' + indent(texture(), '              ') + '\n' +
     '              ' + indent(frame('band-explorer', F, 'pro-shot--desktop', { caption: caption, plain: true }), '              ') + '\n' +
     '            </div>\n' +
     '          </div>\n' +
@@ -473,11 +485,17 @@ function check() {
   if ((crop.match(/aria-selected="true"/g) || []).length !== 1 || crop.indexOf('aria-selected="true"><svg') === -1 || !/aria-selected="true">(<svg[^>]*>[\s\S]*?<\/svg>)Pages<\/span>/.test(crop)) bad('the band crop must show Pages as the selected tab');
   if (bandHtml.indexOf('<figcaption class="pro-shot__cap">Sample: our own site, ' + want.date + '. From the worst page to its fix.</figcaption>') === -1) bad('the band crop caption is wrong');
   if (!/<ul class="pro-band-list">(<li><svg[^>]*>[\s\S]*?<\/svg><span>[^<]+<\/span><\/li>){3}<\/ul>/.test(bandHtml)) bad('the band needs a <ul> of three icon-and-label items');
-  // The texture: an inline SVG pattern of page glyphs, highlights at fixed coordinates, no gradient function anywhere.
-  if (!/<div class="pro-band-field" aria-hidden="true"><svg[^>]*aria-hidden="true"[\s\S]*?<pattern /.test(bandHtml)) bad('the band texture is not an aria-hidden inline SVG with a <pattern>');
-  const wide = (bandHtml.match(/<g class="pro-band-hl pro-band-hl--wide">[\s\S]*?<\/g>/) || [''])[0];
+  // The texture: two band-level layers, each an aria-hidden inline SVG with a <pattern>; no gradient function anywhere.
+  if (!/<section class="pro-mkt pro-band-hero"[^>]*>\s*<svg class="pro-band-faint"[^>]*aria-hidden="true"[\s\S]*?<pattern [\s\S]*?<\/svg>\s*<div class="pro-band-surface" aria-hidden="true"><svg[^>]*aria-hidden="true"[\s\S]*?<pattern /.test(bandHtml)) bad('the band needs the faint field and the zone as band-level aria-hidden SVGs with a <pattern>, before the content container');
+  const faint = (bandHtml.match(/<svg class="pro-band-faint"[\s\S]*?<\/svg>/) || [''])[0];
+  if (/pro-band-hl|pro-band-glyph-ink|pro-band-hl-gold|pro-band-hl-navy/.test(faint)) bad('the left field must be outlines only, with no gold or navy fills');
+  if (!(faint.match(/class="pro-band-faint-glyph" stroke-opacity="[0-9.]+"/g) || []).length || (faint.match(/stroke-opacity="([0-9.]+)"/g) || []).some((x) => parseFloat(x.replace(/[^0-9.]/g, '')) !== LEFT_FIELD_OPACITY)) bad('the left field does not use LEFT_FIELD_OPACITY');
+  const zone = (bandHtml.match(/<div class="pro-band-surface"[\s\S]*?<\/svg><\/div>/) || [''])[0];
+  if (/pro-band-hl/.test(bandHtml.replace(zone, ''))) bad('highlighted glyphs appear outside the right zone');
+  const wide = (zone.match(/<g class="pro-band-hl pro-band-hl--wide">[\s\S]*?<\/g>/) || [''])[0];
   const n = (cls) => (wide.match(new RegExp('class="' + cls + '"', 'g')) || []).length;
   if (n('pro-band-hl-corner') !== 12 || n('pro-band-hl-gold') !== 3 || n('pro-band-hl-navy') !== 6) bad('the wide field needs 12 corner glyphs, 3 gold glyphs and 6 navy glyphs; it has ' + n('pro-band-hl-corner') + ', ' + n('pro-band-hl-gold') + ', ' + n('pro-band-hl-navy'));
+  if ((wide.match(/<svg x="100%" y="(0|100%)"/g) || []).length !== 2) bad('the highlights must be anchored to the right edge, the top edge and the bottom edge');
   const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
   if (/gradient\s*\(/i.test(css)) bad('styles.css contains a gradient function');
   // Outline contrast: --white at the stylesheet's opacity, composited over --navy-900, against --navy-900.
@@ -493,6 +511,22 @@ function check() {
     const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
     if (!(ratio >= 3)) bad('.' + o[0] + ' contrast against --navy-900 is ' + ratio.toFixed(2) + ':1, it must be at least 3:1');
   });
+  // Legibility of the left column against the brightest pixel the left field can put behind it.
+  const navy950 = hex('navy-950'), gold = hex('gold'), goldSoft = hex('gold-soft');
+  const mix = (fg, a, bg) => fg.map((v, i) => v * a + bg[i] * (1 - a));
+  const ratioOf = (c1, c2) => { const x = lum(c1), y = lum(c2); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const alphaOf = (sel) => { const m = new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{[^}]*color:\\s*rgba\\(255,\\s*255,\\s*255,\\s*([0-9.]+)\\)').exec(css); return m ? parseFloat(m[1]) : NaN; };
+  if (!navy950 || !gold || !goldSoft || !white) bad('cannot read the colour tokens for the legibility check');
+  else {
+    const brightest = mix(white, LEFT_FIELD_OPACITY, navy950);
+    const outline = ratioOf(brightest, navy950);
+    if (LEFT_FIELD_OPACITY > 0 && outline < 1.3) bad('the left field outline is ' + outline.toFixed(2) + ':1 against --navy-950; it must be at least 1.3:1 to be visible');
+    [['headline', white, 3, '.pro-mkt h2', 'var(--white)'], ['sentence', mix(white, alphaOf('.pro-mkt__lede'), navy950), 4.5, '.pro-mkt__lede'], ['list labels', mix(white, alphaOf('.pro-band-list li'), navy950), 4.5, '.pro-band-list li'], ['price line', goldSoft, 4.5, '.pro-mkt__price'], ['PRO tag', gold, 4.5, '.pro-band-tag'], ['list icons', gold, 3, '.pro-band-list__icon']].forEach((t) => {
+      if (t[1].some(isNaN)) { bad('cannot read the colour of ' + t[0]); return; }
+      const r = ratioOf(t[1], brightest);
+      if (r < t[2]) bad(t[0] + ' has ' + r.toFixed(2) + ':1 against the brightest left-field pixel; it must be at least ' + t[2] + ':1 (lower LEFT_FIELD_OPACITY)');
+    });
+  }
   if (/<pattern\b/.test(page) || /<pattern\b/.test(index.replace(bandHtml, ''))) bad('the grid texture appears outside the Pro band');
   try {
     const cp = require('child_process');
