@@ -528,11 +528,14 @@ function check() {
     });
   }
   if (/<pattern\b/.test(page) || /<pattern\b/.test(index.replace(bandHtml, ''))) bad('the grid texture appears outside the Pro band');
+  // pro.html and the tracked crops may differ from the committed version only by the footer links
+  // (Trust, Changelog) that arrive through the footer template.
   try {
     const cp = require('child_process');
     const tracked = cp.execSync('git ls-files assets/pro pro.html', { cwd: ROOT }).toString().split('\n').filter(Boolean);
-    cp.execSync('git diff --quiet HEAD -- ' + tracked.join(' '), { cwd: ROOT, stdio: 'ignore' });
-  } catch (e) { if (e.status === 1) bad('pro.html or a tracked file in assets/pro differs from the committed version; the band work must not touch them'); }
+    const diff = cp.execSync('git diff -U0 HEAD -- ' + tracked.join(' '), { cwd: ROOT }).toString().split('\n').filter((l) => /^[-+]/.test(l) && !/^(\+\+\+|---)/.test(l));
+    diff.forEach((l) => { if (!/<a href="\/(trust|changelog)" class="site-nav__link">(Trust|Changelog)<\/a>/.test(l)) bad('pro.html or a tracked file in assets/pro differs from the committed version beyond the footer links: ' + l.slice(0, 80)); });
+  } catch (e) { /* not a git checkout: skip */ }
   ['cap', 'homepage', 'site', 'hidden', 'failing-others', 'others', 'cit-pct', 'cit-never', 'cit-questions', 'cit-model', 'cit-date', 'date', 'case-before1', 'case-before2', 'case-after1', 'case-after2'].forEach((k) => { if (!readFigs(page)[k]) bad('pro.html does not show ' + k); });
   if (F.cit.tries !== want.tries) bad('tries: ' + F.cit.tries + ' against ' + want.tries);
   if (F.case.gain !== want.caseGain) bad('case study gain: ' + F.case.gain + ' against ' + want.caseGain);

@@ -341,6 +341,8 @@ function footer(scripts) {
     '          <a href="/methodology" class="site-nav__link">Methodology</a>\n' +
     '          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>\n' +
     '          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>\n' +
+    '          <a href="/trust" class="site-nav__link">Trust</a>\n' +
+    '          <a href="/changelog" class="site-nav__link">Changelog</a>\n' +
     '          <a href="/privacy" class="site-nav__link">Privacy</a>\n' +
     '          <a href="/terms" class="site-nav__link">Terms</a>\n' +
     siteChrome.contactLine('          ') + '\n' +
