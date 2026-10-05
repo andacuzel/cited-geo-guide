@@ -31,15 +31,19 @@ const path = require('path');
 const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
 const factsLib = require('../lib/report-facts.js');
+const citationPanel = require('../lib/citation-panel.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const OUT = path.join(ROOT, 'assets', 'pro');
+const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 
 const MATRIX_ROWS = 12;   // the frame clips below this; rows past the clip are left out of the markup
 const PAGE_ROWS = 8;      // pages shown in the list crop
 const FIX_COUNT = 2;      // fix cards shown in the fixes crop
-const NAMES = ['summary', 'matrix', 'pages', 'fixes', 'print'];
+const CIT_ROWS = 3;       // rows of the open group in the citations crop
+const TRY_ROWS = 4;       // rows of the open group in the tries crop
+const NAMES = ['summary', 'gap', 'matrix', 'pages', 'fixes', 'print', 'citations', 'tries'];
 
 /* ---------- small markup helpers (the renderer's output is well formed) ---------- */
 
@@ -84,6 +88,7 @@ function clean(html, keepButtons) {
   s = s.replace(/ (id|title|target|rel|aria-labelledby|data-page|data-index|data-path|data-score|data-failed|data-section|data-checks|data-shown|data-rows|data-toggle-cluster|data-check|data-action)="[^"]*"/g, '');
   s = s.replace(/ (data-toggle-cluster|data-action="print")\b/g, '');
   s = s.replace(/<table class="rp-matrix"[^>]*>/, '<table class="rp-matrix">');
+  s = s.replace(/ role="img" aria-label="try \d: [^"]*"/g, '');
   s = s.replace(/<span class="rp-vh">[^<]*<\/span>/g, '').replace(/ class=""/g, '');   // text for screen readers only; a crop is one labelled image
   return s;
 }
@@ -94,10 +99,15 @@ function wrap(inner) { return '<div class="rp-report rp-js">\n' + inner.replace(
 
 function crops(data) {
   const withBm = Object.assign({}, data, { benchmark: data.benchmark || factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
-  const html = render.render(withBm, { schema: schema, label: 'Sample report', bar: false });
+  const sample = JSON.parse(fs.readFileSync(CITATION, 'utf8'));
+  const html = render.render(withBm, { schema: schema, label: 'Sample report', bar: false, citation: { result: citationPanel.fromSample(sample), sample: true } });
   const out = {};
 
   out.summary = wrap(clean(byAttr(html, 'data-shot="summary"')));
+
+  // The gap: the site-wide score, the homepage score and the gap between them (three of the four KPI tiles).
+  const tiles = all(byAttr(html, 'data-shot="summary"'), '<li class="rp-kpi" data-kpi="(avg|home|gap)"', 'li');
+  out.gap = wrap(clean('<ul class="rp-kpis rp-kpis--three">\n' + tiles.join('\n') + '\n</ul>'));
 
   // The matrix: header, then the first rows of the real table. The frame clips the rest.
   const mx = byAttr(html, 'data-shot="matrix"');
@@ -135,6 +145,29 @@ function crops(data) {
   const cards = all(fx, '<article class="rp-fix"', 'article').slice(0, FIX_COUNT)
     .map((c) => c.replace(/<ul class="rp-pagelist">[\s\S]*?<\/ul>/, ''));
   out.fixes = wrap(clean('<div>\n' + cards.join('\n') + '\n</div>'));
+
+  // Citations: the dashboard's Citations tab with the published CRM sample (the Citations panel's own
+  // markup, lib/citation-panel.js). 'citations' opens the never-named group; 'tries' opens the one named
+  // only sometimes. The other groups are folded to their summary lines.
+  const cit = byAttr(html, 'data-shot="citations"').replace(/<p class="rp-cit-cta">[\s\S]*?<\/p>/, '');
+  const groupsAt = cit.indexOf('<div class="rp-cit-groups"');
+  const groups = balanced(cit, groupsAt, 'div');
+  const detail = (g) => byAttr(groups, 'data-group="' + g + '"');
+  const fold = (g) => '<details class="ct-detail" data-group="' + g + '">' + /<summary>[\s\S]*?<\/summary>/.exec(detail(g))[0] + '</details>';
+  const openGroup = (g, rows) => {
+    const d = detail(g);
+    const keep = all(d, '<tr class="rp-cit-row"', 'tr').slice(0, rows);
+    const body = d.replace(/<tbody>[\s\S]*?<\/tbody>/, '<tbody>\n' + keep.join('\n') + '\n</tbody>');
+    return /<details[^>]*>/.exec(body)[0].indexOf(' open') === -1 ? body.replace(/^<details/, '<details open') : body;
+  };
+  const pick = (re) => (re.exec(cit) || [''])[0];
+  const lead = pick(/<p class="rp-cit-lead">[\s\S]*?<\/p>/);
+  const label = pick(/<p class="rp-cit-label">[\s\S]*?<\/p>/);
+  const kpis = pick(/<ul class="rp-kpis rp-kpis--three">[\s\S]*?<\/ul>/);
+  const note = pick(/<p class="rp-note">Across all[\s\S]*?<\/p>/);
+  const grp = (open, rows) => '<div class="rp-cit-groups">\n' + ['never', 'unstable', 'always'].map((g) => g === open ? openGroup(g, rows) : fold(g)).join('\n') + '\n</div>';
+  out.citations = wrap(clean('<div class="rp-cit">\n' + label + '\n' + lead + '\n' + kpis + '\n' + note + '\n' + grp('never', CIT_ROWS) + '\n</div>'));
+  out.tries = wrap(clean('<div class="rp-cit">\n' + lead + '\n' + note + '\n' + grp('unstable', TRY_ROWS) + '\n</div>'));
 
   // Print: the dashboard's own top bar, with its Print button shown (the script un-hides it).
   const bar = render.topBar({ domain: data.domain, date: data.createdAt, label: 'Sample report' }).replace(' hidden>', '>');

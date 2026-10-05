@@ -138,10 +138,10 @@
 <p class="rp-exec__label" data-fig="summary-label">Summary written by gemini-3.5-flash-lite (2026-10-04) from the figures below and checked against them</p>
 </article>
 <ul class="rp-kpis">
-<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="avg">83</span></span><span class="rp-kpi__label">Site-wide score<br /><small>average of <span data-fig="pagesRead">28</span> pages, out of 100</small></span></li>
-<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="homeScore">87</span></span><span class="rp-kpi__label">Homepage score<br /><small>what a single-page scan reports</small></span></li>
-<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="gap">-4</span></span><span class="rp-kpi__label">Gap<br /><small>site-wide minus homepage, in points</small></span></li>
-<li class="rp-kpi"><span class="rp-kpi__num"><span data-fig="kpi-failing">20</span></span><span class="rp-kpi__label">Pages with a failure<br /><small>of 28 read, at least one page-level check</small></span></li>
+<li class="rp-kpi" data-kpi="avg"><span class="rp-kpi__num"><span data-fig="avg">83</span></span><span class="rp-kpi__label">Site-wide score<br /><small>average of <span data-fig="pagesRead">28</span> pages, out of 100</small></span></li>
+<li class="rp-kpi" data-kpi="home"><span class="rp-kpi__num"><span data-fig="homeScore">87</span></span><span class="rp-kpi__label">Homepage score<br /><small>what a single-page scan reports</small></span></li>
+<li class="rp-kpi" data-kpi="gap"><span class="rp-kpi__num"><span data-fig="gap">-4</span></span><span class="rp-kpi__label">Gap<br /><small>site-wide minus homepage, in points</small></span></li>
+<li class="rp-kpi" data-kpi="failing"><span class="rp-kpi__num"><span data-fig="kpi-failing">20</span></span><span class="rp-kpi__label">Pages with a failure<br /><small>of 28 read, at least one page-level check</small></span></li>
 </ul>
 </div>
 <p class="rp-note rp-notrow"><span data-fig="pagesFailed">0</span> pages could not be fetched. The three pillars, site average: Discoverability <span data-fig="pillar-discover">27</span>/40, Technical foundation <span data-fig="pillar-tech">20</span>/20, Content &amp; trust <span data-fig="pillar-trust">36</span>/40.</p>
@@ -1111,7 +1111,7 @@ Allow: /</pre>
 </section>
 <section class="rp-panel" id="rp-citations" data-tab="citations" aria-labelledby="rp-citations-h">
 <h2 id="rp-citations-h" class="rp-h2 rp-h2--panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10.5L6.5 19.5V16H4V5.5z"/><path d="M8 9.5h8M8 12.5h5"/></svg>Citations</h2>
-<div class="rp-cit">
+<div class="rp-cit" data-shot="citations">
 <p class="rp-cit-label"><span class="rp-chip rp-chip--gain">Sample from a different brand</span> This is the published sample for a CRM brand, not a result for this site. It shows what a run looks like.</p>
 <p class="rp-cit-lead">Real answers from <span data-fig="cit-model">gemini-3.5-flash-lite</span> on <span data-fig="cit-date">October 2, 2026</span>, <span data-fig="cit-tries">five</span> tries per question, without web search. Each mark is one try: a filled mark means the brand was named, a hollow one means it was not.</p>
 <ul class="rp-kpis rp-kpis--three">

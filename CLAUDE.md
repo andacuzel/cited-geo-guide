@@ -66,8 +66,9 @@ Constraints that must not be broken:
   facts (`lib/summary.js`). No page content, URL or domain goes to the model.
   `privacy.html` says so; keep both in step. Do not send anything else.
 - **Pro screenshots are generated.** The crops of the dashboard on `/pro` and in
-  the homepage Pro band come from the sample crawl and the real renderer; regenerate
-  them with `scripts/capture-pro-shots.js` whenever the dashboard changes, then run
+  the homepage Pro band (including the Citations tab with the published CRM sample)
+  come from the sample data and the real renderer; rerun
+  `scripts/capture-pro-shots.js` whenever the dashboard changes, then
   `scripts/generate-pro.js`.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
