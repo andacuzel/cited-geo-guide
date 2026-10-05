@@ -56,7 +56,7 @@
       "note": "the source of the address (the fallback in lib/site-config.js too)"
     },
     {
-      "match": "^(plugin/|docs/mcp-submission\\.md$|content/research-index\\.json$)",
+      "match": "^(plugin/|docs/mcp-submission\\.md$)",
       "class": "rewrite",
       "note": "generated from site.config.json"
     },
@@ -67,6 +67,18 @@
     }
   ],
   "lineRules": [
+    {
+      "class": "historical",
+      "files": "^content/research-index\\.json$",
+      "pattern": "Answerable Case Studies",
+      "note": "quotes the case study's citation line as published"
+    },
+    {
+      "class": "rewrite",
+      "files": "^content/research-index\\.json$",
+      "pattern": ".",
+      "note": "generated from the pages and site.config.json"
+    },
     {
       "class": "historical",
       "files": "\\.html$",
