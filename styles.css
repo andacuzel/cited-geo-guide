@@ -3388,3 +3388,29 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 @media (max-width: 640px) {
   .pro-mkt .pro-shot--first { --pro-h: 190px; }
 }
+
+/* ----------------------------- Pro rebalance: a lean band and a leaner page (.pro-) ----------------------------- */
+.pro-flow { margin-top: 22px; display: flex; align-items: center; gap: 16px; color: var(--gold-soft); }
+.pro-flow__num { font-family: var(--font-display); font-size: clamp(64px, 8vw, 104px); line-height: 1; color: var(--gold-soft); }
+.pro-flow__arrow { flex: none; width: clamp(32px, 4vw, 48px); height: auto; }
+.pro-flow + .pro-mkt__nums { margin-top: 10px; }
+.pro-mkt .pro-shot { align-self: center; }
+
+.pro-banner .pro-shot--hero { --pro-h: 440px; }
+.pro-panel__title { margin-top: 6px; font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.15; color: var(--navy-950); }
+
+.pro-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.pro-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; min-width: 0; }
+.pro-card__title { margin-top: 14px; font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.2; color: var(--navy-950); }
+.pro-card__text { margin-top: 8px; font-size: 15.5px; line-height: 1.55; color: var(--ink-soft); }
+.pro-card .pro-shot { margin-top: 16px; }
+.pro-shot--thumb { --pro-h: 170px; }
+
+@media (max-width: 920px) {
+  .pro-cards { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+}
+@media (max-width: 640px) {
+  .pro-banner .pro-shot--hero { --pro-h: 430px; }
+  .pro-card { padding: 20px 18px; }
+  .pro-flow { gap: 12px; }
+}

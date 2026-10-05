@@ -35,7 +35,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 50;
+const CSS_VERSION = 51;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -166,30 +166,21 @@ function frame(name, F, extra) {
 /* ---------- the homepage band ---------- */
 
 function band(F) {
-  const c = F.cit;
+  // One idea (the gap), one visual (the matrix), one action. Nothing else, so the band hooks and /pro tells the story.
   return START + '\n' +
     '      <section class="pro-mkt" id="pro" aria-labelledby="pro-heading">\n' +
     '        <div class="section__inner">\n' +
     '          <div class="pro-mkt__grid">\n' +
     '            <div class="pro-mkt__text">\n' +
     '              <p class="kicker kicker--on-navy">Pro</p>\n' +
-    '              <h2 id="pro-heading">Can AI read you? Does it name you?</h2>\n' +
+    '              <h2 id="pro-heading">Your homepage isn\'t your site.</h2>\n' +
+    '              <p class="pro-flow" aria-label="Homepage score, then whole-site score"><span class="pro-flow__num">' + fig('homepage', F.homepage) + '</span>' + icons.svg('arrow', { cls: 'pro-flow__arrow' }) + '<span class="pro-flow__num">' + fig('site', F.site) + '</span></p>\n' +
+    '              <p class="pro-mkt__nums">Homepage, then whole site. A real crawl of our own site, ' + fig('date', F.date) + '.</p>\n' +
     '              <p class="pro-mkt__lede">Pro reads up to ' + fig('cap', F.cap) + ' pages, then asks a model your buyers\' questions and records when your name comes up.</p>\n' +
-    '              <p class="pro-mkt__nums">Homepage ' + fig('homepage', F.homepage) + ', whole site ' + fig('site', F.site) + '. A real crawl of our own site.</p>\n' +
-    '              <p class="pro-mkt__nums">Named in ' + fig('cit-pct', c.pct) + '% of answers. Never named for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions. A sample from a different brand.</p>\n' +
-    '              <p class="pro-mkt__actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="/pro" class="pro-mkt__link">What Pro includes</a></p>\n' +
+    '              <p class="pro-mkt__actions"><a href="/pro" class="btn btn--gold">See what Pro includes</a></p>\n' +
     '              <p class="pro-mkt__price">One-time purchase. No subscription.</p>\n' +
-    '              <p class="pro-mkt__note">We run the citation questions for you. ' + SELF_SERVE + '</p>\n' +
     '            </div>\n' +
-    '            <div class="pro-stack">\n' +
-    '              ' + indent(frame('gap', F, 'pro-shot--first'), '              ') + '\n' +
-    '              ' + indent(frame('citations', F, 'pro-shot--second'), '              ') + '\n' +
-    '            </div>\n' +
-    '            <div class="services-block pro-mkt__services">\n' +
-    '              <h3>Need this done for you?</h3>\n' +
-    '              <p>From schema rollout to citation-source strategy. We implement it end to end.</p>\n' +
-    '              <a href="#" id="agencyLink" class="btn btn--gold">Talk to us</a>\n' +
-    '            </div>\n' +
+    '            ' + indent(frame('matrix', F, 'pro-shot--desktop'), '            ') + '\n' +
     '          </div>\n' +
     '        </div>\n' +
     '      </section>\n      ' + END;
@@ -239,17 +230,6 @@ function shellParts() {
   };
 }
 
-function row(i, name, ic, title, body, F) {
-  return '        <div class="pro-row' + (i % 2 ? ' pro-row--flip' : '') + '">\n' +
-    '          <div class="pro-row__text">\n' +
-    '            <span class="pro-row__icon">' + icon(ic) + '</span>\n' +
-    '            <h3 class="pro-row__title">' + title + '</h3>\n' +
-    '            <p class="pro-row__body">' + body + '</p>\n' +
-    '          </div>\n' +
-    '          ' + indent(frame(name, F, name === 'matrix' ? 'pro-shot--desktop' : ''), '          ') + '\n' +
-    '        </div>';
-}
-
 function build() {
   const F = figures();
   const c = F.cit;
@@ -263,28 +243,13 @@ function build() {
 
   const gapText = 'Pages other than the homepage fail checks the homepage passes: ' + fig('hidden', F.hidden) + ' checks, failing on ' + fig('failing-others', F.failingOthers) + ' of the ' + fig('others', F.others) + ' other pages.';
 
-  const rows = [
-    row(0, 'summary', 'report', 'Start with the answer.',
-      'The report opens with the site-wide score beside the homepage score, then the top three checks to fix first, each with the points it adds and a typical effort. A short summary leads, labeled with what wrote it.', F),
-    row(1, 'matrix', 'grid', 'See which problems are one template, not fifty pages.',
-      'One row per page, one column per check. A column filled all the way down is likely a shared template: an inference from how many pages fail, not something we observed. In this crawl ' + fig('failing-checks', F.failingChecks) + ' of ' + fig('columns', F.columns) + ' page-level checks fail anywhere' + (F.allDown === 0 ? ', and no column fills all the way down.' : ', and ' + fig('all-down', F.allDown) + ' fill all the way down.'), F),
-    row(2, 'pages', 'document', 'From the worst page to its fix in two clicks.',
-      'Pages are listed worst first. Select one to see the checks it fails, then open its copy-paste fix. Search by path, or filter by a failing check or a section.', F),
-    row(3, 'fixes', 'wrench', 'Every fix once, with the pages it applies to.',
-      'Identical snippets appear once, with the pages they apply to and a Copy button. JSON-LD uses placeholders where a fact is unknown: fill them in, don\'t publish a placeholder.', F),
-    row(4, 'citations', 'eyeoff', 'Find the questions you\'re invisible for.',
-      'Questions fall into three groups: never named, named only sometimes, named every time. In the sample, ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions never named the brand in any try. Those are the gaps to work on.', F),
-    row(5, 'tries', 'repeat', 'Ask five times. Trust the pattern, not one answer.',
-      'The same question can get a different answer each time. In the sample, ' + fig('cit-unstable', c.unstable) + ' of ' + fig('cit-questions', c.questions) + ' questions named the brand in some tries and not in others. Across the ' + c.triesWord + ' tries, the share of questions that named it ranged from ' + fig('cit-min', c.min) + '% to ' + fig('cit-max', c.max) + '%.', F),
-    row(6, 'print', 'printer', 'Hand it to your developer.',
-      'Print or save as PDF opens every section and drops the controls, so the printout is the whole report: summary, pages, checks, fixes and the citation results.', F)
-  ].join('\n');
-
   const li = (text) => '<li>' + icon('check') + '<span>' + text + '</span></li>';
   const freeItems = ['One page, scanned on demand', 'All 16 checks, with their point values', 'The AI crawler matrix, 10 crawlers deep', 'Copy-paste fixes for schema and robots.txt', '<a href="/compare">Comparing two sites</a>', 'Every <a href="/playbooks">playbook</a>', 'All the <a href="/tools">tools</a>', 'The citation question sets, to try in your own assistant through the <a href="/mcp">MCP server</a>'].map(li).join('\n            ');
   const proItems = ['Up to ' + fig('cap2', F.cap) + ' pages in one crawl', 'The whole-site score beside the homepage score', 'Pages ranked, worst first', 'The checks that pass on the homepage and fail elsewhere', 'Every fix once, with the pages it applies to', 'A printable report', 'A citation run on your brand, which we run for you and add to the report'].map(li).join('\n            ');
 
   const step = (ic, name, text) => '          <li class="pro-step">\n            <span class="pro-row__icon">' + icon(ic) + '</span>\n            <h3 class="pro-step__title">' + name + '</h3>\n            <p class="pro-step__text">' + text + '</p>\n          </li>';
+
+  const card = (ic, title, text, thumb) => '          <li class="pro-card">\n            <span class="pro-row__icon">' + icon(ic) + '</span>\n            <h3 class="pro-card__title">' + title + '</h3>\n            <p class="pro-card__text">' + text + '</p>\n' + (thumb ? '            ' + indent(thumb, '            ') + '\n' : '') + '          </li>';
 
   const body = '  <main id="main">\n\n' +
     '    <!-- ---------- Banner ---------- -->\n' +
@@ -294,17 +259,17 @@ function build() {
     '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
     '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="' + CITATION_MAIL + '" class="btn btn--ghost-on-navy">Get early access</a></div>\n' +
     '          </div>\n' +
-    '          <div class="pro-stack">\n            ' + indent(frame('gap', F, 'pro-shot--first'), '            ') + '\n            ' + indent(frame('citations', F, 'pro-shot--second'), '            ') + '\n          </div>\n' +
+    '          ' + indent(frame('summary', F, 'pro-shot--hero'), '          ') + '\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Two questions, one report ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="two-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What Pro answers</p>\n          <h2 id="two-heading" class="section-title">Two questions. One report.</h2>\n        </div>\n' +
     '        <div class="pro-panels">\n' +
-    '          <div class="pro-panel">\n            <p class="kicker">Can AI read you?</p>\n' +
+    '          <div class="pro-panel">\n            <p class="kicker">Can AI read you?</p>\n            <h3 class="pro-panel__title">Your homepage isn\'t your site.</h3>\n' +
     '            <div class="pro-gap">\n              <div class="pro-gap__fig"><span class="pro-gap__label">Homepage</span><span class="pro-gap__num">' + fig('homepage', F.homepage) + '</span></div>\n              <div class="pro-gap__fig"><span class="pro-gap__label">Whole site</span><span class="pro-gap__num">' + fig('site', F.site) + '</span></div>\n            </div>\n' +
     '            <p class="pro-panel__cap">A real crawl of ' + esc(F.domain) + ', ' + fig('date', F.date) + '. Nothing edited.</p>\n' +
     '            <p class="pro-panel__text">' + gapText + '</p>\n' +
     '            ' + indent(frame('matrix', F, 'pro-shot--desktop'), '            ') + '\n' +
-    '            <p class="pro-panel__link"><a href="/sample-report">See the real report</a></p>\n          </div>\n' +
+    '          </div>\n' +
     '          <div class="pro-panel">\n            <p class="kicker">Does it name you?</p>\n' +
     '            <p class="pro-named"><span class="pro-named__big">Named in ' + fig('cit-pct', c.pct) + '% of answers.</span><span class="pro-named__sub">Never named for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions.</span></p>\n' +
     '            <p class="pro-panel__cap">' + fig('cit-model', c.model) + ', ' + fig('cit-date', c.date) + ', ' + c.triesWord + ' tries per question, a different brand.</p>\n' +
@@ -320,9 +285,13 @@ function build() {
     step('chat', 'Ask', 'The questions your buyers ask for your category, each ' + c.triesWord + ' times. The report names the one model used and the date.') + '\n' +
     step('report', 'Hand over', 'One report with the summary, the fixes and the citation results, printable as a PDF. We run the citation questions for you.') + '\n' +
     '        </ol>\n      </div>\n    </section>\n\n' +
-    '    <!-- ---------- What you get ---------- -->\n' +
-    '    <section class="verticals" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What you get</p>\n          <h2 id="get-heading" class="section-title">The report, in the order you read it.</h2>\n        </div>\n' +
-    rows + '\n      </div>\n    </section>\n\n' +
+    '    <!-- ---------- Also inside ---------- -->\n' +
+    '    <section class="verticals" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Also inside</p>\n          <h2 id="get-heading" class="section-title">The rest of the report.</h2>\n        </div>\n        <ul class="pro-cards">\n' +
+    card('report', 'Start with the answer.', 'The report opens with the site-wide score beside the homepage score, then the top three checks to fix first and the points each adds. A short summary leads, labeled with what wrote it.') + '\n' +
+    card('document', 'From the worst page to its fix in two clicks.', 'Pages are listed worst first. Select one to see the checks it fails, then open its copy-paste fix.', frame('pages', F, 'pro-shot--thumb pro-shot--desktop')) + '\n' +
+    card('wrench', 'Every fix once, with the pages it applies to.', 'Identical snippets appear once, with the pages they apply to and a Copy button.', frame('fixes', F, 'pro-shot--thumb pro-shot--desktop')) + '\n' +
+    card('printer', 'Hand it to your developer.', 'Print or save as PDF opens every section and drops the controls, so the printout is the whole report.') + '\n' +
+    '        </ul>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Proof ---------- -->\n' +
     '    <section aria-label="Case study">\n      <div class="section__inner">\n        <div class="pro-proof">\n          <p class="kicker">Case study</p>\n' +
     '          <p class="pro-proof__line"><span class="pro-proof__big">+' + k.gain + ' points</span> on average for two sites: ' + fig('case-before1', k.before1) + ' to ' + fig('case-after1', k.after1) + ' and ' + fig('case-before2', k.before2) + ' to ' + fig('case-after2', k.after2) + '.</p>\n' +
@@ -331,7 +300,7 @@ function build() {
     '    <!-- ---------- Free versus Pro ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="vs-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Free vs. Pro</p>\n          <h2 id="vs-heading" class="section-title">Free reads a page. Pro reads the site and asks the model.</h2>\n          <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>\n        </div>\n' +
     '        <div class="pro-cols">\n' +
-    '          <div class="pro-col">\n            <p class="kicker">Free</p>\n            <h3 class="pro-col__title">Always free</h3>\n            <ul class="pro-list">\n            ' + freeItems + '\n            </ul>\n            <p class="pro-col__foot"><a href="/" class="btn btn--ghost">Scan your site free</a></p>\n          </div>\n' +
+    '          <div class="pro-col">\n            <p class="kicker">Free</p>\n            <h3 class="pro-col__title">Always free</h3>\n            <ul class="pro-list">\n            ' + freeItems + '\n            </ul>\n          </div>\n' +
     '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the model</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">The citation run is one we run for you. ' + SELF_SERVE + '</p>\n            <p class="pro-col__foot pro-col__foot--note">One payment. Full Pro report for your domain. <a href="#" class="btn btn--ghost">In preparation</a></p>\n          </div>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Closing band ---------- -->\n' +
@@ -441,8 +410,14 @@ function check() {
       got[k].forEach(function (v) { if (String(v) !== String(want[k])) bad(s[0] + ': ' + k + ' reads ' + v + ', the source gives ' + want[k]); });
     });
   });
-  ['cap', 'homepage', 'site', 'cit-pct', 'cit-never', 'cit-questions'].forEach((k) => { if (!readFigs(bandHtml)[k]) bad('the band does not show ' + k); });
-  ['cap', 'homepage', 'site', 'hidden', 'failing-others', 'others', 'failing-checks', 'columns', 'cit-pct', 'cit-never', 'cit-questions', 'cit-unstable', 'cit-min', 'cit-max', 'cit-model', 'cit-date', 'date', 'case-before1', 'case-before2', 'case-after1', 'case-after2'].forEach((k) => { if (!readFigs(page)[k]) bad('pro.html does not show ' + k); });
+  ['cap', 'homepage', 'site', 'date'].forEach((k) => { if (!readFigs(bandHtml)[k]) bad('the band does not show ' + k); });
+  // The band is a hook: one idea, one crop, one action. Nothing about citations, no second link.
+  const interactive = (bandHtml.match(/<(a|button)\b/g) || []).length;
+  if (interactive !== 1) bad('the band has ' + interactive + ' links or buttons, it must have exactly one');
+  if (!/<a href="\/pro" class="btn btn--gold">See what Pro includes<\/a>/.test(bandHtml)) bad('the band\'s one action is not the gold "See what Pro includes" button to /pro');
+  if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--matrix') === -1) bad('the band must carry exactly one crop, the heat matrix');
+  if (/cit-|citation|Named in|Never named/i.test(bandHtml.replace(/asks a model your buyers' questions and records when your name comes up/, ''))) bad('the band mentions citation results; the homepage has its own citation block');
+  ['cap', 'homepage', 'site', 'hidden', 'failing-others', 'others', 'cit-pct', 'cit-never', 'cit-questions', 'cit-model', 'cit-date', 'date', 'case-before1', 'case-before2', 'case-after1', 'case-after2'].forEach((k) => { if (!readFigs(page)[k]) bad('pro.html does not show ' + k); });
   if (F.cit.tries !== want.tries) bad('tries: ' + F.cit.tries + ' against ' + want.tries);
   if (F.case.gain !== want.caseGain) bad('case study gain: ' + F.case.gain + ' against ' + want.caseGain);
   // Each case-study figure on the page appears in the case study file.
@@ -482,7 +457,7 @@ function check() {
     const rest = visible.replace(new RegExp(SELF_SERVE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), '').replace('Is the citation run self-serve?', '');
     if (/self-serve/i.test(rest)) bad(name + ': "self-serve" outside the sentence that says it is still to come');
     if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
-    if (!/\bwe run\b[^.]*\bfor you\b/i.test(visible)) bad(name + ': does not say that we run the citation questions for you');
+    if (name === 'pro.html' && !/\bwe run\b[^.]*\bfor you\b/i.test(visible)) bad(name + ': does not say that we run the citation questions for you');
     if (/\baccount\b|\blog ?in\b|\bsign ?in\b/i.test(visible.replace('Do I need an account?', '').replace('No. There is no account or login.', ''))) bad(name + ': mentions an account or login');
   });
   if ((page.match(/<h1[\s>]/g) || []).length !== 1) bad('pro.html needs exactly one h1');
@@ -498,6 +473,12 @@ function check() {
     const site = new RegExp('^Sample: our own site, ' + want.date.replace(/\s/g, '\\s') + '\\.').test(cap);
     const cit = cap === 'Sample from a different brand · ' + want['cit-model'] + ' · ' + want['cit-date'] + ' · ' + WORDS[want.tries] + ' tries per question';
     if (!site && !cit) bad('a crop caption is not one of the two labels: ' + cap);
+  });
+  [['pro.html', page], ['the band', bandHtml]].forEach(function (s2) {
+    const names = (s2[1].match(/<figure class="pro-shot pro-shot--([a-z]+)/g) || []).map((x) => x.replace(/.*--/, ''));
+    names.forEach((n, i) => { if (names.indexOf(n) !== i) bad(s2[0] + ': the "' + n + '" crop appears more than once'); });
+    const ids = (s2[1].match(/ id="[^"]+"/g) || []);
+    ids.forEach((x, i) => { if (ids.indexOf(x) !== i) bad(s2[0] + ': repeated' + x); });
   });
   if (page.indexOf('A real crawl of ' + F.domain + ', <span data-fig="pro-date">' + want.date + '</span>. Nothing edited.') === -1) bad('the gap caption does not carry the crawl and its date');
   return errors;
