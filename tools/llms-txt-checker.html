@@ -160,8 +160,8 @@
       <div class="section__inner">
         <div class="page-banner">
           <div class="page-banner__body">
-            <p class="kicker kicker--on-navy">Free tool</p>
-            <h1 class="page-banner__title">llms.txt Checker</h1>
+            <p class="kicker kicker--on-navy">Free tool · Check</p>
+            <h1 class="page-banner__title">Is your llms.txt really yours?</h1>
             <p class="page-banner__desc">Paste a domain. See whether its llms.txt exists, how it is built, and whether it reads like the brand's own file or a platform default.</p>
           </div>
           <pre class="page-banner__code" aria-hidden="true"># Your brand
@@ -172,12 +172,23 @@
       </div>
     </section>
 
+    <!-- TOOL-INTRO:START -->
+    <section class="toolx-intro" aria-label="About this tool">
+      <div class="section__inner">
+        <div class="toolx-intro__row">
+          <ul class="tools-chips toolx-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
+          <button type="button" class="btn btn--ghost toolx-example" data-toolx-example="answerable-app.vercel.app" data-toolx-target="#llmsDomain">Try an example</button>
+        </div>
+      </div>
+    </section>
+    <!-- TOOL-INTRO:END -->
+
     <section class="verticals" aria-label="Checker">
       <div class="section__inner">
         <form class="tool-form" id="llmsForm" novalidate>
           <div class="tool-form__field">
             <label class="tool-label" for="llmsDomain">Domain</label>
-            <input type="text" class="field" id="llmsDomain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
+            <input type="text" class="field" id="llmsDomain" data-toolx-param="domain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
           </div>
           <div class="tool-form__field tool-form__field--narrow">
             <label class="tool-label" for="llmsBrand">Brand name (optional)</label>
@@ -186,9 +197,9 @@
           <button type="submit" class="btn btn--primary" id="llmsBtn">Check llms.txt</button>
         </form>
         <p class="tool-hint">Reads one public file, <code>https://yourdomain.com/llms.txt</code>. Nothing is stored. Try <button type="button" class="tool-example" data-domain="allbirds.com">allbirds.com</button> or <button type="button" class="tool-example" data-domain="vercel.com">vercel.com</button>.</p>
-        <div class="tool-status" id="llmsStatus" role="status" aria-live="polite"></div>
+        <div class="tool-status" id="llmsStatus" data-toolx-status role="status" aria-live="polite"></div>
 
-        <div id="llmsResult" hidden></div>
+        <div id="llmsResult" data-toolx-result hidden></div>
 
         <div class="tool-panel">
           <p class="tool-panel__title">The evidence</p>
@@ -196,17 +207,48 @@
           <p>76% of the DTC sites in our report had an llms.txt, against 55% of the B2B sites. Two files is not every store, which is why this checker reads yours instead of assuming.</p>
           <p><a href="/research/llms-txt-adoption-2026">Read the research report →</a></p>
         </div>
+      </div>
+    </section>
 
-        <div class="doc-section" style="margin-top: 56px;">
-          <h2 class="doc-section__heading">Common questions</h2>
-          <h3 class="faq-q">What is llms.txt?</h3>
-          <p>llms.txt is a plain text file at the root of a site, written in markdown, that tells AI systems what the site is about and which pages matter. It is a young convention, proposed at llmstxt.org. This checker measures what the file contains. It does not measure whether any AI system reads it.</p>
-          <h3 class="faq-q">Does my platform write my llms.txt?</h3>
-          <p>Some do. Shopify generates an llms.txt automatically for every store it hosts, so the file at /llms.txt may be Shopify's rather than yours. We have only confirmed that pattern for Shopify, so the checker only looks for Shopify's fingerprints.</p>
-          <h3 class="faq-q">How does the checker decide a file is a platform default?</h3>
-          <p>It looks for Shopify's fingerprints in the text: references to shop.app or a Shop skill, commerce protocol and endpoint documentation, and platform marketing links. It also looks for any description of the brand. Several fingerprints with no brand description reads as a platform default. It is a pattern match and can be wrong, which is why "unclear" is a possible answer.</p>
-          <h3 class="faq-q">What should an llms.txt say about my brand?</h3>
-          <p>A title with your name, a one-sentence summary of what you are and who you serve, and sections that link to the pages that matter most, such as products, pricing, policies or documentation. The Answerable MCP server's <a href="/mcp#generate_llms_txt"><code>generate_llms_txt</code></a> tool builds that layout from a name, a description and a list of pages.</p>
+    <!-- TOOL-MORE:START -->
+    <section class="toolx-section" aria-labelledby="toolx-how-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">How it works</p>
+          <h2 id="toolx-how-heading" class="section-title">Three steps.</h2>
+        </div>
+        <ol class="toolx-steps">
+          <li class="card card--static toolx-step"><span class="toolx-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8.5 7h11M8.5 12h11M8.5 17h11"/><path d="M4.5 7h.1M4.5 12h.1M4.5 17h.1"/></svg></span><p class="toolx-step__label">You give it</p><p class="toolx-step__text">Enter a domain, and a brand name if you want it looked for.</p></li>
+          <li class="card card--static toolx-step"><span class="toolx-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span><p class="toolx-step__label">It does</p><p class="toolx-step__text">The server reads that domain’s llms.txt and checks its layout, its brand mentions and the fingerprints of a platform default.</p></li>
+          <li class="card card--static toolx-step"><span class="toolx-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span><p class="toolx-step__label">You get</p><p class="toolx-step__text">A verdict of custom, platform default or unclear, with the evidence behind it.</p></li>
+        </ol>
+        <p class="toolx-why"><strong>Why it matters.</strong> A platform can write your llms.txt for you, so the file may speak for the platform instead of your brand. <a href="/research/llms-txt-adoption-2026">See our research on who controls it.</a></p>
+      </div>
+    </section>
+
+    <section class="ac-section" aria-labelledby="toolx-faq-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="toolx-faq-heading" class="section-title">Common questions.</h2>
+        </div>
+        <div class="ac-faq">
+          <details>
+            <summary>What is llms.txt?</summary>
+            <p>llms.txt is a plain text file at the root of a site, written in markdown, that tells AI systems what the site is about and which pages matter. It is a young convention, proposed at llmstxt.org. This checker measures what the file contains. It does not measure whether any AI system reads it.</p>
+          </details>
+          <details>
+            <summary>Does my platform write my llms.txt?</summary>
+            <p>Some do. Shopify generates an llms.txt automatically for every store it hosts, so the file at /llms.txt may be Shopify's rather than yours. We have only confirmed that pattern for Shopify, so the checker only looks for Shopify's fingerprints.</p>
+          </details>
+          <details>
+            <summary>How does the checker decide a file is a platform default?</summary>
+            <p>It looks for Shopify's fingerprints in the text: references to shop.app or a Shop skill, commerce protocol and endpoint documentation, and platform marketing links. It also looks for any description of the brand. Several fingerprints with no brand description reads as a platform default. It is a pattern match and can be wrong, which is why &quot;unclear&quot; is a possible answer.</p>
+          </details>
+          <details>
+            <summary>What should an llms.txt say about my brand?</summary>
+            <p>A title with your name, a one-sentence summary of what you are and who you serve, and sections that link to the pages that matter most, such as products, pricing, policies or documentation. The Answerable MCP server's generate_llms_txt tool builds that layout from a name, a description and a list of pages.</p>
+          </details>
         </div>
       </div>
     </section>
@@ -221,6 +263,15 @@
       </div>
     </section>
     <!-- NEXT:END -->
+
+    <section class="toolx-section" aria-label="Use it from Claude">
+      <div class="section__inner">
+        <div class="toolx-claude">
+          <p class="toolx-claude__text"><strong>Use it from Claude.</strong> In the MCP server, <code>scan_site</code> reads llms.txt along with every other check, and <code>generate_llms_txt</code> drafts a replacement. <a href="/mcp">See the MCP server</a>.</p>
+        </div>
+      </div>
+    </section>
+    <!-- TOOL-MORE:END -->
 
     <section aria-label="Scan reminder">
       <div class="section__inner">
@@ -254,6 +305,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="../nav.js?v=2"></script>
+  <script src="shared.js?v=1"></script>
   <script src="llms-txt-checker.js?v=1"></script>
 </body>
 </html>

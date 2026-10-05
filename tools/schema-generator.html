@@ -160,8 +160,8 @@
       <div class="section__inner">
         <div class="page-banner">
           <div class="page-banner__body">
-            <p class="kicker kicker--on-navy">Free tool</p>
-            <h1 class="page-banner__title">Schema Generator</h1>
+            <p class="kicker kicker--on-navy">Free tool · Generate</p>
+            <h1 class="page-banner__title">Tell machines who you are.</h1>
             <p class="page-banner__desc">Enter your domain and your real title, description and language are already in the form. Edit from there, copy the JSON-LD, paste it into your page.</p>
           </div>
           <pre class="page-banner__code" aria-hidden="true">{
@@ -173,17 +173,28 @@
       </div>
     </section>
 
+    <!-- TOOL-INTRO:START -->
+    <section class="toolx-intro" aria-label="About this tool">
+      <div class="section__inner">
+        <div class="toolx-intro__row">
+          <ul class="tools-chips toolx-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
+          <button type="button" class="btn btn--ghost toolx-example" data-toolx-example="answerable-app.vercel.app" data-toolx-target="#schemaDomain">Try an example</button>
+        </div>
+      </div>
+    </section>
+    <!-- TOOL-INTRO:END -->
+
     <section class="verticals schema-gen" aria-label="Generator">
       <div class="section__inner">
         <form class="tool-form" id="schemaForm" novalidate>
           <div class="tool-form__field">
             <label class="tool-label" for="schemaDomain">Domain</label>
-            <input type="text" class="field" id="schemaDomain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
+            <input type="text" class="field" id="schemaDomain" data-toolx-param="domain" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" />
           </div>
           <button type="submit" class="btn btn--primary" id="schemaScanBtn">Prefill from site</button>
         </form>
         <p class="tool-hint">Reads your homepage&rsquo;s title, description and language, then fills in what it finds. Nothing is stored. Skip it to start from placeholders.</p>
-        <div class="tool-status" id="schemaStatus" role="status" aria-live="polite"></div>
+        <div class="tool-status" id="schemaStatus" data-toolx-status role="status" aria-live="polite"></div>
 
         <div class="type-picker" id="typePicker" role="group" aria-label="Schema type" style="margin-bottom: 24px;">
           <button type="button" class="type-picker__btn" data-type="organization" aria-pressed="true">Organization</button>
@@ -208,30 +219,61 @@
                     <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>
                     Copy
                   </button>
-                  <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" id="schemaDownloadBtn">
+                  <button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" id="schemaDownloadBtn" data-toolx-download="JSON-LD">
                     <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v6m0 0L5.5 5.5M8 8l2.5-2.5M3.5 11h9"/></svg>
                     Download
                   </button>
                 </div>
               </div>
-              <pre class="fix-snippet__code" id="schemaOutput" tabindex="0" aria-label="Generated JSON-LD"></pre>
+              <pre class="fix-snippet__code" id="schemaOutput" data-toolx-result data-toolx-check="jsonld" tabindex="0" aria-label="Generated JSON-LD"></pre>
             </div>
             <p class="schema-gen__meta" id="schemaMeta" role="status" aria-live="polite"></p>
             <p class="schema-gen__paste" id="schemaPaste"></p>
             <p class="schema-gen__paste">Copy includes the script tag. Download saves the JSON-LD alone. Check the result at <a href="https://validator.schema.org/" rel="noopener">validator.schema.org</a>.</p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="doc-section" style="margin-top: 72px;">
-          <h2 class="doc-section__heading">Common questions</h2>
-          <h3 class="faq-q">What is schema markup?</h3>
-          <p>Schema markup is structured data, usually written as JSON-LD, that tells machines what a page is about: an organization, a product, an article, a set of questions. It sits in the page's code and is invisible to visitors. Search engines and AI systems can read it without guessing from the layout.</p>
-          <h3 class="faq-q">Where does JSON-LD go?</h3>
-          <p>Paste the script tag into the head of the page it describes. Organization and WebSite markup belongs on the homepage, Article on the article, Product on the product page, FAQPage on the page that shows the questions, and LocalBusiness on the page for that location. Most site builders have a field for custom head code.</p>
-          <h3 class="faq-q">Will schema markup get me cited in AI answers?</h3>
-          <p>No one can promise that. Schema removes guesswork about what a page is. It does not decide whether an answer engine cites you. Answerable measures whether the markup is present, not what any assistant says about you.</p>
-          <h3 class="faq-q">What are the bracketed placeholders?</h3>
-          <p>Anything the scan could not know, such as your company name, a real price or your opening hours, appears as a bracketed placeholder instead of an invented value. Replace each one before you publish. The counter under the output shows how many are left.</p>
+    <!-- TOOL-MORE:START -->
+    <section class="toolx-section" aria-labelledby="toolx-how-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">How it works</p>
+          <h2 id="toolx-how-heading" class="section-title">Three steps.</h2>
+        </div>
+        <ol class="toolx-steps">
+          <li class="card card--static toolx-step"><span class="toolx-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8.5 7h11M8.5 12h11M8.5 17h11"/><path d="M4.5 7h.1M4.5 12h.1M4.5 17h.1"/></svg></span><p class="toolx-step__label">You give it</p><p class="toolx-step__text">Enter a domain and pick the type of markup.</p></li>
+          <li class="card card--static toolx-step"><span class="toolx-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span><p class="toolx-step__label">It does</p><p class="toolx-step__text">The server reads that homepage’s title, description and language and fills the form.</p></li>
+          <li class="card card--static toolx-step"><span class="toolx-step__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span><p class="toolx-step__label">You get</p><p class="toolx-step__text">JSON-LD you can edit and paste, with brackets where only you know the facts.</p></li>
+        </ol>
+        <p class="toolx-why"><strong>Why it matters.</strong> Organization and WebSite markup tells a machine who the source is. It is worth 8 points in the Content &amp; trust pillar. <a href="/methodology">See how the score is built.</a></p>
+      </div>
+    </section>
+
+    <section class="ac-section" aria-labelledby="toolx-faq-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="toolx-faq-heading" class="section-title">Common questions.</h2>
+        </div>
+        <div class="ac-faq">
+          <details>
+            <summary>What is schema markup?</summary>
+            <p>Schema markup is structured data, usually written as JSON-LD, that tells machines what a page is about: an organization, a product, an article, a set of questions. It sits in the page's code and is invisible to visitors. Search engines and AI systems can read it without guessing from the layout.</p>
+          </details>
+          <details>
+            <summary>Where does JSON-LD go?</summary>
+            <p>Paste the script tag into the head of the page it describes. Organization and WebSite markup belongs on the homepage, Article on the article, Product on the product page, FAQPage on the page that shows the questions, and LocalBusiness on the page for that location. Most site builders have a field for custom head code.</p>
+          </details>
+          <details>
+            <summary>Will schema markup get me cited in AI answers?</summary>
+            <p>No one can promise that. Schema removes guesswork about what a page is. It does not decide whether an answer engine cites you. Answerable measures whether the markup is present, not what any assistant says about you.</p>
+          </details>
+          <details>
+            <summary>What are the bracketed placeholders?</summary>
+            <p>Anything the scan could not know, such as your company name, a real price or your opening hours, appears as a bracketed placeholder instead of an invented value. Replace each one before you publish. The counter under the output shows how many are left.</p>
+          </details>
         </div>
       </div>
     </section>
@@ -246,6 +288,15 @@
       </div>
     </section>
     <!-- NEXT:END -->
+
+    <section class="toolx-section" aria-label="Use it from Claude">
+      <div class="section__inner">
+        <div class="toolx-claude">
+          <p class="toolx-claude__text"><strong>Use it from Claude.</strong> In the MCP server, <code>generate_schema</code> builds the same JSON-LD from a domain. <a href="/mcp">See the MCP server</a>.</p>
+        </div>
+      </div>
+    </section>
+    <!-- TOOL-MORE:END -->
 
     <section aria-label="Scan reminder">
       <div class="section__inner">
@@ -280,6 +331,7 @@
 
   <script src="../lib/schema.js?v=1"></script>
   <script src="../nav.js?v=2"></script>
+  <script src="shared.js?v=1"></script>
   <script src="schema-generator.js?v=1"></script>
 </body>
 </html>
