@@ -1,8 +1,20 @@
 {
   "groups": [
-    { "name": "Check", "icon": "check", "blurb": "Read a file or a site and see what is really there." },
-    { "name": "Generate", "icon": "wrench", "blurb": "Build the fix from your own choices or your own site." },
-    { "name": "Start here", "icon": "arrow", "blurb": "The scan finds the gaps. The tools close them, one at a time." }
+    {
+      "name": "Check",
+      "icon": "check",
+      "blurb": "Read a file or a site and see what is really there."
+    },
+    {
+      "name": "Generate",
+      "icon": "wrench",
+      "blurb": "Build the fix from your own choices or your own site."
+    },
+    {
+      "name": "Start here",
+      "icon": "arrow",
+      "blurb": "The scan finds the gaps. The tools close them, one at a time."
+    }
   ],
   "tools": [
     {
@@ -18,13 +30,69 @@
       "give": "A domain.",
       "get": "Whether the file exists, how it is built and whether it names your brand or reads like a platform default.",
       "button": "Open the checker",
-      "chips": ["No signup", "Free"],
+      "chips": [
+        "No signup",
+        "Free"
+      ],
       "inventory": {
-        "scripts": ["tools/llms-txt-checker.js"],
-        "network": ["GET /api/llms-check?domain=: the server reads one llms.txt from the domain you enter"],
+        "scripts": [
+          "tools/llms-txt-checker.js"
+        ],
+        "network": [
+          "GET /api/llms-check?domain=: the server reads one llms.txt from the domain you enter"
+        ],
         "stores": "nothing in the browser; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
       },
-      "preview": { "kind": "field", "placeholder": "yourbrand.com", "button": "Check", "chips": [["Custom", "ok"], ["Platform default", "warn"], ["Unclear", "muted"]] }
+      "preview": {
+        "kind": "field",
+        "placeholder": "yourbrand.com",
+        "button": "Check",
+        "chips": [
+          [
+            "Custom",
+            "ok"
+          ],
+          [
+            "Platform default",
+            "warn"
+          ],
+          [
+            "Unclear",
+            "muted"
+          ]
+        ]
+      },
+      "polish": true,
+      "script": "llms-txt-checker.js",
+      "example": {
+        "target": "#llmsDomain",
+        "value": "{host}"
+      },
+      "how": {
+        "give": "Enter a domain, and a brand name if you want it looked for.",
+        "does": "The server reads that domain’s llms.txt and checks its layout, its brand mentions and the fingerprints of a platform default.",
+        "get": "A verdict of custom, platform default or unclear, with the evidence behind it."
+      },
+      "why": {
+        "text": "A platform can write your llms.txt for you, so the file may speak for the platform instead of your brand. {link}",
+        "href": "/research/llms-txt-adoption-2026",
+        "link": "See our research on who controls it."
+      },
+      "claude": "In the MCP server, {scan_site} reads llms.txt along with every other check, and {generate_llms_txt} drafts a replacement.",
+      "hooks": [
+        {
+          "find": "<input type=\"text\" class=\"field\" id=\"llmsDomain\"",
+          "attrs": "data-toolx-param=\"domain\""
+        },
+        {
+          "find": "<div class=\"tool-status\" id=\"llmsStatus\"",
+          "attrs": "data-toolx-status"
+        },
+        {
+          "find": "<div id=\"llmsResult\"",
+          "attrs": "data-toolx-result"
+        }
+      ]
     },
     {
       "slug": "compare",
@@ -39,13 +107,61 @@
       "give": "Two domains.",
       "get": "Both scores and every check, and every AI crawler, where the two sites differ.",
       "button": "Compare two sites",
-      "chips": ["No signup", "Free"],
+      "chips": [
+        "No signup",
+        "Free"
+      ],
       "inventory": {
-        "scripts": ["compare.js"],
-        "network": ["GET /api/scan?domain=, once per site, one after the other"],
+        "scripts": [
+          "compare.js"
+        ],
+        "network": [
+          "GET /api/scan?domain=, once per site, one after the other"
+        ],
         "stores": "nothing in the browser beyond the two domains in the address bar; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
       },
-      "preview": { "kind": "columns", "heads": ["Your site", "Another site"], "rows": [["AI crawler access", ["Open", "ok"], ["Limited", "warn"]], ["Structured data (JSON-LD)", ["Present", "ok"], ["Missing", "risk"]], ["llms.txt present", ["Present", "ok"], ["Missing", "risk"]]] }
+      "preview": {
+        "kind": "columns",
+        "heads": [
+          "Your site",
+          "Another site"
+        ],
+        "rows": [
+          [
+            "AI crawler access",
+            [
+              "Open",
+              "ok"
+            ],
+            [
+              "Limited",
+              "warn"
+            ]
+          ],
+          [
+            "Structured data (JSON-LD)",
+            [
+              "Present",
+              "ok"
+            ],
+            [
+              "Missing",
+              "risk"
+            ]
+          ],
+          [
+            "llms.txt present",
+            [
+              "Present",
+              "ok"
+            ],
+            [
+              "Missing",
+              "risk"
+            ]
+          ]
+        ]
+      }
     },
     {
       "slug": "robots-txt",
@@ -60,13 +176,85 @@
       "give": "The AI crawlers you want in and the ones you want out.",
       "get": "A robots.txt file to copy or download.",
       "button": "Open the generator",
-      "chips": ["No signup", "Free", "Runs in your browser"],
+      "chips": [
+        "No signup",
+        "Free",
+        "Runs in your browser"
+      ],
       "inventory": {
-        "scripts": ["tools/robots-txt.js", "lib/crawlers.js"],
+        "scripts": [
+          "tools/robots-txt.js",
+          "lib/crawlers.js"
+        ],
         "network": [],
         "stores": "nothing; the file is built in the page and copied or downloaded from it"
       },
-      "preview": { "kind": "crawlers", "rows": [["GPTBot", ["Allow", "ok"]], ["ClaudeBot", ["Allow", "ok"]], ["CCBot", ["Block", "risk"]], ["Bytespider", ["Block", "risk"]]] }
+      "preview": {
+        "kind": "crawlers",
+        "rows": [
+          [
+            "GPTBot",
+            [
+              "Allow",
+              "ok"
+            ]
+          ],
+          [
+            "ClaudeBot",
+            [
+              "Allow",
+              "ok"
+            ]
+          ],
+          [
+            "CCBot",
+            [
+              "Block",
+              "risk"
+            ]
+          ],
+          [
+            "Bytespider",
+            [
+              "Block",
+              "risk"
+            ]
+          ]
+        ]
+      },
+      "polish": true,
+      "script": "robots-txt.js",
+      "liveStatus": true,
+      "example": {
+        "target": "#sitemapUrl",
+        "value": "{base}/sitemap.xml"
+      },
+      "how": {
+        "give": "Tick the AI crawlers you allow, leave the others unticked to block them, and add a sitemap address if you like.",
+        "does": "The page builds the file as you choose, entirely in your browser.",
+        "get": "A robots.txt file to copy or download, ready for the root of your site."
+      },
+      "why": {
+        "text": "AI crawler access is the largest check in the score, {max} of {total} points. {link}",
+        "href": "/methodology",
+        "link": "See how the score is built.",
+        "check": "AI crawler access"
+      },
+      "claude": "In the MCP server, {generate_robots_txt} builds the same file from the crawlers you name.",
+      "hooks": [
+        {
+          "find": "<input type=\"text\" id=\"sitemapUrl\"",
+          "attrs": "data-toolx-param=\"sitemap\""
+        },
+        {
+          "find": "<pre class=\"fix-snippet__code\" id=\"robotsOutput\"",
+          "attrs": "data-toolx-check=\"robots\""
+        },
+        {
+          "find": "<button type=\"button\" class=\"btn btn--ghost-on-navy fix-snippet__copy\" id=\"robotsDownloadBtn\"",
+          "attrs": "data-toolx-download=\"robots.txt\""
+        }
+      ]
     },
     {
       "slug": "schema-generator",
@@ -81,13 +269,80 @@
       "give": "A domain and the type of markup you want.",
       "get": "JSON-LD with the title, description and language read from your homepage, and brackets where only you know the facts.",
       "button": "Open the generator",
-      "chips": ["No signup", "Free"],
+      "chips": [
+        "No signup",
+        "Free"
+      ],
       "inventory": {
-        "scripts": ["tools/schema-generator.js", "lib/schema.js"],
-        "network": ["GET /api/site-info?domain=: the server reads the homepage of the domain you enter"],
+        "scripts": [
+          "tools/schema-generator.js",
+          "lib/schema.js"
+        ],
+        "network": [
+          "GET /api/site-info?domain=: the server reads the homepage of the domain you enter"
+        ],
         "stores": "nothing in the browser; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
       },
-      "preview": { "kind": "fields", "rows": [["Name", "wide"], ["Description", "wide"], ["Language", "narrow"]], "types": ["Organization", "FAQPage", "Article", "Product", "LocalBusiness"] }
+      "preview": {
+        "kind": "fields",
+        "rows": [
+          [
+            "Name",
+            "wide"
+          ],
+          [
+            "Description",
+            "wide"
+          ],
+          [
+            "Language",
+            "narrow"
+          ]
+        ],
+        "types": [
+          "Organization",
+          "FAQPage",
+          "Article",
+          "Product",
+          "LocalBusiness"
+        ]
+      },
+      "polish": true,
+      "script": "schema-generator.js",
+      "example": {
+        "target": "#schemaDomain",
+        "value": "{host}"
+      },
+      "how": {
+        "give": "Enter a domain and pick the type of markup.",
+        "does": "The server reads that homepage’s title, description and language and fills the form.",
+        "get": "JSON-LD you can edit and paste, with brackets where only you know the facts."
+      },
+      "why": {
+        "text": "Organization and WebSite markup tells a machine who the source is. It is worth {max} points in the {pillar} pillar. {link}",
+        "href": "/methodology",
+        "link": "See how the score is built.",
+        "check": "Organization / WebSite schema"
+      },
+      "claude": "In the MCP server, {generate_schema} builds the same JSON-LD from a domain.",
+      "hooks": [
+        {
+          "find": "<input type=\"text\" class=\"field\" id=\"schemaDomain\"",
+          "attrs": "data-toolx-param=\"domain\""
+        },
+        {
+          "find": "<div class=\"tool-status\" id=\"schemaStatus\"",
+          "attrs": "data-toolx-status"
+        },
+        {
+          "find": "<pre class=\"fix-snippet__code\" id=\"schemaOutput\"",
+          "attrs": "data-toolx-result data-toolx-check=\"jsonld\""
+        },
+        {
+          "find": "<button type=\"button\" class=\"btn btn--ghost-on-navy fix-snippet__copy\" id=\"schemaDownloadBtn\"",
+          "attrs": "data-toolx-download=\"JSON-LD\""
+        }
+      ]
     },
     {
       "slug": "scan",
@@ -102,26 +357,125 @@
       "give": "A domain.",
       "get": "A score out of 100, the access state of each tracked AI crawler and every failed check with its fix.",
       "button": "Scan your site",
-      "chips": ["No signup", "Free"],
+      "chips": [
+        "No signup",
+        "Free"
+      ],
       "inventory": {
-        "scripts": ["scanner.js", "app.js"],
-        "network": ["GET /api/scan?domain="],
+        "scripts": [
+          "scanner.js",
+          "app.js"
+        ],
+        "network": [
+          "GET /api/scan?domain="
+        ],
         "stores": "nothing in the browser; the server keeps a one-way IP hash with a request counter for rate limiting (privacy.html)"
       },
-      "preview": { "kind": "field", "placeholder": "yourdomain.com", "button": "Scan free", "chips": [["Pass", "ok"], ["Fix ready", "warn"], ["Blocked", "risk"]] }
+      "preview": {
+        "kind": "field",
+        "placeholder": "yourdomain.com",
+        "button": "Scan free",
+        "chips": [
+          [
+            "Pass",
+            "ok"
+          ],
+          [
+            "Fix ready",
+            "warn"
+          ],
+          [
+            "Blocked",
+            "risk"
+          ]
+        ]
+      }
     }
   ],
   "flow": [
-    { "label": "AI crawler access", "text": "Review robots.txt rules for blocked AI crawlers", "tool": "robots-txt", "advice": true },
-    { "label": "Organization / WebSite schema", "text": "Add Organization schema", "tool": "schema-generator", "advice": true },
-    { "label": "llms.txt authorship (not scored)", "text": "platform default", "tool": "llms-txt-checker" },
-    { "label": "Two sites", "text": "Compare two sites", "tool": "compare" }
+    {
+      "label": "AI crawler access",
+      "text": "Review robots.txt rules for blocked AI crawlers",
+      "tool": "robots-txt",
+      "advice": true
+    },
+    {
+      "label": "Organization / WebSite schema",
+      "text": "Add Organization schema",
+      "tool": "schema-generator",
+      "advice": true
+    },
+    {
+      "label": "llms.txt authorship (not scored)",
+      "text": "platform default",
+      "tool": "llms-txt-checker"
+    },
+    {
+      "label": "Two sites",
+      "text": "Compare two sites",
+      "tool": "compare"
+    }
   ],
   "next": {
-    "robots-txt": { "text": "Put the file at the root of your site, then {scan} to check it. To see where you stand against another site, {compare}.", "links": { "scan": ["/#scan", "scan again"], "compare": ["/compare", "compare the two"] } },
-    "schema-generator": { "text": "Paste the JSON-LD into the head of your page, then {scan} to check it. Next, see whether your {llms} is yours.", "links": { "scan": ["/#scan", "scan again"], "llms": ["/tools/llms-txt-checker", "llms.txt"] } },
-    "llms-txt-checker": { "text": "{scan} to see how llms.txt sits beside the other checks. If the file is a platform default, the {mcp} can draft a replacement. Check every line of it.", "links": { "scan": ["/#scan", "Scan your site"], "mcp": ["/mcp", "MCP server"] } },
-    "compare": { "text": "Where the other site is ahead on crawler access, use the {robots}. Where it is ahead on structured data, use the {schema}. Where it has a file you lack, use the {llms}.", "links": { "robots": ["/tools/robots-txt", "robots.txt generator"], "schema": ["/tools/schema-generator", "schema generator"], "llms": ["/tools/llms-txt-checker", "llms.txt checker"] } }
+    "robots-txt": {
+      "text": "Put the file at the root of your site, then {scan} to check it. To see where you stand against another site, {compare}.",
+      "links": {
+        "scan": [
+          "/#scan",
+          "scan again"
+        ],
+        "compare": [
+          "/compare",
+          "compare the two"
+        ]
+      }
+    },
+    "schema-generator": {
+      "text": "Paste the JSON-LD into the head of your page, then {scan} to check it. Next, see whether your {llms} is yours.",
+      "links": {
+        "scan": [
+          "/#scan",
+          "scan again"
+        ],
+        "llms": [
+          "/tools/llms-txt-checker",
+          "llms.txt"
+        ]
+      }
+    },
+    "llms-txt-checker": {
+      "text": "{scan} to see how llms.txt sits beside the other checks. If the file is a platform default, the {mcp} can draft a replacement. Check every line of it.",
+      "links": {
+        "scan": [
+          "/#scan",
+          "Scan your site"
+        ],
+        "mcp": [
+          "/mcp",
+          "MCP server"
+        ]
+      }
+    },
+    "compare": {
+      "text": "Where the other site is ahead on crawler access, use the {robots}. Where it is ahead on structured data, use the {schema}. Where it has a file you lack, use the {llms}.",
+      "links": {
+        "robots": [
+          "/tools/robots-txt",
+          "robots.txt generator"
+        ],
+        "schema": [
+          "/tools/schema-generator",
+          "schema generator"
+        ],
+        "llms": [
+          "/tools/llms-txt-checker",
+          "llms.txt checker"
+        ]
+      }
+    }
   },
-  "mcpCard": { "line": "The scanner, the fix generators and the playbooks also run as tools inside Claude, Cursor and other MCP clients.", "button": "See the MCP server" }
+  "mcpCard": {
+    "line": "The scanner, the fix generators and the playbooks also run as tools inside Claude, Cursor and other MCP clients.",
+    "button": "See the MCP server"
+  }
 }

@@ -2,9 +2,16 @@
 /* =====================================================================
    scripts/generate-tools-page.js
 
-   Writes tools/index.html from content/tools.json, and the "Next step" block
-   on each tool page between <!-- NEXT:START --> and <!-- NEXT:END -->. Nothing
-   else on those pages is touched.
+   Writes tools/index.html from content/tools.json, and the generated blocks on
+   each tool page:
+     compare.html            the "Next step" block between NEXT:START and NEXT:END
+     the other tool pages    TOOL-INTRO (chips and "Try an example", after the banner)
+                             and TOOL-MORE (how it works, why it matters, the FAQ from
+                             the page's own FAQPage JSON-LD, the Next step block and
+                             "Use it from Claude"), plus the kicker, the H1 and the
+                             data-toolx hooks that tools/shared.js reads.
+   Nothing else on those pages is touched. compare.html is never rewritten beyond
+   its Next step block.
 
    The chips come from the inventory, not from the file: a tool earns
    "Runs in your browser" only if none of its scripts makes a network request,
@@ -24,6 +31,7 @@ const icons = require('../lib/icons.js');
 const shell = require('../lib/page-shell.js');
 const site = require('../lib/site-config.js');
 const methodology = require('../lib/methodology.js');
+const mcp = require('../api/mcp.js');
 
 const CSS_VERSION = 50;
 const NEXT_START = '<!-- NEXT:START -->';
@@ -294,9 +302,171 @@ function nextRegion(html) {
   return m ? m[0] : null;
 }
 
+
+/* ---------- tool pages: kicker, H1, hooks, TOOL-INTRO, TOOL-MORE ---------- */
+
+const regionRe = (name) => new RegExp('[ \\t]*<!-- ' + name + ':START -->[\\s\\S]*?<!-- ' + name + ':END -->\\n');
+const subst = (v) => String(v).replace('{host}', site.host).replace('{base}', site.baseUrl);
+const polished = (d) => d.tools.filter((t) => t.polish);
+
+function introBlock(t) {
+  const chips = '<ul class="tools-chips toolx-chips">' + t.chips.map((c) => '<li class="tools-chip">' + esc(c) + '</li>').join('') + '</ul>';
+  const live = t.liveStatus ? '\n        <p class="toolx-live" data-toolx-live role="status" aria-live="polite"></p>' : '';
+  const ex = t.example ? '\n          <button type="button" class="btn btn--ghost toolx-example" data-toolx-example="' + esc(subst(t.example.value)) + '" data-toolx-target="' + esc(t.example.target) + '">Try an example</button>' : '';
+  return '    <!-- TOOL-INTRO:START -->\n    <section class="toolx-intro" aria-label="About this tool">\n      <div class="section__inner">\n        <div class="toolx-intro__row">\n          ' + chips + ex + '\n        </div>' + live + '\n      </div>\n    </section>\n    <!-- TOOL-INTRO:END -->\n';
+}
+
+function claudeLine(t) {
+  const names = [];
+  const text = esc(t.claude).replace(/\{([a-z_]+)\}/g, (m, n) => { names.push(n); return '<code>' + n + '</code>'; });
+  names.forEach((n) => { if (!mcp.TOOLS.some((x) => x.name === n)) throw new Error(t.slug + ': ' + n + ' is not an MCP tool'); });
+  return '<p class="toolx-claude__text"><strong>Use it from Claude.</strong> ' + text + ' <a href="/mcp">See the MCP server</a>.</p>';
+}
+
+function whyLine(t) {
+  if (!t.why || !resolves(t.why.href)) return '';
+  const reg = methodology.registry();
+  const total = reg.reduce((n, c) => n + c.max, 0);
+  const c = t.why.check ? reg.filter((x) => x.label === t.why.check)[0] : null;
+  if (t.why.check && !c) throw new Error(t.slug + ': "' + t.why.check + '" is not a check in the scanner');
+  const pillar = c ? methodology.PILLARS.filter((p) => p.cat === c.cat)[0].name : '';
+  const text = esc(t.why.text).replace('{max}', c ? c.max : '').replace('{total}', total).replace('{pillar}', esc(pillar)).replace('{link}', '<a href="' + t.why.href + '">' + esc(t.why.link) + '</a>');
+  return '<p class="toolx-why"><strong>Why it matters.</strong> ' + text + '</p>';
+}
+
+function pageFaq(html) {
+  const blocks = html.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || [];
+  for (const b of blocks) {
+    const o = JSON.parse(b.replace(/<\/?script[^>]*>/g, ''));
+    const nodes = o['@graph'] || [o];
+    const f = nodes.filter((n) => n['@type'] === 'FAQPage')[0];
+    if (f) return f.mainEntity.map((q) => [q.name, q.acceptedAnswer.text]);
+  }
+  return [];
+}
+
+function moreBlock(d, t, html) {
+  const icons3 = ['list', 'wrench', 'document'];
+  const steps = [['You give it', t.how.give], ['It does', t.how.does], ['You get', t.how.get]].map((s, i) =>
+    '          <li class="card card--static toolx-step"><span class="toolx-step__icon">' + icon(icons3[i]) + '</span><p class="toolx-step__label">' + s[0] + '</p><p class="toolx-step__text">' + esc(s[1]) + '</p></li>').join('\n');
+  const faqItems = pageFaq(html).map((q) => '          <details>\n            <summary>' + esc(q[0]) + '</summary>\n            <p>' + esc(q[1]) + '</p>\n          </details>').join('\n');
+  const why = whyLine(t);
+  return '    <!-- TOOL-MORE:START -->\n    <section class="toolx-section" aria-labelledby="toolx-how-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How it works</p>\n          <h2 id="toolx-how-heading" class="section-title">Three steps.</h2>\n        </div>\n        <ol class="toolx-steps">\n' + steps + '\n        </ol>\n' + (why ? '        ' + why + '\n' : '') + '      </div>\n    </section>\n\n' +
+    '    <section class="ac-section" aria-labelledby="toolx-faq-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Questions</p>\n          <h2 id="toolx-faq-heading" class="section-title">Common questions.</h2>\n        </div>\n        <div class="ac-faq">\n' + faqItems + '\n        </div>\n      </div>\n    </section>\n\n' +
+    nextBlock(d, t.slug) + '\n' +
+    '    <section class="toolx-section" aria-label="Use it from Claude">\n      <div class="section__inner">\n        <div class="toolx-claude">\n          ' + claudeLine(t) + '\n        </div>\n      </div>\n    </section>\n    <!-- TOOL-MORE:END -->\n';
+}
+
+function ensureAttrs(html, h) {
+  const i = html.indexOf(h.find);
+  if (i === -1) throw new Error('hook anchor not found: ' + h.find);
+  const end = html.indexOf('>', i);
+  const tag = html.slice(i, end);
+  if (tag.indexOf(h.attrs.split(' ')[0]) !== -1) return html;
+  return html.slice(0, i + h.find.length) + ' ' + h.attrs + html.slice(i + h.find.length);
+}
+
+function applyPolish(d, t, html) {
+  // the old hand-written FAQ, now generated from the page's JSON-LD
+  html = html.replace(/\n\n        <div class="doc-section" style="margin-top: \d+px;">\n          <h2 class="doc-section__heading">Common questions<\/h2>[\s\S]*?\n        <\/div>(?=\n      <\/div>\n    <\/section>)/, '');
+  // kicker and H1
+  html = html.replace(/<p class="kicker kicker--on-navy">[^<]*<\/p>/, '<p class="kicker kicker--on-navy">Free tool · ' + esc(t.group) + '</p>');
+  html = html.replace(/<h1 class="page-banner__title">[^<]*<\/h1>/, '<h1 class="page-banner__title">' + esc(t.headline) + '</h1>');
+  // hooks and the shared script
+  t.hooks.forEach((h) => { html = ensureAttrs(html, h); });
+  if (html.indexOf('<script src="shared.js') === -1) {
+    const m = new RegExp('( *)<script src="' + t.script.replace('.', '\\.') + '[^"]*"></script>').exec(html);
+    if (!m) throw new Error(t.file + ': no page script tag');
+    html = html.slice(0, m.index) + m[1] + '<script src="shared.js?v=1"></script>\n' + html.slice(m.index);
+  }
+  // TOOL-INTRO, after the banner
+  const intro = introBlock(t);
+  if (regionRe('TOOL-INTRO').test(html)) html = html.replace(regionRe('TOOL-INTRO'), () => intro);
+  else {
+    const b = html.indexOf('<!-- ---------- Page banner ---------- -->');
+    const close = '    </section>\n';
+    const at = html.indexOf(close, b) + close.length;
+    html = html.slice(0, at) + '\n' + intro + html.slice(at);
+  }
+  // TOOL-MORE takes the place of the old Next step block
+  const more = moreBlock(d, t, html);
+  if (regionRe('TOOL-MORE').test(html)) {
+    html = html.replace(regionRe('NEXT'), (m) => m); // a stray copy outside the block is caught by --check
+    html = html.replace(regionRe('TOOL-MORE'), () => more);
+  } else if (regionRe('NEXT').test(html)) {
+    html = html.replace(regionRe('NEXT'), () => more);
+  } else {
+    const anchor = '    <section aria-label="Scan reminder">';
+    const i = html.indexOf(anchor);
+    if (i === -1) throw new Error(t.file + ': no place for the more block');
+    html = html.slice(0, i) + more + '\n' + html.slice(i);
+  }
+  return html;
+}
+
+function checkPolished(d) {
+  const bad = [];
+  polished(d).forEach((t) => {
+    const page = read(t.file);
+    const f = (m) => bad.push(t.file + ': ' + m);
+    if (page !== applyPolish(d, t, page)) f('the generated blocks, kicker, H1 or hooks are out of date');
+    ['TOOL-INTRO', 'TOOL-MORE', 'NEXT'].forEach((n) => {
+      const c = page.split('<!-- ' + n + ':START -->').length - 1;
+      if (c !== 1) f(n + ' markers appear ' + c + ' times, expected once');
+    });
+    const more = (regionRe('TOOL-MORE').exec(page) || [''])[0];
+    if (more.indexOf('<!-- NEXT:START -->') === -1) f('the Next step block is not inside TOOL-MORE');
+    // visible FAQ equals the FAQPage JSON-LD
+    const ld = pageFaq(page);
+    const vis = [];
+    const re = /<details>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/g;
+    let m;
+    while ((m = re.exec(page))) vis.push([decode(m[1]), decode(m[2])]);
+    if (JSON.stringify(ld) !== JSON.stringify(vis)) f('the visible FAQ does not equal the FAQPage JSON-LD');
+    if (!ld.length) f('no FAQPage JSON-LD');
+    // headings
+    const h1 = page.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/g) || [];
+    if (h1.length !== 1) f('has ' + h1.length + ' h1 elements');
+    else if (/\d/.test(decode(h1[0]))) f('the h1 contains a digit');
+    if (decode(h1[0] || '') !== t.headline) f('the h1 is not the benefit headline');
+    if (page.indexOf('<p class="kicker kicker--on-navy">Free tool · ' + t.group + '</p>') === -1) f('the kicker is not the group');
+    // chips equal the inventory (the check in inventory() reads the scripts); here: the page shows exactly t.chips
+    const chipRow = (/<ul class="tools-chips toolx-chips">([\s\S]*?)<\/ul>/.exec(page) || [])[1] || '';
+    const shown = (chipRow.match(/<li class="tools-chip">([^<]*)<\/li>/g) || []).map((x) => decode(x));
+    if (JSON.stringify(shown) !== JSON.stringify(t.chips)) f('the chips differ from content/tools.json');
+    // hooks, script order, example target
+    t.hooks.forEach((h) => { const i = page.indexOf(h.find); if (i === -1 || page.slice(i, page.indexOf('>', i)).indexOf(h.attrs.split(' ')[0]) === -1) f('hook missing: ' + h.attrs); });
+    const si = page.indexOf('<script src="shared.js'), pi = page.indexOf('<script src="' + t.script);
+    if (si === -1 || pi === -1 || si > pi) f('shared.js must load before ' + t.script);
+    if (t.example && page.indexOf('id="' + t.example.target.slice(1) + '"') === -1) f('the example target ' + t.example.target + ' is not on the page');
+    // generated text: no gradient, emoji, price, directory claim, banned word
+    const gen = decode((regionRe('TOOL-INTRO').exec(page) || [''])[0] + more + (/<h1[\s\S]*?<\/h1>/.exec(page) || [''])[0]);
+    if (/gradient\(/i.test(page)) f('a gradient appears');
+    if (/\p{Extended_Pictographic}/u.test(page.replace(/[©®™]/g, ''))) f('an emoji appears');
+    if (/\$\s?\d|\bper month\b|\/mo\b|\bfree trial\b|\bpremium\b|\b(costs?|only) \d/i.test(gen)) f('a price appears');
+    if (/\b(listed (in|on)|verified by|approved by|certified|certification|official directory|marketplace|trusted by|testimonials?|customers)\b/i.test(gen)) f('a directory, certification or testimonial claim appears');
+    if (/\b(quietly|actually|seamlessly|effortless|powerful|unlock|elevate|supercharge|game-changing|revolutionize|landscape|delve|crucial|robust|recommended|coming soon)\b/i.test(gen)) f('a banned word appears');
+    // JSON-LD parses, links resolve, chrome identical
+    (page.match(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g) || []).forEach((b) => { try { JSON.parse(b.replace(/<\/?script[^>]*>/g, '')); } catch (e) { f('a JSON-LD block does not parse'); } });
+    const r = /<a [^>]*href="([^"]*)"/g;
+    while ((m = r.exec(page.replace(/<script[\s\S]*?<\/script>/g, '')))) if (!resolves(m[1])) f('a link does not resolve: ' + m[1]);
+    const about = read('about.html');
+    const chrome = (h, re2) => norm((h.match(re2) || [''])[0]);
+    const H = /<header class="site-header">[\s\S]*?<\/header>/, F = /<footer class="site-footer"[\s\S]*?<\/footer>/;
+    if (chrome(page, H) !== chrome(about, H)) f('the header differs from about.html');
+    if (chrome(page, F) !== chrome(about, F)) f('the footer differs from about.html');
+    // syntax of the page's scripts
+    [t.file.replace(/[^/]*$/, '') + t.script, 'tools/shared.js'].forEach((js) => {
+      const r2 = require('child_process').spawnSync(process.execPath, ['--check', path.join(ROOT, js)]);
+      if (r2.status !== 0) f('node --check fails for ' + js);
+    });
+  });
+  return bad;
+}
+
 function checkNext(d) {
   const bad = [];
-  d.tools.filter((t) => t.slug !== 'scan').forEach((t) => {
+  d.tools.filter((t) => t.slug !== 'scan' && !t.polish).forEach((t) => {
     const page = read(t.file);
     const starts = page.split(NEXT_START).length - 1;
     const ends = page.split(NEXT_END).length - 1;
@@ -313,7 +483,7 @@ function main() {
   const check = process.argv.indexOf('--check') !== -1;
   if (check) {
     const onDisk = fs.existsSync(PAGE) ? fs.readFileSync(PAGE, 'utf8') : '';
-    const bad = verify(onDisk, d).concat(checkNext(d));
+    const bad = verify(onDisk, d).concat(checkNext(d), checkPolished(d));
     if (onDisk !== html) bad.unshift('tools/index.html is out of date; run node scripts/generate-tools-page.js');
     if (bad.length) { bad.forEach((x) => console.error('FAIL: ' + x)); process.exit(1); }
     console.log('OK: tools/index.html matches content/tools.json (' + d.tools.length + ' tools); every page is listed, chips match the inventory, Next step blocks are current');
@@ -322,13 +492,13 @@ function main() {
   d.tools.filter((t) => t.slug !== 'scan').forEach((t) => {
     const file = path.join(ROOT, t.file);
     const cur = fs.readFileSync(file, 'utf8');
-    const next = withNext(d, t, cur);
+    const next = t.polish ? applyPolish(d, t, cur) : withNext(d, t, cur);
     if (next !== cur) fs.writeFileSync(file, next, 'utf8');
   });
-  const bad = verify(html, d).concat(checkNext(d));
+  const bad = verify(html, d).concat(checkNext(d), checkPolished(d));
   if (bad.length) { bad.forEach((x) => console.error('FAIL: ' + x)); process.exit(1); }
   fs.writeFileSync(PAGE, html, 'utf8');
-  console.log('tools/index.html and ' + (d.tools.length - 1) + ' Next step blocks written');
+  console.log('tools/index.html written; ' + polished(d).length + ' tool pages polished, ' + (d.tools.length - 1 - polished(d).length) + ' with only a Next step block');
 }
 
 if (require.main === module) main();

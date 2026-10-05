@@ -110,6 +110,12 @@
     },
     {
       "class": "rewrite",
+      "files": "^tools/[a-z-]+\\.html$",
+      "pattern": "data-toolx-example",
+      "note": "the Try an example value, written from site.config.json by scripts/generate-tools-page.js"
+    },
+    {
+      "class": "rewrite",
       "files": "\\.html$",
       "pattern": "report-cite",
       "note": "citation lines that give a page's own URL"
