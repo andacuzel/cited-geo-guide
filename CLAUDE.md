@@ -100,6 +100,14 @@ Constraints that must not be broken:
   browser" only if its scripts make no network request; the check reads the scripts. The
   generator also writes the "Next step" block between `<!-- NEXT:START -->` and
   `<!-- NEXT:END -->` on each tool page; edit the text in `content/tools.json`, never in the page.
+- **Tool pages are generated between markers from `content/tools.json`.** Besides the Next
+  step block, `scripts/generate-tools-page.js` writes TOOL-INTRO and TOOL-MORE (chips, "Try an
+  example", how it works, why it matters, the FAQ rendered from the page's own FAQPage JSON-LD,
+  "Use it from Claude"), the kicker, the H1 and the `data-toolx-*` hooks. A new tool page needs
+  an entry there (`polish`, `how`, `why`, `claude`, `example`, `hooks`) and `tools/shared.js`
+  loaded before its own script; edit the JSON-LD, never a hand-written FAQ. `tools/shared.js`
+  and the page scripts must make no request the chips do not state. Run
+  `node scripts/test-tools.js` and `node scripts/generate-tools-page.js --check`.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.
