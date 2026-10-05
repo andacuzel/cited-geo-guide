@@ -1,0 +1,4 @@
+Contact: mailto:andacuz@gmail.com
+Expires: 2027-10-05T00:00:00.000Z
+Preferred-Languages: en, tr
+Canonical: https://answerable-app.vercel.app/.well-known/security.txt

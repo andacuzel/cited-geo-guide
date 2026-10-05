@@ -84,4 +84,10 @@
   <url>
     <loc>https://answerable-app.vercel.app/sample-report</loc>
   </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/changelog</loc>
+  </url>
+  <url>
+    <loc>https://answerable-app.vercel.app/trust</loc>
+  </url>
 </urlset>

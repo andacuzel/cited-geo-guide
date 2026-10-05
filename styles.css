@@ -3543,3 +3543,24 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 @media (max-width: 640px) {
   .pro-band-surface { top: 0; bottom: auto; height: 120px; }
 }
+
+/* ----------------------------- Changelog page (.cl-) ----------------------------- */
+.cl-list { margin-top: 28px; max-width: 760px; }
+.cl-list li { font-size: 15px; }
+.cl-refs { display: inline-block; margin-left: 4px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+.cl-refs code { font: inherit; }
+
+/* ----------------------------- Trust page (.tr-) ----------------------------- */
+.tr-heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.2; color: var(--navy-950); max-width: 760px; }
+.tr-rows { list-style: none; margin: 24px 0 0; padding: 0; max-width: 820px; }
+.tr-row { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 20px; padding: 24px 0; border-top: 1px solid var(--line); }
+.tr-row:last-child { border-bottom: 1px solid var(--line); }
+.tr-icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: var(--navy-800); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.tr-icon__svg { width: 24px; height: 24px; }
+.tr-title { font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.25; color: var(--navy-950); }
+.tr-text { margin-top: 8px; font-size: 16px; line-height: 1.6; color: var(--ink-soft); }
+.tr-text a, .tr-link a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.tr-link { margin-top: 10px; font-size: 15px; }
+@media (max-width: 640px) {
+  .tr-row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+}
