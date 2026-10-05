@@ -88,6 +88,12 @@ Constraints that must not be broken:
   what a visitor or an MCP user can see, one plain factual sentence per entry, with
   the commit hashes as refs. `scripts/generate-changelog.js --check` fails on a ref
   that is not a commit or a date that is not the newest ref's date.
+- **`mcp.html` is generated from the registry.** `scripts/generate-mcp-page.js` writes the
+  whole page (tools, prompts, counts, the server URL from `site.config.json`); never edit it
+  by hand. Every new tool or prompt needs an entry and a group in `content/mcp-copy.json`, or
+  the generator stops. The excerpts come from `content/mcp-examples.json`, captured from the
+  live server with `scripts/capture-mcp-examples.js`; recapture after the tools or the host
+  change. `node scripts/generate-mcp-page.js --check` must pass.
 - `GEMINI_API_KEY` is the Google AI Studio key. Environment or the
   gitignored `.env.local` only; never logged, never in a URL.
 - Node 18+ runtime; `fetch` is global, no node-fetch.
