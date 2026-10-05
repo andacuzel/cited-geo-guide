@@ -42,7 +42,7 @@ const MATRIX_ROWS = 12;   // the frame clips below this; rows past the clip are 
 const PAGE_ROWS = 8;      // pages shown in the list crop
 const FIX_COUNT = 2;      // fix cards shown in the fixes crop
 const CIT_ROWS = 3;       // rows of the open group in the citations crop
-const TRY_ROWS = 4;       // rows of the open group in the tries crop
+const TRY_ROWS = 3;       // rows of the open group in the tries crop
 const NAMES = ['summary', 'gap', 'matrix', 'pages', 'fixes', 'print', 'citations', 'tries'];
 
 /* ---------- small markup helpers (the renderer's output is well formed) ---------- */
@@ -89,6 +89,7 @@ function clean(html, keepButtons) {
   s = s.replace(/ (data-toggle-cluster|data-action="print")\b/g, '');
   s = s.replace(/<table class="rp-matrix"[^>]*>/, '<table class="rp-matrix">');
   s = s.replace(/ role="img" aria-label="try \d: [^"]*"/g, '');
+  s = s.replace(/(<span class="rp-cit-model__meta">)[a-z]+, /g, '$1');   // the provider name is left out; the model id and date stay
   s = s.replace(/<span class="rp-vh">[^<]*<\/span>/g, '').replace(/ class=""/g, '');   // text for screen readers only; a crop is one labelled image
   return s;
 }
@@ -140,10 +141,16 @@ function crops(data) {
   });
   out.pages = wrap(clean('<div class="rp-pages"><ul class="rp-list">\n' + lis.join('\n') + '\n</ul>\n<div class="rp-pane"><p class="rp-pane__path">' + firstPath + '</p>' + firstDetail + '</div></div>'));
 
-  // Fixes: the first cards. The page lists are folded away (a closed <details> shows only its summary).
+  // Fixes: two cards, the ones that apply to the most pages after the robots.txt block (which lists crawler
+  // names; the marketing crops leave product names out). The page lists are folded away.
   const fx = byAttr(html, 'data-shot="fixes"');
-  const cards = all(fx, '<article class="rp-fix"', 'article').slice(0, FIX_COUNT)
-    .map((c) => c.replace(/<ul class="rp-pagelist">[\s\S]*?<\/ul>/, ''));
+  const pagesOf = (c) => +/Applies to <strong[^>]*>(\d+)<\/strong>/.exec(c)[1];
+  const cards = all(fx, '<article class="rp-fix"', 'article')
+    .filter((c) => c.indexOf('<h3 class="rp-fix__title">robots.txt') === -1)
+    .map((c, i) => ({ c: c, i: i }))
+    .sort((a, b) => pagesOf(b.c) - pagesOf(a.c) || a.i - b.i)
+    .slice(0, FIX_COUNT)
+    .map((x) => x.c.replace(/<ul class="rp-pagelist">[\s\S]*?<\/ul>/, ''));
   out.fixes = wrap(clean('<div>\n' + cards.join('\n') + '\n</div>'));
 
   // Citations: the dashboard's Citations tab with the published CRM sample (the Citations panel's own
@@ -161,13 +168,12 @@ function crops(data) {
     return /<details[^>]*>/.exec(body)[0].indexOf(' open') === -1 ? body.replace(/^<details/, '<details open') : body;
   };
   const pick = (re) => (re.exec(cit) || [''])[0];
-  const lead = pick(/<p class="rp-cit-lead">[\s\S]*?<\/p>/);
   const label = pick(/<p class="rp-cit-label">[\s\S]*?<\/p>/);
   const kpis = pick(/<ul class="rp-kpis rp-kpis--three">[\s\S]*?<\/ul>/);
   const note = pick(/<p class="rp-note">Across all[\s\S]*?<\/p>/);
   const grp = (open, rows) => '<div class="rp-cit-groups">\n' + ['never', 'unstable', 'always'].map((g) => g === open ? openGroup(g, rows) : fold(g)).join('\n') + '\n</div>';
-  out.citations = wrap(clean('<div class="rp-cit">\n' + label + '\n' + lead + '\n' + kpis + '\n' + note + '\n' + grp('never', CIT_ROWS) + '\n</div>'));
-  out.tries = wrap(clean('<div class="rp-cit">\n' + lead + '\n' + note + '\n' + grp('unstable', TRY_ROWS) + '\n</div>'));
+  out.citations = wrap(clean('<div class="rp-cit">\n' + label + '\n' + kpis + '\n' + note + '\n' + grp('never', CIT_ROWS) + '\n</div>'));
+  out.tries = wrap(clean('<div class="rp-cit">\n' + note + '\n' + grp('unstable', TRY_ROWS) + '\n</div>'));
 
   // Print: the dashboard's own top bar, with its Print button shown (the script un-hides it).
   const bar = render.topBar({ domain: data.domain, date: data.createdAt, label: 'Sample report' }).replace(' hidden>', '>');
