@@ -1,11 +1,11 @@
 ---
 name: geo-audit
-description: Use when the user asks to audit a website for AI readiness, to check whether AI crawlers can reach and read a site, to review robots.txt or llms.txt for AI crawlers, or for an ordered plan to improve how answer engines read a site. Scans the live homepage with the Answerable tools, compares the score with the category benchmark, reads the matching playbook, generates the fixes and returns a plan. Do not use it to measure whether an assistant names a brand: it measures readiness only.
+description: Use when the user asks to audit a website for AI readiness, to check whether AI crawlers can reach and read a site, to review robots.txt or llms.txt for AI crawlers, or for an ordered plan to improve how answer engines read a site. Scans the live homepage with the Citehound tools, compares the score with the category benchmark, reads the matching playbook, generates the fixes and returns a plan. Do not use it to measure whether an assistant names a brand: it measures readiness only.
 ---
 
 # GEO audit
 
-Audit one domain for AI readiness and hand back an ordered plan. The tools below come from the Answerable MCP server. Your client may show them with a prefix such as `mcp__plugin_answerable_answerable__scan_site`; use whichever name it lists.
+Audit one domain for AI readiness and hand back an ordered plan. The tools below come from the Citehound MCP server. Your client may show them with a prefix such as `mcp__plugin_citehound_citehound__scan_site`; use whichever name it lists.
 
 ## Before you start
 

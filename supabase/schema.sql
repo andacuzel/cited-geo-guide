@@ -1,5 +1,5 @@
 -- =====================================================================
--- Answerable Pro: database schema for Supabase (Postgres).
+-- Citehound Pro: database schema for Supabase (Postgres).
 --
 -- PREPARED, NOT APPLIED. Nothing in this repository reads it and no
 -- Supabase project exists yet. Apply it by hand in a new project's SQL

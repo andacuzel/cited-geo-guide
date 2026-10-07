@@ -31,7 +31,7 @@ const shell = require('../lib/page-shell.js');
 
 const FILE = path.join(ROOT, 'mcp.html');
 const MCP_PATH = '/api/mcp';
-const CSS_VERSION = 49;
+const CSS_VERSION = 56;
 const PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 const word = (n) => (n >= 0 && n < WORDS.length ? WORDS[n] : String(n));
@@ -94,14 +94,14 @@ function banner(d) {
   return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner mcp-banner">\n' +
     '          <div class="page-banner__body mcp-banner__body">\n' +
     '            <p class="kicker kicker--on-navy">MCP server</p>\n' +
-    '            <h1 id="hero-heading" class="page-banner__title">Use Answerable from inside Claude.</h1>\n' +
+    '            <h1 id="hero-heading" class="page-banner__title">Use Citehound from inside Claude.</h1>\n' +
     '            <p class="page-banner__desc">Scan a site, get the fix, read the playbook and the research, without leaving the conversation. Free, no signup.</p>\n' +
     '            <div class="mcp-banner__actions">\n              <a href="#connect" class="btn btn--gold">Connect it</a>\n              <a href="#tools" class="btn btn--ghost-on-navy">See what it can do</a>\n            </div>\n          </div>\n' +
     '          <div class="mcp-banner__side">\n' +
     '            <figure class="mcp-chat" aria-label="Example: a question, the tool it runs and the real output">\n              <div class="mcp-chat__head">Example</div>\n              <div class="mcp-chat__body">\n' +
     '                <div class="mcp-msg mcp-msg--user">\n                  <span class="mcp-msg__who">You ask</span>\n                  <p class="mcp-msg__text">' + esc(e.prompt) + '</p>\n                </div>\n' +
-    '                <div class="mcp-call">\n                  ' + check.replace('<svg ', '<svg width="13" height="13" ') + '\n                  <span><span class="mcp-call__server">answerable</span> · <span class="mcp-call__tool">' + esc(e.tool) + '</span></span>\n                  <span class="mcp-call__arg">' + esc(e.arguments.domain || '') + '</span>\n                </div>\n' +
-    '                <div class="mcp-msg mcp-msg--assistant">\n                  <span class="mcp-msg__who">Answerable returns</span>\n                  <div class="mcp-msg__text mcp-excerpt" data-example="' + e.id + '">\n              ' + bannerExcerpt(e) + '\n                  </div>\n                </div>\n' +
+    '                <div class="mcp-call">\n                  ' + check.replace('<svg ', '<svg width="13" height="13" ') + '\n                  <span><span class="mcp-call__server">citehound</span> · <span class="mcp-call__tool">' + esc(e.tool) + '</span></span>\n                  <span class="mcp-call__arg">' + esc(e.arguments.domain || '') + '</span>\n                </div>\n' +
+    '                <div class="mcp-msg mcp-msg--assistant">\n                  <span class="mcp-msg__who">Citehound returns</span>\n                  <div class="mcp-msg__text mcp-excerpt" data-example="' + e.id + '">\n              ' + bannerExcerpt(e) + '\n                  </div>\n                </div>\n' +
     '              </div>\n            </figure>\n            <p class="mcp-banner__caption">Real output from the tool, ' + longDate(d.ex.capturedAt) + '. Excerpt.</p>\n          </div>\n' +
     '        </div>\n      </div>\n    </section>\n';
 }
@@ -129,7 +129,7 @@ function toolCard(d, tool) {
     more += '            <p class="mcp-more__label">Example</p>\n            <p class="mcp-more__prompt">You ask: “' + esc(ex.prompt) + '”</p>\n' +
       '            <div class="fix-snippet">\n              <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first ' + ex.lines.length + ' of ' + ex.totalLines + ' lines</span></div>\n' +
       '              <pre class="fix-snippet__code" data-example="' + ex.id + '">' + esc(ex.lines.join('\n')) + '</pre>\n            </div>\n' +
-      '            <p class="mcp-more__note">Captured ' + longDate(d.ex.capturedAt) + '.</p>\n';
+      '            <p class="mcp-more__note">Captured ' + longDate(ex.capturedAt || d.ex.capturedAt) + '.</p>\n';
   }
   return '          <article class="card card--static mcp-tool" id="' + tool.name + '">\n            <h4 class="mcp-tool__name">' + tool.name + '</h4>\n            <p class="card__desc mcp-tool__line">' + esc(c.line) + '</p>\n' +
     '            <details class="mcp-more">\n              <summary>Inputs and example</summary>\n              <div class="mcp-more__body">\n' + more.replace(/^ {12}/gm, '                ') + '              </div>\n            </details>\n          </article>';
@@ -157,14 +157,14 @@ function workflows(d) {
 function connect() {
   const copyIcon = icon('copy');
   const snippet = (label, code) => '            <div class="fix-snippet">\n              <div class="fix-snippet__head">\n                <span class="fix-snippet__label">' + esc(label) + '</span>\n                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" hidden>' + copyIcon.replace('<svg ', '<svg width="13" height="13" ') + ' Copy</button></div>\n              </div>\n              <pre class="fix-snippet__code">' + esc(code) + '</pre>\n            </div>\n';
-  const cursor = JSON.stringify({ mcpServers: { answerable: { url: URL_FULL } } }, null, 2);
+  const cursor = JSON.stringify({ mcpServers: { citehound: { url: URL_FULL } } }, null, 2);
   const det = (title, inner) => '          <details>\n            <summary>' + title + '</summary>\n' + inner + '          </details>\n';
   const clients =
-    det('Claude', '            <ol class="mcp-steps">\n              <li>Open Claude and go to Customize, then Connectors.</li>\n              <li>Choose Add, then Add custom connector.</li>\n              <li>Name it Answerable and paste the server address from above.</li>\n              <li>Save it. No authentication is needed.</li>\n              <li>Ask: “Scan example.com and tell me what to fix first.”</li>\n            </ol>\n            <p>Custom connectors depend on your plan. Your client’s help has the current steps.</p>\n') +
-    det('Claude Code', '            <ol class="mcp-steps">\n              <li>Run this once, from any directory.</li>\n              <li>Start a session and ask for a scan.</li>\n            </ol>\n' + snippet('Terminal', 'claude mcp add --transport http answerable ' + URL_FULL)) +
+    det('Claude', '            <ol class="mcp-steps">\n              <li>Open Claude and go to Customize, then Connectors.</li>\n              <li>Choose Add, then Add custom connector.</li>\n              <li>Name it Citehound and paste the server address from above.</li>\n              <li>Save it. No authentication is needed.</li>\n              <li>Ask: “Scan example.com and tell me what to fix first.”</li>\n            </ol>\n            <p>Custom connectors depend on your plan. Your client’s help has the current steps.</p>\n') +
+    det('Claude Code', '            <ol class="mcp-steps">\n              <li>Run this once, from any directory.</li>\n              <li>Start a session and ask for a scan.</li>\n            </ol>\n' + snippet('Terminal', 'claude mcp add --transport http citehound ' + URL_FULL)) +
     det('Cursor', '            <ol class="mcp-steps">\n              <li>Open <code>.cursor/mcp.json</code> in your project, or <code>~/.cursor/mcp.json</code> for every project.</li>\n              <li>Add this block.</li>\n              <li>Restart Cursor, or reload its MCP connections.</li>\n            </ol>\n' + snippet('.cursor/mcp.json', cursor)) +
     det('Other clients', '            <p>Any client that speaks Streamable HTTP can use the same address. By hand, send <code>MCP-Protocol-Version: ' + PROTOCOL_VERSIONS[0] + '</code> and <code>Mcp-Method</code> on every request, <code>Mcp-Name</code> on <code>tools/call</code> and <code>prompts/get</code>, and the protocol version and client capabilities in <code>_meta</code>; ' + PROTOCOL_VERSIONS.slice(1).map((v) => '<code>' + v + '</code>').join(' and ') + ' are also accepted.</p>\n');
-  return '    <section class="mcp-section" id="connect" aria-labelledby="connect-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Connect</p>\n          <h2 id="connect-heading" class="section-title">Connect it in a minute.</h2>\n          <p class="section-sub">Add this address to your client. No key, no account.</p>\n        </div>\n' +
+  return '    <section class="mcp-section" id="connect" aria-labelledby="connect-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Connect</p>\n          <h2 id="connect-heading" class="section-title">Connect it in a minute.</h2>\n          <p class="section-sub">Add this address to your client. No key, no account. Connected before the rename? Remove the old connector and add this one again: tool prefixes change with the server name.</p>\n        </div>\n' +
     '        <div class="mcp-url">\n          <label class="mcp-vh" for="mcp-url">Server address</label>\n          <input id="mcp-url" class="mcp-url__field" type="text" readonly value="' + esc(URL_FULL) + '" spellcheck="false" />\n          <button type="button" class="btn btn--gold mcp-url__copy" hidden>Copy</button>\n        </div>\n' +
     '        <div class="ac-faq mcp-clients">\n' + clients + '        </div>\n      </div>\n    </section>\n';
 }
@@ -189,7 +189,7 @@ function faqEntries(d) {
   const n = d.tools.length;
   const liveN = d.live.length;
   return [
-    ['What is MCP?', 'MCP, the Model Context Protocol, is an open standard that lets an AI assistant call outside tools directly instead of a person copying results between a website and a chat. Connect Answerable’s server and the assistant can run a scan, build a fix or read a playbook inside the conversation.'],
+    ['What is MCP?', 'MCP, the Model Context Protocol, is an open standard that lets an AI assistant call outside tools directly instead of a person copying results between a website and a chat. Connect Citehound’s server and the assistant can run a scan, build a fix or read a playbook inside the conversation.'],
     ['Do I need an account?', 'No. There is no signup, no API key and no login. Add the server address to your client and ask.'],
     ['Is it free?', 'All ' + word(n) + ' tools are free, and so are the ' + word(d.prompts.length) + ' prompts. The ' + word(liveN) + ' tools that scan a live site are limited per domain, so one site is not fetched over and over, and there is a ceiling across all callers.'],
     ['What data does it fetch and keep?', 'The ' + word(liveN) + ' tools that scan a live site (' + d.live.join(', ') + ') fetch a domain’s public robots.txt, llms.txt, sitemap and homepage, and for a store one product page where robots.txt allows it. The other ' + word(n - liveN) + ' read our own files and fetch nothing. Nothing about who you are is stored. The server keeps counters keyed by a one-way hash of the scanned domain, which expire within an hour, to limit repeated fetches of one site.'],
@@ -212,8 +212,8 @@ const SCRIPT = '  <script>\n    (function () {\n      \'use strict\';\n      fun
 /* ---------- page ---------- */
 
 function meta(d) {
-  const title = 'Answerable. — MCP Server for Claude, Cursor and Other AI Tools';
-  const description = 'Use Answerable from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. ' + cap(word(d.tools.length)) + ' free, read-only tools, nothing stored.';
+  const title = 'Citehound — MCP Server for Claude, Cursor and Other AI Tools';
+  const description = 'Use Citehound from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. ' + cap(word(d.tools.length)) + ' free, read-only tools, nothing stored.';
   return { title, description };
 }
 
@@ -223,10 +223,10 @@ function jsonld(d) {
     '@graph': [
       {
         '@type': 'SoftwareApplication',
-        name: 'Answerable MCP Server',
+        name: 'Citehound MCP Server',
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any',
-        description: 'An MCP server exposing Answerable’s AI-visibility scanner, fix generators and vertical playbooks as tools for Claude, Cursor and other MCP clients.',
+        description: 'An MCP server exposing Citehound’s AI-visibility scanner, fix generators and vertical playbooks as tools for Claude, Cursor and other MCP clients.',
         url: site.baseUrl + '/mcp',
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
       },
@@ -266,7 +266,7 @@ function verify(html, d) {
   const expectMarker = { toolCountLower: word(d.tools.length), promptCountLower: word(d.prompts.length), liveCountCap: cap(word(d.live.length)), contentCountLower: word(d.tools.length - d.live.length), liveToolNames: d.live.join(', ') };
   Object.keys(expectMarker).forEach((k) => { if (marker(k) !== expectMarker[k]) fail('count marker ' + k + ' is "' + marker(k) + '", the registry gives "' + expectMarker[k] + '"'); });
   const desc = /<meta name="description" content="([^"]*)"/.exec(html);
-  if (!desc || desc[1].length < 120 || desc[1].length > 165) fail('meta description is ' + (desc ? desc[1].length : 'missing') + ' characters, expected 120 to 165');
+  if (!desc || desc[1].length < 120 || desc[1].length > 160) fail('meta description is ' + (desc ? desc[1].length : 'missing') + ' characters, expected 120 to 160');
   if (desc && desc[1].toLowerCase().indexOf(word(d.tools.length) + ' free, read-only tools') === -1) fail('meta description does not carry the registry tool count');
   const cards = (html.match(/<article class="card card--static mcp-tool"/g) || []).length;
   const flows = (html.match(/<article class="card card--static mcp-tool mcp-flow"/g) || []).length;

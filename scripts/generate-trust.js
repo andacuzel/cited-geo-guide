@@ -35,7 +35,7 @@ const schemaLib = require('../lib/schema.js');
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'trust.html');
 const SEC = path.join(ROOT, '.well-known', 'security.txt');
-const CSS_VERSION = 55;
+const CSS_VERSION = 56;
 const esc = shell.esc;
 const fig = (k, v) => '<span data-fig="tr-' + k + '">' + esc(v) + '</span>';
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
@@ -61,7 +61,7 @@ function figures() {
 function rows(F) {
   const ic = (n) => icons.svg(n, { cls: 'tr-icon__svg' });
   const R = [
-    ['people', 'Who runs it.', 'Answerable is built and run by Andaç Üzel. The About page has the background.', '/about', 'About'],
+    ['people', 'Who runs it.', 'Citehound is built and run by Andaç Üzel. The About page has the background.', '/about', 'About'],
     ['search', 'What the scan measures, and what it does not.', methodology.LIMITS[0] + ' ' + methodology.LIMITS[1], '/methodology', 'Read the methodology'],
     ['report', 'Our own results.', 'A crawl of our own site, ' + fig('pages', F.pages) + ' pages, nothing edited' + (F.before !== null ? ', and the crawl before we fixed what it found: the whole-site score went from ' + fig('before', F.before) + ' to ' + fig('after', F.after) + '.' : ': the whole-site score is ' + fig('after', F.after) + '.'), '/sample-report', 'See the sample report'],
     ['eyeoff', 'What we store.', 'No accounts, no email list and no scan history. The privacy page lists the few things we do keep and for how long.', '/privacy', 'Read the privacy policy'],
@@ -74,15 +74,15 @@ function rows(F) {
 }
 
 function build(F) {
-  const desc = 'Who runs Answerable, what the scan measures and what it does not, our own results, what we store, where the data comes from, and how to report a security issue.';
-  const body = shell.banner({ kicker: 'Trust', title: 'What you can check.', desc: 'Who runs Answerable, what the scan measures, what we store and how to report a problem. Each row links to the evidence.', icon: icons.svg('cybersecurity', {}) }) +
+  const desc = 'Who runs Citehound, what the scan measures and what it does not, our own results, what we store, where the data comes from, and how to report a security issue.';
+  const body = shell.banner({ kicker: 'Trust', title: 'What you can check.', desc: 'Who runs Citehound, what the scan measures, what we store and how to report a problem. Each row links to the evidence.', icon: icons.svg('cybersecurity', {}) }) +
     '\n    <section class="verticals" aria-labelledby="trust-heading">\n      <div class="section__inner">\n        <h2 id="trust-heading" class="tr-heading">The evidence, in eight places.</h2>\n        <ul class="tr-rows">\n' + rows(F) + '\n        </ul>\n      </div>\n    </section>\n';
   return shell.page({
-    title: 'Answerable. — Trust: What You Can Check',
+    title: 'Citehound — Trust: What You Can Check',
     description: desc,
     path: '/trust',
     cssVersion: CSS_VERSION,
-    jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Answerable trust', description: desc, url: site.baseUrl + '/trust' }],
+    jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Citehound trust', description: desc, url: site.baseUrl + '/trust' }],
     body: body
   });
 }

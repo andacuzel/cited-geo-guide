@@ -15,6 +15,11 @@
 
      node scripts/capture-mcp-examples.js            capture and write
      node scripts/capture-mcp-examples.js --dry      capture, print, write nothing
+     node scripts/capture-mcp-examples.js --local    re-capture only the three content tools (get_methodology,
+                                                     get_benchmark, get_citation_sample) from the code in this
+                                                     checkout, with no request at all, and date just those. Used
+                                                     after a rename or a content change, before the new code is
+                                                     deployed. The scans and the schema example are kept as captured.
    ===================================================================== */
 
 'use strict';
@@ -31,7 +36,7 @@ const META = { 'io.modelcontextprotocol/protocolVersion': VERSION, 'io.modelcont
 
 const CALLS = [
   { id: 'scan-self', tool: 'scan_site', args: { domain: site.host }, prompt: 'Scan ' + site.host + ' and tell me what to fix first' },
-  { id: 'methodology', tool: 'get_methodology', args: {}, prompt: 'How is the Answerable score built?' },
+  { id: 'methodology', tool: 'get_methodology', args: {}, prompt: 'How is the Citehound score built?' },
   { id: 'benchmark-crm', tool: 'get_benchmark', args: { category: 'crm' }, prompt: 'How do CRM sites score on AI readiness?' },
   { id: 'citation-sample', tool: 'get_citation_sample', args: {}, prompt: 'Show me a sample citation result' },
   { id: 'schema-self', tool: 'generate_schema', args: { domain: site.host, type: 'organization' }, prompt: 'Write Organization JSON-LD for ' + site.host },
@@ -51,8 +56,27 @@ async function call(c) {
   return { id: c.id, tool: c.tool, arguments: c.args, prompt: c.prompt, lines: all.slice(0, LINES), totalLines: all.length };
 }
 
+const LOCAL_IDS = ['methodology', 'benchmark-crm', 'citation-sample'];
+
+async function callLocal(c) {
+  const mcp = require('../api/mcp.js');
+  const out = await mcp.HANDLERS[c.tool](c.args, { headers: {}, socket: {} });
+  const all = out.text.split('\n');
+  return { id: c.id, tool: c.tool, arguments: c.args, prompt: c.prompt, lines: all.slice(0, LINES), totalLines: all.length, capturedAt: new Date().toISOString().slice(0, 10) };
+}
+
 (async function main() {
   const date = new Date().toISOString().slice(0, 10);
+  if (process.argv.indexOf('--local') !== -1) {
+    const doc = JSON.parse(fs.readFileSync(OUT, 'utf8'));
+    for (const c of CALLS.filter((x) => LOCAL_IDS.indexOf(x.id) !== -1)) {
+      const e = await callLocal(c);
+      doc.examples = doc.examples.map((x) => (x.id === e.id ? e : x));
+      console.log('re-captured ' + e.id + ' locally (' + e.totalLines + ' lines)');
+    }
+    fs.writeFileSync(OUT, JSON.stringify(doc, null, 2) + '\n', 'utf8');
+    return;
+  }
   const examples = [];
   for (const c of CALLS) {
     const e = await call(c);

@@ -1,5 +1,5 @@
 /* =====================================================================
-   /api/mcp — Answerable's MCP server.
+   /api/mcp — Citehound's MCP server.
 
    Exposes the scanner, the playbook/benchmark content and the citation
    tracking content as MCP tools (the registry, TOOLS below, is the one
@@ -90,8 +90,8 @@ const CRAWLERS = require('../lib/crawlers');
 const citation = require('../lib/citation-content');
 
 const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
-const SERVER_INFO = { name: 'answerable', title: 'Answerable', version: '1.0.0' };
-const SERVER_INSTRUCTIONS = 'Answerable scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). It also serves the scoring methodology, the research, a sample report of our own site, the vertical playbooks and the citation question sets, and three prompts for common workflows. Every tool is read-only and non-destructive. It measures readiness, not whether any assistant names a brand.';
+const SERVER_INFO = { name: 'citehound', title: 'Citehound', version: '1.0.0' };
+const SERVER_INSTRUCTIONS = 'Citehound scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). It also serves the scoring methodology, the research, a sample report of our own site, the vertical playbooks and the citation question sets, and three prompts for common workflows. Every tool is read-only and non-destructive. It measures readiness, not whether any assistant names a brand.';
 const DATA_DIR = path.join(__dirname, '..', 'data');
 
 /* ---------------- shared small helpers ---------------- */
@@ -343,7 +343,7 @@ var TOOLS = [
   {
     name: 'scan_site',
     title: 'Scan a site for AI readiness',
-    description: 'Scans a domain’s public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability (can AI crawlers reach it), technical foundation (can machines parse it), and content & trust (does it look like a credible source). Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Answerable’s own benchmark data. If the site looks like a store (two or more of five signals), it also reports a separate agentic-commerce sub-score: whether a UCP merchant profile exists at /.well-known/ucp, whether one product page has Product schema with name, price, availability and image, and whether the llms.txt looks like a platform default. That sub-score is never part of the 100. Call this first for any domain. It fetches the live site (a store scan reads up to one extra product page), so avoid calling it in a tight loop for the same domain.',
+    description: 'Scans a domain’s public robots.txt, llms.txt, sitemap declaration and homepage, and scores it out of 100 across three pillars: discoverability (can AI crawlers reach it), technical foundation (can machines parse it), and content & trust (does it look like a credible source). Returns the score, the three pillar scores, access state for the 10 tracked AI crawlers, every failed check with its fix, and how the score compares to Citehound’s own benchmark data. If the site looks like a store (two or more of five signals), it also reports a separate agentic-commerce sub-score: whether a UCP merchant profile exists at /.well-known/ucp, whether one product page has Product schema with name, price, availability and image, and whether the llms.txt looks like a platform default. That sub-score is never part of the 100. Call this first for any domain. It fetches the live site (a store scan reads up to one extra product page), so avoid calling it in a tight loop for the same domain.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -388,7 +388,7 @@ var TOOLS = [
   {
     name: 'generate_robots_txt',
     title: 'Generate an AI-crawler robots.txt',
-    description: 'Builds a robots.txt file that explicitly allows or blocks named AI crawlers from Answerable’s tracked list of 10, plus an optional Sitemap line. Pure text generation — fetches nothing. Call list_ai_crawlers first if you need the exact tracked crawler names.',
+    description: 'Builds a robots.txt file that explicitly allows or blocks named AI crawlers from Citehound’s tracked list of 10, plus an optional Sitemap line. Pure text generation — fetches nothing. Call list_ai_crawlers first if you need the exact tracked crawler names.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -428,7 +428,7 @@ var TOOLS = [
   {
     name: 'get_playbook',
     title: 'Get a vertical playbook',
-    description: 'Returns the full GEO/AEO playbook for one of Answerable’s fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Called with no argument it returns the list of the fourteen verticals with their track (B2B SaaS, consumer and e-commerce brands, local and independent professionals), so call it with no argument first when you do not know which vertical fits. Read from this project’s own content file, so it matches what a visitor to the site sees. Fetches nothing external. Use after scan_site to turn a failed check into the strategy that applies to the site’s category.',
+    description: 'Returns the full GEO/AEO playbook for one of Citehound’s fourteen verticals, as plain readable text: the strategic shift, three actionable strategies, outdated pitfalls to avoid, and an expert-tip placeholder. Called with no argument it returns the list of the fourteen verticals with their track (B2B SaaS, consumer and e-commerce brands, local and independent professionals), so call it with no argument first when you do not know which vertical fits. Read from this project’s own content file, so it matches what a visitor to the site sees. Fetches nothing external. Use after scan_site to turn a failed check into the strategy that applies to the site’s category.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -443,7 +443,7 @@ var TOOLS = [
   {
     name: 'get_benchmark',
     title: 'Get category benchmark data',
-    description: 'Returns Answerable’s own archived scan data for one category — average, median and range of scores, pillar breakdowns, per-crawler blocked, limited and open counts, and the most common failed checks, with sample size and scan date — or a ranked summary across every category when called with no argument. This is archived data, not a live scan, and fetches nothing external.',
+    description: 'Returns Citehound’s own archived scan data for one category — average, median and range of scores, pillar breakdowns, per-crawler blocked, limited and open counts, and the most common failed checks, with sample size and scan date — or a ranked summary across every category when called with no argument. This is archived data, not a live scan, and fetches nothing external.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -455,14 +455,14 @@ var TOOLS = [
   {
     name: 'list_ai_crawlers',
     title: 'List tracked AI crawlers',
-    description: 'Lists the 10 AI crawlers Answerable tracks: which company runs each, what allowing or blocking it means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.',
+    description: 'Lists the 10 AI crawlers Citehound tracks: which company runs each, what allowing or blocking it means, and this project’s robots.txt generator’s default for it. Use before generate_robots_txt if you need the exact tracked names. Fetches nothing.',
     inputSchema: { type: 'object', properties: {} },
     annotations: { title: 'List tracked AI crawlers', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
   {
     name: 'get_citation_prompts',
     title: 'Get citation questions for a vertical',
-    description: 'Returns the set of buying-intent questions Answerable uses to test whether an AI assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions don’t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask. Read-only: it reads a content file and queries no model. There is deliberately no tool that runs the check for you: a run is about 90 model calls at about five seconds each, far past this server’s time limit, and it would spend a quota anyone could drain. Question sets exist for: ' + citation.verticalsWithSets().join(', ') + '.' + (citation.verticalsWithSets().length < citation.verticals().length ? ' The other verticals are valid but have no questions yet and return a message saying so.' : '') + ' Use when the user asks how to check whether an assistant names their brand, or wants the questions for their category.',
+    description: 'Returns the set of buying-intent questions Citehound uses to test whether an AI assistant names a brand, for one vertical, plus a short protocol a person can run in their own assistant: ask each question in a separate conversation three to five times, note whether the brand is named and whether it appears in a heading, list label, table or bold text, and judge the spread rather than one answer. The questions don’t name any brand in the category being measured. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask. Read-only: it reads a content file and queries no model. There is deliberately no tool that runs the check for you: a run is about 90 model calls at about five seconds each, far past this server’s time limit, and it would spend a quota anyone could drain. Question sets exist for: ' + citation.verticalsWithSets().join(', ') + '.' + (citation.verticalsWithSets().length < citation.verticals().length ? ' The other verticals are valid but have no questions yet and return a message saying so.' : '') + ' Use when the user asks how to check whether an assistant names their brand, or wants the questions for their category.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -478,14 +478,14 @@ var TOOLS = [
   {
     name: 'get_citation_sample',
     title: 'Get the anonymised citation sample',
-    description: 'Returns Answerable’s anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and a note on the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand in the category being measured, no domain and no competitor. Read-only: it reads a content file and queries no model. Use when the user wants to see what a citation result looks like, or asks how much the same question varies between tries.',
+    description: 'Returns Citehound’s anonymised sample citation run as readable text: the model, the date, how many times each question was asked, the questions in three groups (named in every try, unstable, never named), the overall rate of being named with its range across sweeps, and a note on the limits. It is one model on one date, so it is not a ranking, says nothing about other assistants and is not a forecast of traffic. It names no brand in the category being measured, no domain and no competitor. Read-only: it reads a content file and queries no model. Use when the user wants to see what a citation result looks like, or asks how much the same question varies between tries.',
     inputSchema: { type: 'object', properties: {} },
     annotations: { title: 'Get the anonymised citation sample', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
   {
     name: 'get_methodology',
     title: 'Get the scoring methodology',
-    description: 'Explains how the Answerable AI readiness score is built, read from the scanner’s own check registry so it matches what runs. With no argument it returns the three pillars with their weights (they add up to 100), every check with its category, points, what it tests and why it matters, and the limits of the scan: it measures readiness and not whether any assistant names a brand; it gives half credit for a crawler with any applicable Disallow rule, usually an ordinary path; and it reads the homepage only. With a check label it returns that one check in detail. An unknown label returns an error listing the valid labels. Read-only, fetches nothing external. Use when the user asks how a score is calculated, why a check carries the points it does, or what the scan cannot tell them.',
+    description: 'Explains how the Citehound AI readiness score is built, read from the scanner’s own check registry so it matches what runs. With no argument it returns the three pillars with their weights (they add up to 100), every check with its category, points, what it tests and why it matters, and the limits of the scan: it measures readiness and not whether any assistant names a brand; it gives half credit for a crawler with any applicable Disallow rule, usually an ordinary path; and it reads the homepage only. With a check label it returns that one check in detail. An unknown label returns an error listing the valid labels. Read-only, fetches nothing external. Use when the user asks how a score is calculated, why a check carries the points it does, or what the scan cannot tell them.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -496,20 +496,20 @@ var TOOLS = [
   },
   {
     name: 'get_research',
-    title: 'Get Answerable research',
-    description: 'Returns Answerable’s published research: with no argument, the list of reports (the llms.txt and crawler study, the AgaOne case study and the benchmark data) with title, date, one-line finding and URL; with a slug, the key findings, the method limits, the URL and a ready line for citing it. Findings are checked against the published pages and data files. Every study measures readiness inputs, not whether any assistant names a brand. Read-only, fetches nothing external. Use when the user wants evidence for a claim about AI crawler access or llms.txt, a statistic to cite, or the reports behind the benchmarks.',
+    title: 'Get Citehound research',
+    description: 'Returns Citehound’s published research: with no argument, the list of reports (the llms.txt and crawler study, the AgaOne case study and the benchmark data) with title, date, one-line finding and URL; with a slug, the key findings, the method limits, the URL and a ready line for citing it. Findings are checked against the published pages and data files. Every study measures readiness inputs, not whether any assistant names a brand. Read-only, fetches nothing external. Use when the user wants evidence for a claim about AI crawler access or llms.txt, a statistic to cite, or the reports behind the benchmarks.',
     inputSchema: {
       type: 'object',
       properties: {
         slug: { type: 'string', description: 'Optional. A report slug from the list this tool returns with no argument. Omit to list the reports.' }
       }
     },
-    annotations: { title: 'Get Answerable research', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+    annotations: { title: 'Get Citehound research', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   },
   {
     name: 'get_sample_report',
     title: 'Get the sample full-site report',
-    description: 'Returns the sample Pro report as readable text: a real crawl of Answerable’s own site on a stated date, nothing edited. It gives the whole-site score beside the homepage score, the pillar averages, the top priorities from the executive summary with the label saying what wrote it, the checks failing by number of pages, and the link to the full report. It shows what a full-site crawl adds to a one-page scan. It is our own site, not a customer’s, and it measures readiness, not whether any assistant names the site. Read-only, fetches nothing external. Use when the user asks what a full-site report looks like or what a crawl shows that a homepage scan cannot.',
+    description: 'Returns the sample Pro report as readable text: a real crawl of Citehound’s own site on a stated date, nothing edited. It gives the whole-site score beside the homepage score, the pillar averages, the top priorities from the executive summary with the label saying what wrote it, the checks failing by number of pages, and the link to the full report. It shows what a full-site crawl adds to a one-page scan. It is our own site, not a customer’s, and it measures readiness, not whether any assistant names the site. Read-only, fetches nothing external. Use when the user asks what a full-site report looks like or what a crawl shows that a homepage scan cannot.',
     inputSchema: { type: 'object', properties: {} },
     annotations: { title: 'Get the sample full-site report', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }
@@ -755,7 +755,7 @@ var HANDLERS = {
   },
 
   list_ai_crawlers: async function () {
-    var lines = ['The ' + CRAWLERS.length + ' AI crawlers Answerable tracks:', ''];
+    var lines = ['The ' + CRAWLERS.length + ' AI crawlers Citehound tracks:', ''];
     CRAWLERS.forEach(function (c) {
       lines.push(c.ua + ' (' + c.vendor + ')');
       lines.push('  ' + c.desc);

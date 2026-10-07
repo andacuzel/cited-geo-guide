@@ -35,7 +35,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 51;
+const CSS_VERSION = 56;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -258,10 +258,10 @@ function indexHtml(current, F) {
 function faq(F) {
   const c = F.cit;
   return [
-    { q: 'What do I get with Answerable Pro?',
+    { q: 'What do I get with Citehound Pro?',
       html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: an executive summary, the whole-site score beside the homepage score, a heat matrix of which pages fail which checks, a page-by-page explorer, every fix once with the pages it applies to, and a printable version. It also includes a citation run on your brand, which we run for you and add to the report: the questions your buyers ask, each asked ' + c.triesWord + ' times, and the pattern of when your name comes up.' },
     { q: 'How is this different from the free scan?',
-      html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds a citation run on your brand, which we run for you. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets are free to try in your own assistant through the <a href="/mcp">Answerable MCP server</a>.' },
+      html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds a citation run on your brand, which we run for you. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets are free to try in your own assistant through the <a href="/mcp">Citehound MCP server</a>.' },
     { q: 'What is the sample report?',
       html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. Nothing in it was edited or improved, and our own pages still fail some checks. The report says which. Its Citations tab shows the published citation sample, which belongs to a different brand. <a href="/sample-report">Open it.</a>' },
     { q: 'Does it measure whether AI names me?',
@@ -271,7 +271,7 @@ function faq(F) {
     { q: 'Is the citation run self-serve?',
       html: 'No. We run it for you and add it to your report. ' + SELF_SERVE },
     { q: 'Is it really a one-time payment?',
-      html: 'Yes. Answerable Pro is a single one-time purchase. There is no subscription and no recurring billing.' },
+      html: 'Yes. Citehound Pro is a single one-time purchase. There is no subscription and no recurring billing.' },
     { q: 'Do I need an account?',
       html: 'No. There is no account or login. Your report is generated and delivered right after payment.' }
   ];
@@ -293,9 +293,9 @@ function build() {
   const c = F.cit;
   const k = F.case;
   const shell = shellParts();
-  const title = 'Answerable. — Pro: Can AI read you? Does it name you?';
+  const title = 'Citehound — Pro: Can AI read you? Does it name you?';
   const desc = 'Pro crawls up to ' + F.cap + ' pages to show what your homepage hides, then asks a model the questions your buyers ask and records when your name comes up.';
-  if (desc.length < 120 || desc.length > 165) throw new Error('description is ' + desc.length + ' characters');
+  if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const questions = faq(F);
   const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map((q) => ({ '@type': 'Question', name: q.q, acceptedAnswer: { '@type': 'Answer', text: textOf(q.html) } })) };
 
@@ -370,14 +370,14 @@ function build() {
 
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\n' +
     '  <title>' + esc(title) + '</title>\n  <meta name="description" content="' + esc(desc) + '" />\n' +
-    '  <meta name="keywords" content="Answerable Pro, AI readiness report, citation tracking, full-site crawl, GEO, AEO" />\n  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n  <link rel="canonical" href="' + SITE + '/pro" />\n\n' +
-    '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(desc) + '" />\n  <meta property="og:url" content="' + SITE + '/pro" />\n  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n\n' +
-    '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(desc) + '" />\n  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
+    '  <meta name="keywords" content="Citehound Pro, AI readiness report, citation tracking, full-site crawl, GEO, AEO" />\n  <meta name="author" content="Citehound" />\n  <meta name="robots" content="index, follow" />\n  <link rel="canonical" href="' + SITE + '/pro" />\n\n' +
+    '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(desc) + '" />\n  <meta property="og:url" content="' + SITE + '/pro" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
+    '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(desc) + '" />\n  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' + body +
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n  </main>\n\n' +
+    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n  </main>\n\n' +
     '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }
 
@@ -550,7 +550,7 @@ function check() {
     if (ldFaq.mainEntity.length !== shown.length) bad('FAQ: ' + ldFaq.mainEntity.length + ' in JSON-LD, ' + shown.length + ' shown');
     ldFaq.mainEntity.forEach(function (q, i) { if (!shown[i] || shown[i].q !== q.name || shown[i].a !== q.acceptedAnswer.text) bad('FAQ ' + (i + 1) + ' differs between the JSON-LD and the page'); });
   }
-  [['Is it really a one-time payment?', 'Yes. Answerable Pro is a single one-time purchase. There is no subscription and no recurring billing.'], ['Do I need an account?', 'No. There is no account or login. Your report is generated and delivered right after payment.']].forEach((k) => { if (!shown.some((s) => s.q === k[0] && s.a === k[1])) bad('the existing answer "' + k[0] + '" changed'); });
+  [['Is it really a one-time payment?', 'Yes. Citehound Pro is a single one-time purchase. There is no subscription and no recurring billing.'], ['Do I need an account?', 'No. There is no account or login. Your report is generated and delivered right after payment.']].forEach((k) => { if (!shown.some((s) => s.q === k[0] && s.a === k[1])) bad('the existing answer "' + k[0] + '" changed'); });
   ['One payment. Full Pro report for your domain.', 'In preparation'].forEach((t) => { if (page.indexOf(t) === -1) bad('the existing statement "' + t + '" is missing'); });
   if (bandHtml.indexOf('One-time purchase. No subscription.') === -1) bad('the band lost its price-model line');
 
@@ -573,7 +573,7 @@ function check() {
   });
   if ((page.match(/<h1[\s>]/g) || []).length !== 1) bad('pro.html needs exactly one h1');
   const meta = /<meta name="description" content="([^"]*)"/.exec(page);
-  if (!meta || meta[1].length < 120 || meta[1].length > 165) bad('meta description length ' + (meta ? meta[1].length : 'missing'));
+  if (!meta || meta[1].length < 120 || meta[1].length > 160) bad('meta description length ' + (meta ? meta[1].length : 'missing'));
   if (page.indexOf('<link rel="canonical" href="' + SITE + '/pro" />') === -1) bad('canonical changed');
   ['og:title', 'og:description'].forEach((p) => { if (!new RegExp('property="' + p + '" content="[^"]+"').test(page)) bad('missing ' + p); });
   ['twitter:title', 'twitter:description'].forEach((p) => { if (!new RegExp('name="' + p + '" content="[^"]+"').test(page)) bad('missing ' + p); });

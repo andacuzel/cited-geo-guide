@@ -29,7 +29,7 @@ const icons = require('../lib/icons.js');
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'content', 'changelog.json');
 const PAGE = path.join(ROOT, 'changelog.html');
-const CSS_VERSION = 55;
+const CSS_VERSION = 56;
 const esc = shell.esc;
 
 const git = (args) => cp.execFileSync('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
@@ -37,17 +37,17 @@ const git = (args) => cp.execFileSync('git', args, { cwd: ROOT, stdio: ['ignore'
 function build(data) {
   const entries = data.entries.slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
   const items = entries.map((e) => '          <li><span class="n">' + esc(e.date) + '</span><span>' + esc(e.text) + ' <span class="cl-refs">' + e.refs.map((r) => '<code>' + esc(r) + '</code>').join(' ') + '</span></span></li>').join('\n');
-  const desc = 'Every change to the Answerable site, scanner and MCP server that a visitor can see, newest first, with the commits behind it. Scoring changes are in the methodology.';
+  const desc = 'Every visible change to the Citehound site, scanner and MCP server, newest first, with the commits behind it. Scoring changes are in the methodology.';
   const body = shell.banner({ kicker: 'Changelog', title: 'What changed, and when.', desc: 'Pages, tools, checks, research and MCP tools that a visitor can see, newest first. Each entry lists the commits behind it.', icon: icons.svg('clock', {}) }) +
     '\n    <section class="verticals" aria-labelledby="log-heading">\n      <div class="section__inner">\n        <div class="doc-section">\n          <h2 id="log-heading" class="doc-section__heading">' + entries.length + ' changes</h2>\n' +
     '          <p>Entries are drawn from the project\'s git history and cover only what a visitor or an MCP user can see. Changes to how the score is calculated are also recorded in the <a href="/methodology#changelog-heading">methodology changelog</a>.</p>\n        </div>\n' +
     '        <ol class="changelog-list cl-list">\n' + items + '\n        </ol>\n      </div>\n    </section>\n';
   return shell.page({
-    title: 'Answerable. — Changelog: What Changed on the Site',
+    title: 'Citehound — Changelog: What Changed on the Site',
     description: desc,
     path: '/changelog',
     cssVersion: CSS_VERSION,
-    jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Answerable changelog', description: desc, url: site.baseUrl + '/changelog' }],
+    jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Citehound changelog', description: desc, url: site.baseUrl + '/changelog' }],
     body: body
   });
 }

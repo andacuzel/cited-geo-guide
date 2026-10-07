@@ -1,5 +1,5 @@
 /* =====================================================================
-   ANSWERABLE. — GEO & AEO Strategy Generator
+   CITEHOUND — GEO & AEO Strategy Generator
    Vanilla JS, zero backend, zero API calls. Built for static hosting.
 
    Three tracks share this one file: B2B SaaS (for-saas.html), consumer
@@ -147,7 +147,7 @@
         that file for the actual content and how to add a vertical.
      --------------------------------------------------------------- */
 
-  var _playbooks = (typeof window !== 'undefined' && window.ANSWERABLE_PLAYBOOKS) || { saasData: {}, brandData: {}, professionalData: {} };
+  var _playbooks = (typeof window !== 'undefined' && window.CITEHOUND_PLAYBOOKS) || { saasData: {}, brandData: {}, professionalData: {} };
   var saasData = _playbooks.saasData;
   var brandData = _playbooks.brandData;
   var professionalData = _playbooks.professionalData;
@@ -331,7 +331,7 @@
 
     var opts = {
       margin: [14, 12, 16, 12],
-      filename: 'answerable-geo-aeo-playbook-' + fileSlug + '.pdf',
+      filename: 'citehound-geo-aeo-playbook-' + fileSlug + '.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },

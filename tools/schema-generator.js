@@ -10,7 +10,7 @@
 (function () {
   'use strict';
 
-  var S = window.ANSWERABLE_SCHEMA;
+  var S = window.CITEHOUND_SCHEMA;
   var fieldsEl = document.getElementById('schemaFields');
   if (!S || !fieldsEl) return;
 

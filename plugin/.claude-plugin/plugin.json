@@ -1,8 +1,8 @@
 {
-  "name": "answerable",
-  "displayName": "Answerable",
+  "name": "citehound",
+  "displayName": "Citehound",
   "version": "1.0.0",
-  "description": "Audit a site for AI readiness, check a store for agentic-commerce readiness, and write citation-ready content, with the Answerable MCP server and three skills.",
+  "description": "Audit a site for AI readiness, check a store for agentic-commerce readiness, and write citation-ready content, with the Citehound MCP server and three skills.",
   "author": {
     "name": "Andaç Üzel",
     "url": "https://answerable-app.vercel.app/about"

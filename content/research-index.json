@@ -20,7 +20,7 @@
         "The Shopify-generated llms.txt pattern was checked in two files read by hand, Magic Spoon and Allbirds.",
         "It measures inputs, not outcomes: whether any of these signals correlate with being cited in an AI answer is not known."
       ],
-      "cite": "Andaç Üzel, “Who Controls Your Brand's AI Representation?,” Answerable Research, 29 July 2026. https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+      "cite": "Andaç Üzel, “Who Controls Your Brand's AI Representation?,” Citehound Research, 29 July 2026. https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
       "sources": [
         "research/llms-txt-adoption-2026.html"
       ]
@@ -35,15 +35,15 @@
       "summary": "AgaOne Commodities scanned two new corporate sites, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.",
       "findings": [
         "Both sites scored in the mid-fifties before the work: 58 and 55.",
-        "One site reached 100 out of 100 on the checks Answerable runs today. The other reached 89.",
+        "One site reached 100 out of 100 on the checks Citehound runs today. The other reached 89.",
         "The average gain was 38 points across 2 sites and 16 checks."
       ],
       "limits": [
         "Two sites from one company, published with permission: a case study, not a sample.",
-        "A score of 100 means the site passes all 16 checks Answerable runs today. It does not mean the site will be cited in an AI answer.",
+        "A score of 100 means the site passes all 16 checks Citehound runs today. It does not mean the site will be cited in an AI answer.",
         "The scoring model will get harder, so the same sites are expected to move."
       ],
-      "cite": "Andaç Üzel, “Two Sites, Launched With Good SEO, Invisible to AI Crawlers,” Answerable Case Studies, August 2026. https://answerable-app.vercel.app/research/case-study-agaone",
+      "cite": "Andaç Üzel, “Two Sites, Launched With Good SEO, Invisible to AI Crawlers,” Citehound Case Studies, August 2026. https://answerable-app.vercel.app/research/case-study-agaone",
       "sources": [
         "research/case-study-agaone.html"
       ]
@@ -67,7 +67,7 @@
         "59 sites that could not be reached are excluded and counted.",
         "A limited result means an applicable Disallow rule, usually an ordinary path, and is not a block."
       ],
-      "cite": "Andaç Üzel, “Which AI crawlers do sites block? 219 homepages, six categories,” Answerable Research, 5 October 2026. https://answerable-app.vercel.app/research/crawler-access-2026",
+      "cite": "Andaç Üzel, “Which AI crawlers do sites block? 219 homepages, six categories,” Citehound Research, 5 October 2026. https://answerable-app.vercel.app/research/crawler-access-2026",
       "sources": [
         "research/crawler-access-2026.html",
         "data/"
@@ -90,7 +90,7 @@
         "One scan date per category. A rescan in October 2026 moved category averages by one point or less.",
         "It measures readiness, not whether any assistant names a brand."
       ],
-      "cite": "Answerable, \"AI readiness benchmarks,\" 31 July 2026. https://answerable-app.vercel.app/benchmarks",
+      "cite": "Citehound, \"AI readiness benchmarks,\" 31 July 2026. https://answerable-app.vercel.app/benchmarks",
       "sources": [
         "benchmarks/index.html",
         "data/"

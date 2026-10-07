@@ -4,34 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Answerable. — Methodology: How the AI Visibility Score Is Calculated</title>
-  <meta name="description" content="How Answerable's AI visibility score is built: three weighted pillars, all 16 checks and their points, what the scan does not measure, and how data is collected." />
+  <title>Citehound — Methodology: How the AI Visibility Score Is Calculated</title>
+  <meta name="description" content="How Citehound's AI visibility score is built: three weighted pillars, all 16 checks and their points, what the scan does not measure, and how data is collected." />
   <meta name="keywords" content="AI visibility methodology, GEO scoring, AEO scoring, AI crawler access, scan methodology" />
-  <meta name="author" content="Answerable." />
+  <meta name="author" content="Citehound" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://answerable-app.vercel.app/methodology" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Answerable. — Methodology: How the AI Visibility Score Is Calculated" />
+  <meta property="og:title" content="Citehound — Methodology: How the AI Visibility Score Is Calculated" />
   <meta property="og:description" content="The three weighted pillars, all 16 checks and their point values, what the scan does not measure, and how the data is collected." />
   <meta property="og:url" content="https://answerable-app.vercel.app/methodology" />
-  <meta property="og:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
-  <meta property="og:site_name" content="Answerable." />
+  <meta property="og:image" content="https://answerable-app.vercel.app/assets/brand/og-default.png" />
+  <meta property="og:site_name" content="Citehound" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Answerable. — Methodology: How the AI Visibility Score Is Calculated" />
+  <meta name="twitter:title" content="Citehound — Methodology: How the AI Visibility Score Is Calculated" />
   <meta name="twitter:description" content="The three weighted pillars, all 16 checks and their point values, what the scan does not measure, and how the data is collected." />
-  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/og-image.png" />
+  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/brand/og-default.png" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%230B1526'/%3E%3Ctext x='12' y='17' font-family='Georgia,serif' font-size='13' fill='%23C2922F' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=48" />
+  <link rel="stylesheet" href="styles.css?v=56" />
 
   <script type="application/ld+json">
   {
@@ -73,7 +73,7 @@
       {
         "@type": "Organization",
         "@id": "https://answerable-app.vercel.app/#org",
-        "name": "Answerable.",
+        "name": "Citehound",
         "url": "https://answerable-app.vercel.app/",
         "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
         "founder": {
@@ -83,7 +83,7 @@
       {
         "@type": "WebSite",
         "@id": "https://answerable-app.vercel.app/#website",
-        "name": "Answerable.",
+        "name": "Citehound",
         "url": "https://answerable-app.vercel.app/",
         "publisher": {
           "@id": "https://answerable-app.vercel.app/#org"
@@ -103,8 +103,8 @@
 
   <header class="site-header">
     <div class="site-header__inner">
-      <a href="/" class="logo" id="logoLink" aria-label="Answerable. — back to homepage">
-        <span class="logo__mark">Answerable<span class="logo__dot">.</span></span>
+      <a href="/" class="logo" id="logoLink" aria-label="Citehound — back to homepage">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="logo__mark">Citehound</span>
       </a>
       <nav class="site-nav" aria-label="Site navigation">
         <a href="/playbooks" class="site-nav__link">Playbooks</a>
@@ -206,14 +206,14 @@
             <div class="check-row"><span>Product schema: availability</span><span class="check-row__pts">1 pt</span></div>
             <div class="check-row"><span>Product schema: image</span><span class="check-row__pts">1 pt</span></div>
             <p>The UCP check passes when <code>/.well-known/ucp</code> returns JSON with a <code>ucp</code> block that has a version and declares services or capabilities. The report lists the versions and capabilities it finds. A URL that answers with a web page, or with JSON of another shape, does not pass. A failed request is an absent endpoint, never a failed scan.</p>
-            <p>The product check opens one page: the first <code>/products/</code> or <code>/product/</code> URL in the sitemap, following one product sitemap if the sitemap is an index, or else the first product link on the homepage. It reads Product or ProductGroup schema, using the first variant to fill gaps in a ProductGroup, and the report shows the URL it checked. If no product page can be found, if robots.txt disallows the path for AnswerableBot, or if the page cannot be read, the check is reported as not assessed and left out of the total. It is never counted as a failure.</p>
+            <p>The product check opens one page: the first <code>/products/</code> or <code>/product/</code> URL in the sitemap, following one product sitemap if the sitemap is an index, or else the first product link on the homepage. It reads Product or ProductGroup schema, using the first variant to fill gaps in a ProductGroup, and the report shows the URL it checked. If no product page can be found, if robots.txt disallows the path for CitehoundBot, or if the page cannot be read, the check is reported as not assessed and left out of the total. It is never counted as a failure.</p>
             <p>The sub-score is shown as points earned out of the points that could be assessed, so a store whose product page could not be read shows a total out of 4.</p>
 
             <h3>Not scored: llms.txt authorship</h3>
             <p>For a store, the report also shows what the <a href="/tools/llms-txt-checker">llms.txt checker</a> finds: whether the file looks like a platform default, custom or unclear. It is a pattern match on the text and is never scored.</p>
 
             <h3>How a scan treats your site</h3>
-            <p>The product page is the only page beyond the homepage that a scan reads. It is one request, made last and after a pause, with a user agent that names Answerable (<code>AnswerableBot</code>), and only where robots.txt allows the path. Sites that show no store signal cost no extra requests.</p>
+            <p>The product page is the only page beyond the homepage that a scan reads. It is one request, made last and after a pause, with a user agent that names Citehound (<code>CitehoundBot</code>, formerly <code>AnswerableBot</code>), and only where robots.txt allows the path. Sites that show no store signal cost no extra requests.</p>
 
             <h3>What this detection misses</h3>
             <p>Detection is a pattern match. On 2 October 2026 we ran the rules over the 156 reachable sites in our benchmark lists. They detected 30 of 34 DTC stores and none of the other 122 sites. The four misses had no platform markers, no product URLs in the sitemap and no cart link on the homepage. The sitemap thresholds were set after two software sites tripped the first version of the rule, so treat that result as a calibration, not an independent test.</p>
@@ -227,9 +227,9 @@
       <div class="section__inner">
         <p class="kicker kicker--on-navy">What this scan does not measure</p>
         <h2 id="honesty-heading">A readiness score, not a presence score.</h2>
-        <p class="pro-band__lede">Answerable measures AI readiness: whether AI crawlers can access your content, and whether your on-page signals give a model a reason to trust and cite you. It does not measure whether ChatGPT, Claude, Perplexity or any other assistant currently mentions your brand in a live answer.</p>
+        <p class="pro-band__lede">Citehound measures AI readiness: whether AI crawlers can access your content, and whether your on-page signals give a model a reason to trust and cite you. It does not measure whether ChatGPT, Claude, Perplexity or any other assistant currently mentions your brand in a live answer.</p>
         <p class="pro-band__lede">That is a different, harder problem. Model responses vary by prompt, by session, and by training snapshot — no scanner can observe a black box or promise a citation. What we can measure, and verify with certainty, is whether the door is open. A perfect score does not guarantee an answer engine will cite you. A blocked crawler guarantees it cannot.</p>
-        <p class="pro-band__lede">The crawler-access check gives half credit for a bot that has any Disallow rule applying to it, including ordinary paths such as <code>/admin/</code>. A site can lose points here while being open to all of its public content. Answerable&rsquo;s own site scores 13 of 26 on this check for that reason.</p>
+        <p class="pro-band__lede">The crawler-access check gives half credit for a bot that has any Disallow rule applying to it, including ordinary paths such as <code>/admin/</code>. A site can lose points here while being open to all of its public content. Citehound&rsquo;s own site scores 13 of 26 on this check for that reason.</p>
         <p class="pro-band__lede">We built the tool that measures the certain thing precisely, instead of the uncertain thing vaguely. That precision is the point.</p>
       </div>
     </section>
@@ -251,10 +251,11 @@
       <div class="section__inner">
         <h2 id="changelog-heading" class="doc-section__heading">Changelog</h2>
         <ol class="changelog-list">
+          <li><span class="n">2026-10-07</span><span>Renamed from Answerable to Citehound. Methodology and published figures unchanged.</span></li>
           <li><span class="n">2026-10-03</span><span>Fixed how the scanner reads a meta description. Until this date it cut the text at the first straight apostrophe, so a description such as &ldquo;Scan your site&rsquo;s AI visibility&hellip;&rdquo; written with a plain <code>'</code> was read as 14 characters and failed the length check. In the July scans, 7 of 219 sites failed that check with 1 to 49 characters captured, so up to 7 results (four points each) may be false failures. That is an upper bound of about 0.13 points on the overall average and under one point in any single category. The same cut could also have let a description longer than 170 characters pass; we have not measured that direction. The published benchmark data stays at the original scans. Fixed going forward.</span></li>
           <li><span class="n">2026-10-03</span><span>The crawler-access rule, which gives half credit for a bot with any Disallow rule applying to it, is under review for a later scoring version. No scoring has changed.</span></li>
           <li><span class="n">2026-10-03</span><span>Recorded a rescan check. A rescan of the same six lists on 2 October 2026 moved the category averages as follows: CRM software &minus;1, DTC brands &minus;1, Cybersecurity +1, Consumer apps +1, Hospitality 0, DevTools &amp; Cloud +1. About a third of individual sites changed by 3 to 15 points between runs, and the most common cause was the Single H1 heading check. The raw rescan output was not retained in the repository, and the published benchmark data was kept at the original scan.</span></li>
-          <li><span class="n">2026-10-02</span><span>Added two commerce-only checks, structured product data and the UCP endpoint, plus store detection. They form a separate sub-score out of 8 and are never added to the 100, so the 16 checks, their point values and the six category benchmarks are unchanged. A scan of a store now reads at most one product page, after the other requests, with a user agent that names Answerable and only where robots.txt allows it.</span></li>
+          <li><span class="n">2026-10-02</span><span>Added two commerce-only checks, structured product data and the UCP endpoint, plus store detection. They form a separate sub-score out of 8 and are never added to the 100, so the 16 checks, their point values and the six category benchmarks are unchanged. A scan of a store now reads at most one product page, after the other requests, with a user agent that names Citehound and only where robots.txt allows it.</span></li>
           <li><span class="n">2026-10-02</span><span>Fixed entity decoding in the page title and meta description parser. Encoded characters such as <code>&amp;amp;</code> were counted at full length, which pushed some titles and descriptions over the length limit and failed the Page title or Meta description check. Across the benchmark corpus, 8 check results on 7 sites flipped from fail to pass. The DTC brands average moved from 71 to 72. No other category average changed, and the overall average stays 73.</span></li>
           <li><span class="n">2026-07-29</span><span>Added <code>llms.txt</code> detection as a new check, bringing the total from 15 to 16. Rebalanced Discoverability: robots.txt 4, llms.txt 4, Sitemap declared 6, AI crawler access 26 (down from 30). Discoverability, Technical foundation and Content &amp; trust totals (40 / 20 / 40) are unchanged.</span></li>
         </ol>
@@ -284,7 +285,7 @@
           <a href="/terms" class="site-nav__link">Terms</a>
           <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
         </nav>
-        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>
+        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>
       </div>
     </footer>
 

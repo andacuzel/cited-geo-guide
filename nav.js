@@ -1,5 +1,5 @@
 /* =====================================================================
-   ANSWERABLE. — Header nav: Playbooks dropdown
+   CITEHOUND — Header nav: Playbooks dropdown
    Loaded on every page. Opens on hover or keyboard focus, closes on
    mouse leave, Escape or click outside. The three links live in the
    HTML at all times; this only toggles their visibility.

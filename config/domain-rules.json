@@ -75,7 +75,7 @@
     {
       "class": "historical",
       "files": "^content/research-index\\.json$",
-      "pattern": "Answerable Case Studies",
+      "pattern": "Citehound Case Studies",
       "note": "quotes the case study's citation line as published"
     },
     {
@@ -129,7 +129,7 @@
     {
       "class": "rewrite",
       "files": "\\.js$",
-      "pattern": "const SITE = |API_BASE = |ANSWERABLE_API|FALLBACK = ",
+      "pattern": "const SITE = |API_BASE = |CITEHOUND_API|FALLBACK = ",
       "note": "script defaults"
     }
   ]

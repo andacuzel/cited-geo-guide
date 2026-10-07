@@ -62,7 +62,7 @@ function benchmarkEntry() {
       'One scan date per category. A rescan in October 2026 moved category averages by one point or less.',
       'It measures readiness, not whether any assistant names a brand.'
     ],
-    cite: 'Answerable, "AI readiness benchmarks," ' + longDate(latest) + '. ' + BASE + '/benchmarks',
+    cite: 'Citehound, "AI readiness benchmarks," ' + longDate(latest) + '. ' + BASE + '/benchmarks',
     sources: ['benchmarks/index.html', 'data/']
   };
 }
@@ -101,12 +101,12 @@ function entries() {
       summary: 'AgaOne Commodities scanned two new corporate sites, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.',
       findings: [
         'Both sites scored in the mid-fifties before the work: 58 and 55.',
-        'One site reached 100 out of 100 on the checks Answerable runs today. The other reached 89.',
+        'One site reached 100 out of 100 on the checks Citehound runs today. The other reached 89.',
         'The average gain was 38 points across 2 sites and 16 checks.'
       ],
       limits: [
         'Two sites from one company, published with permission: a case study, not a sample.',
-        'A score of 100 means the site passes all 16 checks Answerable runs today. It does not mean the site will be cited in an AI answer.',
+        'A score of 100 means the site passes all 16 checks Citehound runs today. It does not mean the site will be cited in an AI answer.',
         'The scoring model will get harder, so the same sites are expected to move.'
       ],
       cite: citeFrom('research/case-study-agaone.html'),

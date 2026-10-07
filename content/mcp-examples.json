@@ -30,9 +30,9 @@
       "id": "methodology",
       "tool": "get_methodology",
       "arguments": {},
-      "prompt": "How is the Answerable score built?",
+      "prompt": "How is the Citehound score built?",
       "lines": [
-        "How the Answerable AI readiness score is built: 100 points across 3 pillars and 16 checks. Every point value below is read from the scanner that runs.",
+        "How the Citehound AI readiness score is built: 100 points across 3 pillars and 16 checks. Every point value below is read from the scanner that runs.",
         "",
         "Discoverability: 40 points. Can AI crawlers reach the site at all. Access is the precondition for every other signal.",
         "  - robots.txt present (4 pts): Whether https://<domain>/robots.txt can be read. A real 404 counts as default-open access; a failed fetch stops the scan. Why it matters: AI crawlers read your access policy from this file.",
@@ -45,7 +45,8 @@
         "  - html lang attribute (3 pts): Whether the <html> element declares a language. Why it matters: Lets AI systems classify your content’s language correctly.",
         "  - Page title (3 pts): Whether the <title> is 10 to 70 characters. Why it matters: Answer engines frequently use the title as your source label."
       ],
-      "totalLines": 32
+      "totalLines": 32,
+      "capturedAt": "2026-10-07"
     },
     {
       "id": "benchmark-crm",
@@ -68,7 +69,8 @@
         "  GPTBot           blocked 1, limited 24, open 6",
         "  ChatGPT-User     blocked 1, limited 24, open 6"
       ],
-      "totalLines": 38
+      "totalLines": 38,
+      "capturedAt": "2026-10-07"
     },
     {
       "id": "citation-sample",
@@ -89,7 +91,8 @@
         "  - What CRM should an agency use to manage clients and deals together?",
         "  - Which CRMs integrate well with Google Workspace and Gmail?"
       ],
-      "totalLines": 38
+      "totalLines": 38,
+      "capturedAt": "2026-10-07"
     },
     {
       "id": "schema-self",

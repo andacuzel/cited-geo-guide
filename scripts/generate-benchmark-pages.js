@@ -45,7 +45,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 48; // bump when styles.css changes
+const CSS_VERSION = 56; // bump when styles.css changes
 
 const TRACKS = {
   'B2B SaaS': { bar: 'chart-bar--b2b', fill: 'bm-fill--b2b', marker: 'var(--navy-800)', onBar: 'chart-seg-text--light' },
@@ -312,17 +312,17 @@ function head(title, desc, url, ld) {
     '  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\n' +
     '  <title>' + esc(title) + '</title>\n' +
     '  <meta name="description" content="' + esc(desc) + '" />\n' +
-    '  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n' +
+    '  <meta name="author" content="Citehound" />\n  <meta name="robots" content="index, follow" />\n' +
     '  <link rel="canonical" href="' + url + '" />\n\n' +
     '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n' +
     '  <meta property="og:title" content="' + esc(title) + '" />\n' +
     '  <meta property="og:description" content="' + esc(desc) + '" />\n' +
     '  <meta property="og:url" content="' + url + '" />\n' +
-    '  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n\n' +
+    '  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
     '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
     '  <meta name="twitter:title" content="' + esc(title) + '" />\n' +
     '  <meta name="twitter:description" content="' + esc(desc) + '" />\n' +
-    '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
+    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png" />\n\n' +
     sh.icon + '\n\n' + sh.fonts + '\n\n' +
     '  <link rel="stylesheet" href="../styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n  ' + JSON.stringify(ld, null, 2).replace(/\n/g, '\n  ') + '\n  </script>\n' +
@@ -347,7 +347,7 @@ function footer(scripts) {
     '          <a href="/terms" class="site-nav__link">Terms</a>\n' +
     siteChrome.contactLine('          ') + '\n' +
     '        </nav>\n' +
-    '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n' +
+    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n' +
     '      </div>\n    </footer>\n\n  </main>\n\n' +
     '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
     '  <script src="../nav.js?v=2"></script>\n' + (scripts || '') +
@@ -393,17 +393,17 @@ function figureSection(id, heading, lead, label, svg, caption, source) {
 
 function categoryPage(c, overall) {
   const url = SITE + '/benchmarks/' + c.slug;
-  const source = 'Source: Answerable scan, ' + dateLong(c.date) + ', ' + c.scanned + ' ' + c.note;
-  const title = 'Answerable. — ' + c.label + ': AI Readiness Benchmark';
+  const source = 'Source: Citehound scan, ' + dateLong(c.date) + ', ' + c.scanned + ' ' + c.note;
+  const title = 'Citehound — ' + c.label + ': AI Readiness Benchmark';
   const desc = c.label + ': ' + c.scanned + ' ' + c.note + ' scanned on ' + dateLong(c.date) + ', average AI readiness score ' + c.avg + '/100 (range ' + c.low + ' to ' + c.high +
-    '). Pillars, most-failed checks and crawler access.';
+    '). Pillars, top failed checks and crawler access.';
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'Answerable AI readiness scan: ' + c.label + ', ' + monthYear(c.date),
+    name: 'Citehound AI readiness scan: ' + c.label + ', ' + monthYear(c.date),
     description: 'Scan results for ' + c.scanned + ' ' + c.label + ' domains (' + c.note + '), scored out of 100 across discoverability, technical foundation and content and trust. Homepages only, each scanned once on ' + dateLong(c.date) + '.',
     temporalCoverage: c.date,
-    creator: { '@type': 'Organization', name: 'Answerable.', url: SITE + '/' },
+    creator: { '@type': 'Organization', name: 'Citehound', url: SITE + '/' },
     variableMeasured: [
       { '@type': 'PropertyValue', name: 'Domains scanned', value: c.scanned },
       { '@type': 'PropertyValue', name: 'Average score (out of 100)', value: c.avg }
@@ -413,7 +413,7 @@ function categoryPage(c, overall) {
   };
   const f = findings(c, overall);
   const worst = topChecks(c);
-  const cite = 'Answerable, “AI readiness benchmark: ' + c.label + ',” ' + dateLong(c.date) + '. ' + url;
+  const cite = 'Citehound, “AI readiness benchmark: ' + c.label + ',” ' + dateLong(c.date) + '. ' + url;
 
   let h = head(title, desc, url, ld);
   h += banner('Benchmarks · ' + c.track, c.label + ': AI readiness benchmark',
@@ -489,15 +489,15 @@ function indexPage(all) {
   const win = dateWindow(all.cats.map((c) => c.date));
   const first = all.cats.map((c) => c.date).sort()[0];
   const last = all.cats.map((c) => c.date).sort().slice(-1)[0];
-  const title = 'Answerable. — AI Readiness Benchmarks by Category';
-  const desc = all.total + ' well-known sites across ' + all.cats.length + ' categories, scanned in ' + monthYear(last) + '. Average AI readiness score ' + all.overall + '/100. See each category\'s pillars, failed checks and crawler access.';
+  const title = 'Citehound — AI Readiness Benchmarks by Category';
+  const desc = all.total + ' well-known sites across ' + all.cats.length + ' categories, scanned in ' + monthYear(last) + '. Average AI readiness score ' + all.overall + '/100. Pillars, failed checks and crawler access.';
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'Answerable AI readiness scans by category, ' + monthYear(last),
+    name: 'Citehound AI readiness scans by category, ' + monthYear(last),
     description: 'Scan results for ' + all.total + ' domains across ' + all.cats.length + ' categories, from homepages only, each scanned once between ' + first + ' and ' + last + '.',
     temporalCoverage: first + '/' + last,
-    creator: { '@type': 'Organization', name: 'Answerable.', url: SITE + '/' },
+    creator: { '@type': 'Organization', name: 'Citehound', url: SITE + '/' },
     variableMeasured: [{ '@type': 'PropertyValue', name: 'Domains scanned', value: all.total }],
     isAccessibleForFree: true,
     url: url
@@ -533,7 +533,7 @@ function indexPage(all) {
     '              <span class="bm-legend__item"><span class="bm-legend__swatch bm-fill--dtc"></span>Consumer &amp; e-commerce</span>\n' +
     '            </div>\n' +
     '            <ol class="bm-list">\n' + rows + '\n            </ol>\n' +
-    '            <p class="report-figure__source">Source: Answerable scans, ' + esc(win) + ', ' + all.total + ' sites</p>\n' +
+    '            <p class="report-figure__source">Source: Citehound scans, ' + esc(win) + ', ' + all.total + ' sites</p>\n' +
     '          </div>\n' +
     '          <p>The lists are hand-picked, well-known sites, not a random sample. Each site was scanned once, homepages only, and sites that could not be reached are excluded from every figure. The scores measure readiness for AI systems, not whether any assistant names a brand. See the <a href="/methodology">methodology</a>.</p>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +

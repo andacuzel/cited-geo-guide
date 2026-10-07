@@ -1,11 +1,11 @@
 ---
 name: agentic-commerce-readiness
-description: Use when the user runs an online store and asks whether shopping agents can read it, about the Universal Commerce Protocol or a UCP endpoint, Product schema, product data quality for AI, or whether their llms.txt was written by the brand or is a platform default. Scans the store with the Answerable tools, reads the commerce sub-score, and returns what to fix with a replacement llms.txt where needed. Not for sites that are not stores.
+description: Use when the user runs an online store and asks whether shopping agents can read it, about the Universal Commerce Protocol or a UCP endpoint, Product schema, product data quality for AI, or whether their llms.txt was written by the brand or is a platform default. Scans the store with the Citehound tools, reads the commerce sub-score, and returns what to fix with a replacement llms.txt where needed. Not for sites that are not stores.
 ---
 
 # Agentic commerce readiness
 
-Check whether a store can be read by shopping agents. The commerce checks run only when the scan treats the site as a store, and they are scored separately from the 100-point readiness score. The tools below come from the Answerable MCP server; your client may show them with a prefix.
+Check whether a store can be read by shopping agents. The commerce checks run only when the scan treats the site as a store, and they are scored separately from the 100-point readiness score. The tools below come from the Citehound MCP server; your client may show them with a prefix.
 
 ## Steps
 

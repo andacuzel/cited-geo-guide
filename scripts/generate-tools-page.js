@@ -33,7 +33,7 @@ const site = require('../lib/site-config.js');
 const methodology = require('../lib/methodology.js');
 const mcp = require('../api/mcp.js');
 
-const CSS_VERSION = 50;
+const CSS_VERSION = 56;
 const NEXT_START = '<!-- NEXT:START -->';
 const NEXT_END = '<!-- NEXT:END -->';
 const PAGE = path.join(ROOT, 'tools', 'index.html');
@@ -130,7 +130,7 @@ function closing() {
 
 function meta() {
   return {
-    title: 'Answerable. — Free AI Readiness Tools',
+    title: 'Citehound — Free AI Readiness Tools',
     description: 'Free tools for AI readiness: check your llms.txt, generate a robots.txt or JSON-LD, and compare two sites. No signup, no email, no accounts.'
   };
 }
@@ -230,7 +230,7 @@ function verify(html, d) {
   else if (/\d/.test(decode(h1[0]))) fail('the h1 contains a digit');
   d.tools.forEach((t) => { if (/\d/.test(t.headline)) fail('the headline of ' + t.slug + ' contains a digit'); });
   const desc = /<meta name="description" content="([^"]*)"/.exec(html);
-  if (!desc || desc[1].length < 120 || desc[1].length > 165) fail('meta description is ' + (desc ? desc[1].length : 'missing') + ' characters, expected 120 to 165');
+  if (!desc || desc[1].length < 120 || desc[1].length > 160) fail('meta description is ' + (desc ? desc[1].length : 'missing') + ' characters, expected 120 to 160');
 
   // cards, one per tool, in the page
   d.tools.forEach((t) => { if (html.indexOf('id="' + t.slug + '"') === -1) fail(t.slug + ' has no card on the page'); });

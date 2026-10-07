@@ -149,7 +149,7 @@ function renderBlock(rows) {
     '          </div>\n' +
     '        </div>\n' +
     '      </section>\n' +
-    '      <script>window.ANSWERABLE_BENCHMARKS = ' + stats + ';</script>\n' +
+    '      <script>window.CITEHOUND_BENCHMARKS = ' + stats + ';</script>\n' +
     '      ' + END_MARKER
   );
 }

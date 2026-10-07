@@ -32,7 +32,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 48; // bump when styles.css changes
+const CSS_VERSION = 56; // bump when styles.css changes
 const PLAYBOOKS = require('../lib/playbooks.js');
 const ICONS = require('../lib/icons.js');
 
@@ -138,7 +138,7 @@ function ensureSitemap() {
    The page
    --------------------------------------------------------------------- */
 
-const TITLE = 'Answerable. — GEO and AEO Playbooks for 14 Categories';
+const TITLE = 'Citehound — GEO and AEO Playbooks for 14 Categories';
 const DESCRIPTION = 'Fourteen GEO and AEO playbooks for B2B SaaS, consumer and e-commerce brands and local professionals. Pick your category and read the playbook for it.';
 const BANNER_DESC = 'One playbook per category: what has changed in how buyers ask AI, three strategies to act on, and the outdated habits to drop.';
 
@@ -174,7 +174,7 @@ function build() {
   const groups = model();
   const shell = shellParts();
   const total = groups.reduce((n, g) => n + g.cards.length, 0);
-  if (DESCRIPTION.length < 120 || DESCRIPTION.length > 165) throw new Error('description is ' + DESCRIPTION.length + ' characters, expected 120 to 165');
+  if (DESCRIPTION.length < 120 || DESCRIPTION.length > 160) throw new Error('description is ' + DESCRIPTION.length + ' characters, expected 120 to 160');
 
   const ld = {
     '@context': 'https://schema.org',
@@ -213,17 +213,17 @@ function build() {
     '  <title>' + esc(TITLE) + '</title>\n' +
     '  <meta name="description" content="' + esc(DESCRIPTION) + '" />\n' +
     '  <meta name="keywords" content="GEO playbooks, AEO playbooks, AI visibility, answer engine optimization, generative engine optimization" />\n' +
-    '  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n' +
+    '  <meta name="author" content="Citehound" />\n  <meta name="robots" content="index, follow" />\n' +
     '  <link rel="canonical" href="' + SITE + '/playbooks" />\n\n' +
     '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n' +
     '  <meta property="og:title" content="' + esc(TITLE) + '" />\n' +
     '  <meta property="og:description" content="' + esc(DESCRIPTION) + '" />\n' +
     '  <meta property="og:url" content="' + SITE + '/playbooks" />\n' +
-    '  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n\n' +
+    '  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
     '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
     '  <meta name="twitter:title" content="' + esc(TITLE) + '" />\n' +
     '  <meta name="twitter:description" content="' + esc(DESCRIPTION) + '" />\n' +
-    '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
+    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n' +
     '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
@@ -243,7 +243,7 @@ function build() {
     '    <section aria-label="Scan reminder">\n      <div class="section__inner">\n        <div class="scan-bridge">\n' +
     '          <p class="scan-bridge__text">Not sure which playbook fits?</p>\n          <a href="/" class="btn btn--primary">Scan your site free</a>\n        </div>\n      </div>\n    </section>\n\n' +
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
+    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }
 
@@ -297,7 +297,7 @@ function check() {
   try { JSON.parse(ld[1]); } catch (e) { bad('JSON-LD does not parse'); }
   if ((html.match(/<h1[\s>]/g) || []).length !== 1) bad('playbooks.html must have exactly one h1');
   const d = html.match(/<meta name="description" content="([^"]*)"/)[1].replace(/&amp;/g, '&');
-  if (d.length < 120 || d.length > 165) bad('description is ' + d.length + ' characters');
+  if (d.length < 120 || d.length > 160) bad('description is ' + d.length + ' characters');
 
   if (problems.length) {
     console.error('FAIL (' + problems.length + '):\n  ' + problems.join('\n  '));

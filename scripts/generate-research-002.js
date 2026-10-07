@@ -28,7 +28,7 @@ const PAGE = path.join(ROOT, 'research', 'crawler-access-2026.html');
 const INDEX = path.join(ROOT, 'research', 'index.html');
 const SLUG = 'crawler-access-2026';
 const PUBLISHED = '2026-10-05';
-const CSS_VERSION = 55;
+const CSS_VERSION = 56;
 const esc = shell.esc;
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -138,9 +138,9 @@ function build(D) {
   const dateLabel = longDate(PUBLISHED);
   const url = site.baseUrl + '/research/' + SLUG;
   const scanWindow = MONTHS[+D.first.slice(5, 7) - 1].slice(0, 3) + ' ' + D.first.slice(0, 4);
-  const src = 'Source: Answerable scans, ' + longDate(D.first) + ' to ' + longDate(D.last) + ', n=' + D.N;
+  const src = 'Source: Citehound scans, ' + longDate(D.first) + ' to ' + longDate(D.last) + ', n=' + D.N;
   const desc = 'We read the robots.txt of ' + D.N + ' homepages in ' + nWord + ' categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path.';
-  const cite = 'Andaç Üzel, “' + title.replace(/\.$/, '') + ',” Answerable Research, ' + dateLabel + '. ' + url;
+  const cite = 'Andaç Üzel, “' + title.replace(/\.$/, '') + ',” Citehound Research, ' + dateLabel + '. ' + url;
   const topBlocked = D.perBot.slice().sort((a, b) => b.blocked - a.blocked)[0];
   const tops = D.perBot.filter((b) => b.blocked === topBlocked.blocked);
   const rescan = 'The October 2026 rescan of the same six lists moved category averages by one point or less (see the methodology changelog).';
@@ -179,10 +179,10 @@ function build(D) {
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Article', '@id': url + '#article', headline: title.replace(/\.$/, ''), description: desc, author: { '@id': site.baseUrl + '/about#person' }, publisher: { '@id': site.baseUrl + '/#org' }, datePublished: PUBLISHED, dateModified: PUBLISHED, url: url, mainEntityOfPage: url },
-      { '@type': 'Dataset', name: 'Answerable AI crawler access, ' + D.N + ' homepages in ' + nWord + ' categories, July 2026', description: 'For each of ' + D.N + ' homepages, whether robots.txt blocks, limits or leaves open each of ' + D.bots.length + ' tracked AI crawlers, grouped by category.', temporalCoverage: D.first + '/' + D.last, creator: { '@id': site.baseUrl + '/#org' }, variableMeasured: 'robots.txt access state (blocked, limited, open) for ' + D.bots.length + ' AI crawlers', url: url }
+      { '@type': 'Dataset', name: 'Citehound AI crawler access, ' + D.N + ' homepages in ' + nWord + ' categories, July 2026', description: 'For each of ' + D.N + ' homepages, whether robots.txt blocks, limits or leaves open each of ' + D.bots.length + ' tracked AI crawlers, grouped by category.', temporalCoverage: D.first + '/' + D.last, creator: { '@id': site.baseUrl + '/#org' }, variableMeasured: 'robots.txt access state (blocked, limited, open) for ' + D.bots.length + ' AI crawlers', url: url }
     ]
   }];
-  return shell.page({ title: 'Answerable. — ' + title.replace(/\.$/, ''), description: desc, path: '/research/' + SLUG, cssVersion: CSS_VERSION, jsonld: ld, depth: 1, body: body }).replace('<script src="../nav.js?v=2"></script>', '<script src="../nav.js?v=2"></script>\n  <script src="../research.js?v=1"></script>').replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
+  return shell.page({ title: 'Citehound — ' + title.replace(/\.$/, ''), description: desc, path: '/research/' + SLUG, cssVersion: CSS_VERSION, jsonld: ld, depth: 1, body: body }).replace('<script src="../nav.js?v=2"></script>', '<script src="../nav.js?v=2"></script>\n  <script src="../research.js?v=1"></script>').replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
 }
 
 function indexEntry() {
@@ -195,7 +195,7 @@ function indexEntry() {
     summary: 'We read the robots.txt of ' + D.N + ' homepages in ' + nWord + ' categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path.',
     findings: F,
     limits: ['Homepages only, from hand-picked well-known sites, not a random sample.', 'One scan date per category. The October 2026 rescan moved category averages by one point or less.', D.failed + ' sites that could not be reached are excluded and counted.', 'A limited result means an applicable Disallow rule, usually an ordinary path, and is not a block.'],
-    cite: 'Andaç Üzel, “' + title + ',” Answerable Research, ' + longDate(PUBLISHED) + '. ' + site.baseUrl + '/research/' + SLUG,
+    cite: 'Andaç Üzel, “' + title + ',” Citehound Research, ' + longDate(PUBLISHED) + '. ' + site.baseUrl + '/research/' + SLUG,
     sources: ['research/' + SLUG + '.html', 'data/']
   };
 }
@@ -267,7 +267,7 @@ function check() {
   if (/gradient\(/i.test(page)) bad('a gradient');
   if (!/class="chart-bar--b2b"/.test(page) || !/class="chart-bar--dtc"/.test(page)) bad('B2B (navy-800) and consumer (gold) bars are required in Fig. 2');
   const meta = /<meta name="description" content="([^"]*)"/.exec(page);
-  if (!meta || meta[1].length < 120 || meta[1].length > 165) bad('meta description length ' + (meta ? meta[1].length : 'missing'));
+  if (!meta || meta[1].length < 120 || meta[1].length > 160) bad('meta description length ' + (meta ? meta[1].length : 'missing'));
   const idx = fs.readFileSync(INDEX, 'utf8');
   if (idx !== updateIndex(idx, D)) bad('research/index.html does not list this report; run node scripts/generate-research-002.js');
   if (fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').indexOf('<loc>' + site.baseUrl + '/research/' + SLUG + '</loc>') === -1) bad('sitemap.xml has no entry');

@@ -1,11 +1,11 @@
 ---
 name: citation-ready-content
-description: Use when the user wants to write, brief or review content so that it is easier for AI answer engines to quote and name, for example a page, an article, an FAQ or a product description for a given industry. Uses the Answerable playbook for the user's vertical to brief or review the content. No scan is needed. Not a promise of being named: it improves how citable the content is, not whether any assistant names the brand.
+description: Use when the user wants to write, brief or review content so that it is easier for AI answer engines to quote and name, for example a page, an article, an FAQ or a product description for a given industry. Uses the Citehound playbook for the user's vertical to brief or review the content. No scan is needed. Not a promise of being named: it improves how citable the content is, not whether any assistant names the brand.
 ---
 
 # Citation-ready content
 
-Brief or review content for citability using the playbook for the user's vertical. This needs no scan and fetches no site. The tools below come from the Answerable MCP server; your client may show them with a prefix.
+Brief or review content for citability using the playbook for the user's vertical. This needs no scan and fetches no site. The tools below come from the Citehound MCP server; your client may show them with a prefix.
 
 ## Steps
 

@@ -26,7 +26,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
-const CSS_VERSION = 48;
+const CSS_VERSION = 56;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function shellParts() {
@@ -44,9 +44,9 @@ function build(data) {
   const a = render.analyze(data);
   const date = render.longDate(data.createdAt);
   const pages = a.ok.length;
-  const title = 'Answerable. — Sample report: a real crawl of our own site';
+  const title = 'Citehound — Sample report: a real crawl of our own site';
   const desc = 'A real full-site crawl of ' + data.domain + ', ' + pages + ' pages, run on ' + date + ': site-wide score, worst pages, the checks that fail and the fixes.';
-  if (desc.length < 120 || desc.length > 165) throw new Error('description is ' + desc.length + ' characters');
+  if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const shell = shellParts();
   const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Sample report: a real crawl of ' + data.domain, description: desc, url: SITE + '/sample-report', dateCreated: String(data.createdAt).slice(0, 10) };
 
@@ -70,23 +70,23 @@ function build(data) {
     rowsBA.map((r) => '<tr><th scope="row">' + esc(r.l) + '</th><td class="rp-num"><span data-fig="ba-row-before">' + r.b + '</span> of ' + fBefore.coverage.pagesRead + '</td><td class="rp-num"><span data-fig="ba-row-after">' + r.a + '</span> of ' + fAfter.coverage.pagesRead + '</td></tr>').join('\n') + '\n</tbody></table></div>\n' +
     '<p class="rp-note">The number of pages differs because the site grew between the crawls. Pages still failing are listed in the report below. Two of them, the research report and the case study, are not ours to edit here.</p>\n</section>\n';
   const banner = '<div class="rp-sample-banner">\n        <p class="rp-kicker">Sample report</p>\n' +
-    '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. We crawled it earlier on ' + esc(dateBefore) + ', fixed what that crawl found, and crawled again. Both results are below. Nothing in either has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n' + beforeAfter;
+    '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. We crawled it earlier on ' + esc(dateBefore) + ', fixed what that crawl found, and crawled again. Both results are below. Nothing in either has been edited or improved. The site was named Answerable when it was crawled, so the crawled page titles still carry that name. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n' + beforeAfter;
   const withBm = Object.assign({}, data, { benchmark: factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
   const citationSample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'citations', 'sample-crm.json'), 'utf8'));
   const body = render.render(withBm, { schema: schema, label: 'Sample report', bannerHtml: banner, citation: { result: citationPanel.fromSample(citationSample), sample: true } });
 
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\n' +
     '  <title>' + esc(title) + '</title>\n  <meta name="description" content="' + esc(desc) + '" />\n' +
-    '  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n  <link rel="canonical" href="' + SITE + '/sample-report" />\n\n' +
+    '  <meta name="author" content="Citehound" />\n  <meta name="robots" content="index, follow" />\n  <link rel="canonical" href="' + SITE + '/sample-report" />\n\n' +
     '  <meta property="og:type" content="website" />\n  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(desc) + '" />\n' +
-    '  <meta property="og:url" content="' + SITE + '/sample-report" />\n  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n' +
+    '  <meta property="og:url" content="' + SITE + '/sample-report" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png" />\n  <meta property="og:site_name" content="Citehound" />\n' +
     '  <meta name="twitter:card" content="summary_large_image" />\n  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(desc) + '" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' +
     '  <main id="main">\n' + body.replace(/\n$/, '') + '\n' +
     '    <div class="rp-body rp-body--foot"><p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p></div>\n\n    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">\u00A9 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n  </main>\n\n' +
+    '        <p class="site-footer__coda">\u00A9 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n  </main>\n\n' +
     '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-ui.js?v=2"></script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }
 

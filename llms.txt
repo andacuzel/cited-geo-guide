@@ -1,6 +1,6 @@
-# Answerable
+# Citehound
 
-> Answerable is a free scanner for AI readiness. It checks whether AI crawlers can reach a website and whether its pages carry the signals machines read, scores the domain out of 100 across three weighted pillars, and returns the fixes. It measures readiness, not whether any AI assistant names a brand.
+> Citehound is a free scanner for AI readiness. It checks whether AI crawlers can reach a website and whether its pages carry the signals machines read, scores the domain out of 100 across three weighted pillars, and returns the fixes. It measures readiness, not whether any AI assistant names a brand.
 
 ## Scanner
 
@@ -28,5 +28,5 @@
 
 ## About
 
-- [About](https://answerable-app.vercel.app/about): who built Answerable and why.
+- [About](https://answerable-app.vercel.app/about): who built Citehound and why.
 - [Pro](https://answerable-app.vercel.app/pro): a full-site crawl, with the whole-site score beside the homepage score, pages ranked, every fix once and a printable report. A real sample of our own site is at /sample-report.

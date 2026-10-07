@@ -1,6 +1,6 @@
-# Answerable plugin
+# Citehound plugin
 
-A Claude Code plugin that connects the Answerable MCP server and adds three skills.
+A Claude Code plugin that connects the Citehound MCP server and adds three skills.
 
 ## What is in it
 

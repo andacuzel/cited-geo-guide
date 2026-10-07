@@ -236,12 +236,12 @@ function loadPage(file, search, responder) {
 /* ---------- stored response shapes ---------- */
 
 const json = (body, status, headers) => new Response(JSON.stringify(body), { status: status || 200, headers: Object.assign({ 'Content-Type': 'application/json' }, headers || {}) });
-const LLMS_TEXT = '# Answerable\n> Scan a site for AI readiness.\n\n## Pages\n- [Methodology](' + site.baseUrl + '/methodology): how the score is built\n';
+const LLMS_TEXT = '# Citehound\n> Scan a site for AI readiness.\n\n## Pages\n- [Methodology](' + site.baseUrl + '/methodology): how the score is built\n';
 function llmsResponse(url) {
   const domain = new URL(url, 'http://x').searchParams.get('domain');
   return json(llms.analyze({ ok: true, status: 200, text: LLMS_TEXT, contentType: 'text/plain', bytes: LLMS_TEXT.length }, domain.replace(/^www\./, ''), ''));
 }
-const siteInfo = (url) => json({ domain: new URL(url, 'http://x').searchParams.get('domain'), title: 'Answerable. — AI visibility scanner', description: 'Scan a site for AI readiness.', lang: 'en' });
+const siteInfo = (url) => json({ domain: new URL(url, 'http://x').searchParams.get('domain'), title: 'Citehound — AI visibility scanner', description: 'Scan a site for AI readiness.', lang: 'en' });
 
 /* ---------- the tests ---------- */
 

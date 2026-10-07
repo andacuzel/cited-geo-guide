@@ -9,7 +9,7 @@
   // Shared with api/mcp.js (list_ai_crawlers, generate_robots_txt) via
   // lib/crawlers.js, loaded as a <script> before this file \u2014 see that
   // file for the data and why it's not duplicated here.
-  var CRAWLERS = window.ANSWERABLE_CRAWLERS || [];
+  var CRAWLERS = window.CITEHOUND_CRAWLERS || [];
 
   var $ = function (id) { return document.getElementById(id); };
 

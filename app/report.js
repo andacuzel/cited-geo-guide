@@ -5,7 +5,7 @@
    written by rules. */
 (function () {
   'use strict';
-  var R = window.ANSWERABLE_REPORT;
+  var R = window.CITEHOUND_REPORT;
   var root = document.getElementById('reportRoot');
   var params = new URLSearchParams(location.search);
 
@@ -15,8 +15,8 @@
   }
 
   function draw(data, demo, citation) {
-    root.innerHTML = R.render(data, { schema: window.ANSWERABLE_SCHEMA, label: demo ? 'Demo data' : null, citation: citation || null });
-    window.ANSWERABLE_REPORT_UI.init(root.querySelector('.rp-report'));
+    root.innerHTML = R.render(data, { schema: window.CITEHOUND_SCHEMA, label: demo ? 'Demo data' : null, citation: citation || null });
+    window.CITEHOUND_REPORT_UI.init(root.querySelector('.rp-report'));
     document.title = 'Crawl report: ' + data.domain;
   }
 
@@ -50,7 +50,7 @@
   if (params.get('demo') === '1') {
     // The demo shows the published CRM sample in the Citations tab, labelled as another brand's.
     getJson('../content/citations/sample-crm.json').then(function (c) {
-      var cit = c.ok ? { result: window.ANSWERABLE_CITATION_PANEL.fromSample(c.body), sample: true } : null;
+      var cit = c.ok ? { result: window.CITEHOUND_CITATION_PANEL.fromSample(c.body), sample: true } : null;
       getJson('../content/pro/demo-fixture.json').then(function (r) {
         if (!r.ok) { state('The demo could not be loaded.', true); return; }
         draw(r.body, true, cit);
@@ -59,11 +59,11 @@
   } else if (params.get('sample') === '1') {
     // The frozen real crawl of our own site (content/pro/sample-report.json), as the static /sample-report shows it.
     getJson('../content/citations/sample-crm.json').then(function (c) {
-      var cit = c.ok ? { result: window.ANSWERABLE_CITATION_PANEL.fromSample(c.body), sample: true } : null;
+      var cit = c.ok ? { result: window.CITEHOUND_CITATION_PANEL.fromSample(c.body), sample: true } : null;
       getJson('../content/pro/sample-report.json').then(function (r) {
         if (!r.ok) { state('The sample could not be loaded.', true); return; }
-        root.innerHTML = R.render(r.body, { schema: window.ANSWERABLE_SCHEMA, label: 'Sample report', citation: cit });
-        window.ANSWERABLE_REPORT_UI.init(root.querySelector('.rp-report'));
+        root.innerHTML = R.render(r.body, { schema: window.CITEHOUND_SCHEMA, label: 'Sample report', citation: cit });
+        window.CITEHOUND_REPORT_UI.init(root.querySelector('.rp-report'));
         document.title = 'Sample report: ' + r.body.domain;
       });
     }).catch(function () { state('The sample could not be loaded.', true); });

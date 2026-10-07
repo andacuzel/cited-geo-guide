@@ -1,5 +1,5 @@
 /* =====================================================================
-   ANSWERABLE. — Research report template behaviour
+   CITEHOUND — Research report template behaviour
    Shared by every report in the /research series. Currently handles
    the "copy citation" button in the How to cite this block. Add future
    report-only behaviour here rather than inlining it per report.

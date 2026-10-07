@@ -166,7 +166,7 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = Core;
-  root.ANSWERABLE_COMPARE = Core;
+  root.CITEHOUND_COMPARE = Core;
 
   /* -------------------------------------------------------------------
      DOM

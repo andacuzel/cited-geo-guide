@@ -27,10 +27,10 @@ const PLUGIN = path.join(ROOT, 'plugin');
 
 function manifest() {
   return {
-    name: 'answerable',
-    displayName: 'Answerable',
+    name: 'citehound',
+    displayName: 'Citehound',
     version: '1.0.0',
-    description: 'Audit a site for AI readiness, check a store for agentic-commerce readiness, and write citation-ready content, with the Answerable MCP server and three skills.',
+    description: 'Audit a site for AI readiness, check a store for agentic-commerce readiness, and write citation-ready content, with the Citehound MCP server and three skills.',
     author: { name: 'Andaç Üzel', url: site.baseUrl + '/about' },
     homepage: site.baseUrl + '/mcp',
     keywords: ['ai-readiness', 'geo', 'aeo', 'robots-txt', 'llms-txt', 'structured-data', 'agentic-commerce'],
@@ -42,15 +42,15 @@ function manifest() {
 }
 
 function mcpConfig() {
-  return { mcpServers: { answerable: { type: 'http', url: site.baseUrl + '/api/mcp' } } };
+  return { mcpServers: { citehound: { type: 'http', url: site.baseUrl + '/api/mcp' } } };
 }
 
 function readme() {
   const url = site.baseUrl + '/api/mcp';
   return [
-    '# Answerable plugin',
+    '# Citehound plugin',
     '',
-    'A Claude Code plugin that connects the Answerable MCP server and adds three skills.',
+    'A Claude Code plugin that connects the Citehound MCP server and adds three skills.',
     '',
     '## What is in it',
     '',

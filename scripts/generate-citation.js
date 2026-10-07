@@ -33,7 +33,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 48;
+const CSS_VERSION = 56;
 const CONTACT_EMAIL = 'andacuz@gmail.com'; // the address on privacy.html and terms.html
 const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
 
@@ -102,7 +102,7 @@ function faq(d) {
     ['What does named mean?',
       'Your brand name appears in the answer. We also record whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement.'],
     ['Can I run it myself?',
-      'A self-serve version is still to come. Today we run it for you. The question sets are also published on the Answerable MCP server, with a short protocol for running them yourself in any assistant.'],
+      'A self-serve version is still to come. Today we run it for you. The question sets are also published on the Citehound MCP server, with a short protocol for running them yourself in any assistant.'],
     ['Which model does it use?',
       'The sample used ' + d.model + ' on ' + d.date + '. Today we run Gemini models only. A result describes one model on one date and says nothing about any other assistant.'],
     ['Is it a ranking?',
@@ -158,10 +158,10 @@ function shellParts() {
 function build(sample) {
   const d = derive(sample);
   const shell = shellParts();
-  const title = 'Answerable. — Citation Tracking: Does a Model Name Your Brand?';
+  const title = 'Citehound — Citation Tracking: Does a Model Name Your Brand?';
   const desc = 'We ask a model the questions your customers ask, ' + d.triesWord + ' times each, and show you when your name comes up and when it does not. Early access, run for you.';
   const ogDesc = 'We ask a model the questions your customers ask, ' + d.triesWord + ' times each, and show you when your name comes up and when it does not.';
-  if (desc.length < 120 || desc.length > 165) throw new Error('description is ' + desc.length + ' characters');
+  if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const questions = faq(d);
   const ld = {
     '@context': 'https://schema.org',
@@ -176,14 +176,14 @@ function build(sample) {
     '  <title>' + esc(title) + '</title>\n' +
     '  <meta name="description" content="' + esc(desc) + '" />\n' +
     '  <meta name="keywords" content="citation tracking, AI citations, brand mentions in AI answers, GEO, AI visibility, buying-intent queries" />\n' +
-    '  <meta name="author" content="Answerable." />\n  <meta name="robots" content="index, follow" />\n' +
+    '  <meta name="author" content="Citehound" />\n  <meta name="robots" content="index, follow" />\n' +
     '  <link rel="canonical" href="' + SITE + '/citation-tracking" />\n\n' +
     '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n' +
     '  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(ogDesc) + '" />\n' +
-    '  <meta property="og:url" content="' + SITE + '/citation-tracking" />\n  <meta property="og:image" content="' + SITE + '/assets/og-image.png" />\n  <meta property="og:site_name" content="Answerable." />\n\n' +
+    '  <meta property="og:url" content="' + SITE + '/citation-tracking" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
     '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
     '  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(ogDesc) + '" />\n' +
-    '  <meta name="twitter:image" content="' + SITE + '/assets/og-image.png" />\n\n' +
+    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n' +
     '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
@@ -266,7 +266,7 @@ function build(sample) {
     '      </div>\n    </section>\n\n' +
 
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Answerable. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
+    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
     '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
 }

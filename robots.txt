@@ -1,4 +1,4 @@
-# Answerable -- allows all AI crawlers. We build a scanner that rewards
+# Citehound -- allows all AI crawlers. We build a scanner that rewards
 # open access, so we hold ourselves to the same standard.
 
 User-agent: GPTBot

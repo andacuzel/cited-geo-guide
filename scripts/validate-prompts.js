@@ -51,7 +51,7 @@ const MAX_LEN = 140;
 const KEYS = ['vertical', 'description', 'version', 'prompts', 'brandsNote', 'brands'];
 
 // Capitalised in the playbooks but not names of anything.
-const GENERIC = new Set(('AI Answerable If SEO Actionable Strategies Pitfalls Replace Tip CRM API JSON LD FAQ HR Article Hiding Stack Overflow Author ' +
+const GENERIC = new Set(('AI Citehound If SEO Actionable Strategies Pitfalls Replace Tip CRM API JSON LD FAQ HR Article Hiding Stack Overflow Author ' +
   'READMEs SOC OTA Standardize Organization LLM LLMs FAQPage Targeting Gating Engage Leaving Play Subheading H2 Publish Saturate Sitemap DTC Financial ' +
   'PCI Pasting LocalBusiness Smartphone Seed Overlooking Googling Engineer ROI CISOs SIEM Hacker News Mark SKU UGC VP HTML Consolidate MedicalBusiness ' +
   'FAQs Travel Wi Fi PDFs HRTech CHRO Embed PDF People LegalService Stuffing Homeowners Drive Cultivate Expose Clarify Locking Target Home Centralize ' +
