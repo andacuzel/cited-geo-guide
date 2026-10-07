@@ -259,6 +259,14 @@
       "refs": [
         "0066ed3"
       ]
+    },
+    {
+      "date": "2026-10-07",
+      "text": "Renamed the site, the scanner and the MCP server from Answerable to Citehound, with a new logo. The checks, the weights and every published figure are unchanged.",
+      "refs": [
+        "78c0a17",
+        "da3fa36"
+      ]
     }
   ]
 }

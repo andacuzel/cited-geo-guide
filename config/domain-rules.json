@@ -109,6 +109,12 @@
       "note": "JSON-LD identifiers and URLs"
     },
     {
+      "class": "historical",
+      "files": "^mcp\\.html$",
+      "pattern": "You ask: |data-example=",
+      "note": "captured MCP output, and the prompt typed for it, name the host they were captured from; recapture with scripts/capture-mcp-examples.js after the move"
+    },
+    {
       "class": "rewrite",
       "files": "^tools/[a-z-]+\\.html$",
       "pattern": "data-toolx-example",
