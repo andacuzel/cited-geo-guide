@@ -75,8 +75,14 @@ The pattern leaves `/api/mcp` on the old host unredirected on purpose: many MCP 
 Claude Code:
 
 ```bash
+claude mcp remove citehound
+claude mcp add --transport http citehound NEW/api/mcp
+```
+
+If the connector was added before the rename to Citehound, it is registered under the old server name. Remove that one too, because tool prefixes follow the server name and the old connector will not find the renamed tools:
+
+```bash
 claude mcp remove answerable
-claude mcp add --transport http answerable NEW/api/mcp
 ```
 
 Claude on the web and desktop: open the connector's settings, change the server URL to `NEW/api/mcp`, and reconnect. The plugin's `.mcp.json` already carries the new URL after step 4.
@@ -109,7 +115,7 @@ curl -s -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/
 
 ## 10. Open Graph image
 
-`assets/og-image.svg` and `assets/og-image.png` do not name the host today, so there is nothing to regenerate. If the image ever names it, edit the SVG, export the PNG at 1200 by 630 over the old file, and bump nothing else: the pages reference it by path.
+The images in `assets/brand/` (`og-default.png`, `og-default-light.png`, the logo SVGs and PNGs, `favicon.svg`, and the root `favicon.ico` and `apple-touch-icon.png`) carry the brand name but not the host, so a domain move needs no new image. Pages reference them as `/assets/brand/og-default.png` under the address in `site.config.json`, which `set-domain.js` already rewrites.
 
 ## 11. MCP directory submission
 

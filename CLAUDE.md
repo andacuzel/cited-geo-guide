@@ -1,4 +1,4 @@
-# CLAUDE.md — Answerable
+# CLAUDE.md — Citehound
 
 Project memory. Read automatically at the start of every Claude Code
 session. Everything here is binding unless the user overrides it in the
@@ -8,7 +8,7 @@ current session.
 
 ## What this project is
 
-**Answerable** — a free AI-visibility scanner. A user enters a domain;
+**Citehound** — a free AI-visibility scanner. A user enters a domain;
 a Vercel serverless function fetches that site's public robots.txt,
 sitemap.xml and homepage, scores it out of 100 across three weighted
 pillars, and returns a prioritized list of fixes.
@@ -79,6 +79,13 @@ Constraints that must not be broken:
 - **Never hardcode the host.** New code reads the address from `site.config.json`
   (through `lib/site-config.js`), so `scripts/set-domain.js` can move the site in one
   command. A literal old-host URL needs a rule in `config/domain-rules.json`.
+- **Brand.** The product is **Citehound** (one word, capital C), formerly Cited and then
+  Answerable. The wordmark is Gloock with no trailing dot, beside the sighthound-head mark in
+  `assets/brand/`. "Hound" is an image, never a promise: copy never says the product hunts,
+  tracks down or finds citations, and the hound image appears in one place only (a short line
+  on `/about`). The old names appear only where `docs/rename-notes.md` allows: the changelogs'
+  rename lines, the `AnswerableBot` user-agent token (kept for one version), frozen crawl
+  data and the host in `site.config.json`. A page description is at most 160 characters.
 - **Counts come from registries.** Tool, prompt, check, vertical and page counts are
   derived from their registry (`api/mcp.js` TOOLS and PROMPTS, the scanner's check
   list, `lib/playbooks.js`), never typed. Every new MCP tool is added to the registry,

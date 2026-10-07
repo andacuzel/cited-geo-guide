@@ -1,5 +1,7 @@
 # cited-geo-guide
 
+This repository holds Citehound, a free AI-readiness scanner. The repository and the Vercel project keep their original names; see `docs/rename-notes.md`.
+
 ## Benchmark data
 
 The homepage benchmark section (and the "average of N sites" line on
