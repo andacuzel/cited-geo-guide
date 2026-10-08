@@ -194,12 +194,18 @@ The header is sticky, and scroll offsets come from its real height: `nav.js` kee
 `--header-h` on `<html>` equal to the pinned part (the whole header on wide screens, only
 the logo row up to 700px, where the nav row scrolls away), and `html { scroll-padding-top }`
 adds 16px to it. Never hand-tune an offset or add a `scroll-margin-top` for the header. A
-share link (`/?scan=domain`) opens at the top and the hero becomes the "Analyzing" screen:
-the five stages tick one by one (each visible at least 700 ms, a stage done only when its work
-is), a "Done" beat, then an eased scroll to the result and a count-up. A form scan keeps the
-progress card and the same beats at a shorter pace. The pacing numbers are the named constants
-in `PACING` in `scanner.js`; the real score is always in the DOM, and any user input, reduced
-motion or a back/forward visit skips the animation.
+share link (`/?scan=domain`) must work the same on every device, browser and in-app browser, so
+nothing about it depends on scrolling. It opens at the top and the hero becomes the "Analyzing"
+screen: the five stages tick one by one (each visible at least 700 ms, a stage done only when its
+work is), a "Done" beat, then the hero fades out where it stands and the report takes its position
+under the sticky header and fades in (the hero moves just below it), followed by the count-up. No
+touch, scroll or key press interrupts it; a reader who has scrolled away gets a "See your score"
+link. A failed scan shows its reason in the hero with a retry (rate limit, unreadable site, network,
+a 25 s deadline); it is never blank. A form scan keeps the progress card and an eased scroll
+(re-aimed every frame, stopped only by a clear scroll gesture) at a shorter pace. The pacing numbers
+are the named constants in `PACING` in `scanner.js`; the real score is always in the DOM, every wait
+pauses while the tab is hidden, and reduced motion or a back/forward visit skips the animation. The
+reveal animates opacity only (the durations are `fadeMs`), the one place a transition runs longer than 150ms.
 
 **Never:** gradients · numbered section headers (01/02/03) · hover
 lift or scale · pill (999px) shapes · emoji in product surfaces ·

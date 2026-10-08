@@ -31,7 +31,7 @@ const shell = require('../lib/page-shell.js');
 const launch = require('../lib/launch-config.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 58;
+const CSS_VERSION = 59;
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

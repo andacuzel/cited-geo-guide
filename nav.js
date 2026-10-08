@@ -117,10 +117,12 @@
   if (!header || !hero) return;
 
   function update() {
-    var pastHero = hero.getBoundingClientRect().bottom <= stickyHeight(header);
+    // after a share-link reveal the report sits above the hero, so the light header stays
+    var pastHero = hero.getBoundingClientRect().bottom <= stickyHeight(header) || document.documentElement.classList.contains('is-revealed');
     header.classList.toggle('site-header--scrolled', pastHero);
   }
 
   update();
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('citehound:layout', update);
 })();

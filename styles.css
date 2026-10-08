@@ -446,8 +446,31 @@ select.field { appearance: auto; cursor: pointer; }
 .analyze__still { margin: 0 0 12px; font-family: var(--font-mono); font-size: 14px; color: var(--ink-soft); }
 .hero--navy .analyze__still { color: var(--gold-soft); }
 .analyze__still[hidden] { display: none; }
-.analyze__after a { font-family: var(--font-mono); font-size: 14px; color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px; }
-.hero--navy .analyze__after a { color: var(--gold-soft); }
+/* The share-link reveal (scanner.js revealInPlace). The hero is as tall as the first view (svh where known, so the iOS address
+   bar cannot change it), fades out where it stands, and the report takes its position and fades in. Opacity is the only thing
+   that animates; the durations are fadeMs in PACING. */
+.hero.is-analyzing { min-height: calc(100vh - var(--header-h, 58px)); transition: opacity 320ms ease; }
+@supports (height: 100svh) { .hero.is-analyzing { min-height: calc(100svh - var(--header-h, 58px)); } }
+.hero.is-leaving { opacity: 0; }
+#scanReport.is-staged { padding-top: 24px; transition: opacity 420ms ease; }
+#scanReport.is-entering { opacity: 0; }
+.scan-report__heading { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.scan-report__heading:focus { outline: none; }
+.scan-announce { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* A failed share-link scan stays in the hero: what happened, and a way on. */
+.analyze__error[hidden] { display: none; }
+.analyze.is-error .analyze__stages, .analyze.is-error .analyze__still { display: none; }
+.analyze.is-error .analyze__mark { animation: none; }
+.analyze__errtext { max-width: 560px; margin: 0 0 22px; font-family: var(--font-body); font-size: 20px; line-height: 1.45; color: var(--ink); }
+.hero--navy .analyze__errtext { color: var(--white); }
+.analyze__errbtns { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero--navy .analyze__errbtns .btn--ghost { color: var(--white); border-color: rgba(255, 255, 255, 0.35); }
+.hero--navy .analyze__errbtns .btn--ghost:hover { border-color: var(--white); color: var(--white); }
+
+/* "See your score": shown only when the report is not in view. A plain link to #scanReport. */
+.see-score { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; box-shadow: var(--shadow); }
+.see-score[hidden] { display: none; }
 .analyze__live { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 @keyframes dot-pulse { 0%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
 @keyframes mark-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }

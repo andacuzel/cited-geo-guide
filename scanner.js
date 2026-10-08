@@ -32,21 +32,25 @@
 
   /* ---------------- Pacing and motion ----------------
      Everything that sets how long the scan feels lives in this one block.
-       share  a share-link arrival: the hero becomes the "Analyzing" screen
-       form   a scan started from the form: no takeover, the progress card on the page
+       share  a share-link arrival: the hero becomes the "Analyzing" screen, and the report appears in place
+              of it (nothing scrolls)
+       form   a scan started from the form: no takeover, the progress card on the page, an eased scroll to the result
      stageMs   the least time each stage stays on screen; a stage turns done only when that time has
                passed AND its work has finished, so stages tick in order
      doneMs    the "Done" beat, held before anything moves
-     scrollMs  the eased scroll to the result
+     fadeMs    share only: the hero fades out, then the report fades in at the same spot (each takes this long)
+     scrollMs  form only: the eased scroll to the result
      countMs   the score counting up once the result is in view
-     prefers-reduced-motion keeps the stages (250 ms each) and then jumps to the result: no scroll
-     animation, no count-up, no pulse. */
+     prefers-reduced-motion keeps the stages (250 ms each) and then swaps at once: no scroll animation, no fade,
+     no count-up, no pulse.
+     Every wait pauses while the tab is hidden and resumes when it is visible (see vwait), so nothing stalls or jumps. */
   var PACING = {
-    share: { stageMs: 700, doneMs: 700, scrollMs: 1100, countMs: 1200, takeover: true },
-    form: { stageMs: 450, doneMs: 400, scrollMs: 800, countMs: 900, takeover: false }
+    share: { stageMs: 700, doneMs: 700, fadeMs: 320, scrollMs: 0, countMs: 1200, takeover: true },
+    form: { stageMs: 450, doneMs: 400, fadeMs: 0, scrollMs: 800, countMs: 900, takeover: false }
   };
-  var REDUCED = { stageMs: 250, doneMs: 150, scrollMs: 0, countMs: 0 };
+  var REDUCED = { stageMs: 250, doneMs: 150, fadeMs: 0, scrollMs: 0, countMs: 0 };
   var STILL_WORKING_MS = 12000;     // after this long a calm "still working" line appears
+  var SCAN_TIMEOUT_MS = 25000;      // a scan that has not answered by now is reported as taking too long
   var BAR_START_MS = 300, BAR_STAGGER_MS = 250, BAR_FILL_MS = 500, REVEAL_MS = 450; // the result, once it is in view
 
   function reducedMotion() {
@@ -54,52 +58,98 @@
   }
   function profileFor(mode) {
     var base = PACING[mode];
-    return reducedMotion() ? { stageMs: REDUCED.stageMs, doneMs: REDUCED.doneMs, scrollMs: 0, countMs: 0, takeover: base.takeover, animate: false } :
-      { stageMs: base.stageMs, doneMs: base.doneMs, scrollMs: base.scrollMs, countMs: base.countMs, takeover: base.takeover, animate: true };
+    return reducedMotion() ? { stageMs: REDUCED.stageMs, doneMs: REDUCED.doneMs, fadeMs: 0, scrollMs: 0, countMs: 0, takeover: base.takeover, animate: false } :
+      { stageMs: base.stageMs, doneMs: base.doneMs, fadeMs: base.fadeMs, scrollMs: base.scrollMs, countMs: base.countMs, takeover: base.takeover, animate: true };
   }
 
-  // Scroll targets land below the sticky header: nav.js keeps --header-h equal to its pinned height.
+  /* ---------------- A clock that waits for the tab ----------------
+     setTimeout keeps running while a tab is hidden, so a sequence could finish unseen; requestAnimationFrame stops, so one
+     driven by frames stalls and then jumps. vwait counts only the time the page is visible: it pauses on hidden and picks up
+     the remainder on visible. Frame-driven animations add a clamped step per frame (see FRAME_CAP_MS) for the same reason. */
+  var FRAME_CAP_MS = 64;
+  var waiting = [];
+  function pageHidden() { return document.visibilityState === 'hidden'; }
+  function vwait(ms) {
+    return new Promise(function (resolve) {
+      var left = ms, t0 = 0, timer = 0;
+      var w = {
+        resume: function () { if (timer || pageHidden()) return; t0 = Date.now(); timer = setTimeout(finish, left); },
+        pause: function () { if (!timer) return; clearTimeout(timer); timer = 0; left = Math.max(0, left - (Date.now() - t0)); }
+      };
+      function finish() { timer = 0; var i = waiting.indexOf(w); if (i !== -1) waiting.splice(i, 1); resolve(); }
+      waiting.push(w);
+      w.resume();
+    });
+  }
+  document.addEventListener('visibilitychange', function () {
+    waiting.slice().forEach(function (w) { if (pageHidden()) w.pause(); else w.resume(); });
+  });
+
+  // Anything that moves the page lands below the sticky header: nav.js keeps --header-h equal to its pinned height.
   function headerOffset() {
     var v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'));
     return (isNaN(v) ? 58 : v) + 16;
   }
   function pageTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
-  function jumpTo(y) {
+  // One instant move. 'instant' is not known to every older WebKit, so it falls back to plain scrollTo with CSS smooth scrolling off.
+  function scrollNow(y) {
     var html = document.documentElement;
+    try { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); return; } catch (e) { /* older engines */ }
+    var was = html.style.scrollBehavior;
     html.style.scrollBehavior = 'auto';
     window.scrollTo(0, y);
-    html.style.scrollBehavior = '';
+    html.style.scrollBehavior = was;
   }
-  // Eased scroll on requestAnimationFrame (ease in-out). Resolves through done(); cancel() stops it where it is.
-  function animateScroll(y, ms, step, done) {
-    var from = window.scrollY, dist = y - from, html = document.documentElement;
-    if (!ms || Math.abs(dist) < 2) { jumpTo(y); step(y); done(); return { cancel: function () {} }; }
-    var t0 = performance.now(), raf = 0, stopped = false;
+  function jumpTo(y) { scrollNow(y); }
+  // Eased scroll on requestAnimationFrame (ease in-out), used only for a scan started from the form. getY is read on every
+  // frame, so a layout change on the way (fonts arriving, the card replaced by the result) moves the target, not the aim.
+  // Time is accumulated per frame and each step is capped, so a stalled tab resumes where it was instead of jumping.
+  function animateScroll(getY, ms, step, done) {
+    var from = window.scrollY;
+    if (!ms || Math.abs(getY() - from) < 2) { jumpTo(getY()); step(getY()); done(); return { cancel: function () {} }; }
+    var html = document.documentElement, was = html.style.scrollBehavior;
+    var elapsed = 0, last = 0, raf = 0, stopped = false;
     html.style.scrollBehavior = 'auto';
+    function end() { html.style.scrollBehavior = was; }
     function frame(now) {
       if (stopped) return;
-      var t = Math.min(1, (now - t0) / ms);
+      if (last) elapsed += Math.min(now - last, FRAME_CAP_MS);
+      last = now;
+      var t = Math.min(1, elapsed / ms);
       var e = -(Math.cos(Math.PI * t) - 1) / 2; // ease in-out (sine): gentle at both ends, so the whole duration is seen
-      var pos = from + dist * e;
-      window.scrollTo(0, pos);
+      var target = getY();
+      var pos = from + (target - from) * e;
+      scrollNow(pos);
       step(pos);
       if (t < 1) raf = requestAnimationFrame(frame);
-      else { html.style.scrollBehavior = ''; done(); }
+      else { scrollNow(getY()); end(); done(); }
     }
     raf = requestAnimationFrame(frame);
-    return { cancel: function () { stopped = true; cancelAnimationFrame(raf); html.style.scrollBehavior = ''; } };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { /* getY() is read each frame, so late fonts are picked up */ });
+    return { cancel: function () { stopped = true; cancelAnimationFrame(raf); end(); } };
   }
-  // The user always wins: wheel, touch, a key, a mouse press or any scroll we did not make cancels what is running.
-  function watchUser(onUser) {
-    var events = ['wheel', 'touchstart', 'touchmove', 'keydown', 'mousedown'];
-    var expected = null, live = true;
+  // Only a clear sign that the person wants to scroll cancels a running scroll: a trusted wheel with a real delta, a finger that
+  // moves more than 10 px, a scroll key, or a press on the page's own scrollbar. A resting finger, a tap, a pointer press
+  // on content and every scroll event the browser raises by itself (address bar, rubber band, momentum) are ignored.
+  var SCROLL_KEYS = { ArrowUp: 1, ArrowDown: 1, PageUp: 1, PageDown: 1, Home: 1, End: 1, ' ': 1, Spacebar: 1 };
+  function watchIntent(onUser) {
+    var live = true, startX = 0, startY = 0, touching = false;
     function user() { if (live) onUser(); }
-    function scrolled() { if (live && (expected === null ? window.scrollY > 2 : Math.abs(window.scrollY - expected) > 4)) onUser(); }
-    events.forEach(function (ev) { window.addEventListener(ev, user, { capture: true, passive: true }); });
-    window.addEventListener('scroll', scrolled, { passive: true });
+    var on = {
+      wheel: function (e) { if (e.isTrusted !== false && Math.abs(e.deltaY) >= 4) user(); },
+      touchstart: function (e) { var t = e.touches && e.touches[0]; if (t) { startX = t.clientX; startY = t.clientY; touching = true; } },
+      touchmove: function (e) {
+        var t = e.touches && e.touches[0];
+        if (!t || !touching) return;
+        if (Math.abs(t.clientY - startY) > 10 || Math.abs(t.clientX - startX) > 10) user();
+      },
+      touchend: function () { touching = false; },
+      keydown: function (e) { if (e.isTrusted !== false && SCROLL_KEYS[e.key] && !/^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '')) user(); },
+      mousedown: function (e) { if (e.isTrusted !== false && e.target === document.documentElement) user(); }
+    };
+    Object.keys(on).forEach(function (ev) { window.addEventListener(ev, on[ev], { capture: true, passive: true }); });
     return {
-      expect: function (y) { expected = y; },
-      stop: function () { live = false; events.forEach(function (ev) { window.removeEventListener(ev, user, true); }); window.removeEventListener('scroll', scrolled); }
+      stop: function () { live = false; Object.keys(on).forEach(function (ev) { window.removeEventListener(ev, on[ev], true); }); }
     };
   }
 
@@ -176,7 +226,6 @@
   var progressErrorText = $('scanProgressErrorText');
   var progressRetryBtn = $('scanProgressRetry');
 
-  function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
 
   var analyze = $('analyze');
   var analyzeText = $('analyzeText');
@@ -184,7 +233,6 @@
   var analyzeStages = $('analyzeStages');
   var analyzeStill = $('analyzeStill');
   var analyzeLive = $('analyzeLive');
-  var analyzeLink = $('analyzeLink');
   var heroEl = $('scan');
 
   function buildStageList(listEl) {
@@ -212,6 +260,7 @@
 
   function showProgressPanel(domain, opts) {
     if (!progressSection) return;
+    var scrollJob = null;
     buildStageList(progressList);
     if (progressDomain) progressDomain.textContent = domain;
     updateProgressBar(0);
@@ -224,9 +273,9 @@
     reserveSpace(true);
     if (opts && opts.scroll) {
       // bring the card into view, a third of the way down, so the stages can be read; the result later eases up to the header
-      var h = progressSection.getBoundingClientRect().height;
-      var top = Math.max(headerOffset(), window.innerHeight * 0.3);
-      animateScroll(Math.max(0, pageTop(progressSection) - top), opts.scrollMs, opts.step || function () {}, function () {});
+      var inset = Math.max(headerOffset(), window.innerHeight * 0.3);
+      scrollJob = animateScroll(function () { return Math.max(0, pageTop(progressSection) - inset); }, opts.scrollMs, function () {}, function () {});
+      if (opts.onJob) opts.onJob(scrollJob);
     }
   }
 
@@ -244,27 +293,130 @@
     if (progressSection) progressSection.hidden = true;
   }
 
-  // The share-link arrival: the hero hands its first viewport to the "Analyzing" screen. The hero keeps its height
-  // while it does, so nothing moves when it comes back.
+  /* ---------------- The share-link arrival ----------------
+     The hero hands its first viewport to the "Analyzing" screen while the scan runs. When the scan is done and the "Done" beat
+     has played, the hero fades out where it stands, then the report is placed in the hero's own position (the hero moves just
+     below it, so the form is still on the page) and fades in. Nothing scrolls and nothing depends on scrolling: the report top
+     sits right under the sticky header, in the first viewport, on every browser. */
+  var announceEl = null;
+  function announce(text) {
+    if (!announceEl) {
+      announceEl = document.createElement('div');
+      announceEl.className = 'scan-announce';
+      announceEl.setAttribute('role', 'status');
+      announceEl.setAttribute('aria-live', 'polite');
+      announceEl.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(announceEl);
+    }
+    announceEl.textContent = text;
+  }
+
+  var reportHome = report ? { parent: report.parentNode, next: report.nextSibling } : null;
+  function returnReportHome() {
+    if (!report || !reportHome || !report.classList.contains('is-staged')) return;
+    reportHome.parent.insertBefore(report, reportHome.next);
+    report.classList.remove('is-staged', 'is-entering');
+    document.documentElement.classList.remove('is-revealed');
+    window.dispatchEvent(new Event('citehound:layout'));
+  }
+
+  // Keeps what the reader is looking at where it is when the layout above it changes. Chrome and Firefox do this themselves
+  // (scroll anchoring); Safari does not. Only a reader who is below the changed block needs it: one at the top is meant to
+  // see the change.
+  function keepAnchor(anchor, mutate) {
+    if (!anchor) { mutate(); return; }
+    var before = anchor.getBoundingClientRect().top;
+    mutate();
+    var delta = anchor.getBoundingClientRect().top - before;
+    if (before <= stickyBottom() + 8 && Math.abs(delta) > 1) scrollNow(window.scrollY + delta);
+  }
+  function stickyBottom() {
+    var h = typeof window.CITEHOUND_STICKY_HEIGHT === 'function' ? window.CITEHOUND_STICKY_HEIGHT() : headerOffset() - 16;
+    return h;
+  }
+  // The top of the report is in the first view: under the sticky header and not so low that it cannot be read.
+  function reportInView() {
+    if (!report || report.hidden) return false;
+    var r = report.getBoundingClientRect();
+    return r.height > 0 && r.top >= stickyBottom() - 1 && r.top < window.innerHeight - 160;
+  }
+
+  // "See your score": a plain in-page link (it works without script), shown only when the report is not in view.
+  var pill = null, pillScroll = null;
+  function hidePill() {
+    if (pill) pill.hidden = true;
+    if (pillScroll) { window.removeEventListener('scroll', pillScroll); pillScroll = null; }
+  }
+  function showPill() {
+    if (!pill) {
+      pill = document.createElement('a');
+      pill.id = 'seeScore';
+      pill.className = 'btn btn--gold see-score';
+      pill.href = '#scanReport';
+      pill.textContent = 'See your score';
+      pill.hidden = true;
+      pill.addEventListener('click', function () { hidePill(); setTimeout(focusReport, 0); });
+      document.body.appendChild(pill);
+    }
+    pill.hidden = false;
+    if (!pillScroll) {
+      pillScroll = function () { if (reportInView()) hidePill(); };
+      window.addEventListener('scroll', pillScroll, { passive: true });
+    }
+  }
+  function focusReport() {
+    var h = report && report.querySelector('.scan-report__heading');
+    if (!h) return;
+    try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+  }
+
+  // elements showTakeoverError creates itself are looked up inside the takeover, not in the page markup
+  function inAnalyze(id) { return analyze ? analyze.querySelector('#' + id) : null; }
   function enterTakeover(domain) {
     if (!analyze || !heroEl) return false;
-    heroEl.style.minHeight = heroEl.offsetHeight + 'px';
     heroEl.classList.add('is-analyzing');
+    heroEl.classList.remove('is-leaving');
     analyze.hidden = false;
-    analyze.classList.remove('is-done');
+    analyze.classList.remove('is-done', 'is-error');
     analyzeText.textContent = 'Analyzing ' + domain;
     if (analyzeDots) analyzeDots.hidden = false;
     if (analyzeStill) analyzeStill.hidden = true;
-    if (analyzeLink) analyzeLink.hidden = true;
+    var err = inAnalyze('analyzeError');
+    if (err) err.hidden = true;
     if (analyzeLive) analyzeLive.textContent = '';
     buildStageList(analyzeStages);
     return true;
   }
   function leaveTakeover() {
     if (!heroEl) return;
-    heroEl.classList.remove('is-analyzing');
-    heroEl.style.minHeight = '';
+    heroEl.classList.remove('is-analyzing', 'is-leaving');
     if (analyze) analyze.hidden = true;
+  }
+
+  // A failed share-link scan stays in the hero, where the person is looking: what happened, and a way to try again.
+  function showTakeoverError(domain, failure, isParamScan) {
+    var box = analyze.querySelector('.analyze__error');
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'analyze__error';
+      box.id = 'analyzeError';
+      box.setAttribute('role', 'alert');
+      box.innerHTML = '<p class="analyze__errtext" id="analyzeErrorText"></p><div class="analyze__errbtns">' +
+        '<button type="button" class="btn btn--gold" id="analyzeRetry">Try again</button>' +
+        '<button type="button" class="btn btn--ghost" id="analyzeOther">Scan a different site</button></div>';
+      analyze.insertBefore(box, analyzeLive);
+    }
+    analyze.classList.add('is-error');
+    analyze.classList.remove('is-done');
+    analyzeText.textContent = 'Couldn’t scan ' + domain;
+    if (analyzeDots) analyzeDots.hidden = true;
+    if (analyzeStill) analyzeStill.hidden = true;
+    inAnalyze('analyzeErrorText').textContent = failure.message;
+    box.hidden = false;
+    inAnalyze('analyzeRetry').onclick = function () { pendingIsParamScan = !!isParamScan; box.hidden = true; runScan({ takeover: true }); };
+    inAnalyze('analyzeOther').onclick = function () { box.hidden = true; leaveTakeover(); setStatus(''); try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); } };
+    announce(failure.message);
+    try { inAnalyze('analyzeRetry').focus({ preventScroll: true }); } catch (e) { /* focus is a courtesy */ }
   }
 
   // What the user sees for stages and the done beat: the takeover for a share link, the card otherwise.
@@ -273,7 +425,8 @@
     return {
       activate: function (i) {
         setStageState(list, i, 'active');
-        if (takeover) { if (analyzeLive) analyzeLive.textContent = 'Step ' + (i + 1) + ' of ' + STAGES.length + ': ' + STAGES[i].label; }
+        var text = 'Step ' + (i + 1) + ' of ' + STAGES.length + ': ' + STAGES[i].label;
+        if (takeover) { if (analyzeLive) analyzeLive.textContent = text; }
         else if (progressContext) progressContext.textContent = STAGES[i].context;
       },
       done: function (i) {
@@ -304,20 +457,17 @@
   // The stages tick in order, each on screen for at least stageMs. The scan is one request, so stages 1 to 4 cannot be
   // tied to separate steps: they advance on the minimum time while the request is in flight, as the stages always have,
   // and "Scoring 16 checks" is the one that is gated on the real response: it never turns done before the scan has
-  // succeeded, and while the response is slow it stays active (pulsing). A failure stops the ticking at once.
+  // succeeded, and while the response is slow it stays active (pulsing). A failure stops the ticking at once. The minimums
+  // count only visible time (vwait).
   async function runPacedStages(fetchPromise, p, ui) {
     var failed = false, outcome = null;
     var settled = fetchPromise.then(function (o) {
       outcome = o;
-      failed = !(o.networkOk && o.res.ok && !o.data.error);
+      failed = !!classify(o);
       return o;
     });
-    function napUnlessFailed(ms) {
-      return new Promise(function (resolve) {
-        var t = setTimeout(resolve, ms);
-        settled.then(function () { if (failed) { clearTimeout(t); resolve(); } });
-      });
-    }
+    var failSignal = new Promise(function (resolve) { settled.then(function () { if (failed) resolve(); }); });
+    function napUnlessFailed(ms) { return Promise.race([vwait(ms), failSignal]); }
     for (var i = 0; i < STAGES.length; i++) {
       if (failed) return outcome;
       ui.activate(i);
@@ -326,29 +476,39 @@
         if (failed) return outcome;
         ui.done(i);
       } else {
-        await Promise.all([sleep(p.stageMs), settled]);
+        await Promise.all([vwait(p.stageMs), settled]);
         if (!failed) ui.done(i);
         return outcome;
       }
     }
   }
 
+  // One request, with a deadline. It always resolves, to an outcome the rest of the flow can describe.
   function startFetch(domain) {
-    return fetch('/api/scan?domain=' + encodeURIComponent(domain))
+    var timer = 0;
+    var request = fetch('/api/scan?domain=' + encodeURIComponent(domain))
       .then(function (res) {
         return res.json()
           .catch(function () { return {}; })
           .then(function (data) { return { networkOk: true, res: res, data: data }; });
       })
       .catch(function (err) { return { networkOk: false, error: err }; });
+    var deadline = new Promise(function (resolve) { timer = setTimeout(function () { resolve({ networkOk: false, timeout: true }); }, SCAN_TIMEOUT_MS); });
+    return Promise.race([request, deadline]).then(function (o) { clearTimeout(timer); return o; });
   }
 
   /* ---------------- Scan flow ---------------- */
 
-  function failureMessage(outcome) {
-    if (!outcome.networkOk) return 'Scan failed: ' + (outcome.error && outcome.error.message ? outcome.error.message : 'connection error');
-    if (outcome.res.status === 429) return outcome.data.error || 'You’ve hit the scan limit. Try again in a little while.';
-    if (!outcome.res.ok || outcome.data.error) return 'Scan failed: ' + (outcome.data.error || ('HTTP ' + outcome.res.status));
+  // Every way a scan can end without a result, in plain words. null means the scan succeeded.
+  function classify(o) {
+    if (o.timeout) return { kind: 'timeout', message: 'The scan took too long and did not finish. Try again in a moment.' };
+    if (!o.networkOk) return { kind: 'network', message: 'The scan could not reach Citehound. Check your connection and try again.' };
+    var st = o.res.status, data = o.data || {};
+    if (st === 429) return { kind: 'rate', message: 'Too many scans from your network right now, try again in a few minutes.' };
+    if (st === 400 && data.error) return { kind: 'input', message: data.error };
+    if (st === 502 || st === 422 || st === 404) return { kind: 'unreadable', message: 'The scanner could not read this site. It may block automated requests, or the address may be wrong. Try again, or scan a different site.' };
+    if (!o.res.ok || data.error) return { kind: 'server', message: 'Something went wrong on our side. Try again in a moment.' };
+    if (!data.result || !data.result.checks) return { kind: 'server', message: 'Something went wrong on our side. Try again in a moment.' };
     return null;
   }
 
@@ -357,7 +517,7 @@
   // (the count is an aria-hidden overlay), so skipping the beats, reduced motion or no script all show the same final page.
   var playing = null;
   function finalizeResult() {
-    if (playing) { playing.timers.forEach(clearTimeout); cancelAnimationFrame(playing.raf); playing = null; }
+    if (playing) { cancelAnimationFrame(playing.raf); playing = null; }
     report.classList.remove('is-prep', 'is-playing');
     var fills = report.querySelectorAll('.score-bar__fill');
     for (var i = 0; i < fills.length; i++) fills[i].style.animationDelay = '';
@@ -373,7 +533,7 @@
   function playResult(countMs, total) {
     finalizeResult();
     var host = report.querySelector('.score-entry__value');
-    var state = { timers: [], raf: 0 };
+    var state = { raf: 0 };
     playing = state;
     report.classList.add('is-playing');
     var fills = report.querySelectorAll('.score-bar__fill');
@@ -388,16 +548,54 @@
       ov.textContent = '0';
       host.appendChild(ov);
       host.classList.add('is-counting');
-      var t0 = performance.now();
+      // time-based: each frame adds a capped step, so a tab that was hidden resumes where it left off and always ends on the real score
+      var elapsed = 0, last = 0;
       var tick = function (now) {
-        var t = Math.min(1, (now - t0) / countMs);
+        if (playing !== state) return;
+        if (last) elapsed += Math.min(now - last, FRAME_CAP_MS);
+        last = now;
+        var t = Math.min(1, elapsed / countMs);
         ov.textContent = String(Math.round(total * (1 - Math.pow(1 - t, 3))));
         if (t < 1) state.raf = requestAnimationFrame(tick);
         else { ov.textContent = String(total); host.classList.remove('is-counting'); ov.remove(); }
       };
       state.raf = requestAnimationFrame(tick);
     }
-    state.timers.push(setTimeout(finalizeResult, afterBars + 200 + REVEAL_MS + 200));
+    vwait(afterBars + 200 + REVEAL_MS + 200).then(function () { if (playing === state) finalizeResult(); });
+  }
+
+  // The share-link reveal. Order matters: the hero fades out first, and only when it is invisible does the report take its place.
+  var arrivalY = 0; // where a share-link arrival starts: the top, or just above the hero on a page that has a banner before it
+  var NUDGE_PX = 48; // a resting finger or a stray wheel tick moves the page a few pixels: that is still "at the top"
+  async function revealInPlace(data, isParamScan, p) {
+    if (p.animate) {
+      heroEl.style.transitionDuration = p.fadeMs + 'ms';
+      heroEl.classList.add('is-leaving');
+      await vwait(p.fadeMs);
+    }
+    if (window.scrollY !== arrivalY && Math.abs(window.scrollY - arrivalY) <= NUDGE_PX) scrollNow(arrivalY);
+    keepAnchor(heroEl.nextElementSibling, function () {
+      heroEl.parentNode.insertBefore(report, heroEl);
+      report.classList.add('is-staged');
+      if (p.animate) report.classList.add('is-entering');
+      leaveTakeover();
+      heroEl.style.transitionDuration = '';
+      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan, data.commerce, { prep: p.animate });
+      document.documentElement.classList.add('is-revealed');
+      window.dispatchEvent(new Event('citehound:layout'));
+    });
+    updateShareableUrl(data.domain);
+    if (p.animate) {
+      report.style.transitionDuration = p.fadeMs + 'ms';
+      void report.offsetWidth; // the report is in the page at opacity 0; let that state paint before it fades in
+      report.classList.remove('is-entering');
+      await vwait(p.fadeMs);
+      report.style.transitionDuration = '';
+    }
+    announce('Your score for ' + data.domain + ' is ready: ' + data.result.total + ' out of 100.');
+    focusReport();
+    if (p.animate) playResult(p.countMs, data.result.total); else finalizeResult();
+    if (!reportInView()) showPill();
   }
 
   async function runScan(arrival) {
@@ -408,22 +606,26 @@
     pendingIsParamScan = false;
 
     // arrival is set only for a share link. A link with a #hash, or a back/forward visit, runs the scan quietly:
-    // no takeover, no scroll and no animation.
+    // no takeover and no animation, and the report stays where it is in the page.
     var quiet = !!(arrival && arrival.quiet);
     var takeover = !!(arrival && arrival.takeover && !quiet && analyze);
     var p = profileFor(takeover ? 'share' : 'form');
     var guard = null, scrollJob = null, cancelled = false, resultShown = false;
 
     scanBtn.disabled = true;
-    function skipAnimations() {
-      cancelled = true;
-      if (scrollJob) scrollJob.cancel();
-      if (guard) guard.stop();
-      if (resultShown) finalizeResult();
-    }
-    if (!quiet) guard = watchUser(skipAnimations);
+    hidePill();
+    if (!takeover) returnReportHome();
     if (takeover) { enterTakeover(domain); report.hidden = true; hideProgressPanel(); setStatus(''); }
-    else showProgressPanel(domain, { scroll: !quiet, scrollMs: p.animate ? 600 : 0, step: function (y) { if (guard) guard.expect(y); } });
+    else {
+      // a scan from the form moves the page; only a clear sign that the person wants to scroll stops it
+      if (!quiet) guard = watchIntent(function () {
+        cancelled = true;
+        if (scrollJob) scrollJob.cancel();
+        if (guard) guard.stop();
+        if (resultShown) finalizeResult();
+      });
+      showProgressPanel(domain, { scroll: !quiet, scrollMs: p.animate ? 600 : 0, onJob: function (j) { scrollJob = j; } });
+    }
     var ui = makeUi(domain, takeover);
     var stillTimer = setTimeout(ui.still, STILL_WORKING_MS);
 
@@ -432,47 +634,52 @@
       var outcome = await runPacedStages(fetchPromise, p, ui);
       clearTimeout(stillTimer);
 
-      var failure = failureMessage(outcome);
+      var failure = classify(outcome);
       if (failure) {
-        if (takeover) { leaveTakeover(); setStatus(failure, true); }
-        else showProgressError(failure);
-        if (guard) guard.stop();
+        if (takeover) showTakeoverError(domain, failure, isParamScan);
+        else showProgressError(failure.message);
         return;
       }
       var data = outcome.data;
 
       // the done beat, held before anything moves
       ui.finish();
-      await sleep(p.doneMs);
+      if (takeover) announce('Done. Here’s ' + domain + '’s score.');
+      await vwait(p.doneMs);
+
+      if (takeover) {
+        await revealInPlace(data, isParamScan, p);
+        return;
+      }
 
       hideProgressPanel();
       var animate = p.animate && !cancelled && !quiet;
       renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan, data.commerce, { prep: animate });
       resultShown = true;
       updateShareableUrl(data.domain);
+      if (quiet) return;
 
-      if (quiet) { return; }
-      if (cancelled) {
-        // the user took over: leave the finished screen in place with a way to the result
-        if (takeover && analyzeLink) analyzeLink.hidden = false;
-        return;
+      // eased scroll to the result, landing below the sticky header; the target is measured again on every frame
+      var aim = function () { return Math.max(0, pageTop(report) - headerOffset()); };
+      if (!cancelled) {
+        await new Promise(function (resolve) {
+          scrollJob = animateScroll(aim, p.scrollMs, function () {}, resolve);
+          if (cancelled) { scrollJob.cancel(); resolve(); }
+        });
       }
-
-      // eased scroll to the result, landing below the sticky header
-      var targetY = Math.max(0, pageTop(report) - headerOffset());
-      await new Promise(function (resolve) {
-        scrollJob = animateScroll(targetY, p.scrollMs, function (y) { if (guard) guard.expect(y); }, resolve);
-        if (cancelled) { scrollJob.cancel(); resolve(); }
-      });
-      if (guard) guard.expect(window.scrollY);
-      if (takeover) leaveTakeover();
-      if (cancelled) { finalizeResult(); return; }
-      if (animate) playResult(p.countMs, data.result.total);
+      if (!cancelled && document.fonts && document.fonts.ready) {
+        try { await document.fonts.ready; } catch (e) { /* ignore */ }
+        if (!cancelled && Math.abs(window.scrollY - aim()) > 2) jumpTo(aim());
+      }
+      if (cancelled) finalizeResult();
+      else if (animate) playResult(p.countMs, data.result.total);
       else finalizeResult();
+      if (!reportInView()) showPill();
     } catch (err) {
       clearTimeout(stillTimer);
-      if (takeover) { leaveTakeover(); setStatus('Scan failed: ' + (err && err.message ? err.message : 'connection error'), true); }
-      else showProgressError('Scan failed: ' + (err && err.message ? err.message : 'connection error'));
+      var fallback = { kind: 'server', message: 'Something went wrong on our side. Try again in a moment.' };
+      if (takeover) showTakeoverError(domain, fallback, isParamScan);
+      else showProgressError(fallback.message);
     } finally {
       if (guard) setTimeout(guard.stop, 4000);
       scanBtn.disabled = false;
@@ -519,6 +726,14 @@
 
   function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam, commerce, opts) {
     lastScore = { domain: domain, total: r.total, checks: r.checks, botResults: botResults };
+    var heading = report.querySelector('.scan-report__heading');
+    if (!heading) {
+      heading = document.createElement('h2');
+      heading.className = 'scan-report__heading';
+      heading.tabIndex = -1;
+      report.insertBefore(heading, report.firstChild);
+    }
+    heading.textContent = 'Score for ' + domain + ': ' + r.total + ' out of 100';
 
     $('scoreValue').textContent = r.total;
     $('scoreDomain').textContent = domain + ' · retrieved ' + new Date().toLocaleDateString('en-GB');
@@ -879,25 +1094,30 @@
   /* ---------------- URL-driven scan (?scan=domain) ---------------- */
 
   /* A share link opens at the top and shows the "Analyzing" screen while the scan runs: the stages tick one by one, a "Done"
-     beat, then an eased scroll to the result and the count-up (see runScan and PACING). A link with a #hash, or a
-     back/forward visit, runs the scan quietly and moves nothing. The domain is validated by normalizeDomain and only ever
-     written with textContent. */
+     beat, then the hero fades out and the report fades in at the same spot, followed by the count-up (see runScan and PACING).
+     Nothing scrolls, so nothing depends on scrolling and no touch, scroll or key press interrupts it. A link with a #hash, or a
+     back/forward visit, runs the scan quietly. The domain is validated by normalizeDomain and only ever written with textContent. */
   (function initFromUrl() {
     var raw = new URLSearchParams(window.location.search).get('scan');
     if (!raw) return;
     var domain = normalizeDomain(raw);
     if (!domain) return;
     input.value = domain;
+    // Link-preview fetchers (WhatsApp, Facebook, Slack, Telegram and the like) never run script, so a share URL costs the server
+    // nothing: the scan is made only by the visitor's own browser, below. A previewer that does run script is not sent to /api/scan.
+    if (/googlebot|bingbot|applebot|slackbot|twitterbot|linkedinbot|discordbot|telegrambot|pinterestbot|redditbot|facebookexternalhit|facebot|whatsapp\/|embedly|linkpresentation|crawler|spider/i.test(navigator.userAgent || '')) return;
     pendingIsParamScan = true;
     var nav = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
     var restored = !!(nav && nav.type === 'back_forward');
     var hash = !!window.location.hash.replace('#', '');
     if (!hash && !restored) {
-      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) { /* some in-app browsers forbid it */ }
+      // best effort, and nothing depends on it: the Analyzing screen is shown where the hero is, and the report takes its place
+      arrivalY = heroEl && pageTop(heroEl) > 160 ? Math.max(0, Math.round(pageTop(heroEl) - headerOffset())) : 0;
+      scrollNow(arrivalY);
     }
     // a page restored from the back/forward cache keeps its state: show it as it is and drop any animation
-    window.addEventListener('pageshow', function (e) { if (e.persisted) { finalizeResult(); leaveTakeover(); } });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) { finalizeResult(); if (!report.classList.contains('is-staged')) leaveTakeover(); } });
     runScan({ takeover: true, quiet: hash || restored });
   }());
 

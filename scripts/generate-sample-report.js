@@ -26,7 +26,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
-const CSS_VERSION = 58;
+const CSS_VERSION = 59;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function shellParts() {
