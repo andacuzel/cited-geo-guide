@@ -63,6 +63,44 @@
 })();
 
 /* =====================================================================
+   Sticky header height — one number for every scroll offset. The part of the
+   header that stays pinned is the whole header on wide screens and only the
+   logo row up to 700px (the nav row scrolls away; see styles.css, where the
+   header is display: contents there). This keeps --header-h on <html> equal to
+   its real height, so html { scroll-padding-top } lands anchors and
+   scrollIntoView calls below it on any screen. ResizeObserver follows font
+   loading, wrapping and rotation; no JS leaves the CSS fallback of 58px.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  var header = document.querySelector('.site-header');
+  if (!header || typeof header.getBoundingClientRect !== 'function') return;
+  var inner = header.querySelector('.site-header__inner');
+
+  function pinned(el) {
+    var box = el || header;
+    var contents = typeof getComputedStyle === 'function' && getComputedStyle(box).display === 'contents';
+    var target = contents && inner ? inner : box;
+    return Math.round(target.getBoundingClientRect().height);
+  }
+  window.CITEHOUND_STICKY_HEIGHT = pinned;
+
+  function sync() {
+    document.documentElement.style.setProperty('--header-h', pinned() + 'px');
+  }
+
+  sync();
+  window.addEventListener('resize', sync);
+  window.addEventListener('load', sync);
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(sync);
+    ro.observe(header);
+    if (inner) ro.observe(inner);
+  }
+})();
+
+/* =====================================================================
    Homepage hero header — the header starts in its navy state (see
    .site-header--hero-navy in styles.css) and switches to the normal
    light header once the hero has scrolled out from behind it. Only
@@ -73,12 +111,13 @@
 (function () {
   'use strict';
 
+  var stickyHeight = window.CITEHOUND_STICKY_HEIGHT || function (el) { return el.offsetHeight; };
   var header = document.querySelector('.site-header--hero-navy');
   var hero = document.getElementById('scan');
   if (!header || !hero) return;
 
   function update() {
-    var pastHero = hero.getBoundingClientRect().bottom <= header.offsetHeight;
+    var pastHero = hero.getBoundingClientRect().bottom <= stickyHeight(header);
     header.classList.toggle('site-header--scrolled', pastHero);
   }
 

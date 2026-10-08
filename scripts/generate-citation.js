@@ -33,7 +33,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 56;
+const CSS_VERSION = 57;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
 
@@ -268,7 +268,7 @@ function build(sample) {
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
     '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
-    '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=2"></script>\n</body>\n</html>\n';
+    '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
 }
 
 /* ---------------------------------------------------------------------

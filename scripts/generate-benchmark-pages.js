@@ -45,7 +45,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 56; // bump when styles.css changes
+const CSS_VERSION = 57; // bump when styles.css changes
 
 const TRACKS = {
   'B2B SaaS': { bar: 'chart-bar--b2b', fill: 'bm-fill--b2b', marker: 'var(--navy-800)', onBar: 'chart-seg-text--light' },
@@ -350,7 +350,7 @@ function footer(scripts) {
     '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n' +
     '      </div>\n    </footer>\n\n  </main>\n\n' +
     '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
-    '  <script src="../nav.js?v=2"></script>\n' + (scripts || '') +
+    '  <script src="../nav.js?v=3"></script>\n' + (scripts || '') +
     '</body>\n</html>\n'
   );
 }

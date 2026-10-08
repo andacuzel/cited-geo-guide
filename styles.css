@@ -45,7 +45,12 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* --header-h is the height of the part of the header that stays pinned; nav.js keeps it in sync
+     (ResizeObserver). 58px is the no-JS fallback. */
+  scroll-padding-top: calc(var(--header-h, 58px) + 16px);
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
@@ -156,7 +161,7 @@ select.field { appearance: auto; cursor: pointer; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(238, 241, 245, 0.9);
+  background: rgba(238, 241, 245, 0.97);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
   transition: background var(--t), border-color var(--t);
@@ -282,7 +287,7 @@ select.field { appearance: auto; cursor: pointer; }
   right: 0;
   bottom: 14px;
   width: 28px;
-  background: rgba(238, 241, 245, 0.9);
+  background: rgba(238, 241, 245, 0.97);
   backdrop-filter: blur(8px);
   pointer-events: none;
 }
@@ -304,13 +309,13 @@ select.field { appearance: auto; cursor: pointer; }
 .site-header--hero-navy .mobile-nav__fade { background: rgba(11, 21, 38, 0.9); }
 
 .site-header--hero-navy.site-header--scrolled {
-  background: rgba(238, 241, 245, 0.9);
+  background: rgba(238, 241, 245, 0.97);
   border-bottom-color: var(--line);
 }
 .site-header--hero-navy.site-header--scrolled .logo__mark, .site-header--hero-navy.site-header--scrolled .logo__icon { color: var(--navy-950); }
 .site-header--hero-navy.site-header--scrolled .site-nav__link { color: var(--ink-soft); }
 .site-header--hero-navy.site-header--scrolled .site-nav__link:hover { color: var(--ink); border-color: var(--gold); }
-.site-header--hero-navy.site-header--scrolled .mobile-nav__fade { background: rgba(238, 241, 245, 0.9); }
+.site-header--hero-navy.site-header--scrolled .mobile-nav__fade { background: rgba(238, 241, 245, 0.97); }
 
 /* ----------------------------- Sections ----------------------------- */
 
@@ -405,6 +410,18 @@ select.field { appearance: auto; cursor: pointer; }
   white-space: pre-line;
 }
 .scan__status.is-error { color: var(--risk); }
+
+/* Share-link arrivals: the hero says what is happening while the scan runs. The three dots are
+   text, animated by opacity only; prefers-reduced-motion switches every animation off (see top of file). */
+.hero__analyzing { margin: 14px 0 0; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+.hero--navy .hero__analyzing { color: var(--gold-soft); }
+.hero__analyzing[hidden] { display: none; }
+.hero__analyzing .dots i { font-style: normal; opacity: 0.25; animation: dot-pulse 1.2s ease-in-out infinite; }
+.hero__analyzing .dots i:nth-child(2) { animation-delay: 0.2s; }
+.hero__analyzing .dots i:nth-child(3) { animation-delay: 0.4s; }
+.hero__analyzing.is-done .dots { display: none; }
+.hero__analyzing a { margin-left: 10px; color: var(--gold-soft); text-decoration: underline; text-underline-offset: 3px; }
+@keyframes dot-pulse { 0%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
 
 .scan__retry { margin-top: 10px; display: none; }
 .scan__retry.is-visible { display: inline-flex; }
@@ -547,6 +564,9 @@ select.field { appearance: auto; cursor: pointer; }
 
 #scanReport, #scanProgress { padding: 0 0 96px; }
 #scanReport[hidden], #scanProgress[hidden] { display: none; }
+/* While a scan runs, the progress card holds the space the result will take, so the section below
+   (the MCP band) does not move when the result replaces the card. scanner.js sets --result-reserve. */
+#scanProgress.is-reserving, #scanReport.is-reserving { min-height: var(--result-reserve, 0px); }
 
 .report-panel {
   background: var(--white);
@@ -576,7 +596,7 @@ select.field { appearance: auto; cursor: pointer; }
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--ink-soft);
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 .score-entry__meta a { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 2px; }
 
@@ -1857,10 +1877,30 @@ code {
   .video-grid { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 640px) {
-  .site-header__inner { padding: 14px 20px; gap: 20px; }
+/* Up to 700px the header is two rows. Only the logo row is sticky (about 56px); the nav row scrolls away
+   with the page and keeps its own horizontal scroll. display: contents lets the logo row stick against the
+   whole page instead of its own two-row parent; the header's colours are passed down with inherit. */
+@media (max-width: 700px) {
+  .site-header { display: contents; }
+  .site-header__inner {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: inherit;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid;
+    border-bottom-color: inherit;
+    padding: 11px 20px;
+    gap: 20px;
+  }
+  .mobile-nav { background: inherit; border-bottom: 1px solid; border-bottom-color: inherit; }
   .site-nav { display: none; }
   .mobile-nav { display: block; }
+  html { scroll-padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 88px); }
+  #scanReport { padding-bottom: calc(96px + 32px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (max-width: 640px) {
   .section__inner { padding: 0 20px; }
   .hero { padding: 44px 0 64px; }
   .report-panel { padding: 26px 20px; }
@@ -3592,7 +3632,6 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 .mcp-excerpt__line--in { padding-left: 16px; color: var(--ink-soft); }
 
 .mcp-section { padding: 0 0 72px; }
-.mcp-section[id] { scroll-margin-top: 72px; }
 
 .mcp-asks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .mcp-ask { min-height: 0; justify-content: space-between; gap: 18px; padding: 20px 20px 18px; }

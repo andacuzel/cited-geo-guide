@@ -31,7 +31,7 @@ const shell = require('../lib/page-shell.js');
 
 const FILE = path.join(ROOT, 'mcp.html');
 const MCP_PATH = '/api/mcp';
-const CSS_VERSION = 56;
+const CSS_VERSION = 57;
 const PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 const word = (n) => (n >= 0 && n < WORDS.length ? WORDS[n] : String(n));
@@ -244,7 +244,7 @@ function build() {
   const body = banner(d) + '\n' + asks(d) + '\n' + toolsSection(d) + '\n' + workflows(d) + '\n' + connect() + '\n' + expect(d) + '\n' + faq(d) + '\n' + closing();
   let html = shell.page({ title: m.title, description: m.description, path: '/mcp', cssVersion: CSS_VERSION, jsonld: jsonld(d), body: body });
   html = html.replace('  <meta name="author"', '  <meta name="keywords" content="MCP server, Model Context Protocol, Claude MCP, Cursor MCP, AI visibility API, GEO tools, AEO tools" />\n  <meta name="author"');
-  html = html.replace('  <script src="nav.js?v=2"></script>', SCRIPT + '  <script src="nav.js?v=2"></script>');
+  html = html.replace('  <script src="nav.js?v=3"></script>', SCRIPT + '  <script src="nav.js?v=3"></script>');
   return html;
 }
 

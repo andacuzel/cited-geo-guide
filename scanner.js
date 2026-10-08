@@ -29,6 +29,30 @@
 
   var lastScore = null;
   var pendingIsParamScan = false;
+  var intro = null; // set while a share-link arrival is being introduced (see startIntro)
+
+  // Scroll targets land below the sticky header: html { scroll-padding-top } in styles.css, kept in sync by nav.js.
+  function scrollToEl(el) {
+    if (!el) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  // The progress card is much shorter than the result. While it shows, the section holds the height the
+  // result will take, so what sits below (the MCP band) does not jump when the result replaces the card.
+  function resultReserve() {
+    var w = window.innerWidth;
+    for (var i = 0; i < RESERVE.length; i++) if (w <= RESERVE[i][0]) return RESERVE[i][1];
+    return 0;
+  }
+  function reserveSpace(on) {
+    var px = resultReserve() + 'px';
+    [progressSection, report].forEach(function (el) {
+      if (!el) return;
+      el.style.setProperty('--result-reserve', px);
+      el.classList.toggle('is-reserving', !!on);
+    });
+  }
 
   function esc(s) {
     var d = document.createElement('div');
@@ -75,6 +99,8 @@
     { label: 'Scoring 16 checks', context: 'Every check is weighted across three pillars: discoverability, technical foundation and trust.' }
   ];
   var STAGE_MIN_MS = 500;
+  // Smallest result heights measured by width band (px, section incl. padding): 3471 at 390, 3440 at 520, 2587 at 700, 2410 at 1000, 1793 at 1280 and up (smallest of four recorded scans). A taller result grows downward, below the fold.
+  var RESERVE = [[400, 3470], [520, 3440], [700, 2580], [1000, 2410], [Infinity, 1790]]; // [max viewport width, px]
 
   var progressSection = $('scanProgress');
   var progressStages = $('scanProgressStages');
@@ -122,11 +148,13 @@
     progressSection.hidden = false;
     report.hidden = true;
     setStatus('');
-    progressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    reserveSpace(true);
+    if (!intro) scrollToEl(progressSection);
   }
 
   function showProgressError(message) {
     if (!progressSection) return;
+    progressSection.classList.remove('is-reserving');
     if (progressStages) progressStages.hidden = true;
     if (progressError) {
       progressError.hidden = false;
@@ -187,9 +215,11 @@
 
     try {
       var fetchPromise = startFetch(domain);
+      if (intro) fetchPromise.then(function () { intro.fetched(); });
       var outcome = await runStagedScan(fetchPromise);
 
       if (!outcome.networkOk) {
+        if (intro) intro.finish(false);
         showProgressError('Scan failed: ' + (outcome.error && outcome.error.message ? outcome.error.message : 'connection error'));
         return;
       }
@@ -197,10 +227,12 @@
       var res = outcome.res, data = outcome.data;
 
       if (res.status === 429) {
+        if (intro) intro.finish(false);
         showProgressError(data.error || 'You’ve hit the scan limit. Try again in a little while.');
         return;
       }
       if (!res.ok || data.error) {
+        if (intro) intro.finish(false);
         showProgressError('Scan failed: ' + (data.error || ('HTTP ' + res.status)));
         return;
       }
@@ -208,7 +240,9 @@
       hideProgressPanel();
       renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan, data.commerce);
       updateShareableUrl(data.domain);
+      if (intro) intro.finish(true);
     } catch (err) {
+      if (intro) intro.finish(false);
       showProgressError('Scan failed: ' + (err && err.message ? err.message : 'connection error'));
     } finally {
       scanBtn.disabled = false;
@@ -342,7 +376,9 @@
     renderProOutput(domain, r);
 
     report.hidden = false;
-    report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    reserveSpace(false);
+    report.classList.add('is-reserving'); // never shorter than the card it replaced
+    if (!intro) scrollToEl(report);
   }
 
   /* ---------------- Pro output (not yet implemented) ----------------
@@ -582,9 +618,9 @@
 
   /* ---------------- Wiring ---------------- */
 
-  form.addEventListener('submit', function (e) { e.preventDefault(); runScan(); });
-  retryBtn.addEventListener('click', function () { runScan(); });
-  if (progressRetryBtn) progressRetryBtn.addEventListener('click', function () { runScan(); });
+  form.addEventListener('submit', function (e) { e.preventDefault(); intro = null; runScan(); });
+  retryBtn.addEventListener('click', function () { intro = null; runScan(); });
+  if (progressRetryBtn) progressRetryBtn.addEventListener('click', function () { intro = null; runScan(); });
   $('shareBtn').addEventListener('click', shareScore);
 
   var fixSnippets = $('fixSnippets');
@@ -610,6 +646,66 @@
 
   /* ---------------- URL-driven scan (?scan=domain) ---------------- */
 
+  /* A share link opens the homepage at the top with a status line, starts the scan at once and brings the
+     user to the progress card (or the result) after a short pause: at max(1.8 s, response in), and at 4 s
+     at the latest. Any wheel, touch, key or scroll by the user cancels it. An explicit #hash in the link
+     means no automatic scroll at all: the hash decides. The domain is validated by normalizeDomain and only
+     ever written with textContent. */
+  var INTRO_MIN_MS = 1800, INTRO_MAX_MS = 4000;
+
+  function startIntro(domain) {
+    var statusLine = $('heroAnalyzing');
+    var statusText = $('heroAnalyzingText');
+    var viewLink = $('heroAnalyzingLink');
+    var t0 = performance.now();
+    var state = { gotResponse: false, scrolled: false, cancelled: false, hash: !!window.location.hash.replace('#', ''), timers: [] };
+    var events = ['wheel', 'touchstart', 'touchmove', 'keydown', 'mousedown'];
+
+    if (statusLine && statusText) {
+      statusText.textContent = 'Analyzing ' + domain;
+      statusLine.hidden = false;
+    }
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (!state.hash) window.scrollTo({ top: 0, behavior: 'instant' });
+
+    function stop() {
+      events.forEach(function (ev) { window.removeEventListener(ev, cancel, true); });
+      window.removeEventListener('scroll', onScroll);
+      state.timers.forEach(clearTimeout);
+      state.timers = [];
+    }
+    function cancel() { if (state.scrolled || state.cancelled) return; state.cancelled = true; stop(); }
+    function onScroll() { if (window.scrollY > 2) cancel(); }
+
+    function tryScroll() {
+      if (state.scrolled || state.cancelled || state.hash) return;
+      var elapsed = performance.now() - t0;
+      if (elapsed < INTRO_MIN_MS - 30) return;
+      if (!state.gotResponse && elapsed < INTRO_MAX_MS - 30) return;
+      state.scrolled = true;
+      stop();
+      scrollToEl(report.hidden ? progressSection : report);
+    }
+
+    if (!state.hash) {
+      events.forEach(function (ev) { window.addEventListener(ev, cancel, { capture: true, passive: true }); });
+      window.addEventListener('scroll', onScroll, { passive: true });
+      state.timers.push(setTimeout(tryScroll, INTRO_MIN_MS), setTimeout(tryScroll, INTRO_MAX_MS));
+    }
+
+    state.fetched = function () { state.gotResponse = true; tryScroll(); };
+    state.finish = function (ok) {
+      state.gotResponse = true;
+      stop();
+      if (statusLine && statusText) {
+        statusText.textContent = (ok ? 'Scan complete for ' : 'Scan failed for ') + domain;
+        statusLine.classList.add('is-done');
+        if (viewLink && ok && !state.scrolled) viewLink.hidden = false;
+      }
+    };
+    return state;
+  }
+
   (function initFromUrl() {
     var raw = new URLSearchParams(window.location.search).get('scan');
     if (!raw) return;
@@ -617,6 +713,7 @@
     if (!domain) return;
     input.value = domain;
     pendingIsParamScan = true;
+    intro = startIntro(domain);
     runScan();
   }());
 

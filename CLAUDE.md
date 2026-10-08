@@ -175,6 +175,14 @@ scrolled out of view. No JS means it stays navy — legible against the
 hero and against the lighter sections below it. Every other page keeps
 the light header always; don't extend the navy header treatment there.
 
+The header is sticky, and scroll offsets come from its real height: `nav.js` keeps
+`--header-h` on `<html>` equal to the pinned part (the whole header on wide screens, only
+the logo row up to 700px, where the nav row scrolls away), and `html { scroll-padding-top }`
+adds 16px to it. Never hand-tune an offset or add a `scroll-margin-top` for the header. A
+share link (`/?scan=domain`) opens at the top with an "Analyzing" line, starts the scan at
+once and scrolls to the progress card or the result at max(1.8 s, response in), at 4 s
+at the latest; any user input cancels that scroll.
+
 **Never:** gradients · numbered section headers (01/02/03) · hover
 lift or scale · pill (999px) shapes · emoji in product surfaces ·
 centered body text · cream or warm backgrounds · Inter, Fraunces,

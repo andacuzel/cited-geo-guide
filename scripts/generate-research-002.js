@@ -28,7 +28,7 @@ const PAGE = path.join(ROOT, 'research', 'crawler-access-2026.html');
 const INDEX = path.join(ROOT, 'research', 'index.html');
 const SLUG = 'crawler-access-2026';
 const PUBLISHED = '2026-10-05';
-const CSS_VERSION = 56;
+const CSS_VERSION = 57;
 const esc = shell.esc;
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -182,7 +182,7 @@ function build(D) {
       { '@type': 'Dataset', name: 'Citehound AI crawler access, ' + D.N + ' homepages in ' + nWord + ' categories, July 2026', description: 'For each of ' + D.N + ' homepages, whether robots.txt blocks, limits or leaves open each of ' + D.bots.length + ' tracked AI crawlers, grouped by category.', temporalCoverage: D.first + '/' + D.last, creator: { '@id': site.baseUrl + '/#org' }, variableMeasured: 'robots.txt access state (blocked, limited, open) for ' + D.bots.length + ' AI crawlers', url: url }
     ]
   }];
-  return shell.page({ title: 'Citehound — ' + title.replace(/\.$/, ''), description: desc, path: '/research/' + SLUG, cssVersion: CSS_VERSION, jsonld: ld, depth: 1, body: body }).replace('<script src="../nav.js?v=2"></script>', '<script src="../nav.js?v=2"></script>\n  <script src="../research.js?v=1"></script>').replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
+  return shell.page({ title: 'Citehound — ' + title.replace(/\.$/, ''), description: desc, path: '/research/' + SLUG, cssVersion: CSS_VERSION, jsonld: ld, depth: 1, body: body }).replace('<script src="../nav.js?v=3"></script>', '<script src="../nav.js?v=3"></script>\n  <script src="../research.js?v=1"></script>').replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
 }
 
 function indexEntry() {
