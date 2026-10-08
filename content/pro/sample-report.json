@@ -1,5 +1,5 @@
 {
- "domain": "answerable-app.vercel.app",
+ "domain": "getcitehound.com",
  "status": "done",
  "createdAt": "2026-10-04T10:48:00.311Z",
  "pageCount": 28,
@@ -128,115 +128,115 @@
   },
   "pagesWorstFirst": [
    {
-    "url": "https://answerable-app.vercel.app/research/case-study-agaone",
+    "url": "https://getcitehound.com/research/case-study-agaone",
     "total": 76
    },
    {
-    "url": "https://answerable-app.vercel.app/tools",
+    "url": "https://getcitehound.com/tools",
     "total": 77
    },
    {
-    "url": "https://answerable-app.vercel.app/research",
+    "url": "https://getcitehound.com/research",
     "total": 77
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks",
+    "url": "https://getcitehound.com/benchmarks",
     "total": 77
    },
    {
-    "url": "https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+    "url": "https://getcitehound.com/research/llms-txt-adoption-2026",
     "total": 79
    },
    {
-    "url": "https://answerable-app.vercel.app/about",
+    "url": "https://getcitehound.com/about",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/for-saas",
+    "url": "https://getcitehound.com/for-saas",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/for-brands",
+    "url": "https://getcitehound.com/for-brands",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/for-professionals",
+    "url": "https://getcitehound.com/for-professionals",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/privacy",
+    "url": "https://getcitehound.com/privacy",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/terms",
+    "url": "https://getcitehound.com/terms",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/playbooks",
+    "url": "https://getcitehound.com/playbooks",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/sample-report",
+    "url": "https://getcitehound.com/sample-report",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/tools/robots-txt",
+    "url": "https://getcitehound.com/tools/robots-txt",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks/crm",
+    "url": "https://getcitehound.com/benchmarks/crm",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks/cybersecurity",
+    "url": "https://getcitehound.com/benchmarks/cybersecurity",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks/devtools",
+    "url": "https://getcitehound.com/benchmarks/devtools",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks/dtc-brands",
+    "url": "https://getcitehound.com/benchmarks/dtc-brands",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks/consumer-apps",
+    "url": "https://getcitehound.com/benchmarks/consumer-apps",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/benchmarks/hospitality",
+    "url": "https://getcitehound.com/benchmarks/hospitality",
     "total": 82
    },
    {
-    "url": "https://answerable-app.vercel.app/",
+    "url": "https://getcitehound.com/",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/mcp",
+    "url": "https://getcitehound.com/mcp",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/citation-tracking",
+    "url": "https://getcitehound.com/citation-tracking",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/agentic-commerce",
+    "url": "https://getcitehound.com/agentic-commerce",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/methodology",
+    "url": "https://getcitehound.com/methodology",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/compare",
+    "url": "https://getcitehound.com/compare",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/tools/llms-txt-checker",
+    "url": "https://getcitehound.com/tools/llms-txt-checker",
     "total": 87
    },
    {
-    "url": "https://answerable-app.vercel.app/tools/schema-generator",
+    "url": "https://getcitehound.com/tools/schema-generator",
     "total": 87
    }
   ],
@@ -320,7 +320,7 @@
  },
  "pages": [
   {
-   "url": "https://answerable-app.vercel.app/",
+   "url": "https://getcitehound.com/",
    "status": "ok",
    "result": {
     "checks": [
@@ -475,13 +475,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — AI Visibility Scanner & GEO Playbooks",
+    "title": "Citehound — AI Visibility Scanner & GEO Playbooks",
     "metaDesc": "Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO & AEO playbooks. No email required.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/about",
+   "url": "https://getcitehound.com/about",
    "status": "ok",
    "result": {
     "checks": [
@@ -636,13 +636,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — About Andaç Üzel",
-    "metaDesc": "Andaç Üzel built Answerable after ten years in content editing and content marketing. Why the free version covers most of what you need, and what Pro is for.",
+    "title": "Citehound — About Andaç Üzel",
+    "metaDesc": "Andaç Üzel built Citehound after ten years in content editing and content marketing. Why the free version covers most of what you need, and what Pro is for.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/for-saas",
+   "url": "https://getcitehound.com/for-saas",
    "status": "ok",
    "result": {
     "checks": [
@@ -797,13 +797,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — B2B SaaS GEO & AEO Playbooks",
+    "title": "Citehound — B2B SaaS GEO & AEO Playbooks",
     "metaDesc": "Six GEO and AEO playbooks for B2B SaaS: CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools. Fixes grounded in each category's citation sources.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/for-brands",
+   "url": "https://getcitehound.com/for-brands",
    "status": "ok",
    "result": {
     "checks": [
@@ -958,13 +958,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Consumer & E-commerce Brand GEO & AEO Playbooks",
+    "title": "Citehound — Consumer & E-commerce Brand GEO & AEO Playbooks",
     "metaDesc": "Four GEO and AEO playbooks for consumer and e-commerce brands: e-commerce, consumer apps, hospitality and marketplaces. Fixes grounded in each category's sources.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/for-professionals",
+   "url": "https://getcitehound.com/for-professionals",
    "status": "ok",
    "result": {
     "checks": [
@@ -1119,13 +1119,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Local & Independent Professional GEO & AEO Playbooks",
+    "title": "Citehound — Local & Independent Professional GEO & AEO Playbooks",
     "metaDesc": "Four GEO and AEO playbooks for local and independent professionals: real estate, legal, health and wellness, and local services. Grounded in each category's sources.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/tools",
+   "url": "https://getcitehound.com/tools",
    "status": "ok",
    "result": {
     "checks": [
@@ -1280,13 +1280,13 @@
     "total": 77
    },
    "siteInfo": {
-    "title": "Answerable. — Free AI Visibility Tools",
+    "title": "Citehound — Free AI Visibility Tools",
     "metaDesc": "Free tools for AI visibility: generate an AI-aware robots.txt, check your llms.txt file, and generate schema markup. No signup.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/mcp",
+   "url": "https://getcitehound.com/mcp",
    "status": "ok",
    "result": {
     "checks": [
@@ -1441,13 +1441,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — MCP Server for Claude, Cursor and Other AI Tools",
-    "metaDesc": "Connect Answerable's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, copy-paste setup, nothing stored.",
+    "title": "Citehound — MCP Server for Claude, Cursor and Other AI Tools",
+    "metaDesc": "Connect Citehound's scanner, fix generators and playbooks to Claude, Cursor or any MCP client. Ten free, read-only tools, copy-paste setup, nothing stored.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/citation-tracking",
+   "url": "https://getcitehound.com/citation-tracking",
    "status": "ok",
    "result": {
     "checks": [
@@ -1602,13 +1602,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — Citation Tracking: Does a Model Name Your Brand?",
+    "title": "Citehound — Citation Tracking: Does a Model Name Your Brand?",
     "metaDesc": "We ask a model the questions your customers ask, five times each, and show you when your name comes up and when it does not. Early access, run for you.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/agentic-commerce",
+   "url": "https://getcitehound.com/agentic-commerce",
    "status": "ok",
    "result": {
     "checks": [
@@ -1763,13 +1763,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — Agentic Commerce: Can AI Agents Buy From Your Store?",
+    "title": "Citehound — Agentic Commerce: Can AI Agents Buy From Your Store?",
     "metaDesc": "Scan whether AI shopping agents can find your product and read your price. What UCP is, what your llms.txt says about your brand, and what agentic commerce means.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/methodology",
+   "url": "https://getcitehound.com/methodology",
    "status": "ok",
    "result": {
     "checks": [
@@ -1924,13 +1924,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — Methodology: How the AI Visibility Score Is Calculated",
-    "metaDesc": "How Answerable's AI visibility score is built: three weighted pillars, all 16 checks and their points, what the scan does not measure, and how data is collected.",
+    "title": "Citehound — Methodology: How the AI Visibility Score Is Calculated",
+    "metaDesc": "How Citehound's AI visibility score is built: three weighted pillars, all 16 checks and their points, what the scan does not measure, and how data is collected.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/research",
+   "url": "https://getcitehound.com/research",
    "status": "ok",
    "result": {
     "checks": [
@@ -2085,13 +2085,13 @@
     "total": 77
    },
    "siteInfo": {
-    "title": "Answerable. — Research",
-    "metaDesc": "Answerable's research series: what we find when we scan real sites for AI visibility, category by category.",
+    "title": "Citehound — Research",
+    "metaDesc": "Citehound's research series: what we find when we scan real sites for AI visibility, category by category.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/privacy",
+   "url": "https://getcitehound.com/privacy",
    "status": "ok",
    "result": {
     "checks": [
@@ -2246,13 +2246,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Privacy",
-    "metaDesc": "What Answerable's scanner fetches, what it stores, and what it doesn't collect. Plain-language privacy policy.",
+    "title": "Citehound — Privacy",
+    "metaDesc": "What Citehound's scanner fetches, what it stores, and what it doesn't collect. Plain-language privacy policy.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/terms",
+   "url": "https://getcitehound.com/terms",
    "status": "ok",
    "result": {
     "checks": [
@@ -2407,13 +2407,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Terms",
-    "metaDesc": "Terms for using Answerable's free AI visibility scanner: provided as-is, scores are guidance not guarantees, and only scan domains you're authorized to check.",
+    "title": "Citehound — Terms",
+    "metaDesc": "Terms for using Citehound's free AI visibility scanner: provided as-is, scores are guidance not guarantees, and only scan domains you're authorized to check.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks",
+   "url": "https://getcitehound.com/benchmarks",
    "status": "ok",
    "result": {
     "checks": [
@@ -2568,13 +2568,13 @@
     "total": 77
    },
    "siteInfo": {
-    "title": "Answerable. — AI Readiness Benchmarks by Category",
+    "title": "Citehound — AI Readiness Benchmarks by Category",
     "metaDesc": "219 well-known sites across 6 categories, scanned in July 2026. Average AI readiness score 73/100. See each category's pillars, failed checks and crawler access.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/compare",
+   "url": "https://getcitehound.com/compare",
    "status": "ok",
    "result": {
     "checks": [
@@ -2729,13 +2729,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — Compare Two Sites: AI Readiness Side by Side",
+    "title": "Citehound — Compare Two Sites: AI Readiness Side by Side",
     "metaDesc": "Scan two domains one after the other and see where their AI readiness differs: the score, the three pillars, the checks and the AI crawlers. Free, nothing stored.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/playbooks",
+   "url": "https://getcitehound.com/playbooks",
    "status": "ok",
    "result": {
     "checks": [
@@ -2890,13 +2890,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — GEO and AEO Playbooks for 14 Categories",
+    "title": "Citehound — GEO and AEO Playbooks for 14 Categories",
     "metaDesc": "Fourteen GEO and AEO playbooks for B2B SaaS, consumer and e-commerce brands and local professionals. Pick your category and read the playbook for it.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/sample-report",
+   "url": "https://getcitehound.com/sample-report",
    "status": "ok",
    "result": {
     "checks": [
@@ -3051,13 +3051,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Sample report: a real crawl of our own site",
-    "metaDesc": "A real full-site crawl of answerable-app.vercel.app, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes.",
+    "title": "Citehound — Sample report: a real crawl of our own site",
+    "metaDesc": "A real full-site crawl of getcitehound.com, 27 pages, run on October 3, 2026: site-wide score, worst pages, the checks that fail and the fixes.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/tools/robots-txt",
+   "url": "https://getcitehound.com/tools/robots-txt",
    "status": "ok",
    "result": {
     "checks": [
@@ -3218,7 +3218,7 @@
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+   "url": "https://getcitehound.com/research/llms-txt-adoption-2026",
    "status": "ok",
    "result": {
     "checks": [
@@ -3373,13 +3373,13 @@
     "total": 79
    },
    "siteInfo": {
-    "title": "Answerable. — Who Controls Your Brand's AI Representation?",
+    "title": "Citehound — Who Controls Your Brand's AI Representation?",
     "metaDesc": "We scanned 64 sites across B2B SaaS and consumer brands. Blocking AI crawlers is rare. What those crawlers find once they're in is where the two categories split.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks/crm",
+   "url": "https://getcitehound.com/benchmarks/crm",
    "status": "ok",
    "result": {
     "checks": [
@@ -3534,13 +3534,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — CRM software: AI Readiness Benchmark",
+    "title": "Citehound — CRM software: AI Readiness Benchmark",
     "metaDesc": "CRM software: 31 platforms scanned on July 29, 2026, average AI readiness score 78/100 (range 53 to 91). Pillars, most-failed checks and crawler access.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/tools/llms-txt-checker",
+   "url": "https://getcitehound.com/tools/llms-txt-checker",
    "status": "ok",
    "result": {
     "checks": [
@@ -3695,13 +3695,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — llms.txt Checker: Is Your llms.txt Yours?",
+    "title": "Citehound — llms.txt Checker: Is Your llms.txt Yours?",
     "metaDesc": "Paste a domain to check its llms.txt: whether it exists, how it is built, whether it names your brand, and whether it reads like a platform default. Free, no signup.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/research/case-study-agaone",
+   "url": "https://getcitehound.com/research/case-study-agaone",
    "status": "ok",
    "result": {
     "checks": [
@@ -3856,13 +3856,13 @@
     "total": 76
    },
    "siteInfo": {
-    "title": "Answerable. — Two Sites, Launched With Good SEO, Invisible to AI Crawlers",
+    "title": "Citehound — Two Sites, Launched With Good SEO, Invisible to AI Crawlers",
     "metaDesc": "AgaOne Commodities scanned their new corporate sites after launch, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks/cybersecurity",
+   "url": "https://getcitehound.com/benchmarks/cybersecurity",
    "status": "ok",
    "result": {
     "checks": [
@@ -4017,13 +4017,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Cybersecurity: AI Readiness Benchmark",
+    "title": "Citehound — Cybersecurity: AI Readiness Benchmark",
     "metaDesc": "Cybersecurity: 46 platforms scanned on July 31, 2026, average AI readiness score 78/100 (range 55 to 100). Pillars, most-failed checks and crawler access.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/tools/schema-generator",
+   "url": "https://getcitehound.com/tools/schema-generator",
    "status": "ok",
    "result": {
     "checks": [
@@ -4178,13 +4178,13 @@
     "total": 87
    },
    "siteInfo": {
-    "title": "Answerable. — Schema Generator: JSON-LD Prefilled From Your Own Site",
+    "title": "Citehound — Schema Generator: JSON-LD Prefilled From Your Own Site",
     "metaDesc": "Scan your domain for its real title, description and language, then edit ready-to-paste JSON-LD for Organization, FAQPage, Article, Product or LocalBusiness.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks/devtools",
+   "url": "https://getcitehound.com/benchmarks/devtools",
    "status": "ok",
    "result": {
     "checks": [
@@ -4339,13 +4339,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — DevTools & Cloud: AI Readiness Benchmark",
+    "title": "Citehound — DevTools & Cloud: AI Readiness Benchmark",
     "metaDesc": "DevTools & Cloud: 48 platforms scanned on July 31, 2026, average AI readiness score 74/100 (range 40 to 100). Pillars, most-failed checks and crawler access.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks/dtc-brands",
+   "url": "https://getcitehound.com/benchmarks/dtc-brands",
    "status": "ok",
    "result": {
     "checks": [
@@ -4500,13 +4500,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — DTC brands: AI Readiness Benchmark",
+    "title": "Citehound — DTC brands: AI Readiness Benchmark",
     "metaDesc": "DTC brands: 33 brands scanned on July 29, 2026, average AI readiness score 72/100 (range 46 to 87). Pillars, most-failed checks and crawler access.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks/consumer-apps",
+   "url": "https://getcitehound.com/benchmarks/consumer-apps",
    "status": "ok",
    "result": {
     "checks": [
@@ -4661,13 +4661,13 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Consumer apps: AI Readiness Benchmark",
+    "title": "Citehound — Consumer apps: AI Readiness Benchmark",
     "metaDesc": "Consumer apps: 40 apps scanned on July 31, 2026, average AI readiness score 65/100 (range 30 to 97). Pillars, most-failed checks and crawler access.",
     "lang": "en"
    }
   },
   {
-   "url": "https://answerable-app.vercel.app/benchmarks/hospitality",
+   "url": "https://getcitehound.com/benchmarks/hospitality",
    "status": "ok",
    "result": {
     "checks": [
@@ -4822,7 +4822,7 @@
     "total": 82
    },
    "siteInfo": {
-    "title": "Answerable. — Hospitality & travel: AI Readiness Benchmark",
+    "title": "Citehound — Hospitality & travel: AI Readiness Benchmark",
     "metaDesc": "Hospitality & travel: 21 venues scanned on July 31, 2026, average AI readiness score 71/100 (range 58 to 96). Pillars, most-failed checks and crawler access.",
     "lang": "en"
    }

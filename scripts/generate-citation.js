@@ -34,7 +34,7 @@ const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
 const CSS_VERSION = 56;
-const CONTACT_EMAIL = 'andacuz@gmail.com'; // the address on privacy.html and terms.html
+const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];

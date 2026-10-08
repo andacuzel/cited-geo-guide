@@ -27,7 +27,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const CONTACT_HREF = 'mailto:andacuz@gmail.com';
+const CONTACT_HREF = 'mailto:hey@getcitehound.com';
 const START = '<!-- SITE-SCHEMA:START -->';
 const END = '<!-- SITE-SCHEMA:END -->';
 const EXEMPT = ['index.html', 'research/case-study-agaone.html', 'research/llms-txt-adoption-2026.html', 'app/crawl.html', 'app/report.html'];

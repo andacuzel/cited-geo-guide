@@ -4,7 +4,7 @@ A Claude Code plugin that connects the Citehound MCP server and adds three skill
 
 ## What is in it
 
-- `.mcp.json`: the remote MCP server at `https://answerable-app.vercel.app/api/mcp`. No key, no account.
+- `.mcp.json`: the remote MCP server at `https://getcitehound.com/api/mcp`. No key, no account.
 - `skills/geo-audit`: audit a site for AI readiness and return an ordered plan.
 - `skills/agentic-commerce-readiness`: check a store for UCP, product schema and llms.txt authorship.
 - `skills/citation-ready-content`: brief or review content for citability with a vertical playbook. No scan.

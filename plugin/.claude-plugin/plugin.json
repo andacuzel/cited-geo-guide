@@ -5,9 +5,9 @@
   "description": "Audit a site for AI readiness, check a store for agentic-commerce readiness, and write citation-ready content, with the Citehound MCP server and three skills.",
   "author": {
     "name": "Andaç Üzel",
-    "url": "https://answerable-app.vercel.app/about"
+    "url": "https://getcitehound.com/about"
   },
-  "homepage": "https://answerable-app.vercel.app/mcp",
+  "homepage": "https://getcitehound.com/mcp",
   "keywords": [
     "ai-readiness",
     "geo",
@@ -17,8 +17,8 @@
     "structured-data",
     "agentic-commerce"
   ],
-  "documentationUrl": "https://answerable-app.vercel.app/mcp",
-  "supportUrl": "https://answerable-app.vercel.app/trust",
-  "privacyPolicyUrl": "https://answerable-app.vercel.app/privacy",
-  "termsOfServiceUrl": "https://answerable-app.vercel.app/terms"
+  "documentationUrl": "https://getcitehound.com/mcp",
+  "supportUrl": "https://getcitehound.com/trust",
+  "privacyPolicyUrl": "https://getcitehound.com/privacy",
+  "termsOfServiceUrl": "https://getcitehound.com/terms"
 }

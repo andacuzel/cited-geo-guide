@@ -9,18 +9,18 @@
   <meta name="keywords" content="MCP server, Model Context Protocol, Claude MCP, Cursor MCP, AI visibility API, GEO tools, AEO tools" />
   <meta name="author" content="Citehound" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://answerable-app.vercel.app/mcp" />
+  <link rel="canonical" href="https://getcitehound.com/mcp" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Citehound — MCP Server for Claude, Cursor and Other AI Tools" />
   <meta property="og:description" content="Use Citehound from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. Thirteen free, read-only tools, nothing stored." />
-  <meta property="og:url" content="https://answerable-app.vercel.app/mcp" />
-  <meta property="og:image" content="https://answerable-app.vercel.app/assets/brand/og-default.png" />
+  <meta property="og:url" content="https://getcitehound.com/mcp" />
+  <meta property="og:image" content="https://getcitehound.com/assets/brand/og-default.png" />
   <meta property="og:site_name" content="Citehound" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Citehound — MCP Server for Claude, Cursor and Other AI Tools" />
   <meta name="twitter:description" content="Use Citehound from inside Claude, Cursor or any MCP client: scan a site, get the fix, read the playbooks. Thirteen free, read-only tools, nothing stored." />
-  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/brand/og-default.png" />
+  <meta name="twitter:image" content="https://getcitehound.com/assets/brand/og-default.png" />
 
   <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
 
@@ -40,7 +40,7 @@
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
         "description": "An MCP server exposing Citehound’s AI-visibility scanner, fix generators and vertical playbooks as tools for Claude, Cursor and other MCP clients.",
-        "url": "https://answerable-app.vercel.app/mcp",
+        "url": "https://getcitehound.com/mcp",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -110,24 +110,30 @@
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://answerable-app.vercel.app/#org",
+        "@id": "https://getcitehound.com/#org",
         "name": "Citehound",
-        "url": "https://answerable-app.vercel.app/",
+        "url": "https://getcitehound.com/",
         "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
+        "email": "hey@getcitehound.com",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "hey@getcitehound.com"
+        },
         "founder": {
-          "@id": "https://answerable-app.vercel.app/about#person"
+          "@id": "https://getcitehound.com/about#person"
         }
       },
       {
         "@type": "WebSite",
-        "@id": "https://answerable-app.vercel.app/#website",
+        "@id": "https://getcitehound.com/#website",
         "name": "Citehound",
-        "url": "https://answerable-app.vercel.app/",
+        "url": "https://getcitehound.com/",
         "publisher": {
-          "@id": "https://answerable-app.vercel.app/#org"
+          "@id": "https://getcitehound.com/#org"
         },
         "author": {
-          "@id": "https://answerable-app.vercel.app/about#person"
+          "@id": "https://getcitehound.com/about#person"
         }
       }
     ]
@@ -208,7 +214,7 @@
                 </div>
               </div>
             </figure>
-            <p class="mcp-banner__caption">Real output from the tool, October 5, 2026. Excerpt.</p>
+            <p class="mcp-banner__caption">Real output from the tool, October 8, 2026. Excerpt.</p>
           </div>
         </div>
       </div>
@@ -271,10 +277,10 @@
 <tr><th scope="row"><span class="mcp-in">domain</span><span class="mcp-req">required</span></th><td>A bare domain, e.g. &quot;example.com&quot;. No scheme (https://) and no path — the scan always targets the domain root.</td></tr>
 </tbody></table></div>
                 <p class="mcp-more__label">Example</p>
-                <p class="mcp-more__prompt">You ask: “Scan answerable-app.vercel.app and tell me what to fix first”</p>
+                <p class="mcp-more__prompt">You ask: “Scan getcitehound.com and tell me what to fix first”</p>
                 <div class="fix-snippet">
                   <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 25 lines</span></div>
-                  <pre class="fix-snippet__code" data-example="scan-self">AI readiness scan — answerable-app.vercel.app
+                  <pre class="fix-snippet__code" data-example="scan-self">AI readiness scan — getcitehound.com
 
 Score: 87/100
   Discoverability:      27/40
@@ -287,7 +293,7 @@ AI crawler access (10 tracked):
   GPTBot — Limited (Disallow: /admin/ (+1 more) · bot-specific rule)
   ChatGPT-User — Limited (Disallow: /admin/ (+1 more) · bot-specific rule)</pre>
                 </div>
-                <p class="mcp-more__note">Captured October 5, 2026.</p>
+                <p class="mcp-more__note">Captured October 8, 2026.</p>
               </div>
             </details>
           </article>
@@ -334,10 +340,10 @@ AI crawler access (10 tracked):
 <tr><th scope="row"><span class="mcp-in">type</span><span class="mcp-req">required</span></th><td>&quot;organization&quot; returns Organization + WebSite schema as an @graph; the others (faqpage, article, product, localbusiness) each return one schema of that @type.</td></tr>
 </tbody></table></div>
                 <p class="mcp-more__label">Example</p>
-                <p class="mcp-more__prompt">You ask: “Write Organization JSON-LD for answerable-app.vercel.app”</p>
+                <p class="mcp-more__prompt">You ask: “Write Organization JSON-LD for getcitehound.com”</p>
                 <div class="fix-snippet">
                   <div class="fix-snippet__head"><span class="fix-snippet__label">Real output, first 12 of 19 lines</span></div>
-                  <pre class="fix-snippet__code" data-example="schema-self">Organization and WebSite JSON-LD for answerable-app.vercel.app, ready to paste inside a &lt;script type=&quot;application/ld+json&quot;&gt; tag in the page’s &lt;head&gt;:
+                  <pre class="fix-snippet__code" data-example="schema-self">Organization and WebSite JSON-LD for getcitehound.com, ready to paste inside a &lt;script type=&quot;application/ld+json&quot;&gt; tag in the page’s &lt;head&gt;:
 
 {
   &quot;@context&quot;: &quot;https://schema.org&quot;,
@@ -345,12 +351,12 @@ AI crawler access (10 tracked):
     {
       &quot;@type&quot;: &quot;Organization&quot;,
       &quot;name&quot;: &quot;[Your company name]&quot;,
-      &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
       &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
     },
     {</pre>
                 </div>
-                <p class="mcp-more__note">Captured October 5, 2026.</p>
+                <p class="mcp-more__note">Captured October 8, 2026.</p>
               </div>
             </details>
           </article>
@@ -447,7 +453,7 @@ By crawler, in number of sites (31 scanned):
   GPTBot           blocked 1, limited 24, open 6
   ChatGPT-User     blocked 1, limited 24, open 6</pre>
                 </div>
-                <p class="mcp-more__note">Captured October 7, 2026.</p>
+                <p class="mcp-more__note">Captured October 8, 2026.</p>
               </div>
             </details>
           </article>
@@ -492,7 +498,7 @@ Technical foundation: 20 points. Baseline machine-readability hygiene.
   - html lang attribute (3 pts): Whether the &lt;html&gt; element declares a language. Why it matters: Lets AI systems classify your content’s language correctly.
   - Page title (3 pts): Whether the &lt;title&gt; is 10 to 70 characters. Why it matters: Answer engines frequently use the title as your source label.</pre>
                 </div>
-                <p class="mcp-more__note">Captured October 7, 2026.</p>
+                <p class="mcp-more__note">Captured October 8, 2026.</p>
               </div>
             </details>
           </article>
@@ -575,7 +581,7 @@ Named in every try (6):
   - What CRM should an agency use to manage clients and deals together?
   - Which CRMs integrate well with Google Workspace and Gmail?</pre>
                 </div>
-                <p class="mcp-more__note">Captured October 7, 2026.</p>
+                <p class="mcp-more__note">Captured October 8, 2026.</p>
               </div>
             </details>
           </article>
@@ -620,7 +626,7 @@ Named in every try (6):
         </div>
         <div class="mcp-url">
           <label class="mcp-vh" for="mcp-url">Server address</label>
-          <input id="mcp-url" class="mcp-url__field" type="text" readonly value="https://answerable-app.vercel.app/api/mcp" spellcheck="false" />
+          <input id="mcp-url" class="mcp-url__field" type="text" readonly value="https://getcitehound.com/api/mcp" spellcheck="false" />
           <button type="button" class="btn btn--gold mcp-url__copy" hidden>Copy</button>
         </div>
         <div class="ac-faq mcp-clients">
@@ -646,7 +652,7 @@ Named in every try (6):
                 <span class="fix-snippet__label">Terminal</span>
                 <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy fix-snippet__copy" hidden><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6.5a2 2 0 00-2-2h-7a2 2 0 00-2 2v7a2 2 0 002 2h2"/></svg> Copy</button></div>
               </div>
-              <pre class="fix-snippet__code">claude mcp add --transport http citehound https://answerable-app.vercel.app/api/mcp</pre>
+              <pre class="fix-snippet__code">claude mcp add --transport http citehound https://getcitehound.com/api/mcp</pre>
             </div>
           </details>
           <details>
@@ -664,7 +670,7 @@ Named in every try (6):
               <pre class="fix-snippet__code">{
   &quot;mcpServers&quot;: {
     &quot;citehound&quot;: {
-      &quot;url&quot;: &quot;https://answerable-app.vercel.app/api/mcp&quot;
+      &quot;url&quot;: &quot;https://getcitehound.com/api/mcp&quot;
     }
   }
 }</pre>
@@ -753,7 +759,7 @@ Named in every try (6):
                   <a href="/changelog" class="site-nav__link">Changelog</a>
                   <a href="/privacy" class="site-nav__link">Privacy</a>
                   <a href="/terms" class="site-nav__link">Terms</a>
-                  <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+                  <a href="mailto:hey@getcitehound.com" class="site-nav__link">Contact</a>
                 </nav>
         <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>
       </div>

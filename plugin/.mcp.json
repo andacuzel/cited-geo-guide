@@ -2,7 +2,7 @@
   "mcpServers": {
     "citehound": {
       "type": "http",
-      "url": "https://answerable-app.vercel.app/api/mcp"
+      "url": "https://getcitehound.com/api/mcp"
     }
   }
 }

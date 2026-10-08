@@ -56,4 +56,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /app/
 
-Sitemap: https://answerable-app.vercel.app/sitemap.xml
+Sitemap: https://getcitehound.com/sitemap.xml

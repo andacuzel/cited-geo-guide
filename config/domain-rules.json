@@ -41,6 +41,11 @@
       "note": "real output captured from the old host on a stated date; recapture with scripts/capture-mcp-examples.js after the move"
     },
     {
+      "match": "^vercel\\.json$",
+      "class": "historical",
+      "note": "the old-host redirect names the old host on purpose; its destination is the current host, to be edited by hand on a move"
+    },
+    {
       "match": "^docs/domain-day\\.md$",
       "class": "historical",
       "note": "the checklist names the old host on purpose: it is the host that keeps redirecting"
@@ -73,12 +78,6 @@
   ],
   "lineRules": [
     {
-      "class": "historical",
-      "files": "^content/research-index\\.json$",
-      "pattern": "Citehound Case Studies",
-      "note": "quotes the case study's citation line as published"
-    },
-    {
       "class": "rewrite",
       "files": "^content/research-index\\.json$",
       "pattern": ".",
@@ -89,12 +88,6 @@
       "files": "\\.html$",
       "pattern": "rp-|data-domain|pro-shot|&quot;|crawl of|crawl of our own site|full-site crawl|our own site, ",
       "note": "markup and sentences built from the frozen sample crawl"
-    },
-    {
-      "class": "historical",
-      "files": "^research/case-study-agaone\\.html$",
-      "pattern": "citeLine|report-cite",
-      "note": "the case study's citation line is as published"
     },
     {
       "class": "rewrite",

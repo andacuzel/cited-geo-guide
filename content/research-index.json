@@ -1,5 +1,5 @@
 {
-  "site": "https://answerable-app.vercel.app",
+  "site": "https://getcitehound.com",
   "entries": [
     {
       "slug": "llms-txt-adoption-2026",
@@ -7,7 +7,7 @@
       "title": "Who controls your brand's AI representation?",
       "date": "2026-07-29",
       "dateLabel": "29 July 2026",
-      "url": "https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+      "url": "https://getcitehound.com/research/llms-txt-adoption-2026",
       "summary": "We scanned 64 sites and found blocking is rare: 10% of B2B sites and 3% of consumer brands restrict AI crawlers.",
       "findings": [
         "76% of consumer brands have an llms.txt file, but the two files we examined by hand were near-identical and said nothing specific about the brand.",
@@ -20,7 +20,7 @@
         "The Shopify-generated llms.txt pattern was checked in two files read by hand, Magic Spoon and Allbirds.",
         "It measures inputs, not outcomes: whether any of these signals correlate with being cited in an AI answer is not known."
       ],
-      "cite": "Andaç Üzel, “Who Controls Your Brand's AI Representation?,” Citehound Research, 29 July 2026. https://answerable-app.vercel.app/research/llms-txt-adoption-2026",
+      "cite": "Andaç Üzel, “Who Controls Your Brand's AI Representation?,” Citehound Research, 29 July 2026. https://getcitehound.com/research/llms-txt-adoption-2026",
       "sources": [
         "research/llms-txt-adoption-2026.html"
       ]
@@ -31,7 +31,7 @@
       "title": "Two sites, launched with good SEO, invisible to AI crawlers",
       "date": "2026-08",
       "dateLabel": "August 2026",
-      "url": "https://answerable-app.vercel.app/research/case-study-agaone",
+      "url": "https://getcitehound.com/research/case-study-agaone",
       "summary": "AgaOne Commodities scanned two new corporate sites, fixed what the report ranked first, and scanned again. Average score moved from 56.5 to 94.5.",
       "findings": [
         "Both sites scored in the mid-fifties before the work: 58 and 55.",
@@ -43,7 +43,7 @@
         "A score of 100 means the site passes all 16 checks Citehound runs today. It does not mean the site will be cited in an AI answer.",
         "The scoring model will get harder, so the same sites are expected to move."
       ],
-      "cite": "Andaç Üzel, “Two Sites, Launched With Good SEO, Invisible to AI Crawlers,” Citehound Case Studies, August 2026. https://answerable-app.vercel.app/research/case-study-agaone",
+      "cite": "Andaç Üzel, “Two Sites, Launched With Good SEO, Invisible to AI Crawlers,” Citehound Case Studies, August 2026. https://getcitehound.com/research/case-study-agaone",
       "sources": [
         "research/case-study-agaone.html"
       ]
@@ -54,7 +54,7 @@
       "title": "Which AI crawlers do sites block? 219 homepages, six categories",
       "date": "2026-10-05",
       "dateLabel": "5 October 2026",
-      "url": "https://answerable-app.vercel.app/research/crawler-access-2026",
+      "url": "https://getcitehound.com/research/crawler-access-2026",
       "summary": "We read the robots.txt of 219 homepages in six categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path.",
       "findings": [
         "Across 6 categories, the share of homepages that block at least one tracked AI crawler runs from 2% (Cybersecurity and DevTools & Cloud) to 18% (Consumer apps).",
@@ -67,7 +67,7 @@
         "59 sites that could not be reached are excluded and counted.",
         "A limited result means an applicable Disallow rule, usually an ordinary path, and is not a block."
       ],
-      "cite": "Andaç Üzel, “Which AI crawlers do sites block? 219 homepages, six categories,” Citehound Research, 5 October 2026. https://answerable-app.vercel.app/research/crawler-access-2026",
+      "cite": "Andaç Üzel, “Which AI crawlers do sites block? 219 homepages, six categories,” Citehound Research, 5 October 2026. https://getcitehound.com/research/crawler-access-2026",
       "sources": [
         "research/crawler-access-2026.html",
         "data/"
@@ -79,7 +79,7 @@
       "title": "AI readiness benchmarks",
       "date": "2026-07-31",
       "dateLabel": "31 July 2026",
-      "url": "https://answerable-app.vercel.app/benchmarks",
+      "url": "https://getcitehound.com/benchmarks",
       "summary": "The average AI readiness score across 219 homepages in 6 categories is 73 out of 100.",
       "findings": [
         "We scanned 219 homepages in 6 categories. The average score is 73 out of 100.",
@@ -90,7 +90,7 @@
         "One scan date per category. A rescan in October 2026 moved category averages by one point or less.",
         "It measures readiness, not whether any assistant names a brand."
       ],
-      "cite": "Citehound, \"AI readiness benchmarks,\" 31 July 2026. https://answerable-app.vercel.app/benchmarks",
+      "cite": "Citehound, \"AI readiness benchmarks,\" 31 July 2026. https://getcitehound.com/benchmarks",
       "sources": [
         "benchmarks/index.html",
         "data/"

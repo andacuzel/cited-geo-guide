@@ -121,7 +121,7 @@ async function build() {
   L.push('- The endpoint does not validate the `Origin` header. It is public, stateless and read-only, with no local socket to rebind.');
   L.push('- Requests without an `MCP-Protocol-Version` header are rejected, so clients for the 2025-03-26 revision are not served.', '');
   L.push('## Name change', '');
-  L.push('- The product and this server were named Answerable until 7 October 2026. `serverInfo.name` is now `citehound` and the title is `Citehound`. The tools and prompts are unchanged.');
+  L.push('- The product and this server were renamed on 7 October 2026. `serverInfo.name` is now `citehound` and the title is `Citehound`. The tools and prompts are unchanged.');
   L.push('- A client connected before the rename must re-add the connector. Tool prefixes follow the server name (in Claude Code, `mcp__plugin_<plugin>_<server>__<tool>`), so the old connector will not find the tools under the new prefix.');
   L.push('- There is no compatibility endpoint for the old name.', '');
   return L.join('\n');

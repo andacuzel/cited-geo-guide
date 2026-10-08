@@ -1,17 +1,17 @@
 {
-  "capturedAt": "2026-10-05",
-  "endpoint": "https://answerable-app.vercel.app/api/mcp",
+  "capturedAt": "2026-10-08",
+  "endpoint": "https://getcitehound.com/api/mcp",
   "protocolVersion": "2026-07-28",
   "examples": [
     {
       "id": "scan-self",
       "tool": "scan_site",
       "arguments": {
-        "domain": "answerable-app.vercel.app"
+        "domain": "getcitehound.com"
       },
-      "prompt": "Scan answerable-app.vercel.app and tell me what to fix first",
+      "prompt": "Scan getcitehound.com and tell me what to fix first",
       "lines": [
-        "AI readiness scan — answerable-app.vercel.app",
+        "AI readiness scan — getcitehound.com",
         "",
         "Score: 87/100",
         "  Discoverability:      27/40",
@@ -46,7 +46,7 @@
         "  - Page title (3 pts): Whether the <title> is 10 to 70 characters. Why it matters: Answer engines frequently use the title as your source label."
       ],
       "totalLines": 32,
-      "capturedAt": "2026-10-07"
+      "capturedAt": "2026-10-08"
     },
     {
       "id": "benchmark-crm",
@@ -70,7 +70,7 @@
         "  ChatGPT-User     blocked 1, limited 24, open 6"
       ],
       "totalLines": 38,
-      "capturedAt": "2026-10-07"
+      "capturedAt": "2026-10-08"
     },
     {
       "id": "citation-sample",
@@ -92,18 +92,18 @@
         "  - Which CRMs integrate well with Google Workspace and Gmail?"
       ],
       "totalLines": 38,
-      "capturedAt": "2026-10-07"
+      "capturedAt": "2026-10-08"
     },
     {
       "id": "schema-self",
       "tool": "generate_schema",
       "arguments": {
-        "domain": "answerable-app.vercel.app",
+        "domain": "getcitehound.com",
         "type": "organization"
       },
-      "prompt": "Write Organization JSON-LD for answerable-app.vercel.app",
+      "prompt": "Write Organization JSON-LD for getcitehound.com",
       "lines": [
-        "Organization and WebSite JSON-LD for answerable-app.vercel.app, ready to paste inside a <script type=\"application/ld+json\"> tag in the page’s <head>:",
+        "Organization and WebSite JSON-LD for getcitehound.com, ready to paste inside a <script type=\"application/ld+json\"> tag in the page’s <head>:",
         "",
         "{",
         "  \"@context\": \"https://schema.org\",",
@@ -111,7 +111,7 @@
         "    {",
         "      \"@type\": \"Organization\",",
         "      \"name\": \"[Your company name]\",",
-        "      \"url\": \"https://answerable-app.vercel.app\",",
+        "      \"url\": \"https://getcitehound.com\",",
         "      \"description\": \"Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO & AEO playbooks. No email required.\"",
         "    },",
         "    {"

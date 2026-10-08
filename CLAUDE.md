@@ -83,9 +83,16 @@ Constraints that must not be broken:
   Answerable. The wordmark is Gloock with no trailing dot, beside the sighthound-head mark in
   `assets/brand/`. "Hound" is an image, never a promise: copy never says the product hunts,
   tracks down or finds citations, and the hound image appears in one place only (a short line
-  on `/about`). The old names appear only where `docs/rename-notes.md` allows: the changelogs'
-  rename lines, the `AnswerableBot` user-agent token (kept for one version), frozen crawl
-  data and the host in `site.config.json`. A page description is at most 160 characters.
+  on `/about`). The old names appear only in `docs/`, this file, the `AnswerableBot`
+  user-agent token in `lib/scanner.js` (kept for one version) and the old-host redirect in
+  `vercel.json`. Site copy, content files and the frozen crawl data carry no old name.
+  A page description is at most 160 characters.
+- **Contact addresses.** `hey@getcitehound.com` is the one contact address: every page, every
+  contact button and `mailto:` link, the structured data (Organization `email` and
+  `contactPoint`), `security.txt`, the MCP `serverInfo` and every doc. It lives in
+  `site.config.json` as `contactEmail`, and new code reads it from there. `andac@getcitehound.com`
+  appears only as the contact button on `/about`. No other address appears anywhere, and
+  addresses stay plain-text `mailto:` links (no obfuscation, so machines can read them).
 - **Counts come from registries.** Tool, prompt, check, vertical and page counts are
   derived from their registry (`api/mcp.js` TOOLS and PROMPTS, the scanner's check
   list, `lib/playbooks.js`), never typed. Every new MCP tool is added to the registry,

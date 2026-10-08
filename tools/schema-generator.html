@@ -9,21 +9,21 @@
   <meta name="keywords" content="schema generator, JSON-LD generator, Organization schema, FAQPage schema, Product schema, LocalBusiness schema, structured data, GEO, AEO" />
   <meta name="author" content="Citehound" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://answerable-app.vercel.app/tools/schema-generator" />
+  <link rel="canonical" href="https://getcitehound.com/tools/schema-generator" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Citehound — Schema Generator: JSON-LD Prefilled From Your Own Site" />
   <meta property="og:description" content="Prefilled JSON-LD for Organization, FAQPage, Article, Product and LocalBusiness, built from your own homepage. Free, no signup." />
-  <meta property="og:url" content="https://answerable-app.vercel.app/tools/schema-generator" />
-  <meta property="og:image" content="https://answerable-app.vercel.app/assets/brand/og-default.png" />
+  <meta property="og:url" content="https://getcitehound.com/tools/schema-generator" />
+  <meta property="og:image" content="https://getcitehound.com/assets/brand/og-default.png" />
   <meta property="og:site_name" content="Citehound" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Citehound — Schema Generator: JSON-LD Prefilled From Your Own Site" />
   <meta name="twitter:description" content="Prefilled JSON-LD for Organization, FAQPage, Article, Product and LocalBusiness, built from your own homepage. Free, no signup." />
-  <meta name="twitter:image" content="https://answerable-app.vercel.app/assets/brand/og-default.png" />
+  <meta name="twitter:image" content="https://getcitehound.com/assets/brand/og-default.png" />
 
   <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
 
@@ -43,7 +43,7 @@
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Any",
         "description": "A free tool that scans a domain for its real title, description and language, then prefills editable JSON-LD for Organization, FAQPage, Article, Product and LocalBusiness.",
-        "url": "https://answerable-app.vercel.app/tools/schema-generator",
+        "url": "https://getcitehound.com/tools/schema-generator",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -97,24 +97,30 @@
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://answerable-app.vercel.app/#org",
+        "@id": "https://getcitehound.com/#org",
         "name": "Citehound",
-        "url": "https://answerable-app.vercel.app/",
+        "url": "https://getcitehound.com/",
         "description": "An AI visibility scanner for any website, with GEO & AEO playbooks for B2B SaaS, consumer brands and local professionals.",
+        "email": "hey@getcitehound.com",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "hey@getcitehound.com"
+        },
         "founder": {
-          "@id": "https://answerable-app.vercel.app/about#person"
+          "@id": "https://getcitehound.com/about#person"
         }
       },
       {
         "@type": "WebSite",
-        "@id": "https://answerable-app.vercel.app/#website",
+        "@id": "https://getcitehound.com/#website",
         "name": "Citehound",
-        "url": "https://answerable-app.vercel.app/",
+        "url": "https://getcitehound.com/",
         "publisher": {
-          "@id": "https://answerable-app.vercel.app/#org"
+          "@id": "https://getcitehound.com/#org"
         },
         "author": {
-          "@id": "https://answerable-app.vercel.app/about#person"
+          "@id": "https://getcitehound.com/about#person"
         }
       }
     ]
@@ -178,7 +184,7 @@
       <div class="section__inner">
         <div class="toolx-intro__row">
           <ul class="tools-chips toolx-chips"><li class="tools-chip">No signup</li><li class="tools-chip">Free</li></ul>
-          <button type="button" class="btn btn--ghost toolx-example" data-toolx-example="answerable-app.vercel.app" data-toolx-target="#schemaDomain">Try an example</button>
+          <button type="button" class="btn btn--ghost toolx-example" data-toolx-example="getcitehound.com" data-toolx-target="#schemaDomain">Try an example</button>
         </div>
       </div>
     </section>
@@ -318,7 +324,7 @@
           <a href="/changelog" class="site-nav__link">Changelog</a>
           <a href="/privacy" class="site-nav__link">Privacy</a>
           <a href="/terms" class="site-nav__link">Terms</a>
-          <a href="mailto:andacuz@gmail.com" class="site-nav__link">Contact</a>
+          <a href="mailto:hey@getcitehound.com" class="site-nav__link">Contact</a>
         </nav>
         <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>
       </div>

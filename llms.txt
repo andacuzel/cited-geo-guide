@@ -4,29 +4,29 @@
 
 ## Scanner
 
-- [Scan a domain](https://answerable-app.vercel.app/): enter a domain and get the score, the failed checks and a copy-paste fix for each. Nothing is stored.
-- [Methodology](https://answerable-app.vercel.app/methodology): the three pillars, all 16 checks with their point values, what the scan does not measure, and the changelog.
-- [Compare two sites](https://answerable-app.vercel.app/compare): scan two domains one after the other and see where the score, checks and crawler access differ.
+- [Scan a domain](https://getcitehound.com/): enter a domain and get the score, the failed checks and a copy-paste fix for each. Nothing is stored.
+- [Methodology](https://getcitehound.com/methodology): the three pillars, all 16 checks with their point values, what the scan does not measure, and the changelog.
+- [Compare two sites](https://getcitehound.com/compare): scan two domains one after the other and see where the score, checks and crawler access differ.
 
 ## Playbooks
 
-- [B2B SaaS](https://answerable-app.vercel.app/for-saas): six category playbooks for CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools.
-- [Consumer and e-commerce brands](https://answerable-app.vercel.app/for-brands): four playbooks for e-commerce, consumer apps, hospitality and marketplaces.
-- [Local and independent professionals](https://answerable-app.vercel.app/for-professionals): four playbooks for real estate, legal, health and wellness, and local services.
+- [B2B SaaS](https://getcitehound.com/for-saas): six category playbooks for CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools.
+- [Consumer and e-commerce brands](https://getcitehound.com/for-brands): four playbooks for e-commerce, consumer apps, hospitality and marketplaces.
+- [Local and independent professionals](https://getcitehound.com/for-professionals): four playbooks for real estate, legal, health and wellness, and local services.
 
 ## Data and research
 
-- [Benchmarks](https://answerable-app.vercel.app/benchmarks): scan results for six categories of well-known sites, with the sample size and scan date on every page.
-- [Research](https://answerable-app.vercel.app/research): reports on what we find when we scan real sites.
-- [Citation tracking](https://answerable-app.vercel.app/citation-tracking): early access. We ask one model the buying questions in a category, repeat each question, and record whether it names a brand.
+- [Benchmarks](https://getcitehound.com/benchmarks): scan results for six categories of well-known sites, with the sample size and scan date on every page.
+- [Research](https://getcitehound.com/research): reports on what we find when we scan real sites.
+- [Citation tracking](https://getcitehound.com/citation-tracking): early access. We ask one model the buying questions in a category, repeat each question, and record whether it names a brand.
 
 ## Tools
 
-- [Tools](https://answerable-app.vercel.app/tools): a robots.txt generator, an llms.txt checker and a schema generator, free, no signup.
-- [MCP server](https://answerable-app.vercel.app/mcp): thirteen free, read-only tools for Claude, Cursor or any MCP client. Endpoint: https://answerable-app.vercel.app/api/mcp
-- [Agentic commerce](https://answerable-app.vercel.app/agentic-commerce): whether AI shopping agents can find a product and read its price.
+- [Tools](https://getcitehound.com/tools): a robots.txt generator, an llms.txt checker and a schema generator, free, no signup.
+- [MCP server](https://getcitehound.com/mcp): thirteen free, read-only tools for Claude, Cursor or any MCP client. Endpoint: https://getcitehound.com/api/mcp
+- [Agentic commerce](https://getcitehound.com/agentic-commerce): whether AI shopping agents can find a product and read its price.
 
 ## About
 
-- [About](https://answerable-app.vercel.app/about): who built Citehound and why.
-- [Pro](https://answerable-app.vercel.app/pro): a full-site crawl, with the whole-site score beside the homepage score, pages ranked, every fix once and a printable report. A real sample of our own site is at /sample-report.
+- [About](https://getcitehound.com/about): who built Citehound and why.
+- [Pro](https://getcitehound.com/pro): a full-site crawl, with the whole-site score beside the homepage score, pages ranked, every fix once and a printable report. A real sample of our own site is at /sample-report.

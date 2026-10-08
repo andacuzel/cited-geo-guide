@@ -13,13 +13,13 @@
     {
       &quot;@type&quot;: &quot;Organization&quot;,
       &quot;name&quot;: &quot;[Your company name]&quot;,
-      &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
       &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
     },
     {
       &quot;@type&quot;: &quot;WebSite&quot;,
-      &quot;name&quot;: &quot;Answerable. — AI Visibility Scanner &amp; GEO Playbooks&quot;,
-      &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+      &quot;name&quot;: &quot;Citehound — AI Visibility Scanner &amp; GEO Playbooks&quot;,
+      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
       &quot;inLanguage&quot;: &quot;en&quot;
     }
   ]
@@ -61,13 +61,13 @@
     {
       &quot;@type&quot;: &quot;Organization&quot;,
       &quot;name&quot;: &quot;[Your company name]&quot;,
-      &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
       &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
     },
     {
       &quot;@type&quot;: &quot;WebSite&quot;,
-      &quot;name&quot;: &quot;Answerable. — AI Visibility Scanner &amp; GEO Playbooks&quot;,
-      &quot;url&quot;: &quot;https://answerable-app.vercel.app&quot;,
+      &quot;name&quot;: &quot;Citehound — AI Visibility Scanner &amp; GEO Playbooks&quot;,
+      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
       &quot;inLanguage&quot;: &quot;en&quot;
     }
   ]
