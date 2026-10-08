@@ -28,6 +28,15 @@
       "permanent": true
     }
   ],
+  "headers": [
+    {
+      "source": "/r/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" }
   ]

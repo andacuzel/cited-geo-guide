@@ -68,6 +68,13 @@ Constraints that must not be broken:
   invented scarcity and no timer: the cap and the end date are static text from the config. The
   report says "readiness", names no scanned site and makes no causal claim. Its numbers come from
   `scripts/launch-report-stats.js` (stored scans only, output in the gitignored `local/launch-report/`).
+- **Private reports are encrypted pages under `/r/<24 hex>/`.** `scripts/encrypt-report.js` turns one
+  self-contained report into an unlock page (AES-GCM, PBKDF2-SHA256); see `docs/private-reports.md`.
+  The crawl data, the plain report and the access code stay in the gitignored `local/private/<slug>/`.
+  The code, the plain report and the recipient never appear in a tracked file, a log or a commit
+  message. The path is not in `robots.txt`, `sitemap.xml`, `llms.txt` or any nav, and `vercel.json`
+  sends `X-Robots-Tag: noindex, nofollow, noarchive` for `/r/*`. The repository is public, so an
+  encrypted page stays in git history for good.
 - **Report summaries.** The executive summary of a crawl report is written
   from aggregated figures only (`lib/report-facts.js`), by rules or by a model
   that only rephrases them, and every model reply is validated against the

@@ -65,6 +65,7 @@ function htmlFiles() {
   (function walk(dir) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach(function (e) {
       if (['node_modules', '.git', 'local', '.claude', 'asset', 'data', 'supabase', 'content', 'lib', 'api', 'scripts'].indexOf(e.name) !== -1) return;
+      if (dir === ROOT && e.name === 'r') return; // /r/<id>/: private encrypted pages (scripts/encrypt-report.js), outside the site chrome
       const p = path.join(dir, e.name);
       if (e.isDirectory()) walk(p); else if (e.name.endsWith('.html')) out.push(path.relative(ROOT, p));
     });
