@@ -42,11 +42,16 @@ function getClientIp(req) {
    { limited: true, scope: 'hour'|'day', retryAfter: seconds } to
    block it. Never rejects — any internal failure resolves to
    { limited: false } so a scan is never blocked by our own bug. */
-async function checkRateLimit(req) {
+async function checkRateLimit(req, opts) {
   try {
+    // opts (optional) lets another endpoint keep its own counters and limits: { prefix, hourly, daily }.
+    // Without it, the scan endpoints behave exactly as before.
+    var prefix = (opts && opts.prefix) || 'rl';
+    var hourlyLimit = (opts && opts.hourly) || HOURLY_LIMIT;
+    var dailyLimit = (opts && opts.daily) || DAILY_LIMIT;
     var hash = hashIp(getClientIp(req));
-    var hourKey = 'rl:h:' + hash;
-    var dayKey = 'rl:d:' + hash;
+    var hourKey = prefix + ':h:' + hash;
+    var dayKey = prefix + ':d:' + hash;
 
     var incrResult = await kvPipeline([
       ['INCR', hourKey],
@@ -64,10 +69,10 @@ async function checkRateLimit(req) {
     if (dayCount === 1) ttlCmds.push(['EXPIRE', dayKey, DAILY_TTL]);
     if (ttlCmds.length) await kvPipeline(ttlCmds); // best-effort
 
-    if (hourCount !== null && hourCount > HOURLY_LIMIT) {
+    if (hourCount !== null && hourCount > hourlyLimit) {
       return { limited: true, scope: 'hour', retryAfter: HOURLY_TTL };
     }
-    if (dayCount !== null && dayCount > DAILY_LIMIT) {
+    if (dayCount !== null && dayCount > dailyLimit) {
       return { limited: true, scope: 'day', retryAfter: DAILY_TTL };
     }
     return { limited: false };

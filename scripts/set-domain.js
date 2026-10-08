@@ -132,12 +132,13 @@ function run(cmd, cwd) {
 const GENERATORS = [
   'scripts/generate-benchmark-pages.js', 'scripts/generate-citation.js', 'scripts/generate-playbooks-page.js', 'scripts/generate-sample-report.js', 'scripts/generate-pro.js',
   'scripts/generate-research-index.js', 'scripts/generate-research-002.js', 'scripts/generate-changelog.js', 'scripts/generate-trust.js', 'scripts/generate-plugin.js',
-  'scripts/generate-mcp-submission.js', 'scripts/generate-mcp-docs.js', 'lib/mcp-docs.js', 'scripts/site-chrome.js', 'scripts/add-footer-links.js'
+  'scripts/generate-mcp-submission.js', 'scripts/generate-mcp-docs.js', 'lib/mcp-docs.js', 'scripts/site-chrome.js', 'scripts/add-footer-links.js', 'scripts/generate-launch-pages.js'
 ];
 const CHECKS = [
   'scripts/generate-benchmark-pages.js --check', 'scripts/generate-citation.js --check', 'scripts/generate-playbooks-page.js --check', 'scripts/generate-sample-report.js --check', 'scripts/generate-pro.js --check',
   'scripts/generate-research-index.js --check', 'scripts/check-research-index.js', 'scripts/generate-research-002.js --check', 'scripts/generate-changelog.js --check', 'scripts/generate-trust.js --check',
   'scripts/generate-plugin.js --check', 'scripts/generate-mcp-submission.js --check', 'scripts/generate-mcp-docs.js --check', 'lib/mcp-docs.js --check', 'scripts/check-mcp-drift.js',
+  'scripts/check-launch-config.js', 'scripts/generate-launch-pages.js --check',
   'scripts/site-chrome.js --check', 'scripts/add-footer-links.js --check', 'scripts/check-pages.js'
 ];
 

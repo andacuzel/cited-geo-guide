@@ -58,8 +58,16 @@ Constraints that must not be broken:
     Cloud. Ungrounded runs stay on the free tier.
   - **Vercel** moves from Hobby to a paid plan when payment goes live.
     That is planned, not a violation. Until then, keep within Hobby limits
-    (12 functions, current count 9 non-underscore).
+    (12 functions, current count 10 non-underscore).
 - **No secrets in the repo.** Environment variables only.
+- **The launch lead-magnet is dark.** `lib/launch-config.js` has `ENABLED = false`: the report
+  signup and the Pro founding page are not generated, nothing links to them, and `/api/subscribe`
+  answers `503 not_enabled`. `scripts/check-launch-config.js` fails if anything is reachable while it
+  is off, or if it is on with a value missing. Turn it on only with `docs/launch-report.md`, and
+  publish `docs/privacy-addendum.md` in the same deploy. The founding page states no price, no
+  invented scarcity and no timer: the cap and the end date are static text from the config. The
+  report says "readiness", names no scanned site and makes no causal claim. Its numbers come from
+  `scripts/launch-report-stats.js` (stored scans only, output in the gitignored `local/launch-report/`).
 - **Report summaries.** The executive summary of a crawl report is written
   from aggregated figures only (`lib/report-facts.js`), by rules or by a model
   that only rephrases them, and every model reply is validated against the
