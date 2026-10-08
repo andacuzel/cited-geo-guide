@@ -20,6 +20,14 @@
       "maxDuration": 30
     }
   },
+  "redirects": [
+    {
+      "source": "/((?!api/mcp|\\.well-known/(?:oauth|openid|mcp)).*)",
+      "has": [{ "type": "host", "value": "answerable-app.vercel.app" }],
+      "destination": "https://getcitehound.com/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" }
   ]
