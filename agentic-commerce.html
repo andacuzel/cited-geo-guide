@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=57" />
+  <link rel="stylesheet" href="styles.css?v=58" />
 
   <script type="application/ld+json">
   {
@@ -202,11 +202,18 @@
             <input type="text" class="field" id="scanInput" placeholder="yourstore.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
             <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
           </form>
-          <p class="hero__analyzing" id="heroAnalyzing" aria-live="polite" hidden><span id="heroAnalyzingText"></span><span class="dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span><a href="#scanReport" id="heroAnalyzingLink" hidden>View the result</a></p>
           <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.</p>
 
           <div class="scan__status" id="scanStatus" role="status" aria-live="polite"></div>
           <button type="button" class="btn btn--ghost scan__retry" id="scanRetry">Try again</button>
+        </div>
+              <div class="analyze" id="analyze" hidden>
+          <svg class="analyze__mark" viewBox="13 8.5 52 52" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z"/><circle cx="40" cy="22.9" r="1.6" fill="#C2922F"/></svg>
+          <h2 class="analyze__title"><span id="analyzeText"></span><span class="dots" id="analyzeDots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></h2>
+          <ol class="analyze__stages scan-progress__list" id="analyzeStages" aria-label="Scan steps"></ol>
+          <p class="analyze__still" id="analyzeStill" hidden>Still working. Some sites answer slowly, and the scan waits for them.</p>
+          <p class="analyze__after"><a href="#scanReport" id="analyzeLink" hidden>View the result</a></p>
+          <p class="analyze__live" id="analyzeLive" role="status" aria-live="polite"></p>
         </div>
       </div>
     </section>
@@ -518,7 +525,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="lib/schema.js?v=1"></script>
-  <script src="scanner.js?v=41"></script>
+  <script src="scanner.js?v=42"></script>
   <script src="nav.js?v=3"></script>
 </body>
 </html>

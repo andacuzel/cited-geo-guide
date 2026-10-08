@@ -29,13 +29,78 @@
 
   var lastScore = null;
   var pendingIsParamScan = false;
-  var intro = null; // set while a share-link arrival is being introduced (see startIntro)
 
-  // Scroll targets land below the sticky header: html { scroll-padding-top } in styles.css, kept in sync by nav.js.
-  function scrollToEl(el) {
-    if (!el) return;
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  /* ---------------- Pacing and motion ----------------
+     Everything that sets how long the scan feels lives in this one block.
+       share  a share-link arrival: the hero becomes the "Analyzing" screen
+       form   a scan started from the form: no takeover, the progress card on the page
+     stageMs   the least time each stage stays on screen; a stage turns done only when that time has
+               passed AND its work has finished, so stages tick in order
+     doneMs    the "Done" beat, held before anything moves
+     scrollMs  the eased scroll to the result
+     countMs   the score counting up once the result is in view
+     prefers-reduced-motion keeps the stages (250 ms each) and then jumps to the result: no scroll
+     animation, no count-up, no pulse. */
+  var PACING = {
+    share: { stageMs: 700, doneMs: 700, scrollMs: 1100, countMs: 1200, takeover: true },
+    form: { stageMs: 450, doneMs: 400, scrollMs: 800, countMs: 900, takeover: false }
+  };
+  var REDUCED = { stageMs: 250, doneMs: 150, scrollMs: 0, countMs: 0 };
+  var STILL_WORKING_MS = 12000;     // after this long a calm "still working" line appears
+  var BAR_START_MS = 300, BAR_STAGGER_MS = 250, BAR_FILL_MS = 500, REVEAL_MS = 450; // the result, once it is in view
+
+  function reducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  function profileFor(mode) {
+    var base = PACING[mode];
+    return reducedMotion() ? { stageMs: REDUCED.stageMs, doneMs: REDUCED.doneMs, scrollMs: 0, countMs: 0, takeover: base.takeover, animate: false } :
+      { stageMs: base.stageMs, doneMs: base.doneMs, scrollMs: base.scrollMs, countMs: base.countMs, takeover: base.takeover, animate: true };
+  }
+
+  // Scroll targets land below the sticky header: nav.js keeps --header-h equal to its pinned height.
+  function headerOffset() {
+    var v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'));
+    return (isNaN(v) ? 58 : v) + 16;
+  }
+  function pageTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
+  function jumpTo(y) {
+    var html = document.documentElement;
+    html.style.scrollBehavior = 'auto';
+    window.scrollTo(0, y);
+    html.style.scrollBehavior = '';
+  }
+  // Eased scroll on requestAnimationFrame (ease in-out). Resolves through done(); cancel() stops it where it is.
+  function animateScroll(y, ms, step, done) {
+    var from = window.scrollY, dist = y - from, html = document.documentElement;
+    if (!ms || Math.abs(dist) < 2) { jumpTo(y); step(y); done(); return { cancel: function () {} }; }
+    var t0 = performance.now(), raf = 0, stopped = false;
+    html.style.scrollBehavior = 'auto';
+    function frame(now) {
+      if (stopped) return;
+      var t = Math.min(1, (now - t0) / ms);
+      var e = -(Math.cos(Math.PI * t) - 1) / 2; // ease in-out (sine): gentle at both ends, so the whole duration is seen
+      var pos = from + dist * e;
+      window.scrollTo(0, pos);
+      step(pos);
+      if (t < 1) raf = requestAnimationFrame(frame);
+      else { html.style.scrollBehavior = ''; done(); }
+    }
+    raf = requestAnimationFrame(frame);
+    return { cancel: function () { stopped = true; cancelAnimationFrame(raf); html.style.scrollBehavior = ''; } };
+  }
+  // The user always wins: wheel, touch, a key, a mouse press or any scroll we did not make cancels what is running.
+  function watchUser(onUser) {
+    var events = ['wheel', 'touchstart', 'touchmove', 'keydown', 'mousedown'];
+    var expected = null, live = true;
+    function user() { if (live) onUser(); }
+    function scrolled() { if (live && (expected === null ? window.scrollY > 2 : Math.abs(window.scrollY - expected) > 4)) onUser(); }
+    events.forEach(function (ev) { window.addEventListener(ev, user, { capture: true, passive: true }); });
+    window.addEventListener('scroll', scrolled, { passive: true });
+    return {
+      expect: function (y) { expected = y; },
+      stop: function () { live = false; events.forEach(function (ev) { window.removeEventListener(ev, user, true); }); window.removeEventListener('scroll', scrolled); }
+    };
   }
 
   // The progress card is much shorter than the result. While it shows, the section holds the height the
@@ -98,7 +163,6 @@
     { label: 'Fetching the homepage', context: 'The homepage is parsed for structured data, headings and metadata.' },
     { label: 'Scoring 16 checks', context: 'Every check is weighted across three pillars: discoverability, technical foundation and trust.' }
   ];
-  var STAGE_MIN_MS = 500;
   // Smallest result heights measured by width band (px, section incl. padding): 3471 at 390, 3440 at 520, 2587 at 700, 2410 at 1000, 1793 at 1280 and up (smallest of four recorded scans). A taller result grows downward, below the fold.
   var RESERVE = [[400, 3470], [520, 3440], [700, 2580], [1000, 2410], [Infinity, 1790]]; // [max viewport width, px]
 
@@ -114,18 +178,27 @@
 
   function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
 
-  function buildStageList() {
-    if (!progressList) return;
-    progressList.innerHTML = STAGES.map(function (s) {
+  var analyze = $('analyze');
+  var analyzeText = $('analyzeText');
+  var analyzeDots = $('analyzeDots');
+  var analyzeStages = $('analyzeStages');
+  var analyzeStill = $('analyzeStill');
+  var analyzeLive = $('analyzeLive');
+  var analyzeLink = $('analyzeLink');
+  var heroEl = $('scan');
+
+  function buildStageList(listEl) {
+    if (!listEl) return;
+    listEl.innerHTML = STAGES.map(function (st) {
       return '<li class="scan-progress__item is-pending">' +
         '<span class="scan-progress__marker" aria-hidden="true"></span>' +
-        '<span class="scan-progress__label">' + esc(s.label) + '</span></li>';
+        '<span class="scan-progress__label">' + esc(st.label) + '</span></li>';
     }).join('');
   }
 
-  function setStageState(i, state) {
-    if (!progressList) return;
-    var item = progressList.children[i];
+  function setStageState(listEl, i, state) {
+    if (!listEl) return;
+    var item = listEl.children[i];
     if (!item) return;
     item.className = 'scan-progress__item is-' + state;
     var marker = item.querySelector('.scan-progress__marker');
@@ -137,9 +210,9 @@
     progressBarFill.style.width = Math.round((doneCount / STAGES.length) * 100) + '%';
   }
 
-  function showProgressPanel(domain) {
+  function showProgressPanel(domain, opts) {
     if (!progressSection) return;
-    buildStageList();
+    buildStageList(progressList);
     if (progressDomain) progressDomain.textContent = domain;
     updateProgressBar(0);
     if (progressContext) progressContext.textContent = '';
@@ -149,7 +222,12 @@
     report.hidden = true;
     setStatus('');
     reserveSpace(true);
-    if (!intro) scrollToEl(progressSection);
+    if (opts && opts.scroll) {
+      // bring the card into view, a third of the way down, so the stages can be read; the result later eases up to the header
+      var h = progressSection.getBoundingClientRect().height;
+      var top = Math.max(headerOffset(), window.innerHeight * 0.3);
+      animateScroll(Math.max(0, pageTop(progressSection) - top), opts.scrollMs, opts.step || function () {}, function () {});
+    }
   }
 
   function showProgressError(message) {
@@ -166,26 +244,90 @@
     if (progressSection) progressSection.hidden = true;
   }
 
-  // Runs the fetch and the staged reveal side by side. Stages before
-  // the last complete on a fixed minimum timer; the last stage waits
-  // on whichever finishes later — the timer or the real response —
-  // and only marks itself done if that response actually succeeded.
-  async function runStagedScan(fetchPromise) {
-    for (var i = 0; i < STAGES.length; i++) {
-      setStageState(i, 'active');
-      if (progressContext) progressContext.textContent = STAGES[i].context;
+  // The share-link arrival: the hero hands its first viewport to the "Analyzing" screen. The hero keeps its height
+  // while it does, so nothing moves when it comes back.
+  function enterTakeover(domain) {
+    if (!analyze || !heroEl) return false;
+    heroEl.style.minHeight = heroEl.offsetHeight + 'px';
+    heroEl.classList.add('is-analyzing');
+    analyze.hidden = false;
+    analyze.classList.remove('is-done');
+    analyzeText.textContent = 'Analyzing ' + domain;
+    if (analyzeDots) analyzeDots.hidden = false;
+    if (analyzeStill) analyzeStill.hidden = true;
+    if (analyzeLink) analyzeLink.hidden = true;
+    if (analyzeLive) analyzeLive.textContent = '';
+    buildStageList(analyzeStages);
+    return true;
+  }
+  function leaveTakeover() {
+    if (!heroEl) return;
+    heroEl.classList.remove('is-analyzing');
+    heroEl.style.minHeight = '';
+    if (analyze) analyze.hidden = true;
+  }
 
-      if (i < STAGES.length - 1) {
-        await sleep(STAGE_MIN_MS);
-        setStageState(i, 'done');
-        updateProgressBar(i + 1);
-      } else {
-        var pair = await Promise.all([sleep(STAGE_MIN_MS), fetchPromise]);
-        var outcome = pair[1];
-        if (outcome.networkOk && outcome.res.ok && !outcome.data.error) {
-          setStageState(i, 'done');
+  // What the user sees for stages and the done beat: the takeover for a share link, the card otherwise.
+  function makeUi(domain, takeover) {
+    var list = takeover ? analyzeStages : progressList;
+    return {
+      activate: function (i) {
+        setStageState(list, i, 'active');
+        if (takeover) { if (analyzeLive) analyzeLive.textContent = 'Step ' + (i + 1) + ' of ' + STAGES.length + ': ' + STAGES[i].label; }
+        else if (progressContext) progressContext.textContent = STAGES[i].context;
+      },
+      done: function (i) {
+        setStageState(list, i, 'done');
+        if (!takeover) updateProgressBar(i + 1);
+      },
+      still: function () {
+        if (takeover) { if (analyzeStill) analyzeStill.hidden = false; }
+        else if (progressContext) progressContext.textContent = 'Still working. Some sites answer slowly, and the scan waits for them.';
+      },
+      finish: function () {
+        var text = 'Done. Here’s ' + domain + '’s score.';
+        if (takeover) {
+          if (analyzeText) analyzeText.textContent = text;
+          if (analyzeDots) analyzeDots.hidden = true;
+          if (analyzeStill) analyzeStill.hidden = true;
+          if (analyze) analyze.classList.add('is-done');
+          if (analyzeLive) analyzeLive.textContent = text;
+        } else {
+          if (progressDomain) progressDomain.textContent = text;
+          if (progressContext) progressContext.textContent = '';
           updateProgressBar(STAGES.length);
         }
+      }
+    };
+  }
+
+  // The stages tick in order, each on screen for at least stageMs. The scan is one request, so stages 1 to 4 cannot be
+  // tied to separate steps: they advance on the minimum time while the request is in flight, as the stages always have,
+  // and "Scoring 16 checks" is the one that is gated on the real response: it never turns done before the scan has
+  // succeeded, and while the response is slow it stays active (pulsing). A failure stops the ticking at once.
+  async function runPacedStages(fetchPromise, p, ui) {
+    var failed = false, outcome = null;
+    var settled = fetchPromise.then(function (o) {
+      outcome = o;
+      failed = !(o.networkOk && o.res.ok && !o.data.error);
+      return o;
+    });
+    function napUnlessFailed(ms) {
+      return new Promise(function (resolve) {
+        var t = setTimeout(resolve, ms);
+        settled.then(function () { if (failed) { clearTimeout(t); resolve(); } });
+      });
+    }
+    for (var i = 0; i < STAGES.length; i++) {
+      if (failed) return outcome;
+      ui.activate(i);
+      if (i < STAGES.length - 1) {
+        await napUnlessFailed(p.stageMs);
+        if (failed) return outcome;
+        ui.done(i);
+      } else {
+        await Promise.all([sleep(p.stageMs), settled]);
+        if (!failed) ui.done(i);
         return outcome;
       }
     }
@@ -203,48 +345,136 @@
 
   /* ---------------- Scan flow ---------------- */
 
-  async function runScan() {
+  function failureMessage(outcome) {
+    if (!outcome.networkOk) return 'Scan failed: ' + (outcome.error && outcome.error.message ? outcome.error.message : 'connection error');
+    if (outcome.res.status === 429) return outcome.data.error || 'You’ve hit the scan limit. Try again in a little while.';
+    if (!outcome.res.ok || outcome.data.error) return 'Scan failed: ' + (outcome.data.error || ('HTTP ' + outcome.res.status));
+    return null;
+  }
+
+  // The result arrives in three beats once it is in view: the score counts up, the three bars fill one after another, then the
+  // check list and the fix list fade in. Only transform and opacity move, and the real figures are in the DOM from the start
+  // (the count is an aria-hidden overlay), so skipping the beats, reduced motion or no script all show the same final page.
+  var playing = null;
+  function finalizeResult() {
+    if (playing) { playing.timers.forEach(clearTimeout); cancelAnimationFrame(playing.raf); playing = null; }
+    report.classList.remove('is-prep', 'is-playing');
+    var fills = report.querySelectorAll('.score-bar__fill');
+    for (var i = 0; i < fills.length; i++) fills[i].style.animationDelay = '';
+    var parts = report.querySelectorAll('.scan-checks, .scan-commerce, .scan-actions, .fix-snippets, .scan-bridge');
+    for (var k = 0; k < parts.length; k++) parts[k].style.animationDelay = '';
+    var host = report.querySelector('.score-entry__value');
+    if (host) {
+      host.classList.remove('is-counting');
+      var ov = host.querySelector('.score-entry__count');
+      if (ov) ov.remove();
+    }
+  }
+  function playResult(countMs, total) {
+    finalizeResult();
+    var host = report.querySelector('.score-entry__value');
+    var state = { timers: [], raf: 0 };
+    playing = state;
+    report.classList.add('is-playing');
+    var fills = report.querySelectorAll('.score-bar__fill');
+    for (var i = 0; i < fills.length; i++) fills[i].style.animationDelay = (BAR_START_MS + i * BAR_STAGGER_MS) + 'ms';
+    var afterBars = BAR_START_MS + fills.length * BAR_STAGGER_MS + 100;
+    var listDelay = [['.scan-checks', afterBars], ['.scan-commerce', afterBars + 200], ['.scan-actions', afterBars + 200], ['.fix-snippets', afterBars + 200], ['.scan-bridge', afterBars + 200]];
+    listDelay.forEach(function (d) { var el = report.querySelector(d[0]); if (el) el.style.animationDelay = d[1] + 'ms'; });
+    if (host) {
+      var ov = document.createElement('span');
+      ov.className = 'score-entry__count';
+      ov.setAttribute('aria-hidden', 'true');
+      ov.textContent = '0';
+      host.appendChild(ov);
+      host.classList.add('is-counting');
+      var t0 = performance.now();
+      var tick = function (now) {
+        var t = Math.min(1, (now - t0) / countMs);
+        ov.textContent = String(Math.round(total * (1 - Math.pow(1 - t, 3))));
+        if (t < 1) state.raf = requestAnimationFrame(tick);
+        else { ov.textContent = String(total); host.classList.remove('is-counting'); ov.remove(); }
+      };
+      state.raf = requestAnimationFrame(tick);
+    }
+    state.timers.push(setTimeout(finalizeResult, afterBars + 200 + REVEAL_MS + 200));
+  }
+
+  async function runScan(arrival) {
     var domain = normalizeDomain(input.value);
     if (!domain) { setStatus('Enter a valid domain, e.g. example.com', true); return; }
 
     var isParamScan = pendingIsParamScan;
     pendingIsParamScan = false;
 
+    // arrival is set only for a share link. A link with a #hash, or a back/forward visit, runs the scan quietly:
+    // no takeover, no scroll and no animation.
+    var quiet = !!(arrival && arrival.quiet);
+    var takeover = !!(arrival && arrival.takeover && !quiet && analyze);
+    var p = profileFor(takeover ? 'share' : 'form');
+    var guard = null, scrollJob = null, cancelled = false, resultShown = false;
+
     scanBtn.disabled = true;
-    showProgressPanel(domain);
+    function skipAnimations() {
+      cancelled = true;
+      if (scrollJob) scrollJob.cancel();
+      if (guard) guard.stop();
+      if (resultShown) finalizeResult();
+    }
+    if (!quiet) guard = watchUser(skipAnimations);
+    if (takeover) { enterTakeover(domain); report.hidden = true; hideProgressPanel(); setStatus(''); }
+    else showProgressPanel(domain, { scroll: !quiet, scrollMs: p.animate ? 600 : 0, step: function (y) { if (guard) guard.expect(y); } });
+    var ui = makeUi(domain, takeover);
+    var stillTimer = setTimeout(ui.still, STILL_WORKING_MS);
 
     try {
       var fetchPromise = startFetch(domain);
-      if (intro) fetchPromise.then(function () { intro.fetched(); });
-      var outcome = await runStagedScan(fetchPromise);
+      var outcome = await runPacedStages(fetchPromise, p, ui);
+      clearTimeout(stillTimer);
 
-      if (!outcome.networkOk) {
-        if (intro) intro.finish(false);
-        showProgressError('Scan failed: ' + (outcome.error && outcome.error.message ? outcome.error.message : 'connection error'));
+      var failure = failureMessage(outcome);
+      if (failure) {
+        if (takeover) { leaveTakeover(); setStatus(failure, true); }
+        else showProgressError(failure);
+        if (guard) guard.stop();
         return;
       }
+      var data = outcome.data;
 
-      var res = outcome.res, data = outcome.data;
-
-      if (res.status === 429) {
-        if (intro) intro.finish(false);
-        showProgressError(data.error || 'You’ve hit the scan limit. Try again in a little while.');
-        return;
-      }
-      if (!res.ok || data.error) {
-        if (intro) intro.finish(false);
-        showProgressError('Scan failed: ' + (data.error || ('HTTP ' + res.status)));
-        return;
-      }
+      // the done beat, held before anything moves
+      ui.finish();
+      await sleep(p.doneMs);
 
       hideProgressPanel();
-      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan, data.commerce);
+      var animate = p.animate && !cancelled && !quiet;
+      renderReport(data.domain, data.robotsOk, data.botResults, data.result, data.siteInfo, isParamScan, data.commerce, { prep: animate });
+      resultShown = true;
       updateShareableUrl(data.domain);
-      if (intro) intro.finish(true);
+
+      if (quiet) { return; }
+      if (cancelled) {
+        // the user took over: leave the finished screen in place with a way to the result
+        if (takeover && analyzeLink) analyzeLink.hidden = false;
+        return;
+      }
+
+      // eased scroll to the result, landing below the sticky header
+      var targetY = Math.max(0, pageTop(report) - headerOffset());
+      await new Promise(function (resolve) {
+        scrollJob = animateScroll(targetY, p.scrollMs, function (y) { if (guard) guard.expect(y); }, resolve);
+        if (cancelled) { scrollJob.cancel(); resolve(); }
+      });
+      if (guard) guard.expect(window.scrollY);
+      if (takeover) leaveTakeover();
+      if (cancelled) { finalizeResult(); return; }
+      if (animate) playResult(p.countMs, data.result.total);
+      else finalizeResult();
     } catch (err) {
-      if (intro) intro.finish(false);
-      showProgressError('Scan failed: ' + (err && err.message ? err.message : 'connection error'));
+      clearTimeout(stillTimer);
+      if (takeover) { leaveTakeover(); setStatus('Scan failed: ' + (err && err.message ? err.message : 'connection error'), true); }
+      else showProgressError('Scan failed: ' + (err && err.message ? err.message : 'connection error'));
     } finally {
+      if (guard) setTimeout(guard.stop, 4000);
       scanBtn.disabled = false;
     }
   }
@@ -287,7 +517,7 @@
     { cat: 'trust', label: 'Content & trust' }
   ];
 
-  function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam, commerce) {
+  function renderReport(domain, robotsOk, botResults, r, siteInfo, scannedFromParam, commerce, opts) {
     lastScore = { domain: domain, total: r.total, checks: r.checks, botResults: botResults };
 
     $('scoreValue').textContent = r.total;
@@ -378,7 +608,9 @@
     report.hidden = false;
     reserveSpace(false);
     report.classList.add('is-reserving'); // never shorter than the card it replaced
-    if (!intro) scrollToEl(report);
+    finalizeResult();
+    // prep: bars and lists start hidden so playResult can bring them in; the real figures are already in the DOM
+    if (opts && opts.prep) report.classList.add('is-prep');
   }
 
   /* ---------------- Pro output (not yet implemented) ----------------
@@ -618,9 +850,9 @@
 
   /* ---------------- Wiring ---------------- */
 
-  form.addEventListener('submit', function (e) { e.preventDefault(); intro = null; runScan(); });
-  retryBtn.addEventListener('click', function () { intro = null; runScan(); });
-  if (progressRetryBtn) progressRetryBtn.addEventListener('click', function () { intro = null; runScan(); });
+  form.addEventListener('submit', function (e) { e.preventDefault(); runScan(); });
+  retryBtn.addEventListener('click', function () { runScan(); });
+  if (progressRetryBtn) progressRetryBtn.addEventListener('click', function () { runScan(); });
   $('shareBtn').addEventListener('click', shareScore);
 
   var fixSnippets = $('fixSnippets');
@@ -646,66 +878,10 @@
 
   /* ---------------- URL-driven scan (?scan=domain) ---------------- */
 
-  /* A share link opens the homepage at the top with a status line, starts the scan at once and brings the
-     user to the progress card (or the result) after a short pause: at max(1.8 s, response in), and at 4 s
-     at the latest. Any wheel, touch, key or scroll by the user cancels it. An explicit #hash in the link
-     means no automatic scroll at all: the hash decides. The domain is validated by normalizeDomain and only
-     ever written with textContent. */
-  var INTRO_MIN_MS = 1800, INTRO_MAX_MS = 4000;
-
-  function startIntro(domain) {
-    var statusLine = $('heroAnalyzing');
-    var statusText = $('heroAnalyzingText');
-    var viewLink = $('heroAnalyzingLink');
-    var t0 = performance.now();
-    var state = { gotResponse: false, scrolled: false, cancelled: false, hash: !!window.location.hash.replace('#', ''), timers: [] };
-    var events = ['wheel', 'touchstart', 'touchmove', 'keydown', 'mousedown'];
-
-    if (statusLine && statusText) {
-      statusText.textContent = 'Analyzing ' + domain;
-      statusLine.hidden = false;
-    }
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    if (!state.hash) window.scrollTo({ top: 0, behavior: 'instant' });
-
-    function stop() {
-      events.forEach(function (ev) { window.removeEventListener(ev, cancel, true); });
-      window.removeEventListener('scroll', onScroll);
-      state.timers.forEach(clearTimeout);
-      state.timers = [];
-    }
-    function cancel() { if (state.scrolled || state.cancelled) return; state.cancelled = true; stop(); }
-    function onScroll() { if (window.scrollY > 2) cancel(); }
-
-    function tryScroll() {
-      if (state.scrolled || state.cancelled || state.hash) return;
-      var elapsed = performance.now() - t0;
-      if (elapsed < INTRO_MIN_MS - 30) return;
-      if (!state.gotResponse && elapsed < INTRO_MAX_MS - 30) return;
-      state.scrolled = true;
-      stop();
-      scrollToEl(report.hidden ? progressSection : report);
-    }
-
-    if (!state.hash) {
-      events.forEach(function (ev) { window.addEventListener(ev, cancel, { capture: true, passive: true }); });
-      window.addEventListener('scroll', onScroll, { passive: true });
-      state.timers.push(setTimeout(tryScroll, INTRO_MIN_MS), setTimeout(tryScroll, INTRO_MAX_MS));
-    }
-
-    state.fetched = function () { state.gotResponse = true; tryScroll(); };
-    state.finish = function (ok) {
-      state.gotResponse = true;
-      stop();
-      if (statusLine && statusText) {
-        statusText.textContent = (ok ? 'Scan complete for ' : 'Scan failed for ') + domain;
-        statusLine.classList.add('is-done');
-        if (viewLink && ok && !state.scrolled) viewLink.hidden = false;
-      }
-    };
-    return state;
-  }
-
+  /* A share link opens at the top and shows the "Analyzing" screen while the scan runs: the stages tick one by one, a "Done"
+     beat, then an eased scroll to the result and the count-up (see runScan and PACING). A link with a #hash, or a
+     back/forward visit, runs the scan quietly and moves nothing. The domain is validated by normalizeDomain and only ever
+     written with textContent. */
   (function initFromUrl() {
     var raw = new URLSearchParams(window.location.search).get('scan');
     if (!raw) return;
@@ -713,8 +889,16 @@
     if (!domain) return;
     input.value = domain;
     pendingIsParamScan = true;
-    intro = startIntro(domain);
-    runScan();
+    var nav = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var restored = !!(nav && nav.type === 'back_forward');
+    var hash = !!window.location.hash.replace('#', '');
+    if (!hash && !restored) {
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    // a page restored from the back/forward cache keeps its state: show it as it is and drop any animation
+    window.addEventListener('pageshow', function (e) { if (e.persisted) { finalizeResult(); leaveTakeover(); } });
+    runScan({ takeover: true, quiet: hash || restored });
   }());
 
 }());

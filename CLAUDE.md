@@ -187,9 +187,12 @@ The header is sticky, and scroll offsets come from its real height: `nav.js` kee
 `--header-h` on `<html>` equal to the pinned part (the whole header on wide screens, only
 the logo row up to 700px, where the nav row scrolls away), and `html { scroll-padding-top }`
 adds 16px to it. Never hand-tune an offset or add a `scroll-margin-top` for the header. A
-share link (`/?scan=domain`) opens at the top with an "Analyzing" line, starts the scan at
-once and scrolls to the progress card or the result at max(1.8 s, response in), at 4 s
-at the latest; any user input cancels that scroll.
+share link (`/?scan=domain`) opens at the top and the hero becomes the "Analyzing" screen:
+the five stages tick one by one (each visible at least 700 ms, a stage done only when its work
+is), a "Done" beat, then an eased scroll to the result and a count-up. A form scan keeps the
+progress card and the same beats at a shorter pace. The pacing numbers are the named constants
+in `PACING` in `scanner.js`; the real score is always in the DOM, and any user input, reduced
+motion or a back/forward visit skips the animation.
 
 **Never:** gradients · numbered section headers (01/02/03) · hover
 lift or scale · pill (999px) shapes · emoji in product surfaces ·
