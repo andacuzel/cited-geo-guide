@@ -18,6 +18,9 @@
     },
     "api/site-info.js": {
       "maxDuration": 30
+    },
+    "api/pro.js": {
+      "maxDuration": 60
     }
   },
   "redirects": [
@@ -35,9 +38,36 @@
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
         { "key": "Referrer-Policy", "value": "no-referrer" }
       ]
+    },
+    {
+      "source": "/pro/start/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/app/pro-start.html",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/api/pro(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
     }
   ],
   "rewrites": [
-    { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" }
+    { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
+    { "source": "/pro/start/:token", "destination": "/app/pro-start.html" },
+    { "source": "/api/pro/:action(start|order|step|status|email)", "destination": "/api/pro?a=:action" },
+    { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
+    { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }
   ]
 }
