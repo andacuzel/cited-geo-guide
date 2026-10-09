@@ -95,13 +95,35 @@ t('nothing is kept in the browser by the Pro pages', !/localStorage|sessionStora
 {
   const v = JSON.parse(read('vercel.json'));
   const need = (src) => { const h = (v.headers || []).filter((x) => x.source === src)[0]; return h && h.headers.some((x) => x.key === 'X-Robots-Tag' && /noindex/.test(x.value)) && h.headers.some((x) => x.key === 'Referrer-Policy' && x.value === 'no-referrer'); };
-  ['/r/(.*)', '/pro/start/(.*)', '/app/pro-start.html', '/api/pro(.*)'].forEach((src) => t('vercel.json: ' + src + ' sends noindex and no referrer', !!need(src)));
+  ['/r/(.*)', '/pro/start/(.*)', '/app/pro-start(.*)', '/api/pro(.*)'].forEach((src) => t('vercel.json: ' + src + ' sends noindex and no referrer', !!need(src)));
   t('vercel.json: the single Pro function has a duration inside the plan', v.functions['api/pro.js'] && v.functions['api/pro.js'].maxDuration <= 60);
   t('vercel.json: the report, the start page and the API are rewritten', ['/pro/start/:token', '/api/pro/:action(start|order|step|status|email)', '/r/:id([0-9a-f]{32})'].every((src) => v.rewrites.some((r) => r.source === src)));
   const fns = fs.readdirSync(path.join(ROOT, 'api')).filter((f) => /\.js$/.test(f) && !f.startsWith('_'));
   t('the function count stays within the Hobby plan (' + fns.length + ' of 12)', fns.length <= 12, fns.join(','));
   ['/pro/start/x', '/r/x'].forEach(() => 0);
 }
+// ---- everything api/pro.js needs is named in a literal require, so Vercel packages it ----
+{
+  const seen = new Set(); const bad = []; const missing = [];
+  (function walk(file) {
+    if (seen.has(file)) return; seen.add(file);
+    const src = read(file).replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"])\/\/.*$/gm, '$1');
+    const re = /\brequire\(([^)]*)\)/g; let m;
+    while ((m = re.exec(src))) {
+      const arg = m[1].trim();
+      if (!/^'[^']+'$|^"[^"]+"$/.test(arg)) { bad.push(file + ': require(' + arg + ')'); continue; }
+      const name = arg.slice(1, -1);
+      if (name[0] !== '.') continue; // a package or a built-in
+      const base = path.posix.normalize(path.posix.join(path.posix.dirname(file), name));
+      const target = [base, base + '.js', base + '/index.js'].filter((c) => exists(c) && fs.statSync(path.join(ROOT, c)).isFile())[0];
+      if (!target) missing.push(file + ' -> ' + name); else walk(target);
+    }
+  }('api/pro.js'));
+  t('every require reachable from api/pro.js is a literal string (' + seen.size + ' files), so the bundler can see it', bad.length === 0, bad.join('; '));
+  t('every file it requires exists', missing.length === 0, missing.join('; '));
+  t('the report renderer and its four libraries are among them', ['lib/report-render.js', 'lib/icons.js', 'lib/report-facts.js', 'lib/summary.js', 'lib/citation-panel.js', 'lib/schema.js', 'lib/scanner.js', 'lib/pro-estimate.js'].every((f) => seen.has(f)), Array.from(seen).join(','));
+}
+
 // ---- pages ----
 {
   const s = read('app/pro-start.html');
