@@ -21,7 +21,7 @@
     },
     "api/pro.js": {
       "maxDuration": 60,
-      "includeFiles": "site.config.json"
+      "includeFiles": "{site.config.json,app/pro-start.html}"
     }
   },
   "redirects": [
@@ -66,9 +66,7 @@
   ],
   "rewrites": [
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
-    { "source": "/pro/start/:token", "destination": "/app/pro-start" },
+    { "source": "/pro/start/:token", "destination": "/api/pro?a=startpage&token=:token" },
     { "source": "/api/pro/:action(start|order|step|status|email)", "destination": "/api/pro?a=:action" },
     { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
-    { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }
-  ]
-}
+    { "source":

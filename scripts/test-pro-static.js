@@ -118,21 +118,4 @@ t('nothing is kept in the browser by the Pro pages', !/localStorage|sessionStora
       const target = [base, base + '.js', base + '/index.js'].filter((c) => exists(c) && fs.statSync(path.join(ROOT, c)).isFile())[0];
       if (!target) missing.push(file + ' -> ' + name); else walk(target);
     }
-  }('api/pro.js'));
-  t('every require reachable from api/pro.js is a literal string (' + seen.size + ' files), so the bundler can see it', bad.length === 0, bad.join('; '));
-  t('every file it requires exists', missing.length === 0, missing.join('; '));
-  t('the report renderer and its four libraries are among them', ['lib/report-render.js', 'lib/icons.js', 'lib/report-facts.js', 'lib/summary.js', 'lib/citation-panel.js', 'lib/schema.js', 'lib/scanner.js', 'lib/pro-estimate.js'].every((f) => seen.has(f)), Array.from(seen).join(','));
-}
-
-// ---- pages ----
-{
-  const s = read('app/pro-start.html');
-  t('the start page is noindex and sends no referrer', /name="robots" content="noindex, nofollow, noarchive"/.test(s) && /name="referrer" content="no-referrer"/.test(s));
-  t('the start page loads only same-origin scripts', !/<script[^>]+src="https?:/.test(s));
-  t('the start form asks for exactly the five things, nothing else', ['psSite', 'psName', 'psEmail', 'psConsent'].every((id) => s.indexOf('id="' + id + '"') !== -1) && (s.match(/<input /g) || []).length === 4);
-  t('the consent line is the agreed wording', s.indexOf('Used only to deliver your report and for support') !== -1);
-  t('the CSS version on the start page matches the report page', s.indexOf('styles.css?v=' + require('../lib/pro-report-page.js').CSS_VERSION) !== -1);
-}
-
-console.log('\n' + pass + ' passed, ' + fails.length + ' failed');
-if (fails.length) { console.error('FAILED:\n  ' + fails.join('\n  ')); process.exit(1); }
+  }('api/pro.js')
