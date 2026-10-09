@@ -20,13 +20,14 @@ const path = require('path');
 const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
 const factsLib = require('../lib/report-facts.js');
+const estimateLib = require('../lib/pro-estimate.js');
 const citationPanel = require('../lib/citation-panel.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
-const CSS_VERSION = 59;
+const CSS_VERSION = 60;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function shellParts() {
@@ -45,7 +46,7 @@ function build(data) {
   const date = render.longDate(data.createdAt);
   const pages = a.ok.length;
   const title = 'Citehound — Sample report: a real crawl of our own site';
-  const desc = 'A real full-site crawl of ' + data.domain + ', ' + pages + ' pages, run on ' + date + ': site-wide score, worst pages, the checks that fail and the fixes.';
+  const desc = 'A real full-site crawl of ' + data.domain + ', ' + pages + ' pages, run on ' + date + ': site-wide score, every page, the checks that fail and an estimated score.';
   if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const shell = shellParts();
   const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Sample report: a real crawl of ' + data.domain, description: desc, url: SITE + '/sample-report', dateCreated: String(data.createdAt).slice(0, 10) };
@@ -73,7 +74,8 @@ function build(data) {
     '        <p><strong>This is a real crawl of our own site, ' + esc(data.domain) + ', run on ' + esc(date) + '.</strong> ' + pages + ' pages, read 1.5 seconds apart, with robots.txt respected. We crawled it earlier on ' + esc(dateBefore) + ', fixed what that crawl found, and crawled again. Both results are below. Nothing in either has been edited or improved. The crawl engine ran from our own machine against the live pages.</p>\n      </div>\n' + beforeAfter;
   const withBm = Object.assign({}, data, { benchmark: factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
   const citationSample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'citations', 'sample-crm.json'), 'utf8'));
-  const body = render.render(withBm, { schema: schema, label: 'Sample report', bannerHtml: banner, citation: { result: citationPanel.fromSample(citationSample), sample: true } });
+  // The same layout as a Pro report (lib/report-render.js renderPro), so the sample and the real thing cannot drift.
+  const body = render.renderPro(withBm, { schema: schema, estimate: estimateLib.estimate(data), cap: factsLib.CRAWL_CAP, label: 'Sample report', bar: false, bannerHtml: banner, actions: { copy: true, print: true }, citation: { result: citationPanel.fromSample(citationSample), sample: true } });
 
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\n' +
     '  <title>' + esc(title) + '</title>\n  <meta name="description" content="' + esc(desc) + '" />\n' +
@@ -87,7 +89,7 @@ function build(data) {
     '  <main id="main">\n' + body.replace(/\n$/, '') + '\n' +
     '    <div class="rp-body rp-body--foot"><p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p></div>\n\n    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
     '        <p class="site-footer__coda">\u00A9 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n  </main>\n\n' +
-    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-ui.js?v=2"></script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
+    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-pro-ui.js?v=1" defer></script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
 }
 
 function ensureSitemap() {

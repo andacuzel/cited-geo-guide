@@ -18,7 +18,7 @@
      node scripts/site-chrome.js --check   verify every page; write nothing
 
    Not touched: the two research reports and the case study (protected), the
-   homepage (it carries the entities itself) and app/ (unlisted, noindex).
+   homepage (it carries the entities itself) and app/ (unlisted, noindex, private).
    ===================================================================== */
 
 'use strict';
@@ -30,7 +30,7 @@ const ROOT = path.resolve(__dirname, '..');
 const CONTACT_HREF = 'mailto:hey@getcitehound.com';
 const START = '<!-- SITE-SCHEMA:START -->';
 const END = '<!-- SITE-SCHEMA:END -->';
-const EXEMPT = ['index.html', 'research/case-study-agaone.html', 'research/llms-txt-adoption-2026.html', 'app/crawl.html', 'app/report.html'];
+const EXEMPT = ['index.html', 'research/case-study-agaone.html', 'research/llms-txt-adoption-2026.html', 'app/crawl.html', 'app/report.html', 'app/pro-start.html'];
 // Pages that fall short of two H2 headings and have a scan-bridge line that can be promoted.
 const PROMOTE_BRIDGE = ['about.html', 'for-saas.html', 'for-brands.html', 'for-professionals.html', 'tools/schema-generator.html', 'tools/llms-txt-checker.html'];
 

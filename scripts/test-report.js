@@ -126,8 +126,9 @@ verify('sample report', JSON.parse(fs.readFileSync(path.join(ROOT, 'content/pro/
 const page = fs.readFileSync(path.join(ROOT, 'sample-report.html'), 'utf8');
 const sample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/pro/sample-report.json'), 'utf8'));
 console.log('static page');
-const fresh = render.render(sample, { schema: schema });
-  t('sample-report.html carries every figure the renderer produces for the sample, in order', ['avg', 'homeScore', 'gap', 'pagesRead', 'pagesFailed', 'pillar-discover', 'pillar-tech', 'pillar-trust', 'page-score', 'page-failed', 'check-failing', 'hidden-failing'].every((k) => JSON.stringify(figs(page, k)) === JSON.stringify(figs(fresh, k)) && figs(page, k).length > 0));
+// The page is the Pro layout (renderPro), the one a Pro report uses; its figures are the renderer's own output for the sample.
+const fresh = render.renderPro(sample, { schema: schema, estimate: require('../lib/pro-estimate.js').estimate(sample), cap: Facts.CRAWL_CAP, actions: { copy: true, print: true } });
+t('sample-report.html carries every figure the renderer produces for the sample, in order', ['pr-score', 'pr-home', 'pr-pages-read', 'pr-pillar-discover', 'pr-pillar-tech', 'pr-pillar-trust', 'pr-page-score', 'pr-page-failed', 'pr-check-failing', 'pr-found-failing', 'pr-est-now', 'pr-est-final', 'pr-est-row-gain', 'pr-est-row-total'].every((k) => JSON.stringify(figs(page, k)) === JSON.stringify(figs(fresh, k)) && figs(page, k).length > 0));
 t('the banner states the date and the domain of the crawl', page.indexOf(render.longDate(sample.createdAt)) !== -1 && page.indexOf('real crawl of our own site, ' + sample.domain) !== -1);
 
 // Before and after: every figure equals the two frozen crawls.
