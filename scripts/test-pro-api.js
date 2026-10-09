@@ -286,6 +286,8 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     const o2 = await call(api.startPage, { query: { token: other.token } }, { store });
     t('start page: another link still shows the form, never that job', o2.status === 200 && !/\/r\/[a-f0-9]{32}/.test(o2.body));
     const late = S.createStore(store.adapter, { now: () => Date.now() + 40 * 86400000 });
+    const noFile = await call(api.startPage, { query: { token: other.token } }, { store, readFile: () => { throw new Error('ENOENT'); } });
+    t('start page: if the page file is missing from the bundle, a ready link goes to the static copy', noFile.status === 302 && noFile.headers.location === '/app/pro-start?t=' + other.token);
     const bad = [await call(api.startPage, { query: { token: 'c'.repeat(32) } }, { store }), await call(api.startPage, { query: { token: 'nope' } }, { store }), await call(api.startPage, { query: {} }, { store }), await call(api.startPage, { query: { token: other.token } }, { store: late })];
     t('start page: unknown, malformed, missing and expired links get the identical generic page', bad.every((r) => r.status === 404 && r.body === bad[0].body && /This link is not available/.test(r.body) && !/expired|used|invalid/i.test(r.body.replace(/<[^>]+>/g, ' '))), bad.map((r) => r.status).join());
   }

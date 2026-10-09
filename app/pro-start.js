@@ -11,7 +11,12 @@
   'use strict';
 
   var $ = function (id) { return document.getElementById(id); };
+  // The token is in the path. If the page was reached through its static address instead, it is in ?t=, and the address is put right.
   var token = ((location.pathname.match(/\/pro\/start\/([a-f0-9]{32})\/?$/i) || [])[1] || '').toLowerCase();
+  if (!token) {
+    var viaQuery = (new URLSearchParams(location.search).get('t') || '').toLowerCase();
+    if (/^[a-f0-9]{32}$/.test(viaQuery)) { token = viaQuery; try { history.replaceState(null, '', '/pro/start/' + token); } catch (e) { /* the page still works */ } }
+  }
 
   var sections = { loading: $('psLoading'), unavailable: $('psUnavailable'), form: $('psFormWrap'), progress: $('psProgress') };
   function show(name) {
