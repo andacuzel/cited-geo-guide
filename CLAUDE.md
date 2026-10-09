@@ -58,7 +58,7 @@ Constraints that must not be broken:
     Cloud. Ungrounded runs stay on the free tier.
   - **Vercel** moves from Hobby to a paid plan when payment goes live.
     That is planned, not a violation. Until then, keep within Hobby limits
-    (12 functions, current count 10 non-underscore).
+    (12 functions, current count 11 non-underscore: `api/pro.js` holds every Pro action).
 - **No secrets in the repo.** Environment variables only.
 - **The launch lead-magnet is dark.** `lib/launch-config.js` has `ENABLED = false`: the report
   signup and the Pro founding page are not generated, nothing links to them, and `/api/subscribe`
@@ -75,6 +75,14 @@ Constraints that must not be broken:
   message. The path is not in `robots.txt`, `sitemap.xml`, `llms.txt` or any nav, and `vercel.json`
   sends `X-Robots-Tag: noindex, nofollow, noarchive` for `/r/*`. The repository is public, so an
   encrypted page stays in git history for good.
+- **Citehound Pro is built, without payment.** Single-use order links, a start form, a polite crawl of at most 25
+  pages driven step by step from the browser, and a private report at `/r/<32 hex>/`, all in one function
+  (`api/pro.js`, logic in `lib/pro-*.js`), stored in Redis (`@upstash/redis`, the only dependency). Read
+  `docs/pro.md` before touching it. Hard rules: the job record never holds contact data (the order does); the
+  report layout is `renderPro` in `lib/report-render.js`, shared with `/sample-report`; the estimated score comes
+  only from re-running `scoreAll()`; reports use no ranking words and no simulation block; every fetch goes through
+  `lib/pro-fetch.js`; Pro paths stay out of the sitemap, robots.txt, llms.txt, the MCP server and analytics; nothing
+  logs a token, address, name or email. `/privacy` is not edited until launch (the wording is in `docs/pro.md`).
 - **Report summaries.** The executive summary of a crawl report is written
   from aggregated figures only (`lib/report-facts.js`), by rules or by a model
   that only rephrases them, and every model reply is validated against the
