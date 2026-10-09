@@ -283,4 +283,56 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     const used = await call(api.startPage, { query: { token: o.token } }, { store });
     t('start page: a used link goes on to its own report, at once, no JavaScript needed', used.status === 302 && used.headers.location === '/r/' + s.json.jobId + '/', used.status + ' ' + used.headers.location);
     const other = await store.createOrder();
-    const o2 = await call(api.s
+    const o2 = await call(api.startPage, { query: { token: other.token } }, { store });
+    t('start page: another link still shows the form, never that job', o2.status === 200 && !/\/r\/[a-f0-9]{32}/.test(o2.body));
+    const late = S.createStore(store.adapter, { now: () => Date.now() + 40 * 86400000 });
+    const bad = [await call(api.startPage, { query: { token: 'c'.repeat(32) } }, { store }), await call(api.startPage, { query: { token: 'nope' } }, { store }), await call(api.startPage, { query: {} }, { store }), await call(api.startPage, { query: { token: other.token } }, { store: late })];
+    t('start page: unknown, malformed, missing and expired links get the identical generic page', bad.every((r) => r.status === 404 && r.body === bad[0].body && /This link is not available/.test(r.body) && !/expired|used|invalid/i.test(r.body.replace(/<[^>]+>/g, ' '))), bad.map((r) => r.status).join());
+  }
+
+  /* ---- rate limits ---- */
+  {
+    const { store } = mk();
+    const o = await store.createOrder();
+    let status = 0;
+    for (let i = 0; i < api.LIMITS.order.max + 3; i++) status = (await call(api.order, { query: { token: o.token }, ip: '198.51.100.9' }, { store })).status;
+    t('order lookups are limited per caller', status === 429);
+    t('another caller is not affected', (await call(api.order, { query: { token: o.token }, ip: '198.51.100.10' }, { store })).status === 200);
+    let s2 = 0;
+    for (let i = 0; i < api.LIMITS.start.max + 2; i++) s2 = (await call(api.start, { method: 'POST', body: { token: 'x' }, ip: '192.0.2.77' }, { store, checkHost: okHost })).status;
+    t('start attempts are limited per caller', s2 === 429);
+    t('counter keys hold a hash, never an address', !Object.keys(store.adapter._dump()).some((k) => /198\.51\.100|192\.0\.2|203\.0\.113/.test(k)));
+    const k1 = H.callerKey({ headers: { 'x-forwarded-for': '198.51.100.9' } }, Date.UTC(2026, 9, 9));
+    const k2 = H.callerKey({ headers: { 'x-forwarded-for': '198.51.100.9' } }, Date.UTC(2026, 9, 10));
+    t('the caller key changes every day', k1 !== k2 && /^[a-f0-9]{32}$/.test(k1));
+  }
+
+  /* ---- dispatch ---- */
+  {
+    const { store } = mk();
+    const unknown = await call(api.handle, { query: { a: 'admin' } }, { store });
+    const proto = await call(api.handle, { query: { a: '__proto__' } }, { store });
+    const none = await call(api.handle, { query: {} }, { store });
+    t('unknown actions answer generically (including prototype names)', unknown.status === 404 && proto.status === 404 && none.status === 404);
+  }
+
+  /* ---- the store is not configured in production ---- */
+  {
+    const keep = Object.assign({}, process.env);
+    ['UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_REST_TOKEN', 'KV_REST_API_URL', 'KV_REST_API_TOKEN'].forEach((k) => delete process.env[k]);
+    process.env.VERCEL = '1'; S.resetSharedStore(null);
+    const r = await call(api.handle, { method: 'GET', query: { a: 'status', id: 'a'.repeat(32) } });
+    t('production without Redis: a clear 503, not a crash', r.status === 503 && r.json.error === 'storage_not_configured');
+    t('... and the log names the missing variables', logged.some((l) => /KV_REST_API_URL/.test(l)));
+    Object.keys(process.env).forEach((k) => { if (!(k in keep)) delete process.env[k]; }); Object.assign(process.env, keep); S.resetSharedStore(null);
+  }
+
+  /* ---- the log ---- */
+  {
+    const text = logged.join('\n');
+    t('nothing a person typed reached the log (no name, email, token or address)', !/grace|hopper|evil\.example|203\.0\.113|198\.51\.100|192\.0\.2|[a-f0-9]{32}/i.test(text), text.slice(0, 300));
+  }
+
+  out('\n' + pass + ' passed, ' + fails.length + ' failed');
+  if (fails.length) { process.stderr.write('FAILED:\n  ' + fails.join('\n  ') + '\n'); process.exit(1); }
+}()).catch((e) => { process.stderr.write(String(e && e.stack || e) + '\n'); process.exit(1); });
