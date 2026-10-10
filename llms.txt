@@ -1,6 +1,6 @@
 # Citehound
 
-> Citehound is a free scanner for AI readiness. It checks whether AI crawlers can reach a website and whether its pages carry the signals machines read, scores the domain out of 100 across three weighted pillars, and returns the fixes. The free scan and its score measure readiness, not whether any AI assistant names a brand. Pro’s citation check is a separate, dated sample on one assistant.
+> Citehound is a free scanner for AI readiness. It checks whether AI crawlers can reach a website and whether its pages carry the signals machines read, scores the domain out of 100 across three weighted pillars, and returns the fixes. The free scan and its score measure readiness, not whether any AI assistant names a brand. Pro’s citation questions are written for you to try in your own assistants; Citehound has not tested them.
 
 ## Scanner
 

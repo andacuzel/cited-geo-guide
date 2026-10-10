@@ -24,11 +24,15 @@ e-commerce brands (`/for-brands`), local and independent professionals
 
 **Honest framing, non-negotiable:** the free scanner and its score measure
 AI *readiness* (crawler access and on-page signals), not confirmed presence
-in AI answers. The Pro **citation check** is a separate thing: one dated
+in AI answers. Pro's **citation questions** are written for the site and are
+not tested ("Not tested. Try these in your own assistants."); until live
+testing is switched on, copy says "citation questions" and claims no result.
+If live testing is on, its **citation check** is a separate thing: one dated
 sample, on one assistant and model with live web search, of whether the site
-is cited or mentioned for questions written from the site's own pages. It is
-never part of the score, never a ranking, never "visibility", and always shows
-its model, date and "sample". Write "the scan" or "the score" (not "Citehound")
+is cited or mentioned for those questions. It is never part of the score,
+never a ranking, never "visibility", and always shows its model, date and
+"sample". The model knowledge check (no search) is never called citation
+tracking and has no "cited" column. Write "the scan" or "the score" (not "Citehound")
 when saying what is not measured, and never write copy that claims more than a
 sample. Precision here is a credibility asset.
 
@@ -53,14 +57,18 @@ Constraints that must not be broken:
   cap set at the provider, so that normal use costs nothing and a mistake
   cannot cost much. If a change would spend beyond an allowance or has no
   cap, stop and say so instead of implementing it.
-  - **Gemini citation tracking** (`scripts/citation-check.js`): needs a
-    billing-enabled Google Cloud project, because Google Search grounding
-    is not available on the free tier. Grounding is billed per search
-    query beyond 5,000 free per month, shared across Gemini 3.x models
-    (Google pricing page, checked 2 Oct 2026). It is therefore OFF unless
-    `--grounded` is passed, the script keeps a local query ledger and
-    stops at the free allowance, and a spend cap must stay set in Google
-    Cloud. Ungrounded runs stay on the free tier.
+  - **Gemini citation tracking** (`scripts/citation-check.js`, the local
+    tracker): ungrounded runs stay on the free tier. `--grounded` (Google
+    Search grounding) is NOT permitted by Google's terms for analysing
+    results and is refused unless `GOOGLE_GROUNDED_ANALYSIS_PERMISSION=confirmed`
+    is also set (`docs/citation-check.md`, "Why grounding was retired").
+  - **Pro citation questions** use the Gemini API and must run on a billing-enabled
+    Google Cloud project (Google's paid terms: no training on the content, and
+    required for users in the EEA, Switzerland and the UK). **Live testing** and the
+    **knowledge check** cost real money (about $0.35 and $0.01 a report) and have no free
+    allowance: they stay OFF unless the provider has a spend limit set and the owner has
+    switched them on (`docs/citation-check.md`). If a change would turn them on without
+    that, stop and say so.
   - **Vercel** moves from Hobby to a paid plan when payment goes live.
     That is planned, not a violation. Until then, keep within Hobby limits
     (12 functions, current count 11 non-underscore: `api/pro.js` holds every Pro action).
@@ -95,13 +103,14 @@ Constraints that must not be broken:
   removal link) answers the same for a known and a new address. Pilot links (`scripts/pro-issue-token.js`, `docs/pilot.md`)
   run the same code as paid ones. `PRO_HASH_SECRET` is required: without it every Pro endpoint answers 503. `/privacy`
   covers the waitlist, feedback and the daily counters; change it together with `docs/pro.md`.
-- **The Pro citation check is OFF unless switched on.** `lib/pro-citation.js` runs after the crawl only when `GEMINI_API_KEY`
-  and `CITATION_ENABLED=1` are both set. It profiles the site (`lib/site-profile.js`), writes 18 + 3 questions in the site's language
-  (`lib/citation-prompts.js`) and asks them to Gemini with Google Search (`lib/citation-check.js`), at most 21 calls a job,
-  `CITATION_DAILY_CAP` a day (default 60) and `CITATION_MONTHLY_QUERY_CAP` search queries a month (default 4000), stopping at
-  the first 429. Search grounding needs a billing-enabled key, and Google's grounding terms restrict how grounded results may be
-  used (`docs/citation-check.md`, "Terms"): do not switch it on for customers before that is settled. The site's text is untrusted:
-  delimiters, a schema, validation; nothing the model returns is fetched. A failure never fails the report.
+- **The Pro citation part has three switches, all OFF unless set to `1`** (`lib/citation-config.js`, `docs/citation-check.md`, `docs/env.md`):
+  `CITATION_QUESTIONS_ENABLED` (with `GEMINI_API_KEY`: profile + 18 + 3 questions in the site's language, listed "Not tested", no search and
+  no analysis of any result), `CITATION_TEST_ENABLED` (live testing with the provider's web search; needs `CITATION_TEST_PROVIDER` and its key)
+  and `CITATION_KNOWLEDGE_ENABLED` (the same questions with no search; stores only "named"). Only the first is meant for production. There is no
+  Google Search grounding in the Pro code and a test fails if it returns. `lib/pro-citation.js` runs after the crawl; at most 21 calls a phase,
+  `CITATION_DAILY_CAP` live calls a day (60), `CITATION_MONTHLY_QUERY_CAP` searches a month (300), `CITATION_QUESTIONS_DAILY_CAP` question
+  jobs a day (30), stopping at the first 429. The site's text is untrusted: delimiters, a schema, validation; nothing a model returns is
+  fetched; no answer text is kept. A failure never fails the report.
 - **Pro payments are built, not switched on.** `lib/pro-payments.js` (Polar adapter, a Paddle stub that refuses everything) verifies the signed
   webhook (`POST /api/pro/webhook`, secret `PRO_WEBHOOK_SECRET`; without it 503), creates one paid order per provider order id through
   `createOrderFromPayment`, remembers `checkout id -> link` for 30 minutes, and `/pro/welcome` hands the start path over once. A refund before use
@@ -118,8 +127,8 @@ Constraints that must not be broken:
   from aggregated figures only (`lib/report-facts.js`), by rules or by a model
   that only rephrases them, and every model reply is validated against the
   facts (`lib/summary.js`). No page content, URL or domain goes to the model
-  for the summary. (The Pro citation check is separate: it sends excerpts of the site's own public text and the questions
-  it wrote to Gemini; `privacy.html` says so.) Keep both in step. Do not send anything else.
+  for the summary. (The Pro citation questions are separate: they send excerpts of the site's own public text
+  to Gemini and receive the questions; `privacy.html` says so.) Keep both in step. Do not send anything else.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

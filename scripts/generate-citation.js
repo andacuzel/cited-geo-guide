@@ -33,7 +33,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 63;
+const CSS_VERSION = 64;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 // Early access goes through the Pro waitlist on /pro; pro-cta.js sends the button to PRO_CHECKOUT_URL when that is set.
 const WAITLIST = '/pro#waitlist';
@@ -98,19 +98,19 @@ function derive(s) {
 function faq(d) {
   return [
     ['What is citation tracking?',
-      'It is a report on whether an AI model names your brand when people ask the questions your buyers ask. We run a fixed set of questions for your category, ask each one ' + d.triesWord + ' times, and show you when your name comes up and when it does not.'],
+      'Checking whether an AI model names your brand when people ask the questions your buyers ask. Citehound Pro does the first half today: it writes the citation questions for your site, in its own language, and you try them in your own assistants. Testing them for you is in preparation.'],
     ['Why ask every question ' + d.triesWord + ' times?',
-      'Because the same question can get different answers. In the sample, ' + d.unstable + ' of ' + d.questions + ' questions named the brand in some tries and not in others. One try can mislead you. ' + cap(d.triesWord) + ' show the pattern.'],
+      'Because the same question can get different answers. In the published sample, ' + d.unstable + ' of ' + d.questions + ' questions named the brand in some tries and not in others. One try can mislead you. ' + cap(d.triesWord) + ' show the pattern.'],
     ['What does named mean?',
-      'Your brand name appears in the answer. We also record whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement.'],
-    ['Can I run it myself?',
-      'A self-serve version is still to come. Today we run it for you. The question sets are also published on the Citehound MCP server, with a short protocol for running them yourself in any assistant.'],
-    ['Which model does it use?',
-      'The sample used ' + d.model + ' on ' + d.date + '. Today we run Gemini models only. A result describes one model on one date and says nothing about any other assistant.'],
+      'Your brand name appears in the answer. In the published sample we also recorded whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement.'],
+    ['Can I try the questions myself?',
+      'Yes. Pro writes them for your site, and the question sets by category are also published on the Citehound MCP server, with a short protocol for running them yourself in any assistant.'],
+    ['Does Citehound test the questions?',
+      'Not yet. Live testing is in preparation. The published sample used ' + d.model + ' on ' + d.date + ', made by hand without web search. A result describes one model on one date and says nothing about any other assistant.'],
     ['Is it a ranking?',
       'No. It records whether a name appears, not where your brand sits against others. Answers shift with the wording of a question and over time, so a result is a picture of one day.'],
     ['How do I get early access?',
-      'Join the Pro waitlist on the Pro page. The citation run is part of Pro, and we run it for you. We email you once, when Pro opens.']
+      'Join the Pro waitlist on the Pro page. Pro includes the citation questions. We email you once, when Pro opens.']
   ];
 }
 
@@ -161,8 +161,8 @@ function build(sample) {
   const d = derive(sample);
   const shell = shellParts();
   const title = 'Citehound — Citation Tracking: Does a Model Name Your Brand?';
-  const desc = 'We ask a model the questions your customers ask, ' + d.triesWord + ' times each, and show you when your name comes up and when it does not. Early access, run for you.';
-  const ogDesc = 'We ask a model the questions your customers ask, ' + d.triesWord + ' times each, and show you when your name comes up and when it does not.';
+  const desc = 'Pro writes the citation questions your customers ask, in your site\u2019s own language, for you to try. Testing them for you is in preparation.';
+  const ogDesc = 'Pro writes the citation questions your customers ask, in your site\u2019s own language, for you to try. Testing them for you is in preparation.';
   if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const questions = faq(d);
   const ld = {
@@ -196,9 +196,9 @@ function build(sample) {
     '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner">\n          <div class="page-banner__body">\n' +
     '            <p class="kicker kicker--on-navy">Citation tracking</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">Does AI name you when your buyers ask?</h1>\n' +
-    '            <p class="page-banner__desc">We ask a model the questions your customers ask, ' + c('triesWord', t) + ' times each, and show you when your name comes up and when it doesn’t.</p>\n' +
+    '            <p class="page-banner__desc">Pro writes the citation questions your customers ask, in your site’s own language, for you to try in your own assistants. Testing them for you is in preparation.</p>\n' +
     '            ' + JOIN + '\n' +
-    '            <p class="ct-banner__note">A self-serve version is still to come. Today we run it for you.</p>\n' +
+    '            <p class="ct-banner__note">The figures on this page come from a published sample for a different brand, made by hand. Pro does not produce them today.</p>\n' +
     '          </div>\n          <span class="page-banner__icon" aria-hidden="true">' + ICONS.svg('chat') + '</span>\n        </div>\n      </div>\n    </section>\n\n' +
 
     // 2. Gold band: the homepage scatter, unchanged
@@ -209,17 +209,17 @@ function build(sample) {
     '          </div>\n            ' + shell.scene.replace(/\n/g, '\n  ') + '\n        </div>\n      </div>\n    </section>\n\n' +
 
     // 3. What you get
-    '    <section class="ct-section" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What you get</p>\n          <h2 id="get-heading" class="section-title">A report you can read in one sitting.</h2>\n        </div>\n        <ul class="ct-cards">\n' +
-    card('chat', 'The questions your buyers ask', 'A fixed set of buying questions for your category, the ones people type before they choose.') +
-    card('repeat', cap(t) + ' tries each', 'Every question is asked ' + t + ' times, each in a new conversation, because one answer can mislead.') +
-    card('eyeoff', 'The questions where you’re never named', 'The gaps: questions where your name does not come up in any try.') +
-    card('people', 'Who is named instead', 'The other brands that appear in the answers when yours does not.') +
+    '    <section class="ct-section" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What you get</p>\n          <h2 id="get-heading" class="section-title">The questions today. The test, in preparation.</h2>\n        </div>\n        <ul class="ct-cards">\n' +
+    card('chat', 'The questions your buyers ask', 'Today: 21 questions written for your site, in its own language, with English glosses. 18 do not name you and 3 do.') +
+    card('repeat', cap(t) + ' tries each', 'In preparation: every question asked ' + t + ' times, each in a new conversation, because one answer can mislead.') +
+    card('eyeoff', 'The questions where you’re never named', 'In preparation: the gaps, questions where your name does not come up in any try.') +
+    card('people', 'Who is named instead', 'In preparation: the other brands that appear in the answers when yours does not.') +
     '        </ul>\n      </div>\n    </section>\n\n' +
 
     // 4. A real example
-    '    <section class="ct-section" aria-labelledby="sample-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">A real example</p>\n' +
+    '    <section class="ct-section" aria-labelledby="sample-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">A published sample</p>\n' +
     '          <h2 id="sample-heading" class="section-title">' + c('labelCap', d.labelCap) + ', ' + c('questions', d.questions) + ' questions, ' + c('triesWord', t) + ' tries each.</h2>\n' +
-    '          <p class="section-sub">Real answers from ' + c('model', d.model) + ' on ' + c('date', d.date) + ', ' + c('triesWord', t) + ' tries per question. The brand is not named here, and neither are its competitors.</p>\n' +
+    '          <p class="section-sub">Real answers from ' + c('model', d.model) + ' on ' + c('date', d.date) + ', ' + c('triesWord', t) + ' tries per question, made by hand without web search. The brand is not named here, and neither are its competitors. This is not a result for your site, and Pro does not produce it today.</p>\n' +
     '        </div>\n' +
     '        <div class="ct-stats">\n' +
     '          <div class="ct-stat"><p class="ct-stat__num">' + c('never', d.never) + '</p><p class="ct-stat__label">questions where the brand was never named</p></div>\n' +
@@ -237,11 +237,11 @@ function build(sample) {
     '        </div>\n      </div>\n    </section>\n\n' +
 
     // 5. How a run works
-    '    <section class="ct-section" aria-labelledby="how-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How a run works</p>\n          <h2 id="how-heading" class="section-title">Four steps, and you only do the last one.</h2>\n        </div>\n        <ol class="ct-steps">\n' +
+    '    <section class="ct-section" aria-labelledby="how-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How a tested run works</p>\n          <h2 id="how-heading" class="section-title">Four steps. Pro does the first today.</h2>\n        </div>\n        <ol class="ct-steps">\n' +
     step('list', 'The questions', 'We use questions that do not name any brand in the category. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.') +
-    step('repeat', 'Each asked ' + t + ' times', 'Every question goes to one model ' + t + ' times, each time with no memory of the others.') +
-    step('search', 'We record two things', 'Whether you are named, and whether you appear in a heading, list label, table or bold text.') +
-    step('report', 'You receive the report', 'The questions, the marks for every try, and who is named when you are not.') +
+    step('repeat', 'Each asked ' + t + ' times', 'In preparation: every question goes to one model ' + t + ' times, each time with no memory of the others.') +
+    step('search', 'Two things are recorded', 'In preparation: whether you are named, and whether you appear in a heading, list label, table or bold text.') +
+    step('report', 'The report', 'Today: the questions. In preparation: the marks for every try, and who is named when you are not.') +
     '        </ol>\n      </div>\n    </section>\n\n' +
 
     // 6. What a run can't tell you
@@ -261,10 +261,10 @@ function build(sample) {
 
     // closing band
     '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Early access</p>\n' +
-    '        <h2 id="close-heading">Find out when AI names you, and when it doesn’t.</h2>\n' +
-    '        <p class="pro-band__lede">The citation run is part of Pro. Join the waitlist and we will email you once, when it opens.</p>\n' +
+    '        <h2 id="close-heading">Start with the questions your buyers ask.</h2>\n' +
+    '        <p class="pro-band__lede">Pro writes the citation questions for your site. Join the waitlist and we will email you once, when it opens.</p>\n' +
     '        <div class="pro-band__cta">' + JOIN + '</div>\n' +
-    '        <p class="ct-banner__note ct-banner__note--band">A self-serve version is still to come. Today we run it for you.</p>\n' +
+    '        <p class="ct-banner__note ct-banner__note--band">Testing the questions for you is in preparation.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
@@ -338,7 +338,7 @@ function check(sample) {
   });
 
   // 4b. Figures quoted inside the FAQ text (and its JSON-LD) are the sample's too.
-  const fq = text.match(/In the sample, (\d+) of (\d+) questions named the brand in some tries/);
+  const fq = text.match(/In the published sample, (\d+) of (\d+) questions named the brand in some tries/);
   if (!fq || +fq[1] !== d.unstable || +fq[2] !== d.questions) bad('the FAQ states "' + (fq ? fq[0] : 'nothing') + '", the sample gives ' + d.unstable + ' of ' + d.questions);
 
   // 5. The scatter's static state is in the HTML and is the homepage's, byte for byte.

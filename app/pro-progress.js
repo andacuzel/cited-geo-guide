@@ -17,21 +17,25 @@
 (function () {
   'use strict';
 
-  // Without the citation check a report has two stages; with it, five. The server says which (the job view's citation field).
+  // Without the citation part a report has two stages. With it: reading the site, understanding what it does, writing the citation
+  // questions, then (only when the server says live testing and/or the model knowledge check are on) those, then building the report.
+  // The server says which in the job view's citation field: { test, knowledge, language, asked, total }.
   var LANG_NAMES = { en: 'English', tr: 'Turkish', de: 'German', fr: 'French', es: 'Spanish', it: 'Italian', pt: 'Portuguese', nl: 'Dutch', pl: 'Polish', sv: 'Swedish', ru: 'Russian', ar: 'Arabic', ja: 'Japanese', zh: 'Chinese', ko: 'Korean', el: 'Greek', he: 'Hebrew' };
-  function stagesFor(withCitation) {
-    if (!withCitation) return [{ id: 'site', label: 'Reading your site' }, { id: 'report', label: 'Building your report' }];
-    return [
+  function stagesFor(cit) {
+    if (!cit) return [{ id: 'site', label: 'Reading your site' }, { id: 'report', label: 'Building your report' }];
+    var s = [
       { id: 'site', label: 'Reading your site' },
       { id: 'profile', label: 'Understanding what you do' },
-      { id: 'questions', label: 'Writing citation questions' },
-      { id: 'test', label: 'Testing questions' },
-      { id: 'report', label: 'Building your report' }
+      { id: 'questions', label: 'Writing citation questions' }
     ];
+    if (cit.test) s.push({ id: 'test', label: 'Testing questions' });
+    if (cit.knowledge) s.push({ id: 'know', label: 'Checking what the model knows' });
+    s.push({ id: 'report', label: 'Building your report' });
+    return s;
   }
   function labelOf(stage, cit) {
     if (stage.id === 'questions') { var n = cit && cit.language ? LANG_NAMES[String(cit.language).split('-')[0]] || cit.language : ''; return 'Writing citation questions' + (n ? ' in ' + n : ''); }
-    if (stage.id === 'test') return 'Testing questions (' + (cit ? cit.asked : 0) + ' of ' + (cit ? cit.total : 21) + ')';
+    if (stage.id === 'test' || stage.id === 'know') return stage.label + ' (' + (cit && cit.stage === (stage.id === 'test' ? 'cite' : 'know') ? cit.asked : 0) + ' of ' + (cit ? cit.total : 21) + ')';
     return stage.label;
   }
   var PACE = { stageMs: 700, doneMs: 700 };
@@ -82,7 +86,7 @@
     var jobId = opts.jobId;
     var pace = reduced() ? REDUCED : PACE;
     var startedAt = Date.now();
-    var STAGES = stagesFor(false);
+    var STAGES = stagesFor(null);
     var shown = 0;            // index of the stage on screen (stages before it are done)
     var target = 0;           // the stage the real work has reached
     var finished = false;     // the server said done, partial or failed
@@ -170,9 +174,10 @@
       if (view.status === 'done' || view.status === 'partial' || view.status === 'failed') { finished = true; target = STAGES.length - 1; }
       else {
         // The stage the real work has reached: the crawl is stage 0, then the citation phases, in order.
-        var at = { discover: 0, scan: 0, profile: 1, questions: 2, cite: 3 }[view.phase];
-        if (at !== undefined && STAGES.length > 2) target = Math.max(target, at);
-        else if (view.phase === 'scan' && STAGES.length === 2) target = Math.max(target, 0);
+        var id = { discover: 'site', scan: 'site', profile: 'profile', questions: 'questions', cite: 'test', know: 'know' }[view.phase];
+        var at = -1;
+        STAGES.forEach(function (st, i) { if (st.id === id) at = i; });
+        if (at !== -1) target = Math.max(target, at);
       }
       paint();
     }
@@ -296,7 +301,7 @@
 
     // Start from wherever the job already is, then drive it.
     call('GET', '/api/pro/status?id=' + encodeURIComponent(jobId)).then(function (r) {
-      if (r.ok && r.body && r.body.status) { last = r.body; STAGES = stagesFor(!!r.body.citation); }
+      if (r.ok && r.body && r.body.status) { last = r.body; STAGES = stagesFor(r.body.citation); }
       buildList();
       if (last) apply(last);
     }, function () { buildList(); /* the first step will say */ }).then(function () {

@@ -4256,4 +4256,9 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .pr-citegloss { display: block; margin-top: 2px; font-size: 14px; font-weight: 400; }
 .pr-table--cite th[scope="row"] { font-weight: 500; }
 .pr-cite-how { margin-top: 28px; }
-@media print { .pr-citecard__link, [data-cit-controls] { display: none; } }
+.pr-qlist { margin: 8px 0 20px; padding-left: 24px; }
+.pr-qlist li { margin-bottom: 10px; line-height: 1.5; }
+.pr-qplain { margin-top: 16px; }
+.pr-qplain summary { cursor: pointer; font-size: 14px; color: var(--ink-soft); }
+.pr-qtext { display: block; width: 100%; margin-top: 10px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; resize: vertical; }
+@media print { .pr-citecard__link, [data-cit-controls], .pr-qplain { display: none; } }

@@ -29,7 +29,7 @@ const icons = require('../lib/icons.js');
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'content', 'changelog.json');
 const PAGE = path.join(ROOT, 'changelog.html');
-const CSS_VERSION = 63;
+const CSS_VERSION = 64;
 const esc = shell.esc;
 
 const git = (args) => cp.execFileSync('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();

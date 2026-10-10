@@ -35,11 +35,10 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 63;
+const CSS_VERSION = 64;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
-const SELF_SERVE = 'A self-serve version is still to come.';
 // Every Pro call to action goes to the waitlist form on /pro. pro-cta.js sends them to PRO_CHECKOUT_URL instead when
 // that is set (GET /api/waitlist), and shows PRO_PRICE_TEXT where data-pro-price stands. No mailto serves as a Pro CTA.
 const CTA_LABEL = 'Join the waitlist';
@@ -131,7 +130,7 @@ function alts(F) {
     pages: 'The page table from the sample report: every page the crawl read, in alphabetical order of its address, with its score and the number of checks it fails.',
     fixes: 'Two copy-paste fixes from the sample report, each shown once with the number of pages it applies to and the code to paste.',
     estimate: 'The estimated score section of the sample report: the current score and the estimated score side by side on a bar, and the first rows of the list of fixes, each with the points it adds and the total it brings.',
-    citations: 'Citations section of the report, filled with the published sample for a CRM brand, not a result for our site. ' + c.model + ', ' + c.date + ', ' + c.triesWord + ' tries per question. Three figures: ' + c.never + ' questions never named, ' + c.unstable + ' named only sometimes and ' + c.always + ' named every time, with the questions of the first group listed.',
+    citations: 'An example of how tested citation questions look: the Citations section of the report, filled with the published sample for a CRM brand, not a result for our site and not something Pro produces today. ' + c.model + ', ' + c.date + ', ' + c.triesWord + ' tries per question. Three figures: ' + c.never + ' questions never named, ' + c.unstable + ' named only sometimes and ' + c.always + ' named every time, with the questions of the first group listed.',
     'band-explorer': 'The sample report for our own site, ' + F.domain + ': the navy top bar, the section links Summary, Pillars, Pages and Estimated score with Pages current, and the page table in alphabetical order with each page\u2019s score and failed checks.'
   };
 }
@@ -221,7 +220,7 @@ function band(F) {
     '            <div class="pro-mkt__text">\n' +
     '              <p class="pro-band-tag">PRO</p>\n' +
     '              <h2 id="pro-heading">Everything the free scan can\'t see.</h2>\n' +
-    '              <p class="pro-mkt__lede">Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
+    '              <p class="pro-mkt__lede">Pro reads beyond your homepage, then writes the citation questions your buyers ask, in your site\u2019s own language.</p>\n' +
     '              <ul class="pro-band-list">' + point('layers', 'Beyond the homepage') + point('question', 'Your buyers\' questions') + point('report', 'A report to hand over') + '</ul>\n' +
     '              <p class="pro-mkt__actions"><a href="/pro" class="btn btn--gold">See what Pro includes</a></p>\n' +
     '              <p class="pro-mkt__price"><span data-pro-price>Early access</span></p>\n' +
@@ -246,20 +245,19 @@ function indexHtml(current, F) {
 /* ---------- the page ---------- */
 
 function faq(F) {
-  const c = F.cit;
   return [
     { q: 'What do I get with Citehound Pro?',
-      html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes a citation run on your brand, which we run for you and add to the report: the questions your buyers ask, each asked ' + c.triesWord + ' times, and the pattern of when your name comes up.' },
+      html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. Citehound does not test them for you yet.' },
     { q: 'How is this different from the free scan?',
-      html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds a citation run on your brand, which we run for you. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets are free to try in your own assistant through the <a href="/mcp">Citehound MCP server</a>.' },
+      html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds citation questions written for your site. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets by category are free to try in your own assistant through the <a href="/mcp">Citehound MCP server</a>.' },
     { q: 'What is the sample report?',
-      html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. The crawl results are shown as the crawl recorded them, not edited or improved, and our own pages still fail some checks. The report says which. Its Citations section shows the published citation sample, which belongs to a different brand. <a href="/sample-report">Open it.</a>' },
+      html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. The crawl results are shown as the crawl recorded them, not edited or improved, and our own pages still fail some checks. The report says which. Its Citations section shows a published sample of how tested questions look, made by hand for a different brand; Pro does not produce that today. <a href="/sample-report">Open it.</a>' },
     { q: 'Does it measure whether AI names me?',
-      html: 'Two parts, two questions. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The <a href="/citation-tracking">citation run</a> records whether a model names your brand when it is asked the questions your buyers ask. A readiness score of 100 doesn\'t guarantee a mention.' },
-    { q: 'Which models does the citation run use?',
-      html: 'One today. Every report names the model and the date it was run, and results are shown per model. A result describes one model on one date and says nothing about any other assistant.' },
-    { q: 'Is the citation run self-serve?',
-      html: 'No. We run it for you and add it to your report. ' + SELF_SERVE },
+      html: 'No. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try: Citehound has not tested them, so Pro reports nothing about whether a model names your brand. Testing is in preparation; <a href="/citation-tracking">this page</a> shows what a tested sample looks like. A readiness score of 100 doesn\'t guarantee a mention.' },
+    { q: 'Does Pro test the citation questions?',
+      html: 'Not yet. Live testing is in preparation. A tested result would describe one model on one date and say nothing about any other assistant.' },
+    { q: 'Can I try the questions myself?',
+      html: 'Yes. The report lists them with a Copy button. Ask each one three to five times, in a new conversation each time, and look at the pattern rather than one answer.' },
     { q: 'Can I buy Pro today?',
       html: 'Not yet. Pro is in early access: <a href="#waitlist">join the waitlist</a> and we will write once, when it opens. The plan is a single one-time purchase with no subscription.' },
     { q: 'Do I need an account?',
@@ -303,8 +301,8 @@ function build() {
   const c = F.cit;
   const k = F.case;
   const shell = shellParts();
-  const title = 'Citehound — Pro: Can AI read you? Does it name you?';
-  const desc = 'Pro crawls up to ' + F.cap + ' pages to show what your homepage hides, then asks a model the questions your buyers ask and records when your name comes up.';
+  const title = 'Citehound — Pro: Can AI read you? What would buyers ask?';
+  const desc = 'Pro crawls up to ' + F.cap + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.';
   if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const questions = faq(F);
   const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map((q) => ({ '@type': 'Question', name: q.q, acceptedAnswer: { '@type': 'Answer', text: textOf(q.html) } })) };
@@ -312,8 +310,8 @@ function build() {
   const gapText = 'Pages other than the homepage fail checks the homepage passes: ' + fig('hidden', F.hidden) + ' checks, failing on ' + fig('failing-others', F.failingOthers) + ' of the ' + fig('others', F.others) + ' other pages.';
 
   const li = (text) => '<li>' + icon('check') + '<span>' + text + '</span></li>';
-  const freeItems = ['One page, scanned on demand', 'All 16 checks, with their point values', 'The AI crawler matrix, 10 crawlers deep', 'Copy-paste fixes for schema and robots.txt', '<a href="/compare">Comparing two sites</a>', 'Every <a href="/playbooks">playbook</a>', 'All the <a href="/tools">tools</a>', 'The citation question sets, to try in your own assistant through the <a href="/mcp">MCP server</a>'].map(li).join('\n            ');
-  const proItems = ['Up to ' + fig('cap2', F.cap) + ' pages in one crawl', 'The whole-site score beside the homepage score', 'Every page listed alphabetically, with what failed', 'The checks that pass on the homepage and fail elsewhere', 'Every fix once, with the pages it applies to', 'An estimated score if the fixes are applied', 'A printable report', 'A citation run on your brand, which we run for you and add to the report'].map(li).join('\n            ');
+  const freeItems = ['One page, scanned on demand', 'All 16 checks, with their point values', 'The AI crawler matrix, 10 crawlers deep', 'Copy-paste fixes for schema and robots.txt', '<a href="/compare">Comparing two sites</a>', 'Every <a href="/playbooks">playbook</a>', 'All the <a href="/tools">tools</a>', 'The citation question sets by category, to try in your own assistant through the <a href="/mcp">MCP server</a>'].map(li).join('\n            ');
+  const proItems = ['Up to ' + fig('cap2', F.cap) + ' pages in one crawl', 'The whole-site score beside the homepage score', 'Every page listed alphabetically, with what failed', 'The checks that pass on the homepage and fail elsewhere', 'Every fix once, with the pages it applies to', 'An estimated score if the fixes are applied', 'A printable report', 'Citation questions written for your site, in its own language, to try yourself'].map(li).join('\n            ');
 
   const step = (ic, name, text) => '          <li class="pro-step">\n            <span class="pro-row__icon">' + icon(ic) + '</span>\n            <h3 class="pro-step__title">' + name + '</h3>\n            <p class="pro-step__text">' + text + '</p>\n          </li>';
 
@@ -323,8 +321,8 @@ function build() {
     '    <!-- ---------- Banner ---------- -->\n' +
     '    <section aria-labelledby="pro-heading">\n      <div class="section__inner">\n        <div class="page-banner pro-banner">\n          <div class="page-banner__body">\n' +
     '            <p class="kicker kicker--on-navy">Pro</p>\n' +
-    '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? Does it name you?</h1>\n' +
-    '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
+    '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? What would buyers ask?</h1>\n' +
+    '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.</p>\n' +
     '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n' +
     '          </div>\n' +
     '          ' + indent(frame('summary', F, 'pro-shot--hero'), '          ') + '\n' +
@@ -338,20 +336,20 @@ function build() {
     '            <p class="pro-panel__text">' + gapText + '</p>\n' +
     '            ' + indent(frame('checks', F, 'pro-shot--desktop'), '            ') + '\n' +
     '          </div>\n' +
-    '          <div class="pro-panel">\n            <p class="kicker">Does it name you?</p>\n' +
-    '            <p class="pro-named"><span class="pro-named__big">Named in ' + fig('cit-pct', c.pct) + '% of answers.</span><span class="pro-named__sub">Never named for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions.</span></p>\n' +
-    '            <p class="pro-panel__cap">' + fig('cit-model', c.model) + ', ' + fig('cit-date', c.date) + ', ' + c.triesWord + ' tries per question, a different brand.</p>\n' +
-    '            <p class="pro-panel__text">The same question can get a different answer each time, so a run asks every question ' + c.triesWord + ' times and shows the pattern.</p>\n' +
+    '          <div class="pro-panel">\n            <p class="kicker">What would buyers ask?</p>\n' +
+    '            <p class="pro-named"><span class="pro-named__big">21 questions, written for your site.</span><span class="pro-named__sub">In its own language. Not tested.</span></p>\n' +
+    '            <p class="pro-panel__cap">Pro writes the questions and you try them in your own assistants. Testing them for you is in preparation.</p>\n' +
+    '            <p class="pro-panel__text">An example of how tested questions look, from a published sample for a different brand: ' + fig('cit-model', c.model) + ', ' + fig('cit-date', c.date) + ', ' + c.triesWord + ' tries per question, made by hand without web search. In that sample the brand was named in ' + fig('cit-pct', c.pct) + '% of answers and never for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions. Pro does not produce this today.</p>\n' +
     '            ' + indent(frame('citations', F, ''), '            ') + '\n' +
-    '            <p class="pro-panel__link"><a href="/citation-tracking">How a run works</a></p>\n          </div>\n' +
+    '            <p class="pro-panel__link"><a href="/citation-tracking">How a tested run looks</a></p>\n          </div>\n' +
     '        </div>\n' +
     '        <p class="pro-between">Reading isn\'t being named. Pro shows you both.</p>\n' +
     '      </div>\n    </section>\n\n' +
     '    <!-- ---------- How a report comes together ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="steps-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How it works</p>\n          <h2 id="steps-heading" class="section-title">How a Pro report comes together</h2>\n        </div>\n        <ol class="pro-steps">\n' +
     step('search', 'Crawl', 'Up to ' + fig('cap3', F.cap) + ' pages, spaced politely, robots.txt respected.') + '\n' +
-    step('chat', 'Ask', 'The questions your buyers ask for your category, each ' + c.triesWord + ' times. The report names the one model used and the date.') + '\n' +
-    step('report', 'Hand over', 'One report with the summary, the fixes and the citation results, printable as a PDF. We run the citation questions for you.') + '\n' +
+    step('chat', 'Write', 'The questions your buyers ask for your category, written for your site in its own language: 18 that do not name you and 3 that do.') + '\n' +
+    step('report', 'Hand over', 'One report with the summary, the fixes and the citation questions, printable as a PDF. The questions are not tested: you try them yourself.') + '\n' +
     '        </ol>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Also inside ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Also inside</p>\n          <h2 id="get-heading" class="section-title">The rest of the report.</h2>\n        </div>\n        <ul class="pro-cards">\n' +
@@ -366,13 +364,13 @@ function build() {
     '          <p class="pro-proof__text">Scan, fix what ranks first, scan again. The case study shows the loop, and what the ' + k.after1 + ' means. <a href="/research/case-study-agaone">Read the AgaOne case study</a></p>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Free versus Pro ---------- -->\n' +
-    '    <section class="verticals" aria-labelledby="vs-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Free vs. Pro</p>\n          <h2 id="vs-heading" class="section-title">Free reads a page. Pro reads the site and asks the model.</h2>\n          <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>\n        </div>\n' +
+    '    <section class="verticals" aria-labelledby="vs-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Free vs. Pro</p>\n          <h2 id="vs-heading" class="section-title">Free reads a page. Pro reads the site and writes the questions.</h2>\n          <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>\n        </div>\n' +
     '        <div class="pro-cols">\n' +
     '          <div class="pro-col">\n            <p class="kicker">Free</p>\n            <h3 class="pro-col__title">Always free</h3>\n            <ul class="pro-list">\n            ' + freeItems + '\n            </ul>\n          </div>\n' +
-    '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the model</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">The citation run is one we run for you. ' + SELF_SERVE + '</p>\n            <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. ' + cta('#waitlist', 'btn btn--ghost') + '</p>\n          </div>\n' +
+    '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the questions</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">Citehound writes the citation questions. It does not test them yet.</p>\n            <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. ' + cta('#waitlist', 'btn btn--ghost') + '</p>\n          </div>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Closing band ---------- -->\n' +
-    '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Pro</p>\n        <h2 id="close-heading">Can AI read you? Does it name you?</h2>\n        <p class="pro-band__lede">Read a real report first: one crawl of our own site, ' + fig('pages', F.pagesRead) + ' pages, results shown as recorded, with a citation sample from a different brand. No signup.</p>\n' +
+    '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Pro</p>\n        <h2 id="close-heading">Can AI read you? What would buyers ask?</h2>\n        <p class="pro-band__lede">Read a real report first: one crawl of our own site, ' + fig('pages', F.pagesRead) + ' pages, results shown as recorded, with an example of tested questions from a different brand. No signup.</p>\n' +
     '        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Waitlist ---------- -->\n' + waitlistSection() +
     '    <!-- ---------- FAQ ---------- -->\n' +
@@ -489,7 +487,7 @@ function check() {
   if (bandTexts.length !== 6) bad('the band should have a tag, a headline, a sentence and three labels');
   bandTexts.forEach((t) => { if (!t[1] || /\d/.test(t[1])) bad('the band ' + t[0] + ' is empty or contains a digit: "' + t[1] + '"'); });
   if (bandHtml.indexOf('<p class="pro-band-tag">PRO</p>') === -1) bad('the band tag is not "PRO"');
-  if (bandHtml.indexOf('Everything the free scan can\'t see.') === -1 || bandHtml.indexOf('Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.') === -1) bad('the band headline or sentence changed');
+  if (bandHtml.indexOf('Everything the free scan can\'t see.') === -1 || bandHtml.indexOf('Pro reads beyond your homepage, then writes the citation questions your buyers ask, in your site\u2019s own language.') === -1) bad('the band headline or sentence changed');
   if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--band-explorer') === -1) bad('the band must carry exactly one crop, the dashboard explorer');
   const crop = (bandHtml.match(/<div class="pro-shot__view"[\s\S]*?<\/figure>/) || [''])[0];
   ['Summary', 'Pillars', 'Pages', 'Estimated score'].forEach((t) => { if (crop.indexOf('<span>' + t + '</span>') === -1 && crop.indexOf('>' + t + '</span>') === -1) bad('the band crop does not show the ' + t + ' section link'); });
@@ -582,10 +580,9 @@ function check() {
     if (/[$€£]\s?\d|\bprice\b|\bpricing\b|\bper (month|year|report)\b|\bUSD\b|\bEUR\b/i.test(visible)) bad(name + ': a price');
     if (/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|unlimited)\s+(citation\s+)?(runs|crawls)\b/i.test(visible)) bad(name + ': a count of runs or crawls');
     if (/\blaunch(ed|es|ing)?\b|\bavailable (from|on|in|starting)\b|\bwill be available\b|\bin (Q[1-4]|20\d\d)\b/i.test(visible)) bad(name + ': a launch or availability date');
-    const rest = visible.replace(new RegExp(SELF_SERVE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), '').replace('Is the citation run self-serve?', '');
-    if (/self-serve/i.test(rest)) bad(name + ': "self-serve" outside the sentence that says it is still to come');
     if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
-    if (name === 'pro.html' && !/\bwe run\b[^.]*\bfor you\b/i.test(visible)) bad(name + ': does not say that we run the citation questions for you');
+    if (name === 'pro.html' && !/\bnot tested\b|\bdoes not test\b|\bhas not tested\b/i.test(visible)) bad(name + ': does not say that the citation questions are not tested');
+    if (/records when your name|asks a model the questions|we run (it|the citation)[^.]*for you/i.test(visible)) bad(name + ': claims a citation result or service Pro does not produce');
     if (/\baccount\b|\blog ?in\b|\bsign ?in\b/i.test(visible.replace('Do I need an account?', '').replace('No. There is no account or login.', ''))) bad(name + ': mentions an account or login');
   });
   if ((page.match(/<h1[\s>]/g) || []).length !== 1) bad('pro.html needs exactly one h1');

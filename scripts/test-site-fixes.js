@@ -65,6 +65,16 @@ const pages = htmlFiles('', []);
   t('docs/payments.md lists the settings and the dashboard steps and marks what is unverified', /PRO_WEBHOOK_SECRET/.test(pay) && /PRO_CHECKOUT_URL/.test(pay) && /PRO_PRICE_TEXT/.test(pay) && /Add Endpoint/.test(pay) && /checkout_id=\{CHECKOUT_ID\}/.test(pay) && (pay.match(/UNVERIFIED/g) || []).length >= 4);
 }
 {
+  // Until live testing is switched on, nothing public may promise or describe a citation result or a run Citehound does not make.
+  const banned = /citation check|citation run|run for you\b|we run (it|the citation)|records when your name|self-serve version|asks a model the questions|and show you when your name/i;
+  const files = pages.filter((f) => !/^(local|docs|node_modules)\//.test(f) && !/^(changelog|mcp)\.html$/.test(f)).concat(['llms.txt', 'lib/pro-mail.js', 'app/pro-start.js', 'app/pro-progress.js']);
+  const hits = files.filter((f) => banned.test(read(f))).map((f) => f + ': ' + (banned.exec(read(f)) || [])[0]);
+  t('public pages, llms.txt, the mail, the start form and the report code never say "citation check", "citation run", "we run it for you" or promise a recorded result', hits.length === 0, hits.join('; '));
+  const needs = ['pro.html', 'citation-tracking.html'].filter((f) => !/in preparation/i.test(read(f)));
+  t('/pro and /citation-tracking say that testing the questions is in preparation', needs.length === 0, needs.join(', '));
+  t('/privacy describes the Gemini API for questions only: no web search, no test, the tier terms and the billing condition', /Citation questions \(Pro/.test(read('privacy.html')) && /No web search is used/.test(read('privacy.html')) && /active billing account/.test(read('privacy.html')) && !/Gemini with Google Search/.test(read('privacy.html')));
+}
+{
   const c = read('docs/domain-day.md');
   t('docs/domain-day.md has a status section, states the move happened, and marks what it cannot know as unverified', /## Status on 11 October 2026/.test(c) && /getcitehound\.com/.test(c) && (c.match(/unverified/gi) || []).length >= 5);
 }

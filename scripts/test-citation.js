@@ -2,13 +2,14 @@
 /* =====================================================================
    scripts/test-citation.js
 
-   The Pro citation check with a mock model and a mock assistant: no network. Covers the language detector, the
-   site profile (language from the page, validation, injection), the question generator (18 + 3, in the site's
-   language with a gloss, validation, retry, fallback), the grounded check (cited, mentioned, other domains,
-   redirect sources, model and date), the pipeline inside the crawl's steps (three questions a step, resumable,
-   idempotent, the per-job and daily caps, quota and timeout behaviour, "not tested"), the report section, the real
-   adapters against a mocked fetch (key in a header only, schema, the Search tool, 429 as quota), and that nothing
-   a site wrote reaches a log.
+   The Pro citation part with a mock model and a mock assistant: no network. Covers the three switches (all off by
+   default, no grounding anywhere), the language detector, the site profile (language from the page, validation,
+   injection), the question generator (18 + 3, in the site's language with a gloss, validation, retry, fallback, the
+   brand questions that used to collapse into one), questions-only mode (the default: the list, the label "Not tested",
+   no cited or mentioned anywhere), live testing (cited, mentioned, other domains, model and date), the model knowledge
+   check (no search, "named" only), the pipeline inside the crawl's steps (resumable, idempotent, per-job and daily
+   caps, quota and timeout behaviour, "not tested"), the report sections, the real adapters against a mocked fetch
+   (key in a header only, schema, the web search tool, 429 as quota), and that nothing a site wrote reaches a log.
 
      node scripts/test-citation.js
    ===================================================================== */
@@ -22,6 +23,8 @@ const Cit = require('../lib/pro-citation.js');
 const Profile = require('../lib/site-profile.js');
 const Prompts = require('../lib/citation-prompts.js');
 const Check = require('../lib/citation-check.js');
+const Config = require('../lib/citation-config.js');
+const Anth = require('../lib/citation-anthropic.js');
 const LlmG = require('../lib/llm-gemini.js');
 const Lang = require('../lib/lang-detect.js');
 const Section = require('../lib/pro-citation-section.js');
@@ -58,11 +61,13 @@ function mockLlm(site, opts) {
 
 function mockProvider(handler) {
   const p = {
-    model: 'mock-search-model', calls: [],
-    async ask(q) {
-      p.calls.push(q);
-      if (handler) return handler(q, p.calls.length);
-      return { text: 'Several tools are popular. Examples include ExampleOne and ExampleTwo.', sources: [{ uri: 'https://www.example-two.com/a', title: 'example-two.com' }, { uri: 'https://example-one.com/b', title: 'ExampleOne' }], queries: ['q1', 'q2'] };
+    model: 'mock-search-model', calls: [], plain: [],
+    async ask(q, o) {
+      const search = !!(o && o.search);
+      (search ? p.calls : p.plain).push(q);
+      if (handler) return handler(q, search ? p.calls.length : p.plain.length, search);
+      if (!search) return { text: 'There are several tools. Examples include ExampleOne and ExampleTwo.', sources: [], queries: [], searches: 0 };
+      return { text: 'Several tools are popular. Examples include ExampleOne and ExampleTwo.', sources: [{ uri: 'https://www.example-two.com/a?utm=1#x', title: 'example-two.com' }, { uri: 'https://example-one.com/b', title: 'ExampleOne' }], queries: ['q1', 'q2'], searches: 2 };
     }
   };
   return p;
@@ -82,7 +87,12 @@ function siteFetch(site, log) {
   };
 }
 
-const ENV_ON = { GEMINI_API_KEY: 'test-key', CITATION_ENABLED: '1' };
+const ENV_Q = { GEMINI_API_KEY: 'test-key', CITATION_QUESTIONS_ENABLED: '1' };
+const ENV_PROV = { CITATION_TEST_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: 'test-anthropic-key' };
+const ENV_T = Object.assign({}, ENV_Q, ENV_PROV, { CITATION_TEST_ENABLED: '1' });
+const ENV_K = Object.assign({}, ENV_Q, ENV_PROV, { CITATION_KNOWLEDGE_ENABLED: '1' });
+const ENV_TK = Object.assign({}, ENV_T, { CITATION_KNOWLEDGE_ENABLED: '1' });
+const ENV_ON = ENV_T; // most of the pipeline tests below are about live testing
 async function runJob(site, o) {
   o = o || {};
   const adapter = o.adapter || S.memoryAdapter();
@@ -92,7 +102,7 @@ async function runJob(site, o) {
   const llm = o.llm || mockLlm(site);
   const provider = o.provider || mockProvider();
   const clock = { t: 1e9 };
-  const deps = { fetch: siteFetch(site, o.fetchLog), sleep: async () => {}, now: () => (clock.t += 1100), env: Object.assign({}, ENV_ON, o.env || {}), citation: { llm: llm, provider: provider, resolve: o.resolve || (async () => null), sleep: async () => {} } };
+  const deps = { fetch: siteFetch(site, o.fetchLog), sleep: async () => {}, now: () => (clock.t += 1100), env: o.envOnly ? o.envOnly : Object.assign({}, ENV_ON, o.env || {}), citation: { llm: llm, provider: provider, sleep: async () => {} } };
   const views = [];
   for (let i = 0; i < 60; i++) {
     const r = await Crawler.runStep(store, id, deps);
@@ -193,13 +203,13 @@ async function runJob(site, o) {
     t('injection: hijacked questions (a URL, an instruction, a name that is not the brand) are rejected; the one clean question stays', hv.open.length === 1 && /blocked drains/.test(hv.open[0].text) && hv.rejected.length >= 3 && hv.brand.length === 0, JSON.stringify(hv.rejected));
   }
 
-  /* ---- the grounded check ---- */
+  /* ---- live testing: one question ---- */
   {
     const site = { domain: 'ledgerlark.example', brand: 'Ledgerlark' };
     const q = 'What accounting software do small teams use?';
-    const mkP = (text, sources) => mockProvider(async () => ({ text: text, sources: sources, queries: ['a', 'b', 'c'] }));
+    const mkP = (text, sources) => mockProvider(async () => ({ text: text, sources: sources, queries: ['a', 'b', 'c'], searches: 3 }));
     const direct = await Check.checkQuestion(q, site, { provider: mkP('Ledgerlark is one option, along with Alpha and Beta.', [{ uri: 'https://www.ledgerlark.example/pricing', title: 'Pricing' }, { uri: 'https://zeta.example/x', title: 't' }, { uri: 'https://alpha.example/y', title: 't' }, { uri: 'https://alpha.example/z', title: 't' }]) });
-    t('check: the site among the sources is "cited", the brand in the text is "mentioned", other domains deduped and alphabetical', direct.cited === true && direct.mentioned === true && JSON.stringify(direct.others) === '["alpha.example","zeta.example"]' && direct.queries === 3, JSON.stringify(direct));
+    t('check: the site among the cited pages is "cited", the brand in the text is "mentioned", other domains deduped and alphabetical', direct.cited === true && direct.mentioned === true && JSON.stringify(direct.others) === '["alpha.example","zeta.example"]' && direct.queries === 3, JSON.stringify(direct));
     const neither = await Check.checkQuestion(q, site, { provider: mkP('Try Alpha.', [{ uri: 'https://alpha.example/y', title: 't' }]) });
     t('check: neither cited nor mentioned when neither is true', neither.cited === false && neither.mentioned === false);
     const subdomain = await Check.checkQuestion(q, site, { provider: mkP('See the docs.', [{ uri: 'https://docs.ledgerlark.example/a', title: 'Docs' }]) });
@@ -209,19 +219,18 @@ async function runJob(site, o) {
     const many = Array.from({ length: 14 }, (_, i) => ({ uri: 'https://site' + String.fromCharCode(110 - i) + '.example/p', title: 't' }));
     const r8 = await Check.checkQuestion(q, site, { provider: mkP('x', many) });
     t('check: at most 8 other domains, the first 8 alphabetically', r8.others.length === 8 && JSON.stringify(r8.others) === JSON.stringify(r8.others.slice().sort()) && r8.others[0] === 'sitea.example', JSON.stringify(r8.others));
-    // redirect sources
-    const redirect = [{ uri: 'https://vertexaisearch.cloud.google.com/grounding-api-redirect/AAA', title: 'ledgerlark.example' }, { uri: 'https://vertexaisearch.cloud.google.com/grounding-api-redirect/BBB', title: 'A page title that is not a domain' }, { uri: 'https://vertexaisearch.cloud.google.com/grounding-api-redirect/CCC', title: 'Another title' }];
-    const resolved = []; const resolve = async (uri) => { resolved.push(uri); return uri.endsWith('BBB') ? 'https://www.gamma.example/page' : null; };
-    const rr = await Check.checkQuestion(q, site, { provider: mkP('x', redirect), resolve: resolve });
-    t('check: a redirect source takes its domain from the title when that is a host name, else from the redirect\'s target', rr.cited === true && rr.others.indexOf('gamma.example') !== -1 && rr.others.indexOf('vertexaisearch.cloud.google.com') === -1 && resolved.length === 2, JSON.stringify(rr.others) + resolved.length);
-    // the resolver reads the Location header and never fetches the target
-    const seen = [];
-    const fakeSafeGet = async (url, o) => { seen.push({ url, max: o.maxRedirects }); return { ok: false, kind: 'redirect_loop', finalUrl: 'https://www.delta.example/x?y=1' }; };
-    const res = await Check.makeResolver(fakeSafeGet, 'UA')('https://vertexaisearch.cloud.google.com/grounding-api-redirect/ZZZ');
-    t('check: the redirect resolver uses the shared safe fetch with no redirects followed and returns only the target host', res === 'www.delta.example' && seen.length === 1 && seen[0].max === 0);
-    t('check: the answer is truncated and the model and date are recorded on every result', direct.answer.length <= Check.ANSWER_CHARS && direct.model === 'mock-search-model' && /^\d{4}-\d{2}-\d{2}$/.test(direct.date) && (await Check.checkQuestion(q, site, { provider: mkP('x'.repeat(5000), []) })).answer.length === Check.ANSWER_CHARS);
+    const odd = await Check.checkQuestion(q, site, { provider: mkP('x', [{ uri: 'javascript:alert(1)', title: 'a' }, { uri: 'https://user:pw@evil.example/a', title: 'b' }, { uri: 'ftp://files.example/a', title: 'c' }, { uri: 'not a url', title: 'd' }, { uri: 'http://plain.example/a?x=1#y', title: 'e' }, { uri: 'https://ok.example/a/b?token=abc#frag', title: 'f' }]) });
+    t('check: only http(s) pages with a normal host count; credentials, other schemes and junk are dropped', JSON.stringify(odd.others) === '["ok.example","plain.example"]', JSON.stringify(odd.others));
+    t('check: each other domain keeps one https link without query or fragment (http pages keep none), for the report to show as a clickable citation', odd.links['ok.example'] === 'https://ok.example/a/b' && !('plain.example' in odd.links), JSON.stringify(odd.links));
+    t('check: no answer text is kept; the model and the date are recorded on every result', !('answer' in direct) && !JSON.stringify(direct).includes('Ledgerlark is one option') && direct.model === 'mock-search-model' && /^\d{4}-\d{2}-\d{2}$/.test(direct.date));
     let err = null; try { await Check.checkQuestion(q, site, { provider: mockProvider(async () => { throw quotaErr(); }) }); } catch (e) { err = e; }
     t('check: a quota error from the provider surfaces as kind "quota"', err && err.kind === 'quota');
+    // the knowledge check
+    const kp = mockProvider(async () => ({ text: 'People often pick Ledgerlark or Alpha.', sources: [{ uri: 'https://zeta.example/x', title: 't' }], queries: ['x'], searches: 1 }));
+    const kn = await Check.knowledgeQuestion(q, site, { provider: kp });
+    t('knowledge: asks without search, keeps only "named", the model and the date: no cited, no domains, no text', kp.plain.length === 1 && kp.calls.length === 0 && kn.state === 'tested' && kn.named === true && kn.model === 'mock-search-model' && JSON.stringify(Object.keys(kn).sort()) === '["date","model","named","state"]', JSON.stringify(kn));
+    t('knowledge: "named" is false when neither the brand nor the domain is in the answer', (await Check.knowledgeQuestion(q, site, { provider: mockProvider(async () => ({ text: 'Try Alpha or Beta.', sources: [], queries: [], searches: 0 })) })).named === false);
+    t('brand questions: three questions about one brand that share its name are not collapsed into duplicates (the bug that left our own site with 18 + 2)', (() => { const v = Prompts.validate({ questions: [], brandQuestions: [{ text: 'What is Ledgerlark?' }, { text: 'What does Ledgerlark offer to small teams?' }, { text: 'Who is Ledgerlark for?' }] }, SITES.en.profile, SITES.en.domain, null); return v.brand.length === 3 && v.rejected.length === 0; })());
   }
 
   /* ---- the real adapters, with a mocked fetch ---- */
@@ -238,21 +247,44 @@ async function runJob(site, o) {
     }
     t('llm: 429 is quota, 500 provider, no text empty, text that is not JSON bad_output, a timeout timeout', Object.keys(kinds).every((k) => kinds[k] === k), JSON.stringify(kinds));
     t('llm: with no key it refuses before any request', await (async () => { try { await LlmG.makeJsonLlm({ fetch: async () => { throw new Error('called'); } }).json({ system: 's', user: 'u', schema: {} }); return false; } catch (e) { return e.kind === 'provider'; } })());
-    const seenG = [];
-    const gem = Check.geminiProvider({ apiKey: 'K2', model: 'gemini-3.5-flash-lite', fetch: async (url, init) => { seenG.push({ url, init }); return { ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: 'An answer.' }, { text: 'thought', thought: true }] }, groundingMetadata: { groundingChunks: [{ web: { uri: 'https://a.example/x', title: 'a.example' } }, { retrievedContext: {} }], webSearchQueries: ['one', 'two'] } }] }) }; } });
-    const ans = await gem.ask('A question?');
-    t('gemini adapter: asks with the Google Search tool, reads text, groundingChunks[].web and webSearchQueries, key in a header', JSON.parse(seenG[0].init.body).tools[0].google_search !== undefined && ans.text === 'An answer.' && ans.sources.length === 1 && ans.sources[0].uri === 'https://a.example/x' && ans.queries.length === 2 && seenG[0].init.headers['x-goog-api-key'] === 'K2' && seenG[0].url.indexOf('K2') === -1);
-    const gq = Check.geminiProvider({ apiKey: 'k', fetch: async () => ({ ok: false, status: 429, json: async () => ({ error: { status: 'RESOURCE_EXHAUSTED' } }) }) });
-    const gt = Check.geminiProvider({ apiKey: 'k', fetch: async () => { const e = new Error('t'); e.name = 'TimeoutError'; throw e; } });
-    const e1 = await gq.ask('q').catch((e) => e), e2 = await gt.ask('q').catch((e) => e);
-    t('gemini adapter: 429 is "quota" (also what a free-tier key gets for search) and a timeout is "timeout"', e1.kind === 'quota' && e2.kind === 'timeout');
+    // the Anthropic adapter, both modes
+    const seenA = [];
+    const resp = { stop_reason: 'end_turn', content: [{ type: 'text', text: 'I will search.' }, { type: 'server_tool_use', id: 's1', name: 'web_search', input: { query: 'best invoicing software for small teams' } }, { type: 'web_search_tool_result', tool_use_id: 's1', content: [{ type: 'web_search_result', url: 'https://consulted.example/x', title: 'Consulted' }] }, { type: 'text', text: 'Ledgerlark is one option.', citations: [{ type: 'web_search_result_location', url: 'https://a.example/x?y=1', title: 'A', cited_text: 'x' }, { type: 'web_search_result_location', url: 'https://a.example/x?y=1', title: 'A again' }] }], usage: { input_tokens: 10, output_tokens: 5, server_tool_use: { web_search_requests: 1 } } };
+    const mkA = (r, status) => Anth.anthropicProvider({ apiKey: 'K-anthropic-9', model: 'claude-haiku-5-5', fetch: async (url, init) => { seenA.push({ url, init }); return { ok: (status || 200) < 400, status: status || 200, json: async () => r }; } });
+    const a1 = await mkA(resp).ask('A question?', { search: true });
+    const sentA = JSON.parse(seenA[0].init.body);
+    t('anthropic (search): posts to /v1/messages with the web_search tool (max_uses 3), the key and version in headers only, the question as the user turn', /\/v1\/messages$/.test(seenA[0].url) && sentA.tools.length === 1 && sentA.tools[0].type === 'web_search_20250305' && sentA.tools[0].max_uses === 3 && sentA.messages[0].content === 'A question?' && seenA[0].init.headers['x-api-key'] === 'K-anthropic-9' && seenA[0].init.headers['anthropic-version'] === '2023-06-01' && seenA[0].url.indexOf('K-anthropic') === -1 && seenA[0].init.body.indexOf('K-anthropic') === -1 && sentA.model === 'claude-haiku-5-5');
+    t('anthropic (search): text from the text blocks, the cited pages (deduped) as sources, the query, the search count from usage', a1.text === 'I will search.Ledgerlark is one option.' && a1.sources.length === 1 && a1.sources[0].uri === 'https://a.example/x?y=1' && a1.queries[0] === 'best invoicing software for small teams' && a1.searches === 1);
+    seenA.length = 0;
+    const a2 = await mkA({ stop_reason: 'end_turn', content: [{ type: 'text', text: 'From memory.' }], usage: {} }).ask('A question?', { search: false });
+    t('anthropic (plain): no tools in the request at all, no sources, no searches', !('tools' in JSON.parse(seenA[0].init.body)) && a2.text === 'From memory.' && a2.sources.length === 0 && a2.searches === 0);
+    const kindOf = async (p, o) => { try { await p.ask('q', o); return 'none'; } catch (e) { return e.kind; } };
+    const timeoutF = async () => { const e = new Error('t'); e.name = 'TimeoutError'; throw e; };
+    t('anthropic: 429 is "quota", other HTTP errors "provider", a timeout "timeout", an empty answer "empty", a paused turn "incomplete"', await kindOf(mkA({}, 429), { search: true }) === 'quota' && await kindOf(mkA({}, 500), { search: true }) === 'provider' && await kindOf(Anth.anthropicProvider({ apiKey: 'k', fetch: timeoutF }), { search: true }) === 'timeout' && await kindOf(mkA({ content: [] }), { search: false }) === 'empty' && await kindOf(mkA({ stop_reason: 'pause_turn', content: [{ type: 'text', text: 'x' }] }), { search: true }) === 'incomplete');
+    t('anthropic: a search that reports too_many_requests is "quota"; an answer that never searched is "no_search"; with no key nothing is sent', await kindOf(mkA({ stop_reason: 'end_turn', content: [{ type: 'text', text: 'x' }, { type: 'web_search_tool_result', tool_use_id: 's', content: { type: 'web_search_tool_result_error', error_code: 'too_many_requests' } }], usage: { server_tool_use: { web_search_requests: 1 } } }), { search: true }) === 'quota' && await kindOf(mkA({ stop_reason: 'end_turn', content: [{ type: 'text', text: 'x' }], usage: {} }), { search: true }) === 'no_search' && await (async () => { let called = false; const e = await Anth.anthropicProvider({ fetch: async () => { called = true; } }).ask('q', { search: true }).catch((x) => x); return !called && e.kind === 'provider'; })());
+    t('no grounding anywhere: there is no Gemini search adapter, no google_search tool and no redirect resolver in the citation code', typeof Check.geminiProvider === 'undefined' && typeof Check.makeResolver === 'undefined' && !/google_search|groundingMetadata|vertexaisearch/i.test(['lib/citation-check.js', 'lib/citation-anthropic.js', 'lib/citation-config.js', 'lib/pro-citation.js', 'lib/llm-gemini.js', 'lib/citation-prompts.js', 'lib/site-profile.js'].map((f) => require('fs').readFileSync(require('path').join(__dirname, '..', f), 'utf8')).join('\n').replace(/^\s*\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')));
   }
 
-  /* ---- the switch ---- */
+  /* ---- the old local tracker cannot ground by accident ---- */
   {
-    t('switch: the check is off with no key, off with a key alone, and on only with the key and CITATION_ENABLED=1', !Cit.enabled({}) && !Cit.enabled({ GEMINI_API_KEY: 'k' }) && !Cit.enabled({ GEMINI_API_KEY: 'k', CITATION_ENABLED: '0' }) && Cit.enabled({ GEMINI_API_KEY: 'k', CITATION_ENABLED: '1' }));
+    const cp = require('child_process');
+    const run = (env) => cp.spawnSync(process.execPath, [require('path').join(__dirname, 'citation-check.js'), '--brand', 'Acme', '--domain', 'acme.example', '--vertical', 'crm', '--grounded'], { env: Object.assign({}, process.env, { GEMINI_API_KEY: '', GOOGLE_GROUNDED_ANALYSIS_PERMISSION: '' }, env), encoding: 'utf8' });
+    const refused = run({});
+    t('local tracker: --grounded alone is refused with the reason, before any key is read or call made', refused.status !== 0 && /not permit analysing grounded results/.test(refused.stderr + refused.stdout) && !/GEMINI_API_KEY is not set/.test(refused.stderr + refused.stdout), (refused.stderr + refused.stdout).slice(0, 200));
+    const allowed = run({ GOOGLE_GROUNDED_ANALYSIS_PERMISSION: 'confirmed' });
+    t('local tracker: with the permission variable it gets past the guard (and then stops for the missing key here)', /GEMINI_API_KEY is not set/.test(allowed.stderr + allowed.stdout));
+  }
+
+  /* ---- the switches ---- */
+  {
+    const f = Config.flags;
+    t('switches: everything is off with an empty environment, with a Gemini key alone, and with the old CITATION_ENABLED=1', ['questions', 'test', 'knowledge'].every((k) => !f({})[k] && !f({ GEMINI_API_KEY: 'k' })[k] && !f({ GEMINI_API_KEY: 'k', CITATION_ENABLED: '1' })[k]) && !Cit.enabled({}) && !Cit.enabled({ GEMINI_API_KEY: 'k' }) && !Cit.enabled({ GEMINI_API_KEY: 'k', CITATION_ENABLED: '1' }));
+    t('switches: questions need the flag AND the Gemini key; "0", "true" and "yes" do not count', f(ENV_Q).questions && !f({ CITATION_QUESTIONS_ENABLED: '1' }).questions && !f({ GEMINI_API_KEY: 'k', CITATION_QUESTIONS_ENABLED: '0' }).questions && !f({ GEMINI_API_KEY: 'k', CITATION_QUESTIONS_ENABLED: 'true' }).questions && !f({ GEMINI_API_KEY: 'k', CITATION_QUESTIONS_ENABLED: 'yes' }).questions && Cit.enabled(ENV_Q));
+    t('switches: testing and the knowledge check each need their own flag, a known provider, that provider\'s key and the questions switch', f(ENV_T).test && !f(ENV_T).knowledge && f(ENV_K).knowledge && !f(ENV_K).test && f(ENV_TK).test && f(ENV_TK).knowledge);
+    t('switches: testing alone is off without the questions flag, without a provider name, with an unknown provider and without the provider key', !f({ GEMINI_API_KEY: 'k', CITATION_TEST_ENABLED: '1', CITATION_TEST_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: 'x' }).test && !f(Object.assign({}, ENV_Q, { CITATION_TEST_ENABLED: '1' })).test && !f(Object.assign({}, ENV_Q, { CITATION_TEST_ENABLED: '1', CITATION_TEST_PROVIDER: 'google', ANTHROPIC_API_KEY: 'x' })).test && !f(Object.assign({}, ENV_Q, { CITATION_TEST_ENABLED: '1', CITATION_TEST_PROVIDER: 'anthropic' })).test);
+    t('switches: the model name is cleaned and defaults to claude-haiku-5-5', f(ENV_T).model === 'claude-haiku-5-5' && Config.modelFor('anthropic', { CITATION_TEST_MODEL: 'x y/../z' }) === 'xy..z');
     const r = await runJob(SITES.en, { citation: false });
-    t('switch: a job started with the check off goes straight from the pages to done, with no model call and no citation record', r.job.status === 'done' && r.llm.calls.length === 0 && r.provider.calls.length === 0 && r.job.citation === null && !r.views.some((v) => v.phase === 'profile'));
+    t('switch: a job started with the citation part off goes straight from the pages to done, with no model call and no citation record', r.job.status === 'done' && r.llm.calls.length === 0 && r.provider.calls.length === 0 && r.job.citation === null && !r.views.some((v) => v.phase === 'profile'));
   }
 
   /* ---- the whole pipeline, per language ---- */
@@ -278,7 +310,7 @@ async function runJob(site, o) {
     t('resume: stopped part-way (a closed tab), the job is unfinished and holds some answers', mid.status === 'running' && mid.citation && mid.citation.status === 'running');
     const store2 = S.createStore(adapter);
     const clock = { t: 2e9 }; const provider2 = mockProvider(); const llm2 = mockLlm(site);
-    const deps = { fetch: siteFetch(site), sleep: async () => {}, now: () => (clock.t += 1100), env: ENV_ON, citation: { llm: llm2, provider: provider2, resolve: async () => null, sleep: async () => {} } };
+    const deps = { fetch: siteFetch(site), sleep: async () => {}, now: () => (clock.t += 1100), env: ENV_ON, citation: { llm: llm2, provider: provider2, sleep: async () => {} } };
     let last = null; for (let i = 0; i < 40; i++) { last = await Crawler.runStep(store2, a.id, deps); if (last.status === 'done') break; }
     const fin = await store2.getJob(a.id);
     t('resume: a new session carries on and finishes; no question is asked twice across the two sessions', fin.status === 'done' && a.provider.calls.length + provider2.calls.length === 21 && new Set(a.provider.calls.concat(provider2.calls)).size === 21 && fin.citation.status === 'ok');
@@ -298,7 +330,7 @@ async function runJob(site, o) {
     const month = await runJob(site, { env: { CITATION_MONTHLY_QUERY_CAP: '4' } });
     t('monthly cap on search queries: the mock uses 2 queries a call, so a cap of 4 allows 2 calls, then stops', month.provider.calls.length === 2 && month.job.citation.status === 'partial' && /monthly limit/.test(month.job.citation.reason));
     const dflt = Cit.caps({});
-    t('caps: the defaults are 60 calls a day and 4000 search queries a month (under 5,000 free)', dflt.daily === 60 && dflt.monthly === 4000 && Cit.caps({ CITATION_DAILY_CAP: '0' }).daily === 0);
+    t('caps: the defaults are 60 live calls a day, 300 web searches a month and 30 question-writing jobs a day; 0 is honoured', dflt.daily === 60 && dflt.monthly === 300 && dflt.questionsDaily === 30 && Cit.caps({ CITATION_DAILY_CAP: '0' }).daily === 0);
     const none = await runJob(site, { env: { CITATION_DAILY_CAP: '0' } });
     t('daily cap of 0: nothing is asked and nothing is spent', none.provider.calls.length === 0 && none.job.citation.status === 'not_tested');
     const calls = []; const slow = await runJob(site, { provider: mockProvider(async (q, n) => { calls.push(n); return { text: 'x', sources: [], queries: [] }; }) });
@@ -360,9 +392,9 @@ async function runJob(site, o) {
     t('report: the nav has the section before the estimate', /<a href="#pr-citation">Citation check \(sample\)<\/a>/.test(html) && html.indexOf('href="#pr-citation"') < html.indexOf('href="#pr-estimate"'));
     t('report: a small card in the summary is labelled "Sample" and links to the section', /class="pr-citecard"/.test(html) && /Sample<\/span> Citation check/.test(html) && html.indexOf('pr-citecard') > iSum && html.indexOf('pr-citecard') < iDet);
     t('report: it shows the profile the questions were based on', /What the questions were based on/.test(html) && /Language of the questions/.test(html) && /Turkish \(tr\)/.test(html) && /Defterim/.test(html) && /Turkey/.test(html));
-    t('report: the table has the questions with their English gloss, cited yes or no, mentioned yes or no, and other cited domains', (html.match(/class="pr-citerow"/g) || []).length === 21 && /pr-citegloss/.test(html) && />Cited</.test(html) && />Mentioned</.test(html) && /Other cited domains/.test(html) && /example-one\.com, example-two\.com/.test(html));
+    t('report: the table has the questions with their English gloss, cited yes or no, mentioned yes or no, and other cited domains', (html.match(/class="pr-citerow"/g) || []).length === 21 && /pr-citegloss/.test(html) && />Cited</.test(html) && />Mentioned</.test(html) && /Other cited domains/.test(html) && /<a href="https:\/\/example-one\.com\/b" rel="noopener noreferrer nofollow" target="_blank">example-one\.com<\/a>, <a href="[^"]*" rel="noopener noreferrer nofollow" target="_blank">example-two\.com<\/a>/.test(html) && !/utm=1/.test(html));
     t('report: the filters (all, cited, not cited) and the copy button are there, hidden until the script runs', /data-cit-filter/.test(html) && /<option value="yes">Cited<\/option>/.test(html) && /<option value="no">Not cited<\/option>/.test(html) && /data-cit-copy/.test(html) && /data-cit-controls hidden/.test(html));
-    t('report: "How to read this" says one run, one assistant and model, a date; a sample, not a ranking or overall visibility; the readiness score is separate', /How to read this/.test(html) && /One run, on one assistant and model \(mock-search-model with Google Search\)/.test(html) && /Answers change between runs/.test(html) && /not a ranking and not a measure of overall AI visibility/.test(html) && /readiness score is separate/.test(html));
+    t('report: "How to read this" says one run, one assistant and model, a date; a sample, not a ranking or overall visibility; the readiness score is separate', /How to read this/.test(html) && /One run, on one assistant and model \(mock-search-model with web search\)/.test(html) && /Answers change between runs/.test(html) && /not a ranking and not a measure of overall AI visibility/.test(html) && /readiness score is separate/.test(html));
     t('report: the frame line says the readiness score is separate and the citation check a dated sample', /The Citation check below is a separate, dated sample/.test(html));
     const text = html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ');
     const citeText = text.slice(text.indexOf('Citation check (sample)'));
@@ -380,13 +412,78 @@ async function runJob(site, o) {
     // not tested
     const nt = await runJob(SITES.en, { provider: mockProvider(async () => { throw quotaErr(); }), env: {} });
     const nhtml = pageLib.render(nt.job, {});
-    t('report: when nothing could be tested the card and the section say "Not tested" with the reason, and the questions are listed to copy', /Not tested\./.test(nhtml) && /could not run|reached its limit/.test(nhtml) && (nhtml.match(/class="pr-citerow"/g) || []).length === 21 && !/pr-state--pass/.test(Section.section(nt.job.citation).html) && /data-cit-copy/.test(nhtml));
+    t('report: when nothing could be tested the card and the section say "Not tested. Try these in your own assistants." with the reason, and the 21 questions are listed to copy, with no cited or mentioned column', /Not tested\. Try these in your own assistants\./.test(nhtml) && /rate or spending limit/.test(nhtml) && (nhtml.match(/data-cit-q>/g) || []).length === 21 && !/pr-citerow|pr-state|>Cited<|>Mentioned</.test(Section.section(nt.job.citation).html) && /data-cit-copy/.test(nhtml) && />Citation questions<\/h2>/.test(nhtml));
     const none = await runJob(SITES.en, { llm: mockLlm(SITES.en, { failWith: 'quota' }), env: {} });
     const nonehtml = pageLib.render(none.job, {});
-    t('report: when no question could even be written the section says so and the rest of the report is intact', /Not tested\./.test(nonehtml) && /id="pr-estimate"/.test(nonehtml) && !/pr-citerow/.test(nonehtml));
+    t('report: when no question could even be written the section says so and the rest of the report is intact', /No citation questions were written/.test(nonehtml) && /id="pr-estimate"/.test(nonehtml) && !/pr-citerow|data-cit-q/.test(nonehtml));
     const plain = await runJob(SITES.en, { citation: false });
     const phtml = pageLib.render(plain.job, {});
     t('report: a report from a job with the check off has no section, no card and the old frame line', !/pr-citation|pr-citecard/.test(phtml) && /does not measure whether or how often AI assistants mention a brand/.test(phtml));
+  }
+
+  /* ---- questions only: the default ---- */
+  for (const k of ['tr', 'en', 'de']) {
+    const site = SITES[k];
+    const r = await runJob(site, { envOnly: ENV_Q });
+    const c = r.job.citation;
+    t('questions-only (' + k + '): the job ends done with status "questions", 21 questions (18 + 3) in ' + Lang.nameOf(k) + ', the profile, and not one search or knowledge call', r.job.status === 'done' && c && c.status === 'questions' && c.questions.items.length === 21 && c.questions.items.filter((q) => q.brand).length === 3 && Lang.base(c.profile.language) === k && r.provider.calls.length === 0 && r.provider.plain.length === 0 && r.llm.calls.length === 2 && Object.keys(c.results).length === 0 && !c.modes.test && !c.modes.knowledge, JSON.stringify(c && { s: c.status, r: c.reason }));
+    const html = pageLib.render(r.job, {});
+    const sec = Section.section(c).html;
+    t('questions-only (' + k + '): the report has "Citation questions", the label "Not tested. Try these in your own assistants.", the profile, 21 questions' + (k === 'en' ? '' : ' with glosses') + ' and "Copy all questions"', />Citation questions<\/h2>/.test(html) && /Not tested\. Try these in your own assistants\./.test(html) && /What the questions were based on/.test(html) && (sec.match(/data-cit-q>/g) || []).length === 21 && (k === 'en' || (sec.match(/pr-citegloss/g) || []).length === 21) && /data-cit-copy/.test(html) && /Show all questions as plain text/.test(html));
+    t('questions-only (' + k + '): no cited, mentioned, sample, model, ranking or result claim anywhere in the section, the card or the frame line', !/Cited|Mentioned|Citation check|\bSample\b|pr-state|pr-citerow|Other cited|questions tested|cited this site|mentioned it/.test(sec + Section.card(c)) && /have not been tested/.test(html) && !/separate, dated sample/.test(html));
+    t('questions-only (' + k + '): the card says "Not tested" and counts the questions', /Not tested<\/span> Citation questions/.test(html) && /data-fig="pr-cit-questions">21</.test(html) && /Not tested\. Try these in your own assistants\./.test(Section.card(c)));
+    t('questions-only (' + k + '): the section, the card and the nav stay before the estimate, which is last', html.indexOf('id="pr-citation"') < html.indexOf('id="pr-estimate"') && html.indexOf('<section', html.indexOf('id="pr-estimate"') + 1) === -1 && /<a href="#pr-citation">Citation questions<\/a>/.test(html));
+  }
+  {
+    const r = await runJob(SITES.en, { envOnly: ENV_Q });
+    const sec = Section.section(r.job.citation).html;
+    t('questions-only: the plain-text box holds exactly the 21 questions, one per line, and a wrong reading can be reported to the one contact address', (/<textarea[^>]*>([\s\S]*?)<\/textarea>/.exec(sec)[1].split('\n').length === 21) && new RegExp('mailto:' + require('../lib/site-config.js').contactEmail.replace('.', '\\.')).test(sec));
+    const bad = JSON.parse(JSON.stringify(r.job)); bad.citation.questions.items[0].text = '</textarea><script>alert(1)</script>?';
+    t('questions-only: a hostile question cannot break out of the text box or the list', pageLib.render(bad, {}).indexOf('<script>alert(1)') === -1);
+    const view = Cit.viewOf(r.job);
+    t('questions-only: the job view tells the progress screen there is no test and no knowledge stage', view.test === false && view.knowledge === false && view.total === 21);
+    const lim = await runJob(SITES.en, { envOnly: ENV_Q, env: {}, adapter: r.adapter, store: r.store });
+    t('questions-only: with the daily limit for question-writing jobs at 0, the report is still made and says why no questions were written', (await runJob(SITES.en, { envOnly: Object.assign({}, ENV_Q, { CITATION_QUESTIONS_DAILY_CAP: '0' }) })).job.citation.reason.indexOf('daily limit for writing citation questions') !== -1);
+    const capped = await runJob(SITES.en, { envOnly: Object.assign({}, ENV_Q, { CITATION_QUESTIONS_DAILY_CAP: '1' }), adapter: S.memoryAdapter() });
+    const second = await runJob(SITES.en, { envOnly: Object.assign({}, ENV_Q, { CITATION_QUESTIONS_DAILY_CAP: '1' }), adapter: capped.adapter });
+    t('questions-only: a cap of 1 allows one job a day; the second gets a done report with "not tested" and no model call', capped.job.citation.status === 'questions' && second.job.status === 'done' && second.job.citation.status === 'not_tested' && second.llm.calls.length === 0);
+  }
+
+  /* ---- the model knowledge check ---- */
+  {
+    const site = SITES.en;
+    const r = await runJob(site, { envOnly: ENV_K });
+    const c = r.job.citation;
+    t('knowledge-only: 21 plain calls with no search, none with search, ending "questions" with kstatus ok', r.provider.plain.length === 21 && r.provider.calls.length === 0 && c.status === 'questions' && c.kstatus === 'ok' && Object.keys(c.knowledge).length === 21 && Object.keys(c.results).length === 0 && c.modes.knowledge && !c.modes.test);
+    t('knowledge-only: only "named", the model and the date are stored per question; the stored record holds no answer text', Object.values(c.knowledge).every((x) => JSON.stringify(Object.keys(x).sort()) === '["date","model","named","state"]') && !/ExampleOne|several tools/i.test(JSON.stringify(c)));
+    const html = pageLib.render(r.job, {});
+    t('knowledge-only: the report shows "Model knowledge check (no live search)" with "Named in the answer", never a cited column, and never calls it citation tracking', /Model knowledge check \(no live search\)/.test(html) && /Named in the answer/.test(html) && !/>Cited</.test(html) && !/pr-citerow|Citation check \(sample\)/.test(html) && /It is not citation tracking/.test(html) && />Citation questions<\/h2>/.test(html));
+    t('knowledge-only: the card mentions the knowledge check and the questions are still marked "Not tested"', /Model knowledge check \(no live search\): 0 of 21 answers named the site/.test(html) && /Not tested\. Try these in your own assistants\./.test(html));
+    const named = await runJob(site, { envOnly: ENV_K, provider: mockProvider(async (q, n, search) => ({ text: n % 3 === 0 ? 'People pick Ledgerlark.' : 'Try Alpha.', sources: [], queries: [], searches: 0 })) });
+    t('knowledge-only: "named" counts follow the answers (every third answer names the brand: 7 of 21)', /7 of 21 answers named the site/.test(pageLib.render(named.job, {})));
+    const q = await runJob(site, { envOnly: ENV_K, provider: mockProvider(async (q, n) => { if (n === 3) throw quotaErr(); return { text: 'x', sources: [], queries: [], searches: 0 }; }) });
+    t('knowledge-only: a 429 on the third call ends that check at once (no fourth call), the job still finishes, the questions stay', q.provider.plain.length === 3 && q.job.status === 'done' && q.job.citation.kstatus === 'partial' && q.job.citation.questions.items.length === 21 && /rate or spending limit/.test(q.job.citation.kreason) && /Not tested\./.test(pageLib.render(q.job, {})));
+    const capk = await runJob(site, { envOnly: Object.assign({}, ENV_K, { CITATION_DAILY_CAP: '4' }) });
+    t('knowledge-only: the daily cap counts these calls too (4 asked, the rest not tested)', capk.provider.plain.length === 4 && capk.job.citation.kstatus === 'partial');
+  }
+  {
+    const site = SITES.de;
+    const r = await runJob(site, { envOnly: ENV_TK });
+    const c = r.job.citation;
+    t('both: testing first (21 search calls), then the knowledge check (21 plain calls), the job ends done and both are complete', r.provider.calls.length === 21 && r.provider.plain.length === 21 && c.status === 'ok' && c.kstatus === 'ok' && r.job.status === 'done');
+    const phases = r.views.map((v) => v.phase);
+    t('both: the steps go scan, profile, questions, cite, know', phases.lastIndexOf('cite') < phases.indexOf('know') && phases.indexOf('questions') < phases.indexOf('cite') && phases.indexOf('know') !== -1);
+    const html = pageLib.render(r.job, {});
+    t('both: the report has the sample table (Cited, Mentioned) and, after it, the knowledge check with no cited column of its own', />Citation check \(sample\)<\/h2>/.test(html) && html.indexOf('id="pr-knowledge"') > html.indexOf('pr-citerow') && !/Named in the answer<\/th>[\s\S]{0,400}Cited/.test(html.slice(html.indexOf('id="pr-knowledge"'))));
+    t('both: the frame line names the dated sample; the view tells the progress screen about both stages', /separate, dated sample/.test(html) && Cit.viewOf(r.job).test === true && Cit.viewOf(r.job).knowledge === true);
+    const tk = await runJob(site, { envOnly: ENV_TK, provider: mockProvider(async (q, n, search) => { if (search) throw quotaErr(); return { text: 'x', sources: [], queries: [], searches: 0 }; }) });
+    t('both: when testing hits its limit at once the knowledge check still runs, and the report shows the questions as not tested plus the knowledge section', tk.job.citation.status === 'not_tested' && tk.job.citation.kstatus === 'ok' && tk.provider.calls.length === 1 && tk.provider.plain.length === 21 && /Not tested\. Try these in your own assistants\./.test(pageLib.render(tk.job, {})) && /id="pr-knowledge"/.test(pageLib.render(tk.job, {})));
+  }
+  {
+    const r = await runJob(SITES.en, { envOnly: ENV_T, provider: mockProvider(async (q, n) => ({ text: 'x', sources: [], queries: [], searches: 0 })) });
+    const ns = await runJob(SITES.en, { envOnly: ENV_T, provider: mockProvider(async () => { throw new Check.CheckError('no_search'); }) });
+    t('testing: three answers in a row that never searched end the check (3 calls), status not_tested, the questions stay', ns.provider.calls.length === 3 && ns.job.citation.status === 'not_tested' && /without searching the web/.test(ns.job.citation.reason) && ns.job.citation.questions.items.length === 21);
+    t('no unnecessary text in the stored record: the search results store no answer text', !/Several tools are popular/.test(JSON.stringify(r.job.citation)));
   }
 
   /* ---- nothing a site wrote reaches a log ---- */
