@@ -14,18 +14,8 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-
-// .env.local (gitignored) fills in what the environment lacks. Values are never printed.
-function loadEnvLocal() {
-  const file = path.join(__dirname, '..', '.env.local');
-  if (!fs.existsSync(file)) return;
-  fs.readFileSync(file, 'utf8').split(/\r?\n/).forEach(function (line) {
-    const m = /^\s*(KV_REST_API_URL|KV_REST_API_TOKEN|UPSTASH_REDIS_REST_URL|UPSTASH_REDIS_REST_TOKEN)\s*=\s*(.*)\s*$/.exec(line);
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
-  });
-}
+// .env.local (gitignored) fills in what the environment lacks (scripts/env-local.js). Values are never printed.
+const loadEnvLocal = require('./env-local.js').load;
 
 async function main() {
   const args = process.argv.slice(2);

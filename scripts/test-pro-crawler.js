@@ -246,6 +246,70 @@ const fresh = (site) => S.createStore(S.memoryAdapter({ now: site ? site.now : u
     t('a 404 robots.txt is a failed check, not a failed crawl', job.status === 'done' && job.siteContext.robotsOk === false);
   }
 
+  /* ---- a job that read no page gives the link back; one that read a page does not ---- */
+  async function orderedJob(store, token, domain) {
+    const tok = token || (await store.createOrder()).token;
+    await store.claimOrder(tok);
+    const id = await store.createJob({ domain: domain || 'example.com' });
+    await store.reserveDomainSlot(domain || 'example.com', 2);
+    await store.markOrderUsed(tok, { jobId: id, contact: { name: 'Ada Lovelace', email: 'ada@example.org' } });
+    return { id, token: tok };
+  }
+  {
+    const cases = [
+      ['robots.txt forbids the crawl', { pages: 10, robots: 'User-agent: *\nDisallow: /\n' }],
+      ['the site answers 429 before the first page', { pages: 10, status: { '/': 429 } }],
+      ['every page is blocked (403), the homepage first', { pages: 10, status: { '/': 403, '/page0': 403, '/page1': 403, '/page2': 403, '/page3': 403, '/page4': 403, '/page5': 403, '/page6': 403, '/page7': 403, '/page8': 403, '/page9': 403 } }],
+      ['robots.txt answers 403', { pages: 10, status: { '/robots.txt': 403 } }],
+      ['the site does not resolve', { pages: 10, dns: true }]
+    ];
+    for (const [label, opts] of cases) {
+      const site = makeSite(opts); const store = fresh(site);
+      const { id, token } = await orderedJob(store);
+      await runAll(store, id, site);
+      const job = await store.getJob(id); const ord = await store.getOrder(token);
+      t('zero pages (' + label + '): the job failed, its link is back, the contact is kept', job.status === 'failed' && job.progress.done === 0 && job.linkRestored === true && ord.status === 'unused' && ord.jobId === null && ord.contact && ord.contact.email === 'ada@example.org' && ord.restores === 1, job.status + ' ' + JSON.stringify(ord));
+      t('zero pages (' + label + '): the restored token can start a new job', (await store.claimOrder(token)) === true);
+    }
+    // At least one page read: no restore.
+    {
+      const site = makeSite({ pages: 40, status: { '/page9': 429, '/page10': 429 } }); const store = fresh(site);
+      const { id, token } = await orderedJob(store);
+      await runAll(store, id, site);
+      const job = await store.getJob(id); const ord = await store.getOrder(token);
+      t('a partial job (pages were read, then 429) keeps its link spent and points at its report', job.status === 'partial' && job.progress.done > 0 && !job.linkRestored && ord.status === 'used' && ord.jobId === id && ord.restores === 0);
+    }
+    {
+      const site = makeSite({ pages: 10 }); const store = fresh(site);
+      const { id, token } = await orderedJob(store);
+      await runAll(store, id, site);
+      const ord = await store.getOrder(token);
+      t('a finished job keeps its link spent', (await store.getJob(id)).status === 'done' && ord.status === 'used' && ord.jobId === id && ord.restores === 0);
+    }
+    // Max 3 restores per order.
+    {
+      const site = makeSite({ pages: 10, robots: 'User-agent: *\nDisallow: /\n' }); const store = fresh(site);
+      let token = null; const results = [];
+      for (let i = 0; i < 5; i++) {
+        const o = await orderedJob(store, token); token = o.token;
+        await runAll(store, o.id, site);
+        const ord = await store.getOrder(token);
+        results.push(ord.status);
+        if (ord.status === 'used') break;
+      }
+      const ord = await store.getOrder(token);
+      t('after 3 restores the 4th failure keeps the link spent', results.join() === 'unused,unused,unused,used' && ord.restores === 3, results.join());
+    }
+    // A restored token never shows the failed job again.
+    {
+      const site = makeSite({ pages: 10, robots: 'User-agent: *\nDisallow: /\n' }); const store = fresh(site);
+      const { id, token } = await orderedJob(store);
+      await runAll(store, id, site);
+      const dump = JSON.stringify(store.adapter._dump()['pro:order:' + token]);
+      t('the restored order record holds no trace of the failed job id', dump.indexOf(id) === -1, dump);
+    }
+  }
+
   /* ---- a page that is not HTML or fails ---- */
   {
     const site = makeSite({ pages: 10, status: { '/page3': 500, '/page4': 404 } }); const store = fresh(site);

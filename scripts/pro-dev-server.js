@@ -2,7 +2,7 @@
 /* =====================================================================
    scripts/pro-dev-server.js: run Citehound Pro locally, no Redis, no network.
 
-     node scripts/pro-dev-server.js [--port 4180] [--fast]
+     node scripts/pro-dev-server.js [--port 4180] [--fast] [--redis] [--no-mail]
 
    Serves the static site, applies the rewrites and headers from vercel.json, and
    runs api/pro.js's logic (lib/pro-api.js) against the in-memory store with a pretend
@@ -26,6 +26,8 @@ const ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const port = parseInt((args[args.indexOf('--port') + 1]) || '4180', 10);
 const fast = args.indexOf('--fast') !== -1;
+const useRedis = args.indexOf('--redis') !== -1;   // the store named by UPSTASH_REDIS_REST_* / KV_REST_API_* instead of memory
+const noMail = args.indexOf('--no-mail') !== -1;   // leave the mail variables unset, as in production today
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.woff2': 'font/woff2' };
 
@@ -49,12 +51,11 @@ const rewrites = (config.rewrites || []).filter((r) => !r.has).map((r) => Object
 const headerRules = (config.headers || []).map((h) => Object.assign({ c: compile(h.source) }, h));
 
 /* ---- the pretend world ---- */
-const adapter = S.memoryAdapter();
-const store = S.createStore(adapter);
+const store = useRedis ? S.getStore() : S.createStore(S.memoryAdapter());
 if (fast) store.takeSlot = async () => true;
 const site = makeFakeSite({ domain: 'demo-site.com', pages: 30, seed: 11, blocked: ['/products/faq'], missing: ['/docs/changelog'], sleep: async () => {} });
 const mailbox = [];
-const env = Object.assign({}, process.env, { RESEND_API_KEY: 'dev-key', PRO_MAIL_FROM: 'Citehound <reports@dev.invalid>' });
+const env = noMail ? Object.assign({}, process.env) : Object.assign({}, process.env, { RESEND_API_KEY: 'dev-key', PRO_MAIL_FROM: 'Citehound <reports@dev.invalid>' });
 const deps = {
   store: store,
   env: env,

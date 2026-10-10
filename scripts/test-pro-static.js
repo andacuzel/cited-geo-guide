@@ -26,7 +26,7 @@ const t = (name, ok, extra) => { if (ok) pass++; else fails.push(name + (extra ?
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const exists = (f) => fs.existsSync(path.join(ROOT, f));
 
-const PRO_FILES = ['lib/pro-store.js', 'lib/pro-fetch.js', 'lib/pro-crawler.js', 'lib/pro-estimate.js', 'lib/pro-api.js', 'lib/pro-http.js', 'lib/pro-mail.js', 'lib/pro-orders.js', 'lib/pro-data.js', 'lib/pro-report-page.js', 'lib/report-pro-ui.js',
+const PRO_FILES = ['lib/pro-store.js', 'lib/safe-fetch.js', 'lib/pro-crawler.js', 'lib/pro-estimate.js', 'lib/pro-api.js', 'lib/pro-http.js', 'lib/pro-mail.js', 'lib/pro-orders.js', 'lib/pro-data.js', 'lib/pro-report-page.js', 'lib/report-pro-ui.js',
   'api/pro.js', 'app/pro-start.html', 'app/pro-start.js', 'app/pro-progress.js', 'scripts/pro-issue-token.js', 'scripts/pro-dev-server.js', 'scripts/pro-fake-site.js', 'docs/pro.md'].filter(exists);
 
 const tracked = cp.execFileSync('git', ['ls-files'], { cwd: ROOT }).toString().split('\n').filter(Boolean);

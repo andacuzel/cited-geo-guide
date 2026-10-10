@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /* =====================================================================
-   scripts/test-pro-fetch.js
+   scripts/test-safe-fetch.js
 
-   Tests lib/pro-fetch.js: which addresses count as public, what a person may
+   Tests lib/safe-fetch.js: which addresses count as public, what a person may
    type as a site, and the request itself (redirects checked by hand, body cap,
    timeout, compressed bodies, "the site said no"), against local servers. The
    guard is also exercised for real: localhost and numeric addresses must never
    connect.
 
-     node scripts/test-pro-fetch.js
+     node scripts/test-safe-fetch.js
    ===================================================================== */
 
 'use strict';
@@ -16,7 +16,7 @@
 const http = require('http');
 const zlib = require('zlib');
 const dns = require('dns');
-const F = require('../lib/pro-fetch.js');
+const F = require('../lib/safe-fetch.js');
 
 let pass = 0; const fails = [];
 const t = (name, ok, extra) => { if (ok) pass++; else fails.push(name + (extra ? ' :: ' + extra : '')); console.log((ok ? '  ok  ' : '  FAIL ') + name + (ok ? '' : '  ' + (extra || ''))); };
@@ -98,8 +98,10 @@ const UA = 'CitehoundBot/test';
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   servers.push(server);
-  const base = 'http://127.0.0.1:' + server.address().port;
+  const base = 'http://local.test:' + server.address().port;
   const get = F.makeSafeGet({ lookup: (h, o, cb) => { if (typeof o === 'function') cb = o; (o && o.all) ? cb(null, [{ address: '127.0.0.1', family: 4 }]) : cb(null, '127.0.0.1', 4); }, allowPort: true });
+  r = await get('http://127.0.0.1:' + server.address().port + '/ok', { ua: UA });
+  t('even the test client refuses a numeric address', r.ok === false && r.kind === 'blocked_host');
 
   r = await get(base + '/ok', { ua: UA });
   t('a plain page: ok, status, text, content type', r.ok && r.status === 200 && /Hello/.test(r.text) && /html/.test(r.contentType));
@@ -121,7 +123,7 @@ const UA = 'CitehoundBot/test';
   t('the redirect limit holds', r.ok === false && r.kind === 'redirect_loop');
   r = await get(base + '/loop', { ua: UA });
   t('a redirect loop ends', r.ok === false && r.kind === 'redirect_loop');
-  r = await get(base + '/away', { ua: UA, allowHost: (h) => h === '127.0.0.1' });
+  r = await get(base + '/away', { ua: UA, allowHost: (h) => h === 'local.test' });
   t('a redirect to another site is refused when the caller says so', r.ok === false && r.kind === 'redirect_away');
   r = await get(base + '/to-file', { ua: UA });
   t('a redirect to a file: address is refused', r.ok === false && r.kind === 'bad_url');
@@ -145,7 +147,7 @@ const UA = 'CitehoundBot/test';
   servers.forEach((s) => s.close());
 
   /* ---- a closed port ---- */
-  r = await get('http://127.0.0.1:1/', { ua: UA, timeoutMs: 2000 });
+  r = await get('http://local.test:1/', { ua: UA, timeoutMs: 2000 });
   t('a refused connection is reported as refused', r.ok === false && r.kind === 'refused', r.kind);
 
   console.log('\n' + pass + ' passed, ' + fails.length + ' failed');

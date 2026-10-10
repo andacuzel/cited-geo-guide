@@ -1,7 +1,7 @@
 /* =====================================================================
    scripts/pro-fake-site.js: a pretend website for developing Citehound Pro.
 
-   A fetch function with the same shape as lib/pro-fetch.js safeGet, backed by
+   A fetch function with the same shape as lib/safe-fetch.js safeGet, backed by
    pages generated in memory: a robots.txt, a sitemap and N pages whose
    signals (title, canonical, JSON-LD, headings ...) vary the way a real site's
    do. Used by scripts/pro-dev-server.js and the screenshot run; no network.

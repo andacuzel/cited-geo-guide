@@ -144,7 +144,7 @@
 
   function begin(jobId) {
     show('progress');
-    window.CITEHOUND_PRO_PROGRESS.mount(sections.progress, { jobId: jobId });
+    window.CITEHOUND_PRO_PROGRESS.mount(sections.progress, { jobId: jobId, retryHref: '/pro/start/' + token });
   }
 
   check();

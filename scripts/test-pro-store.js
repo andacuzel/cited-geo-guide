@@ -109,6 +109,33 @@ function fresh() {
     t('an unknown id returns no job', (await store.getJob('b'.repeat(32))) === null);
   }
 
+  /* ---- giving a link back after a job that read nothing ---- */
+  {
+    const { store, adapter } = fresh();
+    const o = await store.createOrder();
+    await store.claimOrder(o.token);
+    const j1 = await store.createJob({ domain: 'example.com' });
+    await store.markOrderUsed(o.token, { jobId: j1, contact: { name: 'Ada', email: 'ada@example.org' } });
+    t('restoreOrder: refuses a job the order does not point at', (await store.restoreOrder(o.token, 'f'.repeat(32), 3)) === false && (await store.getOrder(o.token)).status === 'used');
+    t('restoreOrder: gives the link back', (await store.restoreOrder(o.token, j1, 3)) === true);
+    const back = await store.getOrder(o.token);
+    t('a restored order is unused, has no job id, keeps the contact and counts one restore', back.status === 'unused' && back.jobId === null && back.contact.email === 'ada@example.org' && back.contact.name === 'Ada' && back.restores === 1, JSON.stringify(back));
+    t('a restored order has a fresh 30-day life and no leftover claim', (await adapter.ttl('pro:order:' + o.token)) === 30 * 86400 && (await adapter.get('pro:order-claim:' + o.token)) === null);
+    t('a restored token can be claimed again', (await store.claimOrder(o.token)) === true);
+    t('restoring the same finished job twice is refused (the order no longer points at it)', (await store.restoreOrder(o.token, j1, 3)) === false);
+    // three restores, then no more
+    let tok = o.token; let last = j1;
+    for (let i = 2; i <= 3; i++) { const j = await store.createJob({ domain: 'example.com' }); await store.markOrderUsed(tok, { jobId: j, contact: { name: 'Ada', email: 'ada@example.org' } }); t('restore number ' + i + ' works', (await store.restoreOrder(tok, j, 3)) === true); last = j; await store.claimOrder(tok); }
+    const j4 = await store.createJob({ domain: 'example.com' });
+    await store.markOrderUsed(tok, { jobId: j4, contact: { name: 'Ada', email: 'ada@example.org' } });
+    t('the fourth restore is refused: the order stays used, with its job, and the count stays 3', (await store.restoreOrder(tok, j4, 3)) === false && (await store.getOrder(tok)).status === 'used' && (await store.getOrder(tok)).jobId === j4 && (await store.getOrder(tok)).restores === 3);
+    void last;
+    const parallel = await store.createOrder(); const pj = await store.createJob({ domain: 'example.com' });
+    await store.markOrderUsed(parallel.token, { jobId: pj, contact: { name: 'B', email: 'b@example.org' } });
+    const many = await Promise.all(Array.from({ length: 6 }, () => store.restoreOrder(parallel.token, pj, 3)));
+    t('six simultaneous restores of one job: the order ends unused and counted once or twice at most, never past the limit', (await store.getOrder(parallel.token)).restores <= 3 && many.filter(Boolean).length >= 1, many.join());
+  }
+
   /* ---- the job record never carries contact data ---- */
   {
     const { adapter, store } = fresh();
@@ -180,7 +207,9 @@ function fresh() {
       ttl: async (k) => mem.ttl(k), exists: async (k) => mem.exists(k),
       hset: async (k, o) => mem.hset(k, o),
       hsetnx: async (k, f, v) => ((await mem.hsetnx(k, f, v)) ? 1 : 0),
-      hget: async (k, f) => mem.hget(k, f), hgetall: async (k) => mem.hgetall(k),
+      hget: async (k, f) => mem.hget(k, f),
+      // As the client answers with automaticDeserialization off: Redis's flat list, empty for a missing key.
+      hgetall: async (k) => { const o = await mem.hgetall(k); return o ? Object.keys(o).reduce((a, f) => a.concat([f, o[f]]), []) : []; },
       hdel: async (k, f) => mem.hdel(k, f), hincrby: async (k, f, n) => mem.hincrby(k, f, n),
       sadd: async (k, m) => mem.sadd(k, m), srem: async (k, m) => mem.srem(k, m), scard: async (k) => mem.scard(k)
     };

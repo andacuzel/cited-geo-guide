@@ -292,6 +292,48 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     t('start page: unknown, malformed, missing and expired links get the identical generic page', bad.every((r) => r.status === 404 && r.body === bad[0].body && /This link is not available/.test(r.body) && !/expired|used|invalid/i.test(r.body.replace(/<[^>]+>/g, ' '))), bad.map((r) => r.status).join());
   }
 
+  /* ---- a failed job gives the link back ---- */
+  {
+    const { store } = mk();
+    const o = await store.createOrder();
+    const s1 = await call(api.start, { method: 'POST', body: GOOD(o.token) }, { store, checkHost: okHost });
+    const failedId = s1.json.jobId;
+    const forbid = async (url, opt) => (url.endsWith('/robots.txt') ? { ok: true, status: 200, text: 'User-agent: *\nDisallow: /\n', headers: {}, finalUrl: url } : fakeSiteFetch([])(url, opt));
+    const crawl = { fetch: forbid, sleep: sleepFast, now: (() => { let c = 1e9; return () => (c += 1100); })() };
+    let last; for (let i = 0; i < 4; i++) { last = await call(api.step, { method: 'POST', query: { id: failedId } }, { store, crawl }); if (last.json.status === 'failed') break; }
+    t('failed job: the step answer says failed and that the link is back', last.json.status === 'failed' && last.json.linkRestored === true && /robots\.txt/.test(last.json.reason), last.body);
+    const stat = await call(api.status, { query: { id: failedId } }, { store });
+    t('failed job: status says the same, with no report path', stat.json.linkRestored === true && stat.json.reportPath === null);
+    const ord = await call(api.order, { query: { token: o.token } }, { store });
+    t('the token reads ready again, and nothing in the answer names the failed job', ord.status === 200 && ord.json.state === 'ready' && ord.body.indexOf(failedId) === -1, ord.body);
+    const pg = await call(api.startPage, { query: { token: o.token } }, { store });
+    t('the start page shows the form again, not a redirect, and does not contain the failed job id', pg.status === 200 && /id="psForm"/.test(pg.body) && pg.body.indexOf(failedId) === -1 && !pg.headers.location);
+    const bad = await call(api.start, { method: 'POST', body: GOOD(o.token, { email: 'nope' }) }, { store, checkHost: okHost });
+    t('a start with a mistake on the restored token answers with the field errors only', bad.status === 400 && bad.body.indexOf(failedId) === -1);
+    const rep = await call(api.report, { query: { id: failedId } }, { store });
+    t('the failed job\'s own page says "Your link is still valid" and carries no token', rep.status === 200 && /Your link is still valid/.test(rep.body) && rep.body.indexOf(o.token) === -1 && !/mail\.example\.org|Grace/.test(rep.body));
+    const mailOnFailed = await call(api.email, { method: 'POST', body: { id: failedId } }, { store, env: { RESEND_API_KEY: 'k', PRO_MAIL_FROM: 'a@b.example' }, fetch: async () => { throw new Error('must not send'); } });
+    t('the failed job cannot be emailed', mailOnFailed.status === 409);
+    const s2 = await call(api.start, { method: 'POST', body: GOOD(o.token, { site: 'another.example.org' }) }, { store, checkHost: okHost });
+    t('the same token starts a new job for another site, and it is a different job', s2.status === 200 && s2.json.jobId !== failedId && !s2.json.duplicate, s2.body);
+    const after = await call(api.order, { query: { token: o.token } }, { store });
+    t('the token now leads to the new job only', after.json.reportPath === '/r/' + s2.json.jobId + '/');
+    // the contact was kept through the restore (the new start rewrote it from the form, so check the intermediate order via a second failure)
+    const o2 = await store.createOrder();
+    const s3 = await call(api.start, { method: 'POST', body: GOOD(o2.token, { name: 'Kept Name', email: 'kept@mail.example.org' }) }, { store, checkHost: okHost });
+    for (let i = 0; i < 4; i++) { const r = await call(api.step, { method: 'POST', query: { id: s3.json.jobId } }, { store, crawl }); if (r.json.status === 'failed') break; }
+    const kept = await store.getOrder(o2.token);
+    t('after the restore the order still holds the contact', kept.status === 'unused' && kept.contact.email === 'kept@mail.example.org' && kept.contact.name === 'Kept Name');
+    // a partial job is not restored
+    const o3 = await store.createOrder();
+    const s4 = await call(api.start, { method: 'POST', body: GOOD(o3.token) }, { store, checkHost: okHost });
+    const okCrawl = { fetch: fakeSiteFetch([]), sleep: sleepFast, now: (() => { let c = 1e9; return () => (c += 1100); })() };
+    for (let i = 0; i < 6; i++) await call(api.step, { method: 'POST', query: { id: s4.json.jobId } }, { store, crawl: okCrawl });
+    const done = await call(api.order, { query: { token: o3.token } }, { store });
+    const dpage = await call(api.startPage, { query: { token: o3.token } }, { store });
+    t('a finished job keeps its link spent: it points at the report', done.json.state === 'started' && dpage.status === 302);
+  }
+
   /* ---- rate limits ---- */
   {
     const { store } = mk();

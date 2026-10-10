@@ -213,14 +213,31 @@
       result.hidden = false; result.textContent = '';
       var s = last && last.status;
       if (s === 'failed') {
+        var why = (last && last.reason) || 'The crawl could not read the site.';
+        if (last && last.linkRestored) {
+          // No page was read, so the link has been given back.
+          title.textContent = 'We couldn\u2019t scan this site';
+          sub.textContent = 'We couldn\u2019t scan this site. Your link is still valid, try again or use a different site.';
+          say(sub.textContent + ' ' + why);
+          result.appendChild(el('p', 'pp-note', why));
+          if (opts.retryHref) {
+            var again = el('a', 'btn btn--primary pp-view', 'Try again');
+            again.href = opts.retryHref;
+            result.appendChild(again);
+          } else {
+            result.appendChild(el('p', 'pp-note', 'Open the link you were sent again to start over.'));
+          }
+          title.focus({ preventScroll: true });
+          return;
+        }
         title.textContent = 'We could not make this report';
-        sub.textContent = (last && last.reason) || 'The crawl could not read the site.';
+        sub.textContent = why;
         say('The report could not be made. ' + sub.textContent);
         var contact = el('p', 'pp-note');
-        contact.appendChild(document.createTextNode('Your link has been used, so write to '));
+        contact.appendChild(document.createTextNode('This link can no longer be used, so write to '));
         var a = el('a', null, 'hey@getcitehound.com'); a.href = 'mailto:hey@getcitehound.com';
         contact.appendChild(a);
-        contact.appendChild(document.createTextNode(' with this page’s address and we will look into it.'));
+        contact.appendChild(document.createTextNode(' with this page\u2019s address and we will look into it.'));
         result.appendChild(contact);
         title.focus({ preventScroll: true });
         return;
