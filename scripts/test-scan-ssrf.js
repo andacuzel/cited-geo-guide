@@ -25,7 +25,6 @@ const path = require('path');
 const dns = require('dns');
 const net = require('net');
 const http = require('http');
-const cp = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 let pass = 0; const fails = [];
@@ -188,7 +187,10 @@ function call(handler, req) {
 
   /* ---- audit: no direct outbound request outside the guard ---- */
   {
-    const files = cp.execFileSync('git', ['ls-files', 'api', 'lib'], { cwd: ROOT }).toString().split('\n').filter((f) => /\.js$/.test(f));
+    // Every .js under api/ and lib/, tracked or not (a new file is audited before it is committed).
+    const files = [];
+    (function walk(rel) { fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true }).forEach((e) => { const r = rel + '/' + e.name; if (e.isDirectory()) walk(r); else if (/\.js$/.test(e.name)) files.push(r); }); }('api'));
+    (function walk(rel) { fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true }).forEach((e) => { const r = rel + '/' + e.name; if (e.isDirectory()) walk(r); else if (/\.js$/.test(e.name)) files.push(r); }); }('lib'));
     const ALLOWED = {
       'api/_kv.js': 'the key-value store, a fixed address from the environment',
       'api/subscribe.js': 'the email-list webhook, a fixed address from the environment',
