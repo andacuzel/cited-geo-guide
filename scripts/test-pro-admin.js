@@ -30,7 +30,7 @@ function call(fn, o, deps) {
   o = o || {}; o.ip = o.ip || '10.9.' + Math.floor(ipc / 250) + '.' + (ipc++ % 250);
   return new Promise((resolve, reject) => {
     const headers = {};
-    const req = { method: o.method || 'GET', url: '/', headers: { 'x-forwarded-for': o.ip }, query: o.query || {}, body: o.body, socket: {} };
+    const req = { method: o.method || 'GET', url: '/', headers: { 'x-forwarded-for': o.ip, 'content-type': 'application/json' }, query: o.query || {}, body: o.body, socket: {} };
     const res = { statusCode: 200, setHeader: (k, v) => { headers[k.toLowerCase()] = v; }, end: (b) => { let json = null; try { json = JSON.parse(b); } catch (e) { /* html */ } resolve({ status: res.statusCode, headers, body: b, json }); } };
     Promise.resolve(fn(req, res, deps)).catch(reject);
   });

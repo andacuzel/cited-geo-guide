@@ -47,7 +47,7 @@ const bumps = {}; // the daily counters this run moved, put back at the end
 const bump = (m, n) => { bumps[m] = (bumps[m] || 0) + (n === undefined ? 1 : n); };
 
 async function http(method, path, body, extra) {
-  const res = await fetch(BASE + path, Object.assign({ method: method, redirect: 'manual', headers: Object.assign({ Accept: '*/*' }, body ? { 'Content-Type': 'application/json' } : {}), body: body ? JSON.stringify(body) : undefined }, extra || {}));
+  const res = await fetch(BASE + path, Object.assign({ method: method, redirect: 'manual', headers: Object.assign({ Accept: '*/*' }, body || method === 'POST' ? { 'Content-Type': 'application/json' } : {}), body: body ? JSON.stringify(body) : (method === 'POST' ? '{}' : undefined) }, extra || {}));
   const text = await res.text();
   let json = null; try { json = JSON.parse(text); } catch (e) { /* html */ }
   return { status: res.status, headers: res.headers, text: text, json: json };

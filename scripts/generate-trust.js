@@ -35,7 +35,7 @@ const schemaLib = require('../lib/schema.js');
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'trust.html');
 const SEC = path.join(ROOT, '.well-known', 'security.txt');
-const CSS_VERSION = 64;
+const CSS_VERSION = 66;
 const esc = shell.esc;
 const fig = (k, v) => '<span data-fig="tr-' + k + '">' + esc(v) + '</span>';
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];

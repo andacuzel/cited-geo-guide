@@ -33,7 +33,7 @@ const site = require('../lib/site-config.js');
 const methodology = require('../lib/methodology.js');
 const mcp = require('../api/mcp.js');
 
-const CSS_VERSION = 64;
+const CSS_VERSION = 66;
 const NEXT_START = '<!-- NEXT:START -->';
 const NEXT_END = '<!-- NEXT:END -->';
 const PAGE = path.join(ROOT, 'tools', 'index.html');

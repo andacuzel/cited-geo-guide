@@ -47,7 +47,7 @@ function call(o, deps) {
   o = o || {}; o.ip = o.ip || '10.7.' + Math.floor(ipc / 250) + '.' + (ipc++ % 250);
   return new Promise((resolve, reject) => {
     const headers = {};
-    const req = Object.assign({ method: o.method || 'POST', url: '/', headers: Object.assign({ 'x-forwarded-for': o.ip }, o.headers || {}), query: o.query || {}, body: o.body, socket: {} }, o.rawBody !== undefined ? { rawBody: o.rawBody } : {});
+    const req = Object.assign({ method: o.method || 'POST', url: '/', headers: Object.assign({ 'x-forwarded-for': o.ip, 'content-type': 'application/json' }, o.headers || {}), query: o.query || {}, body: o.body, socket: {} }, o.rawBody !== undefined ? { rawBody: o.rawBody } : {});
     const res = { statusCode: 200, setHeader: (k, v) => { headers[k.toLowerCase()] = v; }, end: (b) => { let json = null; try { json = JSON.parse(b); } catch (e) { /* html */ } resolve({ status: res.statusCode, headers, body: b, json }); } };
     Promise.resolve(api.handle(req, res, deps)).catch(reject);
   });

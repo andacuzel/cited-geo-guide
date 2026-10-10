@@ -33,7 +33,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 64;
+const CSS_VERSION = 66;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 // Early access goes through the Pro waitlist on /pro; pro-cta.js sends the button to PRO_CHECKOUT_URL when that is set.
 const WAITLIST = '/pro#waitlist';

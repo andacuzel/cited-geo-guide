@@ -28,6 +28,7 @@ const args = process.argv.slice(2);
 const port = parseInt((args[args.indexOf('--port') + 1]) || '4180', 10);
 const fast = args.indexOf('--fast') !== -1;
 const useRedis = args.indexOf('--redis') !== -1;   // the store named by UPSTASH_REDIS_REST_* / KV_REST_API_* instead of memory
+const citation = args.indexOf('--citation') !== -1;  // citation questions on, and two seeded reports that show them
 const noMail = args.indexOf('--no-mail') !== -1;   // leave the mail variables unset, as in production today
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.woff2': 'font/woff2' };
@@ -57,6 +58,7 @@ if (fast) store.takeSlot = async () => true;
 const site = makeFakeSite({ domain: 'demo-site.com', pages: 30, seed: 11, blocked: ['/products/faq'], missing: ['/docs/changelog'], sleep: async () => {} });
 const mailbox = [];
 const env = noMail ? Object.assign({}, process.env) : Object.assign({}, process.env, { RESEND_API_KEY: 'dev-key', PRO_MAIL_FROM: 'Citehound <reports@dev.invalid>' });
+if (citation) Object.assign(env, { GEMINI_API_KEY: 'dev-only', CITATION_QUESTIONS_ENABLED: '1' });
 const deps = {
   store: store,
   env: env,
@@ -65,6 +67,10 @@ const deps = {
   fetch: async (url, init) => { const body = JSON.parse(init.body); mailbox.push({ at: new Date().toISOString(), to: body.to, subject: body.subject, text: body.text }); console.log('[mail] would send "' + body.subject + '"'); return { ok: true, status: 200 }; },
   pollMs: 50
 };
+if (citation) {
+  const F = require('./fixtures/citation-fixtures.js').SITES;
+  deps.citation = { llm: { model: 'dev-model', json: async (req) => (req.schema.properties.siteType ? F.en.profile : { questions: F.en.open.map((text) => ({ text, kind: 'discovery' })), brandQuestions: F.en.brandQs.map((text) => ({ text })) }) }, sleep: async () => {} };
+}
 
 function shim(req, res, query) {
   req.query = query;
@@ -116,6 +122,29 @@ const server = http.createServer(async (req, res) => {
   for (let i = 0; i < sample.pages.length; i++) { const p = sample.pages[i]; await store.updatePage(jobId, i, p.status === 'ok' ? { url: p.url, status: 'ok', result: p.result, siteInfo: p.siteInfo } : { url: p.url, status: 'failed', error: p.error || 'HTTP 500' }); }
   await store.setJob(jobId, { status: 'done', phase: 'done', finishedAt: new Date().toISOString(), siteContext: sample.siteContext, discoverySource: sample.discovery && sample.discovery.source, candidates: sample.discovery && sample.discovery.candidates });
   await store.markOrderUsed(ord.token, { jobId: jobId, contact: { name: 'Dev Person', email: 'dev.person@example.invalid' } });
+  if (citation) {
+    // Two more finished reports, with citation records written straight into the store.
+    const F = require('./fixtures/citation-fixtures.js').SITES;
+    const seed = async (site, modes, withResults) => {
+      const id = await store.createJob({ domain: sample.domain, citation: true });
+      await store.setPages(id, sample.pages.map((p) => p.url));
+      for (let i = 0; i < sample.pages.length; i++) { const p = sample.pages[i]; await store.updatePage(id, i, p.status === 'ok' ? { url: p.url, status: 'ok', result: p.result, siteInfo: p.siteInfo } : { url: p.url, status: 'failed', error: p.error || 'HTTP 500' }); }
+      await store.setJob(id, { status: 'done', phase: 'done', finishedAt: new Date().toISOString(), siteContext: sample.siteContext, discoverySource: sample.discovery && sample.discovery.source, candidates: sample.discovery && sample.discovery.candidates });
+      const items = site.open.map((text, i) => ({ text, gloss: site.lang === 'en' ? '' : 'English version of question ' + (i + 1), kind: 'discovery', brand: false })).concat(site.brandQs.map((text, i) => ({ text, gloss: site.lang === 'en' ? '' : 'English version of brand question ' + (i + 1), kind: 'brand', brand: true })));
+      await store.setCitation(id, { status: withResults ? 'ok' : 'questions', stage: 'done', reason: '', profile: site.profile, questions: { source: 'llm', items }, source: 'llm', model: 'claude-haiku-5-5', date: '2026-10-10', modes: modes, kmodel: 'claude-haiku-5-5', kdate: '2026-10-10', kstatus: modes.knowledge ? 'ok' : '' });
+      if (withResults) for (let i = 0; i < items.length; i++) {
+        await store.setCitationResult(id, i, { state: 'tested', cited: i % 5 === 0, mentioned: i % 3 === 0, others: ['alpha.example', 'beta.example', 'gamma.example'].slice(0, i % 4), links: { 'alpha.example': 'https://alpha.example/guide', 'beta.example': 'https://beta.example/' }, queries: 2, model: 'claude-haiku-5-5', date: '2026-10-10' });
+        if (modes.knowledge) await store.setKnowledgeResult(id, i, { state: 'tested', named: i % 4 === 0, model: 'claude-haiku-5-5', date: '2026-10-10' });
+      }
+      const o = await store.createOrder();
+      await store.markOrderUsed(o.token, { jobId: id, contact: { name: 'Dev Person', email: 'dev.person@example.invalid' } });
+      return id;
+    };
+    const q = await seed(F.tr, { test: false, knowledge: false, provider: null, model: null }, false);
+    const full = await seed(F.en, { test: true, knowledge: true, provider: 'anthropic', model: 'claude-haiku-5-5' }, true);
+    console.log('  questions only (Turkish): /r/' + q + '/');
+    console.log('  testing + knowledge check (made-up results): /r/' + full + '/');
+  }
   server.listen(port, () => {
     console.log('Citehound Pro dev server on http://localhost:' + port + (fast ? ' (fast crawl)' : ''));
     console.log('  finished report: /r/' + jobId + '/');

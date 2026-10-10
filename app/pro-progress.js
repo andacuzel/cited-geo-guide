@@ -76,7 +76,9 @@
   function call(method, url) {
     var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, STEP_TIMEOUT_MS);
-    return fetch(url, { method: method, headers: { Accept: 'application/json' }, cache: 'no-store', credentials: 'omit', signal: ctrl ? ctrl.signal : undefined }).then(function (res) {
+    // A POST names its content type: the server refuses anything that is not JSON (a foreign page cannot send this kind of request).
+    var post = method === 'POST';
+    return fetch(url, { method: method, headers: post ? { Accept: 'application/json', 'Content-Type': 'application/json' } : { Accept: 'application/json' }, body: post ? '{}' : undefined, cache: 'no-store', credentials: 'omit', signal: ctrl ? ctrl.signal : undefined }).then(function (res) {
       clearTimeout(timer);
       return res.json().then(function (body) { return { ok: res.ok, status: res.status, body: body }; }, function () { return { ok: false, status: res.status, body: {} }; });
     }, function (err) { clearTimeout(timer); throw err; });

@@ -150,7 +150,7 @@ async function both(label, step) {
   const o2 = await store.createOrder();
   const call = (fn, o, deps) => new Promise((resolve, reject) => {
     const headers = {};
-    const req = { method: o.method || 'GET', url: '/', headers: { 'x-forwarded-for': o.ip || '203.0.113.9' }, query: o.query || {}, body: o.body, socket: {} };
+    const req = { method: o.method || 'GET', url: '/', headers: { 'x-forwarded-for': o.ip || '203.0.113.9', 'content-type': 'application/json' }, query: o.query || {}, body: o.body, socket: {} };
     const res = { statusCode: 200, setHeader: (k, v) => { headers[k.toLowerCase()] = v; }, end: (b) => { let json = null; try { json = JSON.parse(b); } catch (e) { /* html */ } resolve({ status: res.statusCode, headers, json, body: b }); } };
     Promise.resolve(fn(req, res, deps)).catch(reject);
   });

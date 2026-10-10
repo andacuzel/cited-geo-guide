@@ -4211,6 +4211,8 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .pro-waitlist[hidden] { display: none; }
 .pro-waitlist__box { max-width: 640px; }
 .wl-form { margin-top: 24px; max-width: 520px; }
+.wl-form[hidden] { display: none; }
+.ps-lead + .ps-actions { margin-top: 20px; }
 .wl-opt { font-weight: 400; color: var(--ink-soft); }
 .wl-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .wl-status { font-size: 15px; line-height: 1.45; color: var(--risk); }
@@ -4252,7 +4254,9 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .pr-citecard__link { margin-top: 10px; font-size: 14px; }
 .pr-citecard__link a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
 .pr-cite-sum { margin: 16px 0 8px; }
-.pr-citeprofile dd { overflow-wrap: anywhere; }
+.pr-citeprofile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pr-citeprofile dd { overflow-wrap: anywhere; font-family: var(--font-body); font-size: 16px; line-height: 1.4; font-weight: 500; }
+@media (max-width: 640px) { .pr-citeprofile { grid-template-columns: minmax(0, 1fr); } }
 .pr-citegloss { display: block; margin-top: 2px; font-size: 14px; font-weight: 400; }
 .pr-table--cite th[scope="row"] { font-weight: 500; }
 .pr-cite-how { margin-top: 28px; }

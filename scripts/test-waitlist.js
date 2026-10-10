@@ -40,7 +40,7 @@ function call(o, deps) {
   if (!o.ip) o.ip = '10.' + Math.floor(ipCounter / 250) + '.' + (ipCounter++ % 250) + '.1';
   return new Promise((resolve, reject) => {
     const headers = {};
-    const req = { method: o.method || 'GET', url: '/', headers: Object.assign({ 'x-forwarded-for': o.ip }, o.headers || {}), query: o.query || {}, body: o.body, socket: {} };
+    const req = { method: o.method || 'GET', url: '/', headers: Object.assign({ 'x-forwarded-for': o.ip, 'content-type': 'application/json' }, o.headers || {}), query: o.query || {}, body: o.body, socket: {} };
     const res = { statusCode: 200, setHeader: (k, v) => { headers[k.toLowerCase()] = v; }, end: (b) => { let json = null; try { json = JSON.parse(b); } catch (e) { /* html */ } resolve({ status: res.statusCode, headers, body: b, json }); } };
     Promise.resolve(api.handle(req, res, deps)).catch(reject);
   });

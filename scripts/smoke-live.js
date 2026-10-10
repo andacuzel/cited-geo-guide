@@ -196,6 +196,13 @@ async function waitForDeployment(sha) {
     const r = await get(p, { redirect: 'follow' });
     t(p + ' (the old internal dashboard) is not deployed: 404', r.status === 404, String(r.status));
   }
+  // The Pro JSON endpoints: JSON only, this site's origin only.
+  const stepNoType = await get('/api/pro/step?id=' + 'a'.repeat(32), { method: 'POST', headers: { 'User-Agent': 'citehound-smoke/1' } });
+  const stepJson = await get('/api/pro/step?id=' + 'a'.repeat(32), { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: '{}' });
+  t('POST /api/pro/step without a JSON content type is 415; with one, an unknown job is the generic 404', stepNoType.status === 415 && stepJson.status === 404, stepNoType.status + ' ' + stepJson.status);
+  const foreignOrder = await get('/api/pro/order', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://example.invalid', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ token: 'a'.repeat(32) }) });
+  const textOrder = await get('/api/pro/order', { method: 'POST', headers: { 'Content-Type': 'text/plain', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ token: 'a'.repeat(32) }) });
+  t('POST /api/pro/order from another origin is 403 and as text/plain is 415 (nothing is looked up)', foreignOrder.status === 403 && textOrder.status === 415, foreignOrder.status + ' ' + textOrder.status);
   const portrait = await fetch(BASE + '/assets/andac.jpg');
   t('the About portrait is served as a JPEG', portrait.status === 200 && /image\/jpeg/.test(portrait.headers.get('content-type') || ''), String(portrait.status));
   for (const p of ['/benchmarks/crm', '/methodology', '/research/crawler-access-2026']) {
