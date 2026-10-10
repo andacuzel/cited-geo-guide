@@ -4,6 +4,28 @@ The checklist for the day the domain is bought. Do the steps in order. Replace `
 
 The site reads its address from `site.config.json`. `scripts/set-domain.js` changes it everywhere, using `config/domain-rules.json` to decide what to rewrite, what to leave as a record of the old host and what is protected scanner code. Tested on 5 October 2026 in a throwaway worktree with `https://example-domain.test`: every generator check, the page checks and `node --check` passed.
 
+## Status on 11 October 2026
+
+The move to `getcitehound.com` has happened. What the repository and the live checks show, and what nothing here can show:
+
+| Step | State | Evidence |
+|---|---|---|
+| 1. Domain in Vercel, DNS | done | The live site answers on `getcitehound.com` (every smoke run reads it). The DNS records themselves are at the registrar: **unverified** from here. |
+| 2. TLS | done | `https://getcitehound.com` answers without a certificate error. |
+| 3 and 4. `set-domain.js` | done | `site.config.json` reads `getcitehound.com`; `sitemap.xml`, `robots.txt`, `llms.txt`, `plugin/.mcp.json` and the pages carry it. Run `node scripts/set-domain.js https://getcitehound.com` to see the dry run: it should report nothing to rewrite. |
+| 5. Commit and push | done | On `main`. |
+| 6. Old `vercel.app` host redirects | done | `vercel.json` redirects `answerable-app.vercel.app` to `getcitehound.com`, permanently, and leaves `/api/mcp` and the `/.well-known/oauth`, `openid` and `mcp` paths on the old host unredirected. Retire that exception when nobody is connected to the old MCP address (unverified whether anyone is). |
+| 7. Claude connector | **unverified** | The plugin's `.mcp.json` points at `https://getcitehound.com/api/mcp`. Whether your own Claude connectors were re-added, and the old `answerable` one removed, is not visible from the repository. |
+| 8. Search Console and Bing | **unverified** | Nothing in the repository records a property or a submitted sitemap. |
+| 9. IndexNow | not done | There is no key file at the site root. Optional. |
+| 10. Open Graph image | done | `assets/brand/og-default.png`, `favicon.ico` and `apple-touch-icon.png` exist; they carry the brand, not the host. |
+| 11. MCP directory submission | prepared | `docs/directory-submission.md` is generated and checked against the registry. Whether anything was submitted is **unverified**. The ChatGPT and Gemini Enterprise connector tests in it have not been run. |
+| 12. Afterwards | partly | `security.txt` expires 2027-10-08 (renew with `node scripts/generate-trust.js --renew`; the check fails 30 days early). Social profiles, directory listings and the GitHub repository description are outside the repository: **unverified**. |
+
+Email on the domain (not part of the original checklist): the Pro mail goes through Resend from the address in `PRO_MAIL_FROM`; `docs/pro.md` lists the DNS records the sending domain needs (SPF, DKIM, DMARC). A message was handed to Resend successfully on 10 October 2026 (HTTP 200); that it reached an inbox, and that SPF, DKIM and DMARC pass, is **unverified** (read the headers of a received message). The contact mailbox `hey@getcitehound.com` is read by you, not by anything here.
+
+The steps below stay as the procedure for any future move of the domain.
+
 ## 1. Add the domain in Vercel and set DNS
 
 1. In the Vercel project, open Settings, then Domains, and add `NEWHOST`. Add the `www` form too if you want it, and pick which one redirects to the other.
@@ -87,7 +109,7 @@ claude mcp remove answerable
 
 Claude on the web and desktop: open the connector's settings, change the server URL to `NEW/api/mcp`, and reconnect. The plugin's `.mcp.json` already carries the new URL after step 4.
 
-Confirm the new endpoint answers:
+Confirm the new endpoint answers (the server also serves a client that sends no `MCP-Protocol-Version` header, assuming 2025-03-26, and answers `OPTIONS` for browsers):
 
 ```bash
 curl -s NEW/api/mcp -H 'Content-Type: application/json' -H 'Accept: application/json' \

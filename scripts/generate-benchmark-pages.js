@@ -452,8 +452,8 @@ function categoryPage(c, overall) {
     '          <p>One score out of 100 per site, split across three pillars: ' + c.pillars.map(function (p) { return esc(p.name.toLowerCase()) + ' (' + p.max + ')'; }).join(', ') + '. The checks and their point values are on the <a href="/methodology">methodology page</a>.</p>\n\n' +
     '          <h3>How the sites were chosen</h3>\n' +
     '          <p>The lists are hand-picked, well-known sites in the category. They are not a random sample, so these figures describe the sites we scanned, not the category as a whole.</p>\n\n' +
-    '          <h3>Repeat scans</h3>\n' +
-    '          <p>In one October 2026 rescan of the same lists, category averages moved by one point or less. Individual sites moved more: about a third changed by 3 to 15 points.</p>\n\n' +
+    '          <h3>One snapshot</h3>\n' +
+    '          <p>Every figure on this page comes from one scan of these sites in July 2026, on the date given above. Sites change, so a later scan can give different figures. This page publishes that snapshot only.</p>\n\n' +
     '          <h3>What this measures</h3>\n' +
     '          <p>Whether AI systems can reach a site, and whether its homepage carries the signals machines read. It does not measure whether any assistant names a brand in an answer. Model responses vary by prompt, session and training data, and no scan of public files can predict them.</p>\n\n' +
     '          <div class="report-limits">\n' +

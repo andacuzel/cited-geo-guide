@@ -24,6 +24,11 @@
      - the pilot token flow, when the Upstash credentials are in the environment or .env.local: a pilot link is issued, its
        start page and order lookup say it is ready, it is revoked and then looks like an unknown link, and it is deleted.
        Without credentials this part says it was skipped.
+     - /scan answers a 301 to / ; the MCP endpoint serves a request with no MCP-Protocol-Version header (assumed 2025-03-26) with
+       all its tools, answers OPTIONS (204, CORS) and GET (405 with Allow)
+     - /pro/welcome is a noindex, no-store page; POST /api/pro/welcome answers "waiting" for an id with no order; an unsigned POST to
+       /api/pro/webhook is refused (403, or 503 while PRO_WEBHOOK_SECRET is not set: never a 2xx); a GET on it is 405
+     - the About portrait is served, and no page cites the October 2026 rescan (only the July snapshot)
      - fail-closed without PRO_HASH_SECRET cannot be tried on the live site (it would need the secret removed). The live Pro API
        answering normally proves the secret is set; scripts/test-pro-api.js proves what happens when it is not.
 
@@ -161,6 +166,36 @@ async function waitForDeployment(sha) {
   t('the form script and the switch script are served', wlJs.status === 200 && ctaJs.status === 200 && /\/api\/waitlist/.test(wlJs.text + ctaJs.text));
   const png = await fetch(BASE + '/assets/email/hound-mark.png');
   t('the hound image used in the email is served as a PNG', png.status === 200 && /image\/png/.test(png.headers.get('content-type') || ''), String(png.status));
+
+  /* ---- small fixes and payments ---- */
+  const scan = await get('/scan?scan=example.com');
+  t('/scan is a 301 to the homepage and keeps the query', scan.status === 301 && /^(https:\/\/[^/]+)?\/(\?scan=example\.com)?$/.test(scan.headers.get('location') || ''), scan.status + ' ' + scan.headers.get('location'));
+  const noHdr = await get('/api/mcp', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }) });
+  let noHdrTools = null; try { noHdrTools = JSON.parse(noHdr.text).result.tools; } catch (e) { /* reported below */ }
+  t('MCP: a request with no MCP-Protocol-Version header is served (assumed 2025-03-26) with 13 tools, titled and read-only', noHdr.status === 200 && Array.isArray(noHdrTools) && noHdrTools.length === 13 && noHdrTools.every((x) => x.title && x.annotations && x.annotations.readOnlyHint === true), noHdr.status + ' ' + noHdr.text.slice(0, 100));
+  const opt = await get('/api/mcp', { method: 'OPTIONS', headers: { Origin: 'https://example.com', 'Access-Control-Request-Method': 'POST', 'User-Agent': 'citehound-smoke/1' } });
+  t('MCP: OPTIONS answers the preflight (204, any origin, MCP-Protocol-Version allowed)', opt.status === 204 && opt.headers.get('access-control-allow-origin') === '*' && /MCP-Protocol-Version/i.test(opt.headers.get('access-control-allow-headers') || ''), String(opt.status));
+  const mget = await get('/api/mcp');
+  t('MCP: GET is 405 with Allow (no SSE stream)', mget.status === 405 && /POST/.test(mget.headers.get('allow') || ''), String(mget.status));
+  const mbad = await get('/api/mcp', { method: 'POST', headers: { 'Content-Type': 'application/json', 'MCP-Protocol-Version': '1999-01-01', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }) });
+  t('MCP: an unsupported version is 400', mbad.status === 400, String(mbad.status));
+  const welcome = await get('/pro/welcome');
+  t('/pro/welcome is 200, noindex, no referrer, no-store, and has no link in it', welcome.status === 200 && /noindex/.test(welcome.headers.get('x-robots-tag') || '') && welcome.headers.get('referrer-policy') === 'no-referrer' && /no-store/.test(welcome.headers.get('cache-control') || '') && /Payment received/.test(welcome.text) && !/\/pro\/start\/[a-f0-9]{32}/.test(welcome.text), String(welcome.status));
+  const wpoll = await get('/api/pro/welcome', { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ checkout: 'co_smoke_not_a_real_checkout' }) });
+  t('POST /api/pro/welcome answers "waiting" for a checkout with no order', wpoll.status === 200 && /"state":"waiting"/.test(wpoll.text), wpoll.status + ' ' + wpoll.text.slice(0, 80));
+  const wh = await get('/api/pro/webhook', { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ type: 'order.paid', data: { id: 'ord_smoke_unsigned', status: 'paid' } }) });
+  t('an unsigned POST to the payment webhook is refused: 403 (secret set) or 503 (not set yet), never a 2xx', wh.status === 403 || wh.status === 503, String(wh.status));
+  const whBad = await get('/api/pro/webhook', { method: 'POST', headers: { 'Content-Type': 'application/json', 'webhook-id': 'msg_smoke', 'webhook-timestamp': String(Math.floor(Date.now() / 1000)), 'webhook-signature': 'v1,' + Buffer.from('not a real signature').toString('base64'), 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ type: 'order.paid', data: { id: 'ord_smoke_badsig', status: 'paid' } }) });
+  t('a wrongly signed POST to the payment webhook is refused too', whBad.status === 403 || whBad.status === 503, String(whBad.status));
+  t('a GET on the payment webhook is 405', (await get('/api/pro/webhook')).status === 405);
+  const wjs = await get('/app/pro-welcome.js');
+  t('the welcome script is served', wjs.status === 200 && /api\/pro\/welcome/.test(wjs.text));
+  const portrait = await fetch(BASE + '/assets/andac.jpg');
+  t('the About portrait is served as a JPEG', portrait.status === 200 && /image\/jpeg/.test(portrait.headers.get('content-type') || ''), String(portrait.status));
+  for (const p of ['/benchmarks/crm', '/methodology', '/research/crawler-access-2026']) {
+    const r = await get(p);
+    t(p + ' cites no October 2026 rescan', r.status === 200 && !/October 2026 rescan|rescan of the same|rescan in October/i.test(r.text), String(r.status));
+  }
 
   /* ---- the pilot token flow (needs the Upstash credentials) ---- */
   require('./env-local.js').load();

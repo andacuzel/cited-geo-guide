@@ -41,9 +41,22 @@
        with the spec's 400 + -32020 / -32022 / -32602. A request
        declaring an older supported version (2025-06-18 and 2025-11-25
        clients send the header but no _meta) is served as before. A
-       request declaring no version at all is rejected (-32020);
-       2025-03-26 clients, which sent no header, are not served. ping
-       is answered only on older-version requests.
+       request with no MCP-Protocol-Version header and no _meta version
+       is assumed to be 2025-03-26 and served as a legacy request, which
+       is what the transport spec says to do ("if the server does not
+       receive an MCP-Protocol-Version header, and has no other way to
+       identify the version ... the server SHOULD assume protocol version
+       2025-03-26", spec 2025-11-25, Transports). A request with no header
+       whose body declares a version in _meta has another way to identify
+       it, and the header mismatch is rejected (-32020). An unsupported
+       version is 400 (-32022). Batched JSON-RPC arrays, which 2025-03-26
+       allowed, are not supported (UNVERIFIED against that revision's
+       text). ping is answered only on older-version requests.
+     - OPTIONS answers the CORS preflight (204) and every response
+       carries Access-Control-Allow-Origin: *. The endpoint is public,
+       read-only, stateless and takes no credentials or cookies, so a
+       browser page may call it; GET answers 405 with Allow: POST, OPTIONS
+       because no SSE stream is offered.
      - Origin validation (the spec's DNS-rebinding protection) applies
        to locally-bound servers reachable from a browser tab on the
        same machine. This is a public, remote, stateless, read-only
@@ -89,7 +102,7 @@ const playbooks = require('../lib/playbooks');
 const CRAWLERS = require('../lib/crawlers');
 const citation = require('../lib/citation-content');
 
-const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
+const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26'];
 const SERVER_INFO = { name: 'citehound', title: 'Citehound', version: '1.0.0' };
 const SERVER_INSTRUCTIONS = 'Citehound scans a domain’s public robots.txt, llms.txt and homepage for AI-crawler access and on-page signals, and generates the fixes (schema, robots.txt, llms.txt). It also serves the scoring methodology, the research, a sample report of our own site, the vertical playbooks and the citation question sets, and three prompts for common workflows. Every tool is read-only and non-destructive. It measures readiness, not whether any assistant names a brand.';
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -842,8 +855,8 @@ function isPlainObject(x) { return x && typeof x === 'object' && !Array.isArray(
 //   legacy  — declares an older supported version: 2025-06-18 and
 //             2025-11-25 clients send the MCP-Protocol-Version header but
 //             no _meta. Served as before, no _meta required.
-// A request declaring no version at all is rejected: every supported
-// revision sends the header, and 2025-03-26 (which did not) is not served.
+// A request declaring no version at all is assumed to be 2025-03-26 (the spec's rule for a missing header), unless its body declares one
+// in _meta, in which case the missing header is a mismatch and is rejected.
 function classifyRequest(req, body) {
   var method = body.method;
   var params = isPlainObject(body.params) ? body.params : {};
@@ -855,8 +868,8 @@ function classifyRequest(req, body) {
   function reject(status, code, message, data) { return { reject: { status: status, code: code, message: message, data: data } }; }
 
   if (hdrVersion === undefined) {
-    return reject(400, -32020, 'Header mismatch: the MCP-Protocol-Version header is required on every request and was not sent' +
-      (metaVersion !== undefined ? ' (the request body declares ' + metaVersion + ').' : '.'));
+    if (metaVersion === undefined) return { era: 'legacy', version: '2025-03-26', assumed: true };
+    return reject(400, -32020, 'Header mismatch: the MCP-Protocol-Version header was not sent, but the request body declares ' + metaVersion + '.');
   }
   if (metaVersion !== undefined && metaVersion !== hdrVersion) {
     return reject(400, -32020, 'Header mismatch: MCP-Protocol-Version header value \'' + hdrVersion + '\' does not match _meta protocol version \'' + metaVersion + '\'.');
@@ -902,8 +915,20 @@ function rpcErrorFull(id, code, message, data) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
+  // Public, read-only, no credentials: any origin may call it (see the header comment).
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Allow', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, MCP-Protocol-Version, Mcp-Method, Mcp-Name, Mcp-Session-Id, Last-Event-ID');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.status(204).end();
+    return;
+  }
 
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST, OPTIONS');
     res.status(405).json(rpcError(null, -32601, 'Method not allowed. POST a JSON-RPC 2.0 request to this endpoint.'));
     return;
   }

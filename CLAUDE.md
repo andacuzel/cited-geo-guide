@@ -102,6 +102,12 @@ Constraints that must not be broken:
   the first 429. Search grounding needs a billing-enabled key, and Google's grounding terms restrict how grounded results may be
   used (`docs/citation-check.md`, "Terms"): do not switch it on for customers before that is settled. The site's text is untrusted:
   delimiters, a schema, validation; nothing the model returns is fetched. A failure never fails the report.
+- **Pro payments are built, not switched on.** `lib/pro-payments.js` (Polar adapter, a Paddle stub that refuses everything) verifies the signed
+  webhook (`POST /api/pro/webhook`, secret `PRO_WEBHOOK_SECRET`; without it 503), creates one paid order per provider order id through
+  `createOrderFromPayment`, remembers `checkout id -> link` for 30 minutes, and `/pro/welcome` hands the start path over once. A refund before use
+  cancels the link; after use nothing changes. Replays and redeliveries do nothing. Read `docs/payments.md` (what is verified, what is not) before
+  setting `PRO_CHECKOUT_URL`, and never before the webhook has been tested against Polar's sandbox. `docs/terms-draft.md` and `docs/refund-draft.md`
+  are drafts with placeholders, kept off the deployed site by `.vercelignore`; they are not legal advice and are not published.
 - **One guard for every fetch of a domain someone typed.** `lib/safe-fetch.js` resolves the name inside the socket's
   own lookup, connects only to a public address it has checked, re-checks every redirect and caps time and size.
   `lib/scanner.js` `fetchText` goes through it, so the free scan, the llms.txt checker, site-info, the crawl, the MCP

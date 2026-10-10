@@ -143,7 +143,7 @@ function build(D) {
   const cite = 'Andaç Üzel, “' + title.replace(/\.$/, '') + ',” Citehound Research, ' + dateLabel + '. ' + url;
   const topBlocked = D.perBot.slice().sort((a, b) => b.blocked - a.blocked)[0];
   const tops = D.perBot.filter((b) => b.blocked === topBlocked.blocked);
-  const rescan = 'The October 2026 rescan of the same six lists moved category averages by one point or less (see the methodology changelog).';
+  const rescan = 'These figures are the July 2026 snapshot; the sites have not been scanned again for this page.';
 
   const body = shell.banner({ kicker: 'Research', title: esc(title), desc: 'The share of homepages that block each tracked AI crawler, by category, and how many only limit it with a Disallow rule. Computed from the benchmark scans, no new scans.' })
     .replace('        </div>\n      </div>\n    </section>\n', '          <span class="page-banner__num" aria-hidden="true">002</span>\n        </div>\n      </div>\n    </section>\n') +
@@ -194,7 +194,7 @@ function indexEntry() {
     slug: SLUG, kind: 'research', title: title, date: PUBLISHED, dateLabel: longDate(PUBLISHED), url: site.baseUrl + '/research/' + SLUG,
     summary: 'We read the robots.txt of ' + D.N + ' homepages in ' + nWord + ' categories. Few block an AI crawler outright; many apply a Disallow rule that is usually an ordinary path.',
     findings: F,
-    limits: ['Homepages only, from hand-picked well-known sites, not a random sample.', 'One scan date per category. The October 2026 rescan moved category averages by one point or less.', D.failed + ' sites that could not be reached are excluded and counted.', 'A limited result means an applicable Disallow rule, usually an ordinary path, and is not a block.'],
+    limits: ['Homepages only, from hand-picked well-known sites, not a random sample.', 'One scan date per category, all in July 2026. These figures are that snapshot.', D.failed + ' sites that could not be reached are excluded and counted.', 'A limited result means an applicable Disallow rule, usually an ordinary path, and is not a block.'],
     cite: 'Andaç Üzel, “' + title + ',” Citehound Research, ' + longDate(PUBLISHED) + '. ' + site.baseUrl + '/research/' + SLUG,
     sources: ['research/' + SLUG + '.html', 'data/']
   };

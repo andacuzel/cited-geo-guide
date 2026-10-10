@@ -59,7 +59,7 @@ function benchmarkEntry() {
     ],
     limits: [
       'Homepages only, from hand-picked well-known sites in each category, not a random sample.',
-      'One scan date per category. A rescan in October 2026 moved category averages by one point or less.',
+      'One scan date per category, all in July 2026. These figures are that snapshot.',
       'It measures readiness, not whether any assistant names a brand.'
     ],
     cite: 'Citehound, "AI readiness benchmarks," ' + longDate(latest) + '. ' + BASE + '/benchmarks',

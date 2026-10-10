@@ -31,7 +31,12 @@
     show('loading');
     if (!token) { unavailable(); return; }
     postJson('/api/pro/order', { token: token }).then(function (r) {
-      if (r.ok && r.body.state === 'ready') { show('form'); focusTitle(sections.form); return; }
+      if (r.ok && r.body.state === 'ready') {
+        // A bought link knows who paid: fill the form in. Both fields stay editable and the consent box stays unticked.
+        var pf = r.body.prefill;
+        if (pf) { if (pf.name && !$('psName').value) $('psName').value = pf.name; if (pf.email && !$('psEmail').value) $('psEmail').value = pf.email; }
+        show('form'); focusTitle(sections.form); return;
+      }
       if (r.ok && r.body.state === 'started' && r.body.reportPath) { location.replace(r.body.reportPath); return; }
       if (r.status === 429) { unavailable('Too many requests from your network. Wait a few minutes and try again.', true); return; }
       unavailable();
