@@ -31,7 +31,7 @@ const shell = require('../lib/page-shell.js');
 
 const FILE = path.join(ROOT, 'mcp.html');
 const MCP_PATH = '/api/mcp';
-const CSS_VERSION = 61;
+const CSS_VERSION = 62;
 const PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18'];
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 const word = (n) => (n >= 0 && n < WORDS.length ? WORDS[n] : String(n));

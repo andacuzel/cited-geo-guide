@@ -18,7 +18,7 @@
 
 - [Benchmarks](https://getcitehound.com/benchmarks): scan results for six categories of well-known sites, with the sample size and scan date on every page.
 - [Research](https://getcitehound.com/research): reports on what we find when we scan real sites.
-- [Citation tracking](https://getcitehound.com/citation-tracking): early access. We ask one model the buying questions in a category, repeat each question, and record whether it names a brand.
+- [Citation tracking](https://getcitehound.com/citation-tracking): in early access through the Pro waitlist on the Pro page. We ask one model the buying questions in a category, repeat each question, and record whether it names a brand.
 
 ## Tools
 

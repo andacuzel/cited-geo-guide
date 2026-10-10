@@ -208,10 +208,11 @@ function fresh() {
       hset: async (k, o) => mem.hset(k, o),
       hsetnx: async (k, f, v) => ((await mem.hsetnx(k, f, v)) ? 1 : 0),
       hget: async (k, f) => mem.hget(k, f),
-      // As the client answers with automaticDeserialization off: Redis's flat list, empty for a missing key.
-      hgetall: async (k) => { const o = await mem.hgetall(k); return o ? Object.keys(o).reduce((a, f) => a.concat([f, o[f]]), []) : []; },
+      // As the client answers with automaticDeserialization off: Redis's flat list, empty for a missing key. The fields come back in
+      // reverse insertion order: Redis promises no order for a hash (a real run showed it), so nothing may depend on one.
+      hgetall: async (k) => { const o = await mem.hgetall(k); return o ? Object.keys(o).reverse().reduce((a, f) => a.concat([f, o[f]]), []) : []; },
       hdel: async (k, f) => mem.hdel(k, f), hincrby: async (k, f, n) => mem.hincrby(k, f, n),
-      sadd: async (k, m) => mem.sadd(k, m), srem: async (k, m) => mem.srem(k, m), scard: async (k) => mem.scard(k)
+      sadd: async (k, m) => mem.sadd(k, m), srem: async (k, m) => mem.srem(k, m), scard: async (k) => mem.scard(k), smembers: async (k) => (await mem.smembers(k)).reverse()
     };
     const store = S.createStore(S.redisAdapter(fake), { now: () => clock });
     const o = await store.createOrder();
@@ -224,6 +225,10 @@ function fresh() {
     t('Redis adapter: pages and counters round-trip', job.progress.done === 1 && job.progress.blocked === 1 && job.pages[0].result.total === 80);
     const lock = await store.acquireLock(id);
     t('Redis adapter: lock is exclusive and released by its holder', !!lock && (await store.acquireLock(id)) === null && (await store.releaseLock(id, lock)) === true);
+    t('Redis adapter: pages come back in page order although the hash fields came back reversed', job.pages.length === 2 && job.pages[0].url === 'https://example.com/' && job.pages[1].url === 'https://example.com/a');
+    const oa = await store.createOrder({ source: 'pilot', label: 'L', validDays: 14 }), ob = await store.createOrder({ source: 'paid' });
+    const listed = await store.listOrders();
+    t('Redis adapter: order options and the order index round-trip (flat HGETALL, SMEMBERS)', listed.filter((x) => x.token === oa.token || x.token === ob.token).length === 2 && listed.find((x) => x.token === oa.token).label === 'L' && listed.find((x) => x.token === oa.token).validDays === 14 && listed.find((x) => x.token === ob.token).source === 'paid');
     t('Redis adapter: domain slots', (await store.reserveDomainSlot('x.com', 1)) === true && (await store.reserveDomainSlot('x.com', 1)) === false);
   }
 

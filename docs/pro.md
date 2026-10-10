@@ -101,7 +101,9 @@ Set in the Vercel project (Production and Preview):
 |---|---|---|
 | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Everything | Or `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`. Create a Redis (Upstash, through the Vercel Marketplace) and connect it to the project. Without one, every Pro action answers 503 with a plain message and the log names the missing variables. There is no silent fallback to memory on Vercel. |
 | `PRO_HASH_SECRET` | Rate limits, waitlist removal links | A random string of at least 16 characters. The caller id is `HMAC-SHA256(secret, address + UTC date)`; no address is ever stored or logged. **There is no fallback: if it is missing or shorter than 16 characters, every Pro endpoint answers 503 ("not available") and the log names the variable.** `npm run gates` tests that. |
-| `RESEND_API_KEY`, `PRO_MAIL_FROM` | "Email me this report" | `PRO_MAIL_FROM` looks like `Citehound <reports@mail.getcitehound.com>`. If either is missing, the email endpoint answers "not configured" and the report page hides the button. |
+| `WAITLIST_EMAIL_DAILY_CAP` | The waitlist confirmation email | Most confirmation emails per UTC day, default 200. A signup still succeeds when the cap is reached or Resend is not configured; it just sends nothing. |
+| `PRO_CHECKOUT_URL`, `PRO_PRICE_TEXT` | The Pro buttons | If `PRO_CHECKOUT_URL` is an https address, every Pro button goes there (label "Get Citehound Pro") and the waitlist form is hidden; otherwise the buttons go to the waitlist form on `/pro`. `PRO_PRICE_TEXT` replaces "Early access" where a price can show. Read by `GET /api/waitlist`, applied by `pro-cta.js`. |
+| `RESEND_API_KEY`, `PRO_MAIL_FROM` | "Email me this report", the waitlist confirmation | `PRO_MAIL_FROM` looks like `Citehound <reports@mail.getcitehound.com>`. If either is missing, the email endpoint answers "not configured" and the report page hides the button. |
 
 For `scripts/pro-issue-token.js` on your own machine, the same `KV_*` pair in the gitignored `.env.local` works.
 
@@ -259,3 +261,27 @@ most 3 times per order; after that the link stays spent. A partial job (at least
 - **Crawl driver.** The browser drives the crawl. If a customer closes the tab, the job pauses until they reopen
   the link. A queue or cron would make it server-driven; both cost money or complexity on Hobby.
 - **Dark theme.** The site has no dark theme, so the report is light only.
+
+## Waitlist, pilot links, feedback and counters (10 Oct 2026)
+
+- **Waitlist.** The form on `/pro` posts to `/api/waitlist` (rewritten to `api/pro.js`, action `waitlist`). Logic in
+  `lib/waitlist.js`, the routes in `lib/waitlist-api.js`, the email in `lib/waitlist-mail.js`. A record is
+  `wl:e:<id>` (email, optional name, createdAt, consentVersion), 12 months, where `<id>` is an HMAC of the normalized
+  address keyed with `PRO_HASH_SECRET`; `wl:index` lists ids for `scripts/export-waitlist.js`. The answer is the same
+  for a new address, a known one, a throttled mail and a filled honeypot (`company_fax`). One confirmation mail per
+  address per 30 days (`wl:mail:<id>`), a daily cap (`wl:cap:<day>`), hashed-address rate limit (6 an hour). Response
+  time can differ slightly between a new address and a known one, because only the first sends mail.
+  Not a double opt-in: anyone can enter an address, and the one message they cause carries a removal link.
+- **Removal.** `/waitlist/remove/<64 hex>` is `<id>` plus an HMAC of it. GET shows a page with one button (a mail scanner
+  that opens links removes nobody); POST deletes (the button, and a mail client's one-click `List-Unsubscribe-Post`).
+  The links do not expire. Changing `PRO_HASH_SECRET` breaks them all, and also every id on the list.
+- **Pilot links.** `scripts/pro-issue-token.js --count --label --expires-days --source`; `scripts/pro-admin.js list |
+  revoke | stats | feedback`; `docs/pilot.md` is the owner's guide. An order records `source` (pilot or paid), `label`
+  and `validDays`; the code path after issuing is identical. A restored link gets its `validDays` again.
+- **Feedback.** An optional form at the end of a live report (not the sample): rating 1 to 5, text up to 1000
+  characters, honeypot, 10 an hour per hashed address, one answer per report, `pro:feedback:<jobId>` for 90 days, no
+  contact data. `/privacy` says so.
+- **Counters.** `lib/pro-stats.js`: one hash per UTC day, `pro:stats:<day>`, 400 days, metric names and numbers only (see
+  `METRICS`). `scripts/pro-admin.js stats` prints them. e2e and smoke runs put back what they counted.
+- **Real-Redis note.** Redis returns a hash's fields in no promised order. Nothing in `lib/` relies on one;
+  `scripts/test-real-kv.js` compares objects by sorted keys and `scripts/test-pro-store.js` runs with reversed order.

@@ -200,6 +200,7 @@ function call(handler, req) {
       'lib/citation/providers/perplexity.js': 'a model provider, a fixed address',
       'lib/summary-gemini.js': 'a model provider, a fixed address',
       'lib/pro-mail.js': 'the mail provider, a fixed address',
+      'lib/waitlist-mail.js': 'the mail provider, a fixed address (the waitlist confirmation)',
       'lib/safe-fetch.js': 'the guard itself',
       'lib/report-pro-ui.js': 'browser code, same origin',
       'middleware.js': 'edge middleware, a fixed address'
@@ -216,7 +217,7 @@ function call(handler, req) {
     const stale = Object.keys(ALLOWED).filter((f) => !fs.existsSync(path.join(ROOT, f)));
     t('the list of allowed files has no entry for a file that is gone', stale.length === 0, stale.join(', '));
     // The one allowed file that takes a user-supplied address: none. State it so a change is noticed.
-    t('the mail provider address is a literal, not built from a request', /doFetch\('https:\/\/api\.resend\.com\/emails'/.test(fs.readFileSync(path.join(ROOT, 'lib', 'pro-mail.js'), 'utf8')));
+    t('the mail provider address is a literal, not built from a request', ['pro-mail.js', 'waitlist-mail.js'].every((f) => /doFetch\('https:\/\/api\.resend\.com\/emails'/.test(fs.readFileSync(path.join(ROOT, 'lib', f), 'utf8'))));
   }
 
   dns.lookup = realLookup; net.Socket.prototype.connect = realConnect; console.error = realErr;

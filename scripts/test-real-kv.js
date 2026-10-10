@@ -43,7 +43,10 @@ async function both(label, step) {
   const a = await step(real, 'r');
   const b = await step(memory, 'm');
   const norm = (x) => (typeof x === 'number' && x > 0 && x < 100000 && /ttl/i.test(label) ? 'ttl' : x);
-  const same = JSON.stringify(norm(a)) === JSON.stringify(norm(b)) || (/ttl/i.test(label) && typeof a === 'number' && typeof b === 'number' && Math.abs(a - b) <= 2);
+  // Redis does not promise any field order for a hash (the first real run happened to match, a later one did not),
+  // so an object compares by its keys in sorted order. Order is never relied on anywhere in lib/.
+  const canon = (x) => (x && typeof x === 'object' && !Array.isArray(x) ? JSON.stringify(Object.keys(x).sort().map((k) => [k, x[k]])) : JSON.stringify(x));
+  const same = canon(norm(a)) === canon(norm(b)) || (/ttl/i.test(label) && typeof a === 'number' && typeof b === 'number' && Math.abs(a - b) <= 2);
   t(label + ': real ' + JSON.stringify(a) + ', memory ' + JSON.stringify(b), same);
   return a;
 }
@@ -159,6 +162,58 @@ async function both(label, step) {
   t('... and every response that succeeded names that job', rs.filter((r) => r.status === 200).length >= 1 && rs.every((r) => r.status === 200 || r.status === 409 || r.status === 429));
   const orderAfter = await call(api.order, { method: 'POST', body: { token: o2.token } }, { store });
   t('the order lookup on Redis now points at that job and no other', orderAfter.json.reportPath === '/r/' + [...ids][0] + '/');
+
+  /* ---- sets: SMEMBERS, which the order index, the waitlist index and the feedback index use ---- */
+  await both('SMEMBERS of a set (sorted)', async (A) => { await A.sadd('sm', 'b'); await A.sadd('sm', 'a'); return (await A.smembers('sm')).sort(); });
+  await both('SMEMBERS of a missing set is an empty list', (A) => A.smembers('smissing'));
+
+  /* ---- the waitlist on the real server ---- */
+  {
+    const Waitlist = require('../lib/waitlist.js');
+    const Stats = require('../lib/pro-stats.js');
+    const j = await Waitlist.join(real, { email: 'Reader@Example.org', name: 'Ada' });
+    const j2 = await Waitlist.join(real, { email: ' reader@example.ORG ' });
+    t('waitlist on Redis: a new address is new, the same address typed differently is not', j.isNew === true && j2.isNew === false && j.id === j2.id);
+    t('waitlist on Redis: one record, with the fields, kept 12 months', (await Waitlist.list(real)).length === 1 && (await real.hget('wl:e:' + j.id, 'email')) === 'reader@example.org' && (await real.ttl('wl:e:' + j.id)) > 364 * 86400);
+    const racers = await Promise.all(Array.from({ length: 10 }, () => Waitlist.join(real, { email: 'race@example.org' })));
+    t('waitlist on Redis: 10 parallel signups of one address create exactly one record', racers.filter((r) => r.isNew).length === 1 && (await Waitlist.list(real)).length === 2);
+    const mailEnv = { RESEND_API_KEY: 'x', PRO_MAIL_FROM: 'y' };
+    const slots = await Promise.all(Array.from({ length: 10 }, () => Waitlist.reserveMail(real, j.id, mailEnv)));
+    t('waitlist on Redis: 10 parallel mail reservations for one address: exactly one wins (one mail per address per 30 days)', slots.filter((x) => x.ok).length === 1 && (await real.ttl('wl:mail:' + j.id)) > 29 * 86400);
+    t('waitlist on Redis: the losers gave their share of the daily cap back (counter is 1)', (await real.get('wl:cap:' + Stats.dayOf())) === '1');
+    const capped = await Promise.all(Array.from({ length: 8 }, (_, i) => Waitlist.reserveMail(real, 'cap' + String(i).padStart(29, '0'), Object.assign({ WAITLIST_EMAIL_DAILY_CAP: '4' }, mailEnv))));
+    t('waitlist on Redis: with a cap of 4 (3 slots left after the one above), 3 more of 8 parallel reservations win', capped.filter((x) => x.ok).length === 3, String(capped.filter((x) => x.ok).length));
+    await slots.find((x) => x.ok).release();
+    t('waitlist on Redis: a released reservation frees the address and the cap', (await real.get('wl:mail:' + j.id)) === null);
+    const tok = Waitlist.tokenFor('reader@example.org');
+    t('waitlist on Redis: the signed token removes the record, the index entry, and only that one', (await Waitlist.remove(real, tok)) === true && (await Waitlist.remove(real, tok)) === false && (await Waitlist.list(real)).length === 1);
+  }
+
+  /* ---- daily counters on the real server ---- */
+  {
+    const Stats = require('../lib/pro-stats.js');
+    const base = (await Stats.read(real, 1))[0].counts; // the start endpoint above already counted its one job
+    await Promise.all(Array.from({ length: 12 }, () => Stats.count(real, 'jobs_started')));
+    await Stats.count(real, 'orders_pilot', 3);
+    const today = (await Stats.read(real, 1))[0];
+    t('stats on Redis: 12 parallel increments add up exactly, a step of 3 works, other metrics stay as they were', today.counts.jobs_started === base.jobs_started + 12 && today.counts.orders_pilot === base.orders_pilot + 3 && today.counts.jobs_done === base.jobs_done && base.jobs_started === 1, JSON.stringify(base));
+    t('stats on Redis: the day hash is kept 400 days', (await real.ttl('pro:stats:' + today.day)) > 399 * 86400);
+  }
+
+  /* ---- orders: source, label, validity, the index, revoke ---- */
+  {
+    const store2 = S.createStore(real);
+    const a = await store2.createOrder({ source: 'pilot', label: 'Real Redis pilot', validDays: 14 });
+    const b = await store2.createOrder({ source: 'paid' });
+    const all = await store2.listOrders();
+    t('orders on Redis: source, label and validity round-trip, and both are in the index', a.source === 'pilot' && a.label === 'Real Redis pilot' && a.validDays === 14 && b.source === 'paid' && all.filter((o) => o.token === a.token || o.token === b.token).length === 2);
+    t('orders on Redis: a 14-day link has a 14-day TTL', (await real.ttl('pro:order:' + a.token)) > 13 * 86400 && (await real.ttl('pro:order:' + a.token)) <= 14 * 86400);
+    t('orders on Redis: revoke works once, and the order then reads as revoked', (await store2.revokeOrder(a.token)) === true && (await store2.revokeOrder(a.token)) === false && (await store2.getOrder(a.token)).status === 'revoked');
+    const jid = await store2.createJob({ domain: 'example.com' });
+    await store2.setJob(jid, { status: 'done' });
+    const fbs = await Promise.all(Array.from({ length: 6 }, (_, i) => call(api.handle, { method: 'POST', query: { a: 'feedback' }, body: { id: jid, rating: 1 + (i % 5), text: 'try ' + i }, ip: '198.51.100.' + (50 + i) }, { store: store2 })));
+    t('feedback on Redis: 6 parallel answers for one report store exactly one', fbs.every((r) => r.status === 200) && (await real.hget('pro:feedback:' + jid, 'rating')) !== null && (await real.ttl('pro:feedback:' + jid)) > 89 * 86400 && (await real.smembers('pro:feedback-index')).filter((x) => x === jid).length === 1);
+  }
 
   /* ---- clean up exactly what this run wrote ---- */
   const keys = Array.from(touched);

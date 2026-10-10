@@ -71,6 +71,27 @@ const PRO_PATH = /\/pro\/start|\/api\/pro|\/r\/[a-f0-9]{16}|pro-start|\/app\/pro
 t('the report page makes no request except the email button\'s', (read('lib/report-pro-ui.js').match(/fetch\(/g) || []).length === 1 && /\/api\/pro\/email/.test(read('lib/report-pro-ui.js')));
 t('nothing is kept in the browser by the Pro pages', !/localStorage|sessionStorage|indexedDB|document\.cookie/.test(['app/pro-start.js', 'app/pro-progress.js', 'lib/report-pro-ui.js'].map(read).join('')));
 
+// ---- the waitlist, the Pro switch and the pilot ----
+{
+  const publicPages = ['index.html', 'pro.html', 'citation-tracking.html', 'sample-report.html', 'about.html', 'privacy.html', 'mcp.html', 'llms.txt', 'api/mcp.js', 'content/mcp-copy.json', 'lib/citation-panel.js', 'scripts/generate-pro.js', 'scripts/generate-citation.js'].filter(exists);
+  t('no Pro call to action is a mailto (no "Citation run request" link anywhere public)', publicPages.every((f) => !/Citation(%20| )run(%20| )request/i.test(read(f))) && ['index.html', 'pro.html', 'citation-tracking.html', 'sample-report.html'].every((f) => !/mailto:[^"']*[?&](subject|body)=/.test(read(f))));
+  const ctaPages = ['index.html', 'pro.html', 'citation-tracking.html', 'sample-report.html'];
+  t('every data-pro-cta link points at the waitlist form (#waitlist or /pro#waitlist) and carries its checkout label', ctaPages.every((f) => { const m = read(f).match(/<a [^>]*data-pro-cta[^>]*>/g) || []; return m.length >= 1 && m.every((a) => /href="(\/pro)?#waitlist"/.test(a) && /data-label-checkout="Get Citehound Pro"/.test(a)); }));
+  t('every page with a Pro button or price loads pro-cta.js', ctaPages.every((f) => /<script src="(\/)?pro-cta\.js\?v=\d+"/.test(read(f))));
+  const pro = read('pro.html');
+  t('pro.html: the waitlist form has an email field, an optional name, a honeypot, and an UNCHECKED consent box with the agreed wording', /id="wlEmail"[^>]*type="email"|type="email"[^>]*id="wlEmail"/.test(pro) && /id="wlName"/.test(pro) && /name="company_fax"/.test(pro) && /<input id="wlConsent" name="consent" type="checkbox"(?![^>]*checked)[^>]*>/.test(pro) && /Tell me when Citehound Pro opens/.test(pro));
+  t('pro.html: it shows "Early access" where a price can go, and loads the form and switch scripts', /data-pro-price>Early access</.test(pro) && /waitlist\.js\?v=\d+/.test(pro) && /pro-cta\.js\?v=\d+/.test(pro));
+  const wl = read('waitlist.js'), cta = read('pro-cta.js'), fb = read('app/pro-feedback.js');
+  t('waitlist.js makes one request, to /api/waitlist, and keeps nothing in the browser', (wl.match(/fetch\(/g) || []).length === 1 && /fetch\('\/api\/waitlist'/.test(wl) && !/localStorage|sessionStorage|indexedDB|document\.cookie/.test(wl));
+  t('pro-cta.js makes one GET, to /api/waitlist, sends nothing and keeps nothing', (cta.match(/fetch\(/g) || []).length === 1 && /fetch\('\/api\/waitlist', \{ headers/.test(cta) && !/method:|body:/.test(cta) && !/localStorage|sessionStorage|indexedDB|document\.cookie/.test(cta));
+  t('pro-feedback.js makes one request, to /api/pro/feedback, and keeps nothing in the browser', (fb.match(/fetch\(/g) || []).length === 1 && /fetch\('\/api\/pro\/feedback'/.test(fb) && !/localStorage|sessionStorage|indexedDB|document\.cookie/.test(fb));
+  ['waitlist.js', 'pro-cta.js', 'app/pro-feedback.js', 'lib/waitlist-mail.js'].forEach((f) => t('no analytics or tracking code in ' + f, !/gtag|googletagmanager|plausible|segment\.|hotjar|fbq\(|_vercel\/insights|vercel\/analytics|mixpanel|posthog|sendBeacon/i.test(read(f))));
+  t('the waitlist never reaches the sitemap, robots.txt, llms.txt or the MCP server by its removal path', !/waitlist\/remove|api\/waitlist/.test(['sitemap.xml', 'robots.txt', 'llms.txt', 'api/mcp.js', 'lib/mcp-content.js'].filter(exists).map(read).join('\n')));
+  t('the public sample report has no feedback form (only a live report has one)', !/id="fbForm"/.test(read('sample-report.html')));
+  t('privacy.html describes the waitlist: what is stored, 12 months, the removal link and Resend', /The Pro waitlist/.test(read('privacy.html')) && /12 months/.test(read('privacy.html')) && /Remove me from the list/.test(read('privacy.html')) && /Resend delivers two kinds of message/.test(read('privacy.html')));
+  t('the Pro CSS version is the same everywhere it is written', (() => { const v = require('../lib/pro-report-page.js').CSS_VERSION; return ['index.html', 'pro.html', 'privacy.html', 'sample-report.html', 'app/pro-start.html'].every((f) => read(f).indexOf('styles.css?v=' + v) !== -1); })());
+}
+
 // ---- the job record ----
 {
   const s = read('lib/pro-store.js');
@@ -95,9 +116,9 @@ t('nothing is kept in the browser by the Pro pages', !/localStorage|sessionStora
 {
   const v = JSON.parse(read('vercel.json'));
   const need = (src) => { const h = (v.headers || []).filter((x) => x.source === src)[0]; return h && h.headers.some((x) => x.key === 'X-Robots-Tag' && /noindex/.test(x.value)) && h.headers.some((x) => x.key === 'Referrer-Policy' && x.value === 'no-referrer'); };
-  ['/r/(.*)', '/pro/start/(.*)', '/app/pro-start(.*)', '/api/pro(.*)'].forEach((src) => t('vercel.json: ' + src + ' sends noindex and no referrer', !!need(src)));
+  ['/r/(.*)', '/pro/start/(.*)', '/waitlist/(.*)', '/app/pro-start(.*)', '/api/pro(.*)'].forEach((src) => t('vercel.json: ' + src + ' sends noindex and no referrer', !!need(src)));
   t('vercel.json: the single Pro function has a duration inside the plan', v.functions['api/pro.js'] && v.functions['api/pro.js'].maxDuration <= 60);
-  t('vercel.json: the report, the start page and the API are rewritten', ['/pro/start/:token', '/api/pro/:action(start|order|step|status|email)', '/r/:id([0-9a-f]{32})'].every((src) => v.rewrites.some((r) => r.source === src)));
+  t('vercel.json: the report, the start page and the API are rewritten', ['/pro/start/:token', '/api/pro/:action(start|order|step|status|email|feedback)', '/api/waitlist', '/waitlist/remove/:token', '/r/:id([0-9a-f]{32})'].every((src) => v.rewrites.some((r) => r.source === src)));
   t('vercel.json: the function bundles the start page file (includeFiles), so it is never missing at runtime', v.functions['api/pro.js'].includeFiles === 'app/pro-start.html');
   const tokenInAddress = /pro-start\?t=|searchParams\.get\('t'\)|[?&]token=/;
   t('no Pro page or script takes a token in a query string (no ?t=, no ?token=) and the function never redirects to one', ['lib/pro-api.js', 'app/pro-start.js', 'app/pro-progress.js', 'lib/report-pro-ui.js', 'lib/pro-report-page.js', 'app/pro-start.html'].every((f) => !tokenInAddress.test(read(f).replace(/\/api\/pro\?a=startpage&token=:token/g, ''))));

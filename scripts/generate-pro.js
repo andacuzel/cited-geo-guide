@@ -35,12 +35,15 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 61;
+const CSS_VERSION = 62;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
 const SELF_SERVE = 'A self-serve version is still to come.';
-const CITATION_MAIL = 'mailto:hey@getcitehound.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
+// Every Pro call to action goes to the waitlist form on /pro. pro-cta.js sends them to PRO_CHECKOUT_URL instead when
+// that is set (GET /api/waitlist), and shows PRO_PRICE_TEXT where data-pro-price stands. No mailto serves as a Pro CTA.
+const CTA_LABEL = 'Join the waitlist';
+const cta = (href, cls) => '<a href="' + href + '" class="' + cls + '" data-pro-cta data-label-checkout="Get Citehound Pro">' + CTA_LABEL + '</a>';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const icon = (name) => icons.svg(name, { cls: 'pro-icon' });
@@ -221,7 +224,7 @@ function band(F) {
     '              <p class="pro-mkt__lede">Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
     '              <ul class="pro-band-list">' + point('layers', 'Beyond the homepage') + point('question', 'Your buyers\' questions') + point('report', 'A report to hand over') + '</ul>\n' +
     '              <p class="pro-mkt__actions"><a href="/pro" class="btn btn--gold">See what Pro includes</a></p>\n' +
-    '              <p class="pro-mkt__price">One-time purchase. No subscription.</p>\n' +
+    '              <p class="pro-mkt__price"><span data-pro-price>Early access</span></p>\n' +
     '            </div>\n' +
     '            <div class="pro-band-stage">\n' +
     '              ' + indent(frame('band-explorer', F, 'pro-shot--desktop', { caption: caption, plain: true }), '              ') + '\n' +
@@ -257,10 +260,10 @@ function faq(F) {
       html: 'One today. Every report names the model and the date it was run, and results are shown per model. A result describes one model on one date and says nothing about any other assistant.' },
     { q: 'Is the citation run self-serve?',
       html: 'No. We run it for you and add it to your report. ' + SELF_SERVE },
-    { q: 'Is it really a one-time payment?',
-      html: 'Yes. Citehound Pro is a single one-time purchase. There is no subscription and no recurring billing.' },
+    { q: 'Can I buy Pro today?',
+      html: 'Not yet. Pro is in early access: <a href="#waitlist">join the waitlist</a> and we will write once, when it opens. The plan is a single one-time purchase with no subscription.' },
     { q: 'Do I need an account?',
-      html: 'No. There is no account or login. Your report is generated and delivered right after payment.' }
+      html: 'No. There is no account or login. A report is made from a private link, opens at its own private address and stays available for 90 days.' }
   ];
 }
 
@@ -273,6 +276,26 @@ function shellParts() {
     header: grab(/<header class="site-header">[\s\S]*?<\/header>/, 'header'),
     footerNav: grab(/<nav class="site-nav footer-links"[\s\S]*?<\/nav>/, 'footer nav')
   };
+}
+
+/* ---------- the waitlist form ---------- */
+
+function waitlistSection() {
+  return '    <section class="verticals pro-waitlist" id="waitlist" aria-labelledby="wl-heading">\n      <div class="section__inner">\n        <div class="pro-waitlist__box">\n' +
+    '          <p class="kicker"><span data-pro-price>Early access</span></p>\n' +
+    '          <h2 id="wl-heading" class="section-title">Join the Pro waitlist.</h2>\n' +
+    '          <p class="section-sub">Pro is not open yet. Leave your email and we will write once, when it opens.</p>\n' +
+    '          <form class="ps-form wl-form" id="wlForm" novalidate>\n' +
+    '            <div class="ps-field"><label for="wlEmail" class="ps-label">Email</label><input class="field ps-input" id="wlEmail" name="email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" maxlength="254" aria-describedby="wlEmailError" required /><p class="ps-error" id="wlEmailError" hidden></p></div>\n' +
+    '            <div class="ps-field"><label for="wlName" class="ps-label">Name <span class="wl-opt">(optional)</span></label><input class="field ps-input" id="wlName" name="name" type="text" autocomplete="name" maxlength="80" /></div>\n' +
+    '            <div class="wl-trap" aria-hidden="true"><label>Company fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off" /></label></div>\n' +
+    '            <div class="ps-field ps-field--check"><label class="ps-check" for="wlConsent"><input id="wlConsent" name="consent" type="checkbox" aria-describedby="wlConsentError" required /><span>Tell me when Citehound Pro opens</span></label><p class="ps-error" id="wlConsentError" hidden></p></div>\n' +
+    '            <p class="ps-note">We keep your address for up to 12 months and use it to send you one confirmation now and one message when Pro opens. Each message has a link that removes you. See the <a href="/privacy">privacy page</a>.</p>\n' +
+    '            <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="wlSubmit">Join the waitlist</button></p>\n' +
+    '            <p class="wl-status" id="wlStatus" role="status" aria-live="polite" tabindex="-1"></p>\n' +
+    '          </form>\n' +
+    '          <noscript><p class="ps-note">The form needs JavaScript. Without it, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a> and ask to be added.</p></noscript>\n' +
+    '        </div>\n      </div>\n    </section>\n\n';
 }
 
 function build() {
@@ -302,7 +325,7 @@ function build() {
     '            <p class="kicker kicker--on-navy">Pro</p>\n' +
     '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? Does it name you?</h1>\n' +
     '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then asks a model the questions your buyers ask and records when your name comes up.</p>\n' +
-    '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="' + CITATION_MAIL + '" class="btn btn--ghost-on-navy">Get early access</a></div>\n' +
+    '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n' +
     '          </div>\n' +
     '          ' + indent(frame('summary', F, 'pro-shot--hero'), '          ') + '\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
@@ -346,11 +369,12 @@ function build() {
     '    <section class="verticals" aria-labelledby="vs-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Free vs. Pro</p>\n          <h2 id="vs-heading" class="section-title">Free reads a page. Pro reads the site and asks the model.</h2>\n          <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>\n        </div>\n' +
     '        <div class="pro-cols">\n' +
     '          <div class="pro-col">\n            <p class="kicker">Free</p>\n            <h3 class="pro-col__title">Always free</h3>\n            <ul class="pro-list">\n            ' + freeItems + '\n            </ul>\n          </div>\n' +
-    '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the model</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">The citation run is one we run for you. ' + SELF_SERVE + '</p>\n            <p class="pro-col__foot pro-col__foot--note">One payment. Full Pro report for your domain. <a href="#" class="btn btn--ghost">In preparation</a></p>\n          </div>\n' +
+    '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the model</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">The citation run is one we run for you. ' + SELF_SERVE + '</p>\n            <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. ' + cta('#waitlist', 'btn btn--ghost') + '</p>\n          </div>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Closing band ---------- -->\n' +
     '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Pro</p>\n        <h2 id="close-heading">Can AI read you? Does it name you?</h2>\n        <p class="pro-band__lede">Read a real report first: one crawl of our own site, ' + fig('pages', F.pagesRead) + ' pages, results shown as recorded, with a citation sample from a different brand. No signup.</p>\n' +
-    '        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="' + CITATION_MAIL + '" class="btn btn--ghost-on-navy">Get early access</a></div>\n      </div>\n    </section>\n\n' +
+    '        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n      </div>\n    </section>\n\n' +
+    '    <!-- ---------- Waitlist ---------- -->\n' + waitlistSection() +
     '    <!-- ---------- FAQ ---------- -->\n' +
     '    <section class="verticals pro-faq" aria-labelledby="faq-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Questions</p>\n          <h2 id="faq-heading" class="section-title">Pro, briefly.</h2>\n        </div>\n        <div class="ct-faq">\n' +
     questions.map((q) => '          <details>\n            <summary>' + esc(q.q) + '</summary>\n            <p>' + q.html + '</p>\n          </details>').join('\n') + '\n        </div>\n      </div>\n    </section>\n\n';
@@ -365,7 +389,7 @@ function build() {
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' + body +
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
     '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n  </main>\n\n' +
-    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
+    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="nav.js?v=3"></script>\n  <script src="pro-cta.js?v=1" defer></script>\n  <script src="waitlist.js?v=1" defer></script>\n</body>\n</html>\n';
 }
 
 /* ---------- --check: read every figure back and recompute it from the raw files ---------- */
@@ -538,9 +562,14 @@ function check() {
     if (ldFaq.mainEntity.length !== shown.length) bad('FAQ: ' + ldFaq.mainEntity.length + ' in JSON-LD, ' + shown.length + ' shown');
     ldFaq.mainEntity.forEach(function (q, i) { if (!shown[i] || shown[i].q !== q.name || shown[i].a !== q.acceptedAnswer.text) bad('FAQ ' + (i + 1) + ' differs between the JSON-LD and the page'); });
   }
-  [['Is it really a one-time payment?', 'Yes. Citehound Pro is a single one-time purchase. There is no subscription and no recurring billing.'], ['Do I need an account?', 'No. There is no account or login. Your report is generated and delivered right after payment.']].forEach((k) => { if (!shown.some((s) => s.q === k[0] && s.a === k[1])) bad('the existing answer "' + k[0] + '" changed'); });
-  ['One payment. Full Pro report for your domain.', 'In preparation'].forEach((t) => { if (page.indexOf(t) === -1) bad('the existing statement "' + t + '" is missing'); });
-  if (bandHtml.indexOf('One-time purchase. No subscription.') === -1) bad('the band lost its price-model line');
+  // Pro cannot be bought yet, so no copy may say it can: the buy question is answered "not yet", and the page offers the waitlist.
+  if (!shown.some((x) => x.q === 'Can I buy Pro today?' && /^Not yet\./.test(x.a))) bad('the FAQ must say Pro cannot be bought yet');
+  if (/right after payment|Is it really a one-time payment|One payment\./.test(page)) bad('the page claims a payment that cannot happen yet');
+  if (!/id="waitlist"/.test(page) || !/Tell me when Citehound Pro opens/.test(page) || !/name="company_fax"/.test(page)) bad('the waitlist form (consent line, honeypot) is missing');
+  if (/<input[^>]+id="wlConsent"[^>]*checked/.test(page)) bad('the waitlist consent box must start unchecked');
+  if (/mailto:[^"]*(subject|body)=/.test(page)) bad('pro.html has a mailto call to action');
+  if (!/<span data-pro-price>Early access<\/span>/.test(bandHtml)) bad('the band lost its price line (Early access unless PRO_PRICE_TEXT is set)');
+  if (/mailto:/.test(bandHtml)) bad('the band has a mailto link; every Pro call to action goes to the waitlist');
 
   // Page and band rules.
   const alt = (h) => (h.match(/aria-label="[^"]*"/g) || []).join(' ');

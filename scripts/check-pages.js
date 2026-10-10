@@ -25,7 +25,7 @@ const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F2FF}\u{FE0F}]
 
 const PAGES = {
   'agentic-commerce': { file: 'agentic-commerce.html', faq: true, scannerIds: true },
-  'citation-tracking': { file: 'citation-tracking.html', faq: true, noWords: /\b(recommended|featured|sweeps?|mention rate)\b/i, noTerms: /\b(free|price|pricing|waitlist|coming soon)\b|launch(es|ing|ed)? (date|in|on)/i },
+  'citation-tracking': { file: 'citation-tracking.html', faq: true, noWords: /\b(recommended|featured|sweeps?|mention rate)\b/i, noTerms: /\b(free|price|pricing|coming soon)\b|launch(es|ing|ed)? (date|in|on)/i },
   'sample-report': { file: 'sample-report.html', faq: false }
 };
 

@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=61" />
+  <link rel="stylesheet" href="styles.css?v=62" />
 
   <script type="application/ld+json">
   {
@@ -92,7 +92,7 @@
         "name": "How do I get early access?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Email us your brand, domain, category and three competitors. We reply by email."
+          "text": "Join the Pro waitlist on the Pro page. The citation run is part of Pro, and we run it for you. We email you once, when Pro opens."
         }
       }
     ]
@@ -176,7 +176,7 @@
             <p class="kicker kicker--on-navy">Citation tracking</p>
             <h1 id="hero-heading" class="page-banner__title">Does AI name you when your buyers ask?</h1>
             <p class="page-banner__desc">We ask a model the questions your customers ask, <!--c:triesWord-->five<!--/c--> times each, and show you when your name comes up and when it doesn’t.</p>
-            <a class="btn btn--gold" href="mailto:hey@getcitehound.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Get early access</a>
+            <a class="btn btn--gold" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a>
             <p class="ct-banner__note">A self-serve version is still to come. Today we run it for you.</p>
           </div>
           <span class="page-banner__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10.5L6.5 19.5V16H4V5.5z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>
@@ -403,7 +403,7 @@
           </details>
           <details>
             <summary>How do I get early access?</summary>
-            <p>Email us your brand, domain, category and three competitors. We reply by email.</p>
+            <p>Join the Pro waitlist on the Pro page. The citation run is part of Pro, and we run it for you. We email you once, when Pro opens.</p>
           </details>
         </div>
       </div>
@@ -413,8 +413,8 @@
       <div class="section__inner">
         <p class="kicker kicker--on-navy">Early access</p>
         <h2 id="close-heading">Find out when AI names you, and when it doesn’t.</h2>
-        <p class="pro-band__lede">Tell us your brand, domain, category and three competitors. We reply by email.</p>
-        <div class="pro-band__cta"><a class="btn btn--gold" href="mailto:hey@getcitehound.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A">Get early access</a></div>
+        <p class="pro-band__lede">The citation run is part of Pro. Join the waitlist and we will email you once, when it opens.</p>
+        <div class="pro-band__cta"><a class="btn btn--gold" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a></div>
         <p class="ct-banner__note ct-banner__note--band">A self-serve version is still to come. Today we run it for you.</p>
       </div>
     </section>
@@ -440,6 +440,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="pro-cta.js?v=1" defer></script>
   <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove('scene-anim')"></script>
   <script>if (window.matchMedia && matchMedia('(max-width: 640px)').matches) { var a = document.querySelector('.ct-all'); if (a) a.open = false; }</script>
   <script src="nav.js?v=3"></script>

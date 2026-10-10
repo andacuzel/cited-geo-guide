@@ -49,6 +49,14 @@
       ]
     },
     {
+      "source": "/waitlist/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
       "source": "/app/pro-start(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
@@ -67,7 +75,9 @@
   "rewrites": [
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
     { "source": "/pro/start/:token", "destination": "/api/pro?a=startpage&token=:token" },
-    { "source": "/api/pro/:action(start|order|step|status|email)", "destination": "/api/pro?a=:action" },
+    { "source": "/api/waitlist", "destination": "/api/pro?a=waitlist" },
+    { "source": "/waitlist/remove/:token", "destination": "/api/pro?a=waitremove&token=:token" },
+    { "source": "/api/pro/:action(start|order|step|status|email|feedback)", "destination": "/api/pro?a=:action" },
     { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
     { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }
   ]

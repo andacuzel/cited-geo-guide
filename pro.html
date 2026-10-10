@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=61" />
+  <link rel="stylesheet" href="styles.css?v=62" />
 
   <script type="application/ld+json">
   {
@@ -88,10 +88,10 @@
       },
       {
         "@type": "Question",
-        "name": "Is it really a one-time payment?",
+        "name": "Can I buy Pro today?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Citehound Pro is a single one-time purchase. There is no subscription and no recurring billing."
+          "text": "Not yet. Pro is in early access: join the waitlist and we will write once, when it opens. The plan is a single one-time purchase with no subscription."
         }
       },
       {
@@ -99,7 +99,7 @@
         "name": "Do I need an account?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. There is no account or login. Your report is generated and delivered right after payment."
+          "text": "No. There is no account or login. A report is made from a private link, opens at its own private address and stays available for 90 days."
         }
       }
     ]
@@ -184,7 +184,7 @@
             <p class="kicker kicker--on-navy">Pro</p>
             <h1 id="pro-heading" class="page-banner__title">Can AI read you? Does it name you?</h1>
             <p class="page-banner__desc">Pro crawls up to <span data-fig="pro-cap">25</span> pages to show what your homepage hides, then asks a model the questions your buyers ask and records when your name comes up.</p>
-            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="mailto:hey@getcitehound.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A" class="btn btn--ghost-on-navy">Get early access</a></div>
+            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="#waitlist" class="btn btn--ghost-on-navy" data-pro-cta data-label-checkout="Get Citehound Pro">Join the waitlist</a></div>
           </div>
           <figure class="pro-shot pro-shot--summary pro-shot--hero">
           <div role="img" aria-label="Site summary from the sample report for our own site, getcitehound.com. The site-wide score is 83 out of 100 and the homepage scores 87. Beside the score are the three pillar scores and the main findings in plain words. Headline: Readiness report for 28 pages"><div class="pro-shot__view" inert>
@@ -472,7 +472,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>A citation run on your brand, which we run for you and add to the report</span></li>
             </ul>
             <p class="pro-col__note">The citation run is one we run for you. A self-serve version is still to come.</p>
-            <p class="pro-col__foot pro-col__foot--note">One payment. Full Pro report for your domain. <a href="#" class="btn btn--ghost">In preparation</a></p>
+            <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. <a href="#waitlist" class="btn btn--ghost" data-pro-cta data-label-checkout="Get Citehound Pro">Join the waitlist</a></p>
           </div>
         </div>
       </div>
@@ -484,7 +484,28 @@
         <p class="kicker kicker--on-navy">Pro</p>
         <h2 id="close-heading">Can AI read you? Does it name you?</h2>
         <p class="pro-band__lede">Read a real report first: one crawl of our own site, <span data-fig="pro-pages">28</span> pages, results shown as recorded, with a citation sample from a different brand. No signup.</p>
-        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="mailto:hey@getcitehound.com?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A" class="btn btn--ghost-on-navy">Get early access</a></div>
+        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="#waitlist" class="btn btn--ghost-on-navy" data-pro-cta data-label-checkout="Get Citehound Pro">Join the waitlist</a></div>
+      </div>
+    </section>
+
+    <!-- ---------- Waitlist ---------- -->
+    <section class="verticals pro-waitlist" id="waitlist" aria-labelledby="wl-heading">
+      <div class="section__inner">
+        <div class="pro-waitlist__box">
+          <p class="kicker"><span data-pro-price>Early access</span></p>
+          <h2 id="wl-heading" class="section-title">Join the Pro waitlist.</h2>
+          <p class="section-sub">Pro is not open yet. Leave your email and we will write once, when it opens.</p>
+          <form class="ps-form wl-form" id="wlForm" novalidate>
+            <div class="ps-field"><label for="wlEmail" class="ps-label">Email</label><input class="field ps-input" id="wlEmail" name="email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" maxlength="254" aria-describedby="wlEmailError" required /><p class="ps-error" id="wlEmailError" hidden></p></div>
+            <div class="ps-field"><label for="wlName" class="ps-label">Name <span class="wl-opt">(optional)</span></label><input class="field ps-input" id="wlName" name="name" type="text" autocomplete="name" maxlength="80" /></div>
+            <div class="wl-trap" aria-hidden="true"><label>Company fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off" /></label></div>
+            <div class="ps-field ps-field--check"><label class="ps-check" for="wlConsent"><input id="wlConsent" name="consent" type="checkbox" aria-describedby="wlConsentError" required /><span>Tell me when Citehound Pro opens</span></label><p class="ps-error" id="wlConsentError" hidden></p></div>
+            <p class="ps-note">We keep your address for up to 12 months and use it to send you one confirmation now and one message when Pro opens. Each message has a link that removes you. See the <a href="/privacy">privacy page</a>.</p>
+            <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="wlSubmit">Join the waitlist</button></p>
+            <p class="wl-status" id="wlStatus" role="status" aria-live="polite" tabindex="-1"></p>
+          </form>
+          <noscript><p class="ps-note">The form needs JavaScript. Without it, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a> and ask to be added.</p></noscript>
+        </div>
       </div>
     </section>
 
@@ -521,12 +542,12 @@
             <p>No. We run it for you and add it to your report. A self-serve version is still to come.</p>
           </details>
           <details>
-            <summary>Is it really a one-time payment?</summary>
-            <p>Yes. Citehound Pro is a single one-time purchase. There is no subscription and no recurring billing.</p>
+            <summary>Can I buy Pro today?</summary>
+            <p>Not yet. Pro is in early access: <a href="#waitlist">join the waitlist</a> and we will write once, when it opens. The plan is a single one-time purchase with no subscription.</p>
           </details>
           <details>
             <summary>Do I need an account?</summary>
-            <p>No. There is no account or login. Your report is generated and delivered right after payment.</p>
+            <p>No. There is no account or login. A report is made from a private link, opens at its own private address and stays available for 90 days.</p>
           </details>
         </div>
       </div>
@@ -554,5 +575,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="nav.js?v=3"></script>
+  <script src="pro-cta.js?v=1" defer></script>
+  <script src="waitlist.js?v=1" defer></script>
 </body>
 </html>

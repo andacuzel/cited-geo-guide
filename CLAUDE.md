@@ -83,6 +83,13 @@ Constraints that must not be broken:
   only from re-running `scoreAll()`; reports use no ranking words and no simulation block; every fetch goes through
   `lib/safe-fetch.js`; failed jobs that read no page give the link back (up to 3 times); Pro paths stay out of the sitemap, robots.txt, llms.txt, the MCP server and analytics; nothing
   logs a token, address, name or email. `/privacy` carries a "Pro reports" section (10 Oct 2026): change it and `docs/pro.md` together.
+- **The Pro waitlist and pilot links.** Every Pro call to action goes to the waitlist form on `/pro` (`#waitlist`), and
+  `pro-cta.js` sends it to `PRO_CHECKOUT_URL` instead when that env variable is set; the price spot says "Early access"
+  unless `PRO_PRICE_TEXT` is set. No mailto link is a Pro call to action, and nothing may say Pro can be bought while it
+  cannot. The waitlist (`lib/waitlist*.js`, 12 months, one confirmation mail per address per 30 days, daily cap, signed
+  removal link) answers the same for a known and a new address. Pilot links (`scripts/pro-issue-token.js`, `docs/pilot.md`)
+  run the same code as paid ones. `PRO_HASH_SECRET` is required: without it every Pro endpoint answers 503. `/privacy`
+  covers the waitlist, feedback and the daily counters; change it together with `docs/pro.md`.
 - **One guard for every fetch of a domain someone typed.** `lib/safe-fetch.js` resolves the name inside the socket's
   own lookup, connects only to a public address it has checked, re-checks every redirect and caps time and size.
   `lib/scanner.js` `fetchText` goes through it, so the free scan, the llms.txt checker, site-info, the crawl, the MCP

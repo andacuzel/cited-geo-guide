@@ -27,7 +27,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const PAGE = path.join(ROOT, 'sample-report.html');
-const CSS_VERSION = 61;
+const CSS_VERSION = 62;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function shellParts() {
@@ -89,7 +89,7 @@ function build(data) {
     '  <main id="main">\n' + body.replace(/\n$/, '') + '\n' +
     '    <div class="rp-body rp-body--foot"><p class="rp-sample-foot">A Pro report is this for your site. <a href="/pro">About Pro</a> &middot; <a href="/">Run the free scan first</a></p></div>\n\n    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
     '        <p class="site-footer__coda">\u00A9 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n  </main>\n\n' +
-    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-pro-ui.js?v=1" defer></script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
+    '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="lib/report-pro-ui.js?v=1" defer></script>\n  <script src="nav.js?v=3"></script>\n  <script src="pro-cta.js?v=1" defer></script>\n</body>\n</html>\n';
 }
 
 function ensureSitemap() {

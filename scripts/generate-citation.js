@@ -33,9 +33,11 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 61;
+const CSS_VERSION = 62;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
-const MAILTO = 'mailto:' + CONTACT_EMAIL + '?subject=Citation%20run%20request&amp;body=Brand%3A%0D%0ADomain%3A%0D%0ACategory%3A%0D%0AThree%20competitors%3A%0D%0A';
+// Early access goes through the Pro waitlist on /pro; pro-cta.js sends the button to PRO_CHECKOUT_URL when that is set.
+const WAITLIST = '/pro#waitlist';
+const JOIN = '<a class="btn btn--gold" href="' + WAITLIST + '" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a>';
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -108,7 +110,7 @@ function faq(d) {
     ['Is it a ranking?',
       'No. It records whether a name appears, not where your brand sits against others. Answers shift with the wording of a question and over time, so a result is a picture of one day.'],
     ['How do I get early access?',
-      'Email us your brand, domain, category and three competitors. We reply by email.']
+      'Join the Pro waitlist on the Pro page. The citation run is part of Pro, and we run it for you. We email you once, when Pro opens.']
   ];
 }
 
@@ -195,7 +197,7 @@ function build(sample) {
     '            <p class="kicker kicker--on-navy">Citation tracking</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">Does AI name you when your buyers ask?</h1>\n' +
     '            <p class="page-banner__desc">We ask a model the questions your customers ask, ' + c('triesWord', t) + ' times each, and show you when your name comes up and when it doesn’t.</p>\n' +
-    '            <a class="btn btn--gold" href="' + MAILTO + '">Get early access</a>\n' +
+    '            ' + JOIN + '\n' +
     '            <p class="ct-banner__note">A self-serve version is still to come. Today we run it for you.</p>\n' +
     '          </div>\n          <span class="page-banner__icon" aria-hidden="true">' + ICONS.svg('chat') + '</span>\n        </div>\n      </div>\n    </section>\n\n' +
 
@@ -260,15 +262,15 @@ function build(sample) {
     // closing band
     '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Early access</p>\n' +
     '        <h2 id="close-heading">Find out when AI names you, and when it doesn’t.</h2>\n' +
-    '        <p class="pro-band__lede">Tell us your brand, domain, category and three competitors. We reply by email.</p>\n' +
-    '        <div class="pro-band__cta"><a class="btn btn--gold" href="' + MAILTO + '">Get early access</a></div>\n' +
+    '        <p class="pro-band__lede">The citation run is part of Pro. Join the waitlist and we will email you once, when it opens.</p>\n' +
+    '        <div class="pro-band__cta">' + JOIN + '</div>\n' +
     '        <p class="ct-banner__note ct-banner__note--band">A self-serve version is still to come. Today we run it for you.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
     '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
-    '  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
+    '  <script src="pro-cta.js?v=1" defer></script>\n  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
 }
 
 /* ---------------------------------------------------------------------

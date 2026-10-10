@@ -18,6 +18,14 @@
        the storage, answers its generic "unavailable" (a storage that is not configured, or down, fails here)
      - /r/* and /pro/start/* send X-Robots-Tag noindex and Referrer-Policy no-referrer
      - sitemap.xml, robots.txt and llms.txt do not list a Pro path
+     - the waitlist: GET /api/waitlist is the public Pro switch; a POST without consent is a 400 with the field named; a POST
+       with the honeypot filled answers like a signup and stores nothing; /waitlist/remove/<bad token> is the 404 page, with
+       noindex and no referrer; no Pro call to action on /, /pro, /citation-tracking or /sample-report is a mailto
+     - the pilot token flow, when the Upstash credentials are in the environment or .env.local: a pilot link is issued, its
+       start page and order lookup say it is ready, it is revoked and then looks like an unknown link, and it is deleted.
+       Without credentials this part says it was skipped.
+     - fail-closed without PRO_HASH_SECRET cannot be tried on the live site (it would need the secret removed). The live Pro API
+       answering normally proves the secret is set; scripts/test-pro-api.js proves what happens when it is not.
 
    There is no /scan page on this site (the scanner is the homepage), so it is not checked.
    If this fails after a push, fix forward or revert with a normal revert commit, at once.
@@ -124,6 +132,61 @@ async function waitForDeployment(sha) {
   for (const p of ['/sitemap.xml', '/robots.txt', '/llms.txt']) {
     const r = await get(p);
     t(p + ' does not list a Pro path', r.status === 200 && !/\/pro\/start|\/api\/pro|\/r\/[a-f0-9]{16}/.test(r.text), String(r.status));
+  }
+
+  /* ---- the waitlist ---- */
+  const cfg = await get('/api/waitlist');
+  let cfgJson = null; try { cfgJson = JSON.parse(cfg.text); } catch (e) { /* reported below */ }
+  t('GET /api/waitlist answers the public Pro switch (checkoutUrl and priceText, no secret)', cfg.status === 200 && cfgJson && 'checkoutUrl' in cfgJson && 'priceText' in cfgJson && Object.keys(cfgJson).length === 2, cfg.status + ' ' + cfg.text.slice(0, 100));
+  const json = (body) => ({ method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify(body) });
+  const noConsent = await get('/api/waitlist', json({ email: 'smoke-test@example.invalid', consent: false }));
+  t('a signup without consent is a 400 that names the field and stores nothing', noConsent.status === 400 && /"consent"/.test(noConsent.text), noConsent.status + ' ' + noConsent.text.slice(0, 100));
+  const trap = await get('/api/waitlist', json({ email: 'smoke-test@example.invalid', consent: true, company_fax: 'x' }));
+  t('a signup with the honeypot filled answers 200 (and stores nothing)', trap.status === 200 && /"ok":true/.test(trap.text), trap.status + ' ' + trap.text.slice(0, 100));
+  const badMail = await get('/api/waitlist', json({ email: 'not-an-address', consent: true }));
+  t('a signup with a bad address is a 400', badMail.status === 400 && /"email"/.test(badMail.text));
+  const foreign = await get('/api/waitlist', Object.assign(json({ email: 'smoke-test@example.invalid', consent: true }), { headers: { 'Content-Type': 'application/json', Origin: 'https://example.invalid', 'User-Agent': 'citehound-smoke/1' } }));
+  t('a signup posted from another site is refused (403)', foreign.status === 403, String(foreign.status));
+  for (const [method, tok] of [['GET', 'a'.repeat(64)], ['POST', 'a'.repeat(64)], ['GET', 'short']]) {
+    const r = await get('/waitlist/remove/' + tok, { method: method });
+    t(method + ' /waitlist/remove/<bad token> is the 404 page, noindex, no referrer, no-store', r.status === 404 && /noindex/.test(r.headers.get('x-robots-tag') || '') && r.headers.get('referrer-policy') === 'no-referrer' && /no-store/.test(r.headers.get('cache-control') || ''), String(r.status));
+  }
+  for (const p of ['/', '/pro', '/citation-tracking', '/sample-report']) {
+    const r = await get(p);
+    t(p + ' has no mailto call to action for Pro', r.status === 200 && !/mailto:[^"']*[?&](subject|body)=/.test(r.text) && !/Citation(%20| )run(%20| )request/i.test(r.text));
+  }
+  const pro = await get('/pro');
+  t('/pro has the waitlist form with an unchecked consent box and the honeypot', /id="waitlist"/.test(pro.text) && /<input id="wlConsent" name="consent" type="checkbox"(?![^>]*checked)/.test(pro.text) && /name="company_fax"/.test(pro.text) && /Tell me when Citehound Pro opens/.test(pro.text));
+  const wlJs = await get('/waitlist.js'), ctaJs = await get('/pro-cta.js');
+  t('the form script and the switch script are served', wlJs.status === 200 && ctaJs.status === 200 && /\/api\/waitlist/.test(wlJs.text + ctaJs.text));
+  const png = await fetch(BASE + '/assets/email/hound-mark.png');
+  t('the hound image used in the email is served as a PNG', png.status === 200 && /image\/png/.test(png.headers.get('content-type') || ''), String(png.status));
+
+  /* ---- the pilot token flow (needs the Upstash credentials) ---- */
+  require('./env-local.js').load();
+  const S = require('../lib/pro-store.js');
+  if (!S.hasRedisEnv()) {
+    out('  skip the pilot token flow: no Upstash credentials in the environment or .env.local');
+  } else {
+    const store = S.createStore(S.adapterFromEnv());
+    const orders = require('../lib/pro-orders.js');
+    const issued = await orders.issueOrder(store, { source: 'pilot', label: 'smoke test', validDays: 1 });
+    const tok = issued.order.token;
+    try {
+      t('the issued pilot link is on this site', issued.url === BASE + '/pro/start/' + tok || issued.url.endsWith('/pro/start/' + tok));
+      const page = await get('/pro/start/' + tok);
+      t('the pilot start page is served by the function (200, the form, no-store)', page.status === 200 && /id="psForm"/.test(page.text) && /no-store/.test(page.headers.get('cache-control') || ''), String(page.status));
+      const ord = await get('/api/pro/order', { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ token: tok }) });
+      t('the order lookup says ready', ord.status === 200 && /"state":"ready"/.test(ord.text), ord.status + ' ' + ord.text.slice(0, 80));
+      const revoked = await store.revokeOrder(tok);
+      const after = await get('/pro/start/' + tok), unknown = await get('/pro/start/' + 'd'.repeat(32));
+      t('after revoking, the link is the generic 404, the same page as an unknown link', revoked === true && after.status === 404 && after.text === unknown.text);
+    } finally {
+      await store.adapter.del('pro:order:' + tok); await store.adapter.del('pro:order-claim:' + tok); await store.adapter.srem('pro:orders', tok);
+      const stats = require('../lib/pro-stats.js');
+      await store.adapter.hincrby('pro:stats:' + stats.dayOf(), 'orders_pilot', -1);
+    }
+    t('the smoke order was deleted again', (await store.getOrder(tok)) === null);
   }
 
   out('\n' + pass + ' passed, ' + fails.length + ' failed');
