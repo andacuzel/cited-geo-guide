@@ -22,10 +22,15 @@ Three audience tracks, one engine: B2B SaaS (`/for-saas`), consumer and
 e-commerce brands (`/for-brands`), local and independent professionals
 (`/for-professionals`).
 
-**Honest framing, non-negotiable:** this tool measures AI *readiness*
-(crawler access and on-page signals), not confirmed presence in AI
-answers. Never write copy that claims to measure what a model actually
-says about a brand. Precision here is a credibility asset.
+**Honest framing, non-negotiable:** the free scanner and its score measure
+AI *readiness* (crawler access and on-page signals), not confirmed presence
+in AI answers. The Pro **citation check** is a separate thing: one dated
+sample, on one assistant and model with live web search, of whether the site
+is cited or mentioned for questions written from the site's own pages. It is
+never part of the score, never a ranking, never "visibility", and always shows
+its model, date and "sample". Write "the scan" or "the score" (not "Citehound")
+when saying what is not measured, and never write copy that claims more than a
+sample. Precision here is a credibility asset.
 
 ## Architecture
 
@@ -90,6 +95,13 @@ Constraints that must not be broken:
   removal link) answers the same for a known and a new address. Pilot links (`scripts/pro-issue-token.js`, `docs/pilot.md`)
   run the same code as paid ones. `PRO_HASH_SECRET` is required: without it every Pro endpoint answers 503. `/privacy`
   covers the waitlist, feedback and the daily counters; change it together with `docs/pro.md`.
+- **The Pro citation check is OFF unless switched on.** `lib/pro-citation.js` runs after the crawl only when `GEMINI_API_KEY`
+  and `CITATION_ENABLED=1` are both set. It profiles the site (`lib/site-profile.js`), writes 18 + 3 questions in the site's language
+  (`lib/citation-prompts.js`) and asks them to Gemini with Google Search (`lib/citation-check.js`), at most 21 calls a job,
+  `CITATION_DAILY_CAP` a day (default 60) and `CITATION_MONTHLY_QUERY_CAP` search queries a month (default 4000), stopping at
+  the first 429. Search grounding needs a billing-enabled key, and Google's grounding terms restrict how grounded results may be
+  used (`docs/citation-check.md`, "Terms"): do not switch it on for customers before that is settled. The site's text is untrusted:
+  delimiters, a schema, validation; nothing the model returns is fetched. A failure never fails the report.
 - **One guard for every fetch of a domain someone typed.** `lib/safe-fetch.js` resolves the name inside the socket's
   own lookup, connects only to a public address it has checked, re-checks every redirect and caps time and size.
   `lib/scanner.js` `fetchText` goes through it, so the free scan, the llms.txt checker, site-info, the crawl, the MCP
@@ -98,8 +110,9 @@ Constraints that must not be broken:
 - **Report summaries.** The executive summary of a crawl report is written
   from aggregated figures only (`lib/report-facts.js`), by rules or by a model
   that only rephrases them, and every model reply is validated against the
-  facts (`lib/summary.js`). No page content, URL or domain goes to the model.
-  `privacy.html` says so; keep both in step. Do not send anything else.
+  facts (`lib/summary.js`). No page content, URL or domain goes to the model
+  for the summary. (The Pro citation check is separate: it sends excerpts of the site's own public text and the questions
+  it wrote to Gemini; `privacy.html` says so.) Keep both in step. Do not send anything else.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

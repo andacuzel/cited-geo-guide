@@ -17,12 +17,23 @@
 (function () {
   'use strict';
 
-  var STAGES = [
-    { id: 'site', label: 'Reading robots.txt and the sitemap' },
-    { id: 'pick', label: 'Choosing up to 25 pages' },
-    { id: 'scan', label: 'Reading and scoring the pages' },
-    { id: 'plan', label: 'Estimating the fixes' }
-  ];
+  // Without the citation check a report has two stages; with it, five. The server says which (the job view's citation field).
+  var LANG_NAMES = { en: 'English', tr: 'Turkish', de: 'German', fr: 'French', es: 'Spanish', it: 'Italian', pt: 'Portuguese', nl: 'Dutch', pl: 'Polish', sv: 'Swedish', ru: 'Russian', ar: 'Arabic', ja: 'Japanese', zh: 'Chinese', ko: 'Korean', el: 'Greek', he: 'Hebrew' };
+  function stagesFor(withCitation) {
+    if (!withCitation) return [{ id: 'site', label: 'Reading your site' }, { id: 'report', label: 'Building your report' }];
+    return [
+      { id: 'site', label: 'Reading your site' },
+      { id: 'profile', label: 'Understanding what you do' },
+      { id: 'questions', label: 'Writing citation questions' },
+      { id: 'test', label: 'Testing questions' },
+      { id: 'report', label: 'Building your report' }
+    ];
+  }
+  function labelOf(stage, cit) {
+    if (stage.id === 'questions') { var n = cit && cit.language ? LANG_NAMES[String(cit.language).split('-')[0]] || cit.language : ''; return 'Writing citation questions' + (n ? ' in ' + n : ''); }
+    if (stage.id === 'test') return 'Testing questions (' + (cit ? cit.asked : 0) + ' of ' + (cit ? cit.total : 21) + ')';
+    return stage.label;
+  }
   var PACE = { stageMs: 700, doneMs: 700 };
   var REDUCED = { stageMs: 250, doneMs: 150 };
   var STEP_TIMEOUT_MS = 70000;      // a step can take most of a minute on the server
@@ -71,6 +82,7 @@
     var jobId = opts.jobId;
     var pace = reduced() ? REDUCED : PACE;
     var startedAt = Date.now();
+    var STAGES = stagesFor(false);
     var shown = 0;            // index of the stage on screen (stages before it are done)
     var target = 0;           // the stage the real work has reached
     var finished = false;     // the server said done, partial or failed
@@ -90,17 +102,21 @@
     var live = el('p', 'pp-live');
     live.setAttribute('role', 'status'); live.setAttribute('aria-live', 'polite');
     var list = el('ol', 'pp-stages');
-    var items = STAGES.map(function (s) {
+    var items = [];
+    function buildList() {
+      list.textContent = '';
+      items = STAGES.map(function (s) {
       var li = el('li', 'pp-stage is-todo');
       var label = el('span', 'pp-stage__label', s.label);
       var count = el('span', 'pp-stage__count');
       var state = el('span', 'pp-stage__state', 'Waiting');
       var bar = null;
-      if (s.id === 'scan') { bar = el('span', 'rp-bar pp-stage__bar'); bar.setAttribute('aria-hidden', 'true'); var fill = el('span', 'rp-bar__fill'); fill.style.width = '0%'; bar.appendChild(fill); }
+      if (s.id === 'site') { bar = el('span', 'rp-bar pp-stage__bar'); bar.setAttribute('aria-hidden', 'true'); var fill = el('span', 'rp-bar__fill'); fill.style.width = '0%'; bar.appendChild(fill); }
       li.appendChild(label); li.appendChild(count); li.appendChild(state); if (bar) li.appendChild(bar);
       list.appendChild(li);
-      return { li: li, state: state, count: count, bar: bar };
+      return { li: li, label: label, state: state, count: count, bar: bar };
     });
+    }
     var slow = el('p', 'pp-note');
     var errBox = el('div', 'pp-error'); errBox.hidden = true;
     var result = el('div', 'pp-result'); result.hidden = true;
@@ -115,12 +131,14 @@
         it.state.textContent = done ? 'Done' : (active ? 'Working' : 'Waiting');
         if (active) it.li.setAttribute('aria-current', 'step'); else it.li.removeAttribute('aria-current');
       });
+      var cit = last && last.citation;
+      items.forEach(function (it, i) { it.label.textContent = labelOf(STAGES[i], cit); });
       var p = last && last.progress;
-      if (p) {
-        var scan = items[2];
+      if (p && items[0]) {
+        var scan = items[0];
         var pct = p.total ? Math.round(p.settled / p.total * 100) : 0;
         scan.count.textContent = p.total ? p.settled + ' of ' + p.total + ' pages' : '';
-        if (scan.bar) scan.bar.firstChild.style.width = (shown > 2 ? 100 : pct) + '%';
+        if (scan.bar) scan.bar.firstChild.style.width = (shown > 0 ? 100 : pct) + '%';
       }
     }
 
@@ -150,7 +168,12 @@
     function apply(view) {
       last = view;
       if (view.status === 'done' || view.status === 'partial' || view.status === 'failed') { finished = true; target = STAGES.length - 1; }
-      else if (view.phase === 'scan') target = Math.max(target, 2);
+      else {
+        // The stage the real work has reached: the crawl is stage 0, then the citation phases, in order.
+        var at = { discover: 0, scan: 0, profile: 1, questions: 2, cite: 3 }[view.phase];
+        if (at !== undefined && STAGES.length > 2) target = Math.max(target, at);
+        else if (view.phase === 'scan' && STAGES.length === 2) target = Math.max(target, 0);
+      }
       paint();
     }
 
@@ -273,8 +296,10 @@
 
     // Start from wherever the job already is, then drive it.
     call('GET', '/api/pro/status?id=' + encodeURIComponent(jobId)).then(function (r) {
-      if (r.ok && r.body && r.body.status) apply(r.body);
-    }, function () { /* the first step will say */ }).then(function () {
+      if (r.ok && r.body && r.body.status) { last = r.body; STAGES = stagesFor(!!r.body.citation); }
+      buildList();
+      if (last) apply(last);
+    }, function () { buildList(); /* the first step will say */ }).then(function () {
       if (!finished) drive();
       ticker();
     });

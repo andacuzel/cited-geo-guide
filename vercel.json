@@ -21,7 +21,7 @@
     },
     "api/pro.js": {
       "maxDuration": 60,
-      "includeFiles": "app/pro-start.html"
+      "includeFiles": "{app/pro-start.html,content/prompts/*.json}"
     }
   },
   "redirects": [
