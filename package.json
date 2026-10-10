@@ -4,5 +4,15 @@
   "private": true,
   "dependencies": {
     "@upstash/redis": "^1.39.0"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0"
+  },
+  "scripts": {
+    "check:vercel": "node scripts/check-vercel-json.js",
+    "check:integrity": "node scripts/check-integrity.js",
+    "gates": "node scripts/run-gates.js",
+    "smoke": "node scripts/smoke-live.js",
+    "test:real-kv": "node scripts/test-real-kv.js"
   }
 }
