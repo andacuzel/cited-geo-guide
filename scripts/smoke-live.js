@@ -18,7 +18,8 @@
        the storage, answers its generic "unavailable" (a storage that is not configured, or down, fails here)
      - /r/* and /pro/start/* send X-Robots-Tag noindex and Referrer-Policy no-referrer
      - sitemap.xml, robots.txt and llms.txt do not list a Pro path
-     - the waitlist: GET /api/waitlist is the public Pro switch; a POST without consent is a 400 with the field named; a POST
+     - the waitlist (no check here ever creates an accepted signup, so none uses up the six-an-hour signup quota of the network
+       it runs from: the failures and the honeypot only count against the flood guard): GET /api/waitlist is the public Pro switch; a POST without consent is a 400 with the field named; a POST
        with the honeypot filled answers like a signup and stores nothing; /waitlist/remove/<bad token> is the 404 page, with
        noindex and no referrer; no Pro call to action on /, /pro, /citation-tracking or /sample-report is a mailto
      - the pilot token flow, when the Upstash credentials are in the environment or .env.local: a pilot link is issued, its
@@ -28,6 +29,7 @@
        all its tools, answers OPTIONS (204, CORS) and GET (405 with Allow)
      - /pro/welcome is a noindex, no-store page; POST /api/pro/welcome answers "waiting" for an id with no order; an unsigned POST to
        /api/pro/webhook is refused (403, or 503 while PRO_WEBHOOK_SECRET is not set: never a 2xx); a GET on it is 405
+     - /app/report and /app/report.html (the old internal dashboard) answer 404
      - the About portrait is served, and no page cites the October 2026 rescan (only the July snapshot)
      - fail-closed without PRO_HASH_SECRET cannot be tried on the live site (it would need the secret removed). The live Pro API
        answering normally proves the secret is set; scripts/test-pro-api.js proves what happens when it is not.
@@ -190,6 +192,10 @@ async function waitForDeployment(sha) {
   t('a GET on the payment webhook is 405', (await get('/api/pro/webhook')).status === 405);
   const wjs = await get('/app/pro-welcome.js');
   t('the welcome script is served', wjs.status === 200 && /api\/pro\/welcome/.test(wjs.text));
+  for (const p of ['/app/report', '/app/report.html']) {
+    const r = await get(p, { redirect: 'follow' });
+    t(p + ' (the old internal dashboard) is not deployed: 404', r.status === 404, String(r.status));
+  }
   const portrait = await fetch(BASE + '/assets/andac.jpg');
   t('the About portrait is served as a JPEG', portrait.status === 200 && /image\/jpeg/.test(portrait.headers.get('content-type') || ''), String(portrait.status));
   for (const p of ['/benchmarks/crm', '/methodology', '/research/crawler-access-2026']) {

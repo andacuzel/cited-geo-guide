@@ -106,8 +106,9 @@ Constraints that must not be broken:
   webhook (`POST /api/pro/webhook`, secret `PRO_WEBHOOK_SECRET`; without it 503), creates one paid order per provider order id through
   `createOrderFromPayment`, remembers `checkout id -> link` for 30 minutes, and `/pro/welcome` hands the start path over once. A refund before use
   cancels the link; after use nothing changes. Replays and redeliveries do nothing. Read `docs/payments.md` (what is verified, what is not) before
-  setting `PRO_CHECKOUT_URL`, and never before the webhook has been tested against Polar's sandbox. `docs/terms-draft.md` and `docs/refund-draft.md`
-  are drafts with placeholders, kept off the deployed site by `.vercelignore`; they are not legal advice and are not published.
+  setting `PRO_CHECKOUT_URL`, and never before the webhook has been tested against Polar's sandbox. The terms and refund drafts are not in this
+  public repository (they live in the owner's gitignored `local/`); a draft legal document is never committed. `app/report.html` (the old internal
+  dashboard) stays in the repository and is kept off the deployed site by `.vercelignore`.
 - **One guard for every fetch of a domain someone typed.** `lib/safe-fetch.js` resolves the name inside the socket's
   own lookup, connects only to a public address it has checked, re-checks every redirect and caps time and size.
   `lib/scanner.js` `fetchText` goes through it, so the free scan, the llms.txt checker, site-info, the crawl, the MCP

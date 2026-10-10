@@ -134,6 +134,25 @@ const idOf = (e) => Waitlist.idOf(e);
     t('rate limit: counters are keyed by a hash, not by the address', keys.length >= 1 && keys.every((k) => k.indexOf('198.51') === -1 && /:[0-9a-f]{32}$/.test(k)));
   }
 
+  /* ---- test traffic cannot use up a visitor's signup quota ---- */
+  {
+    const { store } = mk();
+    const deps = { store, env: {}, fetch: fakeResend() };
+    const ip = '198.51.100.20';
+    let bad = 0;
+    for (let i = 0; i < 20; i++) {
+      const r = await call(signup(i % 3 === 0 ? { email: 'nope', consent: true } : i % 3 === 1 ? { email: 'x@example.org', consent: false } : { email: 'trap@example.org', consent: true, company_fax: 'x' }, ip), deps);
+      if (r.status === 400 || r.status === 200) bad++;
+    }
+    const real = await call(signup({ email: 'real-visitor@example.org' }, ip), deps);
+    t('quota: 20 invalid or honeypot requests from one network leave the signup quota untouched, the real signup is accepted', bad === 20 && real.status === 200, bad + ' ' + real.status);
+    let st = 0; for (let i = 0; i < 5; i++) st = (await call(signup({ email: 'q' + i + '@example.org' }, ip), deps)).status;
+    t('quota: six accepted signups fit in the hour (the real one plus five), the seventh is a 429', st === 200 && (await call(signup({ email: 'q9@example.org' }, ip), deps)).status === 429);
+    const f = mk(); const fd = { store: f.store, env: {}, fetch: fakeResend() };
+    let code = 0; for (let i = 0; i < 62; i++) code = (await call(signup({ email: 'nope' }, '198.51.100.30'), fd)).status;
+    t('quota: a flood of invalid requests still hits the flood guard (429 after 60 an hour)', code === 429);
+  }
+
   /* ---- mail: not configured, cap, provider failure ---- */
   {
     const { adapter, store } = mk();

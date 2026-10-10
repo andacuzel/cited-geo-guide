@@ -137,7 +137,7 @@ const orderCount = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro
     const dbl = await hook(other, deps);
     t('double event: the same provider order under a new message id still makes one order, one email', dbl.status === 202 && orderCount(adapter) === 1 && mail.sent.length === 1);
     const ignored = [];
-    for (const e of [{ type: 'checkout.created', timestamp: 'x', api_version: 'x', data: { id: 'c' } }, order({ billing_reason: 'subscription_cycle' }), order({ status: 'pending', paid: false }), { type: 'order.refunded', data: { id: 'ord_x', status: 'partially_refunded' } }, { nothing: true }]) ignored.push((await hook(signed(e), deps)).json);
+    for (const e of [{ type: 'checkout.created', timestamp: 'x', api_version: 'x', data: { id: 'c' } }, order({ billing_reason: 'subscription_cycle' }), order({ status: 'pending', paid: false }), { type: 'order.refunded', data: { id: 'ord_x', status: 'paid' } }, { nothing: true }]) ignored.push((await hook(signed(e), deps)).json);
     t('... each answers 202 {ignored} and no order appears for them', ignored.every((j) => j.ok && j.ignored) && orderCount(adapter) === 1, JSON.stringify(ignored));
   }
 
@@ -161,15 +161,28 @@ const orderCount = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro
     t('refund after use: nothing changes: the order stays used, the report stays', rr.status === 202 && after.status === 'used' && after.jobId === used.json.jobId && (await store.getJob(used.json.jobId)) !== null && (await call({ method: 'GET', query: { a: 'report', id: used.json.jobId } }, deps)).status !== 404);
     const e3 = order(); await hook(signed(e3), deps);
     const t3 = (await store.listOrders()).filter((o) => o.status === 'unused')[0].token;
-    await hook(signed({ type: 'refund.created', data: { id: 'ref_1', status: 'succeeded', order_id: e3.data.id } }), deps);
-    t('refund event: a succeeded refund.created for an unused order cancels it too', (await store.getOrder(t3)).status === 'refunded');
+    await hook(signed({ type: 'refund.created', data: { id: 'ref_1', status: 'succeeded', order_id: e3.data.id, amount: 500 } }), deps);
+    const o3 = await store.getOrder(t3);
+    t('refund event: a succeeded refund.created carries the refund amount but not the order total, so it only flags the order: the link stays valid', o3.status === 'unused' && o3.review === 'refund_reported');
     const e4 = order(); await hook(signed(e4), deps);
     await hook(signed({ type: 'refund.created', data: { id: 'ref_2', status: 'pending', order_id: e4.data.id } }), deps);
-    t('refund event: a pending refund does not', (await store.listOrders()).filter((o) => o.status === 'unused').length === 1);
-    t('refund of an order we never made is acknowledged and changes nothing', (await hook(signed(refunded('ord_never_seen')), deps)).status === 202);
+    const t4 = (await store.listOrders()).filter((o) => o.status === 'unused' && !o.review)[0];
+    t('refund event: a pending refund changes and flags nothing', !!t4);
+    t('refund of an order we never made is acknowledged and changes nothing', (await hook(signed(refunded('ord_never_seen')), deps)).status === 202 && (await hook(signed(refunded('ord_never_seen', 'partially_refunded')), deps)).status === 202);
     const partial = order(); await hook(signed(partial), deps);
-    await hook(signed(refunded(partial.data.id, 'partially_refunded')), deps);
-    t('a partially refunded order (order.refunded with status partially_refunded) keeps its link', (await store.listOrders()).filter((o) => o.status === 'unused').length === 2);
+    const tp = (await store.listOrders()).filter((o) => o.status === 'unused' && !o.review && o.token !== t4.token)[0].token;
+    const pr = await hook(signed(refunded(partial.data.id, 'partially_refunded')), deps);
+    const op = await store.getOrder(tp);
+    t('partial refund of an unused link: the link stays valid (its start page opens) and the order is flagged "partial_refund" for review', pr.status === 202 && op.status === 'unused' && op.review === 'partial_refund' && (await call({ method: 'GET', query: { a: 'startpage', token: tp } }, deps)).status === 200);
+    t('... it is counted as a review item, not as a cancellation', (await require('../lib/pro-stats.js').read(store, 1))[0].counts.payments_review >= 2);
+    const wp = await call({ query: { a: 'welcome' }, body: { checkout: partial.data.checkout_id } }, deps);
+    t('... and the welcome page still hands the link out once', wp.json.state === 'ready');
+    await hook(signed(refunded(partial.data.id, 'refunded'), { id: 'msg_full_after_partial' }), deps);
+    t('a later full refund of the same order does cancel it, and the review flag stays for the owner to clear', (await store.getOrder(tp)).status === 'refunded');
+    await store.clearReview(tp);
+    t('clearing the review flag removes it', (await store.getOrder(tp)).review === '');
+    const fu = await store.getOrder(tok2);
+    t('a full refund after use flags the used order "refund_after_use" and changes nothing else', fu.status === 'used' && fu.review === 'refund_after_use');
   }
 
   /* ---- the welcome page ---- */

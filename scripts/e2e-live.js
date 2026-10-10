@@ -157,21 +157,30 @@ async function cleanup() {
   t('a second answer gets the same thanks and changes nothing', fb2.text === fb.text && (await adapter.hget('pro:feedback:' + id, 'rating')) === '5');
   t('feedback is kept 90 days', (await adapter.ttl('pro:feedback:' + id)) > 89 * 86400);
 
-  // 6c. the waitlist, with the project's own address (it gets the real confirmation message if the deployment can send mail)
+  // 6c. the waitlist: ONE real signup with the project's own address (it gets the real confirmation message if the
+  // deployment can send mail), checked in the database, then removed again. The strict quota (6 accepted signups an hour
+  // per network) counts accepted signups only, so one signup here leaves five for anyone else.
+  const preexisting = [];
+  for (const wid of await adapter.smembers('wl:index')) { const h = await adapter.hgetall('wl:e:' + wid); if (h && h.email === CONTACT.email) preexisting.push(wid); }
+  t('no record for the project address exists before the test (so removing it cannot delete anything of anyone else)', preexisting.length === 0, String(preexisting.length));
   const wl1 = await http('POST', '/api/waitlist', { email: CONTACT.email, name: 'Citehound test', consent: true });
   if (wl1.status === 200) bump('waitlist_signups');
-  const wl2 = await http('POST', '/api/waitlist', { email: ' ' + CONTACT.email.toUpperCase() + ' ', consent: true });
-  if (wl2.status === 200) bump('waitlist_signups');
-  t('the waitlist signup answers 200 and the same words for the same address typed differently', wl1.status === 200 && wl1.text === wl2.text && wl1.text.indexOf('@') === -1, wl1.status + ' ' + wl1.text.slice(0, 80));
+  t('the waitlist signup answers 200 and says nothing about the address', wl1.status === 200 && wl1.text.indexOf('@') === -1, wl1.status + ' ' + wl1.text.slice(0, 80));
   let found = [];
   for (const wid of await adapter.smembers('wl:index')) { const h = await adapter.hgetall('wl:e:' + wid); if (h && h.email === CONTACT.email) found.push(wid); }
   found.forEach((x) => created.waitlistIds.push(x));
   t('exactly one record exists for it, with email, date and consent version, kept 12 months', found.length === 1 && (await adapter.hget('wl:e:' + found[0], 'createdAt')) !== null && (await adapter.hget('wl:e:' + found[0], 'consentVersion')) !== null && (await adapter.ttl('wl:e:' + found[0])) > 364 * 86400);
   if (found.length === 1) {
     const mailKey = await adapter.ttl('wl:mail:' + found[0]);
-    if (liveMail) { bump('waitlist_emails'); t('one confirmation message was handed to the provider (30-day key set), and the second signup sent none', mailKey > 29 * 86400 && mailKey <= 30 * 86400, String(mailKey)); out('      one real confirmation message was sent to the project contact address; check the inbox, its link, and the "Remove me from the list" link'); }
+    if (liveMail) { bump('waitlist_emails'); t('one confirmation message was handed to the provider (30-day key set)', mailKey > 29 * 86400 && mailKey <= 30 * 86400, String(mailKey)); out('      one real confirmation message was sent to the project contact address; check the inbox, its link, and the "Remove me from the list" link'); }
     else t('no mail provider on the deployment: no message reserved', mailKey === -2);
   }
+  // Removal: the signed link needs the deployment's secret, which this machine does not hold, so the record is removed
+  // the way lib/waitlist.js remove() does it (record, mail marker, index entry). The removal endpoint itself is covered
+  // with a known secret by scripts/test-waitlist.js, and the live smoke checks that a bad link is the generic 404.
+  for (const wid of found) { await adapter.del('wl:e:' + wid); await adapter.del('wl:mail:' + wid); await adapter.srem('wl:index', wid); }
+  let still = 0; for (const wid of found) still += await adapter.exists('wl:e:' + wid);
+  t('the test signup is removed again', found.length === 1 && still === 0);
 
   // 7. clean up
   const c = await cleanup();

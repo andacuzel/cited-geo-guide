@@ -52,11 +52,15 @@ const pages = htmlFiles('', []);
   t('it takes the checkout id out of the address bar', /history\.replaceState/.test(js));
 }
 {
-  const drafts = ['docs/terms-draft.md', 'docs/refund-draft.md'];
-  t('the terms and refund drafts exist and say they are drafts, not legal advice, with decisions in brackets', drafts.every((f) => /DRAFT/.test(read(f)) && /not legal advice/.test(read(f)) && /\[[A-Z][^\]]{8,}/.test(read(f))));
-  t('they are kept off the deployed site (.vercelignore)', drafts.every((f) => read('.vercelignore').split('\n').indexOf(f) !== -1));
+  // Draft legal documents are not kept in this public repository (they live in the owner's gitignored local/ folder).
+  const walk = (dir) => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap((e) => e.name === 'node_modules' || e.name === '.git' || e.name === 'local' ? [] : e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
+  const draftish = walk('.').filter((f) => /(^|[\\/])(terms|refund|privacy|legal|tos)[-_]?(draft|template)|draft[-_]?(terms|refund|legal)/i.test(f));
+  t('no draft legal document is in the repository tree', draftish.length === 0, draftish.join(', '));
+  let tracked = null; try { tracked = require('child_process').execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).split('\n'); } catch (e) { /* an export without git: the tree check above covers it */ }
+  if (tracked) t('git tracks no draft legal document', tracked.filter((f) => /(terms|refund|legal|tos)[-_]?draft|draft[-_]?(terms|refund|legal)/i.test(f)).length === 0);
   const linked = pages.concat(['sitemap.xml', 'llms.txt', 'robots.txt']).filter((f) => /terms-draft|refund-draft/.test(read(f)));
   t('no page, the sitemap, llms.txt or robots.txt mention them', linked.length === 0, linked.join(', '));
+  t('the old dashboard app/report.html is kept in the repository and kept off the deployed site (.vercelignore), and no page links to it', fs.existsSync(path.join(ROOT, 'app/report.html')) && read('.vercelignore').split('\n').indexOf('app/report.html') !== -1 && pages.filter((f) => /["'(]\/?app\/report(\.html)?[?"')]/.test(read(f))).length === 0);
   const pay = read('docs/payments.md');
   t('docs/payments.md lists the settings and the dashboard steps and marks what is unverified', /PRO_WEBHOOK_SECRET/.test(pay) && /PRO_CHECKOUT_URL/.test(pay) && /PRO_PRICE_TEXT/.test(pay) && /Add Endpoint/.test(pay) && /checkout_id=\{CHECKOUT_ID\}/.test(pay) && (pay.match(/UNVERIFIED/g) || []).length >= 4);
 }

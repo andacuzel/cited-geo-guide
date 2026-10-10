@@ -1,3 +1,3 @@
-# Drafts that are not published: kept off the deployed site (they are still in the repository).
-docs/terms-draft.md
-docs/refund-draft.md
+# The old internal crawl dashboard is kept in the repository but is not deployed: nothing links to it and it still uses the
+# retired "worst first" wording. Drafts of legal documents do not live in this repository at all (see docs/payments.md).
+app/report.html

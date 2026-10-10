@@ -49,9 +49,12 @@
        2025-03-26", spec 2025-11-25, Transports). A request with no header
        whose body declares a version in _meta has another way to identify
        it, and the header mismatch is rejected (-32020). An unsupported
-       version is 400 (-32022). Batched JSON-RPC arrays, which 2025-03-26
-       allowed, are not supported (UNVERIFIED against that revision's
-       text). ping is answered only on older-version requests.
+       version is 400 (-32022). Batched JSON-RPC arrays are served for
+       2025-03-26 (its Transports page lists an array of requests and/or
+       notifications as a valid POST body; checked 10 Oct 2026), up to 20
+       messages, and refused (400) for 2025-06-18 and later, whose
+       Transports pages require a single message. ping is answered only
+       on older-version requests.
      - OPTIONS answers the CORS preflight (204) and every response
        carries Access-Control-Allow-Origin: *. The endpoint is public,
        read-only, stateless and takes no credentials or cookies, so a
@@ -937,11 +940,50 @@ module.exports = async (req, res) => {
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch (e) { body = null; }
   }
-  if (!body || typeof body !== 'object' || Array.isArray(body)) {
-    res.status(400).json(rpcError(null, -32700, 'Parse error: request body must be a single JSON-RPC 2.0 object (batched arrays are not supported).'));
+  if (Array.isArray(body)) {
+    // JSON-RPC batches are part of revision 2025-03-26 only (its Transports page lists an array of requests and/or
+    // notifications as a valid POST body); 2025-06-18 and later require a single message. A batch is therefore served
+    // when the request names 2025-03-26 or names no version (which is read as 2025-03-26), and refused otherwise.
+    var batchHdr = headerValue(req, 'mcp-protocol-version');
+    if (batchHdr !== undefined && batchHdr !== '2025-03-26') {
+      res.status(400).json(rpcError(null, -32600, 'Invalid Request: JSON-RPC batches are only part of protocol revision 2025-03-26. Send one message per POST.'));
+      return;
+    }
+    if (body.length === 0 || body.length > MAX_BATCH) {
+      res.status(400).json(rpcError(null, -32600, 'Invalid Request: a batch holds 1 to ' + MAX_BATCH + ' messages.'));
+      return;
+    }
+    var replies = [];
+    for (var bi = 0; bi < body.length; bi++) {
+      var item = body[bi];
+      if (!isPlainObject(item)) { replies.push(rpcError(null, -32600, 'Invalid Request: a batch element must be a JSON-RPC object.')); continue; }
+      var cap = captureRes();
+      await dispatch(req, cap, item);
+      if (cap.payload !== undefined) replies.push(cap.payload);
+    }
+    // Only notifications in the batch: 202 with no body, as for a single notification.
+    if (replies.length === 0) { res.status(202).end(); return; }
+    res.status(200).json(replies);
+    return;
+  }
+  if (!body || typeof body !== 'object') {
+    res.status(400).json(rpcError(null, -32700, 'Parse error: request body must be a JSON-RPC 2.0 object.'));
     return;
   }
 
+  await dispatch(req, res, body);
+};
+
+const MAX_BATCH = 20;
+
+// A stand-in for the response, so one message of a batch can be answered by the same code as a single message.
+function captureRes() {
+  const c = { code: 200, payload: undefined, status: function (n) { c.code = n; return c; }, json: function (o) { c.payload = o; return c; }, end: function () { return c; }, setHeader: function () {} };
+  return c;
+}
+
+// One JSON-RPC message in, one answer (or none, for a notification) out.
+async function dispatch(req, res, body) {
   var hasId = Object.prototype.hasOwnProperty.call(body, 'id');
   var id = hasId ? body.id : null;
   var method = body.method;
@@ -1068,7 +1110,7 @@ module.exports = async (req, res) => {
     console.error('[mcp] unhandled error for method', method, '—', err && err.stack ? err.stack : err);
     res.status(200).json(rpcResult(id, toolResult({ isError: true, text: 'Unexpected server error. Please try again.' })));
   }
-};
+}
 
 // The registry, for lib/mcp-docs.js (which derives the tool count shown in mcp.html).
 module.exports.TOOLS = TOOLS;

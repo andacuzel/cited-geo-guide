@@ -168,6 +168,61 @@ async function runToEnd(store, id, crawl) { let last = null; for (let i = 0; i <
     t('admin: an unknown command prints the usage and exits 1', (await Admin.run(store, ['nope'])).code === 1);
   }
 
+  /* ---- purge, waitlist-remove, health, review ---- */
+  {
+    const store = S.createStore(S.memoryAdapter());
+    const A = store.adapter;
+    const Waitlist = require('../lib/waitlist.js');
+    const keep = await store.createOrder({ source: 'pilot', label: 'Real friend' });
+    const t1 = await store.createOrder({ source: 'pilot', label: 'Self test' });
+    const t2 = await store.createOrder({ source: 'pilot', label: 'Self test' });
+    const s1 = await call(api.start, { method: 'POST', body: GOOD(t1.token) }, { store, checkHost: okHost });
+    await runToEnd(store, s1.json.jobId, crawlWith(site1()));
+    await call(api.handle, { method: 'POST', query: { a: 'feedback' }, body: { id: s1.json.jobId, rating: 4 } }, { store });
+    const sk = await call(api.start, { method: 'POST', body: GOOD(keep.token) }, { store, checkHost: okHost });
+    await runToEnd(store, sk.json.jobId, crawlWith(site1()));
+
+    const noLabel = await Admin.run(store, ['purge']);
+    t('purge: without a label nothing is removed', noLabel.code === 1 && (await store.listOrders()).length === 3);
+    const dry = await Admin.run(store, ['purge', '--label', 'Self test']);
+    const dryText = dry.lines.join('\n');
+    t('purge: without --yes it lists what it would remove and changes nothing', dry.code === 0 && /Would remove 2 order\(s\)/.test(dryText) && /Nothing was changed/.test(dryText) && (await store.listOrders()).length === 3 && (await store.getJob(s1.json.jobId)) !== null);
+    t('purge: the dry run shows prefixes only, never a full token, report id, address or name', [t1.token, t2.token, s1.json.jobId].every((x) => dryText.indexOf(x) === -1) && !/@|Grace|Hopper/.test(dryText));
+    const real = await Admin.run(store, ['purge', '--label', 'Self test', '--yes']);
+    const left = await store.listOrders();
+    t('purge --yes: the test orders, their report, its pages, citation record and feedback are gone', real.code === 0 && /Removed 2 order/.test(real.lines.join()) && left.length === 1 && left[0].token === keep.token && (await store.getJob(s1.json.jobId)) === null && (await A.exists('pro:feedback:' + s1.json.jobId)) === 0 && (await A.exists('pro:job:' + s1.json.jobId + ':pages')) === 0 && (await A.exists('pro:job-order:' + s1.json.jobId)) === 0);
+    t('purge --yes: an order with another label, and its report, are untouched', (await store.getJob(sk.json.jobId)) !== null && (await store.getOrder(keep.token)).status === 'used');
+    t('purge: the label must match exactly (a part of it removes nothing)', /No order has the label/.test((await Admin.run(store, ['purge', '--label', 'Real', '--yes'])).lines.join()) && (await store.listOrders()).length === 1);
+
+    // waitlist
+    const rec = await Waitlist.join(A, { email: 'Someone@Example.org', name: 'Someone' });
+    await Waitlist.join(A, { email: 'other@example.org', name: '' });
+    const nf = await Admin.run(store, ['waitlist-remove', 'nobody@example.org', '--yes']);
+    t('waitlist-remove: an address that is not on the list changes nothing', nf.code === 0 && /No waitlist entry/.test(nf.lines.join()) && (await A.smembers('wl:index')).length === 2);
+    const dryW = await Admin.run(store, ['waitlist-remove', ' SOMEONE@example.org ']);
+    t('waitlist-remove: without --yes it only says one entry matches', /One waitlist entry matches/.test(dryW.lines.join()) && (await A.smembers('wl:index')).length === 2 && dryW.lines.join().indexOf('omeone') === -1);
+    const rmW = await Admin.run(store, ['waitlist-remove', ' SOMEONE@example.org ', '--yes']);
+    t('waitlist-remove --yes: the entry (typed in another case) is gone from record, mail marker and index, the other stays, the address is never printed', /Removed 1 waitlist entry/.test(rmW.lines.join()) && (await A.exists('wl:e:' + rec.id)) === 0 && (await A.smembers('wl:index')).length === 1 && rmW.lines.join().indexOf('omeone') === -1);
+    t('waitlist-remove: a missing or malformed address is refused', (await Admin.run(store, ['waitlist-remove'])).code === 1 && (await Admin.run(store, ['waitlist-remove', 'not-an-address'])).code === 1);
+
+    // health
+    await Stats.count(store, 'mail_failed'); await Stats.count(store, 'webhook_rejected'); await Stats.count(store, 'webhook_rejected'); await Stats.count(store, 'waitlist_signups');
+    const h = await Admin.run(store, ['health']);
+    const ht = h.lines.join('\n');
+    t('health: orders, reports started, restored links, webhook and email failures, waitlist signups, all as numbers', h.code === 0 && /Orders issued\s+1/.test(ht) && /Reports started\s+1 /.test(ht) && /Links restored/.test(ht) && /Webhook failures\s+2 rejected/.test(ht) && /Email failures\s+1/.test(ht) && /Waitlist signups\s+1 /.test(ht), ht);
+    t('health: failures are called out, and no token, address or name appears', /Needs a look/.test(ht) && !/@|Grace|Hopper/.test(ht) && ht.indexOf(sk.json.jobId) === -1);
+    const quiet = await Admin.run(S.createStore(S.memoryAdapter()), ['health']);
+    t('health: with nothing wrong it says so', /Nothing needs attention/.test(quiet.lines.join()));
+
+    // review
+    await store.flagReview(keep.token, 'partial_refund');
+    const lr = (await Admin.run(store, ['list'])).lines.join('\n');
+    t('list: an order flagged for review shows "CHECK: partial_refund" and the instruction', /CHECK: partial_refund/.test(lr) && /clear-review/.test(lr));
+    t('health: a flagged order is counted', /1 order\(s\) flagged for your review/.test((await Admin.run(store, ['health'])).lines.join()));
+    const cl = await Admin.run(store, ['clear-review', keep.token.slice(0, 8)]);
+    t('clear-review: removes the flag by prefix', cl.code === 0 && (await store.getOrder(keep.token)).review === '' && (await Admin.run(store, ['clear-review', 'abc'])).code === 1);
+  }
+
   /* ---- an expired link ---- */
   {
     const adapter = S.memoryAdapter();

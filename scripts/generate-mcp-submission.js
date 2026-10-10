@@ -138,7 +138,7 @@ async function build() {
   L.push('- There is no tool that runs a citation check. A run is about 90 model calls, far past the function time limit. The citation tools hand over the questions and a protocol to run yourself.');
   L.push('- Store detection is a pattern match and misses some stores. Its platform markers were checked against live stores for Shopify and Salesforce Commerce Cloud only.');
   L.push('- The endpoint does not validate the `Origin` header. It is public, stateless and read-only, with no local socket to rebind.');
-  L.push('- Clients for the 2025-03-26 revision, which sent no version header, are served as that revision. JSON-RPC batch arrays, which that revision allowed, are not supported (not checked against the text of that revision).');
+  L.push('- Clients for the 2025-03-26 revision, which sent no version header, are served as that revision. JSON-RPC batch arrays, which only that revision allows, are served for it (up to 20 messages) and refused for 2025-06-18 and later.');
   L.push('- Every fetch of a site you name goes through one guard (`lib/safe-fetch.js`): public addresses only, every redirect re-checked. A name that resolves to a private, loopback or link-local address is refused.', '');
   L.push('## Name change', '');
   L.push('- The product and this server were renamed on 7 October 2026. `serverInfo.name` is now `citehound` and the title is `Citehound`. The tools and prompts are unchanged.');

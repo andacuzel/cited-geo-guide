@@ -57,8 +57,19 @@ const rpc = (m, params, id) => ({ jsonrpc: '2.0', id: id === undefined ? 1 : id,
   t('every POST response carries Access-Control-Allow-Origin and no-store', noHeader.headers['access-control-allow-origin'] === '*' && noHeader.headers['cache-control'] === 'no-store');
   const noAuth = await call('POST', {}, rpc('tools/list'));
   t('no credentials are asked for and no cookie is set', noAuth.status === 200 && !noAuth.headers['set-cookie'] && !noAuth.headers['www-authenticate']);
-  const batch = await call('POST', {}, [rpc('tools/list')]);
-  t('a batch array is refused clearly (400), not served wrongly', batch.status === 400);
+  // Batches belong to revision 2025-03-26 (its Transports page: the POST body may be an array of requests and/or notifications).
+  const batch = await call('POST', {}, [rpc('tools/list', undefined, 1), rpc('ping', undefined, 2), { jsonrpc: '2.0', method: 'notifications/initialized' }]);
+  t('a batch with no version header (read as 2025-03-26) is served: one answer per request, none for the notification', batch.status === 200 && Array.isArray(batch.json) && batch.json.length === 2 && batch.json[0].id === 1 && batch.json[0].result.tools.length === 13 && batch.json[1].id === 2, JSON.stringify(batch.json).slice(0, 160));
+  const batch2 = await call('POST', { 'MCP-Protocol-Version': '2025-03-26' }, [rpc('tools/list', undefined, 7)]);
+  t('a batch under an explicit 2025-03-26 is served', batch2.status === 200 && batch2.json[0].id === 7);
+  const onlyNotes = await call('POST', {}, [{ jsonrpc: '2.0', method: 'notifications/initialized' }]);
+  t('a batch of notifications only is 202 with no body', onlyNotes.status === 202 && onlyNotes.json === null);
+  const newer = await call('POST', { 'MCP-Protocol-Version': '2025-06-18' }, [rpc('tools/list')]);
+  t('a batch under 2025-06-18 or later is refused (400): those revisions allow one message per POST', newer.status === 400 && newer.json.error.code === -32600);
+  t('an empty batch is 400', (await call('POST', {}, [])).status === 400);
+  t('a batch over the limit is 400', (await call('POST', {}, Array.from({ length: 21 }, (_, i) => rpc('ping', undefined, i)))).status === 400);
+  const mixed = await call('POST', {}, [rpc('tools/list', undefined, 1), 5, rpc('nope', undefined, 3)]);
+  t('a bad element gets its own error entry and does not stop the others', mixed.status === 200 && mixed.json.length === 3 && mixed.json[1].error.code === -32600 && mixed.json[2].error.code === -32601);
 
   out('\n' + pass + ' passed, ' + fails.length + ' failed');
   if (fails.length) { process.stderr.write('FAILED:\n  ' + fails.join('\n  ') + '\n'); process.exit(1); }

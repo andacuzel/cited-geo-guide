@@ -43,6 +43,7 @@ Please do not promise a price, a launch date or a feature. None is decided.
 node scripts/pro-admin.js list        # every link: first 8 characters, label, source, status, date, report status
 node scripts/pro-admin.js stats       # daily totals for the last 7 days (add --days 30)
 node scripts/pro-admin.js feedback    # what people wrote, newest first, with the average rating
+node scripts/pro-admin.js health      # the last 24 hours at a glance (see "Health" below)
 ```
 
 `list` shows `unused`, `used`, `expired` or `revoked` for each link, and for used links whether the report is
@@ -62,6 +63,47 @@ node scripts/pro-admin.js revoke 1a2b3c4d
 Anyone who opens a revoked link sees the same "This link is not available" page as for a link that never existed. You
 can only revoke a link nobody has used. A report that already exists stays available until its own 90 days end; to
 delete one sooner, see "Deleting a report" in `docs/pro.md`.
+
+## 4b. Health, test clean-up and the review flag
+
+```bash
+node scripts/pro-admin.js health
+```
+
+`health` covers the last 24 hours: orders issued (pilot and paid), reports started and how they ended (done, partial,
+failed, still running, with the reason of a failed one), links restored, webhook failures, email failures, waitlist
+signups, and refunds. It ends with "Nothing needs attention" or "Needs a look". The daily counters are kept per UTC
+day, so the counter lines read today plus yesterday. Numbers only: no token, address or name.
+
+Remove test data you made yourself. The report from the first self test carries the label `Self test`. First look:
+
+```bash
+node scripts/pro-admin.js purge --label "Self test"
+```
+
+Without `--yes` that command only lists what it would remove (first 8 characters of each link, and the report), and
+changes nothing. When the list is what you expect, run the same command with `--yes`:
+
+```bash
+node scripts/pro-admin.js purge --label "Self test" --yes
+```
+
+It removes every order whose label is exactly that text, the report each one made, its pages, citation record and feedback.
+It does not touch other labels, the waitlist or the counters. To remove one waitlist entry (for example your own test
+address) by address:
+
+```bash
+node scripts/pro-admin.js waitlist-remove you@example.com
+node scripts/pro-admin.js waitlist-remove you@example.com --yes
+```
+
+The address is matched without regard to case or surrounding spaces and is never printed back. A person can also remove themselves from the link in the message
+we sent.
+
+When a payment is refunded in part, or a refund arrives that the program cannot size, the link stays valid and the order is
+flagged: `list` shows `CHECK: partial_refund` (or `refund_reported`, or `refund_after_use`), and `health` counts it.
+Look at the order in the Polar dashboard, decide, and clear it with `node scripts/pro-admin.js clear-review <prefix>`.
+See "Refunds" in `docs/payments.md`.
 
 ## 5. The waitlist
 

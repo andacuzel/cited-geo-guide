@@ -26,7 +26,7 @@ const gates = [];
 gates.push({ name: 'integrity: every .js compiles, every .json parses, ' + (precommit ? 'the index' : 'HEAD') + ' equals the working tree', args: ['scripts/check-integrity.js'].concat(precommit ? ['--staged'] : []) });
 gates.push({ name: 'vercel.json is valid against the Vercel schema', args: ['scripts/check-vercel-json.js'] });
 scripts.filter((f) => /^generate-.*\.js$/.test(f)).sort().forEach((f) => gates.push({ name: f + ' --check', args: ['scripts/' + f, '--check'] }));
-['check-pages.js', 'check-mcp-drift.js', 'check-launch-config.js', 'check-research-index.js'].forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
+['check-pages.js', 'check-mcp-drift.js', 'check-launch-config.js', 'check-research-index.js', 'check-secrets.js'].forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
 gates.push({ name: 'site-chrome.js --check', args: ['scripts/site-chrome.js', '--check'] });
 gates.push({ name: 'capture-pro-shots.js --check', args: ['scripts/capture-pro-shots.js', '--check'] });
 scripts.filter((f) => /^test-.*\.js$/.test(f) && f !== 'test-real-kv.js').sort().forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
