@@ -66,7 +66,7 @@
       "note": "the source of the address (the fallback in lib/site-config.js too)"
     },
     {
-      "match": "^(plugin/|docs/mcp-submission\\.md$)",
+      "match": "^(plugin/|docs/directory-submission\\.md$)",
       "class": "rewrite",
       "note": "generated from site.config.json"
     },

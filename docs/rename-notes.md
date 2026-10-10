@@ -42,7 +42,7 @@ Claude on the web and desktop: delete the old connector and add a custom connect
 ## For the owner to do
 
 - Buy the domain, then follow `docs/domain-day.md` (the checklist matches the new name: `set-domain.js`, the connector commands and the image notes were updated).
-- Re-add the connector in Claude and update directory submission copy from `docs/mcp-submission.md`, which has a "Name change" section.
+- Re-add the connector in Claude and update directory submission copy from `docs/directory-submission.md`, which has a "Name change" section.
 - Optionally rename the GitHub repository and the Vercel project, with redirects.
 - Create Search Console, Bing Webmaster Tools and IndexNow properties for the new domain.
 - Rotate the Gemini key and set billing when the name is final. Unchanged and deferred.

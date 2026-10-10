@@ -123,7 +123,7 @@ The images in `assets/brand/` (`og-default.png`, `og-default-light.png`, the log
 node scripts/generate-mcp-submission.js
 ```
 
-`docs/mcp-submission.md` is regenerated from the registry with the new server URL, the privacy URL and the support address. Submit from that file. The plugin in `plugin/` is generated the same way (`node scripts/generate-plugin.js`).
+`docs/directory-submission.md` is regenerated from the registry with the new server URL, the privacy URL and the support address. Submit from that file. The plugin in `plugin/` is generated the same way (`node scripts/generate-plugin.js`).
 
 ## 12. Afterwards
 
