@@ -1,7 +1,7 @@
 /* =====================================================================
    Citehound Pro: /pro/start/<token>
 
-   The page asks the server what the link means (GET /api/pro/order), shows the
+   The page asks the server what the link means (POST /api/pro/order), shows the
    form for a link that is ready, sends a link that has already been used on to
    that link's own report, and shows one generic message for anything else. The
    form posts to /api/pro/start; its answer hands over to the progress screen
@@ -11,12 +11,8 @@
   'use strict';
 
   var $ = function (id) { return document.getElementById(id); };
-  // The token is in the path. If the page was reached through its static address instead, it is in ?t=, and the address is put right.
+  // The token is read from the path and nowhere else: no page of ours takes a token in a query string.
   var token = ((location.pathname.match(/\/pro\/start\/([a-f0-9]{32})\/?$/i) || [])[1] || '').toLowerCase();
-  if (!token) {
-    var viaQuery = (new URLSearchParams(location.search).get('t') || '').toLowerCase();
-    if (/^[a-f0-9]{32}$/.test(viaQuery)) { token = viaQuery; try { history.replaceState(null, '', '/pro/start/' + token); } catch (e) { /* the page still works */ } }
-  }
 
   var sections = { loading: $('psLoading'), unavailable: $('psUnavailable'), form: $('psFormWrap'), progress: $('psProgress') };
   function show(name) {
@@ -24,8 +20,8 @@
   }
   function focusTitle(sec) { var h = sec.querySelector('h1'); if (h) h.focus({ preventScroll: true }); }
 
-  function getJson(url) {
-    return fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store', credentials: 'omit' }).then(function (res) {
+  function postJson(url, body) {
+    return fetch(url, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store', credentials: 'omit' }).then(function (res) {
       return res.json().then(function (body) { return { ok: res.ok, status: res.status, body: body }; }, function () { return { ok: false, status: res.status, body: {} }; });
     });
   }
@@ -34,7 +30,7 @@
   function check() {
     show('loading');
     if (!token) { unavailable(); return; }
-    getJson('/api/pro/order?token=' + encodeURIComponent(token)).then(function (r) {
+    postJson('/api/pro/order', { token: token }).then(function (r) {
       if (r.ok && r.body.state === 'ready') { show('form'); focusTitle(sections.form); return; }
       if (r.ok && r.body.state === 'started' && r.body.reportPath) { location.replace(r.body.reportPath); return; }
       if (r.status === 429) { unavailable('Too many requests from your network. Wait a few minutes and try again.', true); return; }

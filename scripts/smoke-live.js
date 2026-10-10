@@ -112,7 +112,9 @@ async function waitForDeployment(sha) {
     t('... with noindex and no referrer', /noindex/.test(r.headers.get('x-robots-tag') || '') && r.headers.get('referrer-policy') === 'no-referrer', JSON.stringify({ robots: r.headers.get('x-robots-tag'), ref: r.headers.get('referrer-policy') }));
     if (re) t('... and the one generic message', re.test(r.text) && !/expired|invalid|used|not found/i.test(r.text.replace(/<[^>]+>/g, ' ').replace(/Page Not Found/i, '')), r.text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 120));
   }
-  const order = await get('/api/pro/order?token=' + hex);
+  const order = await get('/api/pro/order', { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ token: hex }) });
+  const orderGet = await get('/api/pro/order?token=' + hex);
+  t('a GET on /api/pro/order is refused (405): a token is never read from an address', orderGet.status === 405, String(orderGet.status));
   t('/api/pro/order reaches the storage and answers "unavailable" for an unknown token', order.status === 404 && /"state":"unavailable"/.test(order.text), order.status + ' ' + order.text.slice(0, 100));
   t('the Pro API answers noindex and no-store', /noindex/.test(order.headers.get('x-robots-tag') || '') && /no-store/.test(order.headers.get('cache-control') || ''));
   const noStep = await get('/api/pro/step?id=' + hex);

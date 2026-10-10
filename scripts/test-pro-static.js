@@ -98,6 +98,9 @@ t('nothing is kept in the browser by the Pro pages', !/localStorage|sessionStora
   ['/r/(.*)', '/pro/start/(.*)', '/app/pro-start(.*)', '/api/pro(.*)'].forEach((src) => t('vercel.json: ' + src + ' sends noindex and no referrer', !!need(src)));
   t('vercel.json: the single Pro function has a duration inside the plan', v.functions['api/pro.js'] && v.functions['api/pro.js'].maxDuration <= 60);
   t('vercel.json: the report, the start page and the API are rewritten', ['/pro/start/:token', '/api/pro/:action(start|order|step|status|email)', '/r/:id([0-9a-f]{32})'].every((src) => v.rewrites.some((r) => r.source === src)));
+  t('vercel.json: the function bundles the start page file (includeFiles), so it is never missing at runtime', v.functions['api/pro.js'].includeFiles === 'app/pro-start.html');
+  const tokenInAddress = /pro-start\?t=|searchParams\.get\('t'\)|[?&]token=/;
+  t('no Pro page or script takes a token in a query string (no ?t=, no ?token=) and the function never redirects to one', ['lib/pro-api.js', 'app/pro-start.js', 'app/pro-progress.js', 'lib/report-pro-ui.js', 'lib/pro-report-page.js', 'app/pro-start.html'].every((f) => !tokenInAddress.test(read(f).replace(/\/api\/pro\?a=startpage&token=:token/g, ''))));
   const fns = fs.readdirSync(path.join(ROOT, 'api')).filter((f) => /\.js$/.test(f) && !f.startsWith('_'));
   t('the function count stays within the Hobby plan (' + fns.length + ' of 12)', fns.length <= 12, fns.join(','));
   ['/pro/start/x', '/r/x'].forEach(() => 0);

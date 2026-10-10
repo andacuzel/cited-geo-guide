@@ -84,8 +84,9 @@
     var kicker = el('p', 'pp-kicker', 'Citehound Pro');
     var title = el('h1', 'pp-title', 'Making your report');
     title.setAttribute('tabindex', '-1');
-    var sub = el('p', 'pp-sub', 'Keep this tab open. A report usually takes a few minutes, because the crawl waits one second between requests to be polite to your site.');
-    head.appendChild(kicker); head.appendChild(title); head.appendChild(sub);
+    var sub = el('p', 'pp-sub', 'A report usually takes a few minutes, because the crawl waits one second between requests to be polite to your site.');
+    var keep = el('p', 'pp-note pp-keepopen', 'Keep this tab open while we scan. If you close it, open the same link again and it will continue.');
+    head.appendChild(kicker); head.appendChild(title); head.appendChild(sub); head.appendChild(keep);
     var live = el('p', 'pp-live');
     live.setAttribute('role', 'status'); live.setAttribute('aria-live', 'polite');
     var list = el('ol', 'pp-stages');
@@ -210,6 +211,7 @@
     function showResult() {
       list.classList.add('is-finished');
       slow.textContent = '';
+      keep.hidden = true;
       result.hidden = false; result.textContent = '';
       var s = last && last.status;
       if (s === 'failed') {

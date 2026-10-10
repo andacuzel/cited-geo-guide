@@ -18,6 +18,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+process.env.PRO_HASH_SECRET = process.env.PRO_HASH_SECRET || 'dev-server-only-secret-0123456789';
 const S = require('../lib/pro-store.js');
 const api = require('../lib/pro-api.js');
 const { makeFakeSite } = require('./pro-fake-site.js');

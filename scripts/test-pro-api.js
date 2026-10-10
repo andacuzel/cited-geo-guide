@@ -14,6 +14,7 @@
 
 'use strict';
 
+process.env.PRO_HASH_SECRET = 'test-only-secret-0123456789abcdef';
 const S = require('../lib/pro-store.js');
 const api = require('../lib/pro-api.js');
 const H = require('../lib/pro-http.js');
@@ -96,8 +97,8 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
       call(api.start, { method: 'POST', body: GOOD(b.token, { site: 'two.example.com' }) }, { store, checkHost: okHost })
     ]);
     t('two tokens at once start two jobs', jobKeys(adapter).length === 2 && ra.json.jobId !== rb.json.jobId);
-    const oa = await call(api.order, { query: { token: a.token } }, { store });
-    const ob = await call(api.order, { query: { token: b.token } }, { store });
+    const oa = await call(api.order, { method: 'POST', body: { token: a.token } }, { store });
+    const ob = await call(api.order, { method: 'POST', body: { token: b.token } }, { store });
     t('a used token only ever points at its own job', oa.json.reportPath === '/r/' + ra.json.jobId + '/' && ob.json.reportPath === '/r/' + rb.json.jobId + '/');
     const wrong = await call(api.start, { method: 'POST', body: GOOD(a.token, { site: 'two.example.com' }) }, { store, checkHost: okHost });
     t('a used token resubmitted with another site still returns only its own job', wrong.json.jobId === ra.json.jobId && wrong.json.jobId !== rb.json.jobId);
@@ -117,11 +118,11 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     const bodies = [unknown, malformed, missing, expired].map((r) => r.status + r.body);
     t('unknown, malformed, missing and expired tokens get the identical answer', new Set(bodies).size === 1 && unknown.status === 404, JSON.stringify(bodies));
     t('that answer says nothing about why', !/expired|used|unknown|invalid|found/i.test(unknown.json.message), unknown.body);
-    const orderUnknown = await call(api.order, { query: { token: 'a'.repeat(32) } }, { store });
-    const orderExpired = await call(api.order, { query: { token: old.token } }, { store: late });
-    const orderBad = await call(api.order, { query: { token: '../../etc' } }, { store });
+    const orderUnknown = await call(api.order, { method: 'POST', body: { token: 'a'.repeat(32) } }, { store });
+    const orderExpired = await call(api.order, { method: 'POST', body: { token: old.token } }, { store: late });
+    const orderBad = await call(api.order, { method: 'POST', body: { token: '../../etc' } }, { store });
     t('the order lookup answers unknown, expired and malformed alike', new Set([orderUnknown, orderExpired, orderBad].map((r) => r.status + r.body)).size === 1 && orderUnknown.status === 404);
-    const ready = await call(api.order, { query: { token: o.token } }, { store });
+    const ready = await call(api.order, { method: 'POST', body: { token: o.token } }, { store });
     t('a fresh token reads "ready"', ready.status === 200 && ready.json.state === 'ready');
   }
 
@@ -287,9 +288,35 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     t('start page: another link still shows the form, never that job', o2.status === 200 && !/\/r\/[a-f0-9]{32}/.test(o2.body));
     const late = S.createStore(store.adapter, { now: () => Date.now() + 40 * 86400000 });
     const noFile = await call(api.startPage, { query: { token: other.token } }, { store, readFile: () => { throw new Error('ENOENT'); } });
-    t('start page: if the page file is missing from the bundle, a ready link goes to the static copy', noFile.status === 302 && noFile.headers.location === '/app/pro-start?t=' + other.token);
+    t('start page: if the page file is missing from the bundle, the answer is a 503 page, never a redirect and never the token in an address', noFile.status === 503 && !noFile.headers.location && noFile.body.indexOf(other.token) === -1 && !/\?t=/.test(noFile.body), noFile.status + ' ' + noFile.headers.location);
     const bad = [await call(api.startPage, { query: { token: 'c'.repeat(32) } }, { store }), await call(api.startPage, { query: { token: 'nope' } }, { store }), await call(api.startPage, { query: {} }, { store }), await call(api.startPage, { query: { token: other.token } }, { store: late })];
     t('start page: unknown, malformed, missing and expired links get the identical generic page', bad.every((r) => r.status === 404 && r.body === bad[0].body && /This link is not available/.test(r.body) && !/expired|used|invalid/i.test(r.body.replace(/<[^>]+>/g, ' '))), bad.map((r) => r.status).join());
+  }
+
+  /* ---- closing the tab mid-scan, then opening the same link again ---- */
+  {
+    const { adapter, store } = mk();
+    const o = await store.createOrder();
+    const crawl = { fetch: fakeSiteFetch([]), sleep: sleepFast, now: (() => { let c = 1e9; return () => (c += 1100); })() };
+    const s = await call(api.start, { method: 'POST', body: GOOD(o.token) }, { store, checkHost: okHost });
+    const id = s.json.jobId;
+    const first = await call(api.step, { method: 'POST', query: { id } }, { store, crawl });
+    t('reopen: the first step leaves the job unfinished (the tab is then closed)', first.json.status !== 'done' && first.json.status !== 'partial' && first.json.status !== 'failed', first.json.status);
+    // The closed tab may have been in the middle of a step: its lock is still there.
+    const held = await store.acquireLock(id);
+    const during = await call(api.step, { method: 'POST', query: { id } }, { store, crawl });
+    t('reopen: while the abandoned step\'s lock is held, a step answers busy instead of running twice', during.status === 200 && during.json.busy === true);
+    await store.releaseLock(id, held); // what the lock\'s expiry does by itself after its TTL
+    const again = await call(api.startPage, { query: { token: o.token } }, { store });
+    t('reopen: the same start link sends the visitor to the same report address', again.status === 302 && again.headers.location === '/r/' + id + '/');
+    const page = await call(api.report, { query: { id } }, { store });
+    t('reopen: that address shows the progress screen for the unfinished job, with its script', page.status === 200 && page.body.indexOf('data-pro-job="' + id + '"') !== -1 && /pro-progress\.js/.test(page.body) && !/id="pr-summary"/.test(page.body));
+    let last = null; for (let i = 0; i < 12; i++) { last = (await call(api.step, { method: 'POST', query: { id } }, { store, crawl })).json; if (last.status === 'done' || last.status === 'partial' || last.status === 'failed') break; }
+    t('reopen: the steps carry on from where the job was and finish it, with no second job', last && (last.status === 'done' || last.status === 'partial') && jobKeys(adapter).length === 1, last && last.status);
+    const done = await call(api.report, { query: { id } }, { store });
+    t('reopen: the finished report is then served at the same address', done.status === 200 && /id="pr-summary"/.test(done.body));
+    const copy = require('fs').readFileSync(require('path').join(__dirname, '..', 'app', 'pro-progress.js'), 'utf8');
+    t('the progress screen tells people to keep the tab open and how to continue if they close it', copy.indexOf('Keep this tab open while we scan. If you close it, open the same link again and it will continue.') !== -1);
   }
 
   /* ---- a failed job gives the link back ---- */
@@ -304,7 +331,7 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     t('failed job: the step answer says failed and that the link is back', last.json.status === 'failed' && last.json.linkRestored === true && /robots\.txt/.test(last.json.reason), last.body);
     const stat = await call(api.status, { query: { id: failedId } }, { store });
     t('failed job: status says the same, with no report path', stat.json.linkRestored === true && stat.json.reportPath === null);
-    const ord = await call(api.order, { query: { token: o.token } }, { store });
+    const ord = await call(api.order, { method: 'POST', body: { token: o.token } }, { store });
     t('the token reads ready again, and nothing in the answer names the failed job', ord.status === 200 && ord.json.state === 'ready' && ord.body.indexOf(failedId) === -1, ord.body);
     const pg = await call(api.startPage, { query: { token: o.token } }, { store });
     t('the start page shows the form again, not a redirect, and does not contain the failed job id', pg.status === 200 && /id="psForm"/.test(pg.body) && pg.body.indexOf(failedId) === -1 && !pg.headers.location);
@@ -316,7 +343,7 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     t('the failed job cannot be emailed', mailOnFailed.status === 409);
     const s2 = await call(api.start, { method: 'POST', body: GOOD(o.token, { site: 'another.example.org' }) }, { store, checkHost: okHost });
     t('the same token starts a new job for another site, and it is a different job', s2.status === 200 && s2.json.jobId !== failedId && !s2.json.duplicate, s2.body);
-    const after = await call(api.order, { query: { token: o.token } }, { store });
+    const after = await call(api.order, { method: 'POST', body: { token: o.token } }, { store });
     t('the token now leads to the new job only', after.json.reportPath === '/r/' + s2.json.jobId + '/');
     // the contact was kept through the restore (the new start rewrote it from the form, so check the intermediate order via a second failure)
     const o2 = await store.createOrder();
@@ -329,7 +356,7 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     const s4 = await call(api.start, { method: 'POST', body: GOOD(o3.token) }, { store, checkHost: okHost });
     const okCrawl = { fetch: fakeSiteFetch([]), sleep: sleepFast, now: (() => { let c = 1e9; return () => (c += 1100); })() };
     for (let i = 0; i < 6; i++) await call(api.step, { method: 'POST', query: { id: s4.json.jobId } }, { store, crawl: okCrawl });
-    const done = await call(api.order, { query: { token: o3.token } }, { store });
+    const done = await call(api.order, { method: 'POST', body: { token: o3.token } }, { store });
     const dpage = await call(api.startPage, { query: { token: o3.token } }, { store });
     t('a finished job keeps its link spent: it points at the report', done.json.state === 'started' && dpage.status === 302);
   }
@@ -339,9 +366,9 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     const { store } = mk();
     const o = await store.createOrder();
     let status = 0;
-    for (let i = 0; i < api.LIMITS.order.max + 3; i++) status = (await call(api.order, { query: { token: o.token }, ip: '198.51.100.9' }, { store })).status;
+    for (let i = 0; i < api.LIMITS.order.max + 3; i++) status = (await call(api.order, { method: 'POST', body: { token: o.token }, ip: '198.51.100.9' }, { store })).status;
     t('order lookups are limited per caller', status === 429);
-    t('another caller is not affected', (await call(api.order, { query: { token: o.token }, ip: '198.51.100.10' }, { store })).status === 200);
+    t('another caller is not affected', (await call(api.order, { method: 'POST', body: { token: o.token }, ip: '198.51.100.10' }, { store })).status === 200);
     let s2 = 0;
     for (let i = 0; i < api.LIMITS.start.max + 2; i++) s2 = (await call(api.start, { method: 'POST', body: { token: 'x' }, ip: '192.0.2.77' }, { store, checkHost: okHost })).status;
     t('start attempts are limited per caller', s2 === 429);
@@ -358,6 +385,62 @@ const jobKeys = (adapter) => Object.keys(adapter._dump()).filter((k) => /^pro:jo
     const proto = await call(api.handle, { query: { a: '__proto__' } }, { store });
     const none = await call(api.handle, { query: {} }, { store });
     t('unknown actions answer generically (including prototype names)', unknown.status === 404 && proto.status === 404 && none.status === 404);
+  }
+
+  /* ---- the report email: direct link, no tracking ---- */
+  {
+    const Mail = require('../lib/pro-mail.js');
+    const site = require('../lib/site-config.js');
+    const id = 'ab'.repeat(16);
+    const msg = Mail.compose({ contact: { name: 'Grace', email: 'g@example.org' } }, { id: id, domain: 'example.com', expiresAt: '2027-01-08T00:00:00Z' });
+    const want = site.baseUrl + '/r/' + id + '/';
+    const hrefs = (msg.html.match(/href="[^"]+"/g) || []).map((h) => h.slice(6, -1));
+    const links = hrefs.filter((h) => !/^mailto:/.test(h));
+    t('report email: every link in the HTML is the report address itself (https, our host, /r/<id>/, no query, no redirect)', links.length >= 1 && links.every((h) => h === want) && /^https:\/\//.test(want), JSON.stringify(links));
+    t('report email: the text version carries the same single address and no other link', msg.text.split('\n').filter((l) => /https?:\/\//.test(l)).every((l) => l.trim() === want));
+    t('report email: no tracking pixel, no image, no tracking parameter', !/<img|utm_|track|pixel|click\./i.test(msg.html + msg.text));
+    let sent = null;
+    await Mail.sendReportLink({ contact: { name: 'Grace', email: 'g@example.org' } }, { id: id, domain: 'example.com', expiresAt: '2027-01-08T00:00:00Z' }, { env: { RESEND_API_KEY: 'k', PRO_MAIL_FROM: 'Citehound <a@b.c>' }, fetch: async (u, o) => { sent = { u, body: JSON.parse(o.body) }; return { ok: true }; } });
+    t('report email: the request to Resend names no tracking option and sends to the address on the order only', sent && sent.u === 'https://api.resend.com/emails' && sent.body.to.length === 1 && sent.body.to[0] === 'g@example.org' && !('tracking' in sent.body) && !('tags' in sent.body));
+  }
+
+  /* ---- fail closed without PRO_HASH_SECRET ---- */
+  {
+    const { store } = mk();
+    const o = await store.createOrder();
+    const keep = process.env.PRO_HASH_SECRET;
+    const results = {};
+    for (const bad of [undefined, '', 'short', 'x'.repeat(15)]) {
+      if (bad === undefined) delete process.env.PRO_HASH_SECRET; else process.env.PRO_HASH_SECRET = bad;
+      const before = logged.length;
+      const rs = [
+        await call(api.handle, { method: 'POST', query: { a: 'order' }, body: { token: o.token } }, { store }),
+        await call(api.handle, { method: 'POST', query: { a: 'start' }, body: GOOD(o.token) }, { store, checkHost: okHost }),
+        await call(api.handle, { method: 'POST', query: { a: 'step', id: 'a'.repeat(32) } }, { store }),
+        await call(api.handle, { method: 'GET', query: { a: 'status', id: 'a'.repeat(32) } }, { store }),
+        await call(api.handle, { method: 'GET', query: { a: 'startpage', token: o.token } }, { store }),
+        await call(api.handle, { method: 'GET', query: { a: 'report', id: 'a'.repeat(32) } }, { store }),
+        await call(api.handle, { method: 'POST', query: { a: 'email' }, body: { id: 'a'.repeat(32) } }, { store, env: { RESEND_API_KEY: 'k', PRO_MAIL_FROM: 'a@b.c' } })
+      ];
+      results[String(bad)] = rs.every((r) => r.status === 503) && rs.every((r) => !/\/r\/[a-f0-9]{32}/.test(r.body)) && logged.slice(before).some((l) => /PRO_HASH_SECRET/.test(l)) && logged.slice(before).every((l) => l.indexOf(o.token) === -1);
+    }
+    process.env.PRO_HASH_SECRET = keep;
+    t('without PRO_HASH_SECRET (unset, empty, 5 or 15 characters) every Pro endpoint fails closed with a 503 and the log names the variable', Object.keys(results).length === 4 && Object.values(results).every(Boolean), JSON.stringify(results));
+    t('... and the order stayed unused: nothing was claimed, hashed with a constant or started', (await store.getOrder(o.token)).status === 'unused');
+    t('H.callerKey throws instead of falling back to a constant', (() => { delete process.env.PRO_HASH_SECRET; try { H.callerKey({ headers: {} }); return false; } catch (e) { return e.code === 'pro_secret_missing'; } finally { process.env.PRO_HASH_SECRET = keep; } })());
+    t('the repository holds no fallback secret in lib/pro-http.js', !/FALLBACK|citehound-pro-rate-limit/.test(require('fs').readFileSync(require('path').join(__dirname, '..', 'lib', 'pro-http.js'), 'utf8')));
+  }
+
+  /* ---- the order endpoint takes a token only in a POST body ---- */
+  {
+    const { store } = mk();
+    const o = await store.createOrder();
+    const viaGet = await call(api.handle, { method: 'GET', query: { a: 'order', token: o.token } }, { store });
+    t('GET /api/pro/order is refused (405): a token is never read from an address', viaGet.status === 405 && !/ready/.test(viaGet.body));
+    const viaQuery = await call(api.order, { method: 'POST', query: { token: o.token }, body: {} }, { store });
+    t('a POST with the token in the query string is not accepted either', viaQuery.status === 404);
+    const viaBody = await call(api.order, { method: 'POST', body: { token: o.token } }, { store });
+    t('a POST with the token in the body says ready', viaBody.status === 200 && viaBody.json.state === 'ready');
   }
 
   /* ---- the store is not configured in production ---- */

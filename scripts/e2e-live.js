@@ -12,8 +12,9 @@
      4. GET /r/<id>/: the report, with the estimate section, noindex and no referrer
      5. GET /pro/start/<token> again: a 302 to this link's own report; a second, unused token does not
         lead anywhere near that report
-     6. /api/pro/email: "not configured" and no button when the mail variables are unset; with the mail
-        variables in .env.local, one real send to the test contact, the limit of 3, nothing about the address
+     6. /api/pro/email: whether the deployment can send mail is read from the deployment itself. Not configured:
+        503 and no button. Configured: one real send to the test contact, the limit of 3 (the counter is raised
+        to 3 instead of sending two more), nothing about the address
      7. delete everything this run wrote (order, claim, reverse key, job, pages, lock) and check it is gone
 
    The contact used is the project's own address (hey@getcitehound.com). No value from .env.local is printed.
@@ -69,7 +70,7 @@ async function cleanup() {
   t('GET /pro/start/<token>: 200 and the form', page.status === 200 && /id="psForm"/.test(page.text), String(page.status));
   t('the start page is noindex and sends no referrer', /noindex/.test(page.headers.get('x-robots-tag') || '') && page.headers.get('referrer-policy') === 'no-referrer');
   t('it is served by the function, not the static fallback copy (no redirect, no static-file headers, no-store)', page.status === 200 && !page.headers.get('content-disposition') && !page.headers.get('accept-ranges') && /no-store/.test(page.headers.get('cache-control') || ''), JSON.stringify({ cd: page.headers.get('content-disposition'), ar: page.headers.get('accept-ranges'), cc: page.headers.get('cache-control') }));
-  const order = await http('GET', '/api/pro/order?token=' + tok);
+  const order = await http('POST', '/api/pro/order', { token: tok });
   t('/api/pro/order says ready', order.status === 200 && order.json && order.json.state === 'ready');
 
   // 3. start and run
@@ -105,7 +106,6 @@ async function cleanup() {
   const now = fig('pr-est-now'), fin = fig('pr-est-final');
   if (now !== null) t('the estimate is not below the current score', parseFloat(fin) >= parseFloat(now), now + ' / ' + fin);
   t('the report page carries no contact data', report.text.indexOf(CONTACT.email.split('@')[0] + '@') === -1 && report.text.indexOf('Citehound test') === -1);
-  t('no email button when the mail provider is not configured', /data-action="email"/.test(report.text) === !!(process.env.RESEND_API_KEY && process.env.PRO_MAIL_FROM));
   const unknown = await http('GET', '/r/' + 'f'.repeat(32) + '/');
   t('an unknown report id gets the generic 404', unknown.status === 404 && /This report is not available/.test(unknown.text));
 
@@ -118,15 +118,23 @@ async function cleanup() {
   const badTok = await http('GET', '/pro/start/' + 'a'.repeat(32));
   t('an unknown token gets the generic page', badTok.status === 404 && /This link is not available/.test(badTok.text));
 
-  // 6. email
+  // 6. email. Whether the deployment can send mail is read from the deployment itself (its own variables, not ours).
+  const hasButton = /data-action="email"/.test(report.text);
   const mail = await http('POST', '/api/pro/email', { id: id, to: 'someone-else@example.org' });
-  if (!process.env.RESEND_API_KEY || !process.env.PRO_MAIL_FROM) {
-    t('/api/pro/email answers "not configured" while the mail variables are unset', mail.status === 503 && mail.json && mail.json.error === 'not_configured', mail.status + ' ' + mail.text.slice(0, 80));
+  const liveMail = mail.status !== 503;
+  t('the report shows its email button exactly when the deployment can send mail', hasButton === liveMail, 'button ' + hasButton + ', send answered ' + mail.status);
+  if (!liveMail) {
+    t('/api/pro/email answers "not configured" while the mail variables are unset', mail.json && mail.json.error === 'not_configured', mail.status + ' ' + mail.text.slice(0, 80));
   } else {
-    t('/api/pro/email sent, and the response never reveals the address', mail.status === 200 && mail.text.indexOf('@') === -1 && /Sent to the address you gave us/.test(mail.text), mail.status + ' ' + mail.text.slice(0, 80));
-    const m2 = await http('POST', '/api/pro/email', { id: id }); const m3 = await http('POST', '/api/pro/email', { id: id }); const m4 = await http('POST', '/api/pro/email', { id: id });
-    t('the third send works and the fourth is refused (limit of 3)', m2.status === 200 && m3.status === 200 && m4.status === 429 && (await store.getOrder(tok)).emailSends === 3, [m2.status, m3.status, m4.status].join());
-    out('      one real message was sent to the project contact address; check the inbox');
+    t('/api/pro/email sent once, to the address on the order, and the response never reveals an address', mail.status === 200 && mail.text.indexOf('@') === -1 && /Sent to the address you gave us/.test(mail.text), mail.status + ' ' + mail.text.slice(0, 80));
+    t('the first send reports 2 left (limit of 3)', mail.json && mail.json.remaining === 2);
+    t('the order counts exactly one send', (await store.getOrder(tok)).emailSends === 1);
+    // The limit itself is proved without sending two more real messages: set the counter to the limit, then ask again.
+    await adapter.hset('pro:order:' + tok, { emailSends: '3' });
+    const over = await http('POST', '/api/pro/email', { id: id });
+    t('at 3 sends the next request is refused (429) and says nothing about the address', over.status === 429 && over.json && over.json.error === 'email_limit' && over.text.indexOf('@') === -1, over.status + ' ' + over.text.slice(0, 80));
+    t('a refused request does not change the count', (await store.getOrder(tok)).emailSends === 3);
+    out('      one real message was sent to the project contact address; check the inbox (the link in it points at a report this run then deletes)');
   }
 
   // 7. clean up

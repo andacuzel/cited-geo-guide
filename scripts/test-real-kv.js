@@ -18,6 +18,7 @@
 
 const crypto = require('crypto');
 require('./env-local.js').load();
+process.env.PRO_HASH_SECRET = process.env.PRO_HASH_SECRET || 'test-only-secret-0123456789abcdef';
 const S = require('../lib/pro-store.js');
 
 const out = (s) => process.stdout.write(s + '\n');
@@ -156,7 +157,7 @@ async function both(label, step) {
   const jobKeys = Array.from(touched).filter((k) => /pro:job:[a-f0-9]{32}$/.test(k));
   t('10 parallel POSTs to start on one token over real Redis: exactly one new job', ids.size === 1 && jobKeys.length === 2, 'ids ' + ids.size + ', job hashes ' + jobKeys.length);
   t('... and every response that succeeded names that job', rs.filter((r) => r.status === 200).length >= 1 && rs.every((r) => r.status === 200 || r.status === 409 || r.status === 429));
-  const orderAfter = await call(api.order, { query: { token: o2.token } }, { store });
+  const orderAfter = await call(api.order, { method: 'POST', body: { token: o2.token } }, { store });
   t('the order lookup on Redis now points at that job and no other', orderAfter.json.reportPath === '/r/' + [...ids][0] + '/');
 
   /* ---- clean up exactly what this run wrote ---- */

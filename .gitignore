@@ -22,3 +22,4 @@ data/citations/_state/
 
 # Overnight development log and report (local only)
 local/
+.env*

@@ -42,7 +42,7 @@ often an AI assistant mentions a brand, and no copy may say it does.
 Flow:
 
 1. `scripts/pro-issue-token.js` writes an order and prints `https://<site>/pro/start/<token>`.
-2. The customer opens it. The page asks `GET /api/pro/order`: ready (form), already started (sent on to that
+2. The customer opens it. `/pro/start/<token>` is served by the function (`app/pro-start.html` is bundled with `includeFiles` in `vercel.json`; if the file ever went missing the answer is a 503 page, never a redirect). The page asks `POST /api/pro/order` with the token in the body: ready (form), already started (sent on to that
    link's own report), or unavailable (one generic message for unknown, expired and malformed links).
 3. `POST /api/pro/start` validates the form, refuses addresses that are not public websites, claims the token
    (exactly one caller wins), reserves one of two per-domain slots, creates the job and stores the contact in
@@ -59,6 +59,18 @@ Flow:
 The crawl is driven by the browser that is showing the progress screen. If that tab closes, the job waits where
 it is, and opening the start link again or `/r/<id>/` resumes it. There is no queue and no cron (Hobby cron is
 daily at best). See "Decisions" below.
+
+**Closing the tab (known limitation).** While the progress screen says "Keep this tab open while we scan. If you close it, open
+the same link again and it will continue.", that is exactly how it works: the crawl advances only while a browser tab
+calls `/api/pro/step`. A closed tab pauses the job; the start link then redirects to `/r/<id>/`, which shows the progress
+screen again and continues from the stored state (tested in `scripts/test-pro-api.js`). If the tab was closed in the middle
+of a step, that step's lock lasts up to its TTL, and the new tab sees "busy" and waits for it. A job nobody reopens stays
+unfinished until its 90-day record expires.
+
+**No token in an address.** The token is in the path of `/pro/start/<token>` (that is the link), and every call after
+the page loads carries it in a POST body. No page takes it in a query string. (`/app/pro-start` still exists as a static file, because the function reads it from disk; opened directly it has no token and shows the generic "not available" message.)
+The path itself appears in Vercel's request log for that page; that is inherent to a link that carries a secret, so the
+link is single-use and expires.
 
 ## Files
 
@@ -88,7 +100,7 @@ Set in the Vercel project (Production and Preview):
 | Variable | Needed for | Notes |
 |---|---|---|
 | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Everything | Or `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`. Create a Redis (Upstash, through the Vercel Marketplace) and connect it to the project. Without one, every Pro action answers 503 with a plain message and the log names the missing variables. There is no silent fallback to memory on Vercel. |
-| `PRO_HASH_SECRET` | Rate limits | Any long random string. The caller id is `HMAC-SHA256(secret, address + UTC date)`; no address is ever stored or logged. It still works without it, but the hash is only as private as a constant. |
+| `PRO_HASH_SECRET` | Rate limits, waitlist removal links | A random string of at least 16 characters. The caller id is `HMAC-SHA256(secret, address + UTC date)`; no address is ever stored or logged. **There is no fallback: if it is missing or shorter than 16 characters, every Pro endpoint answers 503 ("not available") and the log names the variable.** `npm run gates` tests that. |
 | `RESEND_API_KEY`, `PRO_MAIL_FROM` | "Email me this report" | `PRO_MAIL_FROM` looks like `Citehound <reports@mail.getcitehound.com>`. If either is missing, the email endpoint answers "not configured" and the report page hides the button. |
 
 For `scripts/pro-issue-token.js` on your own machine, the same `KV_*` pair in the gitignored `.env.local` works.

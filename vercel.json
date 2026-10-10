@@ -20,7 +20,8 @@
       "maxDuration": 30
     },
     "api/pro.js": {
-      "maxDuration": 60
+      "maxDuration": 60,
+      "includeFiles": "app/pro-start.html"
     }
   },
   "redirects": [
