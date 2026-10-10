@@ -114,7 +114,8 @@ Constraints that must not be broken:
 - **Pro payments are built, not switched on.** `lib/pro-payments.js` (Polar adapter, a Paddle stub that refuses everything) verifies the signed
   webhook (`POST /api/pro/webhook`, secret `PRO_WEBHOOK_SECRET`; without it 503), creates one paid order per provider order id through
   `createOrderFromPayment`, remembers `checkout id -> link` for 30 minutes, and `/pro/welcome` hands the start path over once. A refund before use
-  cancels the link; after use nothing changes. Replays and redeliveries do nothing. Read `docs/payments.md` (what is verified, what is not) before
+  cancels the link only on a FULL refund (`order.refunded` with status `refunded`); a partial or unsized refund keeps the link and flags the order
+  (`pro-admin list`, `clear-review`); after use nothing changes. Replays and redeliveries do nothing. Read `docs/payments.md` (what is verified, what is not) before
   setting `PRO_CHECKOUT_URL`, and never before the webhook has been tested against Polar's sandbox. The terms and refund drafts are not in this
   public repository (they live in the owner's gitignored `local/`); a draft legal document is never committed. `app/report.html` (the old internal
   dashboard) stays in the repository and is kept off the deployed site by `.vercelignore`.

@@ -30,6 +30,8 @@
      - /pro/welcome is a noindex, no-store page; POST /api/pro/welcome answers "waiting" for an id with no order; an unsigned POST to
        /api/pro/webhook is refused (403, or 503 while PRO_WEBHOOK_SECRET is not set: never a 2xx); a GET on it is 405
      - /app/report and /app/report.html (the old internal dashboard) answer 404
+     - /pro and /citation-tracking say testing is in preparation and promise no citation result; /privacy describes questions only
+     - the Pro JSON endpoints refuse a foreign origin (403) and a content type other than JSON (415)
      - the About portrait is served, and no page cites the October 2026 rescan (only the July snapshot)
      - fail-closed without PRO_HASH_SECRET cannot be tried on the live site (it would need the secret removed). The live Pro API
        answering normally proves the secret is set; scripts/test-pro-api.js proves what happens when it is not.
@@ -196,6 +198,12 @@ async function waitForDeployment(sha) {
     const r = await get(p, { redirect: 'follow' });
     t(p + ' (the old internal dashboard) is not deployed: 404', r.status === 404, String(r.status));
   }
+  for (const p of ['/pro', '/citation-tracking']) {
+    const r = await get(p);
+    t(p + ' says testing the questions is in preparation and promises no citation result', r.status === 200 && /in preparation/i.test(r.text) && !/citation check|citation run|we run it for you|records when your name/i.test(r.text), String(r.status));
+  }
+  const priv = await get('/privacy');
+  t('/privacy describes the Gemini API for citation questions only (no web search, no test provider, no Polar)', priv.status === 200 && /Citation questions \(Pro/.test(priv.text) && /No web search is used/.test(priv.text) && !/Gemini with Google Search/.test(priv.text) && !/Polar|Anthropic/.test(priv.text));
   // The Pro JSON endpoints: JSON only, this site's origin only.
   const stepNoType = await get('/api/pro/step?id=' + 'a'.repeat(32), { method: 'POST', headers: { 'User-Agent': 'citehound-smoke/1' } });
   const stepJson = await get('/api/pro/step?id=' + 'a'.repeat(32), { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: '{}' });
