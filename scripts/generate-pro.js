@@ -35,7 +35,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 60;
+const CSS_VERSION = 61;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -51,13 +51,10 @@ const indent = (html, pad) => html.replace(/\n/g, '\n' + pad);
 
 /* ---------- the figures, all derived ---------- */
 
-// The crawl engine's page cap (MAX_PAGES in api/crawl-start.js), which lib/report-facts.js must agree with.
+// The Pro crawl's page cap (CAP in lib/pro-crawler.js): the number the page quotes is the number the crawler enforces.
 function crawlCap() {
-  const src = fs.readFileSync(path.join(ROOT, 'api', 'crawl-start.js'), 'utf8');
-  const m = /^var MAX_PAGES = (\d+);/m.exec(src);
-  if (!m) throw new Error('api/crawl-start.js: MAX_PAGES not found');
-  const cap = parseInt(m[1], 10);
-  if (cap !== factsLib.CRAWL_CAP) throw new Error('MAX_PAGES (' + cap + ') and CRAWL_CAP in lib/report-facts.js (' + factsLib.CRAWL_CAP + ') disagree');
+  const cap = require('../lib/pro-crawler.js').CAP;
+  if (!(cap >= 1)) throw new Error('lib/pro-crawler.js: CAP not found');
   return cap;
 }
 
@@ -104,12 +101,6 @@ function figures() {
     hidden: hiddenChecks.length,
     failingOthers: others.filter((r) => r.failed.some((c) => hiddenChecks.indexOf(render.cleanLabel(c.label)) !== -1)).length,
     others: others.length,
-    failingChecks: f.counts.failingChecks,
-    columns: f.checks.filter((c) => !c.siteLevel).length,
-    allDown: f.checks.filter((c) => !c.siteLevel && c.failingPages === f.coverage.pagesRead && c.failingPages > 0).length,
-    worstPath: new URL(a.pageRows[0].url).pathname,
-    worstScore: a.pageRows[0].total,
-    fixFirst: f.fixes.filter((x) => x.kind !== 'robots').sort((x, y) => y.pages.length - x.pages.length)[0] || null,
     summary: data.executiveSummary || null,
     cit: {
       model: m0.model, date: render.longDate(m0.date), tries: m0.tries, triesWord: WORDS[m0.tries] || String(m0.tries),
@@ -132,28 +123,24 @@ function cropHtml(name) {
 function alts(F) {
   const s = F.summary, c = F.cit;
   return {
-    summary: 'Sample dashboard summary for our own site, ' + F.domain + '. Headline: ' + (s ? s.headline : 'readiness report') + '. ' + (s ? s.situation + ' ' : '') + (s ? 'Label under it: ' + s.label + '. ' : '') +
-      'Four figures: site-wide score ' + F.site + ', homepage score ' + F.homepage + ', gap ' + signed(F.gap) + ', and ' + F.pagesWithAFailure + ' pages with a failure.',
-    gap: 'Three figures from the sample dashboard for our own site: site-wide score ' + F.site + ', homepage score ' + F.homepage + ' and the gap between them, ' + signed(F.gap) + ' points.',
-    matrix: 'Heat matrix from the sample crawl of our own site. One row per page, one column per check, a filled square where a page fails a check and a hollow one where it passes. ' + F.failingChecks + ' of the ' + F.columns + ' page-level checks fail on at least one page.',
-    pages: 'Pages explorer from the sample crawl. The list shows pages worst first, starting with ' + F.worstPath + ' at ' + F.worstScore + ' out of 100. The pane beside it shows the checks that page fails and an open copy-paste fix.',
-    fixes: 'Fixes tab from the sample crawl. Each distinct snippet appears once with the number of pages it applies to and a Copy button.' + (F.fixFirst ? ' The first is ' + F.fixFirst.label + ', applying to ' + F.fixFirst.pages.length + ' pages.' : ''),
-    print: 'The top bar of the sample dashboard: the domain ' + F.domain + ', the crawl date ' + F.date + ' and a Print or save as PDF button.',
-    citations: 'Citations tab of the dashboard, filled with the published sample for a CRM brand, not a result for our site. ' + c.model + ', ' + c.date + ', ' + c.triesWord + ' tries per question. Three figures: ' + c.never + ' questions never named, ' + c.unstable + ' named only sometimes, ' + c.always + ' named every time. Below them, the questions that never named the brand, each with ' + c.triesWord + ' marks, one per try.',
-    'band-explorer': 'The sample dashboard for our own site, ' + F.domain + ': the navy top bar, the five tabs Summary, Pages, Checks, Fixes and Citations with Pages selected, the pages list worst first starting with ' + F.worstPath + ' at ' + F.worstScore + ' out of 100, and the detail pane with that page\'s failed checks and an open copy-paste fix.',
-    tries: 'The same citation sample with the group named only sometimes open. Each of the ' + c.unstable + ' questions shows ' + c.triesWord + ' marks, one per try, and the marks differ from try to try.'
+    summary: 'Site summary from the sample report for our own site, ' + F.domain + '. The site-wide score is ' + F.site + ' out of 100 and the homepage scores ' + F.homepage + '. Beside the score are the three pillar scores and the main findings in plain words.' + (s ? ' Headline: ' + s.headline : ''),
+    checks: 'The checks of one pillar, Technical foundation, from the sample report for our own site. Each check is listed alphabetically with whether it passes or fails and on how many of the ' + F.pagesRead + ' pages, and what to change when it fails.',
+    pages: 'The page table from the sample report: every page the crawl read, in alphabetical order of its address, with its score and the number of checks it fails.',
+    fixes: 'Two copy-paste fixes from the sample report, each shown once with the number of pages it applies to and the code to paste.',
+    estimate: 'The estimated score section of the sample report: the current score and the estimated score side by side on a bar, and the first rows of the list of fixes, each with the points it adds and the total it brings.',
+    citations: 'Citations section of the report, filled with the published sample for a CRM brand, not a result for our site. ' + c.model + ', ' + c.date + ', ' + c.triesWord + ' tries per question. Three figures: ' + c.never + ' questions never named, ' + c.unstable + ' named only sometimes and ' + c.always + ' named every time, with the questions of the first group listed.',
+    'band-explorer': 'The sample report for our own site, ' + F.domain + ': the navy top bar, the section links Summary, Pillars, Pages and Estimated score with Pages current, and the page table in alphabetical order with each page\u2019s score and failed checks.'
   };
 }
 
-const CITATION_CROPS = ['citations', 'tries'];
+const CITATION_CROPS = ['citations'];
 const CAPS = {
-  summary: 'The executive summary and four figures.',
-  gap: 'The site-wide score, the homepage score and the gap.',
-  matrix: 'Which pages fail which checks.',
-  pages: 'Pages, worst first, and the page selected.',
+  summary: 'The site summary: score, pillars and findings.',
+  checks: 'Every check of a pillar, and how many pages fail it.',
+  pages: 'Every page, alphabetically, with what failed.',
   fixes: 'Two of the fixes.',
-  print: 'The top bar, with the print button.',
-  'band-explorer': 'From the worst page to its fix.'
+  estimate: 'The estimated score if the fixes are applied.',
+  'band-explorer': 'Every page, with its score and what failed.'
 };
 
 function frame(name, F, extra, opts) {
@@ -222,7 +209,7 @@ function texture() {
 function band(F) {
   // One idea, one visual, one action, no score and no stat: the page tells the rest.
   const point = (ic, label) => '<li>' + icons.svg(ic, { cls: 'pro-band-list__icon' }) + '<span>' + label + '</span></li>';
-  const caption = 'Sample: our own site, ' + esc(F.date) + '. From the worst page to its fix.';
+  const caption = 'Sample: our own site, ' + esc(F.date) + '. ' + esc(CAPS['band-explorer']);
   return START + '\n' +
     '      <section class="pro-mkt pro-band-hero" id="pro" aria-labelledby="pro-heading">\n' +
     '        ' + indent(texture(), '        ') + '\n' +
@@ -259,11 +246,11 @@ function faq(F) {
   const c = F.cit;
   return [
     { q: 'What do I get with Citehound Pro?',
-      html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: an executive summary, the whole-site score beside the homepage score, a heat matrix of which pages fail which checks, a page-by-page explorer, every fix once with the pages it applies to, and a printable version. It also includes a citation run on your brand, which we run for you and add to the report: the questions your buyers ask, each asked ' + c.triesWord + ' times, and the pattern of when your name comes up.' },
+      html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes a citation run on your brand, which we run for you and add to the report: the questions your buyers ask, each asked ' + c.triesWord + ' times, and the pattern of when your name comes up.' },
     { q: 'How is this different from the free scan?',
       html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds a citation run on your brand, which we run for you. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets are free to try in your own assistant through the <a href="/mcp">Citehound MCP server</a>.' },
     { q: 'What is the sample report?',
-      html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. Nothing in it was edited or improved, and our own pages still fail some checks. The report says which. Its Citations tab shows the published citation sample, which belongs to a different brand. <a href="/sample-report">Open it.</a>' },
+      html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. The crawl results are shown as the crawl recorded them, not edited or improved, and our own pages still fail some checks. The report says which. Its Citations section shows the published citation sample, which belongs to a different brand. <a href="/sample-report">Open it.</a>' },
     { q: 'Does it measure whether AI names me?',
       html: 'Two parts, two questions. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The <a href="/citation-tracking">citation run</a> records whether a model names your brand when it is asked the questions your buyers ask. A readiness score of 100 doesn\'t guarantee a mention.' },
     { q: 'Which models does the citation run use?',
@@ -303,7 +290,7 @@ function build() {
 
   const li = (text) => '<li>' + icon('check') + '<span>' + text + '</span></li>';
   const freeItems = ['One page, scanned on demand', 'All 16 checks, with their point values', 'The AI crawler matrix, 10 crawlers deep', 'Copy-paste fixes for schema and robots.txt', '<a href="/compare">Comparing two sites</a>', 'Every <a href="/playbooks">playbook</a>', 'All the <a href="/tools">tools</a>', 'The citation question sets, to try in your own assistant through the <a href="/mcp">MCP server</a>'].map(li).join('\n            ');
-  const proItems = ['Up to ' + fig('cap2', F.cap) + ' pages in one crawl', 'The whole-site score beside the homepage score', 'Pages ranked, worst first', 'The checks that pass on the homepage and fail elsewhere', 'Every fix once, with the pages it applies to', 'A printable report', 'A citation run on your brand, which we run for you and add to the report'].map(li).join('\n            ');
+  const proItems = ['Up to ' + fig('cap2', F.cap) + ' pages in one crawl', 'The whole-site score beside the homepage score', 'Every page listed alphabetically, with what failed', 'The checks that pass on the homepage and fail elsewhere', 'Every fix once, with the pages it applies to', 'An estimated score if the fixes are applied', 'A printable report', 'A citation run on your brand, which we run for you and add to the report'].map(li).join('\n            ');
 
   const step = (ic, name, text) => '          <li class="pro-step">\n            <span class="pro-row__icon">' + icon(ic) + '</span>\n            <h3 class="pro-step__title">' + name + '</h3>\n            <p class="pro-step__text">' + text + '</p>\n          </li>';
 
@@ -324,9 +311,9 @@ function build() {
     '        <div class="pro-panels">\n' +
     '          <div class="pro-panel">\n            <p class="kicker">Can AI read you?</p>\n            <h3 class="pro-panel__title">Your homepage isn\'t your site.</h3>\n' +
     '            <div class="pro-gap">\n              <div class="pro-gap__fig"><span class="pro-gap__label">Homepage</span><span class="pro-gap__num">' + fig('homepage', F.homepage) + '</span></div>\n              <div class="pro-gap__fig"><span class="pro-gap__label">Whole site</span><span class="pro-gap__num">' + fig('site', F.site) + '</span></div>\n            </div>\n' +
-    '            <p class="pro-panel__cap">A real crawl of ' + esc(F.domain) + ', ' + fig('date', F.date) + '. Nothing edited.</p>\n' +
+    '            <p class="pro-panel__cap">A real crawl of ' + esc(F.domain) + ', ' + fig('date', F.date) + '. Results shown as recorded.</p>\n' +
     '            <p class="pro-panel__text">' + gapText + '</p>\n' +
-    '            ' + indent(frame('matrix', F, 'pro-shot--desktop'), '            ') + '\n' +
+    '            ' + indent(frame('checks', F, 'pro-shot--desktop'), '            ') + '\n' +
     '          </div>\n' +
     '          <div class="pro-panel">\n            <p class="kicker">Does it name you?</p>\n' +
     '            <p class="pro-named"><span class="pro-named__big">Named in ' + fig('cit-pct', c.pct) + '% of answers.</span><span class="pro-named__sub">Never named for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions.</span></p>\n' +
@@ -345,10 +332,10 @@ function build() {
     '        </ol>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Also inside ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Also inside</p>\n          <h2 id="get-heading" class="section-title">The rest of the report.</h2>\n        </div>\n        <ul class="pro-cards">\n' +
-    card('report', 'Start with the answer.', 'The report opens with the site-wide score beside the homepage score, then the top three checks to fix first and the points each adds. A short summary leads, labeled with what wrote it.') + '\n' +
-    card('document', 'From the worst page to its fix in two clicks.', 'Pages are listed worst first. Select one to see the checks it fails, then open its copy-paste fix.', frame('pages', F, 'pro-shot--thumb pro-shot--desktop')) + '\n' +
+    card('report', 'Start with the answer.', 'The report opens with the site summary: the site-wide score beside the homepage score, the three pillar scores and the main findings in plain words, then what the crawl covered and what the site blocked.') + '\n' +
+    card('document', 'Every page, with what failed.', 'Pages are listed alphabetically by address, each with its score and the checks it fails. Sort by a column, search for a page, and open a row to see how to fix it.', frame('pages', F, 'pro-shot--thumb pro-shot--desktop')) + '\n' +
     card('wrench', 'Every fix once, with the pages it applies to.', 'Identical snippets appear once, with the pages they apply to and a Copy button.', frame('fixes', F, 'pro-shot--thumb pro-shot--desktop')) + '\n' +
-    card('printer', 'Hand it to your developer.', 'Print or save as PDF opens every section and drops the controls, so the printout is the whole report.') + '\n' +
+    card('fintech', 'Then the estimate.', 'The last section lists each fix with the points it adds and the total it brings, every figure from scoring your pages again with that fix applied. It estimates readiness, not how often assistants mention you. Print or save as PDF gives your developer the whole report.', frame('estimate', F, 'pro-shot--thumb pro-shot--desktop')) + '\n' +
     '        </ul>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Proof ---------- -->\n' +
     '    <section aria-label="Case study">\n      <div class="section__inner">\n        <div class="pro-proof">\n          <p class="kicker">Case study</p>\n' +
@@ -362,7 +349,7 @@ function build() {
     '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the model</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">The citation run is one we run for you. ' + SELF_SERVE + '</p>\n            <p class="pro-col__foot pro-col__foot--note">One payment. Full Pro report for your domain. <a href="#" class="btn btn--ghost">In preparation</a></p>\n          </div>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Closing band ---------- -->\n' +
-    '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Pro</p>\n        <h2 id="close-heading">Can AI read you? Does it name you?</h2>\n        <p class="pro-band__lede">Read a real report first: one crawl of our own site, ' + fig('pages', F.pagesRead) + ' pages, unedited, with a citation sample from a different brand. No signup.</p>\n' +
+    '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Pro</p>\n        <h2 id="close-heading">Can AI read you? Does it name you?</h2>\n        <p class="pro-band__lede">Read a real report first: one crawl of our own site, ' + fig('pages', F.pagesRead) + ' pages, results shown as recorded, with a citation sample from a different brand. No signup.</p>\n' +
     '        <div class="pro-actions pro-actions--band"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a><a href="' + CITATION_MAIL + '" class="btn btn--ghost-on-navy">Get early access</a></div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- FAQ ---------- -->\n' +
     '    <section class="verticals pro-faq" aria-labelledby="faq-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Questions</p>\n          <h2 id="faq-heading" class="section-title">Pro, briefly.</h2>\n        </div>\n        <div class="ct-faq">\n' +
@@ -394,7 +381,7 @@ function independent() {
   const labels = home.result.checks.filter((c) => !siteLevel(c.label)).map((c) => clean(c.label));
   const failsOn = (p, l) => p.result.checks.some((c) => clean(c.label) === l && !c.ok);
   const hidden = labels.filter((l) => !failsOn(home, l) && ok.some((p) => p !== home && failsOn(p, l)));
-  const cap = parseInt(/MAX_PAGES = (\d+)/.exec(fs.readFileSync(path.join(ROOT, 'api', 'crawl-start.js'), 'utf8'))[1], 10);
+  const cap = parseInt(/^const CAP = (\d+);/m.exec(fs.readFileSync(path.join(ROOT, 'lib', 'pro-crawler.js'), 'utf8'))[1], 10);
   const longDate = (iso) => new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 
   const prompts = sample.prompts;
@@ -481,9 +468,10 @@ function check() {
   if (bandHtml.indexOf('Everything the free scan can\'t see.') === -1 || bandHtml.indexOf('Pro reads beyond your homepage, then asks a model the questions your buyers ask and records when your name comes up.') === -1) bad('the band headline or sentence changed');
   if ((bandHtml.match(/<figure class="pro-shot/g) || []).length !== 1 || bandHtml.indexOf('pro-shot--band-explorer') === -1) bad('the band must carry exactly one crop, the dashboard explorer');
   const crop = (bandHtml.match(/<div class="pro-shot__view"[\s\S]*?<\/figure>/) || [''])[0];
-  ['Summary', 'Pages', 'Checks', 'Fixes', 'Citations'].forEach((t) => { if (crop.indexOf('</svg>' + t + '</span>') === -1) bad('the band crop does not show the ' + t + ' tab'); });
-  if ((crop.match(/aria-selected="true"/g) || []).length !== 1 || crop.indexOf('aria-selected="true"><svg') === -1 || !/aria-selected="true">(<svg[^>]*>[\s\S]*?<\/svg>)Pages<\/span>/.test(crop)) bad('the band crop must show Pages as the selected tab');
-  if (bandHtml.indexOf('<figcaption class="pro-shot__cap">Sample: our own site, ' + want.date + '. From the worst page to its fix.</figcaption>') === -1) bad('the band crop caption is wrong');
+  ['Summary', 'Pillars', 'Pages', 'Estimated score'].forEach((t) => { if (crop.indexOf('<span>' + t + '</span>') === -1 && crop.indexOf('>' + t + '</span>') === -1) bad('the band crop does not show the ' + t + ' section link'); });
+  if ((crop.match(/aria-current="true"/g) || []).length !== 1 || !/aria-current="true">Pages<\/span>/.test(crop)) bad('the band crop must show Pages as the current section');
+  if (!/<tr role="row" class="pr-row"/.test(crop)) bad('the band crop does not show the page table');
+  if (bandHtml.indexOf('<figcaption class="pro-shot__cap">Sample: our own site, ' + want.date + '. ' + CAPS['band-explorer'] + '</figcaption>') === -1) bad('the band crop caption is wrong');
   if (!/<ul class="pro-band-list">(<li><svg[^>]*>[\s\S]*?<\/svg><span>[^<]+<\/span><\/li>){3}<\/ul>/.test(bandHtml)) bad('the band needs a <ul> of three icon-and-label items');
   // The texture: two band-level layers, each an aria-hidden inline SVG with a <pattern>; no gradient function anywhere.
   if (!/<section class="pro-mkt pro-band-hero"[^>]*>\s*<svg class="pro-band-faint"[^>]*aria-hidden="true"[\s\S]*?<pattern [\s\S]*?<\/svg>\s*<div class="pro-band-surface" aria-hidden="true"><svg[^>]*aria-hidden="true"[\s\S]*?<pattern /.test(bandHtml)) bad('the band needs the faint field and the zone as band-level aria-hidden SVGs with a <pattern>, before the content container');
@@ -591,7 +579,7 @@ function check() {
     const ids = (s2[1].match(/ id="[^"]+"/g) || []);
     ids.forEach((x, i) => { if (ids.indexOf(x) !== i) bad(s2[0] + ': repeated' + x); });
   });
-  if (page.indexOf('A real crawl of ' + F.domain + ', <span data-fig="pro-date">' + want.date + '</span>. Nothing edited.') === -1) bad('the gap caption does not carry the crawl and its date');
+  if (page.indexOf('A real crawl of ' + F.domain + ', <span data-fig="pro-date">' + want.date + '</span>. Results shown as recorded.') === -1) bad('the gap caption does not carry the crawl and its date');
   return errors;
 }
 

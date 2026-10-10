@@ -1,7 +1,6 @@
-<div class="rp-report rp-js">
+<div class="pr-report">
 <div>
-<article class="rp-fix"><div class="rp-fix__head"><h3 class="rp-fix__title">Organization and WebSite JSON-LD</h3><p class="rp-fix__applies">Applies to <strong data-fig="fix-pages">2</strong> pages</p></div>
-<pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+<details class="pr-snippet" open><summary><span class="pr-snippet__name">Organization and WebSite JSON-LD</span><span class="pr-muted">applies to 2 pages</span></summary><div class="pr-snippet__body"><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
 {
   &quot;@context&quot;: &quot;https://schema.org&quot;,
   &quot;@graph&quot;: [
@@ -19,10 +18,8 @@
     }
   ]
 }
-&lt;/script&gt;</pre>
-<details class="rp-subdetails"><summary>Pages this applies to</summary></details></article>
-<article class="rp-fix"><div class="rp-fix__head"><h3 class="rp-fix__title">Article JSON-LD</h3><p class="rp-fix__applies">Applies to <strong data-fig="fix-pages">1</strong> page</p></div>
-<pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
+&lt;/script&gt;</pre></div></details>
+<details class="pr-snippet" open><summary><span class="pr-snippet__name">Article JSON-LD</span><span class="pr-muted">applies to 1 page</span></summary><div class="pr-snippet__body"><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
 {
   &quot;@context&quot;: &quot;https://schema.org&quot;,
   &quot;@type&quot;: &quot;Article&quot;,
@@ -36,7 +33,6 @@
   &quot;datePublished&quot;: &quot;[YYYY-MM-DD]&quot;,
   &quot;url&quot;: &quot;https://getcitehound.com&quot;
 }
-&lt;/script&gt;</pre>
-<details class="rp-subdetails"><summary>Pages this applies to</summary></details></article>
+&lt;/script&gt;</pre></div></details>
 </div>
 </div>

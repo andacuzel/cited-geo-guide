@@ -2,23 +2,24 @@
 /* =====================================================================
    scripts/capture-pro-shots.js
 
-   Produces the "screenshot crops" of the Pro dashboard shown on /pro and in
-   the homepage Pro band, from the real sample data
-   (content/pro/sample-report.json, a crawl of our own site) and the real
-   renderer (lib/report-render.js), the code the dashboard itself runs.
+   Produces the "screenshot crops" of the Pro report shown on /pro and in the
+   homepage Pro band, from the real sample data (content/pro/sample-report.json,
+   a crawl of our own site) and the real renderer (lib/report-render.js renderPro),
+   the code a Pro report and /sample-report run.
 
-   NO HEADLESS BROWSER IS AVAILABLE in the environment this was built in (no
-   Chrome, Chromium, Playwright or Puppeteer, and no new dependencies are
-   allowed), so the crops are not raster images. Each crop is the dashboard's
-   own markup for a named region (the regions carry data-shot="..." in
-   lib/report-render.js), cleaned of links and controls, and written to
-   assets/pro/<name>.frag (a fragment, not a page: the .frag extension keeps the page
-   checks from reading it as one). scripts/generate-pro.js puts each one inside the
-   frame component (.pro-shot) with its alt text and caption. They are cropped
-   by the frame (a fixed height with overflow hidden), the way a screenshot is.
-   If a headless browser is ever added, load app/report.html?sample=1 at a
-   1000px viewport and 2x, and clip each [data-shot="<name>"]; the names and
-   the sample mode are already in place.
+   The crops are not raster images. Each one is the report's own markup for a
+   named region (the regions carry data-shot or data-pillar in renderPro), cleaned
+   of links and controls, and written to assets/pro/<name>.frag (a fragment, not a
+   page: the .frag extension keeps the page checks from reading it as one).
+   scripts/generate-pro.js puts each one inside the frame component (.pro-shot)
+   with its alt text and caption. The frame crops it (a fixed height with overflow
+   hidden), the way a screenshot is.
+
+   Crops: summary (score, pillars, findings), checks (one pillar's checks),
+   pages (the alphabetical page table, one row open), fixes (two snippets),
+   estimate (the strip and the first fixes), citations (the published sample from
+   a different brand) and band-explorer (the homepage band: the report's top bar,
+   its section nav and the page table).
 
      node scripts/capture-pro-shots.js            write assets/pro/*.frag
      node scripts/capture-pro-shots.js --check    exit 1 if any crop is out of date
@@ -32,19 +33,18 @@ const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
 const factsLib = require('../lib/report-facts.js');
 const citationPanel = require('../lib/citation-panel.js');
-const icons = require('../lib/icons.js');
+const estimateLib = require('../lib/pro-estimate.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'content', 'pro', 'sample-report.json');
 const OUT = path.join(ROOT, 'assets', 'pro');
 const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 
-const MATRIX_ROWS = 12;   // the frame clips below this; rows past the clip are left out of the markup
-const PAGE_ROWS = 8;      // pages shown in the list crop
-const FIX_COUNT = 2;      // fix cards shown in the fixes crop
+const PAGE_ROWS = 8;      // pages shown in the page-table crops; the frame clips below, rows past it are left out of the markup
+const FIX_COUNT = 2;      // snippets shown in the fixes crop
+const EST_ROWS = 3;       // rows of the estimate table shown
 const CIT_ROWS = 3;       // rows of the open group in the citations crop
-const TRY_ROWS = 3;       // rows of the open group in the tries crop
-const NAMES = ['summary', 'gap', 'matrix', 'pages', 'fixes', 'print', 'citations', 'tries', 'band-explorer'];
+const NAMES = ['summary', 'checks', 'pages', 'fixes', 'estimate', 'citations', 'band-explorer'];
 
 /* ---------- small markup helpers (the renderer's output is well formed) ---------- */
 
@@ -95,81 +95,56 @@ function clean(html, keepButtons) {
   return s;
 }
 
-function wrap(inner) { return '<div class="rp-report rp-js">\n' + inner.replace(/\n+$/, '') + '\n</div>\n'; }
+function wrap(inner, cls) { return '<div class="' + (cls || 'pr-report') + '">\n' + inner.replace(/\n+$/, '') + '\n</div>\n'; }
 
 /* ---------- the crops ---------- */
+
+// The page table rebuilt with its header and the first rows. The frames are narrow, so the crop shows the first three columns
+// (page, score, failed checks) and no row is open.
+function pageTable(html, rows) {
+  const wrapEl = byAttr(html, 'data-shot="pages"');
+  const head = /<thead[\s\S]*?<\/thead>/.exec(wrapEl)[0];
+  const all8 = all(wrapEl, '<tr role="row" class="pr-row"', 'tr').slice(0, rows);
+  const kept = all8;
+  return '<div class="pr-tablewrap"><table class="pr-table pr-table--pages"><caption class="pr-vh">Pages</caption>' + head + '<tbody>\n' + kept.join('\n') + '\n</tbody></table></div>';
+}
 
 function crops(data) {
   const withBm = Object.assign({}, data, { benchmark: data.benchmark || factsLib.benchmarkFromData(path.join(ROOT, 'data')) });
   const sample = JSON.parse(fs.readFileSync(CITATION, 'utf8'));
-  const html = render.render(withBm, { schema: schema, label: 'Sample report', bar: false, citation: { result: citationPanel.fromSample(sample), sample: true } });
+  const html = render.renderPro(withBm, { schema: schema, estimate: estimateLib.estimate(data), cap: factsLib.CRAWL_CAP, label: 'Sample report', bar: false, actions: { copy: true, print: true }, citation: { result: citationPanel.fromSample(sample), sample: true } });
   const out = {};
 
+  // The summary: the score and the three pillars beside the findings in plain words.
   out.summary = wrap(clean(byAttr(html, 'data-shot="summary"')));
 
-  // The gap: the site-wide score, the homepage score and the gap between them (three of the four KPI tiles).
-  const tiles = all(byAttr(html, 'data-shot="summary"'), '<li class="rp-kpi" data-kpi="(avg|home|gap)"', 'li');
-  out.gap = wrap(clean('<ul class="rp-kpis rp-kpis--three">\n' + tiles.join('\n') + '\n</ul>'));
+  // The checks: one pillar's table, each check with how many pages fail it.
+  out.checks = wrap(clean(byAttr(html, 'data-pillar="tech"')));
 
-  // The matrix: header, then the first rows of the real table. The frame clips the rest.
-  const mx = byAttr(html, 'data-shot="matrix"');
-  const head = /^[\s\S]*?<\/thead>\n/.exec(mx)[0];
-  const bodies = all(mx, '<tbody class="rp-cluster"', 'tbody');
-  let kept = 0, parts = '';
-  for (const b of bodies) {
-    if (kept >= MATRIX_ROWS) break;
-    const rows = all(b, '<tr class="rp-matrix__row"', 'tr');
-    const headRow = all(b, '<tr class="rp-cluster__head"', 'tr')[0];
-    const take = rows.slice(0, MATRIX_ROWS - kept);
-    kept += take.length;
-    parts += '<tbody class="rp-cluster">' + headRow + '\n' + take.join('\n') + '\n</tbody>\n';
-  }
-  out.matrix = wrap(clean(head.replace(/<div class="rp-matrixwrap"[^>]*>/, '<div class="rp-matrixwrap">') + parts + '</table></div>'));
+  // The pages: the alphabetical table.
+  out.pages = wrap(clean(pageTable(html, PAGE_ROWS)));
 
-  // Pages: the list (worst first) and the detail pane for the worst page, built the way
-  // lib/report-ui.js builds the pane when a row is selected. The first snippet is open.
-  const pg = byAttr(html, 'data-shot="pages"');
-  const ulStart = pg.indexOf('<ul class="rp-list"');
-  const items = all(balanced(pg, ulStart, 'ul').slice(1), '<li class="rp-item', 'li').slice(0, PAGE_ROWS);
-  const first = items[0];
-  const firstPath = /data-path="([^"]*)"/.exec(first)[1];
-  const firstDetail = byAttr(first, 'class="rp-detail"').replace('<details class="rp-snippet">', '<details class="rp-snippet" open>');
-  const lis = items.map((li, i) => {
-    const detail = byAttr(li, 'class="rp-detail"');
-    const bare = li.replace(detail, '');
-    const keep = i === 0 ? li.replace('class="rp-item', 'class="rp-item is-selected is-open').replace(detail, firstDetail) : bare;
-    return keep;
-  });
-  out.pages = wrap(clean('<div class="rp-pages"><ul class="rp-list">\n' + lis.join('\n') + '\n</ul>\n<div class="rp-pane"><p class="rp-pane__path">' + firstPath + '</p>' + firstDetail + '</div></div>'));
-
-  // band-explorer (homepage Pro band only): the dashboard's navy top bar and its five tabs, Pages selected,
-  // with the pages explorer under them: worst page selected, detail open, one fix snippet visible. The tabs
-  // are built the way lib/report-ui.js builds them, but as inert spans (the band holds one link and no buttons).
-  // Paths get a middle ellipsis (a head that shortens, a tail that stays) so a clipped path still ends in its
-  // last segment; that styling lives in the band's own rules, not in the dashboard.
-  const ellipsis = (li) => li.replace(/(<span class="rp-item__path"[^>]*>)([^<]*)(<\/span>)/, (m, a, t, c) => {
-    const cut = Math.max(0, t.length - 8);
-    return a + '<span class="pro-band-path__head">' + t.slice(0, cut) + '</span><span class="pro-band-path__tail">' + t.slice(cut) + '</span>' + c;
-  });
-  const dashBar = render.topBar({ domain: data.domain, date: data.createdAt, label: 'Sample report' }).replace(' hidden>', '>').replace('<button type="button"', '<span').replace('</button>', '</span>');
-  const tabs = render.TABS.map((t) => '<span class="rp-tab" role="tab" aria-selected="' + (t.id === 'pages' ? 'true' : 'false') + '">' + icons.svg(t.icon) + t.name + '</span>').join('');
-  out['band-explorer'] = '<div class="rp-report rp-js pro-band-dash">\n' + clean(dashBar + '<div class="pro-band-dash__body"><div class="rp-tablist" role="tablist">' + tabs + '</div>\n<div class="rp-pages"><ul class="rp-list">\n' + lis.map(ellipsis).join('\n') + '\n</ul>\n<div class="rp-pane"><p class="rp-pane__path">' + firstPath + '</p>' + firstDetail + '</div></div></div>') + '\n</div>\n';
-
-  // Fixes: two cards, the ones that apply to the most pages after the robots.txt block (which lists crawler
-  // names; the marketing crops leave product names out). The page lists are folded away.
-  const fx = byAttr(html, 'data-shot="fixes"');
-  const pagesOf = (c) => +/Applies to <strong[^>]*>(\d+)<\/strong>/.exec(c)[1];
-  const cards = all(fx, '<article class="rp-fix"', 'article')
-    .filter((c) => c.indexOf('<h3 class="rp-fix__title">robots.txt') === -1)
+  // The fixes: the two snippets that apply to the most pages (not the robots.txt one, which lists crawler names; the
+  // marketing crops leave product names out). Both are open.
+  const snippets = all(html, '<details class="pr-snippet"', 'details');
+  const appliesTo = (c) => +/applies to (\d+) page/.exec(c)[1];
+  const picked = snippets
+    .filter((c) => c.indexOf('<span class="pr-snippet__name">robots.txt') === -1)
     .map((c, i) => ({ c: c, i: i }))
-    .sort((a, b) => pagesOf(b.c) - pagesOf(a.c) || a.i - b.i)
+    .sort((a, b) => appliesTo(b.c) - appliesTo(a.c) || a.i - b.i)
     .slice(0, FIX_COUNT)
-    .map((x) => x.c.replace(/<ul class="rp-pagelist">[\s\S]*?<\/ul>/, ''));
-  out.fixes = wrap(clean('<div>\n' + cards.join('\n') + '\n</div>'));
+    .map((x) => x.c.replace('<details class="pr-snippet"', '<details class="pr-snippet" open'));
+  out.fixes = wrap(clean('<div>\n' + picked.join('\n') + '\n</div>'));
 
-  // Citations: the dashboard's Citations tab with the published CRM sample (the Citations panel's own
-  // markup, lib/citation-panel.js). 'citations' opens the never-named group; 'tries' opens the one named
-  // only sometimes. The other groups are folded to their summary lines.
+  // The estimate: the strip and the first rows of the table.
+  const est = byAttr(html, 'data-shot="estimate"');
+  const strip = byAttr(est, 'class="pr-strip"');
+  const estHead = /<thead[\s\S]*?<\/thead>/.exec(est)[0];
+  const estRows = all(est, '<tr role="row"><th scope="row"', 'tr').slice(0, EST_ROWS);
+  out.estimate = wrap(clean(strip + '\n<div class="pr-tablewrap"><table class="pr-table pr-table--estimate"><caption class="pr-vh">Fixes</caption>' + estHead + '<tbody>\n' + estRows.join('\n') + '\n</tbody></table></div>'));
+
+  // Citations: the report's Citations section with the published CRM sample (the panel's own markup, lib/citation-panel.js).
+  // The never-named group is open; the others are folded to their summary lines.
   const cit = byAttr(html, 'data-shot="citations"').replace(/<p class="rp-cit-cta">[\s\S]*?<\/p>/, '');
   const groupsAt = cit.indexOf('<div class="rp-cit-groups"');
   const groups = balanced(cit, groupsAt, 'div');
@@ -186,12 +161,13 @@ function crops(data) {
   const kpis = pick(/<ul class="rp-kpis rp-kpis--three">[\s\S]*?<\/ul>/);
   const note = pick(/<p class="rp-note">Across all[\s\S]*?<\/p>/);
   const grp = (open, rows) => '<div class="rp-cit-groups">\n' + ['never', 'unstable', 'always'].map((g) => g === open ? openGroup(g, rows) : fold(g)).join('\n') + '\n</div>';
-  out.citations = wrap(clean('<div class="rp-cit">\n' + label + '\n' + kpis + '\n' + note + '\n' + grp('never', CIT_ROWS) + '\n</div>'));
-  out.tries = wrap(clean('<div class="rp-cit">\n' + note + '\n' + grp('unstable', TRY_ROWS) + '\n</div>'));
+  out.citations = wrap(clean('<div class="rp-cit">\n' + label + '\n' + kpis + '\n' + note + '\n' + grp('never', CIT_ROWS) + '\n</div>'), 'rp-report rp-js');
 
-  // Print: the dashboard's own top bar, with its Print button shown (the script un-hides it).
-  const bar = render.topBar({ domain: data.domain, date: data.createdAt, label: 'Sample report' }).replace(' hidden>', '>');
-  out.print = wrap(clean(bar, true));
+  // band-explorer (homepage band only): the report's navy top bar, its section nav (inert spans, Pages marked as the current
+  // one) and the page table under them. The band holds one link and no buttons, so nothing in the crop is a control.
+  const bar = render.proTop({ label: 'Sample report' }).replace(/<a class="logo[^>]*>([\s\S]*?)<\/a>/, '<span class="logo rp-top__logo">$1</span>');
+  const nav = '<nav class="pr-nav" aria-label="Report sections"><ul>' + render.PRO_NAV.map((n) => '<li><span' + (n.id === 'pr-pages' ? ' aria-current="true"' : '') + '>' + n.name + '</span></li>').join('') + '</ul></nav>';
+  out['band-explorer'] = '<div class="pr-report pro-band-dash">\n' + clean(bar + nav + '<div class="pro-band-dash__body">' + pageTable(html, PAGE_ROWS) + '</div>') + '\n</div>\n';
 
   return out;
 }

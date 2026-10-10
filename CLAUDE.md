@@ -77,21 +77,26 @@ Constraints that must not be broken:
   encrypted page stays in git history for good.
 - **Citehound Pro is built, without payment.** Single-use order links, a start form, a polite crawl of at most 25
   pages driven step by step from the browser, and a private report at `/r/<32 hex>/`, all in one function
-  (`api/pro.js`, logic in `lib/pro-*.js`), stored in Redis (`@upstash/redis`, the only dependency). Read
+  (`api/pro.js`, logic in `lib/pro-*.js`), stored in Redis (`@upstash/redis`, the only runtime dependency; `ajv` is a dev dependency for `npm run check:vercel`). Read
   `docs/pro.md` before touching it. Hard rules: the job record never holds contact data (the order does); the
   report layout is `renderPro` in `lib/report-render.js`, shared with `/sample-report`; the estimated score comes
   only from re-running `scoreAll()`; reports use no ranking words and no simulation block; every fetch goes through
-  `lib/pro-fetch.js`; Pro paths stay out of the sitemap, robots.txt, llms.txt, the MCP server and analytics; nothing
-  logs a token, address, name or email. `/privacy` is not edited until launch (the wording is in `docs/pro.md`).
+  `lib/safe-fetch.js`; failed jobs that read no page give the link back (up to 3 times); Pro paths stay out of the sitemap, robots.txt, llms.txt, the MCP server and analytics; nothing
+  logs a token, address, name or email. `/privacy` carries a "Pro reports" section (10 Oct 2026): change it and `docs/pro.md` together.
+- **One guard for every fetch of a domain someone typed.** `lib/safe-fetch.js` resolves the name inside the socket's
+  own lookup, connects only to a public address it has checked, re-checks every redirect and caps time and size.
+  `lib/scanner.js` `fetchText` goes through it, so the free scan, the llms.txt checker, site-info, the crawl, the MCP
+  tools and Pro all share it. Do not add a `fetch(`, `http.request` or socket call for a user-supplied address anywhere
+  else; `scripts/test-scan-ssrf.js` lists the files allowed to make any request of their own and fails on a new one.
 - **Report summaries.** The executive summary of a crawl report is written
   from aggregated figures only (`lib/report-facts.js`), by rules or by a model
   that only rephrases them, and every model reply is validated against the
   facts (`lib/summary.js`). No page content, URL or domain goes to the model.
   `privacy.html` says so; keep both in step. Do not send anything else.
-- **Pro screenshots are generated.** The crops of the dashboard on `/pro` and in
-  the homepage Pro band (including the Citations tab with the published CRM sample)
-  come from the sample data and the real renderer; rerun
-  `scripts/capture-pro-shots.js` whenever the dashboard changes, then
+- **Pro screenshots are generated.** The crops of the report on `/pro` and in
+  the homepage Pro band (including the Citations section with the published CRM sample)
+  come from the sample data and the real renderer (`renderPro`); rerun
+  `scripts/capture-pro-shots.js` whenever the report layout changes, then
   `scripts/generate-pro.js`.
 - **One texture, one place.** The homepage Pro band carries one SVG-pattern field
   of page glyphs, partial and hard-edged, in a lighter navy zone (`--navy-900`),
@@ -255,6 +260,30 @@ file and its `.cm*` rules are unused.) The scatter shows no data. The data
 on `/citation-tracking` comes from `content/citations/sample-crm.json` via
 `scripts/generate-citation.js`, which writes the whole page; never type a
 figure into it, and run `node scripts/generate-citation.js --check`.
+
+## Gates and pushing
+
+There are no "known failures". A red gate stops the push.
+
+- `npm run gates` (`scripts/run-gates.js`) runs, in order: the integrity check (`npm run check:integrity`: every tracked `.js`
+  compiles, every tracked `.json` parses, and every file at HEAD is byte-identical to the working tree), the `vercel.json`
+  check against Vercel's schema (`npm run check:vercel`), every `generate-*.js --check`, `check-pages`, `check-mcp-drift`,
+  `check-launch-config`, `check-research-index`, `site-chrome --check`, `capture-pro-shots --check`, and every `test-*.js`.
+  Run it after committing (before committing, `node scripts/run-gates.js --precommit` compares the index instead of HEAD).
+- Never trust a read right after a write on this machine (see the repository location note below). Stage with a check that
+  two reads agree, and run the gates on the committed bytes.
+- Push to `main` only with every gate green, never with force. Then run `npm run smoke` (`scripts/smoke-live.js`): it waits
+  for the deployment of HEAD to be Ready and checks the live site (pages, MCP `tools/list`, the generic Pro 404s and their
+  headers, the storage, nothing Pro in the sitemap, `robots.txt` or `llms.txt`). If a deploy fails or the smoke test fails,
+  fix forward or revert with a normal revert commit at once.
+- `npm run test:real-kv` (`scripts/test-real-kv.js`) and `node scripts/e2e-live.js` need the Upstash credentials and write to the
+  real database under a cleaned-up prefix or with cleaned-up keys. They are run by hand when `lib/pro-store.js` or the Pro
+  flow changes, not in the gate list.
+
+**Repository location.** This repository must not live inside iCloud Drive (`~/Desktop` and `~/Documents` can be synced). The
+file provider returns stale or truncated reads right after a write, and that has corrupted commits: a truncated `vercel.json`
+failed a production deploy, and a truncated `lib/pro-api.js` crashed the Pro function. Keep a clone outside any synced folder
+(for example `~/dev/answerable`) and work there.
 
 ## Voice
 

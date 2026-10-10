@@ -65,7 +65,7 @@ daily at best). See "Decisions" below.
 | Path | What it does |
 |---|---|
 | `lib/pro-store.js` | Redis (`@upstash/redis`) and in-memory adapters; orders, jobs, locks, slots, counters |
-| `lib/pro-fetch.js` | The only way Pro touches a customer site: public addresses only, pinned lookup, manual redirects, caps |
+| `lib/safe-fetch.js` | The only way Pro touches a customer site: public addresses only, pinned lookup, manual redirects, caps |
 | `lib/pro-crawler.js` | Discovery and the scan step; robots.txt, 1 request/s, 429 stops, 403 is "blocked by the site" |
 | `lib/pro-estimate.js` | "Estimated score if you apply these fixes": re-runs `scoreAll()` with each fix applied |
 | `lib/pro-api.js`, `api/pro.js` | The actions: start, order, step, status, email, report (one Vercel function) |
@@ -129,7 +129,7 @@ domain across all jobs, at most two jobs per domain at once, and a hashed-addres
 stops the crawl at once and the job ends "partial" with a plain reason. 401, 403, 406, 451 and bot-challenge pages
 are reported as "blocked by the site" and never retried or worked around; three in a row stop the crawl.
 
-Every request goes through `lib/pro-fetch.js`: the address is resolved inside the socket's own lookup and the
+Every request goes through `lib/safe-fetch.js`: the address is resolved inside the socket's own lookup and the
 connection is made to exactly the address that was checked, so a name that resolves to a private address, or
 changes its answer, never connects. Loopback, private, link-local (including the cloud metadata address),
 carrier-grade NAT, documentation, multicast and IPv4-mapped/NAT64/6to4 forms are all refused. Redirects are
@@ -143,12 +143,12 @@ no simulation block. Every figure in the estimate comes from `scoreAll()` run ag
 run from the biggest gain to the smallest and their gains add up to the change in the total. Lists whose order
 means nothing are alphabetical. The page table starts alphabetical and can be sorted.
 
-## /privacy: what has to change on the day Pro goes live
+## /privacy
 
-`privacy.html` is not edited as part of this work. Today it says "no email collection", "No personal data. No
-email addresses. No accounts" and "Nothing about who started it is stored with it". Those sentences stop being true
-the day a Pro link is used. Replace them, and add this section (wording ready to paste; the date and version line
-move with it):
+`privacy.html` carries the "Pro reports" section below since 10 October 2026, and the three sentences it replaced ("no email
+collection", "No personal data. No email addresses. No accounts", "Nothing about who started it is stored with it") are gone. The
+page also names Upstash, Resend and Google Fonts as third parties and states that the pages load no analytics script and set no
+cookies. Change the page and this text together. The wording as published:
 
 > **Pro reports.** If you order a Citehound Pro report, we collect three things from you: your name, your email
 > address and the address of the site you want scanned. We use them only to deliver your report and for support. If
@@ -172,9 +172,7 @@ move with it):
 > To have a report and its order record deleted before the 90 days end, write to hey@getcitehound.com with the
 > report link.
 
-Also change in the same deploy: "What we don't collect" (add the Pro exception), "What we store" (remove "Nothing
-about who started it is stored with it" for Pro crawls), and the "Third parties" list (add Upstash and Resend).
-Deletion on request is promised above, so there has to be a way to do it: delete the keys `pro:job:<id>`,
+Deletion on request is promised on the page, so there has to be a way to do it: delete the keys `pro:job:<id>`,
 `pro:job:<id>:pages`, `pro:job-order:<id>` and the order hash named by the reverse key.
 
 ## Email: DNS records for the sender domain
@@ -216,26 +214,36 @@ Keep the provider's secret in the environment. Store no card data: nothing in th
 ## Tests and gates
 
 ```
-node scripts/test-pro-store.js       orders, jobs, TTLs, atomic claim, locks, slots (in-memory and a Redis stand-in)
-node scripts/test-pro-fetch.js       public-address rules, site input, redirects, caps, "the site said no"
-node scripts/test-pro-crawler.js     politeness on a virtual clock, 25-page cap, 429, 403, parallel steps
+npm run gates                        everything below, plus every generator --check, integrity and vercel.json (see CLAUDE.md)
+node scripts/test-pro-store.js       orders, jobs, TTLs, atomic claim, locks, slots, giving a link back (in-memory and a Redis stand-in)
+node scripts/test-safe-fetch.js      public-address rules, site input, redirects, caps, "the site said no"
+node scripts/test-scan-ssrf.js       every public path that fetches a typed domain: hostile names, rebinding, redirects, the MCP limit
+node scripts/test-pro-crawler.js     politeness on a virtual clock, 25-page cap, 429, 403, parallel steps, failed jobs
 node scripts/test-pro-estimate.js    the estimate equals real rescoring; rows add up
-node scripts/test-pro-api.js         start, double submit, bad links, limits, email, report page, no private data in logs
+node scripts/test-pro-api.js         start, double submit, bad links, limits, email, report page, failed jobs, no private data in logs
 node scripts/test-pro-report.js      layout order, tables, wording, figures, escaping
-node scripts/test-pro-static.js      secrets, private data, listings, analytics, logs, headers, function count
-node scripts/pro-dev-server.js --fast   the whole flow locally, no Redis, with a pretend site
+node scripts/test-pro-static.js      secrets, private data, listings, analytics, logs, headers, function count, bundled requires
+node scripts/pro-dev-server.js --fast   the whole flow locally, no Redis, with a pretend site (--redis uses the store in the environment)
+npm run test:real-kv                 the store and the start endpoint on a REAL Redis, under a prefix, cleaned up (needs credentials)
+node scripts/e2e-live.js             one report end to end on the deployed site, cleaned up (needs credentials)
+npm run smoke                        after a push: wait for the deploy, check the live site
 ```
 
-The Redis adapter has been tested against a stand-in that answers the way `@upstash/redis` does, not against a
-real database. Before the first customer, run `node scripts/pro-issue-token.js` with the real variables set and
-walk one report through on a preview deploy.
+`scripts/fake-upstash.js` stands in for Upstash's REST API so the two credentialed scripts can be tried without credentials. It proves
+the scripts and the client's encoding line up and nothing about the real server. The first run of `test-real-kv.js` against a
+stand-in found a real bug: with `automaticDeserialization: false` the client returns HGETALL as a flat list, which the adapter had
+read as an object, so every order and job read on a real database would have come back empty. It is fixed and the unit-test stand-in
+now answers the way the client does.
+
+## Failed jobs
+
+A job that ends with no page read (robots.txt forbids, the site blocks, a bot check or 429 before the first page, the site does not
+resolve) is marked failed and its link goes back to unused: the job id is dropped from the order, the contact stays, the claim is
+cleared, and the progress screen says "We couldn't scan this site. Your link is still valid, try again or use a different site." At
+most 3 times per order; after that the link stays spent. A partial job (at least one page read) keeps its link spent and its report.
 
 ## Decisions for the owner
 
 - **Crawl driver.** The browser drives the crawl. If a customer closes the tab, the job pauses until they reopen
   the link. A queue or cron would make it server-driven; both cost money or complexity on Hobby.
-- **Failed jobs spend the link.** A failed crawl (robots.txt forbids it, site blocks us) is final for that link.
-  Reissuing is manual.
-- **Public Pro copy.** `/pro`, `llms.txt` and the Pro band still describe the older report ("pages ranked", worst
-  pages). The sample and the Pro report no longer rank pages. Update that copy before launch.
 - **Dark theme.** The site has no dark theme, so the report is light only.

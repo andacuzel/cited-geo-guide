@@ -4049,6 +4049,7 @@ h2.scan-bridge__text { font-family: var(--font-body); line-height: 1.4; letter-s
 .pr-h4 { font-family: var(--font-display); font-weight: 400; font-size: 18px; color: var(--navy-950); }
 .pr-text { margin-top: 12px; font-size: 16px; line-height: 1.6; color: var(--ink); max-width: 760px; }
 .pr-lede { margin-top: 14px; font-size: 18px; line-height: 1.5; color: var(--navy-950); font-weight: 600; max-width: 760px; }
+.pr-sumlabel { margin-top: 8px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--ink-soft); max-width: 760px; }
 .pr-note { margin-top: 10px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); max-width: 760px; }
 .pr-muted { color: var(--ink-soft); font-size: 13.5px; }
 .pr-summary { margin-top: 18px; display: grid; grid-template-columns: minmax(250px, 330px) minmax(0, 1fr); gap: 32px; align-items: start; }
@@ -4179,3 +4180,29 @@ th[aria-sort="descending"] .pr-sortbtn::after { content: "\2193"; }
 /* Anchors in the report jump at once (a long smooth scroll hides where you are going), and the site header's scroll offset does not
    apply: this page has none, and its sections carry scroll-margin-top for the section nav instead. */
 html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
+
+/* ----------------------------- Pro crops of the report layout (.pro-shot with .pr-) -----------------------------
+   scripts/capture-pro-shots.js cuts regions out of the report (renderPro). The frames are narrower than a report, so a
+   crop keeps one column and drops the widest table column. Nothing here changes the report itself. */
+.pro-shot__view .pr-report { min-width: 0; color: var(--ink); }
+.pro-shot .pr-summary { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 0; }
+.pro-shot .pr-score { padding: 16px; }
+.pro-shot .pr-score__num { font-size: 60px; }
+.pro-shot .pr-lede { margin-top: 0; font-size: 16px; }
+.pro-shot .pr-found li { font-size: 14.5px; padding: 8px 0; }
+.pro-shot .pr-pillarblock { margin-top: 0; }
+.pro-shot .pr-table--checks th:nth-child(4), .pro-shot .pr-table--checks td:nth-child(4) { display: none; }
+.pro-shot .pr-table--pages th:nth-child(4), .pro-shot .pr-table--pages td:nth-child(4) { display: none; }
+.pro-shot .pr-table--estimate th:nth-child(2), .pro-shot .pr-table--estimate td:nth-child(2) { display: none; }
+.pro-shot .pr-strip { margin-top: 0; padding: 16px; }
+.pro-shot .pr-strip__num strong { font-size: 32px; }
+.pro-shot .pr-snippet { margin-top: 0; margin-bottom: 10px; background: var(--white); }
+.pro-shot .pr-snippet .rp-code { padding-right: 14px; }
+.pro-shot--checks { --pro-h: 400px; }
+.pro-shot--estimate { --pro-h: 340px; }
+.pro-band-dash .pr-top__inner { padding: 12px 16px; }
+.pro-band-dash .pr-nav { position: static; margin: 0; padding: 0 12px; }
+.pr-nav span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font-size: 15px; font-weight: 600; color: var(--ink-soft); white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.pr-nav span[aria-current="true"] { color: var(--navy-950); border-bottom-color: var(--gold); }
+.pro-band-dash .pr-table th:nth-child(4), .pro-band-dash .pr-table td:nth-child(4) { display: none; }
+.pro-band-dash .pr-tablewrap { margin-top: 0; }

@@ -1,77 +1,12 @@
-<div class="rp-report rp-js">
-<div class="rp-pages"><ul class="rp-list">
-<li class="rp-item is-selected is-open"><span class="rp-item__row"><span class="rp-item__path">/research/case-study-agaone</span><span class="rp-item__score" data-fig="page-score">76</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
-<div class="rp-detail"><p class="rp-detail__top"><span class="rp-detail__score"><strong>76</strong><span>/100</span></span><span class="rp-detail__open">Open this page<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M17 13.5V18a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h4.5"/></svg></span></p>
-<ul class="rp-fails">
-<li><strong>Page title</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Write a descriptive 10–70 character title</span> <span class="rp-fails__why">Answer engines frequently use the title as your source label.</span></li>
-<li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
-</ul>
-<details class="rp-snippet" open><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
-{
-  &quot;@context&quot;: &quot;https://schema.org&quot;,
-  &quot;@graph&quot;: [
-    {
-      &quot;@type&quot;: &quot;Organization&quot;,
-      &quot;name&quot;: &quot;[Your company name]&quot;,
-      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
-      &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
-    },
-    {
-      &quot;@type&quot;: &quot;WebSite&quot;,
-      &quot;name&quot;: &quot;Citehound — AI Visibility Scanner &amp; GEO Playbooks&quot;,
-      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
-      &quot;inLanguage&quot;: &quot;en&quot;
-    }
-  ]
-}
-&lt;/script&gt;</pre></details>
-</div>
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/benchmarks</span><span class="rp-item__score" data-fig="page-score">77</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
-
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/research</span><span class="rp-item__score" data-fig="page-score">77</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
-
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/tools</span><span class="rp-item__score" data-fig="page-score">77</span><span class="rp-item__failed"><span data-fig="page-failed">2</span> failed</span></span>
-
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/research/llms-txt-adoption-2026</span><span class="rp-item__score" data-fig="page-score">79</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
-
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/about</span><span class="rp-item__score" data-fig="page-score">82</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
-
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/benchmarks/consumer-apps</span><span class="rp-item__score" data-fig="page-score">82</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
-
-</li>
-<li class="rp-item"><span class="rp-item__row"><span class="rp-item__path">/benchmarks/crm</span><span class="rp-item__score" data-fig="page-score">82</span><span class="rp-item__failed"><span data-fig="page-failed">1</span> failed</span></span>
-
-</li>
-</ul>
-<div class="rp-pane"><p class="rp-pane__path">/research/case-study-agaone</p><div class="rp-detail"><p class="rp-detail__top"><span class="rp-detail__score"><strong>76</strong><span>/100</span></span><span class="rp-detail__open">Open this page<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M17 13.5V18a1 1 0 01-1 1H6a1 1 0 01-1-1V8a1 1 0 011-1h4.5"/></svg></span></p>
-<ul class="rp-fails">
-<li><strong>Page title</strong> <span class="rp-fails__pts">0/3</span><br /><span class="rp-fails__advice">Write a descriptive 10–70 character title</span> <span class="rp-fails__why">Answer engines frequently use the title as your source label.</span></li>
-<li><strong>Organization / WebSite schema</strong> <span class="rp-fails__pts">0/8</span><br /><span class="rp-fails__advice">Add Organization schema</span> <span class="rp-fails__why">Defines your brand as a verifiable entity — the base layer of trust.</span></li>
-</ul>
-<details class="rp-snippet" open><summary>Copy-paste fix: Organization and WebSite JSON-LD</summary><pre class="rp-code">&lt;script type=&quot;application/ld+json&quot;&gt;
-{
-  &quot;@context&quot;: &quot;https://schema.org&quot;,
-  &quot;@graph&quot;: [
-    {
-      &quot;@type&quot;: &quot;Organization&quot;,
-      &quot;name&quot;: &quot;[Your company name]&quot;,
-      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
-      &quot;description&quot;: &quot;Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required.&quot;
-    },
-    {
-      &quot;@type&quot;: &quot;WebSite&quot;,
-      &quot;name&quot;: &quot;Citehound — AI Visibility Scanner &amp; GEO Playbooks&quot;,
-      &quot;url&quot;: &quot;https://getcitehound.com&quot;,
-      &quot;inLanguage&quot;: &quot;en&quot;
-    }
-  ]
-}
-&lt;/script&gt;</pre></details>
-</div></div></div>
+<div class="pr-report">
+<div class="pr-tablewrap"><table class="pr-table pr-table--pages"><caption class="pr-vh">Pages</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader" aria-sort="ascending" data-sort="path">Page</th><th scope="col" role="columnheader" class="pr-num" data-sort="score">Score</th><th scope="col" role="columnheader" class="pr-num" data-sort="failed">Failed checks</th><th scope="col" role="columnheader">What failed</th></tr></thead><tbody>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">87</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">0</span></td><td role="cell" data-label="What failed"><span class="pr-muted">No page-level check fails.</span></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/about</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">82</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">1</span></td><td role="cell" data-label="What failed"><details class="pr-det"><summary>1 failed check</summary><ul class="pr-fails"><li><strong>Content schema (Article, FAQ…)</strong> <span class="pr-muted">0/5</span><br />Add Article or FAQPage schema</li></ul></details></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/agentic-commerce</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">87</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">0</span></td><td role="cell" data-label="What failed"><span class="pr-muted">No page-level check fails.</span></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/benchmarks</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">77</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">2</span></td><td role="cell" data-label="What failed"><details class="pr-det"><summary>2 failed checks</summary><ul class="pr-fails"><li><strong>Content schema (Article, FAQ…)</strong> <span class="pr-muted">0/5</span><br />Add Article or FAQPage schema</li><li><strong>Subheading structure (H2)</strong> <span class="pr-muted">0/5</span><br />Break content into H2 sections</li></ul></details></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/benchmarks/consumer-apps</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">82</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">1</span></td><td role="cell" data-label="What failed"><details class="pr-det"><summary>1 failed check</summary><ul class="pr-fails"><li><strong>Content schema (Article, FAQ…)</strong> <span class="pr-muted">0/5</span><br />Add Article or FAQPage schema</li></ul></details></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/benchmarks/crm</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">82</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">1</span></td><td role="cell" data-label="What failed"><details class="pr-det"><summary>1 failed check</summary><ul class="pr-fails"><li><strong>Content schema (Article, FAQ…)</strong> <span class="pr-muted">0/5</span><br />Add Article or FAQPage schema</li></ul></details></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/benchmarks/cybersecurity</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">82</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">1</span></td><td role="cell" data-label="What failed"><details class="pr-det"><summary>1 failed check</summary><ul class="pr-fails"><li><strong>Content schema (Article, FAQ…)</strong> <span class="pr-muted">0/5</span><br />Add Article or FAQPage schema</li></ul></details></td></tr>
+<tr role="row" class="pr-row" data-kind="ok"><th scope="row" role="rowheader" data-label="Page"><span >/benchmarks/devtools</span></th><td role="cell" class="pr-num" data-label="Score"><span data-fig="pr-page-score">82</span></td><td role="cell" class="pr-num" data-label="Failed checks"><span data-fig="pr-page-failed">1</span></td><td role="cell" data-label="What failed"><details class="pr-det"><summary>1 failed check</summary><ul class="pr-fails"><li><strong>Content schema (Article, FAQ…)</strong> <span class="pr-muted">0/5</span><br />Add Article or FAQPage schema</li></ul></details></td></tr>
+</tbody></table></div>
 </div>

@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=60" />
+  <link rel="stylesheet" href="styles.css?v=61" />
   <!-- SITE-SCHEMA:START -->
   <script type="application/ld+json">
   {
@@ -108,7 +108,7 @@
         <div class="section-head">
           <p class="kicker">Privacy</p>
           <h1 id="privacy-heading" class="section-title">What we fetch, what we store, what we don't.</h1>
-          <p class="section-sub">Last updated 30 July 2026.</p>
+          <p class="section-sub">Last updated 10 October 2026.</p>
         </div>
 
         <div class="doc-section">
@@ -119,30 +119,38 @@
 
         <div class="doc-section">
           <h2 class="doc-section__heading">What we store</h2>
-          <p>Almost nothing, today. There are no accounts, no email collection, and no scan history. A scan result exists in your browser for as long as the page stays open.</p>
-          <p>The exception is a full-site crawl, the engine behind the planned Pro report. It is not part of the public scanner yet, but its address is open. A crawl stores the domain, the list of pages it chose, and each page&rsquo;s result, under a random 128-bit id, for 90 days after its last step. Nothing about who started it is stored with it, and nobody can list or search crawls: you need the id.</p>
-          <p>The one exception: to stop abuse of the scanner, we keep a one-way hash of your IP address paired with a request counter, purely to enforce a rate limit. It expires automatically within a day (the hourly counter within an hour), isn't linked to which domains were scanned, and is never stored as a raw IP address.</p>
+          <p>The free scanner and the free tools store almost nothing. There are no accounts, no email collection, and no scan history. A scan result exists in your browser for as long as the page stays open. A Pro report is the exception, described in its own section below.</p>
+          <p>A second exception is the older full-site crawl endpoint, which is not linked from the site but whose address is open. A crawl stores the domain, the list of pages it chose, and each page&rsquo;s result, under a random 128-bit id, for 90 days after its last step. Nothing about who started it is stored with it, and nobody can list or search crawls: you need the id.</p>
+          <p>To stop abuse, we keep a keyed one-way hash of your IP address paired with a request counter, purely to enforce a rate limit. It expires automatically within a day (the hourly counter within an hour), isn't linked to which domains were scanned, and is never stored as a raw IP address.</p>
           <p>The MCP server keeps short-lived counters keyed by the scanned domain, kept for an hour, to limit repeated fetches of one site. They hold no caller identity.</p>
           <p>Separately, we count visits from known AI crawlers (GPTBot, ClaudeBot, PerplexityBot and similar) to our own site, so we can publish real data on how often they show up. This is two aggregate counts: visits per crawler per day, and how often each page of our site was requested by those crawlers. It is never a per-visit log, and nothing about human visitors is recorded at all.</p>
           <div class="callout callout--gold">
             <p class="callout__label">Will change</p>
-            <p>This section will be updated when score history ships. Until then, nothing is retained after your browser tab closes.</p>
+            <p>This section will be updated when score history ships.</p>
           </div>
+        </div>
+
+        <div class="doc-section">
+          <h2 class="doc-section__heading">Pro reports</h2>
+          <p>If you order a Citehound Pro report, we collect three things from you: your name, your email address and the address of the site you want scanned. We use them only to deliver your report and for support. If you press &ldquo;Email me this report&rdquo;, we send the report link to the address you gave us, and to no other.</p>
+          <p>The crawl stores the site&rsquo;s domain, the list of pages it chose and each page&rsquo;s result, under a random 128-bit id, for 90 days. That record contains no name and no email address. Your name and email are kept in a separate order record, for 90 days from the day you start the report. A lookup from the report to its order exists only so the email button can find the address you gave us. Both records delete themselves when the 90 days end. A link you never use expires after 30 days. If a scan cannot read any page of the site, your link is given back so you can try again, and your details stay in the order record until it is used or expires.</p>
+          <p>We do not sell your details and we do not share them. They are stored with our database host, Upstash. When you press &ldquo;Email me this report&rdquo;, your email address and the report link go to our email provider, Resend, to be delivered, and nothing else does. A Pro report&rsquo;s summary is written by rules here: no page content, page address, domain or personal detail is sent to a model.</p>
+          <p>Anyone who has a report&rsquo;s link can open it, so treat the link like a password. We do not publish report links or list them anywhere, and report pages ask search engines not to index them and send no referrer. To have a report and its order record deleted before the 90 days end, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a> with the report link.</p>
         </div>
 
         <div class="doc-section">
           <h2 class="doc-section__heading">What we don't collect</h2>
-          <p>No personal data. No email addresses. No accounts. No advertising trackers.</p>
+          <p>The free scanner and tools collect no personal data: no email addresses, no accounts, no advertising trackers. The only personal details we hold are the ones you give us when you order a Pro report, described above. This site&rsquo;s pages set no cookies and load no analytics or advertising script.</p>
         </div>
 
         <div class="doc-section">
           <h2 class="doc-section__heading">Third parties</h2>
-          <p>Hosting: Vercel. The site and the scan function both run on Vercel's infrastructure.</p>
-          <p>Executive summaries: when a full-site crawl finishes, the report&rsquo;s executive summary is written from aggregated figures: scores, counts of pages and the names of the checks. Those figures are sent to a model provider, Google&rsquo;s Gemini API, to be phrased. No page content, no page addresses, no domain name and no personal data are sent. Google&rsquo;s terms for unpaid use of the API may allow it to use what it receives to improve its products. If the model is unavailable, or its reply fails our checks, the summary is written by rules here and nothing is sent.</p>
-          <div class="callout">
-            <p class="callout__label">Placeholder</p>
-            <p>[Analytics tool name and what it collects will be added here when analytics is implemented. Nothing is in place yet.]</p>
-          </div>
+          <p>Hosting: Vercel. The site and the scan function both run on Vercel's infrastructure, and Vercel handles the requests that reach them as any host does, under its own terms.</p>
+          <p>Storage: Upstash holds the records described above (rate-limit counters, crawl results, and the Pro order and report records).</p>
+          <p>Email: Resend delivers the one message a Pro customer can ask for, the report link, to the address they gave us. It receives nothing else.</p>
+          <p>Typefaces: pages load their typefaces from Google Fonts, so your browser sends its IP address and user agent to Google when a page loads. Private Pro pages do the same but send no referrer.</p>
+          <p>Executive summaries: when a crawl run through the older endpoint finishes, its executive summary may be written from aggregated figures: scores, counts of pages and the names of the checks. Those figures are sent to a model provider, Google&rsquo;s Gemini API, to be phrased. No page content, no page addresses, no domain name and no personal data are sent. Google&rsquo;s terms for unpaid use of the API may allow it to use what it receives to improve its products. If the model is unavailable, or its reply fails our checks, the summary is written by rules here and nothing is sent.</p>
+          <p>Analytics: there is none. The pages carry no analytics script, so no tool collects what you read or click. The only visit counts we keep are the aggregate crawler counts described above.</p>
         </div>
 
         <div class="doc-section">

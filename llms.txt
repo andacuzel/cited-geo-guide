@@ -29,4 +29,4 @@
 ## About
 
 - [About](https://getcitehound.com/about): who built Citehound and why.
-- [Pro](https://getcitehound.com/pro): a full-site crawl, with the whole-site score beside the homepage score, pages ranked, every fix once and a printable report. A real sample of our own site is at /sample-report.
+- [Pro](https://getcitehound.com/pro): a full-site crawl, with the whole-site score beside the homepage score, every page listed with what failed, every fix once, an estimated score if the fixes are applied and a printable report. A real sample of our own site is at /sample-report.
