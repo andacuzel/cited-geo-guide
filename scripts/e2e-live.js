@@ -159,9 +159,9 @@ async function cleanup() {
 
   // 6c. the waitlist, with the project's own address (it gets the real confirmation message if the deployment can send mail)
   const wl1 = await http('POST', '/api/waitlist', { email: CONTACT.email, name: 'Citehound test', consent: true });
-  bump('waitlist_signups');
+  if (wl1.status === 200) bump('waitlist_signups');
   const wl2 = await http('POST', '/api/waitlist', { email: ' ' + CONTACT.email.toUpperCase() + ' ', consent: true });
-  bump('waitlist_signups');
+  if (wl2.status === 200) bump('waitlist_signups');
   t('the waitlist signup answers 200 and the same words for the same address typed differently', wl1.status === 200 && wl1.text === wl2.text && wl1.text.indexOf('@') === -1, wl1.status + ' ' + wl1.text.slice(0, 80));
   let found = [];
   for (const wid of await adapter.smembers('wl:index')) { const h = await adapter.hgetall('wl:e:' + wid); if (h && h.email === CONTACT.email) found.push(wid); }
