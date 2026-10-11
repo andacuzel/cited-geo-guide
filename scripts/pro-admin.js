@@ -15,6 +15,16 @@
      node scripts/pro-admin.js kill on|off|status   the citation kill switch in Redis: "on" stops every paid citation call at once, with no
                                                     redeploy (CITATION_KILL=1 in Vercel does the same, after a redeploy)
      node scripts/pro-admin.js spend                today's and this month's paid citation calls and cost per provider, and the budgets
+     node scripts/pro-admin.js readiness-upload <file.pdf>
+                                                    store the State of AI Readiness PDF in the database (never in a file or the repository):
+                                                    checked to be a PDF under 650 KB, stored with its sha256, served only to signed links
+     node scripts/pro-admin.js readiness-info       the stored PDF (name, size, hash, date), whether the report is switched on, how many addresses
+     node scripts/pro-admin.js readiness on|off     switch signups and downloads off or on at once, with no redeploy
+     node scripts/pro-admin.js readiness-export     the report list as CSV on stdout (email, createdAt, consentVersion, updates); messages go to stderr
+     node scripts/pro-admin.js readiness-remove <email> [--yes]
+                                                    remove one address from the report list (the address is never printed back)
+     node scripts/pro-admin.js readiness-pdf-delete --yes
+                                                    delete the stored PDF (signups and downloads then say the report is not available)
      node scripts/pro-admin.js health               the last 24 hours at a glance: jobs, restored links, webhook and email failures,
                                                     waitlist signups, orders
 
@@ -131,6 +141,77 @@ async function waitlistRemove(store, email, yes) {
   return { ok: true, lines: ['Removed ' + found.length + ' waitlist entry.'] };
 }
 
+/* ---------- the State of AI Readiness report list ---------- */
+
+async function readinessUpload(store, file) {
+  const fs = require('fs');
+  const R = require('../lib/readiness.js');
+  const content = require('../content/readiness.json');
+  if (!file) return { ok: false, lines: ['Give the PDF: readiness-upload <file.pdf>. Nothing was changed.'] };
+  let buf;
+  try { buf = fs.readFileSync(file); } catch (e) { return { ok: false, lines: ['That file could not be read. Nothing was changed.'] }; }
+  try {
+    const info = await R.putPdf(store.adapter, buf, content.downloadName);
+    return { ok: true, lines: ['Stored the report: ' + info.bytes + ' bytes, sha256 ' + info.sha256 + ', served as ' + info.name + '.', 'Compare the hash with: shasum -a 256 <file>. Signups are open unless the report is switched off (readiness-info).'] };
+  } catch (e) { return { ok: false, lines: [e && e.message ? e.message : 'The PDF was refused.', 'Nothing was changed.'] }; }
+}
+
+async function readinessInfo(store) {
+  const R = require('../lib/readiness.js');
+  const A = store.adapter;
+  const info = await R.pdfInfo(A);
+  const off = await R.isOff(A);
+  const lines = ['State of AI Readiness report.', ''];
+  lines.push('Stored PDF       ' + (info ? info.name + ', ' + info.bytes + ' bytes, uploaded ' + info.uploadedAt.slice(0, 10) + ', sha256 ' + info.sha256 : 'none (signups answer "not available")'));
+  const ok = info ? !!(await R.getPdf(A)) : false;
+  if (info) lines.push('Integrity        ' + (ok ? 'the stored bytes match the hash' : 'THE STORED BYTES DO NOT MATCH THE HASH: upload the PDF again'));
+  lines.push('Switch           ' + (off ? 'OFF (signups and downloads are refused)' : 'on'));
+  lines.push('Open             ' + (info && ok && !off ? 'yes' : 'no'));
+  const people = await R.list(A);
+  lines.push('Addresses        ' + people.length + ' (' + people.filter((p) => p.updates).length + ' also chose occasional updates)');
+  const rows = await Stats.read(store, 7);
+  const sum = (m) => rows.reduce((n, r) => n + r.counts[m], 0);
+  lines.push('Last 7 days      ' + sum('readiness_signups') + ' requests, ' + sum('readiness_emails') + ' emails, ' + sum('readiness_throttled') + ' throttled, ' + sum('readiness_downloads') + ' downloads, ' + sum('readiness_removed') + ' removals');
+  return lines;
+}
+
+async function readinessSwitch(store, mode) {
+  const R = require('../lib/readiness.js');
+  if (mode === 'on') { await R.setOff(store.adapter, false); return { ok: true, lines: ['The report is switched ON (it is open only while a PDF is stored: see readiness-info).'] }; }
+  if (mode === 'off') { await R.setOff(store.adapter, true); return { ok: true, lines: ['The report is switched OFF. The form says it is not available, and download links answer "not available" until you run: readiness on'] }; }
+  return { ok: false, lines: ['Usage: node scripts/pro-admin.js readiness on | off'] };
+}
+
+async function readinessExport(store) {
+  const R = require('../lib/readiness.js');
+  const cell = (v) => { let t = String(v === undefined || v === null ? '' : v); if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; return /[",\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  const rows = await R.list(store.adapter);
+  const csv = ['email,createdAt,consentVersion,updates'].concat(rows.map((r) => [r.email, r.createdAt, r.consentVersion, r.updates ? 'yes' : 'no'].map(cell).join(','))).join('\n');
+  return { csv: csv, count: rows.length, withUpdates: rows.filter((r) => r.updates).length };
+}
+
+// By address, with no secret: each record's own address is compared, as waitlist-remove does.
+async function readinessRemove(store, email, yes) {
+  const R = require('../lib/readiness.js');
+  const want = R.normalizeEmail(email);
+  if (!want || want.indexOf('@') === -1) return { ok: false, lines: ['Give the address to remove: readiness-remove name@example.com. Nothing was changed.'] };
+  const A = store.adapter;
+  const found = [];
+  for (const id of await A.smembers('sr:index')) { const h = await A.hgetall('sr:e:' + id); if (h && R.normalizeEmail(h.email) === want) found.push(id); }
+  if (!found.length) return { ok: true, lines: ['No report-list entry for that address. Nothing was changed.'] };
+  if (!yes) return { ok: true, lines: ['One report-list entry matches that address. Nothing was changed. Run the same command with --yes to remove it.'] };
+  for (const id of found) await R.removeId(A, id);
+  return { ok: true, lines: ['Removed ' + found.length + ' report-list entry. Download links sent to it no longer work.'] };
+}
+
+async function readinessPdfDelete(store, yes) {
+  const R = require('../lib/readiness.js');
+  if (!(await R.pdfInfo(store.adapter))) return { ok: true, lines: ['No PDF is stored. Nothing was changed.'] };
+  if (!yes) return { ok: true, lines: ['A PDF is stored. Nothing was changed. Run the same command with --yes to delete it.'] };
+  await R.removePdf(store.adapter);
+  return { ok: true, lines: ['The stored PDF is deleted. The form and the download links answer "not available" until you upload one again.'] };
+}
+
 async function health(store, now) {
   now = now === undefined ? Date.now() : now;
   const A = store.adapter;
@@ -158,6 +239,7 @@ async function health(store, now) {
   lines.push('Webhook failures  ' + sum('webhook_rejected') + ' rejected signatures, ' + sum('webhook_errors') + ' processing errors');
   lines.push('Email failures    ' + sum('mail_failed') + '  (the mail provider refused or was unreachable)');
   lines.push('Waitlist signups  ' + sum('waitlist_signups') + ' requests, ' + sum('waitlist_emails') + ' confirmation emails, ' + sum('waitlist_removed') + ' removals (counters, today and yesterday UTC)');
+  lines.push('Report list       ' + sum('readiness_signups') + ' requests, ' + sum('readiness_emails') + ' report emails, ' + sum('readiness_downloads') + ' downloads, ' + sum('readiness_removed') + ' removals (counters, today and yesterday UTC)');
   lines.push('Refunds           ' + sum('payments_refunded') + ' links cancelled by a refund' + (review.length ? '; ' + review.length + ' order(s) flagged for your review (run list)' : ''));
   const bad = jobs.filter((j) => j.status === 'failed').length + sum('webhook_rejected') + sum('webhook_errors') + sum('mail_failed') + review.length;
   lines.push('', bad ? 'Needs a look: ' + bad + ' item(s) above.' : 'Nothing needs attention.');
@@ -204,10 +286,16 @@ async function run(store, argv) {
   if (cmd === 'feedback') return { code: 0, lines: await feedback(store) };
   if (cmd === 'purge') { const i = argv.indexOf('--label'); const r = await purge(store, i === -1 ? '' : argv[i + 1], argv.indexOf('--yes') !== -1); return { code: r.ok ? 0 : 1, lines: r.lines }; }
   if (cmd === 'waitlist-remove') { const r = await waitlistRemove(store, argv[1], argv.indexOf('--yes') !== -1); return { code: r.ok ? 0 : 1, lines: r.lines }; }
+  if (cmd === 'readiness-upload') { const r = await readinessUpload(store, argv[1]); return { code: r.ok ? 0 : 1, lines: r.lines }; }
+  if (cmd === 'readiness-info') return { code: 0, lines: await readinessInfo(store) };
+  if (cmd === 'readiness') { const r = await readinessSwitch(store, argv[1]); return { code: r.ok ? 0 : 1, lines: r.lines }; }
+  if (cmd === 'readiness-export') { const r = await readinessExport(store); return { code: 0, lines: [r.csv], note: r.count + ' address(es), ' + r.withUpdates + ' with the updates box ticked.' }; }
+  if (cmd === 'readiness-remove') { const r = await readinessRemove(store, argv[1], argv.indexOf('--yes') !== -1); return { code: r.ok ? 0 : 1, lines: r.lines }; }
+  if (cmd === 'readiness-pdf-delete') { const r = await readinessPdfDelete(store, argv.indexOf('--yes') !== -1); return { code: r.ok ? 0 : 1, lines: r.lines }; }
   if (cmd === 'health') return { code: 0, lines: await health(store) };
   if (cmd === 'kill') { const r = await kill(store, argv[1]); return { code: r.ok ? 0 : 1, lines: r.lines }; }
   if (cmd === 'spend') return { code: 0, lines: await spend(store) };
-  return { code: 1, lines: ['Usage: node scripts/pro-admin.js list | revoke <prefix> | clear-review <prefix> | stats [--days N] | feedback | purge --label "<label>" [--yes] | waitlist-remove <email> [--yes] | health | kill on|off|status | spend'] };
+  return { code: 1, lines: ['Usage: node scripts/pro-admin.js list | revoke <prefix> | clear-review <prefix> | stats [--days N] | feedback | purge --label "<label>" [--yes] | waitlist-remove <email> [--yes] | readiness-upload <file> | readiness-info | readiness on|off | readiness-export | readiness-remove <email> [--yes] | readiness-pdf-delete --yes | health | kill on|off|status | spend'] };
 }
 
 async function main() {
@@ -217,8 +305,9 @@ async function main() {
   if (!S.hasRedisEnv()) { console.error('No Redis connection found. Put the Upstash variables in .env.local (see docs/pilot.md).'); process.exit(1); }
   const r = await run(S.createStore(S.adapterFromEnv()), argv);
   r.lines.forEach((l) => (r.code ? console.error(l) : console.log(l)));
+  if (r.note) console.error(r.note);
   process.exit(r.code);
 }
 
-module.exports = { kill: kill, spend: spend, run: run, list: list, revoke: revoke, stats: stats, feedback: feedback, purge: purge, waitlistRemove: waitlistRemove, health: health };
+module.exports = { kill: kill, spend: spend, run: run, list: list, revoke: revoke, stats: stats, feedback: feedback, purge: purge, waitlistRemove: waitlistRemove, health: health, readinessUpload: readinessUpload, readinessInfo: readinessInfo, readinessSwitch: readinessSwitch, readinessExport: readinessExport, readinessRemove: readinessRemove, readinessPdfDelete: readinessPdfDelete };
 if (require.main === module) main().catch(function (e) { console.error(e && e.message ? e.message : e); process.exit(1); });

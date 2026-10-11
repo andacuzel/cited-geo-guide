@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=69" />
+  <link rel="stylesheet" href="styles.css?v=70" />
   <!-- SITE-SCHEMA:START -->
   <script type="application/ld+json">
   {
@@ -108,7 +108,7 @@
         <div class="section-head">
           <p class="kicker">Privacy</p>
           <h1 id="privacy-heading" class="section-title">What we fetch, what we store, what we don't.</h1>
-          <p class="section-sub">Last updated 10 October 2026.</p>
+          <p class="section-sub">Last updated 11 October 2026.</p>
         </div>
 
         <div class="doc-section">
@@ -147,19 +147,26 @@
         </div>
 
         <div class="doc-section">
+          <h2 class="doc-section__heading">The State of AI Readiness report</h2>
+          <p>On the page for our State of AI Readiness report you can ask for the PDF by email. The form asks for your email address and one box, &ldquo;Send me the report&rdquo;, which you must tick. A second box, &ldquo;Also send occasional Citehound updates&rdquo;, is separate, optional and unticked unless you tick it. We store your address, the time you asked, the version of the wording you saw and whether you ticked the second box. It is a separate list from the Pro waitlist. The record sits under a keyed one-way hash of your address, so the same address is never listed twice, and it is deleted automatically after 12 months. We use it to email you the link to the report, so that you can ask again, and, only if you ticked the second box, for occasional Citehound updates. We do not sell it or share it.</p>
+          <p>The email contains a link to the PDF. The link works for 30 days, then you can ask for a new one. It carries a signed token with a record id and an expiry date, and no address. The PDF is not on this site as a file: it sits in our database and is handed out only to a valid link, with search engines asked not to index it and no referrer sent. We send at most three report emails a day to one address and a fixed number a day in all. The email is delivered by our email provider, Resend, which receives your address and the message. It contains no tracking pixel and no tracked links. Every email has a &ldquo;Remove my address&rdquo; link and the standard unsubscribe header. Opening the link shows a page with one button; pressing it deletes your record at once and stops any link sent to it from working. You can also write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a> and we will remove you. The form never tells anyone whether an address is already on the list.</p>
+          <p>The form uses the same abuse limit as everything else here: a keyed one-way hash of your IP address and a counter, kept for an hour. The address is not stored. We keep daily totals of how many people asked for the report, how many emails went out, how many times the PDF was served and how many people removed themselves, as plain numbers with no person attached.</p>
+        </div>
+
+        <div class="doc-section">
           <h2 class="doc-section__heading">What we don't collect</h2>
-          <p>The free scanner and tools collect no personal data: no email addresses, no accounts, no advertising trackers. The only personal details we hold are the ones you give us when you join the Pro waitlist or order a Pro report, described above. This site&rsquo;s pages set no cookies and load no analytics or advertising script.</p>
+          <p>The free scanner and tools collect no personal data: no email addresses, no accounts, no advertising trackers. The only personal details we hold are the ones you give us when you join the Pro waitlist, ask for the State of AI Readiness report or order a Pro report, described above. This site&rsquo;s pages set no cookies and load no analytics or advertising script. Two small notices on the homepage, the Pro waitlist bar and the report card, remember in your browser, for that visit only, that you closed them. That uses your browser&rsquo;s session storage on your device; nothing about it is sent to us.</p>
         </div>
 
         <div class="doc-section">
           <h2 class="doc-section__heading">Third parties</h2>
           <p>Hosting: Vercel. The site and the scan function both run on Vercel's infrastructure, and Vercel handles the requests that reach them as any host does, under its own terms.</p>
-          <p>Storage: Upstash holds the records described above (rate-limit counters, crawl results, the Pro waitlist, the Pro order and report records, feedback, and the daily totals).</p>
-          <p>Email: Resend delivers two kinds of message: the report link a Pro customer asks for, and the one confirmation message a waitlist signup gets, each to the address the person gave us. It receives nothing else.</p>
+          <p>Storage: Upstash holds the records described above (rate-limit counters, crawl results, the Pro waitlist, the report list, the State of AI Readiness PDF itself, the Pro order and report records, feedback, and the daily totals).</p>
+          <p>Email: Resend delivers three kinds of message: the report link a Pro customer asks for, the one confirmation message a waitlist signup gets, and the link to the State of AI Readiness PDF, each to the address the person gave us. It receives nothing else.</p>
           <p>Typefaces: pages load their typefaces from Google Fonts, so your browser sends its IP address and user agent to Google when a page loads. Private Pro pages do the same but send no referrer.</p>
           <p>Executive summaries: when a crawl run through the older endpoint finishes, its executive summary may be written from aggregated figures: scores, counts of pages and the names of the checks. Those figures are sent to a model provider, Google&rsquo;s Gemini API, to be phrased. No page content, no page addresses, no domain name and no personal data are sent. Google&rsquo;s terms for unpaid use of the API may allow it to use what it receives to improve its products. If the model is unavailable, or its reply fails our checks, the summary is written by rules here and nothing is sent.</p>
           <p>Citation questions and citation check (Pro, only when a report includes them): to understand a site and write questions about it, excerpts of that site&rsquo;s public page text (up to 12,000 characters, from the homepage and up to four key pages) go to Anthropic, which runs the Claude model; no web search is used for this step, and nothing about you goes with the text: no name, email address, token, order or report id. When a report includes a citation check, each of about ten of the generated questions (the question text and a language tag, nothing else: no site text, no domain, no personal detail) is sent to Anthropic again with Claude&rsquo;s web search tool, and the cited pages come back. Anthropic&rsquo;s commercial terms say it does not train its models on this content. Citehound keeps, for the 90 days of the report, only whether the site&rsquo;s domain was cited, whether the brand name appears in the answer, the other cited domains with a link, the model name and the date: not the answer text. The results are a dated sample from one provider, one run per question, not a ranking.</p>
-          <p>Analytics: there is none. The pages carry no analytics script, so no tool collects what you read or click. The only visit counts we keep are the aggregate crawler counts described above. The Pro system also keeps daily totals of its own events: how many people joined the waitlist or removed themselves, how many order links were issued, how many reports were started, finished, partly finished or failed, and how many messages were sent. They are plain numbers with no person, address, link or report attached, and nothing in your browser feeds them.</p>
+          <p>Analytics: there is none. The pages carry no analytics script, so no tool collects what you read or click. The only visit counts we keep are the aggregate crawler counts described above. The Pro system also keeps daily totals of its own events: how many people joined the waitlist or asked for the State of AI Readiness report, or removed themselves from either, how many order links were issued, how many reports were started, finished, partly finished or failed, and how many messages were sent. They are plain numbers with no person, address, link or report attached, and nothing in your browser feeds them.</p>
         </div>
 
         <div class="doc-section">

@@ -14,6 +14,7 @@
    --citation also turns the citation questions on for new reports (a pretend writer, so the profile will be refused: the progress screen
    shows its stages) and seeds three more finished reports: questions only (Turkish), a check on Claude and Perplexity with made-up results, and a check
    where Perplexity failed.
+   --readiness stores a stand-in PDF so /research/state-of-ai-readiness can send its (pretend) email; read it at /__mail.
    --real crawls the real site the form names (no pretend site, the public-address check is ON) and, with the keys in .env.local, runs the real
    citation phases: Claude writes the questions, and the check runs on every provider that has a key (Perplexity too, for this run only). It spends
    real money, capped by CITATION_MAX_COST_USD (0.30 here) and the daily and monthly budgets. Nothing is stored outside this process's memory.
@@ -36,6 +37,7 @@ const fast = args.indexOf('--fast') !== -1;
 const useRedis = args.indexOf('--redis') !== -1;   // the store named by UPSTASH_REDIS_REST_* / KV_REST_API_* instead of memory
 const citation = args.indexOf('--citation') !== -1;  // citation questions on, and three seeded reports that show them
 const real = args.indexOf('--real') !== -1;
+const readiness = args.indexOf('--readiness') !== -1;  // a stand-in State of AI Readiness PDF in the store, so the report form and download links work
 const noMail = args.indexOf('--no-mail') !== -1;   // leave the mail variables unset, as in production today
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.woff2': 'font/woff2' };
@@ -127,6 +129,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 (async function () {
+  if (readiness) { const R = require('../lib/readiness.js'); const F = require('./fixtures/readiness-fixtures.js'); await R.putPdf(store.adapter, F.fakePdf(), F.NAME); console.log('  readiness: a stand-in PDF is stored; open /research/state-of-ai-readiness'); }
   // One finished report from the frozen sample, so the report page can be looked at straight away.
   const sample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'pro', 'sample-report.json'), 'utf8'));
   const ord = await store.createOrder();

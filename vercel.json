@@ -67,6 +67,21 @@
       ]
     },
     {
+      "source": "/readiness/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/api/readiness",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
       "source": "/app/pro-start(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
@@ -88,6 +103,9 @@
     { "source": "/api/waitlist", "destination": "/api/pro?a=waitlist" },
     { "source": "/pro/welcome", "destination": "/api/pro?a=welcomepage" },
     { "source": "/waitlist/remove/:token", "destination": "/api/pro?a=waitremove&token=:token" },
+    { "source": "/api/readiness", "destination": "/api/pro?a=readiness" },
+    { "source": "/readiness/download/:token([0-9a-f]{72})", "destination": "/api/pro?a=readinessget&token=:token" },
+    { "source": "/readiness/remove/:token", "destination": "/api/pro?a=readinessremove&token=:token" },
     { "source": "/api/pro/:action(start|order|step|status|email|feedback|webhook|welcome)", "destination": "/api/pro?a=:action" },
     { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
     { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }

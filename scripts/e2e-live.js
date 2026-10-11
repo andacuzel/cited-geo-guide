@@ -41,7 +41,7 @@ if (!S.hasRedisEnv()) { out('No Upstash credentials found (environment or .env.l
 
 const store = S.createStore(S.adapterFromEnv());
 const adapter = store.adapter;
-const created = { tokens: [], jobs: [], waitlistIds: [], feedback: [] };
+const created = { tokens: [], jobs: [], waitlistIds: [], feedback: [], readinessIds: [] };
 const Stats = require('../lib/pro-stats.js');
 const bumps = {}; // the daily counters this run moved, put back at the end
 const bump = (m, n) => { bumps[m] = (bumps[m] || 0) + (n === undefined ? 1 : n); };
@@ -56,15 +56,18 @@ async function http(method, path, body, extra) {
 async function cleanup() {
   const keys = [];
   for (const id of created.waitlistIds) keys.push('wl:e:' + id, 'wl:mail:' + id);
+  for (const id of created.readinessIds) keys.push('sr:e:' + id, 'sr:n:' + id + ':' + Stats.dayOf());
   for (const id of created.feedback) keys.push('pro:feedback:' + id);
   for (const tok of created.tokens) keys.push('pro:order:' + tok, 'pro:order-claim:' + tok);
   for (const id of created.jobs) keys.push('pro:job:' + id, 'pro:job:' + id + ':pages', 'pro:job:' + id + ':lock', 'pro:job-order:' + id);
   for (const k of keys) await adapter.del(k);
   for (const id of created.waitlistIds) await adapter.srem('wl:index', id);
+  for (const id of created.readinessIds) await adapter.srem('sr:index', id);
   for (const id of created.feedback) await adapter.srem('pro:feedback-index', id);
   for (const tok of created.tokens) await adapter.srem('pro:orders', tok);
   for (const m of Object.keys(bumps)) if (bumps[m]) await adapter.hincrby('pro:stats:' + Stats.dayOf(), m, -bumps[m]);
   if (bumps.waitlist_emails) await adapter.decr('wl:cap:' + Stats.dayOf());
+  if (bumps.readiness_emails) await adapter.decr('sr:cap:' + Stats.dayOf());
   let left = 0; for (const k of keys) left += await adapter.exists(k);
   return { n: keys.length, left: left };
 }
@@ -182,6 +185,41 @@ async function cleanup() {
   for (const wid of found) { await adapter.del('wl:e:' + wid); await adapter.del('wl:mail:' + wid); await adapter.srem('wl:index', wid); }
   let still = 0; for (const wid of found) still += await adapter.exists('wl:e:' + wid);
   t('the test signup is removed again', found.length === 1 && still === 0);
+
+  // 6d. the State of AI Readiness report: ONE real request with the project's own address (it gets the real email with the signed link
+  // if the deployment can send mail), checked in the database, then removed again. The signed download and removal links need the
+  // deployment's secret, which this machine does not hold: they are covered with a known secret by scripts/test-readiness.js, and the live smoke
+  // checks that a forged link is the generic 404 and that no public path serves the PDF.
+  const avail = await http('GET', '/api/readiness');
+  if (!avail.json || avail.json.available !== true) {
+    out('  skipped: the report is not open on the deployment (no PDF stored, or switched off): node scripts/pro-admin.js readiness-info');
+  } else {
+    const srPre = [];
+    for (const rid of await adapter.smembers('sr:index')) { const h = await adapter.hgetall('sr:e:' + rid); if (h && h.email === CONTACT.email) srPre.push(rid); }
+    t('no report-list record for the project address exists before the test', srPre.length === 0, String(srPre.length));
+    const noBox = await http('POST', '/api/readiness', { email: CONTACT.email, sendReport: false });
+    t('a request without the required box is a 400 that names the field and stores nothing', noBox.status === 400 && noBox.json && !!noBox.json.fields.sendReport);
+    const before = await Stats.read(store, 1);
+    const trap = await http('POST', '/api/readiness', { email: CONTACT.email, sendReport: true, company_fax: 'x' });
+    let trapped = 0;
+    for (const rid of await adapter.smembers('sr:index')) { const h = await adapter.hgetall('sr:e:' + rid); if (h && h.email === CONTACT.email) trapped++; }
+    t('the honeypot answers like a signup and stores nothing', trap.status === 200 && trapped === 0, trap.status + ' ' + trapped);
+    const r1 = await http('POST', '/api/readiness', { email: CONTACT.email, sendReport: true, updates: false });
+    if (r1.status === 200) bump('readiness_signups');
+    t('the request answers 200 with the one message and says nothing about the address', r1.status === 200 && r1.text.indexOf('@') === -1 && r1.json.message === trap.json.message, r1.status + ' ' + r1.text.slice(0, 90));
+    let sr = [];
+    for (const rid of await adapter.smembers('sr:index')) { const h = await adapter.hgetall('sr:e:' + rid); if (h && h.email === CONTACT.email) sr.push(rid); }
+    sr.forEach((x) => created.readinessIds.push(x));
+    t('exactly one record exists, with the date, the consent version and the second box unticked (0), kept 12 months', sr.length === 1 && (await adapter.hget('sr:e:' + sr[0], 'updates')) === '0' && (await adapter.hget('sr:e:' + sr[0], 'consentVersion')) !== null && (await adapter.ttl('sr:e:' + sr[0])) > 364 * 86400);
+    const after = await Stats.read(store, 1);
+    const d = (m) => after[0].counts[m] - before[0].counts[m];
+    if (liveMail) { bump('readiness_emails'); t('one report email was handed to the provider and counted (the address counter is 1)', d('readiness_emails') === 1 && sr.length === 1 && (await adapter.get('sr:n:' + sr[0] + ':' + Stats.dayOf())) === '1', String(d('readiness_emails'))); out('      one real email with a signed link was sent to the project contact address: open it once, press the link, and check the PDF opens (docs/launch-checklist.md)'); }
+    else t('no mail provider on the deployment: no email counted', d('readiness_emails') === 0);
+    t('the signed download address of an unknown token is the generic 404 on the live site', (await http('GET', '/readiness/download/' + 'a'.repeat(72))).status === 404);
+    for (const rid of sr) { await adapter.del('sr:e:' + rid); await adapter.srem('sr:index', rid); }
+    let left = 0; for (const rid of sr) left += await adapter.exists('sr:e:' + rid);
+    t('the test request is removed again', sr.length === 1 && left === 0);
+  }
 
   // 7. clean up
   const c = await cleanup();

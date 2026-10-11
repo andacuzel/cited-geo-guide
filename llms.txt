@@ -18,6 +18,7 @@
 
 - [Benchmarks](https://getcitehound.com/benchmarks): scan results for six categories of well-known sites, with the sample size and scan date on every page.
 - [Research](https://getcitehound.com/research): reports on what we find when we scan real sites.
+- [State of AI Readiness](https://getcitehound.com/research/state-of-ai-readiness): four findings from 219 well-known sites scanned 29 to 31 July 2026, with the full report by email. It measures readiness, not presence in AI answers.
 - [Citation tracking](https://getcitehound.com/citation-tracking): in early access through the Pro waitlist on the Pro page. We ask one model the buying questions in a category, repeat each question, and record whether it names a brand.
 
 ## Tools

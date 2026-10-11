@@ -88,7 +88,7 @@ t('nothing is kept in the browser by the Pro pages', !/localStorage|sessionStora
   ['waitlist.js', 'pro-cta.js', 'app/pro-feedback.js', 'lib/waitlist-mail.js'].forEach((f) => t('no analytics or tracking code in ' + f, !/gtag|googletagmanager|plausible|segment\.|hotjar|fbq\(|_vercel\/insights|vercel\/analytics|mixpanel|posthog|sendBeacon/i.test(read(f))));
   t('the waitlist never reaches the sitemap, robots.txt, llms.txt or the MCP server by its removal path', !/waitlist\/remove|api\/waitlist/.test(['sitemap.xml', 'robots.txt', 'llms.txt', 'api/mcp.js', 'lib/mcp-content.js'].filter(exists).map(read).join('\n')));
   t('the public sample report has no feedback form (only a live report has one)', !/id="fbForm"/.test(read('sample-report.html')));
-  t('privacy.html describes the waitlist: what is stored, 12 months, the removal link and Resend', /The Pro waitlist/.test(read('privacy.html')) && /12 months/.test(read('privacy.html')) && /Remove me from the list/.test(read('privacy.html')) && /Resend delivers two kinds of message/.test(read('privacy.html')));
+  t('privacy.html describes the waitlist: what is stored, 12 months, the removal link and Resend (three kinds of message: the report link, the waitlist confirmation, the readiness PDF link)', /The Pro waitlist/.test(read('privacy.html')) && /12 months/.test(read('privacy.html')) && /Remove me from the list/.test(read('privacy.html')) && /Resend delivers three kinds of message/.test(read('privacy.html')));
   t('the Pro CSS version is the same everywhere it is written', (() => { const v = require('../lib/pro-report-page.js').CSS_VERSION; return ['index.html', 'pro.html', 'privacy.html', 'sample-report.html', 'app/pro-start.html'].every((f) => read(f).indexOf('styles.css?v=' + v) !== -1); })());
 }
 

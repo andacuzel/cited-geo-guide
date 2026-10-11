@@ -1,0 +1,80 @@
+{
+  "title": "State of AI Readiness: Launch Edition 2026",
+  "downloadName": "Citehound-State-of-AI-Readiness-Launch-Edition-2026.pdf",
+  "pages": 8,
+  "honestFraming": "The score measures AI readiness: crawler access and on-page signals. It does not measure whether any assistant names or cites a site.",
+  "sample": {
+    "scored": 219,
+    "attempted": 278,
+    "notScored": 59,
+    "notScoredPct": "21.2%",
+    "scanWindow": "29 to 31 July 2026",
+    "categories": 6,
+    "checks": 16
+  },
+  "findings": [
+    {
+      "id": "typical",
+      "headline": "The typical site scores 73 out of 100.",
+      "body": "The mean is 73 and the median 75. The middle half of the 219 scored sites sit between 67 and 82, and the range runs from 30 to 100.",
+      "date": "Scanned 29 to 31 July 2026"
+    },
+    {
+      "id": "b2b-consumer",
+      "headline": "B2B software scored higher than consumer categories, 76 against 69.",
+      "body": "In this sample the three B2B software categories (125 sites) average 76.4 and the three consumer-facing ones (94 sites) 68.6, a gap of 7.8 points. Differences of a point or two between single categories are not worth reading into.",
+      "date": "Scanned 29 to 31 July 2026"
+    },
+    {
+      "id": "schema",
+      "headline": "The most common gap is homepage content schema, missing from 76.7% of sites.",
+      "body": "No Article, FAQ, Product or similar type on the homepage. The scan reads only the homepage, so a missing type there is not by itself a defect. It is where the most points were left on the table.",
+      "date": "Scanned 29 to 31 July 2026"
+    },
+    {
+      "id": "crawlers",
+      "headline": "14 of 219 sites (6.4%) block at least one of ten tracked AI crawlers outright.",
+      "body": "One site blocks all ten. For most sites, an ordinary Disallow rule on a path is what applies to AI crawlers, which is a limit, not a block.",
+      "date": "Scanned 29 to 31 July 2026"
+    }
+  ],
+  "method": [
+    "219 hand-picked, well-known websites in six categories: CRM software, cybersecurity, DevTools and cloud, DTC brands, consumer apps, and hospitality and travel.",
+    "One scan of each homepage and its public files (robots.txt, llms.txt, the sitemap), with the 16 checks of the public methodology: discoverability 40 points, technical 20, content and trust 40.",
+    "CRM software and DTC brands were scanned on 29 July 2026, the other four categories on 31 July. 278 sites were attempted; the 59 that could not be scored (21.2%) are left out of every figure."
+  ],
+  "limits": [
+    "Presence in AI answers. The scan measures readiness, not what an assistant says. No number links to citations, answers or traffic.",
+    "The web, or an industry. The sites are hand-picked, so \"sites in our sample\" is the widest claim the numbers support. There are no confidence intervals or significance claims.",
+    "Cause and effect. A check is worth some points on our scale. That says nothing about what fixing it changes outside the score.",
+    "A trend. Each site was scanned once, on three days in July. Nothing here is rising or falling.",
+    "Sites that could not be read. 59 of 278 are missing from every figure, 43 because robots.txt could not be read. The averages describe sites our scanner could read."
+  ],
+  "figures": [
+    { "label": "sites scored", "shown": "219", "path": "overall.n", "value": 219 },
+    { "label": "sites attempted", "shown": "278", "path": "access.attempted", "value": 278 },
+    { "label": "sites not scored", "shown": "59", "path": "access.notScored", "value": 59 },
+    { "label": "share not scored", "shown": "21.2%", "path": "access.notScoredShare.pct", "value": 21.2 },
+    { "label": "mean score", "shown": "73", "path": "overall.score.mean", "value": 73 },
+    { "label": "median score", "shown": "75", "path": "overall.score.median", "value": 75 },
+    { "label": "first quartile", "shown": "67", "path": "overall.score.q1", "value": 67 },
+    { "label": "third quartile", "shown": "82", "path": "overall.score.q3", "value": 82 },
+    { "label": "lowest score", "shown": "30", "path": "overall.score.min", "value": 30 },
+    { "label": "highest score", "shown": "100", "path": "overall.score.max", "value": 100 },
+    { "label": "B2B software mean, whole number", "shown": "76", "path": "tracks.B2B SaaS.score.mean", "round": 0, "value": 76 },
+    { "label": "consumer mean, whole number", "shown": "69", "path": "tracks.Consumer & e-commerce.score.mean", "round": 0, "value": 69 },
+    { "label": "B2B software mean, one decimal", "shown": "76.4", "path": "tracks.B2B SaaS.score.mean", "round": 1, "value": 76.4 },
+    { "label": "consumer mean, one decimal", "shown": "68.6", "path": "tracks.Consumer & e-commerce.score.mean", "round": 1, "value": 68.6 },
+    { "label": "B2B software sites", "shown": "125", "path": "tracks.B2B SaaS.n", "value": 125 },
+    { "label": "consumer sites", "shown": "94", "path": "tracks.Consumer & e-commerce.n", "value": 94 },
+    { "label": "gap in points", "shown": "7.8", "path": "categoryDifferences.trackMeanDifference.points", "value": 7.8 },
+    { "label": "sites without content schema on the homepage", "shown": "76.7%", "path": "checks.rankedByFailure.0.failRatePct", "value": 76.7 },
+    { "label": "sites blocking at least one crawler", "shown": "14", "path": "overall.crawlers.sitesBlockingAtLeastOne.n", "value": 14 },
+    { "label": "share blocking at least one crawler", "shown": "6.4%", "path": "overall.crawlers.sitesBlockingAtLeastOne.pct", "value": 6.4 },
+    { "label": "sites blocking all tracked crawlers", "shown": "One site blocks all ten", "path": "overall.crawlers.sitesBlockingEveryCrawler.n", "value": 1 },
+    { "label": "crawlers tracked", "shown": "ten", "path": "overall.crawlers.trackedCrawlers", "value": 10 },
+    { "label": "robots.txt unreadable", "shown": "43", "path": "access.robotsUnreachable.n", "value": 43 },
+    { "label": "checks", "shown": "16", "path": "meta.scoring.checks", "value": 16 },
+    { "label": "categories", "shown": "six", "path": "categoryDifferences.reportableCategories", "value": 6 }
+  ]
+}

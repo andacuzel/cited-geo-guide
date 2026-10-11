@@ -198,6 +198,29 @@ async function waitForDeployment(sha) {
     const r = await get(p, { redirect: 'follow' });
     t(p + ' (the old internal pages) are not deployed: 404', r.status === 404, String(r.status));
   }
+  // The State of AI Readiness report: the public page is indexable and in the sitemap; the endpoints answer as designed; a forged link is the generic 404.
+  // No check here creates an accepted signup (a request that is refused or caught by the honeypot never uses the six-an-hour quota).
+  const srPage = await get('/research/state-of-ai-readiness');
+  t('/research/state-of-ai-readiness is 200, indexable, with the form and its two boxes', srPage.status === 200 && !/noindex/i.test(srPage.headers.get('x-robots-tag') || '') && !/name="robots" content="[^"]*noindex/.test(srPage.text) && /id="srForm"/.test(srPage.text) && /<span>Send me the report<\/span>/.test(srPage.text) && /Also send occasional Citehound updates/.test(srPage.text), String(srPage.status));
+  const sm = await get('/sitemap.xml');
+  t('the report page is in the sitemap, and no /readiness address is', /\/research\/state-of-ai-readiness</.test(sm.text) && !/\/readiness\//.test(sm.text));
+  t('robots.txt does not mention the report endpoints', !/readiness/i.test((await get('/robots.txt')).text.replace(/state-of-ai-readiness/gi, '')));
+  const srCfg = await get('/api/readiness');
+  t('GET /api/readiness answers whether the report is open (a boolean), noindex', srCfg.status === 200 && srCfg.text.indexOf('@') === -1 && typeof JSON.parse(srCfg.text).available === 'boolean' && /noindex/.test(srCfg.headers.get('x-robots-tag') || ''), srCfg.text.slice(0, 80));
+  const srNoBox = await get('/api/readiness', { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ email: 'smoke@example.com', sendReport: false }) });
+  t('a request without the required box is a 400 naming the field', srNoBox.status === 400 && /sendReport/.test(srNoBox.text), String(srNoBox.status));
+  const srTrap = await get('/api/readiness', { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: JSON.stringify({ email: 'smoke@example.com', sendReport: true, company_fax: 'x' }) });
+  t('the honeypot answers 200 like a signup and stores nothing', srTrap.status === 200 && JSON.parse(srTrap.text).ok === true);
+  const srForeign = await get('/api/readiness', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://evil.example', 'User-Agent': 'citehound-smoke/1' }, body: '{}' });
+  t('a foreign origin is refused (403)', srForeign.status === 403, String(srForeign.status));
+  for (const p of ['/readiness/download/' + 'a'.repeat(72), '/readiness/download/' + '0'.repeat(72), '/readiness/remove/' + 'b'.repeat(64), '/readiness/remove/nonsense']) {
+    const r = await get(p);
+    t(p.replace(/(.{40}).*/, '$1...') + ' (a forged link) is a 404 and never the PDF', r.status === 404 && !/%PDF/.test(r.text.slice(0, 8)), String(r.status));
+    if (/^\/readiness\/(download|remove)\/[ab0]{64,72}$/.test(p)) t('... with noindex, no referrer and no-store', /noindex/.test(r.headers.get('x-robots-tag') || '') && r.headers.get('referrer-policy') === 'no-referrer' && /no-store/.test(r.headers.get('cache-control') || ''));
+  }
+  const srPriv = await get('/privacy');
+  t('/privacy has the State of AI Readiness section with the 12 months, the 30 days and the three a day', /The State of AI Readiness report/.test(srPriv.text) && /after 12 months/.test(srPriv.text) && /works for 30 days/.test(srPriv.text) && /at most three report emails a day/.test(srPriv.text));
+  t('/llms.txt lists the report page', /state-of-ai-readiness/.test((await get('/llms.txt')).text));
   // Repository files are not part of the site: the same 404 page as an address that does not exist (middleware.js).
   const missing = await get('/this-page-does-not-exist-xyz', { redirect: 'follow' });
   for (const p of ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/CLAUDE.md', '/README.md', '/docs/pro.md', '/docs/env.md', '/docs', '/scripts/run-gates.js', '/scripts', '/vercel.json', '/local', '/local/launch-report/stats.json', '/package.json', '/package-lock.json', '/lib/pro-api.js', '/lib/waitlist.js', '/content/tools.json', '/config/domain-rules.json', '/site.config.json', '/middleware.js', '/.vercelignore', '/data/crm-raw.json', '/domains/crm.txt']) {

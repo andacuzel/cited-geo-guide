@@ -336,6 +336,25 @@ select.field { appearance: auto; cursor: pointer; }
   .wl-bar__link span { display: none; }
 }
 
+/* ----------------------------- State of AI Readiness page (/research/state-of-ai-readiness) ----------------------------- */
+.sr-section { padding-bottom: 64px; }
+.sr-findings { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.sr-finding { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 24px 22px; min-width: 0; }
+.sr-finding__date { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); }
+.sr-finding__headline { font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.2; color: var(--ink); margin: 10px 0 12px; }
+.sr-finding__body { color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; }
+.sr-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
+.sr-h2 { font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.2; color: var(--ink); margin-bottom: 14px; }
+.sr-list { margin: 0; padding-left: 20px; display: grid; gap: 12px; color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; }
+.sr-note { margin-top: 28px; }
+.sr-unavailable { margin: 0 0 16px; }
+@media (max-width: 700px) {
+  .sr-findings { grid-template-columns: minmax(0, 1fr); }
+  .sr-cols { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .sr-finding { padding: 20px 18px; }
+  .sr-finding__headline { font-size: 22px; }
+}
+
 /* ----------------------------- Sections ----------------------------- */
 
 .section__inner {
