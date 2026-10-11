@@ -79,6 +79,29 @@ const pages = htmlFiles('', []);
   const c = read('docs/domain-day.md');
   t('docs/domain-day.md has a status section, states the move happened, and marks what it cannot know as unverified', /## Status on 11 October 2026/.test(c) && /getcitehound\.com/.test(c) && (c.match(/unverified/gi) || []).length >= 5);
 }
+{
+  // The waitlist bar: homepage only, sessionStorage in try/catch, no cookie, links to /pro.
+  const home = read('index.html');
+  t('the homepage has the Pro waitlist bar: the words, a link to /pro, a close button', /id="wlBar"/.test(home) && /Citehound Pro is coming: join the waitlist/.test(home) && /href="\/pro#waitlist"/.test(home) && /class="wl-bar__close"[^>]*aria-label=/.test(home));
+  const script = (/<script>\(function\(\)\{var b=document\.getElementById\('wlBar'\)[\s\S]*?<\/script>/.exec(home) || [''])[0];
+  t('the bar script keeps its dismissal in sessionStorage, inside try/catch, and sets no cookie', /sessionStorage\.getItem/.test(script) && /sessionStorage\.setItem/.test(script) && (script.match(/try\{/g) || []).length >= 2 && !/cookie|localStorage|fetch|XMLHttpRequest|sendBeacon/.test(script));
+  t('no other page carries the bar', pages.filter((f) => f !== 'index.html' && /wlBar|wl-bar/.test(read(f))).length === 0);
+  const css = read('styles.css');
+  t('the bar does not animate or use a gradient (reduced motion has nothing to switch off), and is hidden when printed', !/\.wl-bar[^{]*\{[^}]*(animation|transition|gradient)/.test(css) && /\.rp-noprint, \.wl-bar \{ display: none !important; \}/.test(css));
+}
+{
+  // llms.txt: optional, low-cost, no demonstrated effect on Google, and nothing about whether a system reads it. No claim that it helps citations.
+  const claim = /curated map|tells AI systems what (?:the |a )?site|gives AI systems a|improve[sd]? (?:your )?(?:AI )?(?:citations|visibility|ranking)|(?:boost|increase)s? (?:your )?citations|llms\.txt[^.]{0,80}(?:helps|boosts|improves) (?:you|your|AI|models|rank|citation)/i;
+  const deployed = pages.filter((f) => !/^(local|docs|node_modules|app\/(report|crawl))/.test(f)).concat(['llms.txt', 'scanner.js', 'lib/scanner.js', 'api/mcp.js', 'content/mcp-copy.json', 'content/mcp-examples.json', 'lib/methodology.js', 'lib/report-render.js']);
+  const hits = deployed.filter((f) => claim.test(read(f).replace(/An emerging standard that gives AI systems a curated map of your content\./g, ''))).map((f) => f + ': ' + (claim.exec(read(f).replace(/An emerging standard that gives AI systems a curated map of your content\./g, '')) || [])[0]);
+  t('no deployed page, tool text or check text claims that llms.txt helps AI citations or Google results', hits.length === 0, hits.join('; '));
+  t('the scanner check says optional, low-cost, no demonstrated effect on Google', /Optional and low-cost to add\. No demonstrated effect on Google/.test(read('lib/scanner.js')));
+  const rr = read('lib/report-render.js');
+  t('a stored crawl that still carries the retired sentence is shown with the current one (the frozen sample data is not edited)', /RETIRED_WHY/.test(rr) && /curated map/.test(read('content/pro/sample-report.json')));
+  const sampleRaw = read('sample-report.html');
+  t('the sample report page shows the current llms.txt sentence, not the retired one', !/curated map/.test(sampleRaw));
+}
+
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');
 if (fails.length) { process.stderr.write('FAILED:\n  ' + fails.join('\n  ') + '\n'); process.exit(1); }

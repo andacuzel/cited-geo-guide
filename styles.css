@@ -317,6 +317,25 @@ select.field { appearance: auto; cursor: pointer; }
 .site-header--hero-navy.site-header--scrolled .site-nav__link:hover { color: var(--ink); border-color: var(--gold); }
 .site-header--hero-navy.site-header--scrolled .mobile-nav__fade { background: rgba(238, 241, 245, 0.97); }
 
+/* ----------------------------- Pro waitlist bar (homepage only) -----------------------------
+   A slim white strip above the header, in the page flow (it scrolls away; the header stays sticky). White, not a new
+   surface colour. Dismissed for the session by the inline script in index.html (sessionStorage, no cookie). It does not
+   animate, so there is nothing for reduced motion to switch off. */
+.wl-bar { background: var(--white); border-bottom: 1px solid var(--line); }
+.wl-bar[hidden] { display: none; }
+.wl-bar__inner { max-width: var(--content-width); margin: 0 auto; padding: 0 32px; min-height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wl-bar__link { display: inline-flex; align-items: center; min-height: 40px; font-size: 14px; line-height: 1.3; color: var(--ink); text-decoration: none; }
+.wl-bar__link span { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold-deep); margin-right: 10px; }
+.wl-bar__link u { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--gold); }
+.wl-bar__link:hover u { color: var(--gold-deep); }
+.wl-bar__close { flex: none; width: 40px; height: 40px; margin-right: -10px; border: 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: 22px; line-height: 1; cursor: pointer; border-radius: var(--radius-sm); }
+.wl-bar__close:hover { color: var(--ink); }
+@media (max-width: 700px) {
+  .wl-bar__inner { padding: 0 16px; }
+  .wl-bar__link { font-size: 13px; }
+  .wl-bar__link span { display: none; }
+}
+
 /* ----------------------------- Sections ----------------------------- */
 
 .section__inner {
@@ -3087,7 +3106,7 @@ code {
   .rp-page > summary { flex-direction: column; gap: 4px; }
 }
 @media print {
-  .rp-appbar, .site-header, .mobile-nav, .site-footer, .skip-link, .toast, .rp-noprint { display: none !important; }
+  .rp-appbar, .site-header, .mobile-nav, .site-footer, .skip-link, .toast, .rp-noprint, .wl-bar { display: none !important; }
   body { background: var(--white); }
   .rp-page-wrap { padding: 0; max-width: none; }
   .rp-layout { display: block; }
