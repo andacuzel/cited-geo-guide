@@ -28,11 +28,12 @@
 const siteChrome = require('./site-chrome.js');
 
 const fs = require('fs');
+const siteFooter = require('../lib/site-footer.js');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 71; // bump when styles.css changes
+const CSS_VERSION = 72; // bump when styles.css changes
 const PLAYBOOKS = require('../lib/playbooks.js');
 const ICONS = require('../lib/icons.js');
 
@@ -114,7 +115,7 @@ function ensureChrome() {
     const before = s;
     if (DROPDOWN_RE.test(s)) s = s.replace(DROPDOWN_RE, function (m, ind) { return ind + NAV_LINK + '\n'; });
     if (MOBILE_TRACKS_RE.test(s)) s = s.replace(MOBILE_TRACKS_RE, function (m, ind) { return ind + NAV_LINK + '\n'; });
-    if (s.indexOf('<a href="/playbooks" class="site-nav__link">Playbooks</a>\n          <a href="/methodology"') === -1 && !/footer-links[\s\S]*?href="\/playbooks"/.test(s)) {
+    if (s.indexOf('<a href="/playbooks" class="site-nav__link">Playbooks</a>\n          <a href="/methodology"') === -1 && !/site-footer[\s\S]*?href="\/playbooks"/.test(s)) {
       s = s.replace(/\n([ \t]*)<a href="\/methodology" class="site-nav__link">Methodology<\/a>/, function (m, ind) {
         return '\n' + ind + NAV_LINK + '\n' + ind + '<a href="/methodology" class="site-nav__link">Methodology</a>';
       });
@@ -150,7 +151,6 @@ function shellParts() {
     favicon: grab(/<link rel="icon"[^>]*>/, 'favicon'),
     fonts: grab(/<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
     header: grab(/<header class="site-header">[\s\S]*?<\/header>/, 'header'),
-    footerNav: grab(/<nav class="site-nav footer-links"[\s\S]*?<\/nav>/, 'footer nav')
   };
 }
 
@@ -242,8 +242,7 @@ function build() {
     '    <div class="verticals">\n' + sections + '    </div>\n\n' +
     '    <section aria-label="Scan reminder">\n      <div class="section__inner">\n        <div class="scan-bridge">\n' +
     '          <p class="scan-bridge__text">Not sure which playbook fits?</p>\n          <a href="/" class="btn btn--primary">Scan your site free</a>\n        </div>\n      </div>\n    </section>\n\n' +
-    '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
+    '    ' + siteFooter.html('    ') + '\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
 }
 
@@ -285,7 +284,7 @@ function check() {
     const label = (nav) => (nav.match(/<a [^>]*>[^<]*<\/a>/g) || []).map((t) => t.replace(/<[^>]+>/g, '').trim());
     const dl = label(a[0]); const ml = label(b[0]);
     if (dl.join('|') !== ml.join('|').replace('B2B SaaS|Brands|Professionals|', '')) bad(rel + ': desktop and mobile nav labels differ: ' + dl.join(', ') + ' / ' + ml.join(', '));
-    if (!/footer-links[\s\S]*?href="\/playbooks"/.test(s)) bad(rel + ': footer has no Playbooks link');
+    if (!/site-footer[\s\S]*?href="\/playbooks"/.test(s)) bad(rel + ': footer has no Playbooks link');
   });
   if (Object.keys(heads).length > 1) bad('header markup is not identical on every page (' + Object.keys(heads).length + ' variants)');
 

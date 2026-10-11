@@ -26,6 +26,7 @@
 const siteChrome = require('./site-chrome.js');
 
 const fs = require('fs');
+const siteFooter = require('../lib/site-footer.js');
 const path = require('path');
 const ICONS = require('../lib/icons.js');
 
@@ -33,7 +34,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 71;
+const CSS_VERSION = 72;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 // Early access goes through the Pro waitlist on /pro; pro-cta.js sends the button to PRO_CHECKOUT_URL when that is set.
 const WAITLIST = '/pro#waitlist';
@@ -148,7 +149,6 @@ function shellParts() {
     fonts: grab(about, /<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
     sceneSnippet: grab(index, /<script>if \(window\.IntersectionObserver && window\.CSS && CSS\.registerProperty[^<]*<\/script>/, 'the scene-anim head snippet'),
     header: grab(about, /<header class="site-header">[\s\S]*?<\/header>/, 'header'),
-    footerNav: grab(about, /<nav class="site-nav footer-links"[\s\S]*?<\/nav>/, 'footer nav'),
     scene: wrap
   };
 }
@@ -267,8 +267,7 @@ function build(sample) {
     '        <p class="ct-banner__note ct-banner__note--band">A report can also include a dated citation check on a sample of the questions.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
-    '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n' +
+    '    ' + siteFooter.html('    ') + '\n\n' +
     '  </main>\n\n  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
     '  <script src="pro-cta.js?v=1" defer></script>\n  <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove(\'scene-anim\')"></script>\n  <script>if (window.matchMedia && matchMedia(\'(max-width: 640px)\').matches) { var a = document.querySelector(\'.ct-all\'); if (a) a.open = false; }</script>\n  <script src="nav.js?v=3"></script>\n</body>\n</html>\n';
 }

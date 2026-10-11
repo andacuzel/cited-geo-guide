@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=71" />
+  <link rel="stylesheet" href="styles.css?v=72" />
 
   <script type="application/ld+json">
   {
@@ -277,21 +277,51 @@
       </div>
     </section>
 
-    <footer class="site-footer" aria-label="Footer">
+    <footer class="site-footer site-footer--navy" aria-label="Footer">
       <div class="section__inner">
-        <nav class="site-nav footer-links" aria-label="More">
-          <a href="/playbooks" class="site-nav__link">Playbooks</a>
-          <a href="/methodology" class="site-nav__link">Methodology</a>
-          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
-          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
-          <a href="/beyond-technical" class="site-nav__link">Beyond technical</a>
-          <a href="/trust" class="site-nav__link">Trust</a>
-          <a href="/changelog" class="site-nav__link">Changelog</a>
-          <a href="/privacy" class="site-nav__link">Privacy</a>
-          <a href="/terms" class="site-nav__link">Terms</a>
-          <a href="mailto:hey@getcitehound.com" class="site-nav__link">Contact</a>
-        </nav>
-        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>
+        <div class="sf-grid">
+          <div class="sf-brand">
+            <a href="/" class="sf-logo" aria-label="Citehound, back to homepage"><span class="sf-logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="sf-logo__mark">Citehound</span></a>
+            <p class="sf-tag">A scanner for AI readiness, built for teams navigating the shift from search to answers.</p>
+          </div>
+          <nav class="sf-col" aria-labelledby="sf-product">
+            <p class="sf-h" id="sf-product">Product</p>
+            <ul class="sf-list">
+              <li><a href="/">Scanner</a></li>
+              <li><a href="/compare">Compare two sites</a></li>
+              <li><a href="/tools">Tools</a></li>
+              <li><a href="/playbooks">Playbooks</a></li>
+              <li><a href="/pro">Citehound Pro</a></li>
+              <li><a href="/sample-report">Sample Pro report</a></li>
+              <li><a href="/mcp">MCP server</a></li>
+              <li><a href="/agentic-commerce">Agentic commerce</a></li>
+              <li><a href="/citation-tracking">Citation tracking</a></li>
+            </ul>
+          </nav>
+          <nav class="sf-col" aria-labelledby="sf-research">
+            <p class="sf-h" id="sf-research">Research</p>
+            <ul class="sf-list">
+              <li><a href="/research/state-of-ai-readiness">State of AI Readiness</a></li>
+              <li><a href="/research/llms-txt-adoption-2026">llms.txt adoption study</a></li>
+              <li><a href="/research/crawler-access-2026">Crawler access study</a></li>
+              <li><a href="/research/case-study-agaone">Case study</a></li>
+              <li><a href="/benchmarks">Benchmarks</a></li>
+              <li><a href="/methodology">Methodology</a></li>
+              <li><a href="/beyond-technical">Beyond technical</a></li>
+            </ul>
+          </nav>
+          <nav class="sf-col" aria-labelledby="sf-company">
+            <p class="sf-h" id="sf-company">Company</p>
+            <ul class="sf-list">
+              <li><a href="/about">About</a></li>
+              <li><a href="/trust">Trust</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/terms">Terms</a></li>
+              <li><a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a></li>
+            </ul>
+          </nav>
+        </div>
+        <p class="sf-legal">© 2026 Citehound</p>
       </div>
     </footer>
 

@@ -13,7 +13,7 @@
    the history of HEAD and that each entry's date equals the date of its newest
    ref.
 
-     node scripts/generate-changelog.js           write the page and the sitemap entry
+     node scripts/generate-changelog.js           write the page (noindex, not in the sitemap)
      node scripts/generate-changelog.js --check   exit 1 on any mismatch
    ===================================================================== */
 
@@ -29,7 +29,7 @@ const icons = require('../lib/icons.js');
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'content', 'changelog.json');
 const PAGE = path.join(ROOT, 'changelog.html');
-const CSS_VERSION = 71;
+const CSS_VERSION = 72;
 const esc = shell.esc;
 
 const git = (args) => cp.execFileSync('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
@@ -46,18 +46,20 @@ function build(data) {
     title: 'Citehound — Changelog: What Changed on the Site',
     description: desc,
     path: '/changelog',
+    robots: 'noindex, follow',   // 11 Oct 2026: kept at its address but out of search, the footer, the sitemap and llms.txt until the owner decides
     cssVersion: CSS_VERSION,
     jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Citehound changelog', description: desc, url: site.baseUrl + '/changelog' }],
     body: body
   });
 }
 
-function ensureSitemap() {
+// The page is noindex and not in the sitemap (owner's decision, 11 Oct 2026); this takes an older entry out.
+function removeFromSitemap() {
   const file = path.join(ROOT, 'sitemap.xml');
   const xml = fs.readFileSync(file, 'utf8');
-  const loc = site.baseUrl + '/changelog';
-  if (xml.indexOf('<loc>' + loc + '</loc>') !== -1) return false;
-  fs.writeFileSync(file, xml.replace('</urlset>', '  <url>\n    <loc>' + loc + '</loc>\n  </url>\n</urlset>'), 'utf8');
+  const next = xml.replace(/\n?  <url>\n    <loc>[^<]*\/changelog<\/loc>\n  <\/url>/, '');
+  if (next === xml) return false;
+  fs.writeFileSync(file, next, 'utf8');
   return true;
 }
 
@@ -88,7 +90,8 @@ function main() {
   if (process.argv.indexOf('--check') !== -1) {
     const errors = verify(data);
     if (!fs.existsSync(PAGE) || fs.readFileSync(PAGE, 'utf8') !== html) errors.push('changelog.html is out of date; run node scripts/generate-changelog.js');
-    if (fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').indexOf('<loc>' + site.baseUrl + '/changelog</loc>') === -1) errors.push('sitemap.xml has no /changelog');
+    if (fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').indexOf('/changelog</loc>') !== -1) errors.push('sitemap.xml must not list /changelog (the page is noindex)');
+    if (!/name="robots" content="noindex, follow"/.test(html)) errors.push('changelog.html must be noindex');
     if ((html.match(/<h1[ >]/g) || []).length !== 1) errors.push('changelog.html needs exactly one h1');
     if (errors.length) { errors.forEach((m) => console.error('FAIL: ' + m)); process.exit(1); }
     console.log('OK: ' + data.entries.length + ' changelog entries; every ref is a commit on this history and every date is the date of its newest ref; changelog.html is current');
@@ -97,7 +100,7 @@ function main() {
   const errors = verify(data);
   if (errors.length) { errors.forEach((m) => console.error('FAIL: ' + m)); process.exit(1); }
   fs.writeFileSync(PAGE, html, 'utf8');
-  console.log('changelog.html written; ' + (ensureSitemap() ? 'added to sitemap.xml' : 'already in sitemap.xml'));
+  console.log('changelog.html written; ' + (removeFromSitemap() ? 'removed from sitemap.xml' : 'not in sitemap.xml'));
 }
 
 if (require.main === module) main();

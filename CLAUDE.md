@@ -271,10 +271,13 @@ reveal animates opacity only (the durations are `fadeMs`), the one place a trans
 lift or scale · pill (999px) shapes · emoji in product surfaces ·
 centered body text · cream or warm backgrounds · Inter, Fraunces,
 IBM Plex, Space Grotesk, Sora, Manrope, DM Sans, Playfair, or
-JetBrains Mono · more than one full-bleed navy band per page — except
-the homepage, which has a navy hero field plus two navy bands mid-page
-(the MCP announcement, then Pro). Every other page keeps the
-single-band rule. No fourth navy surface, and no new surface colour.
+JetBrains Mono · more than one full-bleed navy band per page, apart from the footer (below) — except
+the homepage, which has a navy hero field plus three navy bands mid-page (the MCP
+announcement, Pro, and "Beyond technical", 11 Oct 2026, owner's request). Every other page keeps the
+single-band rule. No further navy surface, and no new surface colour. **The footer** is the one
+exception on every page: a full-bleed navy band (`--navy-950`) written by `lib/site-footer.js`
+(`scripts/site-footer.js --check` is a gate: one footer everywhere, links only to pages that exist, none to
+/changelog). The "Beyond technical" band sits between light sections, never against the navy footer.
 
 **Gold:** `--gold` is a surface in two places only: the contained commerce
 strip, and one full-bleed gold band, the citation teaser. That band sits
@@ -319,13 +322,18 @@ There are no "known failures". A red gate stops the push.
   Run it after committing (before committing, `node scripts/run-gates.js --precommit` compares the index instead of HEAD).
 - Never trust a read right after a write on this machine (see the repository location note below). Stage with a check that
   two reads agree, and run the gates on the committed bytes.
-- Push to `main` only with every gate green, never with force. Then run `npm run smoke` (`scripts/smoke-live.js`): it waits
-  for the deployment of HEAD to be Ready and checks the live site (pages, MCP `tools/list`, the generic Pro 404s and their
-  headers, the storage, nothing Pro in the sitemap, `robots.txt` or `llms.txt`). If a deploy fails or the smoke test fails,
-  fix forward or revert with a normal revert commit at once.
+- Push to `main` only with every gate green, never with force. Then run `npm run smoke` (`scripts/smoke-live.js`) **once, as the last step of
+  a session** (not after every commit): it waits for the deployment of HEAD to be Ready and checks the live site (pages, MCP `tools/list`, the
+  generic Pro 404s and their headers, the storage, nothing Pro in the sitemap, `robots.txt` or `llms.txt`). If a deploy fails or the smoke test
+  fails, fix forward or revert with a normal revert commit at once. Lighthouse against production is also one final pass per session; use a
+  local server for before/after comparisons.
+- **Real email and live end-to-end runs only on request.** `node scripts/e2e-live.js`, and any test that sends a real email (Resend to
+  `hey@getcitehound.com`), run ONLY when the owner explicitly asks for them in the prompt. Default verification is `npm run gates` plus the tests
+  with the fake mail provider. A change that does not touch the mail flow never triggers an e2e run. Reason: the runs waste time, and the burst of
+  automated traffic made Vercel answer 403 "Security Checkpoint" to this machine for about ten minutes (11 Oct 2026).
 - `npm run test:real-kv` (`scripts/test-real-kv.js`) and `node scripts/e2e-live.js` need the Upstash credentials and write to the
-  real database under a cleaned-up prefix or with cleaned-up keys. They are run by hand when `lib/pro-store.js` or the Pro
-  flow changes, not in the gate list.
+  real database under a cleaned-up prefix or with cleaned-up keys. They are not in the gate list and run only when the owner asks
+  (`e2e-live.js` also sends real email: see the rule above).
 
 **Repository location.** This repository must not live inside iCloud Drive (`~/Desktop` and `~/Documents` can be synced). The
 file provider returns stale or truncated reads right after a write, and that has corrupted commits: a truncated `vercel.json`

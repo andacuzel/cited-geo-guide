@@ -165,16 +165,16 @@ function spliceIntoIndex(html, block) {
     return html.slice(0, startIdx) + block + html.slice(endIdx + END_MARKER.length);
   }
 
-  const footerRe = /<footer class="site-footer"/;
+  const footerRe = /<footer class="site-footer/;
   if (footerRe.test(html)) {
-    return html.replace(footerRe, block + '\n\n      <footer class="site-footer"');
+    return html.replace(footerRe, block + '\n\n      <footer class="site-footer');
   }
 
   if (html.indexOf('</main>') !== -1) {
     return html.replace('</main>', '  ' + block + '\n\n    </main>');
   }
 
-  throw new Error('Could not find BENCHMARKS markers, <footer class="site-footer">, or </main> in index.html.');
+  throw new Error('Could not find BENCHMARKS markers, <footer class="site-footer>, or </main> in index.html.');
 }
 
 function main() {

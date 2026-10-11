@@ -46,7 +46,7 @@ const norm = (s) => s.replace(/&rsquo;|&#8217;|’/g, "'").replace(/&amp;/g, '&'
 const textOf = (html) => norm(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<svg[\s\S]*?<\/svg>/g, ' ').replace(/<[^>]+>/g, ' '));
 
 const page = read('beyond-technical.html');
-const main = textOf((/<main id="main">([\s\S]*?)<footer class="site-footer"/.exec(page) || [])[1] || '');
+const main = textOf((/<main id="main">([\s\S]*?)<footer class="site-footer/.exec(page) || [])[1] || '');
 let at = 0, inOrder = true, missing = [];
 BRIEF.forEach((s) => { const i = main.indexOf(s, at); if (i === -1) { inOrder = false; missing.push(s.slice(0, 50)); } else at = i + s.length; });
 t('every sentence of the owner\'s text is on the page, in order (apostrophes and "prioritized" aside)', inOrder, missing.join(' | '));
@@ -60,22 +60,31 @@ t('the small print follows the button', /Request a content review<\/a>\s*<p clas
 t('the page is indexable, has a meta description of 120 to 160 characters, a canonical address', !/noindex/i.test(page) && /name="robots" content="index, follow"/.test(page) && (() => { const d = (/<meta name="description" content="([^"]*)"/.exec(page) || [])[1] || ''; return d.length >= 120 && d.length <= 160; })() && /<link rel="canonical" href="https:\/\/getcitehound\.com\/beyond-technical"/.test(page));
 t('it is in the sitemap and in llms.txt', /<loc>https:\/\/getcitehound\.com\/beyond-technical<\/loc>/.test(read('sitemap.xml')) && /\(https:\/\/getcitehound\.com\/beyond-technical\)/.test(read('llms.txt')));
 t('it is not in robots.txt, the Pro paths or the MCP server', !/beyond-technical/.test(read('robots.txt')) && !/beyond-technical/.test(read('api/mcp.js')));
-t('the footer of the page itself links to it', /<a href="\/beyond-technical" class="site-nav__link">Beyond technical<\/a>/.test(page));
+t('the footer of the page itself links to it', /<li><a href="\/beyond-technical">Beyond technical<\/a><\/li>/.test(page));
 const footers = ['index.html', 'about.html', 'privacy.html', 'terms.html', 'trust.html', 'pro.html', 'methodology.html', 'compare.html', 'tools/index.html', 'for-saas.html', 'research/index.html', 'benchmarks/index.html', 'mcp.html', 'changelog.html', 'sample-report.html', 'citation-tracking.html', 'playbooks.html', 'agentic-commerce.html', '404.html'];
-const lacking = footers.filter((f) => !/<a href="\/beyond-technical" class="site-nav__link">Beyond technical<\/a>/.test(read(f)));
+const lacking = footers.filter((f) => !/<li><a href="\/beyond-technical">Beyond technical<\/a><\/li>/.test(read(f)));
 t('the footer link is on the other pages', lacking.length === 0, lacking.join(', '));
 
 const home = read('index.html');
 const block = (/<!-- BEYOND:START -->[\s\S]*?<!-- BEYOND:END -->/.exec(home) || [''])[0];
 const bt = textOf(block);
-t('the homepage block has the heading, the line and the link, in that order, and nothing else', HOME.every((s, i) => bt.indexOf(s) !== -1 && (i === 0 || bt.indexOf(s) > bt.indexOf(HOME[i - 1]))) && bt.replace(HOME.join(' '), '').trim() === '', bt);
-t('the link goes to /beyond-technical', /<a class="bt-home__link" href="\/beyond-technical">Beyond technical<\/a>/.test(block));
-t('the block sits inside main, after the agentic commerce section and before the footer', home.indexOf('<!-- BEYOND:START -->') > home.indexOf('aria-label="Agentic commerce"') && home.indexOf('<!-- BEYOND:END -->') < home.indexOf('<footer class="site-footer"'));
+const layers = require('../content/beyond-technical.json').home.layers;
+const OURS = ['Beyond the score', layers.content.tag, layers.content.name, layers.content.text, layers.tech.name, layers.tech.text, layers.tech.tag];
+t('the homepage block has the owner\'s heading, line and link, in that order, word for word', HOME.every((s, i) => bt.indexOf(s) !== -1 && (i === 0 || bt.indexOf(s) > bt.indexOf(HOME[i - 1]))), bt);
+let leftover = bt; HOME.concat(OURS).forEach((s) => { leftover = leftover.replace(s, ''); });
+t('and the only other words are the eyebrow and the labels of the two layers (ours, listed in content/beyond-technical.json)', leftover.replace(/\s+/g, '') === '', leftover.trim());
+t('the link is a gold call to action with an arrow, to /beyond-technical', /<a class="btn btn--gold bt-band__cta" href="\/beyond-technical">Beyond technical<svg[^>]*aria-hidden="true"/.test(block));
+t('the block is a navy band whose headline is one h2 of two sentences, each in its own span', /<section class="bt-band" aria-labelledby="bt-home-h">/.test(block) && /<h2 id="bt-home-h" class="bt-band__title"><span>The score covers the technical layer\.<\/span> <span><em>Content decides what happens next\.<\/em><\/span><\/h2>/.test(block));
+t('the two layers are described for a screen reader, the lower one as the floor the score measures', /role="img" aria-label="Two stacked layers\. The lower one, the technical layer, is the floor and is what the score measures\./.test(block));
+t('the block sits inside main, between two light sections: after the benchmark strip and before the agentic commerce section (never against the navy footer)', home.indexOf('<!-- BEYOND:START -->') > home.indexOf('aria-labelledby="benchmark-heading"') && home.indexOf('<!-- BEYOND:END -->') < home.indexOf('aria-label="Agentic commerce"') && home.indexOf('aria-label="Agentic commerce"') < home.indexOf('<footer class="site-footer'));
+const bandCss = read('styles.css').split('Homepage "Beyond technical" band')[1].split('/* ----------------------------- Sections')[0];
+t('the band CSS: navy-950 surface, white Gloock headline, gold-soft accents, text-wrap balance, solid fills only (no gradient, no image, no pattern, no animation)', /\.bt-band \{ background: var\(--navy-950\)/.test(bandCss) && /color: var\(--white\)/.test(bandCss) && /text-wrap: balance/.test(bandCss) && /var\(--gold-soft\)/.test(bandCss) && !/gradient|url\(|animation|transition|(?<![-\w])transform\s*:|@keyframes/.test(bandCss));
+t('the band stacks under 900px and has fixed paddings and heights (no layout shift)', /@media \(max-width: 900px\)[\s\S]*\.bt-band__grid \{ grid-template-columns: minmax\(0, 1fr\)/.test(bandCss) && /\.bt-layer--tech \{[^}]*min-height: 176px/.test(bandCss));
 const all = page.replace(/<[^>]+>/g, ' ') + ' ' + block.replace(/<[^>]+>/g, ' ');
 t('no price, no promised result, no scanned site named, no gradient, no emoji', !/[$€£]\s?\d/.test(all) && !/\b(guarantee|proven)\b/i.test(all) && !/gradient/i.test(page + block) && !/[\u{1F300}-\u{1FAFF}]/u.test(all));
 t('the one banned word is the owner\'s own "actually" and nothing else (the generator names that exception)', /\bactually\b/i.test(main) && (main.match(/\bactually\b/gi) || []).length === 1 && !/\b(quietly|seamlessly|effortless|powerful|unlock|elevate|supercharge|game-changing|revolutionize|landscape|delve|crucial|robust)\b/i.test(main));
 const css = read('styles.css');
-t('the page\'s styles exist, use only tokens, and are hidden when printed where they are decoration', /\.bt-cta \{/.test(css) && /\.bt-home__box \{/.test(css) && !/gradient/.test(css.split('Beyond technical')[1] || ''));
+t('the page\'s styles exist and use no gradient', /\.bt-cta \{/.test(css) && /\.bt-band \{/.test(css) && !/gradient/.test(css.split('Beyond technical')[1] || ''));
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');
 if (fails.length) { process.stderr.write('FAILED:\n  ' + fails.join('\n  ') + '\n'); process.exit(1); }

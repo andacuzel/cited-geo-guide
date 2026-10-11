@@ -24,7 +24,7 @@ const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'beyond-technical.html');
-const CSS_VERSION = 71;
+const CSS_VERSION = 72;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'beyond-technical.json'), 'utf8'));
 const esc = shell.esc;
 const START = '<!-- BEYOND:START -->';
@@ -52,22 +52,33 @@ function build() {
   });
 }
 
-// The homepage block, between markers. Placed before the footer, after the last section of the page.
+// The homepage block, between markers: a navy band. The owner's headline, line and link are untouched; the eyebrow and the two layer labels are
+// ours. The headline is cut at the sentence boundary so a wide screen can give each sentence its own line (CSS decides), never mid-sentence.
+const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
 function homeBlock() {
   const h = content.home;
-  return START + '\n    <section class="verticals bt-home" aria-labelledby="bt-home-h">\n      <div class="section__inner">\n        <div class="bt-home__box">\n' +
-    '          <h2 id="bt-home-h" class="bt-home__title">' + esc(h.heading) + '</h2>\n          <p class="bt-home__line">' + esc(h.line) + '</p>\n' +
-    '          <a class="bt-home__link" href="' + content.path + '">' + esc(h.link) + '</a>\n        </div>\n      </div>\n    </section>\n    ' + END;
+  const parts = h.heading.split(/(?<=\.)\s+/);
+  if (parts.length !== 2) throw new Error('the homepage headline must be two sentences');
+  const L = h.layers;
+  return START + '\n    <section class="bt-band" aria-labelledby="bt-home-h">\n      <div class="section__inner">\n        <div class="bt-band__head">\n' +
+    '          <p class="kicker kicker--on-navy">' + esc(h.eyebrow) + '</p>\n' +
+    '          <h2 id="bt-home-h" class="bt-band__title"><span>' + esc(parts[0]) + '</span> <span><em>' + esc(parts[1]) + '</em></span></h2>\n        </div>\n' +
+    '        <div class="bt-band__grid">\n          <div class="bt-band__text">\n            <p class="bt-band__line">' + esc(h.line) + '</p>\n' +
+    '            <a class="btn btn--gold bt-band__cta" href="' + content.path + '">' + esc(h.link) + ARROW + '</a>\n          </div>\n' +
+    '          <div class="bt-layers" role="img" aria-label="' + esc(L.label) + '">\n' +
+    '            <div class="bt-layer bt-layer--content"><span class="bt-layer__tag">' + esc(L.content.tag) + '</span><p class="bt-layer__name">' + esc(L.content.name) + '</p><p class="bt-layer__text">' + esc(L.content.text) + '</p></div>\n' +
+    '            <div class="bt-layer bt-layer--tech"><span class="bt-layer__tag">' + esc(L.tech.tag) + '</span><p class="bt-layer__name">' + esc(L.tech.name) + '</p><p class="bt-layer__text">' + esc(L.tech.text) + '</p></div>\n' +
+    '          </div>\n        </div>\n      </div>\n    </section>\n    ' + END;
 }
 
 function applyHome(html) {
   if (html.indexOf(START) !== -1) return html.replace(new RegExp(START + '[\\s\\S]*?' + END), () => homeBlock());
-  // First run: before the footer, after the last section.
-  const marker = '<footer class="site-footer"';
+  // First run: before the agentic commerce section (a light section on each side), so the navy band never touches the navy footer.
+  const marker = '<section aria-label="Agentic commerce">';
   const i = html.indexOf(marker);
-  if (i === -1) throw new Error('index.html has no footer to place the block before');
+  if (i === -1) throw new Error('index.html has no agentic commerce section to place the block before');
   const lineStart = html.lastIndexOf('\n', i) + 1;
-  return html.slice(0, lineStart) + '    ' + homeBlock() + '\n\n' + html.slice(lineStart);
+  return html.slice(0, lineStart) + '      ' + homeBlock() + '\n\n' + html.slice(lineStart);
 }
 
 function ensureSitemap() {
@@ -102,7 +113,7 @@ function check() {
   const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const m = new RegExp(START + '[\\s\\S]*?' + END).exec(home);
   if (!m) bad('index.html has no Beyond technical block'); else if (m[0] !== homeBlock()) bad('the homepage block is out of date; run node scripts/generate-beyond-technical.js');
-  if (home.indexOf(START) > home.indexOf('<footer class="site-footer"') || home.indexOf(START) < home.indexOf('id="main"')) bad('the homepage block must sit inside main, before the footer');
+  if (home.indexOf(START) > home.indexOf('<footer class="site-footer') || home.indexOf(START) < home.indexOf('id="main"') || home.indexOf(START) > home.indexOf('aria-label="Agentic commerce"')) bad('the homepage block must sit inside main, before the agentic commerce section');
   if ((page.match(/<h1[ >]/g) || []).length !== 1) bad('the page needs exactly one h1');
   if ((page.match(/<h2[ >]/g) || []).length !== 4) bad('the page needs exactly four h2 headings (the brief’s four)');
   if (!/name="robots" content="index, follow"/.test(page)) bad('the page must be indexable');
@@ -119,7 +130,7 @@ function check() {
   if (paras.length) bad('more than one em dash in a paragraph');
   if (fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').indexOf('<loc>' + site.baseUrl + content.path + '</loc>') === -1) bad('sitemap.xml has no ' + content.path);
   if (fs.readFileSync(path.join(ROOT, 'llms.txt'), 'utf8').indexOf(site.baseUrl + content.path) === -1) bad('llms.txt has no ' + content.path);
-  if (!/<a href="\/beyond-technical" class="site-nav__link">Beyond technical<\/a>/.test(fs.readFileSync(path.join(ROOT, 'about.html'), 'utf8'))) bad('the footer has no Beyond technical link (node scripts/add-footer-links.js)');
+  if (!/<footer class="site-footer[\s\S]*?<a href="\/beyond-technical">Beyond technical<\/a>/.test(fs.readFileSync(path.join(ROOT, 'about.html'), 'utf8'))) bad('the footer has no Beyond technical link (lib/site-footer.js, then node scripts/site-footer.js)');
   return errors;
 }
 

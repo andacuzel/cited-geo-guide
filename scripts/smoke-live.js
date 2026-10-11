@@ -228,6 +228,19 @@ async function waitForDeployment(sha) {
   const bt = await get('/beyond-technical');
   t('/beyond-technical is 200, indexable, with the owner\u2019s H1 and the mailto call to action', bt.status === 200 && !/noindex/i.test(bt.headers.get('x-robots-tag') || '') && /isn\u2019t yet a citable one/.test(bt.text.replace(/&rsquo;/g, '\u2019')) && /href="mailto:hey@getcitehound\.com\?subject=Content%20review"/.test(bt.text), String(bt.status));
   t('the Beyond technical page is in the sitemap and llms.txt, and the footer links to it', /\/beyond-technical</.test((await get('/sitemap.xml')).text) && /beyond-technical/.test((await get('/llms.txt')).text) && /href="\/beyond-technical"/.test(bt.text));
+  // The one footer, the Beyond technical band, the cover image and the changelog that is out of sight.
+  for (const p of ['/', '/pro', '/privacy', '/research/state-of-ai-readiness', '/research/llms-txt-adoption-2026', '/beyond-technical']) {
+    const r = await get(p);
+    t(p + ' carries the one navy footer: three columns, no changelog link', r.status === 200 && /<footer class="site-footer site-footer--navy"/.test(r.text) && (r.text.match(/class="sf-col"/g) || []).length === 3 && !/href="\/changelog"/.test(r.text.split('<footer')[1] || ''), String(r.status));
+  }
+  const clog = await get('/changelog');
+  t('/changelog still answers 200 but is noindex, and is not in the sitemap or llms.txt', clog.status === 200 && /name="robots" content="noindex/.test(clog.text) && !/\/changelog</.test((await get('/sitemap.xml')).text) && !/\/changelog\b/.test((await get('/llms.txt')).text));
+  for (const [f, type] of [['state-of-ai-readiness-cover-480.webp', 'image/webp'], ['state-of-ai-readiness-cover-960.webp', 'image/webp'], ['state-of-ai-readiness-cover-480.png', 'image/png']]) {
+    const r = await fetch(BASE + '/assets/research/' + f, { headers: { 'User-Agent': 'citehound-smoke/1' } });
+    t('/assets/research/' + f + ' is served as ' + type, r.status === 200 && (r.headers.get('content-type') || '') === type, r.status + ' ' + r.headers.get('content-type'));
+  }
+  const home2 = await get('/');
+  t('the homepage has the navy Beyond technical band with the owner\u2019s headline, between two light sections', /<section class="bt-band" aria-labelledby="bt-home-h">/.test(home2.text) && /The score covers the technical layer\./.test(home2.text) && /Content decides what happens next\./.test(home2.text));
   // Repository files are not part of the site: the same 404 page as an address that does not exist (middleware.js).
   const missing = await get('/this-page-does-not-exist-xyz', { redirect: 'follow' });
   for (const p of ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/CLAUDE.md', '/README.md', '/docs/pro.md', '/docs/env.md', '/docs', '/scripts/run-gates.js', '/scripts', '/vercel.json', '/local', '/local/launch-report/stats.json', '/package.json', '/package-lock.json', '/lib/pro-api.js', '/lib/waitlist.js', '/content/tools.json', '/config/domain-rules.json', '/site.config.json', '/middleware.js', '/.vercelignore', '/data/crm-raw.json', '/domains/crm.txt']) {

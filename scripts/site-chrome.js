@@ -6,7 +6,7 @@
         (read from index.html, never retyped), so the scan's
         "Organization / WebSite schema" check can pass on every page and all
         pages describe the same entity.
-     2. A Contact link in the footer (a mailto: the privacy page already shows).
+     2. (The footer, with its Contact link, is written by scripts/site-footer.js; this script only checks that it has the mailto.)
      3. Where a page has too few H2 headings, an existing text element promoted
         to an H2 with the same words. No wording changes.
 
@@ -80,13 +80,6 @@ function applyTo(rel) {
   const block = indent(schemaBlock(), '  ');
   if (s.indexOf(START) !== -1) s = s.replace(new RegExp('[ \\t]*' + START + '[\\s\\S]*?' + END), block);
   else s = s.replace(/\n<\/head>/, '\n' + block + '\n</head>');
-  if (!/footer-links[\s\S]*?>Contact<\/a>/.test(s)) {
-    s = s.replace(/(<nav class="site-nav footer-links"[^>]*>\n)([\s\S]*?)(\n[ \t]*<\/nav>)/, function (m, open, links, close) {
-      const last = links.split('\n').pop();
-      const pad = (/^[ \t]*/.exec(last) || [''])[0];
-      return open + links + '\n' + contactLine(pad) + close;
-    });
-  }
   if (s !== before) fs.writeFileSync(file, s, 'utf8');
   return s !== before;
 }
@@ -125,7 +118,7 @@ function main() {
       if (g.some((x) => x['@type'] === 'Organization' && x['@id'] === e.org['@id']) && g.some((x) => x['@type'] === 'WebSite' && x['@id'] === e.site['@id'])) ok = true;
     });
     if (!ok) problems.push(rel + ': no Organization and WebSite JSON-LD with the homepage @id values');
-    if (!/footer-links[\s\S]*?>Contact<\/a>/.test(s)) problems.push(rel + ': footer has no Contact link');
+    if (!/<footer class="site-footer[\s\S]*?mailto:hey@getcitehound\.com/.test(s)) problems.push(rel + ': footer has no Contact link');
     const sig = scanner.parseSignals(s);
     if (!sig.hasOrgSchema) problems.push(rel + ': the scanner does not see Organization / WebSite schema');
     if (!sig.contactSignal) problems.push(rel + ': the scanner does not see a contact signal');

@@ -25,13 +25,22 @@ const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'research', 'state-of-ai-readiness.html');
-const CSS_VERSION = 71;
+const CSS_VERSION = 72;
 const SCRIPT_VERSION = 1;
 const PATHNAME = '/research/state-of-ai-readiness';
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'readiness.json'), 'utf8'));
 const esc = shell.esc;
 
 const DESC = 'How ready are ' + content.sample.scored + ' well-known websites for AI crawlers? Four findings from a benchmark scanned ' + content.sample.scanWindow + ', and the eight-page report by email.';
+
+
+// The cover of the PDF, next to the form on a wide screen and above it on a narrow one. Optimized copies live in assets/research/ (the original is not
+// served): WebP at 480 and 960 pixels wide, PNG at 480 as the fallback. Explicit width and height, so the page does not move when it loads. Below the
+// fold on every screen, so it is lazy-loaded.
+const COVER = '        <figure class="sr-cover">\n          <picture>\n' +
+  '            <source type="image/webp" srcset="/assets/research/state-of-ai-readiness-cover-480.webp 480w, /assets/research/state-of-ai-readiness-cover-960.webp 960w" sizes="(max-width: 700px) 190px, 300px" />\n' +
+  '            <img src="/assets/research/state-of-ai-readiness-cover-480.png" width="480" height="686" alt="Cover of the report State of AI Readiness, Launch Edition 2026: a benchmark of 219 well-known websites in six categories, scanned 29 to 31 July 2026." loading="lazy" decoding="async" />\n' +
+  '          </picture>\n        </figure>\n';
 
 function build() {
   const s = content.sample;
@@ -51,7 +60,8 @@ function build() {
   '          <div>\n            <h2 id="sr-method-h" class="sr-h2">How we measured it</h2>\n            <ul class="sr-list">\n' + li(content.method) + '\n            </ul>\n          </div>\n' +
   '          <div>\n            <h2 class="sr-h2">What it does not show</h2>\n            <ul class="sr-list">\n' + li(content.limits) + '\n            </ul>\n          </div>\n' +
   '        </div>\n        <p class="ps-note sr-note">The scoring is public: <a href="/methodology">the methodology</a> lists all ' + esc(s.checks) + ' checks and their points.</p>\n      </div>\n    </section>\n' +
-  '\n    <section class="verticals pro-waitlist sr-signup" id="get-the-report" aria-labelledby="sr-form-h">\n      <div class="section__inner">\n        <div class="pro-waitlist__box">\n' +
+  '\n    <section class="verticals pro-waitlist sr-signup" id="get-the-report" aria-labelledby="sr-form-h">\n      <div class="section__inner">\n        <div class="sr-get">\n' + COVER +
+  '        <div class="pro-waitlist__box">\n' +
   '          <p class="kicker">Free report</p>\n          <h2 id="sr-form-h" class="section-title">Get the full report by email.</h2>\n' +
   '          <p class="section-sub">Eight pages: the typical score, the six categories, where the points go, AI crawler access, signals by category, the sites we could not scan, and the limits. Free. We send a link to the PDF.</p>\n' +
   '          <p class="ps-note sr-unavailable" id="srUnavailable" role="status" hidden>The report is not available right now. Check back soon.</p>\n' +
@@ -64,7 +74,7 @@ function build() {
   '            <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="srSubmit">Email me the report</button></p>\n' +
   '            <p class="wl-status" id="srStatus" role="status" aria-live="polite" tabindex="-1"></p>\n          </form>\n' +
   '          <noscript><p class="ps-note">The form needs JavaScript. Without it, write to <a href="mailto:' + esc(site.contactEmail) + '">' + esc(site.contactEmail) + '</a> and ask for the report.</p></noscript>\n' +
-  '        </div>\n        <p class="ps-note sr-note">Want your own site’s numbers instead? <a href="/">Run the free scan</a>. It applies the same ' + esc(s.checks) + ' checks to your homepage.</p>\n      </div>\n    </section>\n' +
+  '        </div>\n        </div>\n        <p class="ps-note sr-note">Want your own site’s numbers instead? <a href="/">Run the free scan</a>. It applies the same ' + esc(s.checks) + ' checks to your homepage.</p>\n      </div>\n    </section>\n' +
   '\n    <script src="/report-signup.js?v=' + SCRIPT_VERSION + '" defer></script>\n';
   return shell.page({
     title: 'Citehound — State of AI Readiness: Launch Edition 2026',
@@ -108,6 +118,8 @@ function check() {
   if (!/<span>Send me the report<\/span>/.test(page) || !/id="srSend"[^>]*required/.test(page)) bad('the first checkbox must read "Send me the report" and be required');
   if (!/<span>Also send occasional Citehound updates <span class="wl-opt">\(optional\)<\/span><\/span>/.test(page) || /id="srUpdates"[^>]*(required|checked)/.test(page)) bad('the second checkbox must read "Also send occasional Citehound updates", be optional and unchecked');
   if (!/name="company_fax"/.test(page)) bad('the honeypot is missing');
+  if (!/<img src="\/assets\/research\/state-of-ai-readiness-cover-480\.png" width="480" height="686" alt="Cover of the report State of AI Readiness/.test(page)) bad('the cover image needs its fallback, width, height and alt text');
+  ['480.webp', '960.webp', '480.png'].forEach((f) => { if (!fs.existsSync(path.join(ROOT, 'assets', 'research', 'state-of-ai-readiness-cover-' + f))) bad('assets/research/state-of-ai-readiness-cover-' + f + ' is missing'); });
   // The honest-framing rule: no claim about citations, answers, rankings or causes.
   const claims = /\b(proven|prove[sd]?|guarantee[sd]?|will (?:improve|boost|increase|raise)|improves? (?:your )?(?:citations|visibility|ranking)|cited more|more citations|ranking[s]? (?:factor|signal))\b/i;
   if (claims.test(text)) bad('the page makes a claim the report does not support: ' + claims.exec(text)[0]);

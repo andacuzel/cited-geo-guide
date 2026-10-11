@@ -28,6 +28,7 @@ gates.push({ name: 'vercel.json is valid against the Vercel schema', args: ['scr
 scripts.filter((f) => /^generate-.*\.js$/.test(f)).sort().forEach((f) => gates.push({ name: f + ' --check', args: ['scripts/' + f, '--check'] }));
 ['check-pages.js', 'check-mcp-drift.js', 'check-launch-config.js', 'check-research-index.js', 'check-secrets.js'].forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
 gates.push({ name: 'site-chrome.js --check', args: ['scripts/site-chrome.js', '--check'] });
+gates.push({ name: 'site-footer.js --check', args: ['scripts/site-footer.js', '--check'] });
 gates.push({ name: 'capture-pro-shots.js --check', args: ['scripts/capture-pro-shots.js', '--check'] });
 scripts.filter((f) => /^test-.*\.js$/.test(f) && f !== 'test-real-kv.js').sort().forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
 

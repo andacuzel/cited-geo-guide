@@ -39,13 +39,14 @@
 
 const fs = require('fs');
 const siteChrome = require('./site-chrome.js');
+const siteFooter = require('../lib/site-footer.js');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 71; // bump when styles.css changes
+const CSS_VERSION = 72; // bump when styles.css changes
 
 const TRACKS = {
   'B2B SaaS': { bar: 'chart-bar--b2b', fill: 'bm-fill--b2b', marker: 'var(--navy-800)', onBar: 'chart-seg-text--light' },
@@ -334,21 +335,7 @@ function head(title, desc, url, ld) {
 
 function footer(scripts) {
   return (
-    '\n    <footer class="site-footer" aria-label="Footer">\n' +
-    '      <div class="section__inner">\n' +
-    '        <nav class="site-nav footer-links" aria-label="More">\n' +
-    '          <a href="/playbooks" class="site-nav__link">Playbooks</a>\n' +
-    '          <a href="/methodology" class="site-nav__link">Methodology</a>\n' +
-    '          <a href="/benchmarks" class="site-nav__link">Benchmarks</a>\n' +
-    '          <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>\n' +
-    '          <a href="/trust" class="site-nav__link">Trust</a>\n' +
-    '          <a href="/changelog" class="site-nav__link">Changelog</a>\n' +
-    '          <a href="/privacy" class="site-nav__link">Privacy</a>\n' +
-    '          <a href="/terms" class="site-nav__link">Terms</a>\n' +
-    siteChrome.contactLine('          ') + '\n' +
-    '        </nav>\n' +
-    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n' +
-    '      </div>\n    </footer>\n\n  </main>\n\n' +
+    '\n    ' + siteFooter.html('    ') + '\n\n  </main>\n\n' +
     '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n' +
     '  <script src="../nav.js?v=3"></script>\n' + (scripts || '') +
     '</body>\n</html>\n'

@@ -33,7 +33,7 @@ const site = require('../lib/site-config.js');
 const methodology = require('../lib/methodology.js');
 const mcp = require('../api/mcp.js');
 
-const CSS_VERSION = 71;
+const CSS_VERSION = 72;
 const NEXT_START = '<!-- NEXT:START -->';
 const NEXT_END = '<!-- NEXT:END -->';
 const PAGE = path.join(ROOT, 'tools', 'index.html');
@@ -167,7 +167,7 @@ function nextBlock(d, slug) {
 }
 
 // Where the block goes when the page has none yet.
-const ANCHOR = { compare: '    <footer class="site-footer"', default: '    <section aria-label="Scan reminder">' };
+const ANCHOR = { compare: '    <footer class="site-footer', default: '    <section aria-label="Scan reminder">' };
 
 function withNext(d, t, html) {
   const block = nextBlock(d, t.slug);
@@ -291,7 +291,7 @@ function verify(html, d) {
   // chrome identical to about.html
   const about = read('about.html');
   const chrome = (h, re) => norm((h.match(re) || [''])[0]);
-  const H = /<header class="site-header">[\s\S]*?<\/header>/, F = /<footer class="site-footer"[\s\S]*?<\/footer>/;
+  const H = /<header class="site-header">[\s\S]*?<\/header>/, F = /<footer class="site-footer[\s\S]*?<\/footer>/;
   if (chrome(html, H) !== chrome(about, H)) fail('the header differs from about.html');
   if (chrome(html, F) !== chrome(about, F)) fail('the footer differs from about.html');
   return bad;
@@ -452,7 +452,7 @@ function checkPolished(d) {
     while ((m = r.exec(page.replace(/<script[\s\S]*?<\/script>/g, '')))) if (!resolves(m[1])) f('a link does not resolve: ' + m[1]);
     const about = read('about.html');
     const chrome = (h, re2) => norm((h.match(re2) || [''])[0]);
-    const H = /<header class="site-header">[\s\S]*?<\/header>/, F = /<footer class="site-footer"[\s\S]*?<\/footer>/;
+    const H = /<header class="site-header">[\s\S]*?<\/header>/, F = /<footer class="site-footer[\s\S]*?<\/footer>/;
     if (chrome(page, H) !== chrome(about, H)) f('the header differs from about.html');
     if (chrome(page, F) !== chrome(about, F)) f('the footer differs from about.html');
     // syntax of the page's scripts

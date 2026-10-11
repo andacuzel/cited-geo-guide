@@ -347,6 +347,13 @@ select.field { appearance: auto; cursor: pointer; }
 .sr-h2 { font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.2; color: var(--ink); margin-bottom: 14px; }
 .sr-list { margin: 0; padding-left: 20px; display: grid; gap: 12px; color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; }
 .sr-note { margin-top: 28px; }
+.sr-get { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 56px; align-items: start; }
+.sr-cover { margin: 0; }
+.sr-cover img { display: block; width: 100%; height: auto; aspect-ratio: 480 / 686; border-radius: var(--radius); box-shadow: var(--shadow); background: var(--navy-950); }
+@media (max-width: 800px) {
+  .sr-get { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .sr-cover { max-width: 190px; }
+}
 .sr-unavailable { margin: 0 0 16px; }
 @media (max-width: 700px) {
   .sr-findings { grid-template-columns: minmax(0, 1fr); }
@@ -378,12 +385,38 @@ select.field { appearance: auto; cursor: pointer; }
 .bt-steps { list-style: decimal; }
 .bt-cta { max-width: 760px; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
 .bt-fine { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
-.bt-home { padding-bottom: 96px; }
-.bt-home__box { max-width: 760px; border-top: 1px solid var(--line); padding-top: 40px; }
-.bt-home__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 3vw, 32px); line-height: 1.2; color: var(--navy-950); }
-.bt-home__line { margin-top: 12px; font-size: 16.5px; line-height: 1.55; color: var(--ink-soft); }
-.bt-home__link { display: inline-block; margin-top: 16px; font-weight: 600; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 4px; }
-.bt-home__link:hover { color: var(--gold-deep); }
+
+/* Homepage "Beyond technical" band: a full-bleed navy surface (owner's request, 11 Oct 2026: the fourth navy surface on the homepage). Headline
+   across the full width so each sentence has its own line on a wide screen; the line and the call to action on the left, two stacked layers on the
+   right that say the headline at a glance (the lower one, the technical layer, is the floor the score measures; the upper one is editorial).
+   Solid fills only. Fixed paddings and min-heights, so nothing moves while the page loads. */
+.bt-band { background: var(--navy-950); padding: 96px 0 104px; }
+.bt-band__head { max-width: 1040px; }
+.bt-band__title { margin-top: 14px; font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 4.1vw, 48px); line-height: 1.14; letter-spacing: 0.005em; color: var(--white); text-wrap: balance; }
+.bt-band__title span { display: inline; }
+.bt-band__title em { font-style: normal; color: var(--gold-soft); }
+.bt-band__grid { margin-top: 48px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.bt-band__line { max-width: 480px; font-size: 18px; line-height: 1.55; color: rgba(255, 255, 255, 0.82); }
+.bt-band__cta { margin-top: 28px; }
+.bt-band__cta svg { width: 16px; height: 16px; flex: none; }
+.bt-layers { display: flex; flex-direction: column; width: 100%; max-width: 480px; margin-left: auto; }
+.bt-layer { border-radius: var(--radius); padding: 18px 22px; position: relative; }
+.bt-layer__tag { display: block; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+.bt-layer__name { margin: 6px 0 0; font-family: var(--font-display); font-size: 22px; line-height: 1.2; color: var(--white); }
+.bt-layer__text { margin: 6px 0 0; font-size: 14.5px; line-height: 1.5; color: rgba(255, 255, 255, 0.82); }
+.bt-layer--content { z-index: 2; margin-left: 40px; min-height: 140px; background: var(--navy-900); border: 1px solid var(--gold-soft); }
+.bt-layer--content .bt-layer__tag { color: var(--gold-soft); }
+.bt-layer--tech { z-index: 1; margin-top: -28px; margin-right: 40px; min-height: 176px; padding-top: 46px; background: var(--navy-800); border: 1px solid var(--line-on-navy); }
+.bt-layer--tech .bt-layer__tag { color: rgba(255, 255, 255, 0.82); }
+@media (max-width: 900px) {
+  .bt-band { padding: 64px 0 72px; }
+  .bt-band__grid { grid-template-columns: minmax(0, 1fr); gap: 40px; margin-top: 32px; }
+  .bt-layers { margin-left: 0; max-width: 520px; }
+}
+@media (max-width: 420px) {
+  .bt-layer--content { margin-left: 18px; min-height: 164px; }
+  .bt-layer--tech { margin-right: 18px; min-height: 196px; }
+}
 
 /* ----------------------------- Sections ----------------------------- */
 
@@ -1802,16 +1835,30 @@ button.tool-example:hover { color: var(--gold-deep); }
 }
 
 /* ----------------------------- Site footer ----------------------------- */
+/* One footer on every page (lib/site-footer.js): a full-bleed navy band, the mark, one line of positioning, three columns, the copyright. White and gold-soft on
+   navy-950, all above 7:1. Columns stack under 900px (two) and 560px (one). */
 
 .site-footer { padding: 48px 0 60px; }
-.footer-links { flex-wrap: wrap; gap: 10px 24px; }
-
-.site-footer__coda {
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-  font-size: 13px;
-  color: var(--ink-faint);
+.site-footer--navy { font-family: var(--font-body); background: var(--navy-950); color: rgba(255, 255, 255, 0.82); padding: 64px 0 36px; }
+.sf-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 40px 48px; }
+.sf-logo { display: inline-flex; align-items: center; gap: 9px; color: var(--white); text-decoration: none; }
+.sf-logo__icon { display: inline-flex; flex: none; }
+.sf-logo__icon svg { display: block; width: 26px; height: 26px; }
+.sf-logo__mark { font-family: var(--font-display); font-size: 24px; line-height: 1; }
+.sf-tag { margin: 16px 0 0; font-family: var(--font-body); max-width: 300px; font-size: 14.5px; line-height: 1.55; color: rgba(255, 255, 255, 0.82); }
+.sf-h { margin: 0 0 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-soft); }
+.sf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.sf-list a { display: inline-block; padding: 5px 0; font-size: 14.5px; line-height: 1.4; color: rgba(255, 255, 255, 0.88); text-decoration: none; transition: color var(--t); overflow-wrap: anywhere; }
+.sf-list a:hover { color: var(--gold-soft); text-decoration: underline; text-decoration-color: var(--gold-soft); text-underline-offset: 4px; }
+.sf-logo:focus-visible, .sf-list a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; border-radius: 2px; }
+.sf-legal { margin: 48px 0 0; padding-top: 22px; border-top: 1px solid var(--line-on-navy); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.02em; color: rgba(255, 255, 255, 0.7); }
+@media (max-width: 900px) {
+  .sf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sf-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .site-footer--navy { padding: 48px 0 28px; }
+  .sf-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
 }
 
 /* ----------------------------- Views ----------------------------- */

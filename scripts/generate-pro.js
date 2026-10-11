@@ -19,6 +19,7 @@
 'use strict';
 
 const fs = require('fs');
+const siteFooter = require('../lib/site-footer.js');
 const path = require('path');
 const render = require('../lib/report-render.js');
 const schema = require('../lib/schema.js');
@@ -35,7 +36,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 71;
+const CSS_VERSION = 72;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -272,7 +273,6 @@ function shellParts() {
     favicon: grab(/<link rel="icon"[^>]*>/, 'favicon'),
     fonts: grab(/<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
     header: grab(/<header class="site-header">[\s\S]*?<\/header>/, 'header'),
-    footerNav: grab(/<nav class="site-nav footer-links"[\s\S]*?<\/nav>/, 'footer nav')
   };
 }
 
@@ -385,8 +385,7 @@ function build() {
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
     '  <a class="skip-link" href="#main">Skip to content</a>\n\n  ' + shell.header + '\n\n' + body +
-    '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +
-    '        <p class="site-footer__coda">© 2026 Citehound. Built for teams navigating the shift from search to answers.</p>\n      </div>\n    </footer>\n\n  </main>\n\n' +
+    '    ' + siteFooter.html('    ') + '\n\n  </main>\n\n' +
     '  <div class="toast" id="toast" role="status" aria-live="polite"></div>\n\n  <script src="nav.js?v=3"></script>\n  <script src="pro-cta.js?v=1" defer></script>\n  <script src="waitlist.js?v=1" defer></script>\n</body>\n</html>\n';
 }
 

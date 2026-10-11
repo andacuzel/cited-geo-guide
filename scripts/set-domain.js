@@ -139,7 +139,7 @@ const CHECKS = [
   'scripts/generate-research-index.js --check', 'scripts/check-research-index.js', 'scripts/generate-research-002.js --check', 'scripts/generate-changelog.js --check', 'scripts/generate-trust.js --check',
   'scripts/generate-plugin.js --check', 'scripts/generate-mcp-submission.js --check', 'scripts/generate-mcp-docs.js --check', 'lib/mcp-docs.js --check', 'scripts/check-mcp-drift.js',
   'scripts/check-launch-config.js', 'scripts/generate-launch-pages.js --check',
-  'scripts/site-chrome.js --check', 'scripts/add-footer-links.js --check', 'scripts/check-pages.js'
+  'scripts/site-chrome.js --check', 'scripts/site-footer.js --check', 'scripts/check-pages.js'
 ];
 
 function main() {

@@ -52,7 +52,21 @@
   "home": {
     "heading": "The score covers the technical layer. Content decides what happens next.",
     "line": "Being readable by AI is the floor. Being worth citing is an editorial question.",
-    "link": "Beyond technical"
+    "link": "Beyond technical",
+    "eyebrow": "Beyond the score",
+    "layers": {
+      "label": "Two stacked layers. The lower one, the technical layer, is the floor and is what the score measures. The upper one, the content layer, is editorial.",
+      "content": {
+        "tag": "Editorial",
+        "name": "Content layer",
+        "text": "Fit to the question. Answers you can lift. Reasons to be referenced."
+      },
+      "tech": {
+        "tag": "What the score measures",
+        "name": "Technical layer",
+        "text": "The floor: can AI systems reach your site and read it."
+      }
+    }
   },
   "description": "The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you."
 }
