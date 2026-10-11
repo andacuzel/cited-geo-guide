@@ -208,7 +208,7 @@
 
   var STAGES = [
     { label: 'Reading robots.txt', context: 'This file tells AI crawlers what they’re allowed to access.' },
-    { label: 'Checking llms.txt', context: 'An emerging standard some sites use to describe themselves to AI systems.' },
+    { label: 'Checking llms.txt', context: 'An optional file some sites publish. We check that it exists, not whether any system reads it.' },
     { label: 'Looking for a sitemap', context: 'A sitemap lets crawlers discover every page on a site, not just the homepage.' },
     { label: 'Fetching the homepage', context: 'The homepage is parsed for structured data, headings and metadata.' },
     { label: 'Scoring 16 checks', context: 'Every check is weighted across three pillars: discoverability, technical foundation and trust.' }

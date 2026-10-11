@@ -64,7 +64,7 @@ Citehound measures AI readiness: whether AI crawlers can reach and read a websit
 
 ### `generate_llms_txt`
 
-**Generate an llms.txt file.** Builds an llms.txt file — the emerging convention that gives AI systems a curated map of a site — from a name, a one-sentence description and a list of key pages. Pure text generation — fetches nothing.
+**Generate an llms.txt file.** Builds an llms.txt file — an optional convention for describing a site and its key pages, with no demonstrated effect on Google — from a name, a one-sentence description and a list of key pages. Pure text generation — fetches nothing.
 
 - Parameters: `name` (required): The site or product name for the llms.txt header.<br>`description` (required): A one-sentence summary of what the site is.<br>`key_pages` (optional): Pages worth pointing an AI system to, most important first.
 - Annotations: readOnlyHint true, destructiveHint false, idempotentHint true, openWorldHint false (reads this project's own files)

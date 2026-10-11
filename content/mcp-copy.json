@@ -10,7 +10,7 @@
     "compare_sites": { "group": "Scan", "line": "Put two sites side by side and see every check where they differ." },
     "generate_schema": { "group": "Fix", "line": "Get paste-ready JSON-LD for your site, with brackets where only you know the facts." },
     "generate_robots_txt": { "group": "Fix", "line": "Allow or block named AI crawlers with a robots.txt you can paste as it is." },
-    "generate_llms_txt": { "group": "Fix", "line": "Write an llms.txt that tells AI systems what your site is and where to start." },
+    "generate_llms_txt": { "group": "Fix", "line": "Draft an llms.txt, an optional file that describes your site and its key pages." },
     "get_playbook": { "group": "Learn", "line": "Read the playbook for your vertical: the shift, three strategies and the pitfalls to avoid." },
     "get_benchmark": { "group": "Learn", "line": "See where your score sits against the sites in your category." },
     "get_methodology": { "group": "Learn", "line": "See how the 100 points are built, check by check, and what the score cannot show." },

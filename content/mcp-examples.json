@@ -36,7 +36,7 @@
         "",
         "Discoverability: 40 points. Can AI crawlers reach the site at all. Access is the precondition for every other signal.",
         "  - robots.txt present (4 pts): Whether https://<domain>/robots.txt can be read. A real 404 counts as default-open access; a failed fetch stops the scan. Why it matters: AI crawlers read your access policy from this file.",
-        "  - llms.txt present (4 pts): Whether https://<domain>/llms.txt exists and is a usable text file. Why it matters: An emerging standard that gives AI systems a curated map of your content.",
+        "  - llms.txt present (4 pts): Whether https://<domain>/llms.txt exists and is a usable text file. Why it matters: Optional and low-cost to add. No demonstrated effect on Google, and we do not measure whether any AI system reads it.",
         "  - Sitemap declared (6 pts): Whether robots.txt has a Sitemap: line, or /sitemap.xml exists as a urlset or sitemapindex. Why it matters: Sitemaps let crawlers discover your content completely.",
         "  - AI crawler access (26 pts): For each of the 10 tracked AI crawlers: open (no rule applies), limited (at least one Disallow rule applies, often an ordinary path) or blocked (the whole site is disallowed). Open earns full credit, limited half, blocked none, scaled to the 26 points. Why it matters: Every blocked crawler removes you from that platform’s answers.",
         "",

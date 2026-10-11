@@ -418,7 +418,7 @@ var TOOLS = [
   {
     name: 'generate_llms_txt',
     title: 'Generate an llms.txt file',
-    description: 'Builds an llms.txt file — the emerging convention that gives AI systems a curated map of a site — from a name, a one-sentence description and a list of key pages. Pure text generation — fetches nothing.',
+    description: 'Builds an llms.txt file — an optional convention for describing a site and its key pages, with no demonstrated effect on Google — from a name, a one-sentence description and a list of key pages. Pure text generation — fetches nothing.',
     inputSchema: {
       type: 'object',
       properties: {
