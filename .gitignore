@@ -26,6 +26,7 @@ local/
 
 # Exported waitlist (personal data)
 waitlist*.csv
+readers*.csv
 
 # Documents (a report PDF must never be committed: the State of AI Readiness PDF lives in the database)
 *.pdf

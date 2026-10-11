@@ -2,7 +2,7 @@
 /* =====================================================================
    scripts/add-footer-links.js
 
-   Puts the Trust and Changelog links in the footer nav of every page, right
+   Puts the Beyond technical, Trust and Changelog links in the footer nav of every page, right
    after "Citation tracking", in each page's own indentation. Idempotent.
    Pages generated from about.html's footer (pro, sample report, playbooks,
    citation tracking) pick the links up when regenerated, so run this first
@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const PROTECTED = ['research/case-study-agaone.html', 'research/llms-txt-adoption-2026.html'];
-const LINKS = [['/trust', 'Trust'], ['/changelog', 'Changelog']];
+const LINKS = [['/beyond-technical', 'Beyond technical'], ['/trust', 'Trust'], ['/changelog', 'Changelog']];
 const SKIP_DIRS = ['node_modules', '.git', 'local', '.claude', 'asset', 'data', 'supabase', 'content', 'lib', 'api', 'scripts', 'docs', 'plugin', 'assets', 'config', '.well-known'];
 
 function htmlFiles() {
@@ -59,7 +59,7 @@ function main() {
   });
   if (check) {
     if (problems.length) { console.error('FAIL:\n  ' + problems.join('\n  ')); process.exit(1); }
-    console.log('OK: Trust and Changelog are in the footer of every page except the protected reports (' + PROTECTED.join(', ') + ')');
+    console.log('OK: Beyond technical, Trust and Changelog are in the footer of every page except the protected reports (' + PROTECTED.join(', ') + ')');
     return;
   }
   console.log('Footer links added to ' + changed + ' page(s). Skipped (protected): ' + PROTECTED.join(', '));

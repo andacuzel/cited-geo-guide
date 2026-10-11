@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>if (window.IntersectionObserver && window.CSS && CSS.registerProperty && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' scene-anim';</script>
+  <script>if (window.IntersectionObserver && window.CSS && CSS.registerProperty && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' scene-anim'; try { if (sessionStorage.getItem('ch-wlbar') === '1') document.documentElement.className += ' wl-off'; } catch (e) { /* storage blocked: the bar shows */ }</script>
 
   <title>Citehound — AI Visibility Scanner &amp; GEO Playbooks</title>
   <meta name="description" content="Scan a site for AI visibility, free: 16 checks, 10 AI crawlers, live data. Then fix it with vertical-specific GEO &amp; AEO playbooks. No email required." />
@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=70" />
+  <link rel="stylesheet" href="styles.css?v=71" />
 
   <script type="application/ld+json">
   {
@@ -107,7 +107,6 @@
       <button type="button" class="wl-bar__close" aria-label="Dismiss the waitlist message">&times;</button>
     </div>
   </div>
-  <script>(function(){var b=document.getElementById('wlBar');if(!b)return;try{if(sessionStorage.getItem('ch-wlbar')==='1'){b.hidden=true;return;}}catch(e){}var x=b.querySelector('.wl-bar__close');if(x)x.addEventListener('click',function(){b.hidden=true;try{sessionStorage.setItem('ch-wlbar','1');}catch(e){}});}());</script>
 
   <header class="site-header site-header--hero-navy">
     <div class="site-header__inner">
@@ -667,6 +666,18 @@
       </section>
 
       <!-- ---------- Site footer ---------- -->
+    <!-- BEYOND:START -->
+    <section class="verticals bt-home" aria-labelledby="bt-home-h">
+      <div class="section__inner">
+        <div class="bt-home__box">
+          <h2 id="bt-home-h" class="bt-home__title">The score covers the technical layer. Content decides what happens next.</h2>
+          <p class="bt-home__line">Being readable by AI is the floor. Being worth citing is an editorial question.</p>
+          <a class="bt-home__link" href="/beyond-technical">Beyond technical</a>
+        </div>
+      </div>
+    </section>
+    <!-- BEYOND:END -->
+
       <footer class="site-footer" aria-label="Footer">
         <div class="section__inner">
           <nav class="site-nav footer-links" aria-label="More">
@@ -674,6 +685,7 @@
             <a href="/methodology" class="site-nav__link">Methodology</a>
             <a href="/benchmarks" class="site-nav__link">Benchmarks</a>
             <a href="/citation-tracking" class="site-nav__link">Citation tracking</a>
+            <a href="/beyond-technical" class="site-nav__link">Beyond technical</a>
             <a href="/trust" class="site-nav__link">Trust</a>
             <a href="/changelog" class="site-nav__link">Changelog</a>
             <a href="/privacy" class="site-nav__link">Privacy</a>
@@ -689,6 +701,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <template id="rcTemplate"><aside class="rc-card" role="region" aria-label="State of AI Readiness report"><p class="rc-card__text"><strong>State of AI Readiness:</strong> what we found scanning 219 sites. Free report, sent to your inbox.</p><a class="btn btn--gold rc-card__go" href="/research/state-of-ai-readiness">Get the report</a><button type="button" class="rc-card__close" aria-label="Dismiss the report notice">&times;</button></aside></template>
   <script src="mcp-demo.js?v=1"></script>
   <script src="teaser-scene.js?v=1" onerror="document.documentElement.classList.remove('scene-anim')"></script>
   <script src="lib/playbooks.js?v=1"></script>
@@ -697,5 +710,7 @@
   <script src="scanner.js?v=44"></script>
   <script src="nav.js?v=4"></script>
   <script src="pro-cta.js?v=1" defer></script>
+  <script src="report-card.js?v=1" defer></script>
+  <script src="wl-bar.js?v=1" defer></script>
 </body>
 </html>

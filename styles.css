@@ -319,10 +319,10 @@ select.field { appearance: auto; cursor: pointer; }
 
 /* ----------------------------- Pro waitlist bar (homepage only) -----------------------------
    A slim white strip above the header, in the page flow (it scrolls away; the header stays sticky). White, not a new
-   surface colour. Dismissed for the session by the inline script in index.html (sessionStorage, no cookie). It does not
+   surface colour. Dismissed for the session (wl-bar.js; sessionStorage, no cookie). The head script of index.html sets .wl-off on <html> when it was dismissed before, so the bar never flashes and no body script holds up the first paint. It does not
    animate, so there is nothing for reduced motion to switch off. */
 .wl-bar { background: var(--white); border-bottom: 1px solid var(--line); }
-.wl-bar[hidden] { display: none; }
+.wl-bar[hidden], .wl-off .wl-bar { display: none; }
 .wl-bar__inner { max-width: var(--content-width); margin: 0 auto; padding: 0 32px; min-height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .wl-bar__link { display: inline-flex; align-items: center; min-height: 40px; font-size: 14px; line-height: 1.3; color: var(--ink); text-decoration: none; }
 .wl-bar__link span { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold-deep); margin-right: 10px; }
@@ -354,6 +354,36 @@ select.field { appearance: auto; cursor: pointer; }
   .sr-finding { padding: 20px 18px; }
   .sr-finding__headline { font-size: 22px; }
 }
+
+/* ----------------------------- Report card (homepage only; report-card.js) -----------------------------
+   A card bottom right, a slim bar on a narrow screen. position: fixed and injected after the page has loaded, so it
+   moves nothing and paints nothing at load. Not a modal: nothing dims the page and nothing traps focus. White panel, the one shadow token. The one
+   transition is opacity (reduced motion removes it). */
+.rc-card { position: fixed; right: 20px; bottom: 20px; z-index: 40; width: min(340px, calc(100vw - 32px)); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 46px 18px 18px; opacity: 0; transition: opacity var(--t); }
+.rc-card.is-in { opacity: 1; }
+.rc-card__text { margin: 0 0 14px; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+.rc-card__text strong { color: var(--ink); font-weight: 600; }
+.rc-card__go { padding: 10px 18px; font-size: 14px; }
+.rc-card__close { position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border: 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: 22px; line-height: 1; cursor: pointer; border-radius: var(--radius-sm); }
+.rc-card__close:hover { color: var(--ink); }
+@media (max-width: 700px) {
+  .rc-card { left: 0; right: 0; bottom: 0; width: auto; border-width: 1px 0 0; border-radius: 0; padding: 10px 8px calc(10px + env(safe-area-inset-bottom)) 14px; display: flex; align-items: center; gap: 10px; }
+  .rc-card__text { margin: 0; flex: 1; font-size: 12.5px; line-height: 1.4; }
+  .rc-card__go { flex: none; padding: 9px 12px; font-size: 13px; }
+  .rc-card__close { position: static; flex: none; width: 36px; height: 36px; }
+}
+
+/* ----------------------------- Beyond technical (/beyond-technical and the homepage block) ----------------------------- */
+.bt-section .doc-list { margin-top: 16px; }
+.bt-steps { list-style: decimal; }
+.bt-cta { max-width: 760px; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+.bt-fine { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+.bt-home { padding-bottom: 96px; }
+.bt-home__box { max-width: 760px; border-top: 1px solid var(--line); padding-top: 40px; }
+.bt-home__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 3vw, 32px); line-height: 1.2; color: var(--navy-950); }
+.bt-home__line { margin-top: 12px; font-size: 16.5px; line-height: 1.55; color: var(--ink-soft); }
+.bt-home__link { display: inline-block; margin-top: 16px; font-weight: 600; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 4px; }
+.bt-home__link:hover { color: var(--gold-deep); }
 
 /* ----------------------------- Sections ----------------------------- */
 
@@ -3125,7 +3155,7 @@ code {
   .rp-page > summary { flex-direction: column; gap: 4px; }
 }
 @media print {
-  .rp-appbar, .site-header, .mobile-nav, .site-footer, .skip-link, .toast, .rp-noprint, .wl-bar { display: none !important; }
+  .rp-appbar, .site-header, .mobile-nav, .site-footer, .skip-link, .toast, .rp-noprint, .wl-bar, .rc-card { display: none !important; }
   body { background: var(--white); }
   .rp-page-wrap { padding: 0; max-width: none; }
   .rp-layout { display: block; }

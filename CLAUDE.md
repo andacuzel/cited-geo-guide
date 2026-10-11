@@ -126,6 +126,20 @@ Constraints that must not be broken:
   facts (`lib/summary.js`). No page content, URL or domain goes to the model
   for the summary. (The Pro citation questions are separate: they send excerpts of the site's own public text
   to Gemini and receive the questions; `privacy.html` says so.) Keep both in step. Do not send anything else.
+- **The State of AI Readiness report is a gated PDF kept in the database, never a file.** `/research/state-of-ai-readiness` (generated from
+  `content/readiness.json` by `scripts/generate-readiness.js`) shows four dated findings and a form; the signed 30-day link in the email streams the PDF
+  from Upstash (`lib/readiness*.js`, routes in `api/pro.js`). `*.pdf` is gitignored and tests fail on a tracked or deployed PDF; a figure on the page
+  must match `local/launch-report/stats.json` (`scripts/test-readiness-figures.js`) and the July snapshot (219 scored of 278), never the 2 Oct rescan.
+  Its list is separate from the Pro waitlist. Read `docs/readiness.md` before touching it. `/privacy` and `docs/readiness.md` change together.
+- **Repository files are not part of the site.** `middleware.js` answers the ordinary 404 for `docs`, `scripts`, `lib` (except the few files a page loads),
+  `content`, `config`, dotfiles, `CLAUDE.md` and the rest; `.vercelignore` drops what no function reads. A new browser-loaded file under a blocked
+  directory goes in `OPEN_FILES`, or `scripts/test-static-exposure.js` fails. Do not put a body `<script>` ahead of the homepage content: it delayed
+  the first paint by about 200 ms in Lighthouse.
+- **llms.txt is "optional, low-cost, no demonstrated effect on Google", and we do not measure whether any system reads it.** No page, tool text or check
+  text says it improves citations or search results (`scripts/test-site-fixes.js`). The check is still worth 4 of 100 points (owner's call).
+- **Homepage notices.** The Pro waitlist bar (`wl-bar.js`, the `.wl-off` class set by the head script) and the report card (`report-card.js`) keep
+  their state in sessionStorage inside try/catch, set no cookie and take no focus. `/beyond-technical` and its homepage block are generated from
+  `content/beyond-technical.json` (the owner's words; edit the JSON).
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

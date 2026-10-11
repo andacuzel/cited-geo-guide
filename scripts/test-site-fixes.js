@@ -83,11 +83,13 @@ const pages = htmlFiles('', []);
   // The waitlist bar: homepage only, sessionStorage in try/catch, no cookie, links to /pro.
   const home = read('index.html');
   t('the homepage has the Pro waitlist bar: the words, a link to /pro, a close button', /id="wlBar"/.test(home) && /Citehound Pro is coming: join the waitlist/.test(home) && /href="\/pro#waitlist"/.test(home) && /class="wl-bar__close"[^>]*aria-label=/.test(home));
-  const script = (/<script>\(function\(\)\{var b=document\.getElementById\('wlBar'\)[\s\S]*?<\/script>/.exec(home) || [''])[0];
-  t('the bar script keeps its dismissal in sessionStorage, inside try/catch, and sets no cookie', /sessionStorage\.getItem/.test(script) && /sessionStorage\.setItem/.test(script) && (script.match(/try\{/g) || []).length >= 2 && !/cookie|localStorage|fetch|XMLHttpRequest|sendBeacon/.test(script));
+  const head = (/<script>if \(window\.IntersectionObserver[\s\S]*?<\/script>/.exec(home) || [''])[0];
+  const wl = read('wl-bar.js');
+  t('the bar keeps its dismissal in sessionStorage, inside try/catch, in a deferred file and the head script, and sets no cookie', /try \{ sessionStorage\.setItem/.test(wl) && /try \{ if \(sessionStorage\.getItem\('ch-wlbar'\) === '1'\)/.test(head) && !/cookie|localStorage|fetch|XMLHttpRequest|sendBeacon/.test(wl + head) && /wl-bar\.js\?v=\d+" defer/.test(home));
+  t('no inline script sits in the body of the homepage ahead of the content (a body script held up the first paint by about 200 ms in Lighthouse)', home.split('<main')[0].split('<body>')[1].indexOf('<script') === -1);
   t('no other page carries the bar', pages.filter((f) => f !== 'index.html' && /wlBar|wl-bar/.test(read(f))).length === 0);
   const css = read('styles.css');
-  t('the bar does not animate or use a gradient (reduced motion has nothing to switch off), and is hidden when printed', !/\.wl-bar[^{]*\{[^}]*(animation|transition|gradient)/.test(css) && /\.rp-noprint, \.wl-bar \{ display: none !important; \}/.test(css));
+  t('the bar does not animate or use a gradient (reduced motion has nothing to switch off), and is hidden when printed', !/\.wl-bar[^{]*\{[^}]*(animation|transition|gradient)/.test(css) && /\.rp-noprint, \.wl-bar, \.rc-card \{ display: none !important; \}/.test(css));
 }
 {
   // llms.txt: optional, low-cost, no demonstrated effect on Google, and nothing about whether a system reads it. No claim that it helps citations.

@@ -25,6 +25,15 @@ keys below should be set there unless you test with them). *Local* = `.env.local
 
 Resend open and click tracking should be off for the sending domain (their docs say the default is off; confirm in the dashboard).
 
+## The State of AI Readiness report (gated PDF)
+
+No new variable is required: it uses the Upstash connection, `PRO_HASH_SECRET` and the Resend pair above. The PDF is stored in the database with `node scripts/pro-admin.js readiness-upload <file>` (`docs/readiness.md`), and the report is switched with `node scripts/pro-admin.js readiness on|off`, not with a variable.
+
+| Variable | What it does | Set in | Required | If missing | Status |
+|---|---|---|---|---|---|
+| `READINESS_EMAIL_DAILY_CAP` | Most report emails a day, all addresses together (the per-address limit of three a day is fixed in the code) | Production | No | 300 | Default |
+
+
 ## Payments (not live)
 
 | Variable | What it does | Set in | Required | If missing | Status |
