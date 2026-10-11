@@ -230,14 +230,45 @@ const dl = (token, deps, o) => call(Object.assign({ query: { a: 'readinessget', 
     t('no mail provider configured: the signup stands and the answer is the same', nm.status === 200 && nm.body === r[0].body && (await R.list(none.adapter)).length === 1);
     const fail = mk(); await R.putPdf(fail.adapter, F.fakePdf(), F.NAME);
     const bad = fakeResend({ fail: true });
-    const fr = await call(signup(), { store: fail.store, env: MAIL_ENV, fetch: bad, now: NOW });
+    const fr = await call(signup(), { store: fail.store, env: MAIL_ENV, fetch: bad, now: NOW, sleep: async () => {} });
     t('a provider that refuses never fails the signup, and is counted as a mail failure', fr.status === 200 && fr.body === r[0].body && (await Stats.read(fail.store, 1, NOW))[0].counts.mail_failed === 1);
-    for (let i = 0; i < 4; i++) await call(signup(), { store: fail.store, env: MAIL_ENV, fetch: bad, now: NOW });
-    t('... and a refused email gives its reservation back, so the 3-a-day limit is not used up by failures', bad.sent.length === 5);
+    for (let i = 0; i < 4; i++) await call(signup(), { store: fail.store, env: MAIL_ENV, fetch: bad, now: NOW, sleep: async () => {} });
+    t('... and a refused email gives its reservation back, so the 3-a-day limit is not used up by failures (five requests, each tried twice: ten sends)', bad.sent.length === 10);
     const boom = mk(); await R.putPdf(boom.adapter, F.fakePdf(), F.NAME);
     const thrower = async () => { throw new Error('network down ' + 'reader@example.org'); };
-    const tr = await call(signup(), { store: boom.store, env: MAIL_ENV, fetch: thrower, now: NOW });
+    const tr = await call(signup(), { store: boom.store, env: MAIL_ENV, fetch: thrower, now: NOW, sleep: async () => {} });
     t('a provider that cannot be reached never fails the signup', tr.status === 200 && tr.body === r[0].body);
+  }
+
+  /* ---- Resend's rate limit: one retry ---- */
+  {
+    const { adapter, store } = mk(); await R.putPdf(adapter, F.fakePdf(), F.NAME);
+    const waits = [];
+    const seq = (codes, retryAfter) => { const sent = []; let i = 0; const fn = async (url, o) => { sent.push({ headers: o.headers }); const c = codes[Math.min(i++, codes.length - 1)]; return { ok: c === 200, status: c, headers: { get: (k) => (k === 'retry-after' && retryAfter ? String(retryAfter) : null) } }; }; fn.sent = sent; return fn; };
+    const f429 = seq([429, 200]);
+    const a = await call(signup(), { store, env: MAIL_ENV, fetch: f429, now: NOW, sleep: async (ms) => { waits.push(ms); } });
+    t('a 429 from the provider is retried once after 1.1 s, and the email goes out (the same idempotency key on both tries)', a.status === 200 && f429.sent.length === 2 && waits.length === 1 && waits[0] === 1100 && f429.sent[0].headers['Idempotency-Key'] === f429.sent[1].headers['Idempotency-Key'] && (await Stats.read(store, 1, NOW))[0].counts.readiness_emails === 1);
+    const w2 = []; const f2 = seq([429, 200], 2);
+    await call(signup({ email: 'ra@example.org' }), { store, env: MAIL_ENV, fetch: f2, now: NOW, sleep: async (ms) => { w2.push(ms); } });
+    t('the wait Resend names (Retry-After) is used, up to 3 s', w2[0] === 2000);
+    const w3 = []; const f3 = seq([429, 200], 60);
+    await call(signup({ email: 'rb@example.org' }), { store, env: MAIL_ENV, fetch: f3, now: NOW, sleep: async (ms) => { w3.push(ms); } });
+    t('... and never longer than 3 s', w3[0] === 3000);
+    const f5 = seq([503, 200]);
+    await call(signup({ email: 'rc@example.org' }), { store, env: MAIL_ENV, fetch: f5, now: NOW, sleep: async () => {} });
+    t('a 5xx is retried once too', f5.sent.length === 2);
+    const f4 = seq([422, 200]); const w4 = [];
+    await call(signup({ email: 'rd@example.org' }), { store, env: MAIL_ENV, fetch: f4, now: NOW, sleep: async (ms) => { w4.push(ms); } });
+    t('a 4xx other than 429 (a refused message) is not retried', f4.sent.length === 1 && w4.length === 0);
+    const fAll = seq([429, 429]);
+    const before = (await Stats.read(store, 1, NOW))[0].counts;
+    const r = await call(signup({ email: 're@example.org' }), { store, env: MAIL_ENV, fetch: fAll, now: NOW, sleep: async () => {} });
+    const after = (await Stats.read(store, 1, NOW))[0].counts;
+    t('two 429s in a row: the signup stands with the same answer, the reservation is given back and a mail failure is counted', r.status === 200 && fAll.sent.length === 2 && after.mail_failed === before.mail_failed + 1 && after.readiness_emails === before.readiness_emails && (await adapter.get('sr:n:' + idOf('re@example.org') + ':' + Stats.dayOf(NOW))) === '0');
+    let calls = 0;
+    const flaky = async () => { calls++; if (calls === 1) throw new Error('socket hang up'); return { ok: true, status: 200, headers: { get: () => null } }; };
+    const fr = await call(signup({ email: 'rf@example.org' }), { store, env: MAIL_ENV, fetch: flaky, now: NOW, sleep: async () => {} });
+    t('a network error is retried once as well', fr.status === 200 && calls === 2);
   }
 
   /* ---- the download ---- */

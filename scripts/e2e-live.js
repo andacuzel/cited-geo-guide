@@ -197,6 +197,7 @@ async function cleanup() {
     const srPre = [];
     for (const rid of await adapter.smembers('sr:index')) { const h = await adapter.hgetall('sr:e:' + rid); if (h && h.email === CONTACT.email) srPre.push(rid); }
     t('no report-list record for the project address exists before the test', srPre.length === 0, String(srPre.length));
+    await sleep(2500);   // the provider allows about two requests a second: the earlier steps just sent two emails
     const noBox = await http('POST', '/api/readiness', { email: CONTACT.email, sendReport: false });
     t('a request without the required box is a 400 that names the field and stores nothing', noBox.status === 400 && noBox.json && !!noBox.json.fields.sendReport);
     const before = await Stats.read(store, 1);
@@ -213,7 +214,10 @@ async function cleanup() {
     t('exactly one record exists, with the date, the consent version and the second box unticked (0), kept 12 months', sr.length === 1 && (await adapter.hget('sr:e:' + sr[0], 'updates')) === '0' && (await adapter.hget('sr:e:' + sr[0], 'consentVersion')) !== null && (await adapter.ttl('sr:e:' + sr[0])) > 364 * 86400);
     const after = await Stats.read(store, 1);
     const d = (m) => after[0].counts[m] - before[0].counts[m];
-    if (liveMail) { bump('readiness_emails'); t('one report email was handed to the provider and counted (the address counter is 1)', d('readiness_emails') === 1 && sr.length === 1 && (await adapter.get('sr:n:' + sr[0] + ':' + Stats.dayOf())) === '1', String(d('readiness_emails'))); out('      one real email with a signed link was sent to the project contact address: open it once, press the link, and check the PDF opens (docs/launch-checklist.md)'); }
+    // Only what really happened is put back at the end: a refused email counts as a mail failure, not as an email.
+    if (d('readiness_emails') > 0) bump('readiness_emails', d('readiness_emails'));
+    if (d('mail_failed') > 0) bump('mail_failed', d('mail_failed'));
+    if (liveMail) { t('one report email was handed to the provider and counted (the address counter is 1, no mail failure)', d('readiness_emails') === 1 && d('mail_failed') === 0 && sr.length === 1 && (await adapter.get('sr:n:' + sr[0] + ':' + Stats.dayOf())) === '1', 'emails ' + d('readiness_emails') + ', mail failures ' + d('mail_failed')); out('      one real email with a signed link was sent to the project contact address: open it once, press the link, and check the PDF opens (docs/launch-checklist.md)'); }
     else t('no mail provider on the deployment: no email counted', d('readiness_emails') === 0);
     t('the signed download address of an unknown token is the generic 404 on the live site', (await http('GET', '/readiness/download/' + 'a'.repeat(72))).status === 404);
     for (const rid of sr) { await adapter.del('sr:e:' + rid); await adapter.srem('sr:index', rid); }
