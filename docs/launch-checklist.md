@@ -1,6 +1,6 @@
 # Launch checklist (Monday 12 October 2026)
 
-What must be true on launch day, who owns it, how to check it, and where it stands. Status is as of Sunday 11 October 2026, after commit `4d54555` plus the smoke additions (gates 64 of 64, `npm run smoke` 154 of 154, `node scripts/e2e-live.js` 44 of 44, all run today).
+What must be true on launch day, who owns it, how to check it, and where it stands. Status is as of Sunday 11 October 2026, after commit `af6647a` (gates 64 of 64, `npm run smoke` 154 of 154, `node scripts/e2e-live.js` 44 of 44, `npm run test:real-kv` 82 of 82, all run today; run smoke and e2e once each, not in loops: see "Vercel checkpoint" in `docs/readiness.md`).
 "Me" means Claude Code; "You" means the owner. A status of "done" means a check passed today, not that nothing can change.
 
 Run the whole automated set with: `npm run gates && npm run smoke`, then `node scripts/e2e-live.js` (sends two real emails to hey@getcitehound.com and removes its own data) and `node scripts/pro-admin.js health`.

@@ -80,3 +80,8 @@ The second box (updates) is stored and exported. **Nothing sends updates yet.** 
 ## Honest framing
 
 Everything on the page and in the email says "readiness", names no scanned site, makes no causal claim and says what the report does not show. `scripts/generate-readiness.js --check` fails on a banned word, a promise, a price, or a missing figure.
+
+## Two things learned on launch eve
+
+- **Resend rejects a reused idempotency key whose message differs.** The report email's key is now new for every send (and the same on the one internal retry after a 429 or 5xx). Before the fix, one refused send would have blocked the next try of the same day for that address. `scripts/test-readiness.js` covers it.
+- **Vercel's Security Checkpoint.** About 400 automated requests from one machine in an hour (smoke, e2e, Lighthouse) made Vercel answer 403 "challenge" to scripts from that IP for about ten minutes. A real browser passes it in seconds. Run `npm run smoke` and `node scripts/e2e-live.js` once each per push, and run Lighthouse against a local server.
