@@ -265,6 +265,15 @@ const dl = (token, deps, o) => call(Object.assign({ query: { a: 'readinessget', 
     const r = await call(signup({ email: 're@example.org' }), { store, env: MAIL_ENV, fetch: fAll, now: NOW, sleep: async () => {} });
     const after = (await Stats.read(store, 1, NOW))[0].counts;
     t('two 429s in a row: the signup stands with the same answer, the reservation is given back and a mail failure is counted', r.status === 200 && fAll.sent.length === 2 && after.mail_failed === before.mail_failed + 1 && after.readiness_emails === before.readiness_emails && (await adapter.get('sr:n:' + idOf('re@example.org') + ':' + Stats.dayOf(NOW))) === '0');
+    // the key is new for every send (a released reservation makes the next try reuse the day and the count; a reused key with a new link is refused by Resend)
+    {
+      const keys = []; const ok = async (url, o) => { keys.push(o.headers['Idempotency-Key']); return { ok: true, status: 200, headers: { get: () => null } }; };
+      const bad = async (url, o) => { keys.push(o.headers['Idempotency-Key']); return { ok: false, status: 429, headers: { get: () => null } }; };
+      const e = mk(); await R.putPdf(e.adapter, F.fakePdf(), F.NAME);
+      await call(signup({ email: 'key@example.org' }), { store: e.store, env: MAIL_ENV, fetch: bad, now: NOW, sleep: async () => {} });   // two tries, then released
+      await call(signup({ email: 'key@example.org' }), { store: e.store, env: MAIL_ENV, fetch: ok, now: NOW, sleep: async () => {} });    // the next try of the day has the same day and count
+      t('after a refused send the next try of the day uses a different idempotency key (the two tries of one send share one)', keys.length === 3 && keys[0] === keys[1] && keys[2] !== keys[0] && /^readiness-[0-9a-f]{32}-\d{4}-\d\d-\d\d-1-[0-9a-f]{12}$/.test(keys[2]), keys.join(' '));
+    }
     let calls = 0;
     const flaky = async () => { calls++; if (calls === 1) throw new Error('socket hang up'); return { ok: true, status: 200, headers: { get: () => null } }; };
     const fr = await call(signup({ email: 'rf@example.org' }), { store, env: MAIL_ENV, fetch: flaky, now: NOW, sleep: async () => {} });
