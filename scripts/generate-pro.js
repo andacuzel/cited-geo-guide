@@ -36,7 +36,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 72;
+const CSS_VERSION = 73;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -536,7 +536,7 @@ function check() {
       if (r < t[2]) bad(t[0] + ' has ' + r.toFixed(2) + ':1 against the brightest left-field pixel; it must be at least ' + t[2] + ':1 (lower LEFT_FIELD_OPACITY)');
     });
   }
-  if (/<pattern\b/.test(page) || /<pattern\b/.test(index.replace(bandHtml, ''))) bad('the grid texture appears outside the Pro band');
+  if (/<pattern\b/.test(page) || /<pattern\b/.test(index.replace(bandHtml, '').replace(/<!-- BEYOND:START -->[\s\S]*?<!-- BEYOND:END -->/, ''))) bad('the grid texture appears outside the Pro band (the one other place is the homepage Beyond technical panel, CLAUDE.md "Two textures")');
   ['cap', 'homepage', 'site', 'hidden', 'failing-others', 'others', 'cit-pct', 'cit-never', 'cit-questions', 'cit-model', 'cit-date', 'date', 'case-before1', 'case-before2', 'case-after1', 'case-after2'].forEach((k) => { if (!readFigs(page)[k]) bad('pro.html does not show ' + k); });
   if (F.cit.tries !== want.tries) bad('tries: ' + F.cit.tries + ' against ' + want.tries);
   if (F.case.gain !== want.caseGain) bad('case study gain: ' + F.case.gain + ' against ' + want.caseGain);

@@ -24,7 +24,7 @@ const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'beyond-technical.html');
-const CSS_VERSION = 72;
+const CSS_VERSION = 73;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'beyond-technical.json'), 'utf8'));
 const esc = shell.esc;
 const START = '<!-- BEYOND:START -->';
@@ -52,29 +52,32 @@ function build() {
   });
 }
 
-// The homepage block, between markers: a navy band. The owner's headline, line and link are untouched; the eyebrow and the two layer labels are
-// ours. The headline is cut at the sentence boundary so a wide screen can give each sentence its own line (CSS decides), never mid-sentence.
+// The homepage block, between markers: a contained light panel with a dot-grid texture, the same width and radius as the gold commerce card that follows it.
+// The owner's headline, line and link are untouched; the eyebrow and the two layer labels are ours. The headline is cut at the sentence boundary so a wide
+// screen can give each sentence its own line (CSS decides), never mid-sentence. The texture is an inline SVG <pattern> (hard-edged dots, no gradient
+// function, no image file), the same technique as the Pro band's field.
 const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+const DOTS = '<svg class="bt-panel__dots" width="100%" height="100%" aria-hidden="true" focusable="false"><defs><pattern id="btDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="currentColor"/></pattern></defs><rect width="100%" height="100%" fill="url(#btDots)"/></svg>';
 function homeBlock() {
   const h = content.home;
   const parts = h.heading.split(/(?<=\.)\s+/);
   if (parts.length !== 2) throw new Error('the homepage headline must be two sentences');
   const L = h.layers;
-  return START + '\n    <section class="bt-band" aria-labelledby="bt-home-h">\n      <div class="section__inner">\n        <div class="bt-band__head">\n' +
-    '          <p class="kicker kicker--on-navy">' + esc(h.eyebrow) + '</p>\n' +
-    '          <h2 id="bt-home-h" class="bt-band__title"><span>' + esc(parts[0]) + '</span> <span><em>' + esc(parts[1]) + '</em></span></h2>\n        </div>\n' +
-    '        <div class="bt-band__grid">\n          <div class="bt-band__text">\n            <p class="bt-band__line">' + esc(h.line) + '</p>\n' +
-    '            <a class="btn btn--gold bt-band__cta" href="' + content.path + '">' + esc(h.link) + ARROW + '</a>\n          </div>\n' +
-    '          <div class="bt-layers" role="img" aria-label="' + esc(L.label) + '">\n' +
-    '            <div class="bt-layer bt-layer--content"><span class="bt-layer__tag">' + esc(L.content.tag) + '</span><p class="bt-layer__name">' + esc(L.content.name) + '</p><p class="bt-layer__text">' + esc(L.content.text) + '</p></div>\n' +
-    '            <div class="bt-layer bt-layer--tech"><span class="bt-layer__tag">' + esc(L.tech.tag) + '</span><p class="bt-layer__name">' + esc(L.tech.name) + '</p><p class="bt-layer__text">' + esc(L.tech.text) + '</p></div>\n' +
-    '          </div>\n        </div>\n      </div>\n    </section>\n    ' + END;
+  return START + '\n    <section class="bt-sec" aria-labelledby="bt-home-h">\n      <div class="section__inner">\n        <div class="bt-panel">\n          ' + DOTS + '\n          <div class="bt-panel__body">\n' +
+    '            <p class="kicker">' + esc(h.eyebrow) + '</p>\n' +
+    '            <h2 id="bt-home-h" class="bt-panel__title"><span>' + esc(parts[0]) + '</span> <span><em>' + esc(parts[1]) + '</em></span></h2>\n' +
+    '            <div class="bt-panel__grid">\n              <div class="bt-panel__text">\n                <p class="bt-panel__line">' + esc(h.line) + '</p>\n' +
+    '                <a class="btn btn--gold bt-panel__cta" href="' + content.path + '">' + esc(h.link) + ARROW + '</a>\n              </div>\n' +
+    '              <div class="bt-layers" role="img" aria-label="' + esc(L.label) + '">\n' +
+    '                <div class="bt-layer bt-layer--content"><span class="bt-layer__tag">' + esc(L.content.tag) + '</span><p class="bt-layer__name">' + esc(L.content.name) + '</p><p class="bt-layer__text">' + esc(L.content.text) + '</p></div>\n' +
+    '                <div class="bt-layer bt-layer--tech"><span class="bt-layer__tag">' + esc(L.tech.tag) + '</span><p class="bt-layer__name">' + esc(L.tech.name) + '</p><p class="bt-layer__text">' + esc(L.tech.text) + '</p></div>\n' +
+    '              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n    ' + END;
 }
 
 function applyHome(html) {
   if (html.indexOf(START) !== -1) return html.replace(new RegExp(START + '[\\s\\S]*?' + END), () => homeBlock());
-  // First run: before the agentic commerce section (a light section on each side), so the navy band never touches the navy footer.
-  const marker = '<section aria-label="Agentic commerce">';
+  // First run: before the agentic commerce section: two panels of the same width, on the light page, with the navy footer only at the very bottom.
+  const marker = '<section class="home-tail" aria-label="Agentic commerce">';
   const i = html.indexOf(marker);
   if (i === -1) throw new Error('index.html has no agentic commerce section to place the block before');
   const lineStart = html.lastIndexOf('\n', i) + 1;
@@ -113,7 +116,7 @@ function check() {
   const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const m = new RegExp(START + '[\\s\\S]*?' + END).exec(home);
   if (!m) bad('index.html has no Beyond technical block'); else if (m[0] !== homeBlock()) bad('the homepage block is out of date; run node scripts/generate-beyond-technical.js');
-  if (home.indexOf(START) > home.indexOf('<footer class="site-footer') || home.indexOf(START) < home.indexOf('id="main"') || home.indexOf(START) > home.indexOf('aria-label="Agentic commerce"')) bad('the homepage block must sit inside main, before the agentic commerce section');
+  if (home.indexOf(START) > home.indexOf('<footer class="site-footer') || home.indexOf(START) < home.indexOf('id="main"') || home.indexOf(START) > home.indexOf('class="home-tail"')) bad('the homepage block must sit inside main, before the agentic commerce section');
   if ((page.match(/<h1[ >]/g) || []).length !== 1) bad('the page needs exactly one h1');
   if ((page.match(/<h2[ >]/g) || []).length !== 4) bad('the page needs exactly four h2 headings (the brief’s four)');
   if (!/name="robots" content="index, follow"/.test(page)) bad('the page must be indexable');

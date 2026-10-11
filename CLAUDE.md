@@ -145,10 +145,12 @@ Constraints that must not be broken:
   come from the sample data and the real renderer (`renderPro`); rerun
   `scripts/capture-pro-shots.js` whenever the report layout changes, then
   `scripts/generate-pro.js`.
-- **One texture, one place.** The homepage Pro band carries one SVG-pattern field
+- **Two textures, two places.** The homepage Pro band carries one SVG-pattern field
   of page glyphs, partial and hard-edged, in a lighter navy zone (`--navy-900`),
-  built from a `<pattern>` and never a gradient. No other surface may use it, and
-  no CSS gradient function appears anywhere in the stylesheet.
+  built from a `<pattern>` and never a gradient. The homepage "Beyond technical" panel (a contained
+  light panel, the same width and radius as the gold commerce card) carries a dot grid at 10% ink, drawn
+  the same way (an inline SVG `<pattern>`, 11 Oct 2026, owner's request). No other surface may use a
+  texture, and no CSS gradient function appears anywhere in the stylesheet (`generate-pro.js --check`).
 - **Never pair two scores with an arrow.** It reads as a score drop. The Pro band
   shows no scores; the page shows the homepage and whole-site scores side by side.
 - **Never hardcode the host.** New code reads the address from `site.config.json`
@@ -272,12 +274,13 @@ lift or scale · pill (999px) shapes · emoji in product surfaces ·
 centered body text · cream or warm backgrounds · Inter, Fraunces,
 IBM Plex, Space Grotesk, Sora, Manrope, DM Sans, Playfair, or
 JetBrains Mono · more than one full-bleed navy band per page, apart from the footer (below) — except
-the homepage, which has a navy hero field plus three navy bands mid-page (the MCP
-announcement, Pro, and "Beyond technical", 11 Oct 2026, owner's request). Every other page keeps the
-single-band rule. No further navy surface, and no new surface colour. **The footer** is the one
+the homepage, which has a navy hero field plus two navy bands mid-page
+(the MCP announcement, then Pro). Every other page keeps the
+single-band rule. No fourth navy surface, and no new surface colour. **The footer** is the one
 exception on every page: a full-bleed navy band (`--navy-950`) written by `lib/site-footer.js`
 (`scripts/site-footer.js --check` is a gate: one footer everywhere, links only to pages that exist, none to
-/changelog). The "Beyond technical" band sits between light sections, never against the navy footer.
+/changelog). The homepage "Beyond technical" block is a contained light panel, not a band, and the gold
+commerce card never touches a coloured surface: 64px of light page on every side (48px on a phone).
 
 **Gold:** `--gold` is a surface in two places only: the contained commerce
 strip, and one full-bleed gold band, the citation teaser. That band sits

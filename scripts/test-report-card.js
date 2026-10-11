@@ -180,13 +180,13 @@ t('the copy is the brief\'s: "State of AI Readiness: what we found scanning 219 
 t('219 is the content file\'s scored count (which test-readiness-figures checks against the data)', content.sample.scored === 219 && tpl.indexOf(String(content.sample.scored)) !== -1);
 t('the button links to the teaser page', /href="\/research\/state-of-ai-readiness"/.test(tpl));
 t('the close button is visible text, has an accessible name, and is a real button', /<button type="button" class="rc-card__close" aria-label="[^"]+">&times;<\/button>/.test(tpl));
-t('it is a region, not a dialog: no aria-modal, no role dialog, no backdrop', /role="region"/.test(tpl) && !/aria-modal|role="dialog"|backdrop|overlay/i.test(tpl + SRC + read('styles.css').split('Report card')[1].split('/* Homepage "Beyond technical" band')[0].split('/* ----------------------------- Sections')[0]));
+t('it is a region, not a dialog: no aria-modal, no role dialog, no backdrop', /role="region"/.test(tpl) && !/aria-modal|role="dialog"|backdrop|overlay/i.test(tpl + SRC + read('styles.css').split('Report card')[1].split('/* Homepage "Beyond technical" panel')[0].split('/* ----------------------------- Sections')[0]));
 t('the template is inert (a <template>), so nothing is painted or laid out at load', /<template id="rcTemplate">/.test(home));
 t('the script is loaded deferred, once, on the homepage only', (home.match(/report-card\.js/g) || []).length === 1 && /report-card\.js\?v=\d+" defer/.test(home));
 const walk = (d, acc) => { fs.readdirSync(path.join(ROOT, d)).forEach((n) => { if (/^(node_modules|\.git|local|docs|scripts|lib)$/.test(n)) return; const rel = d ? d + '/' + n : n; if (fs.statSync(path.join(ROOT, rel)).isDirectory()) walk(rel, acc); else if (/\.(html|js)$/.test(n)) acc.push(rel); }); return acc; };
 t('no other page loads it', walk('', []).filter((f) => f !== 'index.html' && f !== 'report-card.js' && /report-card/.test(read(f))).length === 0);
 const css = read('styles.css');
-const block = css.split('Report card (homepage only')[1].split('/* Homepage "Beyond technical" band')[0].split('/* ----------------------------- Sections')[0];
+const block = css.split('Report card (homepage only')[1].split('/* Homepage "Beyond technical" panel')[0].split('/* ----------------------------- Sections')[0];
 t('the card is position: fixed, bottom right on a wide screen and a bar along the bottom under 700px', /\.rc-card \{ position: fixed; right: 20px; bottom: 20px;/.test(block) && /@media \(max-width: 700px\) \{\s*\.rc-card \{ left: 0; right: 0; bottom: 0;/.test(block));
 t('its one transition is opacity, and there is no gradient, animation or transform', /transition: opacity var\(--t\)/.test(block) && !/gradient|animation|transform|@keyframes/.test(block));
 t('it is hidden when printed', /\.rp-noprint, \.wl-bar, \.rc-card \{ display: none !important; \}/.test(css));
