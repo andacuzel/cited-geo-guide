@@ -240,7 +240,7 @@ async function waitForDeployment(sha) {
     t('/assets/research/' + f + ' is served as ' + type, r.status === 200 && (r.headers.get('content-type') || '') === type, r.status + ' ' + r.headers.get('content-type'));
   }
   const home2 = await get('/');
-  t('the homepage has the navy Beyond technical band with the owner\u2019s headline, between two light sections', /<section class="bt-band" aria-labelledby="bt-home-h">/.test(home2.text) && /The score covers the technical layer\./.test(home2.text) && /Content decides what happens next\./.test(home2.text));
+  t('the homepage has the contained light Beyond technical panel with the owner\u2019s headline, before the commerce card, and no full-bleed navy band for it', /<section class="bt-sec" aria-labelledby="bt-home-h">/.test(home2.text) && /<div class="bt-panel">/.test(home2.text) && !/bt-band/.test(home2.text) && /The score covers the technical layer\./.test(home2.text) && /Content decides what happens next\./.test(home2.text) && home2.text.indexOf('bt-panel') < home2.text.indexOf('home-tail'));
   // Repository files are not part of the site: the same 404 page as an address that does not exist (middleware.js).
   const missing = await get('/this-page-does-not-exist-xyz', { redirect: 'follow' });
   for (const p of ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/CLAUDE.md', '/README.md', '/docs/pro.md', '/docs/env.md', '/docs', '/scripts/run-gates.js', '/scripts', '/vercel.json', '/local', '/local/launch-report/stats.json', '/package.json', '/package-lock.json', '/lib/pro-api.js', '/lib/waitlist.js', '/content/tools.json', '/config/domain-rules.json', '/site.config.json', '/middleware.js', '/.vercelignore', '/data/crm-raw.json', '/domains/crm.txt']) {
