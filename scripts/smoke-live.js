@@ -221,6 +221,13 @@ async function waitForDeployment(sha) {
   const srPriv = await get('/privacy');
   t('/privacy has the State of AI Readiness section with the 12 months, the 30 days and the three a day', /The State of AI Readiness report/.test(srPriv.text) && /after 12 months/.test(srPriv.text) && /works for 30 days/.test(srPriv.text) && /at most three report emails a day/.test(srPriv.text));
   t('/llms.txt lists the report page', /state-of-ai-readiness/.test((await get('/llms.txt')).text));
+  // The homepage notices and the Beyond technical page.
+  const h0 = await get('/');
+  t('the homepage carries the Pro waitlist bar (a link to /pro), the report card template and both scripts', /id="wlBar"/.test(h0.text) && /href="\/pro#waitlist"/.test(h0.text) && /<template id="rcTemplate">/.test(h0.text) && /report-card\.js/.test(h0.text) && /wl-bar\.js/.test(h0.text) && /BEYOND:START/.test(h0.text));
+  for (const f of ['/report-card.js', '/wl-bar.js', '/report-signup.js']) { const r = await get(f); t(f + ' is served as JavaScript', r.status === 200 && /javascript/.test(r.headers.get('content-type') || ''), String(r.status)); }
+  const bt = await get('/beyond-technical');
+  t('/beyond-technical is 200, indexable, with the owner\u2019s H1 and the mailto call to action', bt.status === 200 && !/noindex/i.test(bt.headers.get('x-robots-tag') || '') && /isn\u2019t yet a citable one/.test(bt.text.replace(/&rsquo;/g, '\u2019')) && /href="mailto:hey@getcitehound\.com\?subject=Content%20review"/.test(bt.text), String(bt.status));
+  t('the Beyond technical page is in the sitemap and llms.txt, and the footer links to it', /\/beyond-technical</.test((await get('/sitemap.xml')).text) && /beyond-technical/.test((await get('/llms.txt')).text) && /href="\/beyond-technical"/.test(bt.text));
   // Repository files are not part of the site: the same 404 page as an address that does not exist (middleware.js).
   const missing = await get('/this-page-does-not-exist-xyz', { redirect: 'follow' });
   for (const p of ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/CLAUDE.md', '/README.md', '/docs/pro.md', '/docs/env.md', '/docs', '/scripts/run-gates.js', '/scripts', '/vercel.json', '/local', '/local/launch-report/stats.json', '/package.json', '/package-lock.json', '/lib/pro-api.js', '/lib/waitlist.js', '/content/tools.json', '/config/domain-rules.json', '/site.config.json', '/middleware.js', '/.vercelignore', '/data/crm-raw.json', '/domains/crm.txt']) {

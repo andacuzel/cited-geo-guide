@@ -1,7 +1,6 @@
 # Launch checklist (Monday 12 October 2026)
 
-What must be true on launch day, who owns it, how to check it, and where it stands. Status is as of Sunday 11 October 2026, after commit `91aec18`
-(gates 56 of 56, `npm run smoke` 64 of 64, `node scripts/e2e-live.js` 35 of 35, `npm run test:real-kv` 76 of 76, all run today).
+What must be true on launch day, who owns it, how to check it, and where it stands. Status is as of Sunday 11 October 2026, after commit `4d54555` plus the smoke additions (gates 64 of 64, `npm run smoke` 154 of 154, `node scripts/e2e-live.js` 44 of 44, all run today).
 "Me" means Claude Code; "You" means the owner. A status of "done" means a check passed today, not that nothing can change.
 
 Run the whole automated set with: `npm run gates && npm run smoke`, then `node scripts/e2e-live.js` (sends two real emails to hey@getcitehound.com and removes its own data) and `node scripts/pro-admin.js health`.
@@ -28,6 +27,12 @@ Run the whole automated set with: `npm run gates && npm run smoke`, then `node s
 | 16 | Production data is what you expect: your self-test report, one unused link, one waitlist entry (yours) | You | `node scripts/pro-admin.js list` and `health`; remove tests with `purge --label "Self test"` (dry run first) and `waitlist-remove <your address>` (`docs/pilot.md`) | Untouched, as you asked |
 | 17 | Someone can reach you: `hey@getcitehound.com` receives mail and you read it | You | Send a message to it from another account | Not checked by me |
 | 18 | A way to see problems: `node scripts/pro-admin.js health` each morning | You | Run it; "Nothing needs attention" is the goal | Works; counters start from today |
+| 19 | Homepage waitlist bar: "Citehound Pro is coming: join the waitlist", links to `/pro#waitlist`, dismissible for the session (no cookie), no body script | Me | Open `/` in a new private window; close it; reload (gone for the session) | Done (390 and 1280 px checked in a browser; Lighthouse numbers in the build report) |
+| 20 | State of AI Readiness: `/research/state-of-ai-readiness` (four dated findings, form), the PDF in the database, the signed email link, removal | Me / You | `node scripts/pro-admin.js readiness-info`; join the form once with your own address, open the email, press "Download the PDF", then "Remove my address" (`docs/readiness.md`) | Built, deployed, PDF uploaded and hash-checked (`ee5438d5…`). The signed links **were not pressed by me**: they are signed with a secret that exists only in Vercel. One real email went to `hey@getcitehound.com` during `e2e-live.js`: press the link in it |
+| 21 | Homepage report card (bottom right, bar on mobile, 40% scroll or 15 s, once per session, never on `/pro`, `/privacy`, `/r/*`, `/pro/*`) | Me | Open `/` in a private window and scroll; press Escape | Done (behaviour test in the gates, checked in a browser) |
+| 22 | `/beyond-technical` and the homepage block, from your text | Me / You | Read it once as a visitor. It uses your words; the only changes are typographic apostrophes and US "prioritized". **It still contains the banned word "actually"** (your sentence "Which questions your market actually asks"): delete that word in `content/beyond-technical.json` and in the exception at the top of `scripts/generate-beyond-technical.js` if you want it to follow the voice rule | Done |
+| 23 | Repository files (`/CLAUDE.md`, `/docs/*`, `/scripts/*`, `/lib/*`, `/vercel.json`, `/.env`, `/.git/*`, `/local/*`, `/package.json`) answer the ordinary 404 | Me | `npm run smoke` checks 25 of them live, and that the files a page loads are still served | Done (was open before 11 Oct for `/CLAUDE.md`, `/docs/*.md`, `/scripts/*`, `/lib/*`) |
+| 24 | No page or tool text says llms.txt improves AI citations or Google results ("optional, low-cost; no demonstrated effect on Google") | Me / You | `node scripts/test-site-fixes.js`. **The check is still worth 4 of 100 points: your decision** (`lib/scanner.js`, check "llms.txt present") | Done, weight untouched |
 
 ## Deliberately not live
 
@@ -88,5 +93,5 @@ Watch the money with `node scripts/pro-admin.js spend` (today, this month, per p
 2. `node scripts/pro-admin.js health` and `list`.
 3. Join the waitlist with your own address from your phone; open the email; press the removal link; check `list`/`health` (a removal shows in the counters).
 4. Issue one pilot link, run a report on a small site, press "Email me this report".
-5. Read `/privacy` and `/pro` once as a visitor.
+5. Read `/privacy` and `/pro` once as a visitor. Open `/research/state-of-ai-readiness`, ask for the report with your own address, press the link in the email and check the PDF opens; then press "Remove my address".
 6. After the launch post goes out, run `health` after an hour and again in the evening.
