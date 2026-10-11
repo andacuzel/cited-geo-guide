@@ -198,6 +198,21 @@ async function waitForDeployment(sha) {
     const r = await get(p, { redirect: 'follow' });
     t(p + ' (the old internal pages) are not deployed: 404', r.status === 404, String(r.status));
   }
+  // Repository files are not part of the site: the same 404 page as an address that does not exist (middleware.js).
+  const missing = await get('/this-page-does-not-exist-xyz', { redirect: 'follow' });
+  for (const p of ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/CLAUDE.md', '/README.md', '/docs/pro.md', '/docs/env.md', '/docs', '/scripts/run-gates.js', '/scripts', '/vercel.json', '/local', '/local/launch-report/stats.json', '/package.json', '/package-lock.json', '/lib/pro-api.js', '/lib/waitlist.js', '/content/tools.json', '/config/domain-rules.json', '/site.config.json', '/middleware.js', '/.vercelignore', '/data/crm-raw.json', '/domains/crm.txt']) {
+    const r = await get(p, { redirect: 'follow' });
+    t(p + ' is not served: 404', r.status === 404, String(r.status));
+    t(p + ' leaks nothing: its body is the ordinary 404 page', r.status === 404 && !/LAUNCH|PRO_HASH_SECRET|\bmodule\.exports\b|^\s*[#{]/m.test(r.text.slice(0, 400)) && r.text.length === missing.text.length, String(r.text.length) + ' vs ' + missing.text.length);
+  }
+  for (const p of ['/lib/playbooks.js', '/lib/schema.js', '/lib/report-pro-ui.js', '/lib/crawlers.js', '/data/benchmarks.json', '/app/pro-progress.js', '/styles.css']) {
+    const r = await get(p);
+    t(p + ' (loaded by a page) is still served', r.status === 200, String(r.status));
+  }
+  for (const p of ['/Citehound-State-of-AI-Readiness-Launch-Edition-2026.pdf', '/research/state-of-ai-readiness.pdf', '/assets/state-of-ai-readiness.pdf', '/state-of-ai-readiness.pdf', '/downloads/state-of-ai-readiness.pdf', '/research/Citehound-State-of-AI-Readiness-Launch-Edition-2026.pdf']) {
+    const r = await get(p, { redirect: 'follow' });
+    t(p + ' (the gated report) is not reachable by a public path', r.status === 404 && !/%PDF/.test(r.text.slice(0, 8)), String(r.status));
+  }
   for (const p of ['/pro', '/citation-tracking']) {
     const r = await get(p);
     t(p + ' says a report can include a dated citation check that is not a ranking, and promises no result', r.status === 200 && /can also include a (dated )?citation check/i.test(r.text) && /not a ranking|never a ranking/i.test(r.text) && !/citation run|we run it for you|records when your name|in preparation/i.test(r.text), String(r.status));

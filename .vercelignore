@@ -4,3 +4,14 @@
 # Drafts of legal documents do not live in this repository at all (see docs/payments.md).
 app/report.html
 app/crawl.html
+# Repository notes and tooling that no page or function reads (the files that functions or pages do read stay deployed
+# and are hidden from the public by middleware.js instead; scripts/test-static-exposure.js checks both).
+docs/
+CLAUDE.md
+README.md
+supabase/
+plugin/
+domains/
+local/
+.claude/
+asset/
