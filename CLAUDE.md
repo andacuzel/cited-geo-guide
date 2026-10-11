@@ -24,12 +24,12 @@ e-commerce brands (`/for-brands`), local and independent professionals
 
 **Honest framing, non-negotiable:** the free scanner and its score measure
 AI *readiness* (crawler access and on-page signals), not confirmed presence
-in AI answers. Pro's **citation questions** are written for the site and are
-not tested ("Not tested. Try these in your own assistants."); until live
-testing is switched on, copy says "citation questions" and claims no result.
-If live testing is on, its **citation check** is a separate thing: one dated
-sample, on one assistant and model with live web search, of whether the site
-is cited or mentioned for those questions. It is never part of the score,
+in AI answers. Pro's **citation questions** are predictions written for the site
+("Not tested. Try these in your own assistants." unless the report has a
+check); site copy says a report *can* include a check and promises no result.
+The **citation check** is a separate thing: one dated sample, on one provider
+and model with live web search, of whether the site is cited (or, for
+Perplexity, among the sources returned) for a sample of those questions. It is never part of the score,
 never a ranking, never "visibility", and always shows its model, date and
 "sample". The model knowledge check (no search) is never called citation
 tracking and has no "cited" column. Write "the scan" or "the score" (not "Citehound")
@@ -57,18 +57,12 @@ Constraints that must not be broken:
   cap set at the provider, so that normal use costs nothing and a mistake
   cannot cost much. If a change would spend beyond an allowance or has no
   cap, stop and say so instead of implementing it.
-  - **Gemini citation tracking** (`scripts/citation-check.js`, the local
-    tracker): ungrounded runs stay on the free tier. `--grounded` (Google
-    Search grounding) is NOT permitted by Google's terms for analysing
-    results and is refused unless `GOOGLE_GROUNDED_ANALYSIS_PERMISSION=confirmed`
-    is also set (`docs/citation-check.md`, "Why grounding was retired").
-  - **Pro citation questions** use the Gemini API and must run on a billing-enabled
-    Google Cloud project (Google's paid terms: no training on the content, and
-    required for users in the EEA, Switzerland and the UK). **Live testing** and the
-    **knowledge check** cost real money (about $0.35 and $0.01 a report) and have no free
-    allowance: they stay OFF unless the provider has a spend limit set and the owner has
-    switched them on (`docs/citation-check.md`). If a change would turn them on without
-    that, stop and say so.
+  - **Local citation tracker** (`scripts/citation-check.js`): plain questions to Gemini, no web search; its old `--grounded` flag and code are deleted (Google's
+    terms do not permit analysing grounded results: `docs/citation-check.md`, "Why grounding was retired"). Its runs stay on the free tier.
+  - **Pro citation questions and check** (`lib/pro-citation.js`): Claude writes the questions (a fraction of a cent a report). The **check** costs real money and has
+    no free allowance (measured 11 Oct 2026: about $0.125 a report on Claude, $0.17 with Perplexity), so it is OFF unless the owner switches it on, every paid call goes
+    through `lib/citation-budget.js` (kill switch, per-report and daily and monthly dollar budgets, reserved before the call), and the provider must have its own spend
+    limit set. If a change would spend without those guards, stop and say so.
   - **Vercel** moves from Hobby to a paid plan when payment goes live.
     That is planned, not a violation. Until then, keep within Hobby limits
     (12 functions, current count 11 non-underscore: `api/pro.js` holds every Pro action).
@@ -103,14 +97,16 @@ Constraints that must not be broken:
   removal link) answers the same for a known and a new address. Pilot links (`scripts/pro-issue-token.js`, `docs/pilot.md`)
   run the same code as paid ones. `PRO_HASH_SECRET` is required: without it every Pro endpoint answers 503. `/privacy`
   covers the waitlist, feedback and the daily counters; change it together with `docs/pro.md`.
-- **The Pro citation part has three switches, all OFF unless set to `1`** (`lib/citation-config.js`, `docs/citation-check.md`, `docs/env.md`):
-  `CITATION_QUESTIONS_ENABLED` (with `GEMINI_API_KEY`: profile + 18 + 3 questions in the site's language, listed "Not tested", no search and
-  no analysis of any result), `CITATION_TEST_ENABLED` (live testing with the provider's web search; needs `CITATION_TEST_PROVIDER` and its key)
-  and `CITATION_KNOWLEDGE_ENABLED` (the same questions with no search; stores only "named"). Only the first is meant for production. There is no
-  Google Search grounding in the Pro code and a test fails if it returns. `lib/pro-citation.js` runs after the crawl; at most 21 calls a phase,
-  `CITATION_DAILY_CAP` live calls a day (60), `CITATION_MONTHLY_QUERY_CAP` searches a month (300), `CITATION_QUESTIONS_DAILY_CAP` question
-  jobs a day (30), stopping at the first 429. The site's text is untrusted: delimiters, a schema, validation; nothing a model returns is
-  fetched; no answer text is kept. A failure never fails the report.
+- **The Pro citation questions and check** (`lib/citation-config.js`, `lib/citation-providers.js`, `lib/citation-budget.js`, `docs/citation-check.md`, `docs/env.md`) are all OFF
+  unless a flag is `1` and its key is present: `CITATION_QUESTIONS_ENABLED` + `CITATION_ANTHROPIC_ENABLED` + `ANTHROPIC_API_KEY` (Claude writes the profile and 18 + 3
+  questions, grouped by topic, shown as "Predicted questions, generated from your site", "Not tested"), `CITATION_TEST_ENABLED` (a deterministic sample of 10 questions, one
+  run each, on Claude with web search, and on Perplexity only with `CITATION_PERPLEXITY_ENABLED` + its key, which stays off: see the Perplexity analysis), and
+  `CITATION_KNOWLEDGE_ENABLED` (no search, only "named"). One section per provider, titled with provider and model, only counts ("cited in 3 of 10"), never a percentage,
+  a ranking, a merged score or a claim about other assistants. Perplexity says "returned", not "cited". Kill switch: `CITATION_KILL=1` or `pro-admin kill on` (Redis,
+  no redeploy). Budgets: `CITATION_MAX_CALLS`, `CITATION_MAX_COST_USD`, `CITATION_DAILY_BUDGET_USD`, `CITATION_MONTHLY_BUDGET_USD`, reserved in micro-dollars before each call.
+  Only a valid order link starts paid calls; labels starting `e2e` or `smoke` never do. The site's text is untrusted (delimiters, schema, validation; nothing a model
+  returns is fetched); what a provider is sent is the question text and a locale tag only; no answer text is kept. A failure never fails the report. There is no Google
+  Search grounding anywhere.
 - **Pro payments are built, not switched on.** `lib/pro-payments.js` (Polar adapter, a Paddle stub that refuses everything) verifies the signed
   webhook (`POST /api/pro/webhook`, secret `PRO_WEBHOOK_SECRET`; without it 503), creates one paid order per provider order id through
   `createOrderFromPayment`, remembers `checkout id -> link` for 30 minutes, and `/pro/welcome` hands the start path over once. A refund before use

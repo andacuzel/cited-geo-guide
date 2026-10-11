@@ -30,7 +30,7 @@
      - /pro/welcome is a noindex, no-store page; POST /api/pro/welcome answers "waiting" for an id with no order; an unsigned POST to
        /api/pro/webhook is refused (403, or 503 while PRO_WEBHOOK_SECRET is not set: never a 2xx); a GET on it is 405
      - /app/report and /app/report.html (the old internal dashboard) answer 404
-     - /pro and /citation-tracking say testing is in preparation and promise no citation result; /privacy describes questions only
+     - /pro and /citation-tracking say a report can include a dated citation check that is not a ranking, and promise no result; /privacy describes Anthropic and what is sent
      - the Pro JSON endpoints refuse a foreign origin (403) and a content type other than JSON (415)
      - the About portrait is served, and no page cites the October 2026 rescan (only the July snapshot)
      - fail-closed without PRO_HASH_SECRET cannot be tried on the live site (it would need the secret removed). The live Pro API
@@ -194,16 +194,16 @@ async function waitForDeployment(sha) {
   t('a GET on the payment webhook is 405', (await get('/api/pro/webhook')).status === 405);
   const wjs = await get('/app/pro-welcome.js');
   t('the welcome script is served', wjs.status === 200 && /api\/pro\/welcome/.test(wjs.text));
-  for (const p of ['/app/report', '/app/report.html']) {
+  for (const p of ['/app/report', '/app/report.html', '/app/crawl', '/app/crawl.html']) {
     const r = await get(p, { redirect: 'follow' });
-    t(p + ' (the old internal dashboard) is not deployed: 404', r.status === 404, String(r.status));
+    t(p + ' (the old internal pages) are not deployed: 404', r.status === 404, String(r.status));
   }
   for (const p of ['/pro', '/citation-tracking']) {
     const r = await get(p);
-    t(p + ' says testing the questions is in preparation and promises no citation result', r.status === 200 && /in preparation/i.test(r.text) && !/citation check|citation run|we run it for you|records when your name/i.test(r.text), String(r.status));
+    t(p + ' says a report can include a dated citation check that is not a ranking, and promises no result', r.status === 200 && /can also include a (dated )?citation check/i.test(r.text) && /not a ranking|never a ranking/i.test(r.text) && !/citation run|we run it for you|records when your name|in preparation/i.test(r.text), String(r.status));
   }
   const priv = await get('/privacy');
-  t('/privacy describes the Gemini API for citation questions only (no web search, no test provider, no Polar)', priv.status === 200 && /Citation questions \(Pro/.test(priv.text) && /No web search is used/.test(priv.text) && !/Gemini with Google Search/.test(priv.text) && !/Polar|Anthropic/.test(priv.text));
+  t('/privacy describes Anthropic for the citation questions and check (not Gemini, not Perplexity, not Polar)', priv.status === 200 && /Citation questions and citation check \(Pro/.test(priv.text) && /Anthropic/.test(priv.text) && !/Gemini with Google Search|Perplexity(?!Bot)|Polar/.test(priv.text));
   // The Pro JSON endpoints: JSON only, this site's origin only.
   const stepNoType = await get('/api/pro/step?id=' + 'a'.repeat(32), { method: 'POST', headers: { 'User-Agent': 'citehound-smoke/1' } });
   const stepJson = await get('/api/pro/step?id=' + 'a'.repeat(32), { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'citehound-smoke/1' }, body: '{}' });

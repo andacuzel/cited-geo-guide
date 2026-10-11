@@ -215,6 +215,33 @@ async function both(label, step) {
     t('feedback on Redis: 6 parallel answers for one report store exactly one', fbs.every((r) => r.status === 200) && (await real.hget('pro:feedback:' + jid, 'rating')) !== null && (await real.ttl('pro:feedback:' + jid)) > 89 * 86400 && (await real.smembers('pro:feedback-index')).filter((x) => x === jid).length === 1);
   }
 
+  /* ---- the citation budget counters on the real Redis: atomic, rolled back, killed ---- */
+  {
+    const Budget = require('../lib/citation-budget.js');
+    const bs = S.createStore(real);
+    const E = { CITATION_DAILY_BUDGET_USD: '0.5', CITATION_MONTHLY_BUDGET_USD: '10', CITATION_MAX_COST_USD: '2', CITATION_MAX_CALLS: '60' };
+    const ids = Array.from({ length: 12 }, (_, i) => String.fromCharCode(97 + i).repeat(32));
+    const got = await Promise.all(ids.map((id) => Budget.reserve(bs, id, { provider: 'anthropic', estMicro: 100000, env: E })));
+    const day = new Date().toISOString().slice(0, 10);
+    const spend = await real.hgetall(Budget.SPEND);
+    t('budget on Redis: twelve reservations at the same moment against a $0.50 day: exactly five are granted and the day counter stops at $0.50 (HINCRBY is atomic, the other seven rolled back)', got.filter((x) => x.ok).length === 5 && spend['d:' + day] === '500000', got.filter((x) => x.ok).length + ' ' + spend['d:' + day]);
+    await Promise.all(got.filter((x) => x.ok).map((x) => Budget.reconcile(bs, x.g, 12000)));
+    const after = await real.hgetall(Budget.SPEND), st = await real.hgetall(Budget.STAT);
+    t('budget on Redis: reconciling five calls to $0.012 each leaves the day at $0.06 and counts five calls and $0.06 for the provider', after['d:' + day] === '60000' && st['d:' + day + ':anthropic:calls'] === '5' && st['d:' + day + ':anthropic:micro'] === '60000', JSON.stringify([after['d:' + day], st['d:' + day + ':anthropic:calls']]));
+    t('budget on Redis: the spend and stat hashes are kept (they have a TTL of about 400 days)', (await real.ttl(Budget.SPEND)) > 399 * 86400 && (await real.ttl(Budget.STAT)) > 399 * 86400);
+    await Budget.setKill(bs, true);
+    const killed = await Budget.reserve(bs, ids[0], { provider: 'anthropic', estMicro: 100, env: E });
+    await Budget.setKill(bs, false);
+    t('budget on Redis: the kill flag refuses the next call at once, and clearing it lets calls through', !killed.ok && killed.reason === 'kill' && (await Budget.reserve(bs, ids[0], { provider: 'anthropic', estMicro: 100, env: E })).ok);
+    const jid2 = 'z'.repeat(32);
+    const r = [];
+    for (let i = 0; i < 4; i++) r.push((await Budget.reserve(bs, jid2, { provider: 'anthropic', estMicro: 1000, env: { CITATION_MAX_CALLS: '3', CITATION_DAILY_BUDGET_USD: '50', CITATION_MONTHLY_BUDGET_USD: '200' } })).ok);
+    t('budget on Redis: the per-report call cap stops the fourth call', r.join() === 'true,true,true,false' && (await real.hget('pro:job:' + jid2 + ':cit', 'calls')) === '3');
+    const mk = S.createStore(real);
+    const a1 = await mk.markAttempt('y'.repeat(32), 'anthropic', 3), a2 = await mk.markAttempt('y'.repeat(32), 'anthropic', 3), a3 = await Promise.all(Array.from({ length: 6 }, () => mk.markAttempt('y'.repeat(32), 'perplexity', 4)));
+    t('attempt markers on Redis: set once (HSETNX): the second attempt for the same question is refused, and of six at once exactly one wins', a1 === true && a2 === false && a3.filter(Boolean).length === 1);
+  }
+
   /* ---- clean up exactly what this run wrote ---- */
   const keys = Array.from(touched);
   for (const k of keys) await rawAdapter.del(k);

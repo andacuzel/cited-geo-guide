@@ -35,7 +35,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 66;
+const CSS_VERSION = 68;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -247,15 +247,15 @@ function indexHtml(current, F) {
 function faq(F) {
   return [
     { q: 'What do I get with Citehound Pro?',
-      html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. Citehound does not test them for you yet.' },
+      html: 'A crawl of up to ' + F.cap + ' pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 predicted questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. A report can also include a citation check: a dated sample of what one provider\'s web search cited for about ten of them, one run each. A report without it says "Not tested".' },
     { q: 'How is this different from the free scan?',
       html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds citation questions written for your site. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets by category are free to try in your own assistant through the <a href="/mcp">Citehound MCP server</a>.' },
     { q: 'What is the sample report?',
       html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. The crawl results are shown as the crawl recorded them, not edited or improved, and our own pages still fail some checks. The report says which. Its Citations section shows a published sample of how tested questions look, made by hand for a different brand; Pro does not produce that today. <a href="/sample-report">Open it.</a>' },
     { q: 'Does it measure whether AI names me?',
-      html: 'No. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try: Citehound has not tested them, so Pro reports nothing about whether a model names your brand. Testing is in preparation; <a href="/citation-tracking">this page</a> shows what a tested sample looks like. A readiness score of 100 doesn\'t guarantee a mention.' },
+      html: 'No. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try. When a report includes a citation check, it is a separate, dated sample of one provider\'s web search for about ten questions, one run each: not a ranking and not a measure of any other assistant. <a href="/citation-tracking">This page</a> shows what a tested sample looks like. A readiness score of 100 doesn\'t guarantee a mention.' },
     { q: 'Does Pro test the citation questions?',
-      html: 'Not yet. Live testing is in preparation. A tested result would describe one model on one date and say nothing about any other assistant.' },
+      html: 'Where the report says so. A report can include a citation check on one or two providers: about ten questions, one run each, with the provider, the model and the date shown. It describes one run on one provider and says nothing about any other assistant. A report with no check labels its questions "Not tested".' },
     { q: 'Can I try the questions myself?',
       html: 'Yes. The report lists them with a Copy button. Ask each one three to five times, in a new conversation each time, and look at the pattern rather than one answer.' },
     { q: 'Can I buy Pro today?',
@@ -338,8 +338,8 @@ function build() {
     '          </div>\n' +
     '          <div class="pro-panel">\n            <p class="kicker">What would buyers ask?</p>\n' +
     '            <p class="pro-named"><span class="pro-named__big">21 questions, written for your site.</span><span class="pro-named__sub">In its own language. Not tested.</span></p>\n' +
-    '            <p class="pro-panel__cap">Pro writes the questions and you try them in your own assistants. Testing them for you is in preparation.</p>\n' +
-    '            <p class="pro-panel__text">An example of how tested questions look, from a published sample for a different brand: ' + fig('cit-model', c.model) + ', ' + fig('cit-date', c.date) + ', ' + c.triesWord + ' tries per question, made by hand without web search. In that sample the brand was named in ' + fig('cit-pct', c.pct) + '% of answers and never for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions. Pro does not produce this today.</p>\n' +
+    '            <p class="pro-panel__cap">Pro writes the questions and you can try them in your own assistants. A report can also include a dated citation check on a sample of them.</p>\n' +
+    '            <p class="pro-panel__text">An example of how tested questions look, from a published sample for a different brand: ' + fig('cit-model', c.model) + ', ' + fig('cit-date', c.date) + ', ' + c.triesWord + ' tries per question, made by hand without web search. In that sample the brand was named in ' + fig('cit-pct', c.pct) + '% of answers and never for ' + fig('cit-never', c.never) + ' of ' + fig('cit-questions', c.questions) + ' questions. It is an example of the format, not a Pro result: a Pro citation check is one provider\'s web search, about ten questions, one run each.</p>\n' +
     '            ' + indent(frame('citations', F, ''), '            ') + '\n' +
     '            <p class="pro-panel__link"><a href="/citation-tracking">How a tested run looks</a></p>\n          </div>\n' +
     '        </div>\n' +
@@ -349,7 +349,7 @@ function build() {
     '    <section class="verticals" aria-labelledby="steps-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How it works</p>\n          <h2 id="steps-heading" class="section-title">How a Pro report comes together</h2>\n        </div>\n        <ol class="pro-steps">\n' +
     step('search', 'Crawl', 'Up to ' + fig('cap3', F.cap) + ' pages, spaced politely, robots.txt respected.') + '\n' +
     step('chat', 'Write', 'The questions your buyers ask for your category, written for your site in its own language: 18 that do not name you and 3 that do.') + '\n' +
-    step('report', 'Hand over', 'One report with the summary, the fixes and the citation questions, printable as a PDF. The questions are not tested: you try them yourself.') + '\n' +
+    step('report', 'Hand over', 'One report with the summary, the fixes and the citation questions, printable as a PDF. The questions are predictions: try them yourself. Where the report includes a citation check, it says so and names the provider.') + '\n' +
     '        </ol>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Also inside ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Also inside</p>\n          <h2 id="get-heading" class="section-title">The rest of the report.</h2>\n        </div>\n        <ul class="pro-cards">\n' +
@@ -367,7 +367,7 @@ function build() {
     '    <section class="verticals" aria-labelledby="vs-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">Free vs. Pro</p>\n          <h2 id="vs-heading" class="section-title">Free reads a page. Pro reads the site and writes the questions.</h2>\n          <p class="section-sub">Nothing below is a trial or a teaser. It stays free whether or not you ever buy Pro.</p>\n        </div>\n' +
     '        <div class="pro-cols">\n' +
     '          <div class="pro-col">\n            <p class="kicker">Free</p>\n            <h3 class="pro-col__title">Always free</h3>\n            <ul class="pro-list">\n            ' + freeItems + '\n            </ul>\n          </div>\n' +
-    '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the questions</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">Citehound writes the citation questions. It does not test them yet.</p>\n            <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. ' + cta('#waitlist', 'btn btn--ghost') + '</p>\n          </div>\n' +
+    '          <div class="pro-col">\n            <p class="kicker">Pro</p>\n            <h3 class="pro-col__title">The whole site, and the questions</h3>\n            <ul class="pro-list">\n            ' + proItems + '\n            </ul>\n            <p class="pro-col__note">Citehound writes the citation questions. A report can add a dated citation check on a sample.</p>\n            <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. ' + cta('#waitlist', 'btn btn--ghost') + '</p>\n          </div>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Closing band ---------- -->\n' +
     '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Pro</p>\n        <h2 id="close-heading">Can AI read you? What would buyers ask?</h2>\n        <p class="pro-band__lede">Read a real report first: one crawl of our own site, ' + fig('pages', F.pagesRead) + ' pages, results shown as recorded, with an example of tested questions from a different brand. No signup.</p>\n' +
@@ -581,7 +581,7 @@ function check() {
     if (/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|unlimited)\s+(citation\s+)?(runs|crawls)\b/i.test(visible)) bad(name + ': a count of runs or crawls');
     if (/\blaunch(ed|es|ing)?\b|\bavailable (from|on|in|starting)\b|\bwill be available\b|\bin (Q[1-4]|20\d\d)\b/i.test(visible)) bad(name + ': a launch or availability date');
     if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
-    if (name === 'pro.html' && !/\bnot tested\b|\bdoes not test\b|\bhas not tested\b/i.test(visible)) bad(name + ': does not say that the citation questions are not tested');
+    if (name === 'pro.html' && !/\bnot tested\b|\bdoes not test\b|\bhas not tested\b/i.test(visible)) bad(name + ': does not say that a report without a check labels its questions not tested');
     if (/records when your name|asks a model the questions|we run (it|the citation)[^.]*for you/i.test(visible)) bad(name + ': claims a citation result or service Pro does not produce');
     if (/\baccount\b|\blog ?in\b|\bsign ?in\b/i.test(visible.replace('Do I need an account?', '').replace('No. There is no account or login.', ''))) bad(name + ': mentions an account or login');
   });

@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=66" />
+  <link rel="stylesheet" href="styles.css?v=68" />
 
   <script type="application/ld+json">
   {
@@ -43,7 +43,7 @@
         "name": "What do I get with Citehound Pro?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "A crawl of up to 25 pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. Citehound does not test them for you yet."
+          "text": "A crawl of up to 25 pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 predicted questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. A report can also include a citation check: a dated sample of what one provider's web search cited for about ten of them, one run each. A report without it says \"Not tested\"."
         }
       },
       {
@@ -67,7 +67,7 @@
         "name": "Does it measure whether AI names me?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. The crawl measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try: Citehound has not tested them, so Pro reports nothing about whether a model names your brand. Testing is in preparation; this page shows what a tested sample looks like. A readiness score of 100 doesn't guarantee a mention."
+          "text": "No. The crawl measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try. When a report includes a citation check, it is a separate, dated sample of one provider's web search for about ten questions, one run each: not a ranking and not a measure of any other assistant. This page shows what a tested sample looks like. A readiness score of 100 doesn't guarantee a mention."
         }
       },
       {
@@ -75,7 +75,7 @@
         "name": "Does Pro test the citation questions?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Not yet. Live testing is in preparation. A tested result would describe one model on one date and say nothing about any other assistant."
+          "text": "Where the report says so. A report can include a citation check on one or two providers: about ten questions, one run each, with the provider, the model and the date shown. It describes one run on one provider and says nothing about any other assistant. A report with no check labels its questions \"Not tested\"."
         }
       },
       {
@@ -255,8 +255,8 @@
           <div class="pro-panel">
             <p class="kicker">What would buyers ask?</p>
             <p class="pro-named"><span class="pro-named__big">21 questions, written for your site.</span><span class="pro-named__sub">In its own language. Not tested.</span></p>
-            <p class="pro-panel__cap">Pro writes the questions and you try them in your own assistants. Testing them for you is in preparation.</p>
-            <p class="pro-panel__text">An example of how tested questions look, from a published sample for a different brand: <span data-fig="pro-cit-model">gemini-3.5-flash-lite</span>, <span data-fig="pro-cit-date">October 2, 2026</span>, five tries per question, made by hand without web search. In that sample the brand was named in <span data-fig="pro-cit-pct">49</span>% of answers and never for <span data-fig="pro-cit-never">7</span> of <span data-fig="pro-cit-questions">18</span> questions. Pro does not produce this today.</p>
+            <p class="pro-panel__cap">Pro writes the questions and you can try them in your own assistants. A report can also include a dated citation check on a sample of them.</p>
+            <p class="pro-panel__text">An example of how tested questions look, from a published sample for a different brand: <span data-fig="pro-cit-model">gemini-3.5-flash-lite</span>, <span data-fig="pro-cit-date">October 2, 2026</span>, five tries per question, made by hand without web search. In that sample the brand was named in <span data-fig="pro-cit-pct">49</span>% of answers and never for <span data-fig="pro-cit-never">7</span> of <span data-fig="pro-cit-questions">18</span> questions. It is an example of the format, not a Pro result: a Pro citation check is one provider's web search, about ten questions, one run each.</p>
             <figure class="pro-shot pro-shot--citations">
             <div role="img" aria-label="An example of how tested citation questions look: the Citations section of the report, filled with the published sample for a CRM brand, not a result for our site and not something Pro produces today. gemini-3.5-flash-lite, October 2, 2026, five tries per question. Three figures: 7 questions never named, 5 named only sometimes and 6 named every time, with the questions of the first group listed."><div class="pro-shot__view" inert>
             <div class="rp-report rp-js">
@@ -313,7 +313,7 @@
           <li class="pro-step">
             <span class="pro-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span>
             <h3 class="pro-step__title">Hand over</h3>
-            <p class="pro-step__text">One report with the summary, the fixes and the citation questions, printable as a PDF. The questions are not tested: you try them yourself.</p>
+            <p class="pro-step__text">One report with the summary, the fixes and the citation questions, printable as a PDF. The questions are predictions: try them yourself. Where the report includes a citation check, it says so and names the provider.</p>
           </li>
         </ol>
       </div>
@@ -471,7 +471,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>A printable report</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pro-icon" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Citation questions written for your site, in its own language, to try yourself</span></li>
             </ul>
-            <p class="pro-col__note">Citehound writes the citation questions. It does not test them yet.</p>
+            <p class="pro-col__note">Citehound writes the citation questions. A report can add a dated citation check on a sample.</p>
             <p class="pro-col__foot pro-col__foot--note"><span data-pro-price>Early access</span>. Full Pro report for your domain. <a href="#waitlist" class="btn btn--ghost" data-pro-cta data-label-checkout="Get Citehound Pro">Join the waitlist</a></p>
           </div>
         </div>
@@ -519,7 +519,7 @@
         <div class="ct-faq">
           <details>
             <summary>What do I get with Citehound Pro?</summary>
-            <p>A crawl of up to 25 pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. Citehound does not test them for you yet.</p>
+            <p>A crawl of up to 25 pages of your site and a report built from it: a site summary with the whole-site score beside the homepage score and the main findings in plain words, a breakdown of every check by pillar, every page listed alphabetically with what failed, every fix once with the pages it applies to, an estimated score if the fixes are applied, and a printable version. It also includes citation questions: 21 predicted questions written for your site, in its own language, with English glosses, ready to copy and try in your own assistants. A report can also include a citation check: a dated sample of what one provider's web search cited for about ten of them, one run each. A report without it says "Not tested".</p>
           </details>
           <details>
             <summary>How is this different from the free scan?</summary>
@@ -531,11 +531,11 @@
           </details>
           <details>
             <summary>Does it measure whether AI names me?</summary>
-            <p>No. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try: Citehound has not tested them, so Pro reports nothing about whether a model names your brand. Testing is in preparation; <a href="/citation-tracking">this page</a> shows what a tested sample looks like. A readiness score of 100 doesn't guarantee a mention.</p>
+            <p>No. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try. When a report includes a citation check, it is a separate, dated sample of one provider's web search for about ten questions, one run each: not a ranking and not a measure of any other assistant. <a href="/citation-tracking">This page</a> shows what a tested sample looks like. A readiness score of 100 doesn't guarantee a mention.</p>
           </details>
           <details>
             <summary>Does Pro test the citation questions?</summary>
-            <p>Not yet. Live testing is in preparation. A tested result would describe one model on one date and say nothing about any other assistant.</p>
+            <p>Where the report says so. A report can include a citation check on one or two providers: about ten questions, one run each, with the provider, the model and the date shown. It describes one run on one provider and says nothing about any other assistant. A report with no check labels its questions "Not tested".</p>
           </details>
           <details>
             <summary>Can I try the questions myself?</summary>

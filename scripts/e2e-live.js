@@ -107,6 +107,7 @@ async function cleanup() {
   out('      ' + (last && last.progress ? last.progress.done + ' pages read, ' + last.progress.blocked + ' blocked, ' + last.progress.failed + ' not read' : '') + ' in ' + Math.round((Date.now() - begun) / 1000) + ' s');
   const status = await http('GET', '/api/pro/status?id=' + id);
   t('status says finished and carries the report path, and no contact data', status.json && /^\/r\//.test(status.json.reportPath || '') && status.text.indexOf(CONTACT.email) === -1 && status.text.indexOf('Citehound test') === -1);
+  t('the e2e link (label "e2e test") ran no citation part at all, so it cost nothing even if the deployment has the paid check switched on', status.json && status.json.citation === null, JSON.stringify(status.json && status.json.citation));
 
   // 4. the report
   const report = await http('GET', '/r/' + id + '/');

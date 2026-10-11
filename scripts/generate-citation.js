@@ -33,7 +33,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 66;
+const CSS_VERSION = 68;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 // Early access goes through the Pro waitlist on /pro; pro-cta.js sends the button to PRO_CHECKOUT_URL when that is set.
 const WAITLIST = '/pro#waitlist';
@@ -98,15 +98,15 @@ function derive(s) {
 function faq(d) {
   return [
     ['What is citation tracking?',
-      'Checking whether an AI model names your brand when people ask the questions your buyers ask. Citehound Pro does the first half today: it writes the citation questions for your site, in its own language, and you try them in your own assistants. Testing them for you is in preparation.'],
+      'Checking whether an AI model names or cites your brand when people ask the questions your buyers ask. Citehound Pro writes the citation questions for your site, in its own language, for you to try in your own assistants. A report can also include a citation check: a dated sample of what one provider\u2019s web search cited for about ten of them, one run each.'],
     ['Why ask every question ' + d.triesWord + ' times?',
       'Because the same question can get different answers. In the published sample, ' + d.unstable + ' of ' + d.questions + ' questions named the brand in some tries and not in others. One try can mislead you. ' + cap(d.triesWord) + ' show the pattern.'],
     ['What does named mean?',
       'Your brand name appears in the answer. In the published sample we also recorded whether it appears in a heading, a list label, a table or bold text, rather than only inside a sentence. A name inside a dismissive aside still counts as named. It is not an endorsement.'],
     ['Can I try the questions myself?',
-      'Yes. Pro writes them for your site, and the question sets by category are also published on the Citehound MCP server, with a short protocol for running them yourself in any assistant.'],
+      'Yes. Pro writes them for your site, and the question sets by category are also published on the Citehound MCP server, with a short protocol for running them yourself in any assistant. Running them yourself is the only way to see other assistants: a Pro citation check covers one provider.'],
     ['Does Citehound test the questions?',
-      'Not yet. Live testing is in preparation. The published sample used ' + d.model + ' on ' + d.date + ', made by hand without web search. A result describes one model on one date and says nothing about any other assistant.'],
+      'Where a report says so. A report can include a citation check on one or two providers: about ten questions, one run each, with the provider, model and date shown. The published sample on this page is different: it used ' + d.model + ' on ' + d.date + ', five tries per question, made by hand without web search. Any result describes one model on one date and says nothing about any other assistant.'],
     ['Is it a ranking?',
       'No. It records whether a name appears, not where your brand sits against others. Answers shift with the wording of a question and over time, so a result is a picture of one day.'],
     ['How do I get early access?',
@@ -161,8 +161,8 @@ function build(sample) {
   const d = derive(sample);
   const shell = shellParts();
   const title = 'Citehound — Citation Tracking: Does a Model Name Your Brand?';
-  const desc = 'Pro writes the citation questions your customers ask, in your site\u2019s own language, for you to try. Testing them for you is in preparation.';
-  const ogDesc = 'Pro writes the citation questions your customers ask, in your site\u2019s own language, for you to try. Testing them for you is in preparation.';
+  const desc = 'Pro writes the citation questions your customers ask, in your language. A report can add a dated check of what one provider\u2019s search cited.';
+  const ogDesc = 'Pro writes the citation questions your customers ask, in your language. A report can add a dated check of what one provider\u2019s search cited.';
   if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const questions = faq(d);
   const ld = {
@@ -196,9 +196,9 @@ function build(sample) {
     '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner">\n          <div class="page-banner__body">\n' +
     '            <p class="kicker kicker--on-navy">Citation tracking</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">Does AI name you when your buyers ask?</h1>\n' +
-    '            <p class="page-banner__desc">Pro writes the citation questions your customers ask, in your site’s own language, for you to try in your own assistants. Testing them for you is in preparation.</p>\n' +
+    '            <p class="page-banner__desc">Pro writes the citation questions your customers ask, in your site’s own language, for you to try in your own assistants. A report can also include a dated citation check on a sample of them.</p>\n' +
     '            ' + JOIN + '\n' +
-    '            <p class="ct-banner__note">The figures on this page come from a published sample for a different brand, made by hand. Pro does not produce them today.</p>\n' +
+    '            <p class="ct-banner__note">The figures on this page come from a published sample for a different brand, made by hand without web search. A Pro citation check is different: one provider’s web search, about ten questions, one run each.</p>\n' +
     '          </div>\n          <span class="page-banner__icon" aria-hidden="true">' + ICONS.svg('chat') + '</span>\n        </div>\n      </div>\n    </section>\n\n' +
 
     // 2. Gold band: the homepage scatter, unchanged
@@ -209,17 +209,17 @@ function build(sample) {
     '          </div>\n            ' + shell.scene.replace(/\n/g, '\n  ') + '\n        </div>\n      </div>\n    </section>\n\n' +
 
     // 3. What you get
-    '    <section class="ct-section" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What you get</p>\n          <h2 id="get-heading" class="section-title">The questions today. The test, in preparation.</h2>\n        </div>\n        <ul class="ct-cards">\n' +
-    card('chat', 'The questions your buyers ask', 'Today: 21 questions written for your site, in its own language, with English glosses. 18 do not name you and 3 do.') +
-    card('repeat', cap(t) + ' tries each', 'In preparation: every question asked ' + t + ' times, each in a new conversation, because one answer can mislead.') +
-    card('eyeoff', 'The questions where you’re never named', 'In preparation: the gaps, questions where your name does not come up in any try.') +
-    card('people', 'Who is named instead', 'In preparation: the other brands that appear in the answers when yours does not.') +
+    '    <section class="ct-section" aria-labelledby="get-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What you get</p>\n          <h2 id="get-heading" class="section-title">The questions, and a check on a sample.</h2>\n        </div>\n        <ul class="ct-cards">\n' +
+    card('chat', 'The questions your buyers ask', '21 predicted questions written for your site, in its own language, with English glosses. 18 do not name you and 3 do.') +
+    card('repeat', cap(t) + ' tries each', 'The published sample asked every question ' + t + ' times, each in a new conversation, because one answer can mislead. A Pro citation check asks each sampled question once per provider.') +
+    card('eyeoff', 'The questions where you’re never named', 'The gaps: questions where your name does not come up. A Pro citation check shows this per question for the sample, as yes or no.') +
+    card('people', 'Who is named instead', 'The other domains a provider cited or returned. A Pro citation check lists them, as links.') +
     '        </ul>\n      </div>\n    </section>\n\n' +
 
     // 4. A real example
     '    <section class="ct-section" aria-labelledby="sample-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">A published sample</p>\n' +
     '          <h2 id="sample-heading" class="section-title">' + c('labelCap', d.labelCap) + ', ' + c('questions', d.questions) + ' questions, ' + c('triesWord', t) + ' tries each.</h2>\n' +
-    '          <p class="section-sub">Real answers from ' + c('model', d.model) + ' on ' + c('date', d.date) + ', ' + c('triesWord', t) + ' tries per question, made by hand without web search. The brand is not named here, and neither are its competitors. This is not a result for your site, and Pro does not produce it today.</p>\n' +
+    '          <p class="section-sub">Real answers from ' + c('model', d.model) + ' on ' + c('date', d.date) + ', ' + c('triesWord', t) + ' tries per question, made by hand without web search. The brand is not named here, and neither are its competitors. This is not a result for your site: it shows the format of a sample, and a Pro citation check differs from it as described above.</p>\n' +
     '        </div>\n' +
     '        <div class="ct-stats">\n' +
     '          <div class="ct-stat"><p class="ct-stat__num">' + c('never', d.never) + '</p><p class="ct-stat__label">questions where the brand was never named</p></div>\n' +
@@ -237,11 +237,11 @@ function build(sample) {
     '        </div>\n      </div>\n    </section>\n\n' +
 
     // 5. How a run works
-    '    <section class="ct-section" aria-labelledby="how-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How a tested run works</p>\n          <h2 id="how-heading" class="section-title">Four steps. Pro does the first today.</h2>\n        </div>\n        <ol class="ct-steps">\n' +
+    '    <section class="ct-section" aria-labelledby="how-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">How a tested run works</p>\n          <h2 id="how-heading" class="section-title">Four steps. A Pro report can do all four.</h2>\n        </div>\n        <ol class="ct-steps">\n' +
     step('list', 'The questions', 'We use questions that do not name any brand in the category. A few mention an integration platform such as Slack or Google Workspace, because that is how buyers ask.') +
-    step('repeat', 'Each asked ' + t + ' times', 'In preparation: every question goes to one model ' + t + ' times, each time with no memory of the others.') +
-    step('search', 'Two things are recorded', 'In preparation: whether you are named, and whether you appear in a heading, list label, table or bold text.') +
-    step('report', 'The report', 'Today: the questions. In preparation: the marks for every try, and who is named when you are not.') +
+    step('repeat', 'Each asked ' + t + ' times', 'In the published sample, every question went to one model ' + t + ' times, each time with no memory of the others. A Pro citation check asks each sampled question once per provider.') +
+    step('search', 'Two things are recorded', 'In the published sample: whether you are named, and whether you appear in a heading, list label, table or bold text. A Pro citation check records whether your domain was cited and whether your brand name is in the answer text.') +
+    step('report', 'The report', 'The questions, and where it includes a citation check: for each sampled question whether your domain was cited, whether your brand name is in the answer, and the other domains.') +
     '        </ol>\n      </div>\n    </section>\n\n' +
 
     // 6. What a run can't tell you
@@ -262,9 +262,9 @@ function build(sample) {
     // closing band
     '    <section class="pro-band" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <p class="kicker kicker--on-navy">Early access</p>\n' +
     '        <h2 id="close-heading">Start with the questions your buyers ask.</h2>\n' +
-    '        <p class="pro-band__lede">Pro writes the citation questions for your site. Join the waitlist and we will email you once, when it opens.</p>\n' +
+    '        <p class="pro-band__lede">Pro writes the citation questions for your site, and a report can include a citation check. Join the waitlist and we will email you once, when it opens.</p>\n' +
     '        <div class="pro-band__cta">' + JOIN + '</div>\n' +
-    '        <p class="ct-banner__note ct-banner__note--band">Testing the questions for you is in preparation.</p>\n' +
+    '        <p class="ct-banner__note ct-banner__note--band">A report can also include a dated citation check on a sample of the questions.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
     '    <footer class="site-footer" aria-label="Footer">\n      <div class="section__inner">\n        ' + shell.footerNav.replace(/\n/g, '\n        ') + '\n' +

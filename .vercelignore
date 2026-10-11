@@ -1,3 +1,6 @@
-# The old internal crawl dashboard is kept in the repository but is not deployed: nothing links to it and it still uses the
-# retired "worst first" wording. Drafts of legal documents do not live in this repository at all (see docs/payments.md).
+# Internal pages that are kept in the repository but not deployed: nothing links to them and they are not part of the product.
+#   app/report.html  the old crawl dashboard (it still uses the retired "worst first" wording)
+#   app/crawl.html   the old internal page that starts a crawl through the earlier endpoint
+# Drafts of legal documents do not live in this repository at all (see docs/payments.md).
 app/report.html
+app/crawl.html

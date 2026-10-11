@@ -44,9 +44,10 @@ global.fetch = async (url, init) => { calls++; last = { url: String(url), init: 
   global.fetch = async () => ({ ok: false, status: 401, json: async () => ({ error: { message: 'bad key' } }) });
   let e2; try { await providers.get('openai').ask('x', { key: 'k', model: 'm' }); } catch (e) { e2 = e; }
   t('an HTTP error is an error with the status', !!e2 && /401/.test(e2.message));
-  global.fetch = async () => ({ ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: 'Attio.' }] }, groundingMetadata: { webSearchQueries: ['q'], groundingChunks: [{ web: { uri: 'https://x/1', title: 'g2.com' } }] } }], usageMetadata: { promptTokenCount: 9, candidatesTokenCount: 2 } }) });
+  let sentBody = null;
+  global.fetch = async (url, init) => { sentBody = JSON.parse(init.body); return { ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: 'Attio.' }] }, groundingMetadata: { webSearchQueries: ['q'], groundingChunks: [{ web: { uri: 'https://x/1', title: 'g2.com' } }] } }], usageMetadata: { promptTokenCount: 9, candidatesTokenCount: 2 } }) }; };
   r = await providers.get('gemini').ask('Which CRM?', { key: 'k4', model: 'gemini-x', grounded: true, pacer: { wait: async () => {}, ok() {}, limited() {}, delay: 0 } });
-  t('gemini: text, sources, usage with search queries', r.text === 'Attio.' && r.sources[0].title === 'g2.com' && r.usage.searchQueries === 1 && r.usage.inputTokens === 9);
+  t('gemini: plain text and usage; no search tool is ever sent (even when asked), and no sources are read from a reply', r.text === 'Attio.' && r.sources.length === 0 && r.usage.searchQueries === 0 && r.usage.inputTokens === 9 && !('tools' in sentBody));
 
   console.log('brand extraction');
   const text = 'We like **Mailchimp** and Klaviyo; HubSpot too. mailchimp again.';

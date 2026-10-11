@@ -24,7 +24,7 @@ Run the whole automated set with: `npm run gates && npm run smoke`, then `node s
 | 12 | Only Pro endpoints that exist are reachable: JSON only, own origin, size caps; `/app/report` is a 404 | Me | `scripts/test-pro-security.js`; smoke | Done |
 | 13 | MCP server: 13 read-only tools with annotations, headerless clients served, SDK clients work | Me | `scripts/test-mcp-sdk.js`; smoke | Done (official v1 and v2 clients) |
 | 14 | Environment variables set as in `docs/env.md` | You | Vercel, Project Settings, Environment Variables; compare with `docs/env.md` | See "Environment" below |
-| 15 | Citation questions: the Gemini key belongs to a billing-enabled Google Cloud project, then `GEMINI_API_KEY` and `CITATION_QUESTIONS_ENABLED=1` are set in production and redeployed | You | `docs/citation-check.md`, "Before you switch anything on"; then run one pilot report and read the section | **Not set.** Do this only after confirming billing. Without it reports simply have no citation section |
+| 15 | Citation questions (and the check): the three steps in "Switching the citation check on" below, in order, each followed by a redeploy and a look | You | `node scripts/pro-admin.js spend` and `health` after the first real report; read the report's citation sections | Built and live-verified (Claude and Perplexity real calls, one full pilot run) but **not switched on**: no citation variable is set in Vercel |
 | 16 | Production data is what you expect: your self-test report, one unused link, one waitlist entry (yours) | You | `node scripts/pro-admin.js list` and `health`; remove tests with `purge --label "Self test"` (dry run first) and `waitlist-remove <your address>` (`docs/pilot.md`) | Untouched, as you asked |
 | 17 | Someone can reach you: `hey@getcitehound.com` receives mail and you read it | You | Send a message to it from another account | Not checked by me |
 | 18 | A way to see problems: `node scripts/pro-admin.js health` each morning | You | Run it; "Nothing needs attention" is the goal | Works; counters start from today |
@@ -34,8 +34,8 @@ Run the whole automated set with: `npm run gates && npm run smoke`, then `node s
 | Item | State | Switch that turns it on | What must happen first |
 |---|---|---|---|
 | Payment | Built, never tried with Polar. `POST /api/pro/webhook` answers 503 (no `PRO_WEBHOOK_SECRET`). Every Pro button goes to the waitlist (no `PRO_CHECKOUT_URL`). | `PRO_WEBHOOK_SECRET`, then `PRO_CHECKOUT_URL` | Polar sandbox test end to end (`docs/payments.md`), terms and refund text, the `/privacy` paragraph drafted there, then a small real purchase of your own |
-| Live citation testing | Code and mock tests only. No provider key exists anywhere. | `CITATION_TEST_ENABLED=1` with `CITATION_TEST_PROVIDER` and the key | The verification list in `docs/citation-check.md`: terms question for counsel, a spend limit at the provider, a first real call, the `/privacy` paragraph, the site copy |
-| Model knowledge check | Same | `CITATION_KNOWLEDGE_ENABLED=1` | Same |
+| Citation check (Claude) | Built, verified live (11 Oct), switched off. Perplexity is built and verified too, and stays off by recommendation | `CITATION_TEST_ENABLED=1` (after the questions steps) | The checklist below, `docs/citation-check.md` (counsel items, Anthropic spend limit) |
+| Model knowledge check | Built, off | `CITATION_KNOWLEDGE_ENABLED=1` | Same |
 | Gemini Google Search grounding | Removed. Google's terms do not allow what the check did. | none | Not planned |
 | Paid-tier upgrade of Vercel | Needed when payment goes live (Hobby limits) | | Planned, not a launch blocker |
 
@@ -46,16 +46,41 @@ Run the whole automated set with: `npm run gates && npm run smoke`, then `node s
 | Upstash (`KV_REST_API_*` or `UPSTASH_REDIS_REST_*`) | set | Yes: reports and the waitlist work |
 | `PRO_HASH_SECRET` | set | Yes: Pro endpoints answer |
 | `RESEND_API_KEY`, `PRO_MAIL_FROM` | set | Yes: mail was sent by e2e |
-| `GEMINI_API_KEY`, `CITATION_QUESTIONS_ENABLED` | set only after item 15 | Not set |
+| `ANTHROPIC_API_KEY`, `CITATION_ANTHROPIC_ENABLED`, `CITATION_QUESTIONS_ENABLED` | set in step 1 below | Not set |
 | `PRO_WEBHOOK_SECRET`, `PRO_CHECKOUT_URL`, `PRO_PRICE_TEXT` | not set | Not set (webhook answers 503) |
-| `CITATION_TEST_*`, `CITATION_KNOWLEDGE_ENABLED`, `ANTHROPIC_API_KEY` | not set | Not set |
-| `WAITLIST_EMAIL_DAILY_CAP`, `CITATION_*_CAP` | optional | Defaults |
+| `CITATION_TEST_ENABLED` | set in step 2 below | Not set |
+| `PERPLEXITY_API_KEY`, `CITATION_PERPLEXITY_ENABLED`, `CITATION_KNOWLEDGE_ENABLED`, `CITATION_KILL` | not set | Not set |
+| `WAITLIST_EMAIL_DAILY_CAP`, `CITATION_*_BUDGET_USD`, `CITATION_MAX_*`, `CITATION_QUESTION_SAMPLE` | optional | Defaults ($2 a day, $4 a month, $0.50 and 30 calls a report, 10 questions) |
 
 ## Mail DNS (what `scripts/check-mail-dns.js` found on 11 October)
 
 - DKIM: a public key at `resend._domainkey.mail.getcitehound.com`. SPF: the return path `send.mail.getcitehound.com` is a CNAME to Resend's host, which carries the SPF record, and has an MX for bounces. Both align with `mail.getcitehound.com`.
 - DMARC: none on `mail.getcitehound.com`; the root `getcitehound.com` has `p=reject` with `ruf=` only and **no `rua`**, and no `sp`, so `p=reject` also applies to the sending subdomain, with no reports.
 - Recommendation (also printed by the script): keep the root at `p=reject` and add a record only for the sending subdomain, `_dmarc.mail.getcitehound.com` = `v=DMARC1; p=none; rua=mailto:hey@getcitehound.com`. That gives you reports for Resend mail without letting anyone spoof the root domain while you watch. After a few weeks of clean reports move the subdomain to `quarantine`, then `reject`. Lowering the root itself to `p=none` (your plan) also works but opens the root domain to spoofing for as long as it stays there. I changed no DNS.
+
+## Switching the citation check on (when you decide to)
+
+Prerequisites, once: in the Anthropic Console set a spend limit for the workspace the key belongs to and keep the prepaid credit topped up (the key in `.env.local` has about $5); read the **LAWYER** items in `docs/citation-check.md`; read `/privacy` (it already describes Anthropic).
+
+Costs, measured on 11 October: about **$0.125 a report** with Claude alone (10 questions), about $0.17 with Perplexity too. The built-in budgets ($2 a day, $4 a month, $0.50 a report) stop it before that can run away.
+
+**Step 1: the questions only** (about $0.002 a report). In Vercel: Project, Settings, Environment Variables, "Add New", **Production only**, in this order:
+1. `ANTHROPIC_API_KEY` = the key, with "Sensitive" ticked
+2. `CITATION_ANTHROPIC_ENABLED` = `1`
+3. `CITATION_QUESTIONS_ENABLED` = `1`
+
+Then **redeploy** (variables apply only to a new deployment): Deployments, the latest production deployment, the three dots, "Redeploy". Check: issue a pilot link (`node scripts/pro-issue-token.js --count 1 --label "Citation check 1"`), run a report, open it: it has "Citation questions" (grouped, "Not tested") and no provider section. Then `node scripts/pro-admin.js spend`: a few calls under "questions".
+
+**Step 2: the check on Claude** (about $0.125 a report). Add `CITATION_TEST_ENABLED` = `1` (Production), redeploy, run one pilot report: it has the section "What Claude's web search cited" with ten rows. `spend` now shows the cost.
+
+**Step 3, optional and not recommended yet:** `PERPLEXITY_API_KEY` (Sensitive) and `CITATION_PERPLEXITY_ENABLED` = `1`, plus the Perplexity paragraph for `/privacy` from `docs/citation-check.md`, in one deploy, only after the written answer from Perplexity described there.
+
+**The way back, from fastest:**
+1. `node scripts/pro-admin.js kill on`: no redeploy; the next paid call is refused; reports in progress finish without it. Needs the Upstash keys in `.env.local`. Undo with `kill off`.
+2. Vercel: add `CITATION_KILL` = `1` and redeploy (stops everything, also new reports' questions).
+3. Remove `CITATION_TEST_ENABLED` and redeploy (back to questions only), or remove `CITATION_QUESTIONS_ENABLED` and redeploy (back to no citation section).
+
+Watch the money with `node scripts/pro-admin.js spend` (today, this month, per provider) and `health`.
 
 ## Morning of launch, in order
 

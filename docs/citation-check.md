@@ -1,218 +1,129 @@
-# The Pro citation questions (and the two optional live checks)
+# The Pro citation questions and the citation check
 
-A Pro report can carry a **Citation questions** section. Citehound learns what a site is, writes 21 questions in the site's own
-language (18 that do not name the brand, 3 that do, each non-English one with a short English gloss), and lists them with a "Copy all
-questions" button and the label **"Not tested. Try these in your own assistants."** Nothing is asked of any assistant. There is no cited
-or mentioned claim anywhere in that section.
+A Pro report carries a **Citation questions** section: Claude reads the site, writes 21 predicted questions in the site's own language (18 that do not
+name the brand, grouped by topic, and 3 that do, each non-English one with a short English gloss), and the report lists them as **"Predicted questions,
+generated from your site"** with a "Copy all questions" button. They are predictions, never observed buyer prompts, and they say nothing about real search volume.
 
-Two further parts exist in code, each behind its own switch, **off by default and not enabled in production**:
+On top of that a report can carry a **citation check**: a deterministic sample of the questions (default 10), one run each, on Claude with its web search
+tool and, if switched on, on Perplexity's search. Each provider gets its own section with the provider and the model in the title. A report with no check labels
+its questions "Not tested. Try these in your own assistants."
 
-| Switch | What it adds | Needs |
+Everything below is OFF until you switch it on. Nothing public says a result exists unless the report itself shows it.
+
+## The switches (all off unless exactly `1` AND the key is there)
+
+| Variable | Needs | What it turns on |
 |---|---|---|
-| `CITATION_QUESTIONS_ENABLED=1` | profile + question writing (the part above). No search, no analysis of any result. | `GEMINI_API_KEY` |
-| `CITATION_TEST_ENABLED=1` | **Citation check (sample)**: the questions asked to a provider's assistant with its web search tool; per question cited yes/no, mentioned yes/no, up to 8 other cited domains (alphabetical, each with one link), model and date. | the questions switch, `CITATION_TEST_PROVIDER`, that provider's key |
-| `CITATION_KNOWLEDGE_ENABLED=1` | **Model knowledge check (no live search)**: the same questions to the provider's plain chat API with no tool. Stored: only whether the brand or domain appears in the answer, the model and the date. Never shown as citation tracking, never a "cited" column. | same as testing |
+| `CITATION_QUESTIONS_ENABLED` | `ANTHROPIC_API_KEY` and `CITATION_ANTHROPIC_ENABLED` | the profile and the 21 questions, written by Claude without search. This alone gives the "Citation questions" section |
+| `CITATION_ANTHROPIC_ENABLED` | `ANTHROPIC_API_KEY` | lets Claude be used at all (questions, check, knowledge check) |
+| `CITATION_TEST_ENABLED` | the questions switch and at least one provider ready | the live check on every provider that is ready |
+| `CITATION_PERPLEXITY_ENABLED` | `PERPLEXITY_API_KEY` | Perplexity joins the check. **Leave it off** until you have read "Perplexity" below |
+| `CITATION_KNOWLEDGE_ENABLED` | Claude ready | the model knowledge check (Claude, no search, same sample): only whether the brand or domain appears in the answer. Never citation tracking, never a "cited" column |
+| `CITATION_KILL` | nothing | `1` stops every paid call at once (after a redeploy); the instant, no-redeploy switch is `node scripts/pro-admin.js kill on` |
+| `CITATION_MODEL`, `CITATION_PERPLEXITY_MODEL` | | the models. Defaults `claude-haiku-5-5` and `perplexity/sonar`, both verified (below) |
+| `CITATION_QUESTION_SAMPLE` | | questions asked per provider, default 10, hard ceiling 18 |
+| `CITATION_MAX_CALLS`, `CITATION_MAX_COST_USD` | | per report: paid calls (default 30, ceiling 60) and cost (default $0.50, ceiling $2) |
+| `CITATION_DAILY_BUDGET_USD`, `CITATION_MONTHLY_BUDGET_USD` | | all reports together: default $2 a day and $4 a month, ceilings $50 and $200 |
+| `CITATION_QUESTIONS_PROVIDER=gemini` | `GEMINI_API_KEY` | the **disabled fallback** question writer (Gemini, no search). Never selected by accident; no work is planned on it |
 
-`CITATION_TEST_PROVIDER` is `anthropic` today (the only adapter). The old `CITATION_ENABLED` variable is not read any more. **There is no
-Gemini Google Search grounding anywhere in the Pro code**: the adapter was deleted, no `google_search` tool is sent, and a test fails if one
-comes back (see "Why grounding was retired"). Env details: `docs/env.md`.
+Removed and now ignored: `CITATION_ENABLED`, `CITATION_TEST_PROVIDER`, `CITATION_DAILY_CAP`, `CITATION_MONTHLY_QUERY_CAP`, `CITATION_QUESTIONS_DAILY_CAP` (replaced by the dollar budgets).
+There is no Google Search grounding anywhere in the Pro code, and the local tracker's `--grounded` flag and code path are deleted (see "Why grounding was retired").
+`docs/env.md` lists every variable with where to set it.
 
-## How it runs
+## How a report runs
 
-After the pages are read (and at least one was), the job goes through up to four more phases in the same browser-driven steps and under
-the same per-job lock as the crawl, so it is resumable and idempotent (`lib/pro-citation.js`; switches in `lib/citation-config.js`, decided
-once when the phases begin and stored on the job):
+After the crawl (and only if at least one page was read) the job goes through up to four more phases, driven by the same browser-made step calls and the same
+per-job lock as the crawl: a closed tab pauses it, reopening the same link resumes it (`lib/pro-citation.js`).
 
-1. **profile**: the homepage and up to four key pages (about, services, pricing, product, from the crawl's own page list) are read again,
-   one request a second, and Gemini describes the site as `{language, siteType, category, offering, audience, geography, brandName}`
-   (`lib/site-profile.js`). Language comes from the page's `lang`, checked against a detector on the text (`lib/lang-detect.js`).
-2. **questions**: 18 + 3 questions in the site's language (`lib/citation-prompts.js`). One model call per step, at most two. The 14 vertical
-   sets in `content/prompts/` are style examples when the category matches one, and a fallback for English sites only. With only the
-   questions switch on, the job ends here: status `questions`.
-3. **cite** (testing switch): about three questions per step to the provider with web search (`lib/citation-check.js`,
-   `lib/citation-anthropic.js`). Each result is stored before the next call.
-4. **know** (knowledge switch): five questions per step to the provider with no tool. Only `named`, model and date are stored.
+1. **profile**: the homepage and up to four key pages are read again, one request a second, and Claude describes the site as `{language, siteType, category, offering, audience, geography, brandName}` (`lib/site-profile.js`).
+2. **questions**: 18 + 3 questions, in the site's language, validated by rules (`lib/citation-prompts.js`).
+3. **cite** (test switch): up to two Claude calls in parallel and, beside them, up to two Perplexity calls one after the other (Perplexity answers one request a second), per step; never more than three at once, so a step stays well under the function's 60 s.
+4. **know** (knowledge switch): three plain Claude calls per step.
 
-Progress stages: "Reading your site", "Understanding what you do", "Writing citation questions in <language>", then (only when those
-switches are on) "Testing questions (n of 21)" and "Checking what the model knows (n of 21)", and "Building your report".
+The sample is deterministic: from the 18 questions that do not name the brand, balanced round-robin across the five topics (two from each at ten), each topic ordered by a hash of the report id and the question. The same report always asks the same ten; brand-naming questions are never asked.
 
-Questions mode needs no provider key besides Gemini. If `GEMINI_API_KEY` is missing the job simply has no citation section.
+**Never paid twice.** A question's attempt is marked in Redis before its call (`HSETNX`, set once). If a step dies between the call and the stored result, the next step sees the marker without a result and records "interrupted": the call is not repeated.
 
-### Controls
+**Guards before every paid call** (`lib/citation-budget.js`): the kill switch (env and a Redis flag), the per-report call and cost caps, the daily and monthly budgets. Costs are integer micro-dollars in Redis hashes moved with `HINCRBY` (atomic): the worst-case estimate is added first, any limit passed rolls it back and the call is not made, and after the call the estimate is replaced by the real cost (token usage and searches for Claude, the provider's own `usage.cost` for Perplexity). If Redis cannot be reached the answer is "no". Only aggregate counters are stored (per day and month, per provider: calls and micro-dollars); the per-report figures sit on that report's record.
 
-| Control | Value |
-|---|---|
-| Calls per phase per job | 21 at most |
-| Live calls per day, all jobs (test and knowledge together) | `CITATION_DAILY_CAP`, default 60 |
-| Web searches per month | `CITATION_MONTHLY_QUERY_CAP`, default 300 (about $3 at $10 per 1,000) |
-| Question-writing jobs per day | `CITATION_QUESTIONS_DAILY_CAP`, default 30 (each is 2 or 3 Gemini calls) |
-| Pace | one call after another, 0.7 s apart, 40 s timeout for a search call, 25 s without |
-| HTTP 429, a rate-limit answer, a quota error | stops that phase at once; every question not yet asked is "not tested"; never retried |
-| An answer that never searched (testing) / a paused search turn | counts as a failed call |
-| Three failed calls in a row | stops that phase the same way |
-| Anything else going wrong | the phase ends "not tested"; the report is still made |
+**Failures** never fail a report: HTTP 429 gets one backoff and one retry (the wait is `Retry-After`, 1 to 8 s), then stops that provider for that report; timeouts are not retried (the call may have been charged); a refusal, an empty answer, a paused search turn, an answer that never searched, or three failures in a row stop that provider. A budget cap or the kill switch stops all providers. The report then shows what was tested ("Partial. 6 of 10 questions were tested. <reason>") or, for a provider with nothing: "Citation check unavailable for <provider>; the questions below are still yours to use."
 
-A provider-side spending limit is **not** replaced by these caps: set one in the provider's console before switching live testing on
-(CLAUDE.md: zero marginal cost with a spend cap at the provider). Live testing costs money (see "Cost"); the questions part costs a fraction of a cent.
+**What is sent to a provider:** the question text, a generic locale tag (for example `tr`), and a short fixed instruction. Never the domain, a name, an address, a token, an order or report id. For the questions, Claude is sent excerpts of the site's own public page text (up to 12,000 characters). Keys are only ever in request headers.
 
-### What is untrusted, and how it is handled
+**What is stored (90 days, with the report):** the profile, the 21 questions, the sample; per question and provider: cited yes/no, brand name in the answer text yes/no (a plain string match), up to 8 other domains with one https link each (no query string), the number of searches, the model, the date and the cost. **No answer text is kept.** Per report: the number of paid calls and the cost.
 
-The site's text. It goes to the model between delimiters with a random nonce (a forged delimiter inside the page is neutralized), with a
-system instruction that says it is data, never instructions; the reply is forced to a JSON schema; every field is then validated (strings
-only, length caps, no URLs, domains or e-mail addresses, no instruction-like wording, `siteType` from a fixed list, a brand name that must be
-in the site's title, first heading, site name, description or domain). Questions are validated again (length, no URL or markup, no
-instruction wording, the 18 must not contain the brand, the 3 must, duplicates and near-duplicates dropped, language checked, a gloss
-required for non-English). A field that fails is dropped, never repaired by trusting the model more. Nothing a model returns is fetched or
-run: a cited page's address is parsed for its host name and never requested. Input is capped at 12,000 characters (4,000 for the
-homepage, 3,000 a page). `scripts/test-citation.js` has a hostile page and a model that falls for it.
+**Only valid Pro order links can start paid calls** (paid or pilot). The free scan, the MCP server, the waitlist, the site tools and the mail code do not load the providers at all (a test checks it). An order whose label starts with `e2e` or `smoke` never starts the citation part, even with every switch on, so `scripts/e2e-live.js` and the smoke test can never cost money.
 
-The 18 + 3 count had a bug: the near-duplicate test counted the brand's own name and short question words, so "What is X?", "What does X
-offer?" and "Who is X for?" looked like one question and our own site got 18 + 2. Brand words are now ignored in the comparison and a
-question with fewer than three other words is only a duplicate when identical (regression test in `scripts/test-citation.js`). A real
-run on getcitehound.com after the fix gave 18 + 3 (`node scripts/test-citation-live.js getcitehound.com`, 10 Oct 2026).
+## Verified on 11 October 2026
 
-### What is stored (90 days, with the job)
+Live calls with the project's own keys (no secret printed) and the official pages.
 
-The profile; the 21 questions; per question, with testing: `cited`, `mentioned`, up to 8 other cited domains with one https link each (no query
-string), the number of searches, the model and the date. **No answer text is kept**, in either mode. With the knowledge check: per question
-`named`, model, date. Nothing about the person who ordered the report.
+**Anthropic**
+- `GET https://api.anthropic.com/v1/models`: `claude-haiku-5-5` ("Claude Haiku 5.5", created 2026-10-07) is listed with `capabilities.server_tools.web_search.supported: true`; the older "claude-haiku-4-5-20251001" too. So the earlier report's id is right.
+- A live call with tool `{type: "web_search_20250305", name: "web_search", max_uses: 2}` returned HTTP 200: web search **is enabled for this organization**. Shape (recorded in `scripts/fixtures/provider-shapes.js`): content blocks `thinking` (empty text, ignored), `server_tool_use` (the query), `web_search_tool_result` (the results seen), and `text` blocks carrying `citations` of type `web_search_result_location` with `url` and `title`; `usage.server_tool_use.web_search_requests` counts the searches. Haiku 5.5 emits thinking blocks by default; the output tokens include them.
+- Structured output works with `output_config.format = {type: "json_schema", schema}` (checked live for the profile and the questions); it forbids `maxItems`, length bounds and `additionalProperties` other than `false`, so the adapter rewrites the schema.
+- Sources: platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool (tool versions `web_search_20250305`, `web_search_20260209`, `web_search_20260318`; `max_uses`; `pause_turn`; **$10 per 1,000 searches**; ZDR-eligible; an org administrator can disable it in the Console, which makes a request that includes the tool fail with a 400); platform.claude.com/docs/en/build-with-claude/structured-outputs; platform.claude.com/docs/en/about-claude/pricing (Haiku 5.5: $0.10 in, $0.50 out per million tokens for prompts up to 100,000 tokens). Rate-limit headers on the reply: 1,000 requests, 500,000 input tokens a minute.
 
-### What goes to which provider
+**Perplexity**
+- `GET https://api.perplexity.ai/v1/models` lists `perplexity/sonar` ($0.25 in, $2.50 out per million tokens) beside models from Anthropic, OpenAI, Google and xAI.
+- Perplexity's own page (docs.perplexity.ai/docs/sonar/quickstart) says Sonar Chat Completions support **ended on 27 September 2026** and moves to the Agent API. `POST /v1/sonar` with our key answers **401 invalid key**, so it is not used. `POST https://api.perplexity.ai/v1/agent` with `{"model": "perplexity/sonar", "input": ..., "tools": [{"type": "web_search"}]}` works (HTTP 200).
+- Reply shape (recorded): an `output` array with a `search_results` item (`queries` and `results`, each with `id`, `title`, `url`, `snippet`, `date`) and a `message` item (`content[].output_text`); `usage.cost` has the real cost in USD (`total_cost`, `tool_calls_cost` $0.0025 per search). `annotations` came back empty and the text carried no `[web:N]` markers in the probes, so **the pages Perplexity returned are recorded, not pages it cited**. The report says "among the sources returned".
+- Rate limit: replies carry `x-ratelimit-limit: 1` (one request a second); a 429 comes with `Retry-After` and is not billed (docs.perplexity.ai/docs/admin/rate-limits-usage-tiers, which describes this for its orchestrator API; the Agent API's own wording was not found, so this is read from the reply headers).
 
-- **Google (Gemini API), questions mode:** excerpts of the site's public text (up to 12,000 characters) and nothing else; the reply is the
-  profile and the questions. Measured on getcitehound.com: 2 calls, 2,264 input and 615 output tokens, about $0.002 at list price.
-- **The testing provider (Anthropic), testing mode:** one generated question per request (no site text, no profile) plus a short instruction.
-  **Knowledge mode:** the same, with no tool. The answers come back and are reduced to the flags above.
+## Measured cost (real calls, 11 October 2026)
 
-## Cost per report (list prices read 10 Oct 2026; estimates, not measurements)
+Two live runs on getcitehound.com (3 questions per provider) and one full pilot-token run (crawl, questions, 10 questions on each provider).
 
-| Part | Basis | Per report |
-|---|---|---|
-| Questions (Gemini 3.5 Flash-Lite, $0.30 / $2.50 per million tokens) | measured: 2,264 in + 615 out | about $0.002 |
-| Testing, Anthropic Claude Haiku 5.5 ($0.10 / $0.50 per million tokens, prompts up to 100k) + web search at $10 per 1,000 searches | 21 questions, 1 to 3 searches each (cap 3), search results counted as input tokens (assumed up to 20,000 per question) | about $0.25 to $0.70, typically about $0.35 |
-| Knowledge check, same model, no tool | about 300 tokens in, 500 out per question | about $0.01 |
-| For comparison: OpenAI `gpt-5-mini` ($0.25 / $2.00) + $10 per 1,000 search calls | same assumptions | about $0.40 to $0.80 |
-| For comparison: Perplexity `sonar`, low context ($1 / $1 per million + $5 per 1,000 requests) | one request per question | about $0.16 |
+| Call | Tokens | Searches | Real cost |
+|---|---|---|---|
+| Claude, search, one question | about 14,400 to 15,200 in, 1,300 to 1,400 out | 1 | $0.0122 each (3 calls: $0.0365) |
+| Perplexity `sonar`, one question | about 4,400 to 5,000 in, 240 to 400 out | 1 | $0.0043 to $0.0047 each (3 calls: $0.0136) |
+| Claude writes the profile and the questions (3 calls) | 5,900 in, 3,400 out | 0 | $0.0023 |
+| Claude knowledge check, one question | 110 to 120 in, 850 to 1,270 out | 0 | $0.0004 to $0.0007 each |
 
-The token counts for search results are an assumption: the provider bills them at input rates and does not say how large they are. Measure
-with a handful of calls (below) before trusting these figures. Prices: platform.claude.com/docs/en/about-claude/pricing,
-developers.openai.com/api/docs/pricing, docs.perplexity.ai (pricing page); retrieved 10 Oct 2026.
+Per report with the defaults (10 questions): **Claude only about $0.125** ($0.0023 + 10 × $0.0122); **Claude and Perplexity about $0.17** (+ 10 × $0.0045); the knowledge check adds about $0.005. The report's own cost cap ($0.50) is about four times the Claude-only cost.
+The reservation counters count a call at a worst-case estimate until it finishes (Claude $0.03, Perplexity $0.012), so the day and month budgets are conservative while calls are in flight.
 
-## Terms: what each provider says (retrieved 10 Oct 2026; paraphrased)
+## Terms (re-read 11 October 2026; paraphrased, with where to read the original)
 
-I could not reproduce the providers' text here, so these are paraphrases with the place to read the original. **Nothing below is legal advice;
-anything marked LAWYER is for you or counsel to settle before the feature is switched on.** Terms change: re-read before enabling.
+Nothing here is legal advice. **LAWYER** marks what I cannot settle.
 
-### Google, Gemini API (used for the questions)
+### Anthropic (Claude): enabled path
 
-Source: ai.google.dev/gemini-api/terms (effective 23 March 2026, page updated 28 April 2026).
+- **Commercial Terms** (anthropic.com/legal/commercial-terms, the page shows "Effective June 17, 2025" as current): the customer owns Outputs and Anthropic assigns whatever rights it has (B); Anthropic may not train models on Customer Content (B); the customer may use the Services to power products for its own customers and end users (A.1) and must tell users that factual claims in outputs may be wrong or out of date (D.3); no building a competing product or training competing models, no reselling, no reverse engineering (D.4); third-party features and content are the third party's, not Anthropic's responsibility (A.2); Anthropic may suspend access for violations of D.1, D.2 or D.4 or for risk (I.3). The report's scope text says results vary and are a sample, and I added that answers can be inaccurate or out of date (D.3).
+- **Acceptable Use Policy** (anthropic.com/legal/aup; the page states an effective date of 12 November 2026, a date after today, so read it as published): no circumventing other platforms' guardrails or terms; no using outputs to train a model without authorization; no reselling or proxying access; agentic use is the customer's responsibility. **LAWYER:** one universal standard forbids manipulating the sources that search engines or AI systems draw their answers from. Citehound reports whether a site is readable and cited, and its fixes are standard technical changes (crawler access, structured data), which is not manipulation as I read it, but a product in the "improve how AI sees your site" category should have that clause read by counsel.
+- **Web search tool page** (platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool): when API outputs are displayed directly to end users, citations to the original source must be included; if outputs are modified, reprocessed or combined with your own material before display, citations are to be shown as appropriate, after consulting your legal team. The report shows derived facts (cited yes/no, brand in text yes/no, other domains as links to the cited page), not the answer text, so each cited domain is a link to a page the answer cited. **LAWYER:** whether that satisfies the sentence.
+- **Sharing:** the report link can be opened by anyone who has it, so the results can reach people beyond the buyer. The terms allow serving the customer's own users; nothing found limits sharing derived facts. **LAWYER**, because the web search page speaks of "end users".
+- **Data:** the retention page lists web search as ZDR-eligible; retention periods are in the DPA, which I did not read.
 
-- **Unpaid services** (free tier, AI Studio): Google may use the content you submit and the responses to improve its products, and human
-  reviewers may read, annotate and process input and output. The terms say not to submit sensitive, confidential or personal information.
-- **Paid services**: the Gemini API counts as a paid service only when used through a Google Cloud project with an active billing account.
-  Google does not use prompts or responses to improve its products; it logs them for a limited time to detect and prevent violations.
-- **EEA, Switzerland, United Kingdom**: only paid services may be used when making an API client available to users there, and the paid
-  data terms then apply to all services. **LAWYER / you verify:** Citehound's visitors include people in those regions, so the key must belong to
-  a billing-enabled project before `CITATION_QUESTIONS_ENABLED` is set. I cannot see your Google Cloud project: check that billing is active on
-  the project that owns `GEMINI_API_KEY` (Google Cloud console, Billing) and that the key's project is that one.
-- What is sent in questions mode is public page text of the site the customer named, not personal data about the customer. Public pages can
-  still contain personal data (a team page, a name): that is the customer's own site, but it is a point for counsel under the privacy page.
-- **Grounding with Google Search** (not used any more), same page: use only in an app you own and operate; show grounded results with their Search
-  Suggestions only to the end user who submitted the prompt; no caching, framing, syndicating, reselling, analysing, training on or learning from
-  the results or suggestions; no click or link tracking; grounded text storable for up to two years only in limited cases; Google stores the prompt and
-  output for 30 days. What the old check did (analyse results, store answers for 90 days, show a report link to others) falls on the wrong side of
-  several of those lines. See "Why grounding was retired".
+### Perplexity: built, verified live, **left off**
 
-### Anthropic (recommended candidate for testing and the knowledge check)
+- **API Terms of Service** (perplexity.ai/hub/legal/perplexity-api-terms-of-service, last updated 23 January 2026; names "Sonar by Perplexity and/or Agentic Research"): the customer owns Output and Perplexity assigns any rights (2.3.1); Perplexity may not train on Customer Content (2.3.3); the right to use the service is to submit Input, receive Output and **display it solely within the customer's applications** (2.1(ii)); end users of the customer's application count as the customer (2.2); Perplexity may end the licence for an application it judges competitive with Perplexity (2.5); third-party models carry their own terms (2.6).
+- **Acceptable Use Policy** (perplexity.ai/hub/legal/aup, last updated 8 July 2025): bars making products or services that compete with, resemble or could substitute for the Services, probing or testing the services' vulnerabilities, and requires following the policies of the third-party models behind them.
+- **Third-party models** (perplexity.ai/hub/legal/third-party-models, last updated 25 November 2025): says Sonar is based on Meta's Llama 3.1 70B, fine-tuned, so Meta's licence and use policy come with it.
+- **Analysis for Citehound.** Display: the report page is inside Citehound and the results are derived facts, so 2.1(ii) is probably met, but a shareable link is the case to ask about. Competitor or substitute: a tool that reports whether a site appears in Perplexity's search is complementary to it, not a substitute, but "similar to" is broad and 2.5 gives Perplexity a termination right that needs no breach. The pages it returns are not marked as cited.
+- **Recommendation: keep `CITATION_PERPLEXITY_ENABLED` unset.** The analysis is not clearly fine: the competitor and substitute wording, the Llama dependency, the "returned, not cited" semantics, and a one-request-a-second limit. If you want it, write to api@perplexity.ai first and ask whether a report that shows, per question, whether a customer's domain was among the search results returned, to that customer and anyone the customer shares the report link with, is within 2.1(ii) and not caught by the competitor clauses. If they say yes, keep their answer. **LAWYER** for the rest.
 
-Sources: platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool; anthropic.com/legal/commercial-terms (effective 17 June 2025);
-platform.claude.com/docs/en/manage-claude/api-and-data-retention.
+### Google (Gemini): only the disabled fallback
 
-- **Analysing results:** the web search page sets no restriction on analysing results. The commercial terms (D.4) bar using the services to build a competing product,
-  training competing models, reselling, and reverse engineering; a citation report about a customer's site is none of those.
-- **Storing:** the customer owns Outputs and Anthropic assigns its rights in them (Section B); the terms and the web search page set no storage limit.
-  Anthropic may not train on Customer Content (B). The web search tool is listed as eligible for zero data retention arrangements on the retention page.
-- **Display / citations:** the web search page says that when API outputs are displayed directly to end users, citations to the original source must
-  be included, and that if outputs are modified, reprocessed or combined with your own material before display, citations should be shown "as appropriate"
-  after consulting your legal team. **LAWYER:** the report shows derived facts (cited yes/no, domains with a link, mentioned yes/no), not the
-  answer text. I made the cited domains links to the cited page for that reason. Whether that satisfies the clause is your call.
-- **Sharing with third parties:** products may be built on the services for the customer's own customers and end users (A.1), with a duty to
-  tell users that factual assertions in outputs may be wrong (D.3). The report's "How to read this" says answers change and are a sample.
-- **Commercial use:** allowed under the commercial terms; third-party web content in results stays the third party's (A.2, L.2). Search billing: $10 per 1,000 searches.
-- **Not verified:** that `claude-haiku-5-5` accepts the web search tool (read `capabilities.server_tools.web_search.supported` in the Models API for the model you use);
-  the exact live response shape; the spending-limit feature (Console, Limits). No `ANTHROPIC_API_KEY` was available, so **no live call was made**.
+ai.google.dev/gemini-api/terms (effective 23 March 2026): unpaid use may be used by Google to improve its products; paid use (a Cloud project with active billing) is not, and only paid services may be used for users in the EEA, Switzerland and the UK. This matters only if you set `CITATION_QUESTIONS_PROVIDER=gemini`; then `/privacy` must be changed back to name Google.
 
-### OpenAI
+### Draft /privacy wording if Perplexity is ever switched on (not published)
 
-Sources: developers.openai.com/api/docs/guides/tools-web-search; openai.com/policies/services-agreement (effective 1 January 2026); openai.com/policies/service-terms (updated 29 September 2026).
+> Perplexity (Pro, only when a report includes it): the generated question text and a language tag (nothing else: no site text, no domain, no personal detail) are sent to Perplexity, which runs a web search and returns an answer and the pages it found. Citehound keeps, for the 90 days of the report, only whether the site&rsquo;s domain was among the pages Perplexity returned, whether the brand name appears in the answer, the other returned domains with a link, the model name and the date, and the cost of the call: not the answer text. Perplexity&rsquo;s API terms say it does not train its models on this content. The results are a dated sample from one provider, one run per question, not a ranking.
 
-- **Analysing / storing:** the customer owns Output and OpenAI assigns its rights (Services Agreement 4.1); the customer is responsible for Output and for judging its accuracy (4.3);
-  Output may not be unique (4.4). Restrictions (3.3) include using Output to build competing models (with a permitted exception) and extracting data from the services other than as the services permit. The service terms page has no web-search clause.
-- **Display:** the web search guide says that when web results, or information from them, are shown to end users, inline citations must be clearly visible and clickable in the user interface.
-  The guide does not mention storing results. **LAWYER:** same question as above for derived facts.
-- **Customer Content:** OpenAI uses it only to provide the services, comply with law, enforce policies and prevent abuse, and does not use it to develop or improve the services without agreement (4.2).
-- **Sharing / commercial use:** customers may make applications available to end users (2.2). Search: $10 per 1,000 calls (all models for the current tool), with search content tokens at model rates.
-- OpenAI's pages return HTTP 403 to automated fetches; I read the agreement and the service terms in a browser. The Responses API shape (`web_search` tool, `include: ["web_search_call.action.sources"]`, `url_citation` annotations) is from the guide and not tested.
-
-### Perplexity (Sonar API)
-
-Sources: perplexity.ai/hub/legal/perplexity-api-terms-of-service (last updated 23 January 2026); perplexity.ai/hub/legal/aup (7/8 July 2025); docs.perplexity.ai pricing.
-
-- **Output:** the customer owns Output and Perplexity disclaims and assigns any rights (2.3.1); Output may match internet content or other users' output (2.3.2); Perplexity may not train on Customer Content (2.3.3).
-- **Display / sharing:** the right to use the services is to submit Input, receive Output **and display it solely within the customer's applications** (2.1(ii)); end users of the customer's application count as the customer for compliance (2.2). **LAWYER:** a shareable report link is inside Citehound, but confirm.
-- **Restrictions:** the acceptable use policy (2.4) bars building competing or substitute products and requires following the policies of third-party model providers behind the service; Perplexity may end a customer application it finds competitive with Perplexity (2.5). A citation checker about AI search is not obviously competing, but it is the clause to ask about. The terms set no storage limit that I found.
-- **Cost:** $1 / $1 per million tokens for `sonar` plus $5 to $12 per 1,000 requests depending on search context size (pricing page).
-- **No plain-chat mode:** Sonar always searches, so it cannot do the knowledge check. Not tested live.
-
-## Recommendation
-
-**Anthropic, Claude Haiku 5.5, for both the live test and the knowledge check.** One vendor and one set of terms covers both modes (OpenAI would too; Perplexity cannot do the no-search check). Its terms
-say plainly that the customer owns outputs, that Anthropic does not train on customer content, and that products may serve the customer's own end users, and its
-only web-search display rule is the citation sentence above. The cost is about $0.35 a report for testing and a cent for the knowledge check. Perplexity is cheaper
-(about $0.16) and always searches, which is a real methodological advantage, but it has the "competitive or substitute" clause and cannot do the knowledge check. OpenAI is similar in cost to
-Anthropic and requires visible, clickable citations. **A caution about this recommendation:** Anthropic also makes the assistant that wrote this, which is a reason to read
-the comparison above rather than take my word for it.
-
-A methodological caveat that applies to any provider that decides for itself whether to search: Claude (and OpenAI with `tool_choice: auto`) may answer without searching. The adapter tells the model to
-search, then counts a search-mode answer with zero searches as "not tested", so a "not cited" is never recorded for a question that was not searched.
-
-**What to verify yourself, or with counsel, before enabling in production:**
-
-1. Anthropic: that the account accepts the web search tool for `claude-haiku-5-5` (Models API field above), a spend limit is set in the Console, and the commercial terms you accepted are the ones read above.
-2. Whether showing derived facts with linked domains satisfies the display and citation sentence (LAWYER). If not, the fix is to show the answer text with its citations, which means storing it.
-3. Whether the report's shareable link makes the results "displayed to end users" beyond the customer (LAWYER).
-4. The first real call: `ANTHROPIC_API_KEY=… node scripts/test-citation-live.js --test --calls 3 example.com` (never more than 10 calls, default 3), then read the output. The response shape is from the docs and unverified.
-5. Re-read `/privacy` and add the provider (draft wording below) in the same deploy that switches testing on.
-6. Page copy: live testing is described nowhere on the site (the site says "citation questions", and "In preparation" for testing). Update /pro, /citation-tracking, the start form and the mail text in the same deploy.
-
-### Draft /privacy wording if testing or the knowledge check is switched on (not published)
-
-> Citation testing (Pro, only when a report includes it): the citation questions Citehound wrote for the site are sent, one at a time, to Anthropic (Claude, with its web search
-> tool, and without it for the model knowledge check). The requests contain the question and a short instruction. They contain no part of the site's text, no name, no email
-> address and no contact detail. Anthropic returns an answer, and for the search check the pages it cited. Citehound keeps only whether the site was cited or named, the domains of the
-> other cited pages with a link, the model name and the date, for 90 days with the report, and not the answer text. Anthropic's commercial terms say it does not train its models on this
-> content. The results are a dated sample from one assistant, not a ranking.
-
-## Before you switch anything on
-
-**Questions mode (the only one meant for production):**
-
-1. Confirm billing is active on the Google Cloud project that owns the key, and set a budget alert there. (Required for EEA/Swiss/UK users and for the paid data terms.)
-2. In Vercel (production) set `GEMINI_API_KEY` and `CITATION_QUESTIONS_ENABLED=1`; redeploy.
-3. Run `node scripts/test-citation-live.js example.com` once from your machine and read the output; start one real report with a pilot link and read the section.
-
-**Live testing or the knowledge check (not yet):** the six items above, then `CITATION_TEST_PROVIDER=anthropic`, `ANTHROPIC_API_KEY`, `CITATION_TEST_ENABLED=1` and/or `CITATION_KNOWLEDGE_ENABLED=1`.
+Publish it in the same deploy that sets `CITATION_PERPLEXITY_ENABLED`, and add Perplexity to the list in `docs/env.md` and on `/privacy`.
 
 ## Why grounding was retired
 
-The first version of this feature asked the questions through Gemini with the Google Search tool. Google's terms for grounded results do not permit what that design does
-(analysis of the results, displaying them without Search Suggestions, a report link that others can open), the free tier cannot ground at all (HTTP 429), and the response shape was
-never verified against a live response. The adapter is deleted. `scripts/test-citation.js` fails if `google_search`, `groundingMetadata`, a redirect resolver or a `geminiProvider` reappear in the Pro
-citation code. The local tracker (`scripts/citation-check.js`) keeps a `--grounded` flag from before; it is refused unless `GOOGLE_GROUNDED_ANALYSIS_PERMISSION=confirmed` is also set, which is for
-an owner who has Google's written permission. The published CRM sample was made without web search and is not affected.
+The first design asked the questions through Gemini with the Google Search tool. Google's terms for grounded results do not permit what it did (analysing results, showing them without Search Suggestions, a report link others can open), the free tier cannot ground at all, and the response shape was never verified. The adapter is gone, `scripts/test-citation.js` fails if `google_search`, `groundingMetadata` or a redirect resolver reappears, and the local tracker (`scripts/citation-check.js`) no longer has a `--grounded` flag or any code behind it: it asks plain questions only.
 
 ## Live runs
 
-- 10 Oct 2026, free-tier Gemini key, **before** the changes in this file: grounded calls answered 429 on both sites and the check stopped at once; questions were 18 + 2 on getcitehound.com (the duplicate bug) and 18 + 3 on lexware.de.
-- 10 Oct 2026, **after**: `node scripts/test-citation-live.js getcitehound.com` (questions only): crawl 25 pages in 35 s, profile correct (English, saas), 18 + 3 questions, 2 Gemini calls, 2,264 input and 615 output tokens.
-- No provider key (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `PERPLEXITY_API_KEY`) was present in `.env.local`, so no live testing or knowledge call has been made. The adapter is covered by mocks only.
+- 11 Oct 2026: `node scripts/test-citation-live.js getcitehound.com`: crawl 25 pages, profile and 18 + 3 questions by Claude, 3 writer calls, $0.0023.
+- 11 Oct 2026: `node scripts/test-citation-live.js --test --knowledge --calls 3 getcitehound.com`: 3 questions on Claude (cited no, brand in text no, 4 to 8 other domains each), 3 on Perplexity (returned no, brand no, up to 8 domains), 3 knowledge calls (named no); total $0.054.
+- 11 Oct 2026: one full pilot-token run on getcitehound.com through the real HTTP flow (issue link, start, 14 steps, report page): 114 s, 20 paid questions, status done, both provider sections present, 0 of 10 cited and 0 of 10 brand-in-text on both providers.
+
+## Before you switch anything on
+
+See `docs/launch-checklist.md` ("Citation check") for the order of the steps, the exact variable names, the redeploy and the way back.

@@ -60,19 +60,20 @@ const pages = htmlFiles('', []);
   if (tracked) t('git tracks no draft legal document', tracked.filter((f) => /(terms|refund|legal|tos)[-_]?draft|draft[-_]?(terms|refund|legal)/i.test(f)).length === 0);
   const linked = pages.concat(['sitemap.xml', 'llms.txt', 'robots.txt']).filter((f) => /terms-draft|refund-draft/.test(read(f)));
   t('no page, the sitemap, llms.txt or robots.txt mention them', linked.length === 0, linked.join(', '));
-  t('the old dashboard app/report.html is kept in the repository and kept off the deployed site (.vercelignore), and no page links to it', fs.existsSync(path.join(ROOT, 'app/report.html')) && read('.vercelignore').split('\n').indexOf('app/report.html') !== -1 && pages.filter((f) => /["'(]\/?app\/report(\.html)?[?"')]/.test(read(f))).length === 0);
+  t('the old internal pages app/report.html and app/crawl.html are kept in the repository and kept off the deployed site (.vercelignore), and no page links to them', ['app/report.html', 'app/crawl.html'].every((f) => fs.existsSync(path.join(ROOT, f)) && read('.vercelignore').split('\n').indexOf(f) !== -1) && pages.filter((f) => !/^app\/(crawl|report)\.html$/.test(f) && /["'(]\/?app\/(report|crawl)(\.html)?[?"')]/.test(read(f))).length === 0);
   const pay = read('docs/payments.md');
   t('docs/payments.md lists the settings and the dashboard steps and marks what is unverified', /PRO_WEBHOOK_SECRET/.test(pay) && /PRO_CHECKOUT_URL/.test(pay) && /PRO_PRICE_TEXT/.test(pay) && /Add Endpoint/.test(pay) && /checkout_id=\{CHECKOUT_ID\}/.test(pay) && (pay.match(/UNVERIFIED/g) || []).length >= 4);
 }
 {
   // Until live testing is switched on, nothing public may promise or describe a citation result or a run Citehound does not make.
-  const banned = /citation check|citation run|run for you\b|we run (it|the citation)|records when your name|self-serve version|asks a model the questions|and show you when your name/i;
+  const banned = /citation run|run for you\b|we run (it|the citation)|records when your name|self-serve version|asks a model the questions|and show you when your name/i;
   const files = pages.filter((f) => !/^(local|docs|node_modules)\//.test(f) && !/^(changelog|mcp)\.html$/.test(f)).concat(['llms.txt', 'lib/pro-mail.js', 'app/pro-start.js', 'app/pro-progress.js']);
   const hits = files.filter((f) => banned.test(read(f))).map((f) => f + ': ' + (banned.exec(read(f)) || [])[0]);
-  t('public pages, llms.txt, the mail, the start form and the report code never say "citation check", "citation run", "we run it for you" or promise a recorded result', hits.length === 0, hits.join('; '));
-  const needs = ['pro.html', 'citation-tracking.html'].filter((f) => !/in preparation/i.test(read(f)));
-  t('/pro and /citation-tracking say that testing the questions is in preparation', needs.length === 0, needs.join(', '));
-  t('/privacy describes the Gemini API for questions only: no web search, no test, the tier terms and the billing condition', /Citation questions \(Pro/.test(read('privacy.html')) && /No web search is used/.test(read('privacy.html')) && /active billing account/.test(read('privacy.html')) && !/Gemini with Google Search/.test(read('privacy.html')));
+  t('public pages, llms.txt, the mail, the start form and the progress script never say "citation run" or "we run it for you", or promise a recorded result', hits.length === 0, hits.join('; '));
+  t('/pro and /citation-tracking no longer say the check is "in preparation" (a report can include it)', ['pro.html', 'citation-tracking.html'].every((f) => !/in preparation/i.test(read(f))));
+  const needs = ['pro.html', 'citation-tracking.html'].filter((f) => !/can also include a (dated )?citation check/i.test(read(f)) || !/not a ranking|never a ranking/i.test(read(f)));
+  t('/pro and /citation-tracking say a report can include a citation check, as a dated sample, and that it is not a ranking', needs.length === 0, needs.join(', '));
+  t('/privacy describes Anthropic for the citation questions and the citation check: what is sent, that nothing personal goes, what is kept, no Gemini and no Perplexity (not switched on)', /Citation questions and citation check \(Pro/.test(read('privacy.html')) && /Anthropic/.test(read('privacy.html')) && /the question text and a language tag, nothing else/.test(read('privacy.html')) && /does not train its models/.test(read('privacy.html')) && !/Perplexity(?!Bot)/.test(read('privacy.html')) && !/Gemini with Google Search|Google&rsquo;s Gemini API, which returns/.test(read('privacy.html')));
 }
 {
   const c = read('docs/domain-day.md');

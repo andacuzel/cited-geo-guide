@@ -28,7 +28,7 @@
       { id: 'profile', label: 'Understanding what you do' },
       { id: 'questions', label: 'Writing citation questions' }
     ];
-    if (cit.test) s.push({ id: 'test', label: 'Testing questions' });
+    if (cit.test) s.push({ id: 'test', label: 'Running the citation check' });
     if (cit.knowledge) s.push({ id: 'know', label: 'Checking what the model knows' });
     s.push({ id: 'report', label: 'Building your report' });
     return s;

@@ -12,6 +12,9 @@
                                                     record and feedback. Without --yes it only says what it would remove.
      node scripts/pro-admin.js waitlist-remove <email> [--yes]
                                                     remove one waitlist entry by address (the address is never printed back)
+     node scripts/pro-admin.js kill on|off|status   the citation kill switch in Redis: "on" stops every paid citation call at once, with no
+                                                    redeploy (CITATION_KILL=1 in Vercel does the same, after a redeploy)
+     node scripts/pro-admin.js spend                today's and this month's paid citation calls and cost per provider, and the budgets
      node scripts/pro-admin.js health               the last 24 hours at a glance: jobs, restored links, webhook and email failures,
                                                     waitlist signups, orders
 
@@ -161,6 +164,29 @@ async function health(store, now) {
   return lines;
 }
 
+const usd = (micro) => '$' + (micro / 1e6).toFixed(4);
+
+async function kill(store, mode) {
+  const Budget = require('../lib/citation-budget.js');
+  if (mode === 'on') { await Budget.setKill(store, true); return { ok: true, lines: ['Citation kill switch is ON. No paid citation call will be made from now on, and reports in progress finish without them. Turn it off with: node scripts/pro-admin.js kill off'] }; }
+  if (mode === 'off') { await Budget.setKill(store, false); return { ok: true, lines: ['Citation kill switch is OFF in Redis. (CITATION_KILL=1 in the Vercel environment, if set, still stops everything.)'] }; }
+  if (mode === 'status') { const flag = (await store.adapter.get(Budget.KILL)) === '1'; return { ok: true, lines: ['Kill switch in Redis: ' + (flag ? 'ON' : 'off') + '. CITATION_KILL in this shell\'s environment: ' + (process.env.CITATION_KILL === '1' ? 'set' : 'not set') + ' (the Vercel value cannot be read from here).'] }; }
+  return { ok: false, lines: ['Usage: node scripts/pro-admin.js kill on | off | status'] };
+}
+
+async function spend(store) {
+  const Budget = require('../lib/citation-budget.js');
+  const x = await Budget.summary(store, process.env, Date.now());
+  const lines = ['Paid citation calls, UTC. Aggregate numbers only (no report, site or person).', '', pad('PROVIDER', 14) + pad('TODAY CALLS', 13) + pad('TODAY COST', 13) + pad('MONTH CALLS', 13) + 'MONTH COST'];
+  let dc = 0, dm = 0, mc = 0, mm = 0;
+  x.rows.forEach((r) => { dc += r.dayCalls; dm += r.dayMicro; mc += r.monthCalls; mm += r.monthMicro; lines.push(pad(r.provider === 'generate' ? 'questions' : r.provider, 14) + pad(r.dayCalls, 13) + pad(usd(r.dayMicro), 13) + pad(r.monthCalls, 13) + usd(r.monthMicro)); });
+  lines.push(pad('TOTAL', 14) + pad(dc, 13) + pad(usd(dm), 13) + pad(mc, 13) + usd(mm));
+  lines.push('', 'Budget today: ' + usd(x.reservedDayMicro) + ' counted of ' + usd(x.dailyBudgetMicro) + ' (the counter includes calls in flight at their worst-case estimate). This month: ' + usd(x.reservedMonthMicro) + ' of ' + usd(x.monthlyBudgetMicro) + '.');
+  lines.push('(The budgets shown are the ones set in this shell\'s environment, or the defaults; Vercel\'s values cannot be read from here.)');
+  lines.push('Kill switch: ' + (x.killed ? 'ON (no paid call will be made)' : 'off') + '.');
+  return lines;
+}
+
 async function run(store, argv) {
   const cmd = argv[0];
   if (cmd === 'list') return { code: 0, lines: await list(store) };
@@ -179,7 +205,9 @@ async function run(store, argv) {
   if (cmd === 'purge') { const i = argv.indexOf('--label'); const r = await purge(store, i === -1 ? '' : argv[i + 1], argv.indexOf('--yes') !== -1); return { code: r.ok ? 0 : 1, lines: r.lines }; }
   if (cmd === 'waitlist-remove') { const r = await waitlistRemove(store, argv[1], argv.indexOf('--yes') !== -1); return { code: r.ok ? 0 : 1, lines: r.lines }; }
   if (cmd === 'health') return { code: 0, lines: await health(store) };
-  return { code: 1, lines: ['Usage: node scripts/pro-admin.js list | revoke <prefix> | clear-review <prefix> | stats [--days N] | feedback | purge --label "<label>" [--yes] | waitlist-remove <email> [--yes] | health'] };
+  if (cmd === 'kill') { const r = await kill(store, argv[1]); return { code: r.ok ? 0 : 1, lines: r.lines }; }
+  if (cmd === 'spend') return { code: 0, lines: await spend(store) };
+  return { code: 1, lines: ['Usage: node scripts/pro-admin.js list | revoke <prefix> | clear-review <prefix> | stats [--days N] | feedback | purge --label "<label>" [--yes] | waitlist-remove <email> [--yes] | health | kill on|off|status | spend'] };
 }
 
 async function main() {
@@ -192,5 +220,5 @@ async function main() {
   process.exit(r.code);
 }
 
-module.exports = { run: run, list: list, revoke: revoke, stats: stats, feedback: feedback, purge: purge, waitlistRemove: waitlistRemove, health: health };
+module.exports = { kill: kill, spend: spend, run: run, list: list, revoke: revoke, stats: stats, feedback: feedback, purge: purge, waitlistRemove: waitlistRemove, health: health };
 if (require.main === module) main().catch(function (e) { console.error(e && e.message ? e.message : e); process.exit(1); });

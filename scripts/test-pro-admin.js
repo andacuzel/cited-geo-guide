@@ -223,6 +223,28 @@ async function runToEnd(store, id, crawl) { let last = null; for (let i = 0; i <
     t('clear-review: removes the flag by prefix', cl.code === 0 && (await store.getOrder(keep.token)).review === '' && (await Admin.run(store, ['clear-review', 'abc'])).code === 1);
   }
 
+  /* ---- the citation kill switch and the spend view ---- */
+  {
+    const store = S.createStore(S.memoryAdapter());
+    const Budget = require('../lib/citation-budget.js');
+    const st0 = await Admin.run(store, ['kill', 'status']);
+    t('kill status: says the Redis switch is off and that the Vercel value cannot be read from here', st0.code === 0 && /Redis: off/.test(st0.lines.join()) && /cannot be read from here/.test(st0.lines.join()));
+    const on = await Admin.run(store, ['kill', 'on']);
+    const blocked = await Budget.reserve(store, 'a'.repeat(32), { provider: 'anthropic', estMicro: 100, env: {} });
+    t('kill on: sets the flag and the very next paid call is refused (no redeploy)', on.code === 0 && /ON/.test(on.lines.join()) && !blocked.ok && blocked.reason === 'kill');
+    t('kill status after: says ON', /Redis: ON/.test((await Admin.run(store, ['kill', 'status'])).lines.join()));
+    const off = await Admin.run(store, ['kill', 'off']);
+    t('kill off: clears the flag and calls pass again', off.code === 0 && (await Budget.reserve(store, 'a'.repeat(32), { provider: 'anthropic', estMicro: 100, env: {} })).ok);
+    t('kill with no or a wrong argument prints the usage and exits 1', (await Admin.run(store, ['kill'])).code === 1 && (await Admin.run(store, ['kill', 'maybe'])).code === 1);
+    const g = await Budget.reserve(store, 'b'.repeat(32), { provider: 'perplexity', estMicro: 12000, env: {} });
+    await Budget.reconcile(store, g.g, 4500);
+    const g2 = await Budget.reserve(store, 'b'.repeat(32), { provider: 'anthropic', estMicro: 30000, env: {} });
+    await Budget.reconcile(store, g2.g, 12180);
+    const sp = (await Admin.run(store, ['spend'])).lines.join('\n');
+    t('spend: today and this month per provider with the calls and the cost, a total, the budgets and the kill state', /perplexity\s+1\s+\$0\.0045\s+1\s+\$0\.0045/.test(sp) && /anthropic\s+1\s+\$0\.0122\s+1\s+\$0\.0122/.test(sp) && /TOTAL\s+2\s+\$0\.0167/.test(sp) && /of \$2\.0000/.test(sp) && /of \$4\.0000/.test(sp) && /Kill switch: off/.test(sp), sp);
+    t('spend: aggregate numbers only: no token, report id, address or name', !/@|b{32}/.test(sp));
+  }
+
   /* ---- an expired link ---- */
   {
     const adapter = S.memoryAdapter();

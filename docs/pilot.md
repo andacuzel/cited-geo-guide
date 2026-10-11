@@ -44,6 +44,8 @@ node scripts/pro-admin.js list        # every link: first 8 characters, label, s
 node scripts/pro-admin.js stats       # daily totals for the last 7 days (add --days 30)
 node scripts/pro-admin.js feedback    # what people wrote, newest first, with the average rating
 node scripts/pro-admin.js health      # the last 24 hours at a glance (see "Health" below)
+node scripts/pro-admin.js spend       # paid citation calls and cost, today and this month, per provider
+node scripts/pro-admin.js kill on     # stop every paid citation call at once (kill off to undo), no redeploy
 ```
 
 `list` shows `unused`, `used`, `expired` or `revoked` for each link, and for used links whether the report is
@@ -104,6 +106,12 @@ When a payment is refunded in part, or a refund arrives that the program cannot 
 flagged: `list` shows `CHECK: partial_refund` (or `refund_reported`, or `refund_after_use`), and `health` counts it.
 Look at the order in the Polar dashboard, decide, and clear it with `node scripts/pro-admin.js clear-review <prefix>`.
 See "Refunds" in `docs/payments.md`.
+
+## 4c. The citation check costs money: spend and the kill switch
+
+A report can run a paid citation check (docs/citation-check.md). `node scripts/pro-admin.js spend` shows, per provider, today's and this month's calls and cost and the budgets
+(counters only: no report, site or person). `node scripts/pro-admin.js kill on` makes the next paid call refuse, with no redeploy; `kill off` undoes it; `kill status` says
+which way it is. An order whose label starts with `e2e` or `smoke` never starts a paid check, so label your own test links `Test ...` only when you want the check to run.
 
 ## 5. The waitlist
 
