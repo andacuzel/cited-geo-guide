@@ -104,6 +104,12 @@ const pages = htmlFiles('', []);
   t('the sample report page shows the current llms.txt sentence, not the retired one', !/curated map/.test(sampleRaw));
 }
 
+{
+  // Bing Webmaster Tools site verification: the homepage's head carries the owner's meta tag, once, and no other page does (the root is what Bing verifies).
+  const home = read('index.html');
+  t('the homepage head has the Bing Webmaster Tools verification tag, once, exactly as given', (home.match(/<meta name="msvalidate\.01" content="121B0BA2689999A90CF65824DFBD7F38" \/>/g) || []).length === 1 && home.indexOf('msvalidate.01') < home.indexOf('</head>'));
+  t('no other page carries it', pages.filter((f) => f !== 'index.html' && /msvalidate/.test(read(f))).length === 0);
+}
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');
 if (fails.length) { process.stderr.write('FAILED:\n  ' + fails.join('\n  ') + '\n'); process.exit(1); }
