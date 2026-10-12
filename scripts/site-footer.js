@@ -28,7 +28,7 @@ function pages() {
 
 function expected(rel, s) {
   if (rel === START_PAGE) return s.replace(/([ \t]*)<footer class="ps-foot">[\s\S]*?<\/footer>|([ \t]*)<footer class="site-footer"[\s\S]*?<\/footer>/, (m, a, b) => { const ind = a !== undefined ? a : b; return ind + footer.html(ind); });
-  return footer.normalize(s);
+  return footer.normalize(s, { badge: rel === 'index.html' });
 }
 
 // Every address the footer links to must be a page of this site (a file, an index.html or a clean URL) or a mailto.
@@ -36,7 +36,7 @@ function missingTargets() {
   const tracked = new Set(pages().concat(['404.html']));
   const bad = [];
   footer.hrefs().forEach((h) => {
-    if (/^mailto:/.test(h)) return;
+    if (/^(mailto:|https:)/.test(h)) return;
     const p = h === '/' ? 'index.html' : h.replace(/^\//, '');
     if (!(tracked.has(p + '.html') || tracked.has(p) || tracked.has(p + '/index.html'))) bad.push(h);
   });

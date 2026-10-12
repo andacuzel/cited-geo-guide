@@ -46,7 +46,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
 const OUT = path.join(ROOT, 'benchmarks');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 73; // bump when styles.css changes
+const CSS_VERSION = 74; // bump when styles.css changes
 
 const TRACKS = {
   'B2B SaaS': { bar: 'chart-bar--b2b', fill: 'bm-fill--b2b', marker: 'var(--navy-800)', onBar: 'chart-seg-text--light' },

@@ -1863,6 +1863,15 @@ button.tool-example:hover { color: var(--gold-deep); }
 .sf-logo__mark { font-family: var(--font-display); font-size: 24px; line-height: 1; }
 .sf-tag { margin: 16px 0 0; font-family: var(--font-body); max-width: 300px; font-size: 14.5px; line-height: 1.55; color: rgba(255, 255, 255, 0.82); }
 .sf-h { margin: 0 0 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-soft); }
+.sf-social { list-style: none; margin: 14px 0 0 -12px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sf-social a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: var(--radius-sm); color: rgba(255, 255, 255, 0.88); transition: color var(--t); }
+.sf-social a:hover { color: var(--gold-soft); }
+.sf-social a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 2px; }
+.sf-social svg { display: block; width: 20px; height: 20px; }
+.sf-badge { margin: 12px 0 0; }
+.sf-badge a { display: inline-block; border-radius: var(--radius-sm); }
+.sf-badge a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; }
+.sf-badge img { display: block; width: 200px; max-width: 100%; height: auto; aspect-ratio: 200 / 52; }
 .sf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .sf-list a { display: inline-block; padding: 5px 0; font-size: 14.5px; line-height: 1.4; color: rgba(255, 255, 255, 0.88); text-decoration: none; transition: color var(--t); overflow-wrap: anywhere; }
 .sf-list a:hover { color: var(--gold-soft); text-decoration: underline; text-decoration-color: var(--gold-soft); text-underline-offset: 4px; }
