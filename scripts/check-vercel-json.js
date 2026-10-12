@@ -39,14 +39,16 @@ async function loadSchema(refresh) {
   try {
     const ctrl = new AbortController();
     const t = setTimeout(function () { ctrl.abort(); }, 8000);
-    const res = await fetch(LIVE, { signal: ctrl.signal });
-    clearTimeout(t);
-    if (res.ok) {
-      schema = await res.json();
-      source = 'live schema';
-      if (refresh) fs.writeFileSync(SAVED, JSON.stringify(schema), 'utf8');
-    }
-  } catch (e) { /* offline: the saved copy is used */ }
+    // The timeout covers the whole download, the body included: clearing it after the headers let a stalled body hang the gates (13 Oct 2026).
+    try {
+      const res = await fetch(LIVE, { signal: ctrl.signal });
+      if (res.ok) {
+        schema = await res.json();
+        source = 'live schema';
+        if (refresh) fs.writeFileSync(SAVED, JSON.stringify(schema), 'utf8');
+      }
+    } finally { clearTimeout(t); }
+  } catch (e) { /* offline or too slow: the saved copy is used */ }
   if (!schema) schema = JSON.parse(fs.readFileSync(SAVED, 'utf8'));
   return { schema: schema, source: source };
 }
@@ -69,5 +71,6 @@ async function main() {
   console.log('OK: ' + path.relative(ROOT, file) + ' is valid against the Vercel schema (' + loaded.source + ')');
 }
 
-if (require.main === module) main().catch(function (e) { console.error(e.message || e); process.exit(1); });
+// Exit as soon as the answer is printed: a connection the fetch left open must not hold the gates up.
+if (require.main === module) main().then(function () { process.exit(process.exitCode || 0); }, function (e) { console.error(e.message || e); process.exit(1); });
 module.exports = { validate: validate, loadSchema: loadSchema, stableRead: stableRead };

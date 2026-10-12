@@ -1868,10 +1868,10 @@ button.tool-example:hover { color: var(--gold-deep); }
 .sf-social a:hover { color: var(--gold-soft); }
 .sf-social a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 2px; }
 .sf-social svg { display: block; width: 20px; height: 20px; }
-.sf-badge { margin: 12px 0 0; }
-.sf-badge a { display: inline-block; border-radius: var(--radius-sm); }
-.sf-badge a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; }
-.sf-badge img { display: block; width: 200px; max-width: 100%; height: auto; aspect-ratio: 200 / 52; }
+.sf-badges { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 12px; justify-items: start; }
+.sf-badges a { display: inline-block; border-radius: var(--radius-sm); }
+.sf-badges a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; }
+.sf-badges img { display: block; max-width: 100%; height: auto; }
 .sf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .sf-list a { display: inline-block; padding: 5px 0; font-size: 14.5px; line-height: 1.4; color: rgba(255, 255, 255, 0.88); text-decoration: none; transition: color var(--t); overflow-wrap: anywhere; }
 .sf-list a:hover { color: var(--gold-soft); text-decoration: underline; text-decoration-color: var(--gold-soft); text-underline-offset: 4px; }
