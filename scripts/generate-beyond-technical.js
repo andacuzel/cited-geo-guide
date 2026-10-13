@@ -24,7 +24,7 @@ const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'beyond-technical.html');
-const CSS_VERSION = 75;
+const CSS_VERSION = 76;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'beyond-technical.json'), 'utf8'));
 const esc = shell.esc;
 const START = '<!-- BEYOND:START -->';

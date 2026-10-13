@@ -4,7 +4,7 @@
 
      node scripts/export-waitlist.js > waitlist.csv
 
-   Columns: email, name, createdAt, consentVersion. Oldest first. Reads the Redis named in the environment or the
+   Columns: email, name, createdAt, consentVersion, interest (pro, fix, beyond, comma-joined), website, note. Oldest first. Reads the Redis named in the environment or the
    gitignored .env.local (scripts/env-local.js). The file you save holds personal data: keep it off the repository,
    and delete addresses from it when someone uses their removal link (the list itself is cleaned automatically).
    A cell that starts with = + - @ gets a leading apostrophe so a spreadsheet does not run it as a formula.
@@ -13,7 +13,7 @@
 
 'use strict';
 
-const COLUMNS = ['email', 'name', 'createdAt', 'consentVersion'];
+const COLUMNS = ['email', 'name', 'createdAt', 'consentVersion', 'interest', 'website', 'note'];
 
 function cell(v) {
   let s = String(v === undefined || v === null ? '' : v);

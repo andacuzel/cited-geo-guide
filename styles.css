@@ -4414,3 +4414,32 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .pr-qplain summary { cursor: pointer; font-size: 14px; color: var(--ink-soft); }
 .pr-qtext { display: block; width: 100%; margin-top: 10px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; resize: vertical; }
 @media print { .pr-citecard__link, [data-cit-controls], .pr-qplain { display: none; } }
+
+/* ----------------------------- Homepage ladder (scan, Pro report, Fix, Beyond) and the early-access form ----------------------------- */
+
+.ladder { padding: 0 0 96px; }
+.ladder-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.ladder-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 24px 24px; }
+.ladder-card__tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 8px; }
+.ladder-card__name { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.15; color: var(--navy-950); }
+.ladder-card__text { flex: 1 1 auto; margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.ladder-card__feat { margin-top: 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--ink); }
+.ladder-card__cta { margin-top: 22px; }
+.ladder-card__cta .btn { width: 100%; }
+@media (max-width: 1100px) { .ladder-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .ladder { padding-bottom: 72px; } .ladder-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.score-fix { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.score-fix[hidden] { display: none; }
+.score-fix__text { margin-bottom: 12px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+
+.req-dialog { position: fixed; inset: 0; margin: auto; width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; padding: 32px 28px 26px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); color: var(--ink); }
+.req-dialog::backdrop { background: rgba(11, 21, 38, 0.6); }
+.req-close { position: absolute; top: 6px; right: 6px; width: 44px; height: 44px; border: 0; background: transparent; font-size: 28px; line-height: 1; color: var(--ink-soft); cursor: pointer; }
+.req-close:hover { color: var(--ink); }
+.req-title { margin-top: 6px; font-size: clamp(24px, 4vw, 30px); }
+.req-lede { margin-top: 10px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.req-form { margin-top: 18px; gap: 16px; }
+.req-which { border: 0; margin: 0; padding: 0; display: grid; gap: 2px; min-width: 0; }
+.req-which legend { padding: 0; margin-bottom: 4px; }
+.req-form[hidden] { display: none; }

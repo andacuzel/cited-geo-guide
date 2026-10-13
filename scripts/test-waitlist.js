@@ -96,6 +96,34 @@ const idOf = (e) => Waitlist.idOf(e);
     t('stats: the hash holds only metric names and numbers', Object.entries((adapter._dump()['pro:stats:' + days[0].day])).every(([k, v]) => Stats.METRICS.indexOf(k) !== -1 && /^\d+$/.test(v)));
   }
 
+  /* ---- the Fix and Beyond early-access form (same endpoint: interest, website, note) ---- */
+  {
+    const API = require('../lib/waitlist-api.js');
+    const { adapter, store } = mk();
+    const resend = fakeResend();
+    const deps = { store, env: MAIL_ENV, fetch: resend };
+    const f = await call(signup({ email: 'buyer@example.org', interest: 'fix', website: ' example.org ', note: 'Schema\nand   robots <b>' }), deps);
+    t('interest: a Fix request is a 200 with its own short answer', f.status === 200 && f.json.ok === true && f.json.message === API.REQUESTED && API.REQUESTED !== API.JOINED, f.body);
+    const rec = await adapter.hgetall('wl:e:' + idOf('buyer@example.org'));
+    t('interest: the record keeps interest, website and a one-line cleaned note', rec.interests === 'fix' && rec.website === 'example.org' && rec.note === 'Schema and robots b', JSON.stringify(rec));
+    t('interest: the Pro confirmation mail is not sent for a Fix request', resend.sent.length === 0);
+    const def = await call(signup({ email: 'plain@example.org' }), deps);
+    const defRec = await adapter.hgetall('wl:e:' + idOf('plain@example.org'));
+    t('interest: left out, it is Pro, with the Pro answer and the mail', def.json.message === API.JOINED && defRec.interests === 'pro' && resend.sent.length === 1);
+    const more = await call(signup({ email: 'plain@example.org', interest: 'beyond', note: 'Content' }), deps);
+    const merged = await adapter.hgetall('wl:e:' + idOf('plain@example.org'));
+    t('interest: a known address gains the new interest and the note, and keeps one record', more.json.message === API.REQUESTED && merged.interests === 'pro,beyond' && merged.note === 'Content' && resend.sent.length === 1);
+    for (const bad of [{ interest: 'enterprise' }, { interest: 7 }, { website: 'x'.repeat(201) }, { note: 'y'.repeat(201) }, { note: 5 }]) {
+      const r = await call(signup(Object.assign({ email: 'bad@example.org' }, bad)), deps);
+      t('interest: ' + JSON.stringify(bad).slice(0, 30) + ' is refused with a field error and nothing stored', r.status === 400 && r.json.error === 'invalid' && Object.keys(r.json.fields).length >= 1 && !(await adapter.hgetall('wl:e:' + idOf('bad@example.org'))));
+    }
+    const trap = await call(signup({ email: 'bot@example.org', interest: 'beyond', company_fax: 'x' }), deps);
+    t('interest: a filled honeypot gets the same answer as a real request and stores nothing', trap.status === 200 && trap.json.message === API.REQUESTED && !(await adapter.hgetall('wl:e:' + idOf('bot@example.org'))));
+    const rows = await Waitlist.list(adapter);
+    const row = rows.find((x) => x.email === 'buyer@example.org');
+    t('list: rows carry interest, website and note (Pro by default for older records)', row && row.interest === 'fix' && row.website === 'example.org' && rows.find((x) => x.email === 'plain@example.org').interest === 'pro,beyond');
+  }
+
   /* ---- honeypot, validation, consent ---- */
   {
     const { adapter, store } = mk();
@@ -240,7 +268,7 @@ const idOf = (e) => Waitlist.idOf(e);
     t('list: oldest first, expired entries dropped (and cleaned from the index)', rows.length === 2 && rows[0].email === 'a@example.org' && rows[1].email === 'b@example.org' && (await adapter.scard('wl:index')) === 2);
     const exp = require('./export-waitlist.js');
     const csv = exp.toCsv([{ email: 'x,y"z@example.org', name: '=SUM(1)', createdAt: '2026-10-10T00:00:00.000Z', consentVersion: 'v1' }]);
-    t('export: CSV with a header row, quotes doubled, and a leading = + - @ neutralized', csv.split('\n')[0] === 'email,name,createdAt,consentVersion' && csv.indexOf('"x,y""z@example.org"') !== -1 && csv.indexOf("'=SUM(1)") !== -1, csv);
+    t('export: CSV with a header row, quotes doubled, and a leading = + - @ neutralized', csv.split('\n')[0] === 'email,name,createdAt,consentVersion,interest,website,note' && csv.indexOf('"x,y""z@example.org"') !== -1 && csv.indexOf("'=SUM(1)") !== -1, csv);
   }
 
   /* ---- feedback on a report ---- */
