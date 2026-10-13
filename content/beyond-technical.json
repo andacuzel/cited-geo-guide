@@ -1,12 +1,12 @@
 {
   "path": "/beyond",
-  "title": "A clean site isn\u2019t yet a citable one",
-  "lede": "The Citehound score tells you whether AI systems can reach your site and read it. It does not tell you whether any of your pages deserves to be picked when someone asks a question. That part is editorial, and a scanner can\u2019t do it for you.",
+  "title": "A clean site isn’t yet a citable one",
+  "lede": "The Citehound score tells you whether AI systems can reach your site and read it. It does not tell you whether any of your pages deserves to be picked when someone asks a question. That part is editorial, and a scanner can’t do it for you.",
   "sections": [
     {
-      "heading": "What the score can\u2019t see",
+      "heading": "What the score can’t see",
       "paragraphs": [
-        "An assistant answering a buyer\u2019s question isn\u2019t weighing your site against a topic. It is looking for the page, or the part of a page, that answers that specific question well enough to use. Three things follow from that."
+        "An assistant answering a buyer’s question isn’t weighing your site against a topic. It is looking for the page, or the part of a page, that answers that specific question well enough to use. Three things follow from that."
       ],
       "bullets": [
         {
@@ -24,22 +24,22 @@
       ]
     },
     {
-      "heading": "What we know, and what we don\u2019t",
+      "heading": "What we know, and what we don’t",
       "paragraphs": [
         "Nobody outside the AI labs can show you exactly why an assistant cites one page over another. Studies find patterns, and patterns are not causes: popular sites tend to be cited more, and they also tend to have more of everything else. So we treat each content recommendation as a hypothesis. We say how much evidence stands behind it, and we measure before and after with the same set of questions."
       ]
     },
     {
-      "heading": "Why we don\u2019t publish the full method",
+      "heading": "Why we don’t publish the full method",
       "paragraphs": [
-        "We could write another ultimate guide. We\u2019d rather not. Content work only pays off when it is matched to your market, your pages and your questions, and that is a conversation, not a checklist. The technical side, Citehound shows you for free. The content side we do with you."
+        "We could write another ultimate guide. We’d rather not. Content work only pays off when it is matched to your market, your pages and your questions, and that is a conversation, not a checklist. The technical side, Citehound shows you for free. The content side we do with you."
       ]
     },
     {
       "heading": "How a content review works",
       "steps": [
-        "We write the question set for your market, in your customers\u2019 language, starting from your site.",
-        "We read your pages against those questions: what each page can answer, what it can\u2019t, what\u2019s missing.",
+        "We write the question set for your market, in your customers’ language, starting from your site.",
+        "We read your pages against those questions: what each page can answer, what it can’t, what’s missing.",
         "You get a prioritized editorial brief. If you want it measured, we run the same questions before and after and report what changed, including when nothing did."
       ]
     }
@@ -48,7 +48,7 @@
     "label": "Request a content review",
     "href": "mailto:hey@getcitehound.com?subject=Content%20review"
   },
-  "smallPrint": "We don\u2019t promise citations. Nobody honestly can.",
+  "smallPrint": "We don’t promise citations. Nobody honestly can.",
   "home": {
     "heading": "The score covers the technical layer. Content decides what happens next.",
     "line": "Being readable by AI is the floor. Being worth citing is an editorial question.",
@@ -68,5 +68,6 @@
       }
     }
   },
-  "description": "The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you."
+  "description": "The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you.",
+  "lead": "Readable is not enough. Be the page assistants pick. We write the market questions in your customers’ words, read your pages against them, and deliver briefs and drafts you approve, then re-measure monthly. Includes a monthly citation check."
 }

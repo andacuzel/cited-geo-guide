@@ -23,10 +23,12 @@ const dialog = require('../lib/request-dialog.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'fix.html');
-const CSS_VERSION = 83;
+const CSS_VERSION = 84;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'fix.json'), 'utf8'));
 const esc = shell.esc;
 const FAQ_LINK = '<p class="bt-faq"><a href="/#why-pay">If nobody can promise a citation, why pay?</a></p>';
+
+const BACK_LINK = '<p class="bt-back"><a href="/#ladder">Back to the four steps</a></p>';
 
 function build() {
   const sections = content.sections.map((s, i) => {
@@ -38,7 +40,7 @@ function build() {
   }).join('\n\n');
   const body = shell.banner({ kicker: content.kicker, title: esc(content.title), desc: esc(content.lede), icon: icons.svg('layers', {}) }) +
     '\n    <section class="verticals" aria-labelledby="fix-first">\n      <div class="section__inner">\n' + sections + '\n\n' +
-    '        <div class="bt-cta">\n          <button type="button" class="btn btn--gold" data-request="fix">' + esc(content.cta.label) + '</button>\n          <p class="bt-fine">' + esc(content.smallPrint) + '</p>\n          ' + FAQ_LINK + '\n        </div>\n' +
+    '        <div class="bt-cta">\n          <button type="button" class="btn btn--gold" data-request="fix">' + esc(content.cta.label) + '</button>\n          <p class="bt-fine">' + esc(content.smallPrint) + '</p>\n          ' + FAQ_LINK + '\n          ' + BACK_LINK + '\n        </div>\n' +
     '      </div>\n    </section>\n\n    ' + dialog.html('    ') + '\n';
   return shell.page({
     title: 'Citehound Fix: ' + content.title.charAt(0).toLowerCase() + content.title.slice(1),
@@ -85,6 +87,7 @@ function check() {
     if ((h.match(/<dialog class="req-dialog"/g) || []).length !== 1) bad(f + ' needs exactly one request form');
     if (h.indexOf('<script src="/request-form.js?v=1" defer></script>') === -1) bad(f + ' does not load request-form.js');
     if (h.indexOf('<a href="/#why-pay">If nobody can promise a citation, why pay?</a>') === -1) bad(f + ' has no link to the FAQ answer');
+    if (h.indexOf('<a href="/#ladder">Back to the four steps</a>') === -1) bad(f + ' has no link back to the ladder');
   });
   if (read('index.html').indexOf('<details id="why-pay">') === -1) bad('the homepage FAQ answer has lost its id (why-pay)');
   if (!/name="robots" content="index, follow"/.test(page)) bad('the page must be indexable');

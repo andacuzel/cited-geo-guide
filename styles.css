@@ -4625,3 +4625,7 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .research-strip__list--small .research-strip__icon { grid-row: 1 / span 2; margin-bottom: 0; }
 .research-strip__list--small .research-strip__desc { margin-top: 2px; }
 @media (max-width: 640px) { .research-strip__list--small { grid-template-columns: minmax(0, 1fr); } }
+
+.bt-lead { max-width: 720px; margin-bottom: 32px; font-size: 18px; line-height: 1.55; color: var(--ink); }
+.bt-back { margin-top: 6px; font-size: 14px; line-height: 1.5; }
+.bt-back a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }

@@ -25,10 +25,11 @@ const icons = require('../lib/icons.js');
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'beyond.html');
 const dialog = require('../lib/request-dialog.js');
-const CSS_VERSION = 83;
+const CSS_VERSION = 84;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'beyond-technical.json'), 'utf8'));
 const esc = shell.esc;
 const FAQ_LINK = '<p class="bt-faq"><a href="/#why-pay">If nobody can promise a citation, why pay?</a></p>';
+const BACK_LINK = '<p class="bt-back"><a href="/#ladder">Back to the four steps</a></p>';
 const START = '<!-- BEYOND:START -->';
 const END = '<!-- BEYOND:END -->';
 
@@ -41,8 +42,8 @@ function build() {
     return h + '        </div>';
   }).join('\n\n');
   const body = shell.banner({ kicker: 'Citehound Beyond', title: esc(content.title), desc: esc(content.lede), icon: icons.svg('layers', {}) }) +
-    '\n    <section class="verticals" aria-labelledby="bt-first">\n      <div class="section__inner">\n' + sections + '\n\n' +
-    '        <div class="bt-cta">\n          <button type="button" class="btn btn--gold" data-request="beyond">' + esc(content.cta.label) + '</button>\n          <p class="bt-fine">' + esc(content.smallPrint) + '</p>\n          ' + FAQ_LINK + '\n        </div>\n' +
+    '\n    <section class="verticals" aria-labelledby="bt-first">\n      <div class="section__inner">\n' + (content.lead ? '        <p class="bt-lead">' + esc(content.lead) + '</p>\n\n' : '') + sections + '\n\n' +
+    '        <div class="bt-cta">\n          <button type="button" class="btn btn--gold" data-request="beyond">' + esc(content.cta.label) + '</button>\n          <p class="bt-fine">' + esc(content.smallPrint) + '</p>\n          ' + FAQ_LINK + '\n          ' + BACK_LINK + '\n        </div>\n' +
     '      </div>\n    </section>\n\n    ' + dialog.html('    ') + '\n';
   return shell.page({
     title: 'Citehound Beyond: ' + content.title,
