@@ -4443,3 +4443,35 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .req-which { border: 0; margin: 0; padding: 0; display: grid; gap: 2px; min-width: 0; }
 .req-which legend { padding: 0; margin-bottom: 4px; }
 .req-form[hidden] { display: none; }
+
+/* ----------------------------- Homepage: research strip, developer strip, FAQ, closing call to action ----------------------------- */
+
+.research-strip { padding: 0 0 64px; }
+.research-strip__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.research-strip__link { display: block; height: 100%; padding: 22px 24px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); transition: border-color 150ms ease; }
+.research-strip__link:hover { border-color: var(--gold); }
+.research-strip__name { display: block; font-family: var(--font-display); font-size: 21px; line-height: 1.25; color: var(--navy-950); }
+.research-strip__desc { display: block; margin-top: 8px; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+.dev-strip { padding: 0 0 64px; }
+.dev-strip__row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 24px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.dev-strip__label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
+.dev-strip__text { font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.dev-strip__text a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+.home-faq { padding: 0 0 72px; }
+.home-faq .ac-faq { margin-top: 0; }
+
+.home-close { padding: 0 0 64px; }
+.home-close__panel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; padding: 36px 40px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.home-close__title { font-size: clamp(24px, 3.2vw, 32px); line-height: 1.2; }
+.home-close__text { margin-top: 8px; font-size: 15px; color: var(--ink-soft); }
+.home-close__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.home-close__link { font-size: 15px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+@media (max-width: 900px) { .research-strip__list { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) {
+  .research-strip, .dev-strip, .home-close { padding-bottom: 48px; }
+  .home-faq { padding-bottom: 56px; }
+  .home-close__panel { padding: 28px 22px; }
+}

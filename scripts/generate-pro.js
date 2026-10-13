@@ -36,7 +36,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 76;
+const CSS_VERSION = 77;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -237,8 +237,9 @@ function band(F) {
 function indexHtml(current, F) {
   const b = band(F);
   if (current.indexOf(START) !== -1) return current.replace(new RegExp(START + '[\\s\\S]*?' + END), () => b);
+  // The homepage no longer carries the band (13 Oct 2026: the ladder's Pro card replaced it). Without markers there is nothing to write.
   const open = current.indexOf('<section class="pro-band" id="pro"');
-  if (open === -1) throw new Error('index.html: no Pro band to replace');
+  if (open === -1) return current;
   const close = current.indexOf('</section>', open) + '</section>'.length;
   return current.slice(0, open) + b + current.slice(close);
 }
@@ -463,8 +464,8 @@ function check() {
 
   if (page !== build()) bad('pro.html is out of date; run node scripts/generate-pro.js');
   if (indexHtml(index, F) !== index) bad('the Pro band in index.html is out of date; run node scripts/generate-pro.js');
-  const bandHtml = (index.match(new RegExp(START + '[\\s\\S]*?' + END)) || [''])[0];
-  if (!bandHtml) bad('index.html has no PRO-BAND markers');
+  // The homepage no longer carries the band; its checks then run on the band the generator would write.
+  const bandHtml = (index.match(new RegExp(START + '[\\s\\S]*?' + END)) || [''])[0] || band(F);
 
   // Figures on both surfaces equal the recomputation from the raw files.
   [['pro.html', page], ['the homepage band', bandHtml]].forEach(function (s) {

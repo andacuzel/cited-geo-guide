@@ -11,7 +11,7 @@
    and `--check` recomputes each one from the sample and compares.
 
    The gold band reuses the homepage scatter exactly: its markup is copied
-   from index.html (the .teaser__scene-wrap block) and the page loads the
+   from content/citation-scatter.html (the .teaser__scene-wrap block, kept there when the homepage dropped its teaser on 13 Oct 2026) and the page loads the
    same teaser-scene.js and CSS classes. There is no second implementation
    of the loop. The static state is plain HTML, and without JavaScript,
    without @property support, or under reduced motion nothing moves.
@@ -34,7 +34,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
 const SAMPLE = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const PAGE = path.join(ROOT, 'citation-tracking.html');
-const CSS_VERSION = 76;
+const CSS_VERSION = 77;
 const CONTACT_EMAIL = 'hey@getcitehound.com'; // the address on privacy.html and terms.html
 // Early access goes through the Pro waitlist on /pro; pro-cta.js sends the button to PRO_CHECKOUT_URL when that is set.
 const WAITLIST = '/pro#waitlist';
@@ -143,7 +143,7 @@ function shellParts() {
   const about = read('about.html');
   const grab = (src, re, what) => { const m = src.match(re); if (!m) throw new Error('could not find ' + what); return m[0]; };
   const index = read('index.html');
-  const wrap = grab(index, /<div class="teaser__scene-wrap">[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>\s*<\/div>/, 'the homepage scatter (teaser__scene-wrap) in index.html');
+  const wrap = grab(read('content/citation-scatter.html'), /<div class="teaser__scene-wrap">[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>\s*<\/div>/, 'the scatter (teaser__scene-wrap) in content/citation-scatter.html');
   return {
     favicon: grab(about, /<link rel="icon"[^>]*>/, 'favicon'),
     fonts: grab(about, /<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
@@ -340,16 +340,16 @@ function check(sample) {
   const fq = text.match(/In the published sample, (\d+) of (\d+) questions named the brand in some tries/);
   if (!fq || +fq[1] !== d.unstable || +fq[2] !== d.questions) bad('the FAQ states "' + (fq ? fq[0] : 'nothing') + '", the sample gives ' + d.unstable + ' of ' + d.questions);
 
-  // 5. The scatter's static state is in the HTML and is the homepage's, byte for byte.
-  const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  // 5. The scatter's static state is in the HTML and is the content file's, byte for byte.
+  const index = fs.readFileSync(path.join(ROOT, 'content/citation-scatter.html'), 'utf8');
   const scene = (index.match(/<div class="scene" id="citeScene"[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>/) || [''])[0];
   const strip = (s) => s.replace(/\s+/g, ' ');
-  if (!scene || strip(html).indexOf(strip(scene)) === -1) bad('the scatter markup differs from the homepage\'s');
+  if (!scene || strip(html).indexOf(strip(scene)) === -1) bad('the scatter markup differs from content/citation-scatter.html');
   if ((html.match(/class="sq sq--\d/g) || []).length !== 8) bad('expected eight scatter cards in the static HTML');
   if (html.indexOf('src="teaser-scene.js') === -1) bad('teaser-scene.js is not loaded');
 
   if (problems.length) { console.error('FAIL (' + problems.length + '):\n  ' + problems.join('\n  ')); process.exit(1); }
-  console.log('OK: every figure on the page equals the sample (' + d.never + ' never, ' + d.unstable + ' sometimes, ' + d.always + ' always, ' + d.namedAnswers + ' of ' + d.totalAnswers + ' answers named), ' + sample.prompts.length + ' questions with their marks, scatter identical to the homepage.');
+  console.log('OK: every figure on the page equals the sample (' + d.never + ' never, ' + d.unstable + ' sometimes, ' + d.always + ' always, ' + d.namedAnswers + ' of ' + d.totalAnswers + ' answers named), ' + sample.prompts.length + ' questions with their marks, scatter identical to content/citation-scatter.html.');
 }
 
 function main() {

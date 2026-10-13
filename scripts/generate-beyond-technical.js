@@ -24,7 +24,7 @@ const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'beyond-technical.html');
-const CSS_VERSION = 76;
+const CSS_VERSION = 77;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'beyond-technical.json'), 'utf8'));
 const esc = shell.esc;
 const START = '<!-- BEYOND:START -->';
@@ -75,13 +75,9 @@ function homeBlock() {
 }
 
 function applyHome(html) {
+  // The homepage block was retired on 13 Oct 2026 (the ladder's Beyond card replaced it); it is refreshed only where it still stands.
   if (html.indexOf(START) !== -1) return html.replace(new RegExp(START + '[\\s\\S]*?' + END), () => homeBlock());
-  // First run: before the agentic commerce section: two panels of the same width, on the light page, with the navy footer only at the very bottom.
-  const marker = '<section class="home-tail" aria-label="Agentic commerce">';
-  const i = html.indexOf(marker);
-  if (i === -1) throw new Error('index.html has no agentic commerce section to place the block before');
-  const lineStart = html.lastIndexOf('\n', i) + 1;
-  return html.slice(0, lineStart) + '      ' + homeBlock() + '\n\n' + html.slice(lineStart);
+  return html;
 }
 
 function ensureSitemap() {
@@ -115,8 +111,8 @@ function check() {
   if (page !== build()) bad('beyond-technical.html is out of date; run node scripts/generate-beyond-technical.js');
   const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const m = new RegExp(START + '[\\s\\S]*?' + END).exec(home);
-  if (!m) bad('index.html has no Beyond technical block'); else if (m[0] !== homeBlock()) bad('the homepage block is out of date; run node scripts/generate-beyond-technical.js');
-  if (home.indexOf(START) > home.indexOf('<footer class="site-footer') || home.indexOf(START) < home.indexOf('id="main"') || home.indexOf(START) > home.indexOf('class="home-tail"')) bad('the homepage block must sit inside main, before the agentic commerce section');
+  if (m && m[0] !== homeBlock()) bad('the homepage block is out of date; run node scripts/generate-beyond-technical.js');
+  if (m && (home.indexOf(START) > home.indexOf('<footer class="site-footer') || home.indexOf(START) < home.indexOf('id="main"'))) bad('the homepage block must sit inside main, before the agentic commerce section');
   if ((page.match(/<h1[ >]/g) || []).length !== 1) bad('the page needs exactly one h1');
   if ((page.match(/<h2[ >]/g) || []).length !== 4) bad('the page needs exactly four h2 headings (the brief’s four)');
   if (!/name="robots" content="index, follow"/.test(page)) bad('the page must be indexable');

@@ -140,6 +140,14 @@ Constraints that must not be broken:
 - **Homepage notices.** The Pro waitlist bar (`wl-bar.js`, the `.wl-off` class set by the head script) and the report card (`report-card.js`) keep
   their state in sessionStorage inside try/catch, set no cookie and take no focus. `/beyond-technical` and its homepage block are generated from
   `content/beyond-technical.json` (the owner's words; edit the JSON).
+- **Homepage structure (13 Oct 2026).** Order: hero with the scan, the four-step ladder (Scan, Pro report, Fix, Beyond), proof (the AgaOne case study, then the
+  benchmark strip), how the scan works, a research strip (three links), one developer row (MCP server, playbooks, generators), the FAQ, a closing call to
+  action, the footer. The Pro band, the Beyond technical panel, the MCP band, the citation teaser and the agentic commerce strip are gone from the homepage;
+  their generators still build their own pages and check the old blocks only where they stand (`generate-pro.js`, `generate-beyond-technical.js`). The
+  citation scatter markup lives in `content/citation-scatter.html` (source for `/citation-tracking`). Citation tracking is a feature line inside the Pro and
+  Beyond cards, never a section. The no-promise sentence is in the FAQ answer ("If nobody can promise a citation, why pay?") and nowhere else on the page: not
+  in the hero, meta, cards or buttons. The Fix and Beyond form (`request-form.js`, a dialog) posts to `/api/waitlist` with `interest` (pro, fix, beyond),
+  optional `website` and `note`; only a Pro signup gets the confirmation mail. `scripts/export-waitlist.js` prints the three columns.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun
@@ -274,24 +282,22 @@ lift or scale · pill (999px) shapes · emoji in product surfaces ·
 centered body text · cream or warm backgrounds · Inter, Fraunces,
 IBM Plex, Space Grotesk, Sora, Manrope, DM Sans, Playfair, or
 JetBrains Mono · more than one full-bleed navy band per page, apart from the footer (below) — except
-the homepage, which has a navy hero field plus two navy bands mid-page
-(the MCP announcement, then Pro). Every other page keeps the
-single-band rule. No fourth navy surface, and no new surface colour. **The footer** is the one
+the homepage, which has a navy hero field and no navy band mid-page since 13 Oct 2026 (the MCP and Pro bands were
+retired). Every other page keeps the single-band rule. No fourth navy surface, and no new surface colour. **The footer** is the one
 exception on every page: a full-bleed navy band (`--navy-950`) written by `lib/site-footer.js`
 (`scripts/site-footer.js --check` is a gate: one footer everywhere, links only to pages that exist, none to
 /changelog). The homepage "Beyond technical" block is a contained light panel, not a band, and the gold
 commerce card never touches a coloured surface: 64px of light page on every side (48px on a phone).
 
 **Gold:** `--gold` is a surface in two places only: the contained commerce
-strip, and one full-bleed gold band, the citation teaser. That band sits
-directly after the capabilities block on the homepage and is reused,
-markup and classes unchanged, once on `/citation-tracking`. Every word on the gold
+strip, and one full-bleed gold band, the citation teaser. The homepage no longer
+carries the band (13 Oct 2026); it stays on `/citation-tracking`. Every word on the gold
 band is solid `--navy-950`. Never translucent navy, `--gold-soft`,
 `--gold-deep` or white on gold: reduced opacity on gold looks muddy,
 most of all on mobile.
 
-**One animation exception:** the MCP band's conversation on the
-homepage types itself in once, on first view (`mcp-demo.js`), because it
+**One animation exception (the band left the homepage on 13 Oct 2026; `mcp-demo.js` is now unused, like `citation-matrix.js`):** the MCP band's conversation
+types itself in once, on first view (`mcp-demo.js`), because it
 demonstrates the product rather than decorating it. The content must
 stay complete in the HTML, the replay must do nothing under
 `prefers-reduced-motion`, and nothing else in that block animates. No
@@ -300,8 +306,8 @@ other section gets motion on this basis.
 **The second and last exception:** the citation scatter. The "questions
 everywhere" scene (`teaser-scene.js`, styles.css "Homepage teaser"): an
 illustration, labelled as one, that loops for about 14s while it is on
-screen and pauses when it is not. It runs on the homepage and, with the same
-markup, classes and script, in the gold band on `/citation-tracking`; there
+screen and pauses when it is not. It runs, with the same
+markup, classes and script, in the gold band on `/citation-tracking` (the homepage dropped its copy on 13 Oct 2026); there
 is no second implementation of the loop. One `@keyframes` drives a registered
 number (`--t`); cards, chips and the refresh icon derive their opacity or
 rotation from it. Only opacity and transform change. No gradients, glow,
