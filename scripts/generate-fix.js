@@ -23,7 +23,7 @@ const dialog = require('../lib/request-dialog.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'fix.html');
-const CSS_VERSION = 82;
+const CSS_VERSION = 83;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'fix.json'), 'utf8'));
 const esc = shell.esc;
 const FAQ_LINK = '<p class="bt-faq"><a href="/#why-pay">If nobody can promise a citation, why pay?</a></p>';

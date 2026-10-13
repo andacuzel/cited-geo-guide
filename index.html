@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=82" />
+  <link rel="stylesheet" href="styles.css?v=83" />
 
   <script type="application/ld+json">
   {
@@ -352,7 +352,7 @@
       </section>
 
       <!-- ---------- Pro showcase: a two-slide slider (the sample report, the citation scatter) with the copy that goes with each ---------- -->
-      <section class="showcase" id="showcase" aria-label="Citehound Pro">
+      <section class="showcase band-white" id="showcase" aria-label="Citehound Pro">
         <div class="section__inner">
           <div class="showcase__grid" id="showcaseGrid">
             <div class="showcase__slider" role="group" aria-roledescription="carousel" aria-label="Citehound Pro previews">
@@ -444,12 +444,12 @@
       </section>
 
       <!-- ---------- Proof: the AgaOne case study, then the benchmark strip (219 sites) ---------- -->
-      <section aria-labelledby="case-study-block-heading">
+      <section class="proof-band" aria-labelledby="case-study-block-heading">
         <div class="section__inner">
           <div class="case-study-block">
             <div class="case-study-block__grid">
               <div class="case-study-block__text">
-                <p class="kicker">Case study &middot; 001</p>
+                <p class="kicker kicker--on-navy">Case study &middot; 001</p>
                 <h2 id="case-study-block-heading" class="case-study-block__heading">How AgaOne Commodities moved two sites from 56.5 to 94.5</h2>
 
                 <div class="report-pullquote">
@@ -457,7 +457,7 @@
                   <p class="report-pullquote__attribution">&mdash; Saruhan Efe Saruhanoğlu, Marketing Manager, AgaOne Commodities</p>
                 </div>
 
-                <a href="/research/case-study-agaone" class="btn btn--primary">Read the case study</a>
+                <a href="/research/case-study-agaone" class="btn btn--gold">Read the case study</a>
               </div>
 
               <div class="case-study-block__figure">
@@ -622,16 +622,22 @@
             <li><a class="research-strip__link" href="/research/crawler-access-2026"><span class="research-strip__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="research-strip__svg" aria-hidden="true" focusable="false"><path d="M9 3.5v4M15 3.5v4"/><path d="M6.5 7.5h11v3.2a5.5 5.5 0 01-11 0V7.5z"/><path d="M12 16.2V20.5"/></svg></span><span class="research-strip__name">Crawler access 2026</span><span class="research-strip__desc">What the robots.txt files of well-known sites say to AI crawlers.</span></a></li>
             <li><a class="research-strip__link" href="/research/llms-txt-adoption-2026"><span class="research-strip__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="research-strip__svg" aria-hidden="true" focusable="false"><path d="M6.5 3.5h7.8L19 8.2V20.5H6.5V3.5z"/><path d="M14 3.5V8.5h5"/><path d="M9.5 12.5h6M9.5 15.5h6M9.5 18h3.5"/></svg></span><span class="research-strip__name">llms.txt adoption 2026</span><span class="research-strip__desc">Who has an llms.txt file, and who wrote it.</span></a></li>
           </ul>
+          <ul class="research-strip__list research-strip__list--small">
+            <li><a class="research-strip__link" href="/playbooks"><span class="research-strip__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="research-strip__svg" aria-hidden="true" focusable="false"><path d="M8.5 7h11M8.5 12h11M8.5 17h11"/><path d="M4.5 7h.1M4.5 12h.1M4.5 17h.1"/></svg></span><span class="research-strip__name">Playbooks</span><span class="research-strip__desc">Industry playbooks for marketers</span></a></li>
+            <li><a class="research-strip__link" href="/tools"><span class="research-strip__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="research-strip__svg" aria-hidden="true" focusable="false"><path d="M9 6.5L4 12l5 5.5M15 6.5l5 5.5-5 5.5"/></svg></span><span class="research-strip__name">Free generators</span><span class="research-strip__desc">Schema, robots.txt and llms.txt</span></a></li>
+          </ul>
         </div>
       </section>
 
-      <!-- ---------- Developer strip ---------- -->
-      <section class="dev-strip" id="mcp" aria-label="For developers">
+      <!-- ---------- MCP server ---------- -->
+      <section class="mcp-section" id="mcp" aria-labelledby="mcp-section-heading">
         <div class="section__inner">
-          <div class="dev-strip__grid">
-            <div class="dev-strip__row">
-              <p class="dev-strip__label"><span class="dev-strip__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="dev-strip__svg" aria-hidden="true" focusable="false"><path d="M9 6.5L4 12l5 5.5M15 6.5l5 5.5-5 5.5"/></svg></span>For developers</p>
-              <p class="dev-strip__text"><a href="/mcp">MCP server</a> (<span class="dev-strip__facts">13 tools</span>, free), <a href="/playbooks">playbooks</a> and <a href="/tools">generators</a> for schema, robots.txt and llms.txt.</p>
+          <div class="mcp-section__grid">
+            <div class="mcp-section__copy">
+              <p class="kicker kicker--on-navy">Model Context Protocol</p>
+              <h2 id="mcp-section-heading" class="mcp-section__title">Ask your AI assistant about your site.</h2>
+              <p class="mcp-section__lede">Citehound&rsquo;s MCP server gives Claude and other assistants <span class="mcp-section__facts">13 free tools</span>.</p>
+              <a href="/mcp" class="btn btn--gold">Connect the MCP server</a>
             </div>
             <figure class="mcp-chat" id="mcpChat" aria-label="Example conversation: Claude calls the Citehound scan_site tool on example.com">
               <div class="mcp-chat__head">Claude</div>
@@ -686,7 +692,7 @@
       </section>
 
       <!-- ---------- Closing call to action ---------- -->
-      <section class="home-close home-close--navy" aria-labelledby="home-close-heading">
+      <section class="home-close" aria-labelledby="home-close-heading">
         <div class="section__inner">
           <div class="home-close__panel">
             <div>
@@ -694,7 +700,7 @@
               <p class="home-close__text">About 30 seconds, no email. Then decide what to do about it.</p>
             </div>
             <div class="home-close__actions">
-              <button type="button" class="btn btn--gold" data-ladder-scan>Run the free scan</button>
+              <button type="button" class="btn btn--primary" data-ladder-scan>Run the free scan</button>
               <a class="home-close__link" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a>
             </div>
           </div>

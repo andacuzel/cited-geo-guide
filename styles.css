@@ -4528,8 +4528,8 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .dev-strip__grid .dev-strip__label { margin-bottom: 10px; }
 .dev-strip .mcp-chat { max-width: 520px; }
 .dev-strip .mcp-chat__body { padding: 20px 20px 22px; }
-.dev-strip.is-armed [data-step] { opacity: 0; visibility: hidden; }
-.dev-strip.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
+.mcp-section.is-armed [data-step] { opacity: 0; visibility: hidden; }
+.mcp-section.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
 @media (max-width: 900px) { .dev-strip__grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* Sample Pro report: opens larger on click (home-motion.js builds the dialog from a copy of the figure). */
@@ -4586,3 +4586,42 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 @media (max-width: 900px) { .showcase__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
 @media (max-width: 640px) { .showcase { padding-bottom: 56px; } }
 @media (prefers-reduced-motion: reduce) { .showcase__slide, .showcase__text, .showcase__dot::before { transition: none; } }
+
+/* ----------------------------- Homepage navy bands: the AgaOne case study and the MCP block; resources cards ----------------------------- */
+
+.proof-band { background: var(--navy-950); padding: 80px 0; }
+.proof-band .case-study-block { background: transparent; border: 0; box-shadow: none; padding: 0; margin: 0; }
+.proof-band .case-study-block__heading { color: var(--white); }
+.proof-band .report-pullquote p { color: var(--white); }
+.proof-band .report-pullquote .report-pullquote__attribution { color: rgba(255, 255, 255, 0.72); }
+.proof-band .case-study-figure__stat-num { color: var(--gold-soft); }
+.proof-band .case-study-figure__stat-label { color: rgba(255, 255, 255, 0.72); }
+.proof-band .chart-axis { stroke: rgba(255, 255, 255, 0.2); }
+.proof-band .chart-label { fill: rgba(255, 255, 255, 0.78); }
+.proof-band .chart-label--faint { fill: rgba(255, 255, 255, 0.62); }
+.proof-band .chart-value { fill: var(--white); }
+.proof-band .chart-annotation { fill: var(--gold-soft); }
+.proof-band .case-study-figure__chart [stroke="var(--navy-800)"] { stroke: var(--white); }
+.proof-band .case-study-figure__chart [fill="var(--navy-800)"] { fill: var(--white); }
+.proof-band .case-study-figure__chart [stroke="var(--gold-deep)"] { stroke: var(--gold-soft); }
+.proof-band .case-study-figure__chart [fill="var(--gold-deep)"] { fill: var(--gold-soft); }
+.proof-band .case-study-figure__chart circle[fill="var(--white)"] { fill: var(--navy-950); }
+.proof-band .case-study-figure__chart text[style] { fill: var(--white) !important; }
+.proof-band + .benchmark-strip { padding-top: 72px; border-top: 0; }
+
+.mcp-section { background: var(--navy-950); padding: 88px 0; }
+.mcp-section__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 56px; align-items: center; }
+.mcp-section__title { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; color: var(--white); }
+.mcp-section__lede { margin-top: 16px; max-width: 460px; font-size: 17px; line-height: 1.55; color: rgba(255, 255, 255, 0.84); }
+.mcp-section__facts { color: var(--gold-soft); font-weight: 600; }
+.mcp-section .btn { margin-top: 28px; }
+.mcp-section .mcp-chat { width: 100%; max-width: 520px; justify-self: end; box-shadow: none; }
+.mcp-section .mcp-chat__body { padding: 22px 22px 24px; }
+@media (max-width: 900px) { .mcp-section__grid { grid-template-columns: minmax(0, 1fr); gap: 36px; } .mcp-section .mcp-chat { justify-self: stretch; max-width: none; } }
+@media (max-width: 640px) { .proof-band { padding: 56px 0; } .mcp-section { padding: 56px 0; } .proof-band + .benchmark-strip { padding-top: 56px; } }
+
+.research-strip__list--small { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 20px; }
+.research-strip__list--small .research-strip__link { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; align-items: center; padding: 16px 20px; }
+.research-strip__list--small .research-strip__icon { grid-row: 1 / span 2; margin-bottom: 0; }
+.research-strip__list--small .research-strip__desc { margin-top: 2px; }
+@media (max-width: 640px) { .research-strip__list--small { grid-template-columns: minmax(0, 1fr); } }
