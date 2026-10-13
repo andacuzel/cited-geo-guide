@@ -4,6 +4,7 @@
    - The four ladder cards fade and slide in 80 ms apart, and the gold connectors between them draw in (styles.css, ".ladder-grid.is-armed").
    - The benchmark average (73/100) counts up once when it scrolls into view.
    - The two lines of the AgaOne before/after chart draw in, then their end points and values fade in.
+   - The Pro showcase slider (#showcaseGrid) crossfades two slides, auto-advances every 7 s, pauses on hover and focus, stops once a dot is used, and never advances under reduced motion.
    - The sample Pro report opens larger in a dialog when clicked (a copy of the figure; this one needs no motion, so it always runs).
 
    Every figure is complete in the HTML; this file only hides it for a moment and reveals it again, and a failure leaves the finished page.
@@ -42,6 +43,40 @@
       var r = dlg.getBoundingClientRect();
       if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
     });
+  }
+
+  // ---- the Pro showcase: two slides that crossfade, with the copy that goes with each
+  var show = $('#showcaseGrid');
+  if (show) {
+    var all = function (sel) { return Array.prototype.slice.call(show.querySelectorAll(sel)); };
+    var slides = all('.showcase__slide'), texts = all('.showcase__text'), dots = all('.showcase__dot');
+    var cur = 0, timer = null, hovering = false, focusing = false, chosen = false;
+    var go = function (i) {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach(function (el, k) { el.classList.toggle('is-active', k === cur); el.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); });
+      texts.forEach(function (el, k) { el.classList.toggle('is-active', k === cur); el.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); Array.prototype.forEach.call(el.querySelectorAll('a'), function (a) { if (k === cur) a.removeAttribute('tabindex'); else a.tabIndex = -1; }); });
+      dots.forEach(function (d, k) { d.classList.toggle('is-active', k === cur); d.setAttribute('aria-selected', k === cur ? 'true' : 'false'); d.tabIndex = k === cur ? 0 : -1; });
+    };
+    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+    // Auto-advance every 7 s; it pauses on hover and focus, stops for good once the visitor picks a slide, and never runs under reduced motion.
+    var start = function () {
+      stop();
+      if (reduced || chosen || hovering || focusing || document.hidden) return;
+      timer = setInterval(function () { go(cur + 1); }, 7000);
+    };
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { chosen = true; stop(); go(k); }); });
+    show.querySelector('.showcase__dots').addEventListener('keydown', function (e) {
+      var to = e.key === 'ArrowRight' ? cur + 1 : e.key === 'ArrowLeft' ? cur - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? slides.length - 1 : null;
+      if (to === null) return;
+      e.preventDefault(); chosen = true; stop(); go(to); dots[cur].focus();
+    });
+    show.addEventListener('mouseenter', function () { hovering = true; stop(); });
+    show.addEventListener('mouseleave', function () { hovering = false; start(); });
+    show.addEventListener('focusin', function () { focusing = true; stop(); });
+    show.addEventListener('focusout', function (e) { if (!show.contains(e.relatedTarget)) { focusing = false; start(); } });
+    document.addEventListener('visibilitychange', start);
+    go(0);
+    start();
   }
 
   if (reduced || !canObserve) return;

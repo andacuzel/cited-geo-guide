@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=81" />
+  <link rel="stylesheet" href="styles.css?v=82" />
 
   <script type="application/ld+json">
   {
@@ -326,38 +326,40 @@
             <li class="ladder-card ladder-card--scan">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span><p class="ladder-card__tag">Free</p></div>
               <h3 class="ladder-card__name">Scan</h3>
-              <p class="ladder-card__text">See your score. 100 points, 16 checks, 10 AI crawlers. No sign-up.</p>
-              <p class="ladder-card__cta"><button type="button" class="btn btn--primary" data-ladder-scan>Run the free scan</button></p>
+              <p class="ladder-card__text">Free page analysis</p>
+              <p class="ladder-card__cta"><button type="button" class="btn btn--primary" data-ladder-scan>Run the scan</button></p>
             </li>
             <li class="ladder-card ladder-card--pro">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span><p class="ladder-card__tag">Waitlist</p></div>
               <h3 class="ladder-card__name">Pro report</h3>
-              <p class="ladder-card__text">The whole site, page by page. Prioritized fixes, your estimated score after fixing, 21 questions in your customers&rsquo; words, and a citation check (pilot).</p>
-              <p class="ladder-card__cta"><a class="btn btn--ghost" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Get early access</a></p>
+              <p class="ladder-card__text">Detailed site report and citation test</p>
+              <p class="ladder-card__cta"><a class="btn btn--ghost" href="/pro">See Pro</a></p>
             </li>
             <li class="ladder-card ladder-card--fix">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span><p class="ladder-card__tag">Early access</p></div>
               <h3 class="ladder-card__name">Fix</h3>
-              <p class="ladder-card__text">We close the gaps. Schema, robots.txt, llms.txt, sitemap, titles and descriptions: prepared, applied, rescanned, with the before/after shown to you.</p>
+              <p class="ladder-card__text">We make the technical fixes</p>
               <p class="ladder-card__cta"><button type="button" class="btn btn--gold" data-request="fix">Request a Fix quote</button></p>
             </li>
             <li class="ladder-card ladder-card--beyond">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M9 7h8v8"/></svg></span><p class="ladder-card__tag">Early access</p></div>
               <h3 class="ladder-card__name">Beyond</h3>
-              <p class="ladder-card__text">Readable is not enough. Be the page assistants pick. We write the market questions in your customers&rsquo; words, read your pages against them, and deliver briefs and drafts you approve, then re-measure monthly.</p>
-              <p class="ladder-card__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__tagicon" aria-hidden="true" focusable="false"><path d="M4.5 11.5V10a3.5 3.5 0 013.5-3.5h10.5"/><path d="M15.5 3.5l3 3-3 3"/><path d="M19.5 12.5V14a3.5 3.5 0 01-3.5 3.5H5.5"/><path d="M8.5 20.5l-3-3 3-3"/></svg>Includes a monthly citation check</p>
+              <p class="ladder-card__text">We deliver the content</p>
               <p class="ladder-card__cta"><button type="button" class="btn btn--gold" data-request="beyond">Join Beyond</button></p>
             </li>
           </ul>
         </div>
       </section>
 
-      <!-- ---------- Previews: the sample Pro report and the citation scatter ---------- -->
-      <section class="preview-strip" aria-label="Previews">
+      <!-- ---------- Pro showcase: a two-slide slider (the sample report, the citation scatter) with the copy that goes with each ---------- -->
+      <section class="showcase" id="showcase" aria-label="Citehound Pro">
         <div class="section__inner">
-          <div class="preview-strip__grid">
-            <div class="preview-stage">
-              <figure class="pro-shot pro-shot--band-explorer">
+          <div class="showcase__grid" id="showcaseGrid">
+            <div class="showcase__slider" role="group" aria-roledescription="carousel" aria-label="Citehound Pro previews">
+              <div class="showcase__slides">
+                <div class="showcase__slide is-active" id="slideReport" role="tabpanel" aria-labelledby="dotReport" data-slide="0">
+                  <div class="preview-stage">
+                    <figure class="pro-shot pro-shot--band-explorer">
               <div role="img" aria-label="The sample report for our own site, getcitehound.com: the navy top bar, the section links Summary, Pillars, Pages and Estimated score with Pages current, and the page table in alphabetical order with each page’s score and failed checks."><div class="pro-shot__view" inert>
               <div class="pr-report pro-band-dash">
               <header class="pr-top"><div class="pr-top__inner"><span class="logo rp-top__logo"><span class="logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="logo__mark">Citehound</span></span><span class="pr-top__label">Sample report</span></div></header>
@@ -375,9 +377,11 @@
               </div></div>
               <figcaption class="pro-shot__cap">Sample Pro report: our own site, October 4, 2026. Every page, with its score and what failed.</figcaption>
               </figure>
-            </div>
-            <div class="preview-gold">
-              <div class="teaser__scene-wrap">
+                  </div>
+                </div>
+                <div class="showcase__slide" id="slideCite" role="tabpanel" aria-labelledby="dotCite" data-slide="1" aria-hidden="true">
+                  <div class="preview-gold">
+                    <div class="teaser__scene-wrap">
               <div class="scene" id="citeScene" role="img" aria-label="Illustration: an AI names a brand for some buyer questions and not for others">
                 <svg class="scene__refresh" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11" stroke-width="1.4"/><path d="M16.2 9.2A5 5 0 0 0 7.6 10.4M7.8 14.8a5 5 0 0 0 8.6-1.2"/><path d="M16.4 6.6v2.8h-2.8M7.6 17.4v-2.8h2.8"/></svg>
               <div class="sq sq--1 sq--flips" aria-hidden="true">
@@ -415,6 +419,25 @@
               </div>
               <p class="teaser__caption">Illustration. Not real data.</p>
             </div>
+                  </div>
+                </div>
+              </div>
+              <div class="showcase__dots" role="tablist" aria-label="Choose a preview">
+                <button type="button" class="showcase__dot is-active" role="tab" id="dotReport" aria-controls="slideReport" aria-selected="true" aria-label="Sample Pro report" data-slide="0"></button>
+                <button type="button" class="showcase__dot" role="tab" id="dotCite" aria-controls="slideCite" aria-selected="false" aria-label="Citation questions" data-slide="1" tabindex="-1"></button>
+              </div>
+            </div>
+            <div class="showcase__copy">
+              <div class="showcase__text is-active" data-slide="0">
+                <h2 class="showcase__title">Pro goes through your whole site.</h2>
+                <p class="showcase__lede">Every page scored, every failed check listed, in one report.</p>
+                <p class="showcase__actions"><a class="btn btn--primary" href="/pro">Explore Pro</a><a class="showcase__link" href="/sample-report">See the sample report</a></p>
+              </div>
+              <div class="showcase__text" data-slide="1" aria-hidden="true">
+                <h2 class="showcase__title">Find out which questions name you.</h2>
+                <p class="showcase__lede">Citation tracking runs your customers&rsquo; questions through an AI assistant.</p>
+                <p class="showcase__actions"><a class="btn btn--primary" href="/pro" tabindex="-1">Try Citehound Pro for citation tracking</a></p>
+              </div>
             </div>
           </div>
         </div>

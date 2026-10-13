@@ -4418,11 +4418,11 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 /* ----------------------------- Homepage ladder (scan, Pro report, Fix, Beyond) and the early-access form ----------------------------- */
 
 .ladder { padding: 0 0 96px; }
-.ladder-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; align-items: end; }
+.ladder-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; align-items: start; }
 .ladder-card { position: relative; display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--line); border-radius: var(--radius); padding: 22px 24px 24px; transition: transform 200ms ease, border-color 150ms ease; }
-.ladder-card:nth-child(1) { min-height: 330px; }
-.ladder-card:nth-child(2) { min-height: 385px; }
-.ladder-card:nth-child(3) { min-height: 440px; }
+.ladder-card:nth-child(1) { margin-top: 72px; }
+.ladder-card:nth-child(2) { margin-top: 48px; }
+.ladder-card:nth-child(3) { margin-top: 24px; }
 .ladder-card:hover { transform: translateY(-4px); border-top-color: var(--gold); }
 .ladder-card--fix, .ladder-card--beyond { background: var(--navy-950); border-color: var(--navy-950); color: var(--white); }
 .ladder-card--beyond { border-top-color: var(--gold); }
@@ -4434,11 +4434,11 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .ladder-card--fix .ladder-card__tag, .ladder-card--beyond .ladder-card__tag { color: var(--gold-soft); }
 .ladder-card__name { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.15; color: var(--navy-950); }
 .ladder-card--fix .ladder-card__name, .ladder-card--beyond .ladder-card__name { color: var(--white); }
-.ladder-card__text { flex: 1 1 auto; margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.ladder-card__text { margin-top: 10px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
 .ladder-card--fix .ladder-card__text, .ladder-card--beyond .ladder-card__text { color: rgba(255, 255, 255, 0.84); }
 .ladder-card__note { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 6px 12px; border: 1px solid var(--gold); border-radius: var(--radius-sm); font-size: 13px; line-height: 1.3; font-weight: 600; color: var(--gold-soft); }
 .ladder-card__tagicon { flex: none; width: 16px; height: 16px; }
-.ladder-card__cta { margin-top: 24px; }
+.ladder-card__cta { margin-top: 20px; }
 .ladder-card__cta .btn { width: 100%; justify-content: center; min-height: 48px; white-space: nowrap; }
 /* The step connectors: a gold line from each card to the next one, in the gap, at the height of its icon. */
 .ladder-card + .ladder-card::before { content: ""; position: absolute; top: 38px; left: -29px; width: 28px; height: 2px; background: var(--gold); transform-origin: left center; }
@@ -4449,7 +4449,7 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .ladder-grid.is-in .ladder-card::before { transform: scaleX(1); transition: transform 360ms ease; transition-delay: calc(var(--i, 0) * 80ms + 260ms); }
 @media (max-width: 1100px) {
   .ladder-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
-  .ladder-card:nth-child(n) { min-height: 0; }
+  .ladder-card:nth-child(n) { margin-top: 0; }
   .ladder-card + .ladder-card::before { display: none; }
 }
 @media (max-width: 640px) { .ladder { padding-bottom: 72px; } .ladder-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
@@ -4560,3 +4560,29 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .home-close--navy .home-close__text { color: rgba(255, 255, 255, 0.84); }
 .home-close--navy .home-close__link { color: var(--gold-soft); text-decoration-color: var(--gold-soft); }
 @media (max-width: 640px) { .home-close--navy .section__inner { padding-top: 48px; padding-bottom: 48px; } }
+
+/* ----------------------------- Pro showcase (slider) ----------------------------- */
+
+.showcase { padding: 0 0 80px; }
+.showcase__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.showcase__slider { min-width: 0; }
+.showcase__slides { display: grid; }
+.showcase__slide { grid-area: 1 / 1; min-width: 0; display: flex; align-items: center; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 0s linear 500ms; }
+.showcase__slide.is-active { opacity: 1; visibility: visible; transition: opacity 500ms ease, visibility 0s; }
+.showcase__slide > * { width: 100%; }
+.showcase__slide .preview-stage .pro-shot__view { height: auto; max-height: 440px; }
+.showcase__dots { display: flex; justify-content: center; gap: 4px; margin-top: 14px; }
+.showcase__dot { width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; position: relative; }
+.showcase__dot::before { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border: 2px solid var(--navy-800); border-radius: 50%; background: transparent; transition: background 150ms ease; }
+.showcase__dot.is-active::before { background: var(--navy-800); }
+.showcase__dot:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: -4px; border-radius: var(--radius-sm); }
+.showcase__copy { display: grid; min-width: 0; }
+.showcase__text { grid-area: 1 / 1; align-self: center; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 0s linear 500ms; }
+.showcase__text.is-active { opacity: 1; visibility: visible; transition: opacity 500ms ease, visibility 0s; }
+.showcase__title { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.15; }
+.showcase__lede { margin-top: 14px; font-size: 17px; line-height: 1.55; color: var(--ink-soft); max-width: 460px; }
+.showcase__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 26px; }
+.showcase__link { font-size: 15px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+@media (max-width: 900px) { .showcase__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+@media (max-width: 640px) { .showcase { padding-bottom: 56px; } }
+@media (prefers-reduced-motion: reduce) { .showcase__slide, .showcase__text, .showcase__dot::before { transition: none; } }
