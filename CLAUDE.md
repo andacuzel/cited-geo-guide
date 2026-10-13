@@ -148,6 +148,11 @@ Constraints that must not be broken:
   Beyond cards, never a section. The no-promise sentence is in the FAQ answer ("If nobody can promise a citation, why pay?") and nowhere else on the page: not
   in the hero, meta, cards or buttons. The Fix and Beyond form (`request-form.js`, a dialog) posts to `/api/waitlist` with `interest` (pro, fix, beyond),
   optional `website` and `note`; only a Pro signup gets the confirmation mail. `scripts/export-waitlist.js` prints the three columns.
+- **Homepage ladder motion (14 Oct 2026, owner's request).** The four ladder cards step up (their heights differ, bottoms aligned), Fix and Beyond are navy with a
+  gold accent, and they are the one place on the site where a card lifts 4px on hover and fades in on scroll (`home-motion.js`, 80 ms apart, connectors draw in).
+  The same file counts the benchmark average up and draws the AgaOne chart lines. All of it is skipped under `prefers-reduced-motion`; the figures are in the HTML.
+  The sample Pro report (the `band-explorer` crop) and the citation scatter sit in a preview strip under the ladder, the MCP conversation types in beside the
+  developer row; click on the report opens it larger. No other card may lift or slide.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

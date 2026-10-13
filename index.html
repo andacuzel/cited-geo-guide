@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=79" />
+  <link rel="stylesheet" href="styles.css?v=80" />
 
   <script type="application/ld+json">
   {
@@ -322,31 +322,31 @@
             <p class="kicker">Four steps</p>
             <h2 id="ladder-heading" class="section-title">Start with the scan. Go as far as you need.</h2>
           </div>
-          <ul class="ladder-grid">
-            <li class="ladder-card">
-              <p class="ladder-card__tag">Free</p>
+          <ul class="ladder-grid" id="ladderGrid">
+            <li class="ladder-card ladder-card--scan">
+              <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span><p class="ladder-card__tag">Free</p></div>
               <h3 class="ladder-card__name">Scan</h3>
               <p class="ladder-card__text">See your score. 100 points, 16 checks, 10 AI crawlers. No sign-up.</p>
               <p class="ladder-card__cta"><button type="button" class="btn btn--primary" data-ladder-scan>Run the free scan</button></p>
             </li>
-            <li class="ladder-card">
-              <p class="ladder-card__tag">Waitlist</p>
+            <li class="ladder-card ladder-card--pro">
+              <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span><p class="ladder-card__tag">Waitlist</p></div>
               <h3 class="ladder-card__name">Pro report</h3>
               <p class="ladder-card__text">The whole site, page by page. Prioritized fixes, your estimated score after fixing, 21 questions in your customers&rsquo; words, and a citation check (pilot).</p>
               <p class="ladder-card__cta"><a class="btn btn--ghost" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Get early access</a></p>
             </li>
-            <li class="ladder-card">
-              <p class="ladder-card__tag">Early access</p>
+            <li class="ladder-card ladder-card--fix">
+              <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span><p class="ladder-card__tag">Early access</p></div>
               <h3 class="ladder-card__name">Fix</h3>
               <p class="ladder-card__text">We close the gaps. Schema, robots.txt, llms.txt, sitemap, titles and descriptions: prepared, applied, rescanned, with the before/after shown to you.</p>
-              <p class="ladder-card__cta"><button type="button" class="btn btn--ghost" data-request="fix">Request a Fix quote</button></p>
+              <p class="ladder-card__cta"><button type="button" class="btn btn--gold" data-request="fix">Request a Fix quote</button></p>
             </li>
-            <li class="ladder-card">
-              <p class="ladder-card__tag">Early access</p>
+            <li class="ladder-card ladder-card--beyond">
+              <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M9 7h8v8"/></svg></span><p class="ladder-card__tag">Early access</p></div>
               <h3 class="ladder-card__name">Beyond</h3>
               <p class="ladder-card__text">Readable is not enough. Be the page assistants pick. We write the market questions in your customers&rsquo; words, read your pages against them, and deliver briefs and drafts you approve, then re-measure monthly.</p>
-              <p class="ladder-card__feat">Includes a monthly citation check.</p>
-              <p class="ladder-card__cta"><button type="button" class="btn btn--ghost" data-request="beyond">Join Beyond early access</button></p>
+              <p class="ladder-card__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__tagicon" aria-hidden="true" focusable="false"><path d="M4.5 11.5V10a3.5 3.5 0 013.5-3.5h10.5"/><path d="M15.5 3.5l3 3-3 3"/><path d="M19.5 12.5V14a3.5 3.5 0 01-3.5 3.5H5.5"/><path d="M8.5 20.5l-3-3 3-3"/></svg>Includes a monthly citation check</p>
+              <p class="ladder-card__cta"><button type="button" class="btn btn--gold" data-request="beyond">Join Beyond</button></p>
             </li>
           </ul>
         </div>
@@ -774,5 +774,6 @@
   <script src="report-card.js?v=1" defer></script>
   <script src="wl-bar.js?v=1" defer></script>
   <script src="request-form.js?v=1" defer></script>
+  <script src="home-motion.js?v=1" defer></script>
 </body>
 </html>

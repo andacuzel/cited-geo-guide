@@ -4418,16 +4418,45 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 /* ----------------------------- Homepage ladder (scan, Pro report, Fix, Beyond) and the early-access form ----------------------------- */
 
 .ladder { padding: 0 0 96px; }
-.ladder-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
-.ladder-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 24px 24px; }
-.ladder-card__tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 8px; }
-.ladder-card__name { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.15; color: var(--navy-950); }
+.ladder-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; align-items: end; }
+.ladder-card { position: relative; display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--line); border-radius: var(--radius); padding: 22px 24px 24px; transition: transform 200ms ease, border-color 150ms ease; }
+.ladder-card:nth-child(1) { min-height: 330px; }
+.ladder-card:nth-child(2) { min-height: 385px; }
+.ladder-card:nth-child(3) { min-height: 440px; }
+.ladder-card:hover { transform: translateY(-4px); border-top-color: var(--gold); }
+.ladder-card--fix, .ladder-card--beyond { background: var(--navy-950); border-color: var(--navy-950); color: var(--white); }
+.ladder-card--beyond { border-top-color: var(--gold); }
+.ladder-card__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.ladder-card__icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius); background: var(--bg); color: var(--navy-800); }
+.ladder-card__svg { width: 24px; height: 24px; }
+.ladder-card--fix .ladder-card__icon, .ladder-card--beyond .ladder-card__icon { background: var(--navy-900); color: var(--gold-soft); }
+.ladder-card__tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
+.ladder-card--fix .ladder-card__tag, .ladder-card--beyond .ladder-card__tag { color: var(--gold-soft); }
+.ladder-card__name { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.15; color: var(--navy-950); }
+.ladder-card--fix .ladder-card__name, .ladder-card--beyond .ladder-card__name { color: var(--white); }
 .ladder-card__text { flex: 1 1 auto; margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
-.ladder-card__feat { margin-top: 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--ink); }
-.ladder-card__cta { margin-top: 22px; }
-.ladder-card__cta .btn { width: 100%; }
-@media (max-width: 1100px) { .ladder-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 640px) { .ladder { padding-bottom: 72px; } .ladder-grid { grid-template-columns: minmax(0, 1fr); } }
+.ladder-card--fix .ladder-card__text, .ladder-card--beyond .ladder-card__text { color: rgba(255, 255, 255, 0.84); }
+.ladder-card__note { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 6px 12px; border: 1px solid var(--gold); border-radius: var(--radius-sm); font-size: 13px; line-height: 1.3; font-weight: 600; color: var(--gold-soft); }
+.ladder-card__tagicon { flex: none; width: 16px; height: 16px; }
+.ladder-card__cta { margin-top: 24px; }
+.ladder-card__cta .btn { width: 100%; justify-content: center; min-height: 48px; white-space: nowrap; }
+/* The step connectors: a gold line from each card to the next one, in the gap, at the height of its icon. */
+.ladder-card + .ladder-card::before { content: ""; position: absolute; top: 38px; left: -29px; width: 28px; height: 2px; background: var(--gold); transform-origin: left center; }
+/* Motion. request: armed by home-motion.js only when motion is allowed; the cards then fade and slide in 80 ms apart and the connectors draw in. */
+.ladder-grid.is-armed .ladder-card { opacity: 0; transform: translateY(18px); }
+.ladder-grid.is-armed .ladder-card::before { transform: scaleX(0); }
+.ladder-grid.is-in .ladder-card { opacity: 1; transform: none; transition: opacity 500ms ease, transform 500ms ease, border-color 150ms ease; transition-delay: calc(var(--i, 0) * 80ms), calc(var(--i, 0) * 80ms), 0s; }
+.ladder-grid.is-in .ladder-card::before { transform: scaleX(1); transition: transform 360ms ease; transition-delay: calc(var(--i, 0) * 80ms + 260ms); }
+@media (max-width: 1100px) {
+  .ladder-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  .ladder-card:nth-child(n) { min-height: 0; }
+  .ladder-card + .ladder-card::before { display: none; }
+}
+@media (max-width: 640px) { .ladder { padding-bottom: 72px; } .ladder-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+@media (prefers-reduced-motion: reduce) {
+  .ladder-card { transition: none; }
+  .ladder-card:hover { transform: none; }
+}
 
 .score-fix { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
 .score-fix[hidden] { display: none; }
@@ -4502,3 +4531,11 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .dev-strip.is-armed [data-step] { opacity: 0; visibility: hidden; }
 .dev-strip.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
 @media (max-width: 900px) { .dev-strip__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Sample Pro report: opens larger on click (home-motion.js builds the dialog from a copy of the figure). */
+.preview-stage .pro-shot { cursor: zoom-in; }
+.shot-dialog { position: fixed; inset: 0; margin: auto; width: min(1100px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; padding: 44px 16px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
+.shot-dialog::backdrop { background: rgba(11, 21, 38, 0.7); }
+.shot-dialog .pro-shot { cursor: auto; box-shadow: none; }
+.shot-dialog .pro-shot__view { max-height: none; height: auto; }
+.hm-count { font-variant-numeric: tabular-nums; }
