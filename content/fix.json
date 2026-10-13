@@ -1,0 +1,38 @@
+{
+  "path": "/fix",
+  "kicker": "Citehound Fix",
+  "title": "We close the gaps the scan finds",
+  "lede": "Schema, robots.txt, llms.txt, sitemap, titles and descriptions: prepared, applied and rescanned, with the before and after shown to you.",
+  "description": "Citehound Fix prepares and applies the technical changes the AI-readiness scan asks for, then rescans and shows you the before and after. In early access.",
+  "sections": [
+    {
+      "heading": "What we do",
+      "paragraphs": [
+        "The scan shows what keeps AI systems from reaching or reading your site. Fix is the part where we do the work. It covers the technical layer, the one the score measures."
+      ],
+      "bullets": [
+        { "lead": "Schema.", "text": "Organization, WebSite and the content markup the checks look for." },
+        { "lead": "robots.txt.", "text": "Rules for the AI crawlers, set the way you decide." },
+        { "lead": "llms.txt.", "text": "A short file that says what the site is and where its main pages are. It is optional and low-cost, and nobody has shown that it changes what Google does." },
+        { "lead": "Sitemap.", "text": "Declared in robots.txt and listing the pages that matter." },
+        { "lead": "Titles and descriptions.", "text": "One title and one meta description for each page, written for that page." }
+      ]
+    },
+    {
+      "heading": "Where Fix stops",
+      "paragraphs": [
+        "Fix is the technical layer. Writing and editing your content is a separate service, Citehound Beyond."
+      ]
+    },
+    {
+      "heading": "How it works",
+      "steps": [
+        "We scan your site and agree with you which gaps to close.",
+        "We prepare each change and apply it.",
+        "We rescan and send you the before and after."
+      ]
+    }
+  ],
+  "cta": { "label": "Request a Fix quote" },
+  "smallPrint": "Early access. We publish no price yet; we reply to each request with a quote."
+}

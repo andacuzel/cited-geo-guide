@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* =====================================================================
-   scripts/test-beyond-technical.js: /beyond-technical and its homepage block say what the owner wrote, and nothing else.
+   scripts/test-beyond-technical.js: /beyond (formerly /beyond-technical, which redirects) and its homepage block say what the owner wrote, and nothing else.
 
    The copy below is the owner's text from the brief of 11 October 2026, with straight apostrophes. The page is allowed to differ from it in only
    two ways, both checked here: typographic apostrophes (the site's style) and the US spelling "prioritized" (CLAUDE.md: US English). Every sentence of it
@@ -45,24 +45,24 @@ const HOME = ["The score covers the technical layer. Content decides what happen
 const norm = (s) => s.replace(/&rsquo;|&#8217;|’/g, "'").replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim();
 const textOf = (html) => norm(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<svg[\s\S]*?<\/svg>/g, ' ').replace(/<[^>]+>/g, ' '));
 
-const page = read('beyond-technical.html');
-const main = textOf((/<main id="main">([\s\S]*?)<footer class="site-footer/.exec(page) || [])[1] || '');
+const page = read('beyond.html');
+const main = textOf(((/<main id="main">([\s\S]*?)<footer class="site-footer/.exec(page) || [])[1] || '').replace(/<dialog[\s\S]*?<\/dialog>/, ' '));
 let at = 0, inOrder = true, missing = [];
 BRIEF.forEach((s) => { const i = main.indexOf(s, at); if (i === -1) { inOrder = false; missing.push(s.slice(0, 50)); } else at = i + s.length; });
 t('every sentence of the owner\'s text is on the page, in order (apostrophes and "prioritized" aside)', inOrder, missing.join(' | '));
 let rest = main; BRIEF.forEach((s) => { rest = rest.replace(s, ''); });
-// The only other words are the banner's kicker, the page's own name in the gold mono label the design system puts above every title.
-t('and the page holds no other body text (the kicker "Beyond technical" above the title is the design system\'s label, the page\'s name)', rest.replace(/\s+/g, '') === 'Beyondtechnical', rest.trim().slice(0, 120));
-t('the heading levels are the brief\'s: one h1, four h2', (page.match(/<h1[ >]/g) || []).length === 1 && (page.match(/<h2[ >]/g) || []).length === 4 && />A clean site isn’t yet a citable one</.test(page.replace(/&rsquo;/g, '’')));
+// The only other words are the banner's kicker, the page's own name in the gold mono label the design system puts above every title, and the link to the homepage FAQ answer (the request form is a dialog, not body text).
+t('and the page holds no other body text (the kicker "Citehound Beyond" above the title is the design system\'s label, the page\'s name; the one FAQ link follows the small print)', rest.replace(/\s+/g, '') === 'CitehoundBeyondIfnobodycanpromiseacitation,whypay?', rest.trim().slice(0, 160));
+t('the heading levels are the brief\'s: one h1, four h2', (page.replace(/<dialog[\s\S]*?<\/dialog>/, '').match(/<h1[ >]/g) || []).length === 1 && (page.replace(/<dialog[\s\S]*?<\/dialog>/, '').match(/<h2[ >]/g) || []).length === 4 && />A clean site isn’t yet a citable one</.test(page.replace(/&rsquo;/g, '’')));
 t('the three points are a list with the bold lead-ins; the steps are a numbered list of three', /<ul class="doc-list">\s*<li><strong>Fit to the question\.<\/strong>/.test(page) && (page.match(/<ol class="doc-list bt-steps">[\s\S]*?<\/ol>/) || [''])[0].split('<li>').length === 4);
-t('the call to action is one link with the mailto and subject of the brief', (page.match(/href="mailto:[^"]+"/g) || []).filter((x) => /Content%20review/.test(x)).length === 1 && page.indexOf('href="mailto:hey@getcitehound.com?subject=Content%20review"') !== -1 && />Request a content review</.test(page));
-t('the small print follows the button', /Request a content review<\/a>\s*<p class="bt-fine">We don’t promise citations\. Nobody honestly can\.<\/p>/.test(page.replace(/&rsquo;/g, '’')));
-t('the page is indexable, has a meta description of 120 to 160 characters, a canonical address', !/noindex/i.test(page) && /name="robots" content="index, follow"/.test(page) && (() => { const d = (/<meta name="description" content="([^"]*)"/.exec(page) || [])[1] || ''; return d.length >= 120 && d.length <= 160; })() && /<link rel="canonical" href="https:\/\/getcitehound\.com\/beyond-technical"/.test(page));
-t('it is in the sitemap and in llms.txt', /<loc>https:\/\/getcitehound\.com\/beyond-technical<\/loc>/.test(read('sitemap.xml')) && /\(https:\/\/getcitehound\.com\/beyond-technical\)/.test(read('llms.txt')));
-t('it is not in robots.txt, the Pro paths or the MCP server', !/beyond-technical/.test(read('robots.txt')) && !/beyond-technical/.test(read('api/mcp.js')));
-t('the footer of the page itself links to it', /<li><a href="\/beyond-technical">Beyond technical<\/a><\/li>/.test(page));
+t('the call to action is one button that opens the request form for Beyond (the old mailto link is gone)', (page.match(/<button type="button" class="btn btn--gold" data-request="beyond">Request a content review<\/button>/g) || []).length === 1 && !/href="mailto:[^"]*Content%20review/.test(page) && /id="reqDialog"/.test(page));
+t('the small print follows the button', /Request a content review<\/button>\s*<p class="bt-fine">We don’t promise citations\. Nobody honestly can\.<\/p>/.test(page.replace(/&rsquo;/g, '’')));
+t('the page is indexable, has a meta description of 120 to 160 characters, a canonical address', !/noindex/i.test(page) && /name="robots" content="index, follow"/.test(page) && (() => { const d = (/<meta name="description" content="([^"]*)"/.exec(page) || [])[1] || ''; return d.length >= 120 && d.length <= 160; })() && /<link rel="canonical" href="https:\/\/getcitehound\.com\/beyond"/.test(page));
+t('it is in the sitemap and in llms.txt, and the old address is in neither', /<loc>https:\/\/getcitehound\.com\/beyond<\/loc>/.test(read('sitemap.xml')) && /\(https:\/\/getcitehound\.com\/beyond\)/.test(read('llms.txt')) && !/beyond-technical/.test(read('sitemap.xml')) && !/beyond-technical/.test(read('llms.txt')));
+t('it is not in robots.txt, the Pro paths or the MCP server, and the old address redirects to it', !/beyond/.test(read('robots.txt')) && !/beyond/.test(read('api/mcp.js')) && /"source": "\/beyond-technical", "destination": "\/beyond", "statusCode": 301/.test(read('vercel.json')));
+t('the footer of the page itself links to it', /<li><a href="\/beyond">Beyond<\/a><\/li>/.test(page));
 const footers = ['index.html', 'about.html', 'privacy.html', 'terms.html', 'trust.html', 'pro.html', 'methodology.html', 'compare.html', 'tools/index.html', 'for-saas.html', 'research/index.html', 'benchmarks/index.html', 'mcp.html', 'changelog.html', 'sample-report.html', 'citation-tracking.html', 'playbooks.html', 'agentic-commerce.html', '404.html'];
-const lacking = footers.filter((f) => !/<li><a href="\/beyond-technical">Beyond technical<\/a><\/li>/.test(read(f)));
+const lacking = footers.filter((f) => !/<li><a href="\/beyond">Beyond<\/a><\/li>/.test(read(f)));
 t('the footer link is on the other pages', lacking.length === 0, lacking.join(', '));
 
 const home = read('index.html');

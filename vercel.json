@@ -27,6 +27,8 @@
   "redirects": [
     { "source": "/scan", "destination": "/", "statusCode": 301 },
     { "source": "/scan/", "destination": "/", "statusCode": 301 },
+    { "source": "/beyond-technical", "destination": "/beyond", "statusCode": 301 },
+    { "source": "/beyond-technical/", "destination": "/beyond", "statusCode": 301 },
     {
       "source": "/((?!api/mcp|\\.well-known/(?:oauth|openid|mcp)).*)",
       "has": [{ "type": "host", "value": "answerable-app.vercel.app" }],

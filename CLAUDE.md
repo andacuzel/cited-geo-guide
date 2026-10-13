@@ -144,7 +144,7 @@ Constraints that must not be broken:
   benchmark strip), how the scan works, a research strip (three links), one developer row (MCP server, playbooks, generators), the FAQ, a closing call to
   action, the footer. The Pro band, the Beyond technical panel, the MCP band, the citation teaser and the agentic commerce strip are gone from the homepage;
   their generators still build their own pages and check the old blocks only where they stand (`generate-pro.js`, `generate-beyond-technical.js`). The
-  citation scatter markup lives in `content/citation-scatter.html` (source for `/citation-tracking`). Citation tracking is a feature line inside the Pro and
+  citation scatter markup lives in `content/citation-scatter.fragment.txt` (source for `/citation-tracking`). Citation tracking is a feature line inside the Pro and
   Beyond cards, never a section. The no-promise sentence is in the FAQ answer ("If nobody can promise a citation, why pay?") and nowhere else on the page: not
   in the hero, meta, cards or buttons. The Fix and Beyond form (`request-form.js`, a dialog) posts to `/api/waitlist` with `interest` (pro, fix, beyond),
   optional `website` and `note`; only a Pro signup gets the confirmation mail. `scripts/export-waitlist.js` prints the three columns.

@@ -24,7 +24,7 @@ const t = (name, ok, extra) => { if (ok) pass++; else fails.push(name + (extra ?
 
 const html = F.html('');
 t('three columns, Product, Research and Company, each a labelled nav', F.COLUMNS.map((c) => c.title).join() === 'Product,Research,Company' && (html.match(/<nav class="sf-col" aria-labelledby="sf-/g) || []).length === 3);
-t('the brief\'s links are there: scanner, Pro, MCP; State of AI Readiness, the llms.txt adoption study, Beyond technical; privacy and the contact address', ['/', '/pro', '/mcp', '/research/state-of-ai-readiness', '/research/llms-txt-adoption-2026', '/beyond-technical', '/privacy', 'mailto:' + site.contactEmail].every((h) => F.hrefs().indexOf(h) !== -1));
+t('the brief\'s links are there: scanner, Pro, MCP; State of AI Readiness, the llms.txt adoption study, Fix, Beyond; privacy and the contact address', ['/', '/pro', '/mcp', '/research/state-of-ai-readiness', '/research/llms-txt-adoption-2026', '/fix', '/beyond', '/privacy', 'mailto:' + site.contactEmail].every((h) => F.hrefs().indexOf(h) !== -1));
 t('the contact address is the one in site.config.json, shown as the address', html.indexOf('<a href="mailto:' + site.contactEmail + '">' + site.contactEmail + '</a>') !== -1 && site.contactEmail === 'hey@getcitehound.com');
 t('no link to /changelog, no account other than X and LinkedIn, no link to a page that does not exist', !/changelog/i.test(html) && !/github\.com|facebook|instagram|youtube|mastodon/i.test(html) && require('./site-footer.js').missingTargets().length === 0);
 t('the bottom row is the copyright and nothing else', /<p class="sf-legal">© 2026 Citehound<\/p>/.test(html));
@@ -44,7 +44,7 @@ t('link targets are at least 24px tall (padding on the links)', /\.sf-list a \{[
 const pro = fs.readFileSync(path.join(ROOT, 'lib', 'pro-report-page.js'), 'utf8');
 t('the pages the Pro function writes (report, progress, start, errors) carry it through the shared shell', /siteFooter\.html\(/.test(pro) && /require\('\.\/site-footer\.js'\)/.test(pro));
 t('the Pro start page has the same footer instead of its own small one', /<footer class="site-footer site-footer--navy"/.test(read('app/pro-start.html')) && !/ps-foot/.test(read('app/pro-start.html').replace(/<style[\s\S]*?<\/style>/g, '')));
-const pages = ['index.html', 'about.html', 'pro.html', 'privacy.html', 'terms.html', 'research/index.html', 'research/state-of-ai-readiness.html', 'research/llms-txt-adoption-2026.html', 'research/case-study-agaone.html', 'research/crawler-access-2026.html', 'beyond-technical.html', 'tools/index.html', 'benchmarks/crm.html', 'sample-report.html', '404.html', 'changelog.html'];
+const pages = ['index.html', 'about.html', 'pro.html', 'privacy.html', 'terms.html', 'research/index.html', 'research/state-of-ai-readiness.html', 'research/llms-txt-adoption-2026.html', 'research/case-study-agaone.html', 'research/crawler-access-2026.html', 'beyond.html', 'fix.html', 'tools/index.html', 'benchmarks/crm.html', 'sample-report.html', '404.html', 'changelog.html'];
 const flat = (x) => x.replace(/\s+/g, ' ');
 const want = (p) => flat(F.html('', { badge: p === 'index.html' }));
 t('the footer is the same on the pages the owner named and on the old research pages (the homepage\'s alone has the badge)', pages.every((p) => flat(read(p)).indexOf(want(p)) !== -1), pages.filter((p) => flat(read(p)).indexOf(want(p)) === -1).join(', '));

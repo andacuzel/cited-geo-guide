@@ -221,15 +221,20 @@ async function waitForDeployment(sha) {
   const srPriv = await get('/privacy');
   t('/privacy has the State of AI Readiness section with the 12 months, the 30 days and the three a day', /The State of AI Readiness report/.test(srPriv.text) && /after 12 months/.test(srPriv.text) && /works for 30 days/.test(srPriv.text) && /at most three report emails a day/.test(srPriv.text));
   t('/llms.txt lists the report page', /state-of-ai-readiness/.test((await get('/llms.txt')).text));
-  // The homepage notices and the Beyond technical page.
+  // The homepage notices, the Beyond and Fix pages.
   const h0 = await get('/');
-  t('the homepage carries the Pro waitlist bar (a link to /pro), the report card template and both scripts', /id="wlBar"/.test(h0.text) && /href="\/pro#waitlist"/.test(h0.text) && /<template id="rcTemplate">/.test(h0.text) && /report-card\.js/.test(h0.text) && /wl-bar\.js/.test(h0.text) && /BEYOND:START/.test(h0.text));
+  t('the homepage carries the Pro waitlist bar (a link to /pro), the report card template and both scripts', /id="wlBar"/.test(h0.text) && /href="\/pro#waitlist"/.test(h0.text) && /<template id="rcTemplate">/.test(h0.text) && /report-card\.js/.test(h0.text) && /wl-bar\.js/.test(h0.text));
   for (const f of ['/report-card.js', '/wl-bar.js', '/report-signup.js', '/request-form.js']) { const r = await get(f); t(f + ' is served as JavaScript', r.status === 200 && /javascript/.test(r.headers.get('content-type') || ''), String(r.status)); }
-  const bt = await get('/beyond-technical');
-  t('/beyond-technical is 200, indexable, with the owner\u2019s H1 and the mailto call to action', bt.status === 200 && !/noindex/i.test(bt.headers.get('x-robots-tag') || '') && /isn\u2019t yet a citable one/.test(bt.text.replace(/&rsquo;/g, '\u2019')) && /href="mailto:hey@getcitehound\.com\?subject=Content%20review"/.test(bt.text), String(bt.status));
-  t('the Beyond technical page is in the sitemap and llms.txt, and the footer links to it', /\/beyond-technical</.test((await get('/sitemap.xml')).text) && /beyond-technical/.test((await get('/llms.txt')).text) && /href="\/beyond-technical"/.test(bt.text));
+  const bt = await get('/beyond');
+  t('/beyond is 200, indexable, with the owner\u2019s H1, the request-form button and the FAQ link', bt.status === 200 && !/noindex/i.test(bt.headers.get('x-robots-tag') || '') && /isn\u2019t yet a citable one/.test(bt.text.replace(/&rsquo;/g, '\u2019')) && /data-request="beyond">Request a content review<\/button>/.test(bt.text) && /href="\/#why-pay"/.test(bt.text), String(bt.status));
+  const oldBt = await fetch(BASE + '/beyond-technical', { redirect: 'manual', headers: { 'User-Agent': 'citehound-smoke/1' } });
+  t('/beyond-technical redirects (301) to /beyond', oldBt.status === 301 && /\/beyond$/.test(oldBt.headers.get('location') || ''), oldBt.status + ' ' + oldBt.headers.get('location'));
+  const fx = await get('/fix');
+  t('/fix is 200, indexable, with the request-form button', fx.status === 200 && !/noindex/i.test(fx.headers.get('x-robots-tag') || '') && /data-request="fix">Request a Fix quote<\/button>/.test(fx.text), String(fx.status));
+  const smap = (await get('/sitemap.xml')).text, ll = (await get('/llms.txt')).text;
+  t('/fix and /beyond are in the sitemap and llms.txt (the old address in neither), and the footer links to both', /<loc>https:\/\/getcitehound\.com\/beyond<\/loc>/.test(smap) && /<loc>https:\/\/getcitehound\.com\/fix<\/loc>/.test(smap) && !/beyond-technical/.test(smap + ll) && /\(https:\/\/getcitehound\.com\/beyond\)/.test(ll) && /\(https:\/\/getcitehound\.com\/fix\)/.test(ll) && /href="\/beyond"/.test(bt.text) && /href="\/fix"/.test(bt.text));
   // The one footer, the Beyond technical band, the cover image and the changelog that is out of sight.
-  for (const p of ['/', '/pro', '/privacy', '/research/state-of-ai-readiness', '/research/llms-txt-adoption-2026', '/beyond-technical']) {
+  for (const p of ['/', '/pro', '/privacy', '/research/state-of-ai-readiness', '/research/llms-txt-adoption-2026', '/beyond', '/fix']) {
     const r = await get(p);
     t(p + ' carries the one navy footer: three columns, no changelog link', r.status === 200 && /<footer class="site-footer site-footer--navy"/.test(r.text) && (r.text.match(/class="sf-col"/g) || []).length === 3 && !/href="\/changelog"/.test(r.text.split('<footer')[1] || ''), String(r.status));
   }

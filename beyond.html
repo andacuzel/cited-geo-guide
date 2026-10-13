@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Citehound — A clean site isn’t yet a citable one</title>
+  <title>Citehound Beyond: A clean site isn’t yet a citable one</title>
   <meta name="description" content="The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you." />
   <meta name="author" content="Citehound" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://getcitehound.com/beyond-technical" />
+  <link rel="canonical" href="https://getcitehound.com/beyond" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Citehound — A clean site isn’t yet a citable one" />
+  <meta property="og:title" content="Citehound Beyond: A clean site isn’t yet a citable one" />
   <meta property="og:description" content="The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you." />
-  <meta property="og:url" content="https://getcitehound.com/beyond-technical" />
+  <meta property="og:url" content="https://getcitehound.com/beyond" />
   <meta property="og:image" content="https://getcitehound.com/assets/brand/og-default.png" />
   <meta property="og:site_name" content="Citehound" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Citehound — A clean site isn’t yet a citable one" />
+  <meta name="twitter:title" content="Citehound Beyond: A clean site isn’t yet a citable one" />
   <meta name="twitter:description" content="The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you." />
   <meta name="twitter:image" content="https://getcitehound.com/assets/brand/og-default.png" />
 
@@ -27,15 +27,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=77" />
+  <link rel="stylesheet" href="styles.css?v=78" />
 
+  <script src="/request-form.js?v=1" defer></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "A clean site isn’t yet a citable one",
+    "name": "Citehound Beyond",
     "description": "The Citehound score shows whether AI systems can reach and read your site. Whether a page is worth citing is an editorial question, and we work on it with you.",
-    "url": "https://getcitehound.com/beyond-technical",
+    "url": "https://getcitehound.com/beyond",
     "publisher": {
       "@id": "https://getcitehound.com/#org"
     }
@@ -119,7 +120,7 @@
       <div class="section__inner">
         <div class="page-banner">
           <div class="page-banner__body">
-            <p class="kicker kicker--on-navy">Beyond technical</p>
+            <p class="kicker kicker--on-navy">Citehound Beyond</p>
             <h1 id="hero-heading" class="page-banner__title">A clean site isn’t yet a citable one</h1>
             <p class="page-banner__desc">The Citehound score tells you whether AI systems can reach your site and read it. It does not tell you whether any of your pages deserves to be picked when someone asks a question. That part is editorial, and a scanner can’t do it for you.</p>
           </div>
@@ -160,11 +161,34 @@
         </div>
 
         <div class="bt-cta">
-          <a class="btn btn--gold" href="mailto:hey@getcitehound.com?subject=Content%20review">Request a content review</a>
+          <button type="button" class="btn btn--gold" data-request="beyond">Request a content review</button>
           <p class="bt-fine">We don’t promise citations. Nobody honestly can.</p>
+          <p class="bt-faq"><a href="/#why-pay">If nobody can promise a citation, why pay?</a></p>
         </div>
       </div>
     </section>
+
+    <dialog class="req-dialog" id="reqDialog" aria-labelledby="reqTitle">
+      <button type="button" class="req-close" id="reqClose" aria-label="Close the form">&times;</button>
+      <p class="kicker" id="reqKicker">Early access</p>
+      <h2 class="req-title" id="reqTitle">Request a Fix quote</h2>
+      <p class="req-lede" id="reqLede">Leave your email and the site. We reply with a quote.</p>
+      <form class="ps-form req-form" id="reqForm" novalidate>
+        <fieldset class="req-which">
+          <legend class="ps-label">I am asking about</legend>
+          <label class="ps-check" for="reqFix"><input id="reqFix" name="interest" type="radio" value="fix" checked /><span>Fix: closing the technical gaps</span></label>
+          <label class="ps-check" for="reqBeyond"><input id="reqBeyond" name="interest" type="radio" value="beyond" /><span>Beyond: content briefs and drafts</span></label>
+        </fieldset>
+        <div class="ps-field"><label for="reqEmail" class="ps-label">Email</label><input class="field ps-input" id="reqEmail" name="email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" maxlength="254" aria-describedby="reqEmailError" required /><p class="ps-error" id="reqEmailError" hidden></p></div>
+        <div class="ps-field"><label for="reqWebsite" class="ps-label">Website <span class="wl-opt">(optional)</span></label><input class="field ps-input" id="reqWebsite" name="website" type="text" inputmode="url" autocapitalize="off" autocomplete="url" spellcheck="false" maxlength="200" placeholder="yourdomain.com" /></div>
+        <div class="ps-field"><label for="reqNote" class="ps-label">One line about what you need <span class="wl-opt">(optional)</span></label><input class="field ps-input" id="reqNote" name="note" type="text" maxlength="200" /></div>
+        <div class="wl-trap" aria-hidden="true"><label>Company fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off" /></label></div>
+        <div class="ps-field ps-field--check"><label class="ps-check" for="reqConsent"><input id="reqConsent" name="consent" type="checkbox" aria-describedby="reqConsentError" required /><span>You may email me about this request</span></label><p class="ps-error" id="reqConsentError" hidden></p></div>
+        <p class="ps-note">We keep your address and what you write here for up to 12 months and use them only to answer you. To have them deleted, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a>. See the <a href="/privacy">privacy page</a>.</p>
+        <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="reqSubmit">Send</button></p>
+        <p class="wl-status" id="reqStatus" role="status" aria-live="polite" tabindex="-1"></p>
+      </form>
+    </dialog>
 
     <footer class="site-footer site-footer--navy" aria-label="Footer">
       <div class="section__inner">
@@ -185,6 +209,8 @@
               <li><a href="/tools">Tools</a></li>
               <li><a href="/playbooks">Playbooks</a></li>
               <li><a href="/pro">Citehound Pro</a></li>
+              <li><a href="/fix">Fix</a></li>
+              <li><a href="/beyond">Beyond</a></li>
               <li><a href="/sample-report">Sample Pro report</a></li>
               <li><a href="/mcp">MCP server</a></li>
               <li><a href="/agentic-commerce">Agentic commerce</a></li>
@@ -200,7 +226,6 @@
               <li><a href="/research/case-study-agaone">Case study</a></li>
               <li><a href="/benchmarks">Benchmarks</a></li>
               <li><a href="/methodology">Methodology</a></li>
-              <li><a href="/beyond-technical">Beyond technical</a></li>
             </ul>
           </nav>
           <nav class="sf-col" aria-labelledby="sf-company">

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Citehound Fix: we close the gaps the scan finds</title>
+  <meta name="description" content="Citehound Fix prepares and applies the technical changes the AI-readiness scan asks for, then rescans and shows you the before and after. In early access." />
+  <meta name="author" content="Citehound" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://getcitehound.com/fix" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Citehound Fix: we close the gaps the scan finds" />
+  <meta property="og:description" content="Citehound Fix prepares and applies the technical changes the AI-readiness scan asks for, then rescans and shows you the before and after. In early access." />
+  <meta property="og:url" content="https://getcitehound.com/fix" />
+  <meta property="og:image" content="https://getcitehound.com/assets/brand/og-default.png" />
+  <meta property="og:site_name" content="Citehound" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Citehound Fix: we close the gaps the scan finds" />
+  <meta name="twitter:description" content="Citehound Fix prepares and applies the technical changes the AI-readiness scan asks for, then rescans and shows you the before and after. In early access." />
+  <meta name="twitter:image" content="https://getcitehound.com/assets/brand/og-default.png" />
+
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=78" />
+
+  <script src="/request-form.js?v=1" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Citehound Fix",
+    "description": "Citehound Fix prepares and applies the technical changes the AI-readiness scan asks for, then rescans and shows you the before and after. In early access.",
+    "url": "https://getcitehound.com/fix",
+    "publisher": {
+      "@id": "https://getcitehound.com/#org"
+    }
+  }
+  </script>
+  <!-- SITE-SCHEMA:START -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://getcitehound.com/#org",
+        "name": "Citehound",
+        "url": "https://getcitehound.com/",
+        "description": "Citehound scans websites for AI readiness: a free 100-point scan, a Pro report, and Fix and Beyond services in early access to close the gaps.",
+        "email": "hey@getcitehound.com",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "hey@getcitehound.com"
+        },
+        "sameAs": [
+          "https://x.com/getcitehound",
+          "https://www.linkedin.com/company/citehound/"
+        ],
+        "founder": {
+          "@id": "https://getcitehound.com/about#person"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://getcitehound.com/#website",
+        "name": "Citehound",
+        "url": "https://getcitehound.com/",
+        "publisher": {
+          "@id": "https://getcitehound.com/#org"
+        },
+        "author": {
+          "@id": "https://getcitehound.com/about#person"
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:END -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Citehound — back to homepage">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="logo__mark">Citehound</span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section aria-labelledby="hero-heading">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">Citehound Fix</p>
+            <h1 id="hero-heading" class="page-banner__title">We close the gaps the scan finds</h1>
+            <p class="page-banner__desc">Schema, robots.txt, llms.txt, sitemap, titles and descriptions: prepared, applied and rescanned, with the before and after shown to you.</p>
+          </div>
+          <span class="page-banner__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8.5 4.5L12 13 3.5 8.5 12 4z"/><path d="M3.5 12.5L12 17l8.5-4.5M3.5 16.5L12 21l8.5-4.5"/></svg></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="verticals" aria-labelledby="fix-first">
+      <div class="section__inner">
+        <div class="doc-section bt-section">
+          <h2 class="doc-section__heading" id="fix-first">What we do</h2>
+          <p>The scan shows what keeps AI systems from reaching or reading your site. Fix is the part where we do the work. It covers the technical layer, the one the score measures.</p>
+          <ul class="doc-list">
+            <li><strong>Schema.</strong> Organization, WebSite and the content markup the checks look for.</li>
+            <li><strong>robots.txt.</strong> Rules for the AI crawlers, set the way you decide.</li>
+            <li><strong>llms.txt.</strong> A short file that says what the site is and where its main pages are. It is optional and low-cost, and nobody has shown that it changes what Google does.</li>
+            <li><strong>Sitemap.</strong> Declared in robots.txt and listing the pages that matter.</li>
+            <li><strong>Titles and descriptions.</strong> One title and one meta description for each page, written for that page.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section bt-section">
+          <h2 class="doc-section__heading">Where Fix stops</h2>
+          <p>Fix is the technical layer. Writing and editing your content is a separate service, Citehound Beyond.</p>
+        </div>
+
+        <div class="doc-section bt-section">
+          <h2 class="doc-section__heading">How it works</h2>
+          <ol class="doc-list bt-steps">
+            <li>We scan your site and agree with you which gaps to close.</li>
+            <li>We prepare each change and apply it.</li>
+            <li>We rescan and send you the before and after.</li>
+          </ol>
+        </div>
+
+        <div class="bt-cta">
+          <button type="button" class="btn btn--gold" data-request="fix">Request a Fix quote</button>
+          <p class="bt-fine">Early access. We publish no price yet; we reply to each request with a quote.</p>
+          <p class="bt-faq"><a href="/#why-pay">If nobody can promise a citation, why pay?</a></p>
+        </div>
+      </div>
+    </section>
+
+    <dialog class="req-dialog" id="reqDialog" aria-labelledby="reqTitle">
+      <button type="button" class="req-close" id="reqClose" aria-label="Close the form">&times;</button>
+      <p class="kicker" id="reqKicker">Early access</p>
+      <h2 class="req-title" id="reqTitle">Request a Fix quote</h2>
+      <p class="req-lede" id="reqLede">Leave your email and the site. We reply with a quote.</p>
+      <form class="ps-form req-form" id="reqForm" novalidate>
+        <fieldset class="req-which">
+          <legend class="ps-label">I am asking about</legend>
+          <label class="ps-check" for="reqFix"><input id="reqFix" name="interest" type="radio" value="fix" checked /><span>Fix: closing the technical gaps</span></label>
+          <label class="ps-check" for="reqBeyond"><input id="reqBeyond" name="interest" type="radio" value="beyond" /><span>Beyond: content briefs and drafts</span></label>
+        </fieldset>
+        <div class="ps-field"><label for="reqEmail" class="ps-label">Email</label><input class="field ps-input" id="reqEmail" name="email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" maxlength="254" aria-describedby="reqEmailError" required /><p class="ps-error" id="reqEmailError" hidden></p></div>
+        <div class="ps-field"><label for="reqWebsite" class="ps-label">Website <span class="wl-opt">(optional)</span></label><input class="field ps-input" id="reqWebsite" name="website" type="text" inputmode="url" autocapitalize="off" autocomplete="url" spellcheck="false" maxlength="200" placeholder="yourdomain.com" /></div>
+        <div class="ps-field"><label for="reqNote" class="ps-label">One line about what you need <span class="wl-opt">(optional)</span></label><input class="field ps-input" id="reqNote" name="note" type="text" maxlength="200" /></div>
+        <div class="wl-trap" aria-hidden="true"><label>Company fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off" /></label></div>
+        <div class="ps-field ps-field--check"><label class="ps-check" for="reqConsent"><input id="reqConsent" name="consent" type="checkbox" aria-describedby="reqConsentError" required /><span>You may email me about this request</span></label><p class="ps-error" id="reqConsentError" hidden></p></div>
+        <p class="ps-note">We keep your address and what you write here for up to 12 months and use them only to answer you. To have them deleted, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a>. See the <a href="/privacy">privacy page</a>.</p>
+        <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="reqSubmit">Send</button></p>
+        <p class="wl-status" id="reqStatus" role="status" aria-live="polite" tabindex="-1"></p>
+      </form>
+    </dialog>
+
+    <footer class="site-footer site-footer--navy" aria-label="Footer">
+      <div class="section__inner">
+        <div class="sf-grid">
+          <div class="sf-brand">
+            <a href="/" class="sf-logo" aria-label="Citehound, back to homepage"><span class="sf-logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="sf-logo__mark">Citehound</span></a>
+            <p class="sf-tag">A scanner for AI readiness, built for teams navigating the shift from search to answers.</p>
+            <ul class="sf-social" aria-label="Citehound on social media">
+              <li><a href="https://x.com/getcitehound" target="_blank" rel="noopener noreferrer" aria-label="Citehound on X"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></li>
+              <li><a href="https://www.linkedin.com/company/citehound/" target="_blank" rel="noopener noreferrer" aria-label="Citehound on LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+            </ul>
+          </div>
+          <nav class="sf-col" aria-labelledby="sf-product">
+            <p class="sf-h" id="sf-product">Product</p>
+            <ul class="sf-list">
+              <li><a href="/">Scanner</a></li>
+              <li><a href="/compare">Compare two sites</a></li>
+              <li><a href="/tools">Tools</a></li>
+              <li><a href="/playbooks">Playbooks</a></li>
+              <li><a href="/pro">Citehound Pro</a></li>
+              <li><a href="/fix">Fix</a></li>
+              <li><a href="/beyond">Beyond</a></li>
+              <li><a href="/sample-report">Sample Pro report</a></li>
+              <li><a href="/mcp">MCP server</a></li>
+              <li><a href="/agentic-commerce">Agentic commerce</a></li>
+              <li><a href="/citation-tracking">Citation tracking</a></li>
+            </ul>
+          </nav>
+          <nav class="sf-col" aria-labelledby="sf-research">
+            <p class="sf-h" id="sf-research">Research</p>
+            <ul class="sf-list">
+              <li><a href="/research/state-of-ai-readiness">State of AI Readiness</a></li>
+              <li><a href="/research/llms-txt-adoption-2026">llms.txt adoption study</a></li>
+              <li><a href="/research/crawler-access-2026">Crawler access study</a></li>
+              <li><a href="/research/case-study-agaone">Case study</a></li>
+              <li><a href="/benchmarks">Benchmarks</a></li>
+              <li><a href="/methodology">Methodology</a></li>
+            </ul>
+          </nav>
+          <nav class="sf-col" aria-labelledby="sf-company">
+            <p class="sf-h" id="sf-company">Company</p>
+            <ul class="sf-list">
+              <li><a href="/about">About</a></li>
+              <li><a href="/trust">Trust</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/terms">Terms</a></li>
+              <li><a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a></li>
+            </ul>
+          </nav>
+        </div>
+        <p class="sf-legal">© 2026 Citehound</p>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="nav.js?v=3"></script>
+</body>
+</html>

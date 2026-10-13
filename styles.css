@@ -4475,3 +4475,6 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
   .home-faq { padding-bottom: 56px; }
   .home-close__panel { padding: 28px 22px; }
 }
+
+.bt-faq { margin-top: 10px; font-size: 14px; line-height: 1.5; }
+.bt-faq a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }

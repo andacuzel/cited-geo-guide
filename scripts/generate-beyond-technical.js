@@ -2,7 +2,7 @@
 /* =====================================================================
    scripts/generate-beyond-technical.js
 
-   Writes beyond-technical.html (served at /beyond-technical) from content/beyond-technical.json, and the "Beyond technical" block of the homepage
+   Writes beyond.html (served at /beyond; /beyond-technical redirects to it, vercel.json) from content/beyond-technical.json, and the "Beyond technical" block of the homepage
    between <!-- BEYOND:START --> and <!-- BEYOND:END -->. The words are the owner's, set in the content file; the generator only lays them
    out. Edit the JSON, never the page.
 
@@ -23,10 +23,12 @@ const site = require('../lib/site-config.js');
 const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const PAGE = path.join(ROOT, 'beyond-technical.html');
-const CSS_VERSION = 77;
+const PAGE = path.join(ROOT, 'beyond.html');
+const dialog = require('../lib/request-dialog.js');
+const CSS_VERSION = 78;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'beyond-technical.json'), 'utf8'));
 const esc = shell.esc;
+const FAQ_LINK = '<p class="bt-faq"><a href="/#why-pay">If nobody can promise a citation, why pay?</a></p>';
 const START = '<!-- BEYOND:START -->';
 const END = '<!-- BEYOND:END -->';
 
@@ -38,16 +40,17 @@ function build() {
     if (s.steps) h += '          <ol class="doc-list bt-steps">\n' + s.steps.map((x) => '            <li>' + esc(x) + '</li>').join('\n') + '\n          </ol>\n';
     return h + '        </div>';
   }).join('\n\n');
-  const body = shell.banner({ kicker: 'Beyond technical', title: esc(content.title), desc: esc(content.lede), icon: icons.svg('layers', {}) }) +
+  const body = shell.banner({ kicker: 'Citehound Beyond', title: esc(content.title), desc: esc(content.lede), icon: icons.svg('layers', {}) }) +
     '\n    <section class="verticals" aria-labelledby="bt-first">\n      <div class="section__inner">\n' + sections + '\n\n' +
-    '        <div class="bt-cta">\n          <a class="btn btn--gold" href="' + esc(content.cta.href) + '">' + esc(content.cta.label) + '</a>\n          <p class="bt-fine">' + esc(content.smallPrint) + '</p>\n        </div>\n' +
-    '      </div>\n    </section>\n';
+    '        <div class="bt-cta">\n          <button type="button" class="btn btn--gold" data-request="beyond">' + esc(content.cta.label) + '</button>\n          <p class="bt-fine">' + esc(content.smallPrint) + '</p>\n          ' + FAQ_LINK + '\n        </div>\n' +
+    '      </div>\n    </section>\n\n    ' + dialog.html('    ') + '\n';
   return shell.page({
-    title: 'Citehound — ' + content.title,
+    title: 'Citehound Beyond: ' + content.title,
+    headExtra: '  <script src="/request-form.js?v=1" defer></script>\n',
     description: content.description,
     path: content.path,
     cssVersion: CSS_VERSION,
-    jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: content.title, description: content.description, url: site.baseUrl + content.path, publisher: { '@id': site.baseUrl + '/#org' } }],
+    jsonld: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'Citehound Beyond', description: content.description, url: site.baseUrl + content.path, publisher: { '@id': site.baseUrl + '/#org' } }],
     body: body
   });
 }
@@ -84,6 +87,8 @@ function ensureSitemap() {
   const file = path.join(ROOT, 'sitemap.xml');
   const xml = fs.readFileSync(file, 'utf8');
   const loc = site.baseUrl + content.path;
+  const old = site.baseUrl + '/beyond-technical';
+  if (xml.indexOf('<loc>' + old + '</loc>') !== -1) { fs.writeFileSync(file, xml.replace('<loc>' + old + '</loc>', '<loc>' + loc + '</loc>'), 'utf8'); return true; }
   if (xml.indexOf('<loc>' + loc + '</loc>') !== -1) return false;
   fs.writeFileSync(file, xml.replace('</urlset>', '  <url>\n    <loc>' + loc + '</loc>\n  </url>\n</urlset>'), 'utf8');
   return true;
@@ -91,8 +96,10 @@ function ensureSitemap() {
 function ensureLlms() {
   const file = path.join(ROOT, 'llms.txt');
   const t = fs.readFileSync(file, 'utf8');
-  const line = '- [Beyond technical](' + site.baseUrl + content.path + '): what the score cannot see, what we know and what we do not, and how a content review works. We do not promise citations.\n';
-  if (t.indexOf(site.baseUrl + content.path) !== -1) return false;
+  const line = '- [Beyond](' + site.baseUrl + content.path + '): early access. What the score cannot see, what we know and what we do not, and how a content review works. We do not promise citations.\n';
+  if (t.indexOf('(' + site.baseUrl + content.path + ')') !== -1) return false;
+  const old = /^- \[Beyond technical\]\(https:[^\n]*\n/m;
+  if (old.test(t)) { fs.writeFileSync(file, t.replace(old, line), 'utf8'); return true; }
   const anchor = '## About\n\n';
   if (t.indexOf(anchor) === -1) throw new Error('llms.txt has no About section');
   fs.writeFileSync(file, t.replace(anchor, anchor + line), 'utf8');
@@ -108,16 +115,17 @@ function check() {
   const errors = [];
   const bad = (m) => errors.push(m);
   const page = fs.existsSync(PAGE) ? fs.readFileSync(PAGE, 'utf8') : '';
-  if (page !== build()) bad('beyond-technical.html is out of date; run node scripts/generate-beyond-technical.js');
+  if (page !== build()) bad('beyond.html is out of date; run node scripts/generate-beyond-technical.js');
   const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const m = new RegExp(START + '[\\s\\S]*?' + END).exec(home);
   if (m && m[0] !== homeBlock()) bad('the homepage block is out of date; run node scripts/generate-beyond-technical.js');
   if (m && (home.indexOf(START) > home.indexOf('<footer class="site-footer') || home.indexOf(START) < home.indexOf('id="main"'))) bad('the homepage block must sit inside main, before the agentic commerce section');
-  if ((page.match(/<h1[ >]/g) || []).length !== 1) bad('the page needs exactly one h1');
-  if ((page.match(/<h2[ >]/g) || []).length !== 4) bad('the page needs exactly four h2 headings (the brief’s four)');
+  const noDialog = page.replace(/<dialog[\s\S]*?<\/dialog>/, '');
+  if ((noDialog.match(/<h1[ >]/g) || []).length !== 1) bad('the page needs exactly one h1');
+  if ((noDialog.match(/<h2[ >]/g) || []).length !== 4) bad('the page needs exactly four h2 headings (the brief’s four)');
   if (!/name="robots" content="index, follow"/.test(page)) bad('the page must be indexable');
-  if ((page.match(/mailto:/g) || []).filter((x, i, a) => true).length < 1 || page.indexOf('href="mailto:hey@getcitehound.com?subject=Content%20review"') === -1) bad('the call to action must be mailto:hey@getcitehound.com?subject=Content%20review');
-  const text = page.replace(/<script[\s\S]*?<\/script>|<svg[\s\S]*?<\/svg>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;/g, '’').replace(/\s+/g, ' ');
+  if (!/<button type="button" class="btn btn--gold" data-request="beyond">Request a content review<\/button>/.test(page)) bad('the call to action must be the "Request a content review" button that opens the request form');
+  const text = page.replace(/<script[\s\S]*?<\/script>|<svg[\s\S]*?<\/svg>|<dialog[\s\S]*?<\/dialog>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;/g, '’').replace(/\s+/g, ' ');
   const stripped = text.replace(ACTUALLY_OK, '');
   if (BANNED.test(stripped) || /\bactually\b/i.test(stripped)) bad('a banned word is on the page: ' + (BANNED.exec(stripped) || /\bactually\b/i.exec(stripped))[0]);
   if (/[$€£]\s?\d|\b\d+\s?(USD|EUR|dollars|euros)\b|per month|per hour|free consult/i.test(text.replace(/Citehound shows you for free/, ''))) bad('the page must state no price');
@@ -128,8 +136,8 @@ function check() {
   const paras = (page.match(/<p[^>]*>[\s\S]*?<\/p>/g) || []).filter((p) => (p.match(/\u2014|&mdash;/g) || []).length > 1);
   if (paras.length) bad('more than one em dash in a paragraph');
   if (fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').indexOf('<loc>' + site.baseUrl + content.path + '</loc>') === -1) bad('sitemap.xml has no ' + content.path);
-  if (fs.readFileSync(path.join(ROOT, 'llms.txt'), 'utf8').indexOf(site.baseUrl + content.path) === -1) bad('llms.txt has no ' + content.path);
-  if (!/<footer class="site-footer[\s\S]*?<a href="\/beyond-technical">Beyond technical<\/a>/.test(fs.readFileSync(path.join(ROOT, 'about.html'), 'utf8'))) bad('the footer has no Beyond technical link (lib/site-footer.js, then node scripts/site-footer.js)');
+  if (fs.readFileSync(path.join(ROOT, 'llms.txt'), 'utf8').indexOf('(' + site.baseUrl + content.path + ')') === -1) bad('llms.txt has no ' + content.path);
+  if (!/<footer class="site-footer[\s\S]*?<a href="\/beyond">Beyond<\/a>/.test(fs.readFileSync(path.join(ROOT, 'about.html'), 'utf8'))) bad('the footer has no Beyond link (lib/site-footer.js, then node scripts/site-footer.js)');
   return errors;
 }
 
@@ -137,13 +145,13 @@ function main() {
   if (process.argv.indexOf('--check') !== -1) {
     const errors = check();
     if (errors.length) { errors.forEach((e) => console.error('FAIL: ' + e)); process.exit(1); }
-    console.log('OK: /beyond-technical and the homepage block are current, indexable, in the sitemap and llms.txt, one mailto call to action, no price, no promised result');
+    console.log('OK: /beyond is current, indexable, in the sitemap and llms.txt, one request-form call to action, no price, no promised result');
     return;
   }
   fs.writeFileSync(PAGE, build(), 'utf8');
   const idx = path.join(ROOT, 'index.html');
   fs.writeFileSync(idx, applyHome(fs.readFileSync(idx, 'utf8')), 'utf8');
-  console.log('beyond-technical.html and the homepage block written; ' + (ensureSitemap() ? 'added to sitemap.xml' : 'already in sitemap.xml') + '; ' + (ensureLlms() ? 'added to llms.txt' : 'already in llms.txt'));
+  console.log('beyond.html written (the homepage block only where it still stands); ' + (ensureSitemap() ? 'added to sitemap.xml' : 'already in sitemap.xml') + '; ' + (ensureLlms() ? 'added to llms.txt' : 'already in llms.txt'));
 }
 
 if (require.main === module) main();

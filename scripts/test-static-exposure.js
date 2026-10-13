@@ -32,7 +32,7 @@ const blocked = m.isBlocked;
 ].forEach((p) => ok(blocked(p), 'should be blocked: ' + p));
 
 // what must stay open
-['/', '/pro', '/privacy', '/methodology', '/research/state-of-ai-readiness', '/beyond-technical', '/sitemap.xml', '/robots.txt', '/llms.txt', '/styles.css', '/app.js', '/scanner.js', '/nav.js', '/app/pro-start.js',
+['/', '/pro', '/privacy', '/methodology', '/research/state-of-ai-readiness', '/beyond', '/fix', '/sitemap.xml', '/robots.txt', '/llms.txt', '/styles.css', '/app.js', '/scanner.js', '/nav.js', '/app/pro-start.js',
   '/app/pro-progress.js', '/lib/playbooks.js', '/lib/schema.js', '/lib/report-pro-ui.js', '/lib/crawlers.js', '/assets/brand/mark.svg', '/.well-known/security.txt', '/r/abcdef/', '/tools/schema', '/data/benchmarks.json', '/data/crm-summary.json', '/api/pro/start'
 ].forEach((p) => ok(!blocked(p), 'should stay open: ' + p));
 
