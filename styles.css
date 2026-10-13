@@ -4478,3 +4478,27 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 
 .bt-faq { margin-top: 10px; font-size: 14px; line-height: 1.5; }
 .bt-faq a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+/* ----------------------------- Homepage previews: the sample Pro report and the citation scatter, and the conversation in the developer strip ----------------------------- */
+
+.preview-strip { padding: 0 0 72px; }
+.preview-strip__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+.preview-stage { min-width: 0; display: flex; }
+.preview-stage .pro-shot { display: flex; flex-direction: column; width: 100%; box-shadow: var(--shadow); }
+.preview-stage .pro-shot > div[role="img"] { flex: 1; min-height: 0; overflow: hidden; }
+.preview-stage .pro-shot__view { height: 100%; max-height: none; padding: 0; background: var(--bg); }
+.preview-stage .pro-shot__cap { flex: none; }
+.preview-gold { min-width: 0; padding: 28px 28px 22px; background: var(--gold); color: var(--navy-950); border-radius: var(--radius); }
+.preview-gold .teaser__caption { margin-top: 18px; }
+.preview-gold .scene { gap: 14px 16px; }
+@media (max-width: 900px) { .preview-strip__grid { grid-template-columns: minmax(0, 1fr); } .preview-stage .pro-shot__view { max-height: 360px; } }
+@media (max-width: 640px) { .preview-strip { padding-bottom: 56px; } .preview-gold { padding: 22px 18px 18px; } }
+
+.dev-strip__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 32px 56px; align-items: center; }
+.dev-strip__grid .dev-strip__row { display: block; border: 0; padding: 0; }
+.dev-strip__grid .dev-strip__label { margin-bottom: 10px; }
+.dev-strip .mcp-chat { max-width: 520px; }
+.dev-strip .mcp-chat__body { padding: 20px 20px 22px; }
+.dev-strip.is-armed [data-step] { opacity: 0; visibility: hidden; }
+.dev-strip.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
+@media (max-width: 900px) { .dev-strip__grid { grid-template-columns: minmax(0, 1fr); } }
