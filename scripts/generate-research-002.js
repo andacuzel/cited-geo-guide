@@ -21,6 +21,7 @@
 const fs = require('fs');
 const path = require('path');
 const shell = require('../lib/page-shell.js');
+const datasetLicense = require('../lib/dataset-license.js');
 const site = require('../lib/site-config.js');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -172,14 +173,14 @@ function build(D) {
     '              <li>Anything about the ' + D.failed + ' sites that could not be reached, which are counted here and left out.</li>\n' +
     '              <li>Whether a limited result is harmful. It means an applicable Disallow rule, usually an ordinary path, and is not a block.</li>\n' +
     '            </ul>\n          </div>\n        </div>\n      </div>\n    </section>\n\n' +
-    '    <section aria-labelledby="cite-heading">\n      <div class="section__inner">\n        <div class="report-cite">\n          <p id="cite-heading" class="report-cite__label">How to cite this</p>\n          <p class="report-cite__line" id="citeLine">' + esc(cite) + '</p>\n          <div class="report-cite__row">\n            <button type="button" class="btn btn--ghost" id="citeCopyBtn">\n              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>\n              Copy citation\n            </button>\n          </div>\n        </div>\n      </div>\n    </section>\n\n' +
+    '    <section aria-labelledby="cite-heading">\n      <div class="section__inner">\n        <div class="report-cite">\n          <p id="cite-heading" class="report-cite__label">How to cite this</p>\n          <p class="report-cite__line" id="citeLine">' + esc(cite) + '</p>\n          <p class="report-cite__url report-cite__license">' + datasetLicense.lineHtml() + '</p>\n          <div class="report-cite__row">\n            <button type="button" class="btn btn--ghost" id="citeCopyBtn">\n              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>\n              Copy citation\n            </button>\n          </div>\n        </div>\n      </div>\n    </section>\n\n' +
     '    <section aria-label="Closing">\n      <div class="section__inner">\n        <div class="report-closing">\n          <p>If you want to see what your own robots.txt says to each of these crawlers, run the free scan.</p>\n          <a href="/" class="btn btn--primary">Scan your site free</a>\n        </div>\n      </div>\n    </section>\n';
 
   const ld = [{
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Article', '@id': url + '#article', headline: title.replace(/\.$/, ''), description: desc, author: { '@id': site.baseUrl + '/about#person' }, publisher: { '@id': site.baseUrl + '/#org' }, datePublished: PUBLISHED, dateModified: PUBLISHED, url: url, mainEntityOfPage: url },
-      { '@type': 'Dataset', name: 'Citehound AI crawler access, ' + D.N + ' homepages in ' + nWord + ' categories, July 2026', description: 'For each of ' + D.N + ' homepages, whether robots.txt blocks, limits or leaves open each of ' + D.bots.length + ' tracked AI crawlers, grouped by category.', temporalCoverage: D.first + '/' + D.last, creator: { '@id': site.baseUrl + '/#org' }, variableMeasured: 'robots.txt access state (blocked, limited, open) for ' + D.bots.length + ' AI crawlers', url: url }
+      { '@type': 'Dataset', name: 'Citehound AI crawler access, ' + D.N + ' homepages in ' + nWord + ' categories, July 2026', description: 'For each of ' + D.N + ' homepages, whether robots.txt blocks, limits or leaves open each of ' + D.bots.length + ' tracked AI crawlers, grouped by category.', temporalCoverage: D.first + '/' + D.last, creator: datasetLicense.creator(), license: datasetLicense.LICENSE_URL, variableMeasured: 'robots.txt access state (blocked, limited, open) for ' + D.bots.length + ' AI crawlers', url: url }
     ]
   }];
   return shell.page({ title: 'Citehound — ' + title.replace(/\.$/, ''), description: desc, path: '/research/' + SLUG, cssVersion: CSS_VERSION, jsonld: ld, depth: 1, body: body }).replace('<script src="../nav.js?v=3"></script>', '<script src="../nav.js?v=3"></script>\n  <script src="../research.js?v=1"></script>').replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');

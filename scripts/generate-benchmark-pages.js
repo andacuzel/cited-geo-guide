@@ -40,6 +40,7 @@
 const fs = require('fs');
 const siteChrome = require('./site-chrome.js');
 const siteFooter = require('../lib/site-footer.js');
+const datasetLicense = require('../lib/dataset-license.js');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -390,7 +391,8 @@ function categoryPage(c, overall) {
     name: 'Citehound AI readiness scan: ' + c.label + ', ' + monthYear(c.date),
     description: 'Scan results for ' + c.scanned + ' ' + c.label + ' domains (' + c.note + '), scored out of 100 across discoverability, technical foundation and content and trust. Homepages only, each scanned once on ' + dateLong(c.date) + '.',
     temporalCoverage: c.date,
-    creator: { '@type': 'Organization', name: 'Citehound', url: SITE + '/' },
+    creator: datasetLicense.creator(),
+    license: datasetLicense.LICENSE_URL,
     variableMeasured: [
       { '@type': 'PropertyValue', name: 'Domains scanned', value: c.scanned },
       { '@type': 'PropertyValue', name: 'Average score (out of 100)', value: c.avg }
@@ -454,6 +456,7 @@ function categoryPage(c, overall) {
     '          <p id="cite-heading" class="report-cite__label">How to cite this</p>\n' +
     '          <p class="report-cite__line" id="citeLine">' + esc(cite) + '</p>\n' +
     '          <p class="report-cite__url">Canonical URL: <a href="' + url + '">' + url + '</a></p>\n' +
+    '          <p class="report-cite__url report-cite__license">' + datasetLicense.lineHtml() + '</p>\n' +
     '          <div class="report-cite__row" id="citeRow" hidden>\n' +
     '            <button type="button" class="btn btn--ghost" id="citeCopyBtn">\n' +
     '              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="9" rx="1.5"/><path d="M3.5 10.5v-6a1.5 1.5 0 011.5-1.5h6"/></svg>\n' +
@@ -484,7 +487,8 @@ function indexPage(all) {
     name: 'Citehound AI readiness scans by category, ' + monthYear(last),
     description: 'Scan results for ' + all.total + ' domains across ' + all.cats.length + ' categories, from homepages only, each scanned once between ' + first + ' and ' + last + '.',
     temporalCoverage: first + '/' + last,
-    creator: { '@type': 'Organization', name: 'Citehound', url: SITE + '/' },
+    creator: datasetLicense.creator(),
+    license: datasetLicense.LICENSE_URL,
     variableMeasured: [{ '@type': 'PropertyValue', name: 'Domains scanned', value: all.total }],
     isAccessibleForFree: true,
     url: url
@@ -523,6 +527,7 @@ function indexPage(all) {
     '            <p class="report-figure__source">Source: Citehound scans, ' + esc(win) + ', ' + all.total + ' sites</p>\n' +
     '          </div>\n' +
     '          <p>The lists are hand-picked, well-known sites, not a random sample. Each site was scanned once, homepages only, and sites that could not be reached are excluded from every figure. The scores measure readiness for AI systems, not whether any assistant names a brand. See the <a href="/methodology">methodology</a>.</p>\n' +
+    '          <p>' + datasetLicense.lineHtml() + '</p>\n' +
     '        </div>\n      </div>\n    </section>\n\n' +
     '    <section aria-label="Closing">\n      <div class="section__inner">\n        <div class="report-closing">\n' +
     '          <p>To see where your own site lands against these categories, run the free scan.</p>\n' +
