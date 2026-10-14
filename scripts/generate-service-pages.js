@@ -24,7 +24,7 @@ const dialog = require('../lib/request-dialog.js');
 const lockup = require('../lib/lockup.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 94;
+const CSS_VERSION = 95;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -122,7 +122,7 @@ function build(p) {
     { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
   ];
   return shell.page({
-    title: c.title, description: c.description, path: c.path, cssVersion: CSS_VERSION,
+    title: c.title, description: c.description, path: c.path, cssVersion: CSS_VERSION, ogImage: 'og-' + c.path.replace('/', '') + '.png',
     headExtra: '  <script src="/request-form.js?v=1" defer></script>\n', jsonld: ld, body: body
   });
 }

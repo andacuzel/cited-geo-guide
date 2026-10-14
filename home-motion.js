@@ -5,8 +5,6 @@
    - The benchmark average (73/100) counts up once when it scrolls into view.
    - The two lines of the AgaOne before/after chart draw in, then their end points and values fade in.
    - The product tour (#tourBox): three tabs (Pro report, Fix, Beyond), one real screenshot at a time, keyboard arrows move between tabs.
-   - The Pro showcase slider (#showcaseGrid) crossfades two slides, auto-advances every 7 s, pauses on hover and focus, stops once a dot is used, and never advances under reduced motion.
-   - The sample Pro report opens larger in a dialog when clicked (a copy of the figure; this one needs no motion, so it always runs).
 
    Every figure is complete in the HTML; this file only hides it for a moment and reveals it again, and a failure leaves the finished page.
    ===================================================================== */
@@ -22,28 +20,6 @@
       entries.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); fn(); } });
     }, { threshold: threshold });
     io.observe(el);
-  }
-
-  // ---- the sample Pro report, larger
-  var stage = $('.preview-stage .pro-shot');
-  if (stage && typeof HTMLDialogElement !== 'undefined') {
-    var dlg = document.createElement('dialog');
-    dlg.className = 'shot-dialog'; dlg.setAttribute('aria-label', 'Sample Pro report');
-    var close = document.createElement('button');
-    close.type = 'button'; close.className = 'req-close'; close.setAttribute('aria-label', 'Close'); close.innerHTML = '&times;';
-    var body = document.createElement('div');
-    dlg.appendChild(close); dlg.appendChild(body); document.body.appendChild(dlg);
-    stage.setAttribute('role', 'button'); stage.tabIndex = 0; stage.setAttribute('aria-haspopup', 'dialog');
-    stage.setAttribute('aria-label', 'Open the sample Pro report larger');
-    var open = function () { body.innerHTML = ''; body.appendChild(stage.cloneNode(true)); var c = body.firstChild; c.removeAttribute('role'); c.removeAttribute('tabindex'); c.removeAttribute('aria-label'); c.removeAttribute('aria-haspopup'); dlg.showModal(); };
-    stage.addEventListener('click', open);
-    stage.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
-    close.addEventListener('click', function () { dlg.close(); });
-    dlg.addEventListener('click', function (e) {
-      if (e.target !== dlg) return;
-      var r = dlg.getBoundingClientRect();
-      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
-    });
   }
 
   // ---- the product tour: three tabs, one screenshot at a time (without this script all three are shown in a column)
@@ -74,40 +50,6 @@
       if (to === null) return;
       e.preventDefault(); tgo(to, true);
     });
-  }
-
-  // ---- the Pro showcase: two slides that crossfade, with the copy that goes with each
-  var show = $('#showcaseGrid');
-  if (show) {
-    var all = function (sel) { return Array.prototype.slice.call(show.querySelectorAll(sel)); };
-    var slides = all('.showcase__slide'), texts = all('.showcase__text'), dots = all('.showcase__dot');
-    var cur = 0, timer = null, hovering = false, focusing = false, chosen = false;
-    var go = function (i) {
-      cur = (i + slides.length) % slides.length;
-      slides.forEach(function (el, k) { el.classList.toggle('is-active', k === cur); el.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); });
-      texts.forEach(function (el, k) { el.classList.toggle('is-active', k === cur); el.setAttribute('aria-hidden', k === cur ? 'false' : 'true'); Array.prototype.forEach.call(el.querySelectorAll('a'), function (a) { if (k === cur) a.removeAttribute('tabindex'); else a.tabIndex = -1; }); });
-      dots.forEach(function (d, k) { d.classList.toggle('is-active', k === cur); d.setAttribute('aria-selected', k === cur ? 'true' : 'false'); d.tabIndex = k === cur ? 0 : -1; });
-    };
-    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
-    // Auto-advance every 7 s; it pauses on hover and focus, stops for good once the visitor picks a slide, and never runs under reduced motion.
-    var start = function () {
-      stop();
-      if (reduced || chosen || hovering || focusing || document.hidden) return;
-      timer = setInterval(function () { go(cur + 1); }, 7000);
-    };
-    dots.forEach(function (d, k) { d.addEventListener('click', function () { chosen = true; stop(); go(k); }); });
-    show.querySelector('.showcase__dots').addEventListener('keydown', function (e) {
-      var to = e.key === 'ArrowRight' ? cur + 1 : e.key === 'ArrowLeft' ? cur - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? slides.length - 1 : null;
-      if (to === null) return;
-      e.preventDefault(); chosen = true; stop(); go(to); dots[cur].focus();
-    });
-    show.addEventListener('mouseenter', function () { hovering = true; stop(); });
-    show.addEventListener('mouseleave', function () { hovering = false; start(); });
-    show.addEventListener('focusin', function () { focusing = true; stop(); });
-    show.addEventListener('focusout', function (e) { if (!show.contains(e.relatedTarget)) { focusing = false; start(); } });
-    document.addEventListener('visibilitychange', start);
-    go(0);
-    start();
   }
 
   if (reduced || !canObserve) return;

@@ -29,7 +29,7 @@ t('the contact address is the one in site.config.json, shown as the address', ht
 t('no link to /changelog, no account other than X and LinkedIn, no link to a page that does not exist', !/changelog/i.test(html) && !/github\.com|facebook|instagram|youtube|mastodon/i.test(html) && require('./site-footer.js').missingTargets().length === 0);
 t('the bottom row is the copyright and nothing else', /<p class="sf-legal">© 2026 Citehound<\/p>/.test(html));
 const llms = read('llms.txt') + read('about.html');
-t('the line of positioning is two things the site already says: a scanner for AI readiness (llms.txt) and "the shift from search to answers" (the old footer, the About page)', /A scanner for AI readiness, built for teams navigating the shift from search to answers\./.test(html) && /scanner for AI readiness/i.test(llms) && /shift from search to answers/i.test(read('about.html') + read('index.html') + read('trust.html')));
+t('the line of positioning is the owner\'s: scan, fix and write for the way AI answers (the same line as llms.txt\'s service description: scan, fix, write)', /<p class="sf-tag">Scan, fix and write for the way AI answers\.<\/p>/.test(html) && F.TAGLINE === 'Scan, fix and write for the way AI answers.' && /Fix \(we make the technical changes\) and Beyond \(we write the content\)/.test(llms));
 t('the wordmark is the mark plus "Citehound" linking home, with a name for screen readers', /<a href="\/" class="sf-logo" aria-label="Citehound, back to homepage">/.test(html) && /<svg viewBox="13 8.5 52 52"/.test(html));
 const css = read('styles.css');
 const block = css.split('Site footer ---')[1].split('/* ----------------------------- Views')[0];

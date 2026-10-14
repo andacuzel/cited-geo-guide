@@ -49,7 +49,7 @@ function shell(bodyHtml) {
     'body{margin:0;padding:32px;background:#EEF1F5;color:#14202E;font-family:-apple-system,BlinkMacSystemFont,"Hanken Grotesk",sans-serif;}' +
     'h1{font-size:22px;margin:0 0 4px;}' +
     'h2{font-size:15px;margin:36px 0 10px;color:#4B5766;text-transform:uppercase;letter-spacing:0.06em;font-family:"SF Mono",monospace;}' +
-    'p.note{color:#87909C;font-size:13px;margin:0 0 24px;}' +
+    'p.note{color:#5F6B7A;font-size:13px;margin:0 0 24px;}' +
     'table{border-collapse:collapse;font-size:12.5px;font-family:"SF Mono",monospace;background:#FFFFFF;border:1px solid #D9DEE6;border-radius:8px;overflow:hidden;}' +
     'th,td{padding:6px 10px;text-align:right;border-bottom:1px solid #D9DEE6;white-space:nowrap;}' +
     'th{background:#0B1526;color:#E7C77C;font-weight:500;position:sticky;top:0;}' +
@@ -58,8 +58,8 @@ function shell(bodyHtml) {
     'tr:last-child td{border-bottom:none;}' +
     'tr.total td{font-weight:700;background:#F7F1E1;}' +
     '.scroll{overflow-x:auto;max-width:100%;}' +
-    '.empty{color:#87909C;font-size:13px;}' +
-    'a{color:#97701F;}' +
+    '.empty{color:#5F6B7A;font-size:13px;}' +
+    'a{color:#85620F;}' +
     '</style>\n</head>\n<body>\n' + bodyHtml + '\n</body>\n</html>\n';
 }
 

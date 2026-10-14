@@ -8,15 +8,20 @@ current session.
 
 ## What this project is
 
-**Citehound** — a free AI-visibility scanner. A user enters a domain;
-a Vercel serverless function fetches that site's public robots.txt,
+**Citehound** — an end-to-end service for AI readiness: a free scanner,
+Pro site reports, Fix (we make the technical changes) and Beyond (we write
+the content). The scanner is where it starts: a user enters a domain; a
+Vercel serverless function fetches that site's public robots.txt,
 sitemap.xml and homepage, scores it out of 100 across three weighted
 pillars, and returns a prioritized list of fixes.
 
-Positioning: the scanner that hands you the fix, not just the finding.
-Free tier gives the full diagnosis plus copy-paste fixes. A one-time
-purchase Pro tier (no subscription) gives personalized interpretation,
-competitor comparison, and score history.
+Positioning (14 Oct 2026): "Scan, fix and write for the way AI answers."
+The boilerplate sentence is `lib/about-line.js` (JSON-LD, llms.txt, README,
+every email footer); the footer line is `TAGLINE` in `lib/site-footer.js`; the
+share images carry it (`scripts/capture-og.js`, versioned `?v=2`). The free
+scan gives the full diagnosis plus copy-paste fixes. The MCP server and the
+free tools stay described as read-only measurement and generators; they never
+claim to fix or write anything. Pro, Fix and Beyond are in early access.
 
 Three audience tracks, one engine: B2B SaaS (`/for-saas`), consumer and
 e-commerce brands (`/for-brands`), local and independent professionals
@@ -153,8 +158,8 @@ Constraints that must not be broken:
 - **Homepage ladder motion (14 Oct 2026, owner's request).** The four ladder cards step up (their heights differ, bottoms aligned), Fix and Beyond are navy with a
   gold accent, and they are the one place on the site where a card lifts 4px on hover and fades in on scroll (`home-motion.js`, 80 ms apart, connectors draw in).
   The same file counts the benchmark average up and draws the AgaOne chart lines. All of it is skipped under `prefers-reduced-motion`; the figures are in the HTML.
-  The sample Pro report (the `band-explorer` crop) and the citation scatter sit in a preview strip under the ladder, the MCP conversation types in beside the
-  developer row; click on the report opens it larger. No other card may lift or slide.
+  The Pro showcase slider is gone (14 Oct 2026): each service has its screenshot in the product tour, and the homepage has no sample-report crop or citation scatter
+  (the scatter lives on `/citation-tracking`). The homepage MCP navy band is `.mcp-home`: never style the shared `.mcp-section`, which `/mcp` uses on a light page. No other card may lift or slide.
 - **Project workspaces (Fix and Beyond).** Bearer-link pages `/w/<32 hex>` and the public demos `/demo/fix` and `/demo/beyond`, in the one Pro function (`lib/ws-*.js`, routes in
   `lib/ws-api.js`, `docs/workspaces.md`); the admin is `/admin/ws` and `scripts/ws-admin.js`. Hard rules: the admin is behind `ADMIN_TOKEN` and **every admin
   route is a 404 while it is unset or under 16 characters**; the token is compared in constant time, never logged, echoed or put in a cookie; a Fix item becomes
@@ -252,12 +257,12 @@ Surface rhythm creates hierarchy. Never a single-background page.
 | `--navy-800` | #17304F | icons, hover states |
 | `--ink` | #14202E | primary text |
 | `--ink-soft` | #4B5766 | secondary text |
-| `--ink-faint` | #87909C | metadata |
+| `--ink-faint` | #5F6B7A | metadata (4.5:1 or more on --bg and --white, since 14 Oct 2026) |
 | `--line` | #D9DEE6 | borders |
 | `--gold` | #C2922F | accent ink, primary CTA on key actions |
 | `--gold-soft` | #E7C77C | gold on navy |
-| `--gold-deep` | #97701F | gold text on light |
-| `--ok` | #2E7D5B (+ tint #E3F1EA) | pass states |
+| `--gold-deep` | #85620F | gold text on light |
+| `--ok` | #26704F (+ tint #E3F1EA) | pass states |
 | `--risk` | #B04A3A (+ tint #F7E8E5) | fail states |
 
 Type: **Gloock** (display, 400) for headlines, card names, big numbers ·
@@ -433,3 +438,7 @@ Never fill an expert-tip placeholder. Those are the owner's, by design.
 - When a task is ambiguous, ask once, then proceed.
 - When something would spend past a free allowance, break a constraint above, or make a
   claim the product cannot support, say so instead of doing it.
+
+- **Text contrast is WCAG AA everywhere (14 Oct 2026).** Normal text 4.5:1, large text 3:1, on the real background it sits on. The tokens `--ink-faint`, `--gold-deep` and `--ok` were
+  darkened to meet it on `--bg`, `--white` and their tints; `scripts/test-contrast-scope.js` checks the token ratios and that no band style leaks into a shared selector.
+  Decorative `aria-hidden` watermarks (the page banner number and code) are exempt. A navy band's styles use their own class, never a class another page already uses.

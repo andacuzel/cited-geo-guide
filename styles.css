@@ -14,16 +14,16 @@
 
   --ink: #14202E;
   --ink-soft: #4B5766;
-  --ink-faint: #87909C;
+  --ink-faint: #5F6B7A;
 
   --line: #D9DEE6;
   --line-on-navy: rgba(255, 255, 255, 0.14);
 
   --gold: #C2922F;
   --gold-soft: #E7C77C;
-  --gold-deep: #97701F;
+  --gold-deep: #85620F;
 
-  --ok: #2E7D5B;
+  --ok: #26704F;
   --ok-tint: #E3F1EA;
   --risk: #B04A3A;
   --risk-tint: #F7E8E5;
@@ -1543,6 +1543,7 @@ select.field { appearance: auto; cursor: pointer; }
   align-items: start;
 }
 
+.pro-band code { background: var(--navy-900); color: var(--white); }
 .pro-band h2 { color: var(--white); font-size: clamp(26px, 3vw, 38px); line-height: 1.12; }
 .pro-band__lede { margin-top: 14px; font-size: 16px; color: rgba(255, 255, 255, 0.72); max-width: 520px; }
 
@@ -4508,36 +4509,18 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .bt-faq { margin-top: 10px; font-size: 14px; line-height: 1.5; }
 .bt-faq a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
 
-/* ----------------------------- Homepage previews: the sample Pro report and the citation scatter, and the conversation in the developer strip ----------------------------- */
+/* ----------------------------- Homepage developer strip: the conversation ----------------------------- */
 
-.preview-strip { padding: 0 0 72px; }
-.preview-strip__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
-.preview-stage { min-width: 0; display: flex; }
-.preview-stage .pro-shot { display: flex; flex-direction: column; width: 100%; box-shadow: var(--shadow); }
-.preview-stage .pro-shot > div[role="img"] { flex: 1; min-height: 0; overflow: hidden; }
-.preview-stage .pro-shot__view { height: 100%; max-height: none; padding: 0; background: var(--bg); }
-.preview-stage .pro-shot__cap { flex: none; }
-.preview-gold { min-width: 0; padding: 28px 28px 22px; background: var(--gold); color: var(--navy-950); border-radius: var(--radius); }
-.preview-gold .teaser__caption { margin-top: 18px; }
-.preview-gold .scene { gap: 14px 16px; }
-@media (max-width: 900px) { .preview-strip__grid { grid-template-columns: minmax(0, 1fr); } .preview-stage .pro-shot__view { max-height: 360px; } }
-@media (max-width: 640px) { .preview-strip { padding-bottom: 56px; } .preview-gold { padding: 22px 18px 18px; } }
 
 .dev-strip__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 32px 56px; align-items: center; }
 .dev-strip__grid .dev-strip__row { display: block; border: 0; padding: 0; }
 .dev-strip__grid .dev-strip__label { margin-bottom: 10px; }
 .dev-strip .mcp-chat { max-width: 520px; }
 .dev-strip .mcp-chat__body { padding: 20px 20px 22px; }
-.mcp-section.is-armed [data-step] { opacity: 0; visibility: hidden; }
-.mcp-section.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
+.mcp-home.is-armed [data-step] { opacity: 0; visibility: hidden; }
+.mcp-home.is-armed [data-step].is-shown { opacity: 1; visibility: visible; transition: opacity var(--t); }
 @media (max-width: 900px) { .dev-strip__grid { grid-template-columns: minmax(0, 1fr); } }
 
-/* Sample Pro report: opens larger on click (home-motion.js builds the dialog from a copy of the figure). */
-.preview-stage .pro-shot { cursor: zoom-in; }
-.shot-dialog { position: fixed; inset: 0; margin: auto; width: min(1100px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; padding: 44px 16px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
-.shot-dialog::backdrop { background: rgba(11, 21, 38, 0.7); }
-.shot-dialog .pro-shot { cursor: auto; box-shadow: none; }
-.shot-dialog .pro-shot__view { max-height: none; height: auto; }
 .hm-count { font-variant-numeric: tabular-nums; }
 
 /* ----------------------------- Homepage rhythm: white bands, one navy closing band, small icons ----------------------------- */
@@ -4561,32 +4544,6 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .home-close--navy .home-close__link { color: var(--gold-soft); text-decoration-color: var(--gold-soft); }
 @media (max-width: 640px) { .home-close--navy .section__inner { padding-top: 48px; padding-bottom: 48px; } }
 
-/* ----------------------------- Pro showcase (slider) ----------------------------- */
-
-.showcase { padding: 0 0 80px; }
-.showcase__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
-.showcase__slider { min-width: 0; }
-.showcase__slides { display: grid; }
-.showcase__slide { grid-area: 1 / 1; min-width: 0; display: flex; align-items: center; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 0s linear 500ms; }
-.showcase__slide.is-active { opacity: 1; visibility: visible; transition: opacity 500ms ease, visibility 0s; }
-.showcase__slide > * { width: 100%; }
-.showcase__slide .preview-stage .pro-shot__view { height: auto; max-height: 440px; }
-.showcase__dots { display: flex; justify-content: center; gap: 4px; margin-top: 14px; }
-.showcase__dot { width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; position: relative; }
-.showcase__dot::before { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border: 2px solid var(--navy-800); border-radius: 50%; background: transparent; transition: background 150ms ease; }
-.showcase__dot.is-active::before { background: var(--navy-800); }
-.showcase__dot:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: -4px; border-radius: var(--radius-sm); }
-.showcase__copy { display: grid; min-width: 0; }
-.showcase__text { grid-area: 1 / 1; align-self: center; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 0s linear 500ms; }
-.showcase__text.is-active { opacity: 1; visibility: visible; transition: opacity 500ms ease, visibility 0s; }
-.showcase__title { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.15; }
-.showcase__lede { margin-top: 14px; font-size: 17px; line-height: 1.55; color: var(--ink-soft); max-width: 460px; }
-.showcase__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 26px; }
-.showcase__link { font-size: 15px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
-@media (max-width: 900px) { .showcase__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
-@media (max-width: 640px) { .showcase { padding-bottom: 56px; } }
-@media (prefers-reduced-motion: reduce) { .showcase__slide, .showcase__text, .showcase__dot::before { transition: none; } }
-
 /* ----------------------------- Homepage navy bands: the AgaOne case study and the MCP block; resources cards ----------------------------- */
 
 .proof-band { background: var(--navy-950); padding: 80px 0; }
@@ -4609,16 +4566,16 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .proof-band .case-study-figure__chart text[style] { fill: var(--white) !important; }
 .proof-band + .benchmark-strip { padding-top: 72px; border-top: 0; }
 
-.mcp-section { background: var(--navy-950); padding: 88px 0; }
-.mcp-section__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 56px; align-items: center; }
-.mcp-section__title { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; color: var(--white); }
-.mcp-section__lede { margin-top: 16px; max-width: 460px; font-size: 17px; line-height: 1.55; color: rgba(255, 255, 255, 0.84); }
-.mcp-section__facts { color: var(--gold-soft); font-weight: 600; }
-.mcp-section .btn { margin-top: 28px; }
-.mcp-section .mcp-chat { width: 100%; max-width: 520px; justify-self: end; box-shadow: none; }
-.mcp-section .mcp-chat__body { padding: 22px 22px 24px; }
-@media (max-width: 900px) { .mcp-section__grid { grid-template-columns: minmax(0, 1fr); gap: 36px; } .mcp-section .mcp-chat { justify-self: stretch; max-width: none; } }
-@media (max-width: 640px) { .proof-band { padding: 56px 0; } .mcp-section { padding: 56px 0; } .proof-band + .benchmark-strip { padding-top: 56px; } }
+.mcp-home { background: var(--navy-950); padding: 88px 0; }
+.mcp-home__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 56px; align-items: center; }
+.mcp-home__title { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; color: var(--white); }
+.mcp-home__lede { margin-top: 16px; max-width: 460px; font-size: 17px; line-height: 1.55; color: rgba(255, 255, 255, 0.84); }
+.mcp-home__facts { color: var(--gold-soft); font-weight: 600; }
+.mcp-home .btn { margin-top: 28px; }
+.mcp-home .mcp-chat { width: 100%; max-width: 520px; justify-self: end; box-shadow: none; }
+.mcp-home .mcp-chat__body { padding: 22px 22px 24px; }
+@media (max-width: 900px) { .mcp-home__grid { grid-template-columns: minmax(0, 1fr); gap: 36px; } .mcp-home .mcp-chat { justify-self: stretch; max-width: none; } }
+@media (max-width: 640px) { .proof-band { padding: 56px 0; } .mcp-home { padding: 56px 0; } .proof-band + .benchmark-strip { padding-top: 56px; } }
 
 .research-strip__list--small { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 20px; }
 .research-strip__list--small .research-strip__link { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; align-items: center; padding: 16px 20px; }
@@ -4648,33 +4605,6 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .research-strip .benchmark-strip { margin-top: 40px; padding: 40px 0 0; border-top: 1px solid var(--line); }
 .research-strip .benchmark-strip .section__inner { max-width: none; padding: 0; }
 .research-strip .research-strip__list--small { margin-top: 40px; }
-
-/* Pro showcase: one fixed square box for both slides, so the block never changes height */
-.showcase.hp-band { padding: 64px 0; }
-.showcase__grid { gap: 48px; }
-.showcase__slider { width: 100%; max-width: 480px; justify-self: center; }
-.showcase__slides { aspect-ratio: 1 / 1; }
-.showcase__slide { height: 100%; align-items: stretch; }
-.showcase__slide > .preview-stage, .showcase__slide > .preview-gold { height: 100%; }
-.showcase__slide .preview-stage .pro-shot { height: 100%; box-shadow: none; }
-.showcase__slide .preview-stage .pro-shot__view { height: 100%; max-height: none; }
-.showcase__slide .pro-shot > div[role="img"] { -webkit-mask-image: url(/assets/ui/fade-bottom.png); mask-image: url(/assets/ui/fade-bottom.png); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-.showcase__dots { margin-top: 6px; }
-.showcase .preview-gold { display: flex; flex-direction: column; padding: 18px 18px 14px; }
-.showcase .preview-gold .teaser__scene-wrap { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.showcase .preview-gold .scene { gap: 10px 12px; }
-.showcase .preview-gold .sq { padding: 9px 11px; }
-.showcase .preview-gold .sq__text { margin-bottom: 7px; font-size: 13px; line-height: 1.3; }
-.showcase .preview-gold .sq__chip { padding: 3px 9px 3px 8px; font-size: 12px; }
-.showcase .preview-gold .sq__mark { width: 10px; height: 10px; }
-.showcase .preview-gold .sq--2 { margin-top: 26px; }
-.showcase .preview-gold .sq--3 { margin-top: 12px; }
-.showcase .preview-gold .sq--5 { margin-top: 2px; }
-.showcase .preview-gold .sq--6 { margin-top: 16px; }
-.showcase .preview-gold .teaser__caption { margin-top: auto; padding-top: 10px; font-size: 11px; }
-@media (max-width: 900px) { .showcase__slider { justify-self: center; } }
-@media (max-width: 640px) { .showcase.hp-band { padding: 48px 0; } .showcase .preview-gold .sq__text { font-size: 12px; } }
-.showcase .preview-gold .scene { flex: 1; align-content: space-around; }
 
 /* ----------------------------- Product lockups (lib/lockup.js): Citehound FREE, PRO, FIX, BEYOND ----------------------------- */
 
