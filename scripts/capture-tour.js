@@ -5,12 +5,14 @@
      NODE_PATH=<a folder with playwright installed>/node_modules node scripts/capture-tour.js [base-url] [out-dir]
 
    Playwright is not a dependency of this repository (the site has none; see CLAUDE.md): install it anywhere (npm i playwright; npx playwright install chromium) and
-   point NODE_PATH at that folder. Defaults: https://getcitehound.com and assets/tour. It opens only the three public, fictional or sample pages, at
+   point NODE_PATH at that folder. Defaults: https://getcitehound.com and assets/tour. It opens only the public, fictional or sample pages, at
    1200x800, and encodes each shot as WebP inside the browser (canvas.toDataURL), so no image tool is needed:
 
      /sample-report        the sample Pro report            -> pro-report.webp (1800x1200)
      /demo/fix             the Fix demo, its Overview       -> fix.webp (1800x1200), fix-hero.webp (960x640)
-     /demo/beyond          the Beyond demo, opening on Content -> beyond.webp (1800x1200), beyond-hero.webp (960x640)
+     /demo/fix#fixes       the Fix demo, the Fix list       -> fix-list.webp (1800x1200)
+     /demo/beyond          the Beyond demo, its Overview    -> beyond.webp (1800x1200), beyond-hero.webp (960x640)
+     /demo/beyond#content  the Beyond demo, the Content board -> beyond-content.webp (1800x1200)
 
    The demo data is never changed here. Re-run it when a page's layout changes, then commit the files. The pages show their own "Product demo · Sample data" band.
    ===================================================================== */
@@ -25,7 +27,9 @@ const OUT = path.resolve(process.argv[3] || path.join(__dirname, '..', 'assets',
 const SHOTS = [
   { path: '/sample-report', file: 'pro-report', sizes: [['', 1.5]] },
   { path: '/demo/fix', file: 'fix', sizes: [['', 1.5], ['-hero', 0.8]] },
-  { path: '/demo/beyond', file: 'beyond', sizes: [['', 1.5], ['-hero', 0.8]] }
+  { path: '/demo/fix#fixes', file: 'fix-list', sizes: [['', 1.5]] },
+  { path: '/demo/beyond', file: 'beyond', sizes: [['', 1.5], ['-hero', 0.8]] },
+  { path: '/demo/beyond#content', file: 'beyond-content', sizes: [['', 1.5]] }
 ];
 
 async function main() {

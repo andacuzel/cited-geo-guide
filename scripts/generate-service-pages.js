@@ -24,7 +24,7 @@ const dialog = require('../lib/request-dialog.js');
 const lockup = require('../lib/lockup.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 93;
+const CSS_VERSION = 94;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -41,8 +41,8 @@ function head(kicker, id, title) {
 
 // The hero picture: the live demo's own screenshot (scripts/capture-tour.js) in a browser frame, with the demo label and a link to the demo.
 const SHOT = {
-  fix: { img: 'fix-hero', url: 'getcitehound.com/demo/fix', href: '/demo/fix', alt: 'The Fix workspace demo for the fictional example-co.com: score before 39 and now 87, checks passing, and the fix list by status.' },
-  beyond: { img: 'beyond-hero', url: 'getcitehound.com/demo/beyond', href: '/demo/beyond', alt: 'The Beyond workspace demo for the fictional example-books.com: questions, gaps, and content pieces with their status and comments.' }
+  fix: { img: 'fix-hero', url: 'getcitehound.com/demo/fix', href: '/demo/fix', alt: 'The Fix workspace demo for the fictional example-co.com: a score ring at 87, a line of eight scans with verified fixes marked, bars by pillar and a status donut.' },
+  beyond: { img: 'beyond-hero', url: 'getcitehound.com/demo/beyond', href: '/demo/beyond', alt: 'The Beyond workspace demo for the fictional example-books.com: a pipeline from questions to published, two pieces waiting for review, and a coverage donut.' }
 };
 function shot(p) {
   const s = SHOT[p.key];

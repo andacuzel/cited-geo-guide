@@ -5186,3 +5186,13 @@ body.wsd-open { overflow: hidden; }
 .wsa-qsel { min-height: 90px; }
 @media (max-width: 1000px) { .wsb { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 720px) { .wsq-list { grid-template-columns: minmax(0, 1fr); } .wsb { grid-template-columns: minmax(0, 1fr); } .wc-step { flex-basis: 33%; } .ws-feed__row { grid-template-columns: 14px minmax(0, 1fr); } .ws-feed__date { grid-column: 2; } }
+
+/* The tour's second screen inside a panel */
+.tour__views { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tour__vbtn { min-height: 38px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); font-size: 14px; color: var(--ink-soft); cursor: pointer; transition: color var(--t), border-color var(--t), background var(--t); }
+.tour__vbtn:hover { color: var(--ink); border-color: var(--ink); }
+.tour__vbtn.is-active { background: var(--navy-800); border-color: var(--navy-800); color: var(--white); }
+.tour__vbtn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.tour__view + .tour__view { margin-top: 28px; }
+.tour--js .tour__view { display: none; }
+.tour--js .tour__view.is-active { display: block; }

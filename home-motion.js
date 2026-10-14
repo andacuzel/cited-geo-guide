@@ -57,7 +57,16 @@
     };
     tour.classList.add('tour--js');
     document.getElementById('tour').classList.add('tour--js');
+    Array.prototype.forEach.call(tour.querySelectorAll('.tour__panel'), function (p) { var v = p.querySelector('.tour__view'); if (v) v.classList.add('is-active'); });
     ttabs.forEach(function (b, k) { b.addEventListener('click', function () { tgo(k); }); });
+    // Inside a panel, a second screen (Fix: Overview and Fix list; Beyond: Overview and Content).
+    Array.prototype.forEach.call(tour.querySelectorAll('.tour__panel'), function (panel) {
+      var btns = Array.prototype.slice.call(panel.querySelectorAll('.tour__vbtn')), views = Array.prototype.slice.call(panel.querySelectorAll('.tour__view'));
+      btns.forEach(function (b, k) { b.addEventListener('click', function () {
+        btns.forEach(function (x, i) { x.classList.toggle('is-active', i === k); x.setAttribute('aria-pressed', i === k ? 'true' : 'false'); });
+        views.forEach(function (v, i) { v.classList.toggle('is-active', i === k); });
+      }); });
+    });
     tour.querySelector('.tour__tabs').addEventListener('keydown', function (e) {
       var cur = ttabs.indexOf(document.activeElement);
       if (cur === -1) return;
