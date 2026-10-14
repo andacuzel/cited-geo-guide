@@ -4432,7 +4432,7 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .ladder-card--fix .ladder-card__icon, .ladder-card--beyond .ladder-card__icon { background: var(--navy-900); color: var(--gold-soft); }
 .ladder-card__tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
 .ladder-card--fix .ladder-card__tag, .ladder-card--beyond .ladder-card__tag { color: var(--gold-soft); }
-.ladder-card__name { font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.15; color: var(--navy-950); }
+.ladder-card__name { font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.15; color: var(--navy-950); }
 .ladder-card--fix .ladder-card__name, .ladder-card--beyond .ladder-card__name { color: var(--white); }
 .ladder-card__text { margin-top: 10px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
 .ladder-card--fix .ladder-card__text, .ladder-card--beyond .ladder-card__text { color: rgba(255, 255, 255, 0.84); }
@@ -4675,3 +4675,20 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 @media (max-width: 900px) { .showcase__slider { justify-self: center; } }
 @media (max-width: 640px) { .showcase.hp-band { padding: 48px 0; } .showcase .preview-gold .sq__text { font-size: 12px; } }
 .showcase .preview-gold .scene { flex: 1; align-content: space-around; }
+
+/* ----------------------------- Product lockups (lib/lockup.js): Citehound FREE, PRO, FIX, BEYOND ----------------------------- */
+
+.lockup { display: inline-flex; align-items: center; gap: 8px; font-size: 24px; line-height: 1; white-space: nowrap; }
+.lockup__icon { display: inline-flex; flex: none; }
+.lockup__icon svg { display: block; width: 1.08em; height: 1.08em; }
+.lockup__mark { font-family: var(--font-display); font-weight: 400; font-size: 1em; }
+.lockup__tag { margin-left: 4px; padding: 4px 8px 3px; font-family: var(--font-mono); font-size: 0.5em; font-weight: 500; letter-spacing: 0.12em; line-height: 1.2; border: 1px solid var(--gold); border-radius: 4px; }
+.lockup--light { color: var(--navy-950); }
+.lockup--light .lockup__tag { color: var(--gold-deep); }
+.lockup--navy { color: var(--white); }
+.lockup--navy .lockup__tag { color: var(--gold); }
+.ladder-card__name .lockup { font-size: 22px; }
+.hero__lockup { margin: 0 0 18px; }
+.hero__lockup .lockup { font-size: 26px; }
+.page-lockup { margin: 0 0 16px; }
+.page-lockup .lockup { font-size: 26px; }

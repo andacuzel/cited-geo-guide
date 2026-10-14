@@ -36,7 +36,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 85;
+const CSS_VERSION = 86;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -321,7 +321,7 @@ function build() {
   const body = '  <main id="main">\n\n' +
     '    <!-- ---------- Banner ---------- -->\n' +
     '    <section aria-labelledby="pro-heading">\n      <div class="section__inner">\n        <div class="page-banner pro-banner">\n          <div class="page-banner__body">\n' +
-    '            <p class="kicker kicker--on-navy">Pro</p>\n' +
+    '            <p class="page-lockup">' + require('../lib/lockup.js').html('PRO', 'navy') + '</p>\n' +
     '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? What would buyers ask?</h1>\n' +
     '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.</p>\n' +
     '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n' +
