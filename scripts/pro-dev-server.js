@@ -131,7 +131,7 @@ const server = http.createServer(async (req, res) => {
 (async function () {
   if (readiness) { const R = require('../lib/readiness.js'); const F = require('./fixtures/readiness-fixtures.js'); await R.putPdf(store.adapter, F.fakePdf(), F.NAME); console.log('  readiness: a stand-in PDF is stored; open /research/state-of-ai-readiness'); }
   // The fictional demo workspace, so /demo/fix can be looked at (the admin is there too when ADMIN_TOKEN is set in the environment).
-  if (!useRedis) await require('../lib/ws-service.js').seedDemoFix(store.adapter);
+  if (!useRedis) { await require('../lib/ws-service.js').seedDemoFix(store.adapter); await require('../lib/ws-service.js').seedDemoBeyond(store.adapter); }
   // One finished report from the frozen sample, so the report page can be looked at straight away.
   const sample = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'pro', 'sample-report.json'), 'utf8'));
   const ord = await store.createOrder();
@@ -173,7 +173,7 @@ const server = http.createServer(async (req, res) => {
   server.listen(port, () => {
     console.log('Citehound Pro dev server on http://localhost:' + port + (fast ? ' (fast crawl)' : ''));
     console.log('  finished report: /r/' + jobId + '/');
-    console.log('  demo workspace: /demo/fix' + (process.env.ADMIN_TOKEN ? '   admin: /admin/ws' : ''));
+    console.log('  demo workspaces: /demo/fix and /demo/beyond' + (process.env.ADMIN_TOKEN ? '   admin: /admin/ws' : ''));
   });
   process.on('SIGINT', () => process.exit(0));
 }());

@@ -119,6 +119,7 @@
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
     { "source": "/admin/ws", "destination": "/api/pro?a=wsadmin" },
     { "source": "/demo/fix", "destination": "/api/pro?a=demofix" },
+    { "source": "/demo/beyond", "destination": "/api/pro?a=demobeyond" },
     { "source": "/w/:id([0-9a-f]{32})", "destination": "/api/pro?a=ws&id=:id" },
     { "source": "/w/:id([0-9a-f]{32})/", "destination": "/api/pro?a=ws&id=:id" },
     { "source": "/pro/start/:token", "destination": "/api/pro?a=startpage&token=:token" },
@@ -129,7 +130,7 @@
     { "source": "/readiness/download/:token([0-9a-f]{72})", "destination": "/api/pro?a=readinessget&token=:token" },
     { "source": "/readiness/remove/:token", "destination": "/api/pro?a=readinessremove&token=:token" },
     { "source": "/api/pro/:action(start|order|step|status|email|feedback|webhook|welcome)", "destination": "/api/pro?a=:action" },
-    { "source": "/api/pro/:action(wsverify|wsadminlogin|wsadminapi)", "destination": "/api/pro?a=:action" },
+    { "source": "/api/pro/:action(wsverify|wscontent|wsadminlogin|wsadminapi)", "destination": "/api/pro?a=:action" },
     { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
     { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }
   ]

@@ -22,10 +22,31 @@
   }
   root.classList.add('ws--js');
   window.addEventListener('hashchange', function () { show(location.hash.replace('#', '')); });
-  show(location.hash.replace('#', ''));
+  show(location.hash.replace('#', '') || root.getAttribute('data-default-tab') || '');
   // A link inside a section that points at another tab.
   Array.prototype.forEach.call(root.querySelectorAll('a[data-ws-tab]'), function (a) {
     a.addEventListener('click', function () { show(a.getAttribute('data-ws-tab')); });
+  });
+
+  // The client's answer on a piece in review (a Beyond workspace): Approve, or Request changes with a comment.
+  var mid = /^\/w\/([0-9a-f]{32})\/?$/.exec(location.pathname);
+  Array.prototype.forEach.call(root.querySelectorAll('.ws-review'), function (box) {
+    Array.prototype.forEach.call(box.querySelectorAll('.ws-review__btn'), function (b) {
+      if (!mid) { box.hidden = true; return; }
+      b.addEventListener('click', function () {
+        var out = box.querySelector('.ws-review__out'), text = box.querySelector('.ws-review__text'), action = b.getAttribute('data-action');
+        var btns = box.querySelectorAll('.ws-review__btn');
+        Array.prototype.forEach.call(btns, function (x) { x.disabled = true; });
+        out.textContent = '';
+        fetch('/api/pro/wscontent', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, cache: 'no-store', credentials: 'omit', body: JSON.stringify({ id: mid[1], cid: box.getAttribute('data-cid'), action: action, comment: text.value }) })
+          .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, body: j }; }, function () { return { ok: false, body: {} }; }); })
+          .then(function (r) {
+            if (r.ok) { out.textContent = r.body.message || 'Done.'; setTimeout(function () { location.reload(); }, 900); return; }
+            Array.prototype.forEach.call(btns, function (x) { x.disabled = false; });
+            out.textContent = r.body.message || 'That did not work. Try again in a few minutes.';
+          }, function () { Array.prototype.forEach.call(btns, function (x) { x.disabled = false; }); out.textContent = 'We could not reach the server.'; });
+      });
+    });
   });
 
   function toast(msg) {

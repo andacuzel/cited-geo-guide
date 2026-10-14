@@ -249,6 +249,10 @@ async function waitForDeployment(sha) {
   // Project workspaces: the public demo, the bearer link's generic 404, and the admin that must show nothing without its token.
   const demoFix = await get('/demo/fix');
   t('/demo/fix is 200 with the "Product demo · Sample data" ribbon, noindex, no referrer, and no Verify button', demoFix.status === 200 && /Product demo &middot; Sample data/.test(demoFix.text) && /example-co\.com/.test(demoFix.text) && /noindex/.test(demoFix.headers.get('x-robots-tag') || '') && (demoFix.headers.get('referrer-policy') || '') === 'no-referrer' && !/class="btn btn--ghost ws-verify"/.test(demoFix.text), String(demoFix.status));
+  const demoBeyond = await get('/demo/beyond');
+  t('/demo/beyond is 200 with the "Product demo · Sample data" ribbon, noindex, no referrer, and no write buttons for a visitor', demoBeyond.status === 200 && /Product demo &middot; Sample data/.test(demoBeyond.text) && /example-books\.com/.test(demoBeyond.text) && /noindex/.test(demoBeyond.headers.get('x-robots-tag') || '') && (demoBeyond.headers.get('referrer-policy') || '') === 'no-referrer' && !/class="ws-review"|ws-review__btn|class="btn btn--ghost ws-verify"/.test(demoBeyond.text), String(demoBeyond.status));
+  const wsContent = await fetch(BASE + '/api/pro/wscontent', { method: 'POST', headers: { 'User-Agent': 'citehound-smoke/1', 'Content-Type': 'application/json' }, body: JSON.stringify({ id: '0'.repeat(32), cid: 'c1', action: 'approve' }) });
+  t('a review answer for an unknown workspace is the generic 404', wsContent.status === 404, String(wsContent.status));
   const noWs = await get('/w/' + '0'.repeat(32));
   t('an unknown workspace link is the generic 404, noindex', noWs.status === 404 && /noindex/.test(noWs.headers.get('x-robots-tag') || ''), String(noWs.status));
   const adminPg = await get('/admin/ws');

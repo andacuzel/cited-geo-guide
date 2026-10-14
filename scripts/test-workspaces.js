@@ -24,6 +24,7 @@ const Fix = require('../lib/ws-fix.js');
 const Md = require('../lib/ws-markdown.js');
 const Render = require('../lib/ws-render.js');
 const WsApi = require('../lib/ws-api.js');
+const Bey = require('../lib/ws-beyond.js');
 const methodology = require('../lib/methodology.js');
 const ROOT = path.resolve(__dirname, '..');
 
@@ -227,7 +228,7 @@ const okHost = async () => ({ ok: true });
     t('admin: list shows real workspaces with their score, and not the demo', list.status === 200 && list.json.workspaces.length >= 1 && list.json.workspaces.every((w) => WS.HEX32.test(w.id)));
     const cr = await A({ action: 'create', type: 'fix', domain: 'https://www.Example.net/page' });
     t('admin: create scans the site and answers with the client path', cr.status === 200 && /^\/w\/[0-9a-f]{32}$/.test(cr.json.path));
-    t('admin: create refuses a Beyond workspace for now, a bad domain and a non-public host', (await A({ action: 'create', type: 'beyond', domain: 'example.org' })).status === 400 && (await A({ action: 'create', type: 'fix', domain: 'not a domain' })).status === 400 &&
+    t('admin: create refuses an unknown type, a bad domain and a non-public host', (await A({ action: 'create', type: 'essay', domain: 'example.org' })).status === 400 && (await A({ action: 'create', type: 'fix', domain: 'not a domain' })).status === 400 &&
       (await call({ method: 'POST', query: { a: 'wsadminapi' }, headers: { cookie: session }, body: { action: 'create', type: 'fix', domain: 'localhost.example' } }, Object.assign({}, deps, { checkHost: async () => ({ ok: false, kind: 'blocked_host' }) }))).status === 400);
     const wid = cr.json.id;
     const got = await A({ action: 'get', id: wid });
@@ -247,11 +248,129 @@ const okHost = async () => ({ ok: true });
     t('admin: the token is compared in constant time (timingSafeEqual on digests)', /timingSafeEqual/.test(fs.readFileSync(path.join(ROOT, 'lib/ws-api.js'), 'utf8')) && !/(^|[^.\w])token\s*===|===\s*token\b/.test(fs.readFileSync(path.join(ROOT, 'lib/ws-api.js'), 'utf8')));
   }
 
+  /* ---- Beyond ---- */
+  {
+    const { adapter, store } = mk();
+    const state = { failing: ['Author / about signals'] };
+    const deps = { store, scanner: fakeScanner(state), checkHost: okHost, env: { ADMIN_TOKEN: TOKEN } };
+    const r = await Svc.startBeyond(adapter, 'example.org', deps);
+    const id = r.id;
+    const meta = await WS.getMeta(adapter, id);
+    t('beyond: a workspace of type beyond, with a baseline scan and no Fix list', r.ok && meta.type === 'beyond' && (await WS.getScans(adapter, id)).length === 1 && (await WS.getItems(adapter, id)).length === 0);
+    t('beyond: a site that cannot be scanned makes no workspace', !(await Svc.startBeyond(adapter, 'down.org', { scanner: fakeScanner({ down: true, failing: [] }) })).ok);
+    t('beyond: Fix-only operations are refused on it', !(await Svc.addItem(adapter, id, { label: 'x' })).ok && (await Svc.verify(adapter, id, 'Page title', deps)).reason === 'not_found');
+    t('beyond: a rescan adds a score to the history and nothing else', (await Svc.rescan(adapter, id, deps)).ok && (await WS.getScans(adapter, id)).length === 2 && (await WS.getItems(adapter, id)).length === 0);
+
+    const q = await Svc.setQuestions(adapter, id, ['What is the best invoicing tool?', 'short', 'What is the best invoicing tool?', '  How do I send a recurring invoice?  ']);
+    t('questions: short and repeated ones are dropped, the rest get ids', q.ok && q.count === 2 && (await WS.getQuestions(adapter, id)).map((x) => x.id).join() === 'q1,q2');
+    t('questions: more than the limit is refused', !(await Svc.setQuestions(adapter, id, Array.from({ length: 41 }, (_, i) => 'A question number ' + i + ' about invoices'))).ok);
+    t('questions: a category set is a starting point; an unknown one is refused', (await Svc.seedQuestions(adapter, id, 'crm')).count > 5 && (await Svc.seedQuestions(adapter, id, '../etc')).reason === 'vertical');
+    t('questions: import needs a linked Pro report that has questions', (await Svc.importQuestions(store, id)).reason === 'no_pro_report');
+    const job = await store.createJob({ domain: 'example.org', citation: true });
+    await Svc.setPro(adapter, id, job);
+    t('questions: ... and one without questions says so', (await Svc.importQuestions(store, id)).reason === 'no_questions');
+    await store.setCitation(job, { status: 'done', questions: { source: 'llm', items: [{ text: 'Which invoicing tool suits a freelancer?', gloss: '', kind: 'category', brand: false }, { text: 'What does Example Books offer?', gloss: '', kind: 'brand', brand: true }] } });
+    t('questions: import takes what the Pro report\'s generator wrote, with no model call', (await Svc.importQuestions(store, id)).count === 2 && (await WS.getQuestions(adapter, id))[0].text === 'Which invoicing tool suits a freelancer?');
+    const g = await Svc.setGaps(adapter, id, [{ question: 'Q one is here', page: '/pricing', note: 'No direct answer', priority: 'high' }, { question: 'Q two is here', priority: 'weird' }, { question: '' }]);
+    const gaps = await WS.getGaps(adapter, id);
+    t('gaps: empty rows are dropped, an unknown priority becomes medium', g.ok && gaps.length === 2 && gaps[1].priority === 'medium' && gaps[0].page === '/pricing');
+
+    const add = await Svc.addPiece(adapter, id, { title: ' A <b>piece</b> ', type: 'FAQ block', body: 'Text **here** <script>alert(1)</script>' });
+    const cid = add.cid;
+    t('content: a new piece is a draft with a version', add.ok && cid === 'c1' && (await WS.getPiece(adapter, id, cid)).status === 'draft' && (await WS.getPiece(adapter, id, cid)).version === 1);
+    t('content: a bad type or an empty title is refused', !(await Svc.addPiece(adapter, id, { title: 'x', type: 'Essay' })).ok && !(await Svc.addPiece(adapter, id, { title: '  ', type: 'Rewrite' })).ok);
+    t('content: an admin cannot set approved, and cannot publish a draft', (await Svc.setPieceStatus(adapter, id, cid, 'approved')).reason === 'approved_by_client_only' && (await Svc.setPieceStatus(adapter, id, cid, 'published')).reason === 'publish_needs_approval');
+    t('content: the client cannot review a piece that is not in review', (await Svc.review(adapter, id, cid, { action: 'approve' })).reason === 'not_in_review');
+    await Svc.setPieceStatus(adapter, id, cid, 'in_review');
+    t('content: Request changes needs a comment', (await Svc.review(adapter, id, cid, { action: 'changes', comment: ' ' })).reason === 'comment');
+    t('content: an unknown action is refused', (await Svc.review(adapter, id, cid, { action: 'delete' })).reason === 'action');
+    const ch = await Svc.review(adapter, id, cid, { action: 'changes', comment: 'Please name the rate source.' });
+    const afterCh = await WS.getPiece(adapter, id, cid); const cms1 = await WS.getComments(adapter, id, cid);
+    t('content: Request changes puts the piece back to draft and keeps the comment for the admin', ch.ok && afterCh.status === 'draft' && cms1.length === 1 && cms1[0].by === 'client' && cms1[0].kind === 'changes' && cms1[0].text === 'Please name the rate source.');
+    t('content: the admin sees it as changes requested', Bey.changesRequested(Object.assign({}, afterCh, { comments: cms1 })));
+    await Svc.setPieceStatus(adapter, id, cid, 'in_review');
+    const ap = await Svc.review(adapter, id, cid, { action: 'approve', comment: 'Good.' });
+    t('content: Approve sets approved and records who and when', ap.ok && (await WS.getPiece(adapter, id, cid)).status === 'approved' && (await WS.getComments(adapter, id, cid)).pop().kind === 'approve');
+    const ed = await Svc.editPiece(adapter, id, cid, { body: 'A different text.' });
+    t('content: editing an approved piece sends it back to review, with a note', ed.ok && ed.reopened && (await WS.getPiece(adapter, id, cid)).status === 'in_review' && (await WS.getPiece(adapter, id, cid)).version === 2 && (await WS.getComments(adapter, id, cid)).pop().kind === 'note');
+    await Svc.review(adapter, id, cid, { action: 'approve' });
+    t('content: after approval the admin can publish; an unchanged save does not reopen it', (await Svc.editPiece(adapter, id, cid, { body: 'A different text.' })).reopened === false && (await Svc.setPieceStatus(adapter, id, cid, 'published')).ok);
+    t('content: an admin note is a comment the client sees', (await Svc.noteOnPiece(adapter, id, cid, 'Live on 12 Oct.')).ok && (await WS.getComments(adapter, id, cid)).pop().by === 'admin');
+    t('content: writes are limited per piece (30 comments)', await (async () => { const p2 = (await Svc.addPiece(adapter, id, { title: 'Second', type: 'Rewrite' })).cid; await Svc.setPieceStatus(adapter, id, p2, 'in_review'); for (let i = 0; i < 31; i++) await WS.addComment(adapter, id, p2, { by: 'admin', kind: 'note', text: 'n' + i }, Date.now() + i); return (await Svc.review(adapter, id, p2, { action: 'approve' })).reason === 'limit'; })());
+    t('content: and per workspace per day', await (async () => { const p3 = (await Svc.addPiece(adapter, id, { title: 'Third', type: 'Rewrite' })).cid; await Svc.setPieceStatus(adapter, id, p3, 'in_review'); const dayKey = WS.key(id, 'cn:' + new Date().toISOString().slice(0, 10)); await adapter.set(dayKey, String(Svc.CLIENT_PER_DAY)); const out = (await Svc.review(adapter, id, p3, { action: 'approve' })).reason === 'daily'; await adapter.del(dayKey); return out; })());
+
+    t('months: a bad month or counts are refused', (await Svc.setMonth(adapter, id, { month: '2026-13', named: 1, asked: 5 })).reason === 'month' && (await Svc.setMonth(adapter, id, { month: '2026-09', named: 6, asked: 5 })).reason === 'counts');
+    await Svc.setMonth(adapter, id, { month: '2026-09', named: 2, asked: 10, model: 'one assistant', note: 'one run each' });
+    const table = Bey.monthsTable(await WS.getScans(adapter, id), await WS.getMonths(adapter, id));
+    t('months: the table joins the scans of a month with its citation-check entry', table.some((x) => x.month === '2026-09' && x.citation && x.citation.named === 2) && table.every((x) => x.score === null || typeof x.score === 'number'));
+
+    // The pages
+    const hostile = (await Svc.addPiece(adapter, id, { title: '<img src=x onerror=alert(1)>', type: 'Rewrite', body: '<script>alert("body")</script> **bold** [x](javascript:alert(1))' })).cid;
+    await Svc.setPieceStatus(adapter, id, hostile, 'in_review');
+    await WS.addComment(adapter, id, hostile, { by: 'client', kind: 'changes', text: '<script>alert("comment")</script>' });
+    const page = await call({ query: { a: 'ws', id } }, deps);
+    t('beyond page: the tabs, the Pro tab and the lockup are there', page.status === 200 && ['questions', 'gaps', 'content', 'monthly', 'pro'].every((x) => page.body.indexOf('id="' + x + '"') !== -1) && /BEYOND/.test(page.body) && /Citehound Pro report <span class="ws-included">Included<\/span>/.test(page.body));
+    t('beyond page: nothing typed by an admin or a client reaches it as markup', !/<script>alert/.test(page.body) && !/<img src=x/.test(page.body) && !/href="javascript/.test(page.body));
+    t('beyond page: a piece in review shows Approve and Request changes; one that is not does not', (page.body.match(/class="ws-review"/g) || []).length === Bey.counts(await WS.listContent(adapter, id, false)).in_review && /data-action="approve"/.test(page.body) && /data-action="changes"/.test(page.body));
+    t('beyond page: the piece\'s text is rendered through the safe markdown', /<strong>bold<\/strong>/.test(page.body) && /&lt;script&gt;alert\(&quot;body&quot;\)&lt;\/script&gt;/.test(page.body));
+    t('beyond page: Monthly says the citation check is a pilot and a month without one says "Not run"', /Citation check: pilot/.test(page.body) && /never a ranking/.test(page.body) && /Not run this month/.test(page.body) && /Named in <b>2<\/b> of 10 questions/.test(page.body));
+    t('beyond page: it opens on Content when something waits for the client', /data-default-tab="content"/.test(page.body) && /waiting for your review/.test(page.body));
+    t('beyond page: noindex, no referrer, a script-src self policy', /noindex/.test(page.headers['x-robots-tag']) && page.headers['referrer-policy'] === 'no-referrer' && /script-src 'self'/.test(page.headers['content-security-policy']));
+    await Svc.archive(adapter, id, true);
+    const arch = await call({ query: { a: 'ws', id } }, deps);
+    t('beyond page: an archived workspace has no review buttons', !/class="ws-review"/.test(arch.body) && /archived, read-only/.test(arch.body));
+    t('beyond: an archived workspace refuses a review', (await Svc.review(adapter, id, hostile, { action: 'approve' })).reason === 'archived');
+    await Svc.archive(adapter, id, false);
+
+    // The client's route
+    await Svc.setPieceStatus(adapter, id, hostile, 'in_review');
+    const ok1 = await call({ method: 'POST', query: { a: 'wscontent' }, body: { id: id, cid: hostile, action: 'changes', comment: 'Please simplify the title.' } }, deps);
+    t('route: Request changes through /api/pro/wscontent', ok1.status === 200 && ok1.json.status === 'draft', ok1.body);
+    const again = await call({ method: 'POST', query: { a: 'wscontent' }, body: { id: id, cid: hostile, action: 'approve' } }, deps);
+    t('route: a piece that is no longer in review is a 409', again.status === 409);
+    t('route: a bad id, a bad cid and the demo are generic 404s', (await call({ method: 'POST', query: { a: 'wscontent' }, body: { id: 'nope', cid: 'c1', action: 'approve' } }, deps)).status === 404 && (await call({ method: 'POST', query: { a: 'wscontent' }, body: { id: id, cid: '../x', action: 'approve' } }, deps)).status === 404 && (await call({ method: 'POST', query: { a: 'wscontent' }, body: { id: 'demo-beyond', cid: 'c3', action: 'approve' } }, deps)).status === 404);
+    t('route: a foreign origin or a form-encoded post is refused before anything runs', (await call({ method: 'POST', query: { a: 'wscontent' }, headers: { origin: 'https://evil.example' }, body: { id: id, cid: 'c1', action: 'approve' } }, deps)).status === 403 && (await call({ method: 'POST', query: { a: 'wscontent' }, headers: { 'content-type': 'text/plain' }, body: {} }, deps)).status === 415);
+    let last = 0; for (let i = 0; i < 63; i++) last = (await call({ method: 'POST', query: { a: 'wscontent' }, ip: '10.88.88.88', body: { id: '0'.repeat(32), cid: 'c1', action: 'approve' } }, deps)).status;
+    t('route: limited per network (60 an hour)', last === 429);
+
+    // The admin
+    const login = await call({ method: 'POST', query: { a: 'wsadminlogin' }, body: { token: TOKEN } }, deps);
+    const cookie = String(login.headers['set-cookie']).split(';')[0];
+    const A = (body) => call({ method: 'POST', query: { a: 'wsadminapi' }, headers: { cookie: cookie }, body: body }, deps);
+    const cr = await A({ action: 'create', type: 'beyond', domain: 'example.net' });
+    t('admin: create makes a Beyond workspace', cr.status === 200 && /^\/w\/[0-9a-f]{32}$/.test(cr.json.path) && (await WS.getMeta(adapter, cr.json.id)).type === 'beyond');
+    const bid = cr.json.id;
+    const got = await A({ action: 'get', id: bid });
+    t('admin: get on a Beyond workspace returns its collections and the lists an editor needs', got.status === 200 && Array.isArray(got.json.questions) && Array.isArray(got.json.pieces) && got.json.types.indexOf('FAQ block') !== -1 && got.json.adminStatuses.indexOf('approved') === -1 && got.json.verticals.indexOf('crm') !== -1);
+    t('admin: questions, gaps, a piece, a note and a month through the API', (await A({ action: 'setQuestions', id: bid, questions: ['What is the best tool for me?', 'How do I start with it?'] })).status === 200 && (await A({ action: 'setGaps', id: bid, gaps: [{ question: 'A gap question', page: '/x', note: 'n', priority: 'low' }] })).status === 200 &&
+      (await A({ action: 'addPiece', id: bid, title: 'T', type: 'Rewrite', body: 'b' })).json.cid === 'c1' && (await A({ action: 'notePiece', id: bid, cid: 'c1', text: 'hello' })).status === 200 && (await A({ action: 'setMonth', id: bid, month: '2026-10', named: 1, asked: 8 })).status === 200);
+    t('admin: it cannot set approved or publish a draft, and says why', (await A({ action: 'setPieceStatus', id: bid, cid: 'c1', status: 'approved' })).json.error === 'approved_by_client_only' && (await A({ action: 'setPieceStatus', id: bid, cid: 'c1', status: 'published' })).json.error === 'publish_needs_approval');
+    await A({ action: 'setPieceStatus', id: bid, cid: 'c1', status: 'in_review' });
+    await Svc.review(adapter, bid, 'c1', { action: 'changes', comment: 'A client comment.' });
+    const g2 = await A({ action: 'get', id: bid });
+    t('admin: the client\'s comment is there for the admin, with the status it caused', g2.json.pieces[0].status === 'draft' && g2.json.pieces[0].comments.some((c) => c.by === 'client' && c.text === 'A client comment.'));
+    const lst = await A({ action: 'list' });
+    t('admin: the list shows a Beyond workspace with its pieces', lst.json.workspaces.some((w) => w.id === bid && w.type === 'beyond' && w.pieces === 1));
+    t('admin: a Fix action on a Beyond workspace and a demo id are refused', (await A({ action: 'addItem', id: bid, label: 'x' })).status === 400 && (await A({ action: 'get', id: 'demo-beyond' })).status === 404);
+    t('admin: everything the admin stores is escaped on the client page', !/<script>/.test((await call({ query: { a: 'ws', id: bid } }, deps)).body.replace(/<script src=[^>]*><\/script>/g, '')));
+  }
+  {
+    const { adapter, store } = mk();
+    await Svc.seedDemoBeyond(adapter);
+    const deps = { store, env: {} };
+    const r = await call({ query: { a: 'demobeyond' } }, deps);
+    t('demo beyond: /demo/beyond shows the ribbon, a fictional domain, the five tabs and no review form', r.status === 200 && /Product demo &middot; Sample data/.test(r.body) && /example-books\.com/.test(r.body) && ['questions', 'gaps', 'content', 'monthly', 'pro'].every((x) => r.body.indexOf('id="' + x + '"') !== -1) && !/class="ws-review"/.test(r.body));
+    t('demo beyond: noindex, no referrer, and it is not reachable as a /w/ link', /noindex/.test(r.headers['x-robots-tag']) && r.headers['referrer-policy'] === 'no-referrer' && (await call({ query: { a: 'ws', id: 'demo-beyond' } }, deps)).status === 404);
+    t('demo beyond: it has every status, a client comment and a changes-requested history, and invents no citation numbers', ['Draft', 'In review', 'Approved', 'Published'].every((x) => r.body.indexOf('>' + x + '<') !== -1) && /asked for changes/.test(r.body) && !/Named in <b>/.test(r.body) && /Not run this month/.test(r.body));
+    t('demo beyond: nothing in it can be changed', !(await Svc.setQuestions(adapter, 'demo-beyond', ['A question that is long enough'])).ok && !(await Svc.addPiece(adapter, 'demo-beyond', { title: 'x', type: 'Rewrite' })).ok && (await Svc.review(adapter, 'demo-beyond', 'c3', { action: 'approve' })).reason === 'not_found');
+    t('demo beyond: the seed is repeatable (a second run leaves the same four pieces)', (await Svc.seedDemoBeyond(adapter)).ok && (await WS.listContent(adapter, 'demo-beyond')).length === 4 && (await adapter.ttl(WS.key('demo-beyond'))) === -1);
+  }
+
   /* ---- routing and the repository ---- */
   {
     const v = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
     const rw = (src) => (v.rewrites || []).some((r) => r.source === src);
-    t('routing: /w/<id>, /demo/fix and /admin/ws are rewritten onto the one Pro function', rw('/w/:id([0-9a-f]{32})') && rw('/demo/fix') && rw('/admin/ws') && (v.rewrites || []).some((r) => /wsverify\|wsadminlogin\|wsadminapi/.test(r.source)));
+    t('routing: /w/<id>, /demo/fix, /demo/beyond and /admin/ws are rewritten onto the one Pro function', rw('/w/:id([0-9a-f]{32})') && rw('/demo/fix') && rw('/demo/beyond') && rw('/admin/ws') && (v.rewrites || []).some((r) => /wsverify\|wscontent\|wsadminlogin\|wsadminapi/.test(r.source)));
     const hdr = (src) => (v.headers || []).filter((h) => h.source === src)[0];
     t('routing: those paths send noindex, no-referrer and no-store from vercel.json (which sets no CSP)', ['/(w|demo)/(.*)', '/admin/ws'].every((s) => { const h = hdr(s); const m = {}; (h ? h.headers : []).forEach((x) => { m[x.key] = x.value; }); return h && /noindex/.test(m['X-Robots-Tag']) && m['Referrer-Policy'] === 'no-referrer' && m['Cache-Control'] === 'no-store'; }) && !/Content-Security-Policy/.test(JSON.stringify(v)));
     const wsPage = await call({ query: { a: 'ws', id } }, deps);
