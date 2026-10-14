@@ -112,6 +112,7 @@
           var done = document.createElement('p');
           done.className = 'wl-done'; done.setAttribute('role', 'status'); done.tabIndex = -1;
           done.textContent = r.body.message || 'Thanks, we have it.';
+          var inc = $('reqIncludes'); if (inc && inc.content) done.appendChild(inc.content.cloneNode(true));   // "Includes Citehound PRO", the same badge as on the pages
           form.parentNode.insertBefore(done, form.nextSibling);
           done.focus();
           return;

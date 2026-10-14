@@ -1,6 +1,6 @@
 # Citehound
 
-> Citehound is a scanner for AI readiness, in four steps. Scan: a free 100-point score from 16 checks and 10 AI crawlers, with the fix for each failed check, no signup. Pro report: the whole site page by page, with prioritized fixes, an estimated score after fixing, citation questions in your customers’ words and a citation check (pilot); join the waitlist. Fix (early access): we prepare and apply the technical fixes (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after. Beyond (early access): content briefs and drafts you approve, written against your customers’ questions and re-measured monthly. The free scan and its score measure readiness, not whether any AI assistant names a brand. The citation check is a dated sample of one provider’s web search for about ten questions, one run each, never a ranking.
+> Citehound is a scanner for AI readiness, in four steps. Scan: a free 100-point score from 16 checks and 10 AI crawlers, with the fix for each failed check, no signup. Pro report: the whole site page by page, with prioritized fixes, an estimated score after fixing, citation questions in your customers’ words and a citation check (pilot); join the waitlist. Fix (early access): we prepare and apply the technical fixes (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after. Beyond (early access): we research the questions your customers ask, read your pages against them and write the content (human-edited); you approve it, we publish or hand it over, and we re-measure every month. Fix and Beyond both include Citehound Pro. The free scan and its score measure readiness, not whether any AI assistant names a brand. The citation check is a dated sample of one provider’s web search for about ten questions, one run each, never a ranking.
 
 ## Scanner
 
@@ -29,7 +29,7 @@
 
 ## About
 
-- [Fix](https://getcitehound.com/fix): early access. We prepare and apply the technical changes the scan asks for (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after.
-- [Beyond](https://getcitehound.com/beyond): early access. We write the market questions in your customers’ words, read your pages against them, and deliver briefs and drafts you approve, then re-measure monthly.
+- [Fix](https://getcitehound.com/fix): early access. We prepare and apply the technical changes the scan asks for (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after. Includes Citehound Pro.
+- [Beyond](https://getcitehound.com/beyond): early access. We research the questions your customers ask, read your pages against them, write the content (new pages, FAQ and comparison blocks, rewrites; human-edited), you approve it, we publish or hand it over, and we re-measure every month. Includes Citehound Pro.
 - [About](https://getcitehound.com/about): who built Citehound and why.
 - [Pro](https://getcitehound.com/pro): a full-site crawl, with the whole-site score beside the homepage score, every page listed with what failed, every fix once, an estimated score if the fixes are applied and a printable report. A real sample of our own site is at /sample-report.

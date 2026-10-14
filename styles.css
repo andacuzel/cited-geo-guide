@@ -4743,3 +4743,21 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .req-inline .req-title { margin-top: 6px; font-size: clamp(22px, 3vw, 28px); }
 @media (max-width: 900px) { .svc-band__grid, .svc-request__grid { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
 @media (max-width: 640px) { .svc-band__cols { grid-template-columns: minmax(0, 1fr); } .svc-request__card { padding: 22px 18px; } }
+
+/* "Includes Citehound PRO" (lib/lockup.js includes()): the Pro lockup behind a lead-in, on Fix and Beyond surfaces */
+.includes-pro { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.includes-pro__lead { font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.includes-pro--navy .includes-pro__lead { color: rgba(255, 255, 255, 0.84); }
+.includes-pro--light .includes-pro__lead { color: var(--ink-soft); }
+.includes-pro .lockup { font-size: 20px; }
+.svc-includes { margin: 18px 0 0; }
+.ladder-card__includes { margin-top: 14px; }
+.ladder-card__includes .lockup { font-size: 18px; }
+.wl-done .includes-pro { display: flex; margin-top: 10px; }
+.svc-scope { margin-top: 28px; font-size: 15px; line-height: 1.5; color: var(--ink-soft); max-width: 640px; }
+.bm-snippet { margin-top: 14px; padding: 10px 12px; background: var(--bg); border-radius: var(--radius-sm); }
+.bm-snippet__label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.bm-snippet__text { margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--ink); }
+.bm-draft { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.bm-draft__title { font-family: var(--font-display); font-size: 18px; line-height: 1.25; color: var(--navy-950); }
+.bm-draft__text { margin-top: 8px; font-size: 14px; line-height: 1.5; color: var(--ink); }

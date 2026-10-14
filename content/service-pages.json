@@ -2,35 +2,88 @@
   "fix": {
     "path": "/fix",
     "title": "Citehound Fix: we fix what holds your site back",
-    "description": "Citehound Fix prepares and applies the technical changes the AI-readiness scan asks for, then rescans and shows you the before and after. In early access.",
+    "description": "Citehound Fix applies the technical changes the scan asks for, then rescans and shows the before and after. Includes Citehound Pro. In early access.",
     "h1": "We fix what holds your site back.",
     "sub": "Schema, robots.txt, llms.txt, sitemap, titles and descriptions: prepared, applied, rescanned.",
     "cta": "Request a Fix quote",
     "stepsKicker": "How it works",
     "stepsTitle": "From scan to before and after.",
     "steps": [
-      { "icon": "search", "title": "Scan", "text": "We scan your site and list the gaps." },
-      { "icon": "list", "title": "Fix plan", "text": "We agree with you which gaps to close, and in what order." },
-      { "icon": "wrench", "title": "We apply it", "text": "We prepare each change and apply it." },
-      { "icon": "repeat", "title": "Rescan", "text": "We scan again and send you the before and after." }
+      {
+        "icon": "search",
+        "title": "Scan",
+        "text": "We scan your site and list the gaps."
+      },
+      {
+        "icon": "list",
+        "title": "Fix plan",
+        "text": "We agree with you which gaps to close, and in what order."
+      },
+      {
+        "icon": "wrench",
+        "title": "We apply it",
+        "text": "We prepare each change and apply it."
+      },
+      {
+        "icon": "repeat",
+        "title": "Rescan",
+        "text": "We scan again and send you the before and after."
+      }
     ],
     "itemsKicker": "What we fix",
     "itemsTitle": "The technical layer the score measures.",
     "items": [
-      { "icon": "devtools", "title": "Schema", "text": "Organization, WebSite and content markup, so machines can tell who you are." },
-      { "icon": "plug", "title": "robots.txt", "text": "Clear rules for the AI crawlers, set the way you decide." },
-      { "icon": "document", "title": "llms.txt", "text": "A short file that says what the site is and where its main pages are. It is optional and low-cost, and nobody has shown that it changes what Google does." },
-      { "icon": "list", "title": "Sitemap", "text": "Declared in robots.txt and listing the pages that matter." },
-      { "icon": "pricetag", "title": "Titles", "text": "One clear title for each page." },
-      { "icon": "chat", "title": "Descriptions", "text": "One meta description for each page, written for that page." }
+      {
+        "icon": "devtools",
+        "title": "Schema",
+        "text": "Organization, WebSite and content markup, so machines can tell who you are."
+      },
+      {
+        "icon": "plug",
+        "title": "robots.txt",
+        "text": "Clear rules for the AI crawlers, set the way you decide."
+      },
+      {
+        "icon": "document",
+        "title": "llms.txt",
+        "text": "A short file that says what the site is and where its main pages are. It is optional and low-cost, and nobody has shown that it changes what Google does."
+      },
+      {
+        "icon": "list",
+        "title": "Sitemap",
+        "text": "Declared in robots.txt and listing the pages that matter."
+      },
+      {
+        "icon": "pricetag",
+        "title": "Titles",
+        "text": "One clear title for each page."
+      },
+      {
+        "icon": "chat",
+        "title": "Descriptions",
+        "text": "One meta description for each page, written for that page."
+      }
     ],
     "proofNote": "These are AI-readiness scores: crawler access and on-page signals. They do not measure whether any assistant names a brand.",
     "faqKicker": "Questions",
     "faqTitle": "Before you ask.",
     "faq": [
-      { "q": "If nobody can promise a citation, why pay?", "a": "No one can guarantee what an assistant says, including us. What we control is whether you are eligible: a site that blocks crawlers, can’t be read or doesn’t answer the question never gets considered. We close those gaps and measure the result: before/after scores, and a citation check each month." },
-      { "q": "What does Fix change on my site?", "a": "The technical layer the score measures: schema markup, robots.txt, llms.txt, the sitemap, page titles and meta descriptions. We agree with you which gaps to close first." },
-      { "q": "Does Fix write my content?", "a": "No. Fix covers the technical layer. Writing and editing content is Citehound Beyond." }
+      {
+        "q": "If nobody can promise a citation, why pay?",
+        "a": "No one can guarantee what an assistant says, including us. What we control is whether you are eligible: a site that blocks crawlers, can’t be read or doesn’t answer the question never gets considered. We close those gaps and measure the result: before/after scores, and a citation check each month."
+      },
+      {
+        "q": "What does Fix change on my site?",
+        "a": "The technical layer the score measures: schema markup, robots.txt, llms.txt, the sitemap, page titles and meta descriptions. We agree with you which gaps to close first."
+      },
+      {
+        "q": "Does Fix write my content?",
+        "a": "No. Fix covers the technical layer. Writing and editing content is Citehound Beyond."
+      },
+      {
+        "q": "Do I need to buy Pro separately?",
+        "a": "No. Fix and Beyond both include Citehound Pro."
+      }
     ],
     "requestTitle": "Fix is in early access.",
     "requestText": "Leave your email and the site. We reply to each request with a quote."
@@ -38,17 +91,33 @@
   "beyond": {
     "path": "/beyond",
     "title": "Citehound Beyond: be the page assistants pick",
-    "description": "Citehound Beyond writes the questions your customers ask, reads your pages against them and delivers briefs and drafts you approve. In early access.",
+    "description": "Citehound Beyond researches your customers’ questions, writes the content you approve and re-measures monthly. Includes Citehound Pro. In early access.",
     "h1": "Readable is not enough. Be the page assistants pick.",
-    "sub": "We write the market questions in your customers’ words, read your pages against them, and deliver briefs and drafts you approve.",
+    "sub": "We research the questions your customers ask, read your pages against them and write the content: new pages, FAQ and comparison blocks, rewrites. Human-edited. You approve it, we publish or hand it over, and we re-measure every month.",
     "cta": "Join Beyond early access",
     "stepsKicker": "How it works",
     "stepsTitle": "From their questions to your pages.",
     "steps": [
-      { "icon": "question", "title": "Market questions", "text": "We write the questions in your customers’ words, starting from your site." },
-      { "icon": "layers", "title": "Your pages read against them", "text": "For each question: what your pages answer, what they don’t, what is missing." },
-      { "icon": "document", "title": "Briefs and drafts you approve", "text": "You get an editorial brief for each gap and a draft to approve." },
-      { "icon": "repeat", "title": "Monthly re-measurement", "text": "Each month we run the same questions again and send the citation check, including when nothing changed." }
+      {
+        "icon": "question",
+        "title": "Market questions",
+        "text": "We research the questions your customers ask, in their words, starting from your site."
+      },
+      {
+        "icon": "layers",
+        "title": "Your pages read against them",
+        "text": "For each question: what your pages answer, what they don’t, what is missing."
+      },
+      {
+        "icon": "document",
+        "title": "We write the content",
+        "text": "New pages, FAQ and comparison blocks, rewrites. Human-edited. You approve every piece."
+      },
+      {
+        "icon": "repeat",
+        "title": "Publish, then re-measure",
+        "text": "We publish it or hand it over. Each month we run the same questions again and send the citation check, including when nothing changed."
+      }
     ],
     "mockKicker": "What it looks like",
     "mockTitle": "Three things you would see.",
@@ -64,33 +133,72 @@
         "Is there an invoicing tool with no monthly fee?"
       ],
       "gaps": [
-        { "q": "Best invoicing tool for a freelancer", "page": "/pricing", "gap": "No direct answer" },
-        { "q": "Send a recurring invoice", "page": "/help/recurring", "gap": "Answer sits under background" },
-        { "q": "Connects to my bank", "page": "None", "gap": "No page" },
-        { "q": "Invoice in two currencies", "page": "/features", "gap": "One line, no steps" }
+        {
+          "q": "Best invoicing tool for a freelancer",
+          "page": "/pricing",
+          "gap": "No direct answer"
+        },
+        {
+          "q": "Send a recurring invoice",
+          "page": "/help/recurring",
+          "gap": "Answer sits under background"
+        },
+        {
+          "q": "Connects to my bank",
+          "page": "None",
+          "gap": "No page"
+        },
+        {
+          "q": "Invoice in two currencies",
+          "page": "/features",
+          "gap": "One line, no steps"
+        }
       ],
-      "brief": {
-        "question": "How do I send a recurring invoice?",
-        "page": "/help/recurring",
-        "gap": "The answer sits under four paragraphs of background.",
-        "write": ["Open with the answer in two sentences.", "Show the steps, one line each.", "Say what recurring invoices cannot do."],
-        "status": "Draft awaiting your approval"
+      "draft": {
+        "tag": "Draft for approval",
+        "briefLabel": "From the brief",
+        "brief": "Answer “How do I send a recurring invoice?” on /help/recurring. The answer sits under background.",
+        "title": "How to send a recurring invoice",
+        "text": "Open Invoices, choose New and switch on Repeat. Pick how often it repeats and the day it is sent. The next invoice goes out on its own until you stop it.",
+        "status": "Awaiting your approval"
       }
     },
     "bandTitle": "Human-approved, automated.",
-    "bandText": "We automate the question writing, the page reading and the monthly re-measurement. You approve every brief and every draft. Nothing is published without you.",
+    "bandText": "We automate the question research, the page reading and the monthly re-measurement. People edit the drafts. You approve every piece, and nothing is published without you.",
     "bandCols": [
-      { "icon": "repeat", "title": "We automate", "text": "Question sets, page reading and the monthly measurement." },
-      { "icon": "check", "title": "You approve", "text": "Every brief and every draft, before anything is published." }
+      {
+        "icon": "repeat",
+        "title": "We automate",
+        "text": "Question research, page reading and the monthly measurement."
+      },
+      {
+        "icon": "check",
+        "title": "You approve",
+        "text": "Every piece, before we publish it or hand it over."
+      }
     ],
     "faqKicker": "Questions",
     "faqTitle": "Before you ask.",
     "faq": [
-      { "q": "If nobody can promise a citation, why pay?", "a": "No one can guarantee what an assistant says, including us. What we control is whether you are eligible: a site that blocks crawlers, can’t be read or doesn’t answer the question never gets considered. We close those gaps and measure the result: before/after scores, and a citation check each month." },
-      { "q": "Does anything go live without my approval?", "a": "No. You approve every brief and every draft before anything is published." },
-      { "q": "How do you measure the result?", "a": "We run the same questions each month and send the citation check: a dated sample of one assistant’s answers, one run each, never a ranking. We report what changed, including when nothing did." }
+      {
+        "q": "If nobody can promise a citation, why pay?",
+        "a": "No one can guarantee what an assistant says, including us. What we control is whether you are eligible: a site that blocks crawlers, can’t be read or doesn’t answer the question never gets considered. We close those gaps and measure the result: before/after scores, and a citation check each month."
+      },
+      {
+        "q": "Does anything go live without my approval?",
+        "a": "No. You approve every piece before we publish it or hand it over."
+      },
+      {
+        "q": "How do you measure the result?",
+        "a": "We run the same questions each month and send the citation check: a dated sample of one assistant’s answers, one run each, never a ranking. We report what changed, including when nothing did."
+      },
+      {
+        "q": "Do I need to buy Pro separately?",
+        "a": "No. Fix and Beyond both include Citehound Pro."
+      }
     ],
     "requestTitle": "Beyond is in early access.",
-    "requestText": "Leave your email and the site. We write to you about early access."
+    "requestText": "Leave your email and the site. We write to you about early access.",
+    "scope": "The scope, the number and type of pieces, is agreed in the pilot."
   }
 }

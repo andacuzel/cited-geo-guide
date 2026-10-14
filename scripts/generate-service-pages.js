@@ -24,7 +24,7 @@ const dialog = require('../lib/request-dialog.js');
 const lockup = require('../lib/lockup.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 87;
+const CSS_VERSION = 88;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -44,6 +44,7 @@ function hero(p, c) {
     '            <p class="page-lockup">' + lockup.html(p.tier, 'navy') + '</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">' + esc(c.h1) + '</h1>\n' +
     '            <p class="page-banner__desc">' + esc(c.sub) + '</p>\n' +
+    '            <p class="svc-includes">' + lockup.includes('navy') + '</p>\n' +
     '            <div class="pro-actions"><button type="button" class="btn btn--gold" data-request="' + p.interest + '">' + esc(c.cta) + '</button><a href="#how" class="btn btn--ghost-on-navy">How it works</a></div>\n' +
     '          </div>\n          <span class="page-banner__icon" aria-hidden="true">' + icons.svg(p.bannerIcon, {}) + '</span>\n        </div>\n      </div>\n    </section>\n';
 }
@@ -52,7 +53,7 @@ function steps(c) {
   return '    <section class="verticals hp-light" id="how" aria-labelledby="how-heading">\n      <div class="section__inner">\n' + head(c.stepsKicker, 'how-heading', c.stepsTitle).replace(/^/gm, '  ').replace(/^  $/gm, '') +
     '        <ol class="pro-steps pro-steps--4">\n' + c.steps.map((s) =>
       '          <li class="pro-step">\n            <span class="pro-row__icon">' + ic(s.icon, 'pro-icon') + '</span>\n            <h3 class="pro-step__title">' + esc(s.title) + '</h3>\n            <p class="pro-step__text">' + esc(s.text) + '</p>\n          </li>').join('\n') +
-    '\n        </ol>\n      </div>\n    </section>\n';
+    '\n        </ol>\n' + (c.scope ? '        <p class="svc-scope">' + esc(c.scope) + '</p>\n' : '') + '      </div>\n    </section>\n';
 }
 
 function items(c) {
@@ -80,9 +81,8 @@ function mockups(c) {
     m.questions.map((q) => '            <li>' + esc(q) + '</li>').join('\n') + '\n          </ul>\n        </div>\n        ' + note() + '\n      </figure>\n';
   const table = '      <figure class="bm-fig">\n        <div class="bm-card">\n          <p class="bm-card__tag">Gap table</p>\n          <p class="bm-card__sub">' + esc(m.category) + '</p>\n          <table class="bm-table">\n            <thead><tr><th scope="col">Question</th><th scope="col">Page</th><th scope="col">Gap</th></tr></thead>\n            <tbody>\n' +
     m.gaps.map((g) => '              <tr><td>' + esc(g.q) + '</td><td class="bm-mono">' + esc(g.page) + '</td><td>' + esc(g.gap) + '</td></tr>').join('\n') + '\n            </tbody>\n          </table>\n        </div>\n        ' + note() + '\n      </figure>\n';
-  const b = m.brief;
-  const brief = '      <figure class="bm-fig">\n        <div class="bm-card">\n          <p class="bm-card__tag">Content brief</p>\n          <p class="bm-card__sub">' + esc(m.category) + '</p>\n          <dl class="bm-brief">\n' +
-    '            <dt>Question</dt><dd>' + esc(b.question) + '</dd>\n            <dt>Page</dt><dd class="bm-mono">' + esc(b.page) + '</dd>\n            <dt>Gap</dt><dd>' + esc(b.gap) + '</dd>\n            <dt>What to write</dt><dd><ul class="bm-write">' + b.write.map((w) => '<li>' + esc(w) + '</li>').join('') + '</ul></dd>\n          </dl>\n          <p class="bm-status">' + esc(b.status) + '</p>\n        </div>\n        ' + note() + '\n      </figure>\n';
+  const d = m.draft;
+  const brief = '      <figure class="bm-fig">\n        <div class="bm-card">\n          <p class="bm-card__tag">' + esc(d.tag) + '</p>\n          <p class="bm-card__sub">' + esc(m.category) + '</p>\n          <div class="bm-snippet"><p class="bm-snippet__label">' + esc(d.briefLabel) + '</p><p class="bm-snippet__text">' + esc(d.brief) + '</p></div>\n          <div class="bm-draft"><p class="bm-draft__title">' + esc(d.title) + '</p><p class="bm-draft__text">' + esc(d.text) + '</p></div>\n          <p class="bm-status">' + esc(d.status) + '</p>\n        </div>\n        ' + note() + '\n      </figure>\n';
   return '    <section class="verticals band-white hp-band" aria-labelledby="mock-heading">\n      <div class="section__inner">\n' + head(c.mockKicker, 'mock-heading', c.mockTitle).replace(/^/gm, '  ').replace(/^  $/gm, '') +
     '        <div class="bm-grid">\n' + list + table + brief + '        </div>\n      </div>\n    </section>\n';
 }
@@ -98,7 +98,7 @@ function faq(c) {
 }
 
 function request(p, c) {
-  return '    <section class="svc-request hp-band" aria-labelledby="request-heading">\n      <div class="section__inner">\n        <div class="svc-request__grid">\n          <div class="svc-request__copy">\n            <p class="page-lockup">' + lockup.html(p.tier, 'navy') + '</p>\n            <h2 id="request-heading" class="svc-request__title">' + esc(c.requestTitle) + '</h2>\n            <p class="svc-request__text">' + esc(c.requestText) + '</p>\n            <p class="svc-request__back"><a href="/#ladder">Back to the four steps</a></p>\n          </div>\n          <div class="svc-request__card">\n            ' +
+  return '    <section class="svc-request hp-band" aria-labelledby="request-heading">\n      <div class="section__inner">\n        <div class="svc-request__grid">\n          <div class="svc-request__copy">\n            <p class="page-lockup">' + lockup.html(p.tier, 'navy') + '</p>\n            <h2 id="request-heading" class="svc-request__title">' + esc(c.requestTitle) + '</h2>\n            <p class="svc-request__text">' + esc(c.requestText) + '</p>\n            <p class="svc-includes">' + lockup.includes('navy') + '</p>\n            <p class="svc-request__back"><a href="/#ladder">Back to the four steps</a></p>\n          </div>\n          <div class="svc-request__card">\n            ' +
     dialog.inline(p.interest, '            ') + '\n          </div>\n        </div>\n      </div>\n    </section>\n';
 }
 
@@ -125,8 +125,8 @@ function ensureSitemap(c) {
 }
 
 const LLMS = {
-  fix: '- [Fix](' + site.baseUrl + '/fix): early access. We prepare and apply the technical changes the scan asks for (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after.\n',
-  beyond: '- [Beyond](' + site.baseUrl + '/beyond): early access. We write the market questions in your customers’ words, read your pages against them, and deliver briefs and drafts you approve, then re-measure monthly.\n'
+  fix: '- [Fix](' + site.baseUrl + '/fix): early access. We prepare and apply the technical changes the scan asks for (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after. Includes Citehound Pro.\n',
+  beyond: '- [Beyond](' + site.baseUrl + '/beyond): early access. We research the questions your customers ask, read your pages against them, write the content (new pages, FAQ and comparison blocks, rewrites; human-edited), you approve it, we publish or hand it over, and we re-measure every month. Includes Citehound Pro.\n'
 };
 function ensureLlms(key) {
   const file = path.join(ROOT, 'llms.txt');
@@ -162,6 +162,9 @@ function check() {
     if (/<dialog/.test(page)) bad(name + ' carries a dialog; the form is inline here');
     if (page.indexOf('<script src="/request-form.js?v=1" defer></script>') === -1) bad(name + ' does not load request-form.js');
     if (page.indexOf(lockup.html(p.tier, 'navy')) === -1) bad(name + ' has no ' + p.tier + ' lockup');
+    if ((page.match(/<span class="includes-pro includes-pro--navy">/g) || []).length < 2) bad(name + ' needs the "Includes Citehound PRO" badge in the hero and beside the form');
+    if (c.description.indexOf('Includes Citehound Pro.') === -1) bad(name + ': the meta description must say it includes Citehound Pro');
+    if (!c.faq.some((f) => f.q === 'Do I need to buy Pro separately?' && f.a === 'No. Fix and Beyond both include Citehound Pro.')) bad(name + ' has no "Do I need to buy Pro separately?" FAQ entry');
     if (c.faq[0].q !== WHY_Q || c.faq[0].a !== homeAnswer) bad(name + ': the first FAQ entry must be the homepage answer, word for word');
     if (!/<script type="application\/ld\+json">[\s\S]*"@type": "FAQPage"/.test(page)) bad(name + ' has no FAQPage JSON-LD');
     if (!/<link rel="canonical" href="https:\/\/getcitehound\.com\/(fix|beyond)" \/>/.test(page)) bad(name + ' has no canonical address');
@@ -169,6 +172,8 @@ function check() {
     if (p.key === 'beyond') {
       if ((page.match(/<figcaption class="bm-note">Illustration\. Not a real client\.<\/figcaption>/g) || []).length !== 3) bad(name + ': each of the three mockups needs the label "Illustration. Not a real client."');
       if (page.indexOf('Human-approved, automated.') === -1) bad(name + ' has no "Human-approved, automated" band');
+      if (page.indexOf('Draft for approval') === -1 || /Content brief/.test(page)) bad(name + ': the third mockup must be the draft for approval, not a content brief');
+      if (!/write the content/i.test(page) || page.indexOf('is agreed in the pilot') === -1) bad(name + ' must say we write the content and that the scope is agreed in the pilot');
     } else {
       if (!/case-study-figure__chart/.test(page) || page.indexOf('case-study-figure__note') === -1) bad(name + ' has no AgaOne component with its readiness note');
     }
