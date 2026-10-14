@@ -36,7 +36,9 @@
     var final = parseInt(el.getAttribute('data-count'), 10);
     if (isNaN(final) || final <= 0) return;
     var sign = el.getAttribute('data-sign') === '+' ? '+' : el.getAttribute('data-sign') === '-' ? '-' : '';
-    var t0 = null, dur = 900;
+    var t0 = null, dur = 900, finalText = sign + final;
+    // A timer (which still runs in a background tab) puts the real number back even if animation frames are paused, so a figure is never left at 0.
+    setTimeout(function () { el.textContent = finalText; }, dur + 1200);
     (function step(t) {
       if (t0 === null) t0 = t;
       var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
