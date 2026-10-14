@@ -161,14 +161,16 @@
       var body = el('textarea', { class: 'field ps-input', rows: '10', 'aria-label': 'Text (markdown)', maxlength: '20000' }); body.value = p.body;
       var statuses = d.adminStatuses.slice(); if (statuses.indexOf(p.status) === -1) statuses.push(p.status);
       var st = el('select', { class: 'field ps-input', 'aria-label': 'Status' }, statuses.map(function (s2) { var o = el('option', { value: s2, text: s2.replace('_', ' ') }); if (s2 === p.status) o.selected = true; if (s2 === 'approved') o.disabled = true; return o; }));
+      var qsel = el('select', { class: 'field ps-input wsa-qsel', multiple: 'multiple', size: String(Math.min(6, Math.max(2, d.questions.length))), 'aria-label': 'Questions this piece answers' }, d.questions.map(function (q) { var o = el('option', { value: q.id, text: q.id + ': ' + q.text }); if ((p.forIds || []).indexOf(q.id) !== -1) o.selected = true; return o; }));
+      var picked = function () { return Array.prototype.filter.call(qsel.options, function (o) { return o.selected; }).map(function (o) { return o.value; }); };
       var note = el('textarea', { class: 'field ps-input', rows: '2', maxlength: '1000', 'aria-label': 'Note to the client', placeholder: 'A note the client sees under this piece' });
       var cms = (p.comments || []).map(function (c) { return el('li', { class: 'wsa-cm wsa-cm--' + c.by }, [el('b', { text: (c.by === 'client' ? 'Client' : 'Citehound') + ' · ' + c.kind + ' · ' + fmt(c.at) }), c.text ? el('span', { text: ' ' + c.text }) : '']); });
       return el('div', { class: 'wsa-item' }, [
         el('p', { class: 'wsa-item__t' }, [el('b', { text: p.title }), ' · ' + p.status.replace('_', ' ') + ' · v' + p.version]),
         cms.length ? el('ul', { class: 'wsa-cms' }, cms) : '',
-        el('div', { class: 'wsa-item__row' }, [title, type]), body,
+        el('div', { class: 'wsa-item__row' }, [title, type]), body, el('p', { class: 'ps-note', text: 'Questions this piece answers (hold Ctrl or Cmd to pick several). A question is Covered once an approved or published piece answers it.' }), qsel,
         el('p', { class: 'ps-note', text: 'Markdown: **bold**, lists, `code`, [links](https://…). Raw HTML is shown as text. Editing an approved or published piece sends it back to review.' }),
-        el('p', {}, [el('button', { type: 'button', class: 'btn btn--ghost', text: 'Save text', on: { click: function () { call({ action: 'editPiece', id: id, cid: p.id, title: title.value, type: type.value, body: body.value }).then(saved(id)); } } }), ' ', st, ' ',
+        el('p', {}, [el('button', { type: 'button', class: 'btn btn--ghost', text: 'Save text', on: { click: function () { call({ action: 'editPiece', id: id, cid: p.id, title: title.value, type: type.value, body: body.value, questions: picked() }).then(saved(id)); } } }), ' ', st, ' ',
           el('button', { type: 'button', class: 'btn btn--ghost', text: 'Set status', on: { click: function () { call({ action: 'setPieceStatus', id: id, cid: p.id, status: st.value }).then(saved(id)); } } })]),
         note, el('p', {}, [el('button', { type: 'button', class: 'btn btn--ghost', text: 'Add note', on: { click: function () { call({ action: 'notePiece', id: id, cid: p.id, text: note.value }).then(saved(id)); } } }), ' ',
           el('button', { type: 'button', class: 'btn btn--ghost', text: 'Remove piece', on: { click: function () { call({ action: 'removePiece', id: id, cid: p.id }).then(saved(id)); } } })])]);
@@ -176,9 +178,10 @@
     var nTitle = el('input', { class: 'field ps-input', type: 'text', maxlength: '120', 'aria-label': 'New piece title', placeholder: 'Title of a new piece' });
     var nType = el('select', { class: 'field ps-input', 'aria-label': 'New piece type' }, d.types.map(function (t) { return el('option', { value: t, text: t }); }));
     var nBody = el('textarea', { class: 'field ps-input', rows: '6', maxlength: '20000', 'aria-label': 'New piece text (markdown)' });
+    var nQ = el('select', { class: 'field ps-input wsa-qsel', multiple: 'multiple', size: String(Math.min(6, Math.max(2, d.questions.length))), 'aria-label': 'Questions the new piece answers' }, d.questions.map(function (q) { return el('option', { value: q.id, text: q.id + ': ' + q.text }); }));
     var content = el('div', { class: 'wsa-block' }, [el('h3', { class: 'wsa-h', text: 'Content' })].concat(pieces, [
-      el('div', { class: 'wsa-add' }, [el('h3', { class: 'wsa-h', text: 'Add a piece' }), nTitle, nType, nBody,
-        el('button', { type: 'button', class: 'btn btn--ghost', text: 'Add as draft', on: { click: function () { call({ action: 'addPiece', id: id, title: nTitle.value, type: nType.value, body: nBody.value }).then(saved(id)); } } })])]));
+      el('div', { class: 'wsa-add' }, [el('h3', { class: 'wsa-h', text: 'Add a piece' }), nTitle, nType, nBody, nQ,
+        el('button', { type: 'button', class: 'btn btn--ghost', text: 'Add as draft', on: { click: function () { call({ action: 'addPiece', id: id, title: nTitle.value, type: nType.value, body: nBody.value, questions: Array.prototype.filter.call(nQ.options, function (o) { return o.selected; }).map(function (o) { return o.value; }) }).then(saved(id)); } } })])]));
 
     // Monthly
     var mo = d.months.map(function (x) {

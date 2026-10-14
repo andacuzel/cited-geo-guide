@@ -24,7 +24,7 @@ const dialog = require('../lib/request-dialog.js');
 const lockup = require('../lib/lockup.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 92;
+const CSS_VERSION = 93;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');

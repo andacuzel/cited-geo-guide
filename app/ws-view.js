@@ -125,7 +125,17 @@
     var o = e.target.closest ? e.target.closest('[data-open]') : null;
     if (o) { var id = o.getAttribute('data-open'); setTimeout(function () { openDrawer(id, o); }, 30); }
   });
-  if (drawer) drawer.addEventListener('click', function (e) { var c = e.target.closest ? e.target.closest('[data-close]') : null; if (c) closeDrawer(true); });
+  if (drawer) drawer.addEventListener('click', function (e) {
+    var c = e.target.closest ? e.target.closest('[data-close]') : null; if (c) { closeDrawer(true); return; }
+    var d = e.target.closest ? e.target.closest('[data-drawer]') : null;   // a link from one drawer to another (a gap to its piece)
+    if (d) openDrawer(d.getAttribute('data-drawer'), opener);
+  });
+  // A table row that opens the drawer is a button for the keyboard too.
+  root.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var tr = e.target.closest ? e.target.closest('tr[data-drawer]') : null;
+    if (tr && e.target === tr) { e.preventDefault(); openDrawer(tr.getAttribute('data-drawer'), tr); }
+  });
 
   /* ---------- filter chips and sortable headers ---------- */
   all('.wsf').forEach(function (group) {

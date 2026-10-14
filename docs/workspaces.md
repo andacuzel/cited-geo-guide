@@ -5,6 +5,15 @@ no login. It is built on what already exists: the free scan (`lib/scanner.js`, t
 the generators the MCP tools use (`lib/schema.js`, `lib/file-generators.js`) and the Pro report (`/r/<id>`), and it runs inside the one Pro function
 (`api/pro.js`, so the Hobby plan's function count does not change).
 
+## The dashboards (presentation, not behaviour)
+
+Both products use one app shell (`lib/ws-shell.js`: a navy sidebar with the lockup once, the domain, the sections with icons and counts, and a slim top bar with "Included:
+Citehound Pro"; no marketing footer), hand-built SVG chart helpers (`lib/ws-charts.js`: ring, line chart with tooltips, paired bars, donut, progress bar, pipeline, empty
+state) and one script (`app/ws-view.js`: sections by URL hash, a details drawer, filter chips, sortable headers, tooltips, first-view draw-in and count-up, Verify and
+the client's review). The finished state is always in the HTML; under `prefers-reduced-motion` nothing animates. On a demo every write control (Verify, Approve,
+Request changes) is shown disabled with the tooltip "Demo is read-only" and nothing binds it. A piece can say which questions it answers (`for`, set by an admin); a
+question is Covered, In progress or Gap from those links only, never from the wording.
+
 ## What a Fix workspace shows
 
 - **Overview**: the score of the first scan and of the latest, the change, the last scan date, how many checks pass, and the Fix list by status. These are
