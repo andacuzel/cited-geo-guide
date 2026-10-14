@@ -161,6 +161,9 @@ Constraints that must not be broken:
   "verified" only through a passing re-run of its check (`lib/ws-service.js` verify), never by hand; everything rendered is escaped and pasted text goes through
   `lib/ws-markdown.js`; a workspace holds no contact data; the demos are fictional (example-co.com, example-books.com), read-only, marked "Product demo · Sample data". In a Beyond workspace only the client's Approve sets "approved" (an admin cannot), published only follows approved, and a visitor has no other write button; the Monthly tab labels the citation check a pilot and invents no numbers. The robots.txt and
   llms.txt text comes from `lib/file-generators.js`, shared with the MCP tools: do not write a second builder. `node scripts/test-workspaces.js` is a gate.
+- **The product tour and the /fix and /beyond hero pictures are real screenshots** of the live sample report and the two demos, in `assets/tour/` (WebP, with width and height),
+  made by `scripts/capture-tour.js` (Playwright is not a dependency: see the script's header). Re-run it when one of those pages changes its layout, never to change
+  the demo data. The tour's label is "Product demo · Sample data"; show only screens that exist, and no multi-engine visibility tiles or invented metrics.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

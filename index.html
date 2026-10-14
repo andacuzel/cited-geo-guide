@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=90" />
+  <link rel="stylesheet" href="styles.css?v=91" />
 
   <script type="application/ld+json">
   {
@@ -354,6 +354,36 @@
               <p class="ladder-card__cta"><a class="btn btn--gold" href="/beyond">See Beyond</a></p>
             </li>
           </ul>
+        </div>
+      </section>
+
+      <!-- ---------- Product tour: real screenshots of the sample report and the two demos (scripts/capture-tour.js) ---------- -->
+      <section class="tour hp-light" id="tour" aria-labelledby="tour-heading">
+        <div class="section__inner">
+          <div class="section-head">
+            <p class="kicker">Inside Citehound</p>
+            <h2 id="tour-heading" class="section-title">The screens you would work in.</h2>
+          </div>
+          <div class="tour__box" id="tourBox">
+            <div class="tour__tabs" role="tablist" aria-label="Product screens"><button type="button" class="tour__tab is-active" role="tab" id="tourTab-pro" aria-controls="tour-pro" aria-selected="true">Pro report</button><button type="button" class="tour__tab" role="tab" id="tourTab-fix" aria-controls="tour-fix" aria-selected="false" tabindex="-1">Fix</button><button type="button" class="tour__tab" role="tab" id="tourTab-beyond" aria-controls="tour-beyond" aria-selected="false" tabindex="-1">Beyond</button></div>
+            <div class="tour__panels">
+              <div class="tour__panel is-active" id="tour-pro" role="tabpanel" aria-labelledby="tourTab-pro">
+                <figure class="bframe"><div class="bframe__bar" aria-hidden="true"><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__url">getcitehound.com/sample-report</span></div><img class="bframe__img" src="/assets/tour/pro-report.webp" width="1800" height="1200" loading="lazy" decoding="async" alt="The sample Pro report: a navy banner saying it is a real crawl of getcitehound.com, then the site-wide score before and after and a table of checks." /></figure>
+                <p class="tour__cap">Every page scored, every failed check listed. This is a real crawl of our own site.</p>
+                <p class="tour__meta"><span class="tour__label">Product demo &middot; Sample data</span><a class="tour__link" href="/sample-report">Open the live demo</a></p>
+              </div>
+              <div class="tour__panel" id="tour-fix" role="tabpanel" aria-labelledby="tourTab-fix">
+                <figure class="bframe"><div class="bframe__bar" aria-hidden="true"><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__url">getcitehound.com/demo/fix</span></div><img class="bframe__img" src="/assets/tour/fix.webp" width="1800" height="1200" loading="lazy" decoding="async" alt="The Fix workspace demo for the fictional example-co.com: score before 39 and now 87, checks passing, and the fix list by status." /></figure>
+                <p class="tour__cap">Before and after scores, and a fix list where Verify re-runs the check.</p>
+                <p class="tour__meta"><span class="tour__label">Product demo &middot; Sample data</span><a class="tour__link" href="/demo/fix">Open the live demo</a></p>
+              </div>
+              <div class="tour__panel" id="tour-beyond" role="tabpanel" aria-labelledby="tourTab-beyond">
+                <figure class="bframe"><div class="bframe__bar" aria-hidden="true"><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__url">getcitehound.com/demo/beyond</span></div><img class="bframe__img" src="/assets/tour/beyond.webp" width="1800" height="1200" loading="lazy" decoding="async" alt="The Beyond workspace demo for the fictional example-books.com: questions, gaps, and content pieces with their status and comments." /></figure>
+                <p class="tour__cap">Questions, gaps and the pieces we write, each waiting for your approval.</p>
+                <p class="tour__meta"><span class="tour__label">Product demo &middot; Sample data</span><a class="tour__link" href="/demo/beyond">Open the live demo</a></p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

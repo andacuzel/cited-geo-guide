@@ -4,6 +4,7 @@
    - The four ladder cards fade and slide in 80 ms apart, and the gold connectors between them draw in (styles.css, ".ladder-grid.is-armed").
    - The benchmark average (73/100) counts up once when it scrolls into view.
    - The two lines of the AgaOne before/after chart draw in, then their end points and values fade in.
+   - The product tour (#tourBox): three tabs (Pro report, Fix, Beyond), one real screenshot at a time, keyboard arrows move between tabs.
    - The Pro showcase slider (#showcaseGrid) crossfades two slides, auto-advances every 7 s, pauses on hover and focus, stops once a dot is used, and never advances under reduced motion.
    - The sample Pro report opens larger in a dialog when clicked (a copy of the figure; this one needs no motion, so it always runs).
 
@@ -42,6 +43,27 @@
       if (e.target !== dlg) return;
       var r = dlg.getBoundingClientRect();
       if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+    });
+  }
+
+  // ---- the product tour: three tabs, one screenshot at a time (without this script all three are shown in a column)
+  var tour = $('#tourBox');
+  if (tour) {
+    var ttabs = Array.prototype.slice.call(tour.querySelectorAll('.tour__tab')), tpanels = Array.prototype.slice.call(tour.querySelectorAll('.tour__panel'));
+    var tgo = function (i, focus) {
+      ttabs.forEach(function (b, k) { b.classList.toggle('is-active', k === i); b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.tabIndex = k === i ? 0 : -1; });
+      tpanels.forEach(function (p, k) { p.classList.toggle('is-active', k === i); });
+      if (focus) ttabs[i].focus();
+    };
+    tour.classList.add('tour--js');
+    document.getElementById('tour').classList.add('tour--js');
+    ttabs.forEach(function (b, k) { b.addEventListener('click', function () { tgo(k); }); });
+    tour.querySelector('.tour__tabs').addEventListener('keydown', function (e) {
+      var cur = ttabs.indexOf(document.activeElement);
+      if (cur === -1) return;
+      var to = e.key === 'ArrowRight' ? (cur + 1) % ttabs.length : e.key === 'ArrowLeft' ? (cur - 1 + ttabs.length) % ttabs.length : e.key === 'Home' ? 0 : e.key === 'End' ? ttabs.length - 1 : null;
+      if (to === null) return;
+      e.preventDefault(); tgo(to, true);
     });
   }
 

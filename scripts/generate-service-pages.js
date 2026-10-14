@@ -24,7 +24,7 @@ const dialog = require('../lib/request-dialog.js');
 const lockup = require('../lib/lockup.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 90;
+const CSS_VERSION = 91;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -39,6 +39,18 @@ function head(kicker, id, title) {
   return '      <div class="section-head">\n        <p class="kicker">' + esc(kicker) + '</p>\n        <h2 id="' + id + '" class="section-title">' + esc(title) + '</h2>\n      </div>\n';
 }
 
+// The hero picture: the live demo's own screenshot (scripts/capture-tour.js) in a browser frame, with the demo label and a link to the demo.
+const SHOT = {
+  fix: { img: 'fix-hero', url: 'getcitehound.com/demo/fix', href: '/demo/fix', alt: 'The Fix workspace demo for the fictional example-co.com: score before 39 and now 87, checks passing, and the fix list by status.' },
+  beyond: { img: 'beyond-hero', url: 'getcitehound.com/demo/beyond', href: '/demo/beyond', alt: 'The Beyond workspace demo for the fictional example-books.com: questions, gaps, and content pieces with their status and comments.' }
+};
+function shot(p) {
+  const s = SHOT[p.key];
+  return '          <figure class="svc-shot">\n            <div class="bframe"><div class="bframe__bar" aria-hidden="true"><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__dot"></span><span class="bframe__url">' + s.url + '</span></div>' +
+    '<img class="bframe__img" src="/assets/tour/' + s.img + '.webp" width="960" height="640" decoding="async" fetchpriority="high" alt="' + esc(s.alt) + '" /></div>\n' +
+    '            <figcaption class="svc-shot__cap"><span class="svc-shot__label">Product demo &middot; Sample data</span><a class="svc-shot__link" href="' + s.href + '">Open the live demo</a></figcaption>\n          </figure>\n';
+}
+
 function hero(p, c) {
   return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner svc-banner">\n          <div class="page-banner__body">\n' +
     '            <p class="page-lockup">' + lockup.html(p.tier, 'navy') + '</p>\n' +
@@ -46,7 +58,7 @@ function hero(p, c) {
     '            <p class="page-banner__desc">' + esc(c.sub) + '</p>\n' +
     '            <p class="svc-includes">' + lockup.includes('navy') + '</p>\n' +
     '            <div class="pro-actions"><button type="button" class="btn btn--gold" data-request="' + p.interest + '">' + esc(c.cta) + '</button><a href="#how" class="btn btn--ghost-on-navy">How it works</a></div>\n' +
-    '          </div>\n          <span class="page-banner__icon" aria-hidden="true">' + icons.svg(p.bannerIcon, {}) + '</span>\n        </div>\n      </div>\n    </section>\n';
+    '          </div>\n' + shot(p, c) + '        </div>\n      </div>\n    </section>\n';
 }
 
 function steps(c) {
@@ -162,6 +174,7 @@ function check() {
     if (/<dialog/.test(page)) bad(name + ' carries a dialog; the form is inline here');
     if (page.indexOf('<script src="/request-form.js?v=1" defer></script>') === -1) bad(name + ' does not load request-form.js');
     if (page.indexOf(lockup.html(p.tier, 'navy')) === -1) bad(name + ' has no ' + p.tier + ' lockup');
+    if (page.indexOf('src="/assets/tour/' + SHOT[p.key].img + '.webp" width="960" height="640"') === -1 || page.indexOf('Product demo &middot; Sample data') === -1 || !fs.existsSync(path.join(ROOT, 'assets', 'tour', SHOT[p.key].img + '.webp'))) bad(name + ' needs its hero screenshot (assets/tour/' + SHOT[p.key].img + '.webp), labelled "Product demo · Sample data"');
     if ((page.match(/<span class="includes-pro includes-pro--navy">/g) || []).length < 2) bad(name + ' needs the "Includes Citehound PRO" badge in the hero and beside the form');
     if (c.description.indexOf('Includes Citehound Pro.') === -1) bad(name + ': the meta description must say it includes Citehound Pro');
     if (!c.faq.some((f) => f.q === 'Do I need to buy Pro separately?' && f.a === 'No. Fix and Beyond both include Citehound Pro.')) bad(name + ' has no "Do I need to buy Pro separately?" FAQ entry');

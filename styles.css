@@ -4890,3 +4890,34 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .wsa-cms { list-style: none; margin: 0 0 10px; padding: 0; font-size: 13px; }
 .wsa-cm--client b { color: var(--gold-deep); }
 @media (max-width: 800px) { .wsa-gap { grid-template-columns: minmax(0, 1fr); } }
+
+/* ----------------------------- Product tour (homepage) and the framed screenshots (also in the /fix and /beyond heroes) ----------------------------- */
+
+.bframe { margin: 0; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.bframe__bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: var(--navy-950); }
+.bframe__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--navy-800); flex: none; }
+.bframe__url { margin-left: 10px; padding: 3px 10px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: var(--navy-900); border-radius: 4px; font-family: var(--font-mono); font-size: 12px; color: rgba(255, 255, 255, 0.8); }
+.bframe__img { display: block; width: 100%; height: auto; }
+.tour__box { max-width: 980px; }
+.tour__tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.tour__tab { min-height: 44px; padding: 10px 18px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--white); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; transition: color var(--t), border-color var(--t), background var(--t); }
+.tour__tab:hover { color: var(--ink); border-color: var(--ink); }
+.tour__tab.is-active { background: var(--navy-950); border-color: var(--navy-950); color: var(--white); }
+.tour__tab:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.tour__panel + .tour__panel { margin-top: 40px; }
+.tour--js .tour__panel { display: none; }
+.tour--js .tour__panel.is-active { display: block; animation: tour-in 300ms ease; }
+@keyframes tour-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .tour--js .tour__panel.is-active { animation: none; } }
+.tour__cap { margin-top: 16px; font-size: 17px; line-height: 1.5; color: var(--ink); max-width: 720px; }
+.tour__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-top: 10px; }
+.tour__label { padding: 3px 9px; border: 1px solid var(--gold); border-radius: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
+.tour__link { font-size: 15px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+@media (max-width: 640px) { .tour__tab { flex: 1 1 auto; padding: 10px 12px; } .bframe__bar { padding: 8px 10px; } .bframe__url { font-size: 11px; } }
+
+.svc-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 36px; align-items: center; }
+.svc-shot { margin: 0; position: relative; z-index: 1; }
+.svc-shot__cap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 10px; }
+.svc-shot__label { padding: 3px 9px; border: 1px solid var(--gold); border-radius: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-soft); }
+.svc-shot__link { font-size: 14px; color: var(--white); text-decoration: underline; text-decoration-color: var(--gold-soft); text-underline-offset: 3px; }
+@media (max-width: 900px) { .svc-banner { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
