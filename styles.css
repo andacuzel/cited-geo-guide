@@ -4629,3 +4629,49 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .bt-lead { max-width: 720px; margin-bottom: 32px; font-size: 18px; line-height: 1.55; color: var(--ink); }
 .bt-back { margin-top: 6px; font-size: 14px; line-height: 1.5; }
 .bt-back a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
+/* ----------------------------- Homepage spacing scale (14 Oct 2026) -----------------------------
+   One scale for every homepage section: --sp-section between sections, --sp-head from a heading to its content.
+   .hp-light sections carry space above only; .hp-band sections (navy or white bands) carry their own padding above and below and
+   sit flush against another band. So two neighbours never add their paddings together, and nothing is left over from a removed block. */
+:root { --sp-section: 88px; --sp-head: 32px; }
+@media (max-width: 640px) { :root { --sp-section: 56px; --sp-head: 24px; } }
+.hp-light { padding: var(--sp-section) 0 0; margin: 0; }
+.hp-band { padding: var(--sp-section) 0; margin: var(--sp-section) 0 0; min-height: 0; }
+.hp-band + .hp-band { margin-top: 0; }
+.hp-light .section-head, .hp-band .section-head { margin-bottom: var(--sp-head); }
+.home-close.hp-light { padding-bottom: var(--sp-section); }
+.ladder.hp-light { padding-top: 56px; }
+.band-white.hp-band { margin-bottom: 0; }
+
+/* Research, with the benchmark strip inside it (one section, one heading) */
+.research-strip .benchmark-strip { margin-top: 40px; padding: 40px 0 0; border-top: 1px solid var(--line); }
+.research-strip .benchmark-strip .section__inner { max-width: none; padding: 0; }
+.research-strip .research-strip__list--small { margin-top: 40px; }
+
+/* Pro showcase: one fixed square box for both slides, so the block never changes height */
+.showcase.hp-band { padding: 64px 0; }
+.showcase__grid { gap: 48px; }
+.showcase__slider { width: 100%; max-width: 480px; justify-self: center; }
+.showcase__slides { aspect-ratio: 1 / 1; }
+.showcase__slide { height: 100%; align-items: stretch; }
+.showcase__slide > .preview-stage, .showcase__slide > .preview-gold { height: 100%; }
+.showcase__slide .preview-stage .pro-shot { height: 100%; box-shadow: none; }
+.showcase__slide .preview-stage .pro-shot__view { height: 100%; max-height: none; }
+.showcase__slide .pro-shot > div[role="img"] { -webkit-mask-image: url(/assets/ui/fade-bottom.png); mask-image: url(/assets/ui/fade-bottom.png); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.showcase__dots { margin-top: 6px; }
+.showcase .preview-gold { display: flex; flex-direction: column; padding: 18px 18px 14px; }
+.showcase .preview-gold .teaser__scene-wrap { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.showcase .preview-gold .scene { gap: 10px 12px; }
+.showcase .preview-gold .sq { padding: 9px 11px; }
+.showcase .preview-gold .sq__text { margin-bottom: 7px; font-size: 13px; line-height: 1.3; }
+.showcase .preview-gold .sq__chip { padding: 3px 9px 3px 8px; font-size: 12px; }
+.showcase .preview-gold .sq__mark { width: 10px; height: 10px; }
+.showcase .preview-gold .sq--2 { margin-top: 26px; }
+.showcase .preview-gold .sq--3 { margin-top: 12px; }
+.showcase .preview-gold .sq--5 { margin-top: 2px; }
+.showcase .preview-gold .sq--6 { margin-top: 16px; }
+.showcase .preview-gold .teaser__caption { margin-top: auto; padding-top: 10px; font-size: 11px; }
+@media (max-width: 900px) { .showcase__slider { justify-self: center; } }
+@media (max-width: 640px) { .showcase.hp-band { padding: 48px 0; } .showcase .preview-gold .sq__text { font-size: 12px; } }
+.showcase .preview-gold .scene { flex: 1; align-content: space-around; }
