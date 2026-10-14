@@ -24,7 +24,7 @@
     });
   });
 
-  if (!dlg || !form) return;
+  if (!form) return;   // no form on this page. With no dialog the form is inline (/fix, /beyond) and the buttons scroll to it.
 
   var TEXT = {
     fix: { kicker: 'Early access · Fix', title: 'Request a Fix quote', lede: 'Leave your email and the site. We reply with a quote.' },
@@ -63,23 +63,24 @@
   }
 
   function open(kind, website) {
-    var done = dlg.querySelector('.wl-done'); if (done) done.parentNode.removeChild(done);
+    var done = (dlg || form.parentNode).querySelector('.wl-done'); if (done) done.parentNode.removeChild(done);
     form.hidden = false;
     clearErrors();
     $(kind === 'beyond' ? 'reqBeyond' : 'reqFix').checked = true;
     if (website) $('reqWebsite').value = website; else if (!$('reqWebsite').value && lastDomain) $('reqWebsite').value = lastDomain;
     paint();
+    if (!dlg) { form.scrollIntoView({ block: 'center' }); fields.email.input.focus({ preventScroll: true }); return; }
     if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
     fields.email.input.focus();
   }
-  function close() { if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open'); }
+  function close() { if (!dlg) return; if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open'); }
 
   Array.prototype.forEach.call(document.querySelectorAll('[data-request]'), function (b) {
     b.addEventListener('click', function () { open(b.getAttribute('data-request'), b.closest('#scoreFix') ? lastDomain : ''); });
   });
-  $('reqClose').addEventListener('click', close);
+  if ($('reqClose')) $('reqClose').addEventListener('click', close);
   // A click on the backdrop (the dialog element itself, outside its content box) closes it.
-  dlg.addEventListener('click', function (e) {
+  if (dlg) dlg.addEventListener('click', function (e) {
     if (e.target !== dlg) return;
     var r = dlg.getBoundingClientRect();
     if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();

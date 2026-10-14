@@ -30,6 +30,6 @@
 ## About
 
 - [Fix](https://getcitehound.com/fix): early access. We prepare and apply the technical changes the scan asks for (schema, robots.txt, llms.txt, sitemap, titles and descriptions), rescan, and show the before and after.
-- [Beyond](https://getcitehound.com/beyond): early access. What the score cannot see, what we know and what we do not, and how a content review works. We do not promise citations.
+- [Beyond](https://getcitehound.com/beyond): early access. We write the market questions in your customers’ words, read your pages against them, and deliver briefs and drafts you approve, then re-measure monthly.
 - [About](https://getcitehound.com/about): who built Citehound and why.
 - [Pro](https://getcitehound.com/pro): a full-site crawl, with the whole-site score beside the homepage score, every page listed with what failed, every fix once, an estimated score if the fixes are applied and a printable report. A real sample of our own site is at /sample-report.
