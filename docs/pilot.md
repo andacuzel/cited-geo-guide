@@ -118,7 +118,7 @@ which way it is. An order whose label starts with `e2e` or `smoke` never starts 
 People join on the Pro page, tick "Tell me when Citehound Pro opens", and get one confirmation email. To get the list:
 
 ```bash
-node scripts/export-waitlist.js > waitlist.csv
+node scripts/export-waitlist.js > waitlist.csv   # both lists; the `source` column says pro-waitlist or readiness-report
 ```
 
 The file has personal data. Keep it out of the repository (files named `waitlist*.csv` are ignored by git, but do not rename it), and do not

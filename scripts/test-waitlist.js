@@ -268,7 +268,7 @@ const idOf = (e) => Waitlist.idOf(e);
     t('list: oldest first, expired entries dropped (and cleaned from the index)', rows.length === 2 && rows[0].email === 'a@example.org' && rows[1].email === 'b@example.org' && (await adapter.scard('wl:index')) === 2);
     const exp = require('./export-waitlist.js');
     const csv = exp.toCsv([{ email: 'x,y"z@example.org', name: '=SUM(1)', createdAt: '2026-10-10T00:00:00.000Z', consentVersion: 'v1' }]);
-    t('export: CSV with a header row, quotes doubled, and a leading = + - @ neutralized', csv.split('\n')[0] === 'email,name,createdAt,consentVersion,interest,website,note' && csv.indexOf('"x,y""z@example.org"') !== -1 && csv.indexOf("'=SUM(1)") !== -1, csv);
+    t('export: CSV with a header row, quotes doubled, and a leading = + - @ neutralized', csv.split('\n')[0] === 'email,name,createdAt,consentVersion,interest,website,note,source,updates' && csv.indexOf('"x,y""z@example.org"') !== -1 && csv.indexOf("'=SUM(1)") !== -1, csv);
   }
 
   /* ---- feedback on a report ---- */
