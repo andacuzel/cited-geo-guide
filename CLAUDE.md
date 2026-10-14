@@ -155,6 +155,12 @@ Constraints that must not be broken:
   The same file counts the benchmark average up and draws the AgaOne chart lines. All of it is skipped under `prefers-reduced-motion`; the figures are in the HTML.
   The sample Pro report (the `band-explorer` crop) and the citation scatter sit in a preview strip under the ladder, the MCP conversation types in beside the
   developer row; click on the report opens it larger. No other card may lift or slide.
+- **Project workspaces (Fix now, Beyond next).** Bearer-link pages `/w/<32 hex>` and the public demo `/demo/fix`, in the one Pro function (`lib/ws-*.js`, routes in
+  `lib/ws-api.js`, `docs/workspaces.md`); the admin is `/admin/ws` and `scripts/ws-admin.js`. Hard rules: the admin is behind `ADMIN_TOKEN` and **every admin
+  route is a 404 while it is unset or under 16 characters**; the token is compared in constant time, never logged, echoed or put in a cookie; a Fix item becomes
+  "verified" only through a passing re-run of its check (`lib/ws-service.js` verify), never by hand; everything rendered is escaped and pasted text goes through
+  `lib/ws-markdown.js`; a workspace holds no contact data; the demo is fictional (example-co.com), read-only, marked "Product demo · Sample data". The robots.txt and
+  llms.txt text comes from `lib/file-generators.js`, shared with the MCP tools: do not write a second builder. `node scripts/test-workspaces.js` is a gate.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

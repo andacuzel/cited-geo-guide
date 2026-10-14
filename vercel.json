@@ -53,6 +53,24 @@
       ]
     },
     {
+      "source": "/(w|demo)/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Content-Security-Policy", "value": "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" }
+      ]
+    },
+    {
+      "source": "/admin/ws",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Content-Security-Policy", "value": "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" }
+      ]
+    },
+    {
       "source": "/pro/welcome",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
@@ -101,6 +119,10 @@
   ],
   "rewrites": [
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
+    { "source": "/admin/ws", "destination": "/api/pro?a=wsadmin" },
+    { "source": "/demo/fix", "destination": "/api/pro?a=demofix" },
+    { "source": "/w/:id([0-9a-f]{32})", "destination": "/api/pro?a=ws&id=:id" },
+    { "source": "/w/:id([0-9a-f]{32})/", "destination": "/api/pro?a=ws&id=:id" },
     { "source": "/pro/start/:token", "destination": "/api/pro?a=startpage&token=:token" },
     { "source": "/api/waitlist", "destination": "/api/pro?a=waitlist" },
     { "source": "/pro/welcome", "destination": "/api/pro?a=welcomepage" },
@@ -108,7 +130,7 @@
     { "source": "/api/readiness", "destination": "/api/pro?a=readiness" },
     { "source": "/readiness/download/:token([0-9a-f]{72})", "destination": "/api/pro?a=readinessget&token=:token" },
     { "source": "/readiness/remove/:token", "destination": "/api/pro?a=readinessremove&token=:token" },
-    { "source": "/api/pro/:action(start|order|step|status|email|feedback|webhook|welcome)", "destination": "/api/pro?a=:action" },
+    { "source": "/api/pro/:action(start|order|step|status|email|feedback|webhook|welcome|wsverify|wsadminlogin|wsadminapi)", "destination": "/api/pro?a=:action" },
     { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
     { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }
   ]

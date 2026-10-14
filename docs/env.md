@@ -16,6 +16,12 @@ keys below should be set there unless you test with them). *Local* = `.env.local
 | `PRO_HASH_SECRET` | HMAC secret for rate-limit caller ids and waitlist ids and removal links. 16 characters or more. | Production only (never Local: it would let a local script forge removal links) | Yes | Every Pro endpoint answers 503 ("not available"); the log names the variable. No fallback. | Verified |
 | `WAITLIST_EMAIL_DAILY_CAP` | Most waitlist confirmation emails a day | Production | No | 200 | Default |
 
+## Project workspaces and their admin
+
+| Variable | What it does | Set in | Required | If missing | Status |
+|---|---|---|---|---|---|
+| `ADMIN_TOKEN` | The one credential of the workspace admin (`/admin/ws`). 16 characters or more; use a long random string (`openssl rand -hex 24`). Never put it in the repository, a URL or a chat. | Production only (Local only if you run the dev server with the admin) | To use the admin | **Every `/admin/ws` route answers 404 and renders nothing** (the page, the sign-in and the API). Workspaces themselves, and the demo, work without it. | Not set yet |
+
 ## Email (Resend)
 
 | Variable | What it does | Set in | Required | If missing | Status |

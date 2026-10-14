@@ -103,6 +103,7 @@ const scanner = require('../lib/scanner');
 const schemaLib = require('../lib/schema');
 const playbooks = require('../lib/playbooks');
 const CRAWLERS = require('../lib/crawlers');
+const fileGenerators = require('../lib/file-generators');
 const citation = require('../lib/citation-content');
 
 const SUPPORTED_PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26'];
@@ -628,25 +629,9 @@ var HANDLERS = {
       return { isError: true, text: 'Nothing to generate: provide at least one crawler in "allow" or "block", or a "sitemap_url".' };
     }
 
-    var lines = [];
-    CRAWLERS.forEach(function (c) {
-      if (allow.indexOf(c.ua) !== -1) {
-        lines.push('User-agent: ' + c.ua);
-        lines.push('Allow: /');
-        lines.push('');
-      } else if (block.indexOf(c.ua) !== -1) {
-        lines.push('User-agent: ' + c.ua);
-        lines.push('Disallow: /');
-        lines.push('');
-      }
-    });
-    if (sitemapUrl) {
-      lines.push('Sitemap: ' + sitemapUrl);
-    } else if (lines[lines.length - 1] === '') {
-      lines.pop();
-    }
+    var body = fileGenerators.robotsTxt(CRAWLERS, allow, block, sitemapUrl);
 
-    return { isError: false, text: 'robots.txt — paste this at your site root (e.g. https://yoursite.com/robots.txt):\n\n' + lines.join('\n') };
+    return { isError: false, text: 'robots.txt — paste this at your site root (e.g. https://yoursite.com/robots.txt):\n\n' + body };
   },
 
   generate_llms_txt: async function (args) {
@@ -667,16 +652,9 @@ var HANDLERS = {
       return { isError: true, text: '"key_pages" entries at index ' + badIndexes.join(', ') + ' are missing a "url" or "description" — each entry needs both.' };
     }
 
-    var lines = ['# ' + name, '', '> ' + description];
-    if (keyPages.length > 0) {
-      lines.push('');
-      lines.push('## Pages');
-      keyPages.forEach(function (p) {
-        lines.push('- [' + p.description.trim() + '](' + p.url.trim() + ')');
-      });
-    }
+    var body = fileGenerators.llmsTxt(name, description, keyPages);
 
-    return { isError: false, text: 'llms.txt — paste this at your site root (e.g. https://yoursite.com/llms.txt):\n\n' + lines.join('\n') };
+    return { isError: false, text: 'llms.txt — paste this at your site root (e.g. https://yoursite.com/llms.txt):\n\n' + body };
   },
 
   get_playbook: async function (args) {

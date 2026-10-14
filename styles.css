@@ -4761,3 +4761,87 @@ html:has(.pr-report) { scroll-behavior: auto; scroll-padding-top: 0; }
 .bm-draft { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
 .bm-draft__title { font-family: var(--font-display); font-size: 18px; line-height: 1.25; color: var(--navy-950); }
 .bm-draft__text { margin-top: 8px; font-size: 14px; line-height: 1.5; color: var(--ink); }
+
+/* ----------------------------- Project workspaces (/w/<id>, /demo/fix) and the admin (/admin/ws): lib/ws-render.js, app/ws-view.js, app/ws-admin.js ----------------------------- */
+
+.ws-ribbon { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding: 10px 24px; background: var(--gold); color: var(--navy-950); font-size: 14px; line-height: 1.4; }
+.ws-ribbon b { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+.ws { padding: 40px 0 88px; }
+.ws__inner { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+.ws-head__lockup { margin: 0 0 14px; }
+.ws-head__title { font-size: clamp(28px, 4vw, 40px); line-height: 1.12; overflow-wrap: anywhere; }
+.ws-head__sub { margin-top: 8px; font-size: 15px; color: var(--ink-soft); }
+.ws-tabs { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 28px 0 24px; border-bottom: 1px solid var(--line); }
+.ws-tabs a { padding: 12px 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color var(--t), border-color var(--t); }
+.ws-tabs a:hover { color: var(--ink); }
+.ws-tabs a[aria-current="true"] { color: var(--navy-950); border-bottom-color: var(--gold); }
+.ws--js .ws-panel[hidden] { display: none; }
+.ws-panel { margin-bottom: 40px; }
+.ws--js .ws-panel { margin-bottom: 0; }
+.ws-h { font-size: 24px; line-height: 1.2; margin-bottom: 14px; }
+.ws-lede { max-width: 640px; margin-bottom: 20px; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+.ws-note { margin-top: 20px; max-width: 640px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.ws-empty { padding: 20px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink-soft); }
+.ws-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.ws-stat { padding: 18px 20px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.ws-stat__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
+.ws-stat__big { margin-top: 8px; font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--navy-950); }
+.ws-stat__big small { font-size: 0.4em; color: var(--ink-faint); margin-left: 2px; }
+.ws-stat__small { margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
+.ws-counts { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.ws-counts li { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; }
+.ws-chip { display: inline-block; padding: 3px 9px; border: 1px solid var(--line); border-radius: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); background: var(--white); white-space: nowrap; }
+.ws-chip--in_progress { border-color: var(--gold); color: var(--gold-deep); }
+.ws-chip--applied { border-color: var(--navy-800); color: var(--navy-800); }
+.ws-chip--verified { border-color: var(--ok); background: var(--ok-tint); color: var(--ok); }
+.ws-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.ws-item { padding: 18px 20px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.ws-item[data-status="verified"] { background: var(--bg); }
+.ws-item__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; }
+.ws-item__title { font-size: 19px; line-height: 1.25; }
+.ws-item__meta { margin-top: 4px; font-size: 13px; color: var(--ink-soft); }
+.ws-item__advice { margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+.ws-item__why { margin-top: 6px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.ws-item__note { margin-top: 12px; padding: 10px 14px; border-left: 3px solid var(--gold); background: var(--bg); font-size: 14px; line-height: 1.5; }
+.ws-md p { margin: 0 0 8px; } .ws-md p:last-child { margin-bottom: 0; }
+.ws-md ul, .ws-md ol { margin: 0 0 8px; padding-left: 20px; }
+.ws-md code { font-family: var(--font-mono); font-size: 0.92em; background: var(--white); padding: 1px 5px; border-radius: 4px; }
+.ws-md h4, .ws-md h5, .ws-md h6 { margin: 8px 0 4px; font-size: 15px; }
+.ws-md a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.ws-item__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 12px; }
+.ws-item__actions:empty { display: none; }
+.ws-link { font-size: 14px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.ws-verify__out { font-size: 14px; color: var(--ink-soft); }
+.ws-file { margin-bottom: 24px; }
+.ws-file__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; }
+.ws-file__title { font-size: 19px; }
+.ws-file__where { margin: 6px 0 10px; font-size: 14px; color: var(--ink-soft); }
+.ws-pre { margin: 0; padding: 16px; max-height: 360px; overflow: auto; background: var(--navy-950); color: var(--white); border-radius: var(--radius); font-family: var(--font-mono); font-size: 13px; line-height: 1.55; white-space: pre; }
+.ws-pre:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.ws-tl { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ws-tl__row { display: grid; grid-template-columns: 110px 130px 90px 110px 1fr; gap: 6px 14px; align-items: baseline; padding: 12px 16px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); font-size: 15px; }
+.ws-tl__date, .ws-tl__fail { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+.ws-tl__score { font-family: var(--font-display); font-size: 20px; color: var(--navy-950); }
+.ws-included { margin-left: 8px; padding: 3px 9px; border: 1px solid var(--gold); border-radius: 4px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep); vertical-align: middle; }
+@media (max-width: 800px) {
+  .ws { padding: 28px 0 64px; }
+  .ws-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ws-tl__row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) { .ws__inner { padding: 0 16px; } .ws-stats { grid-template-columns: minmax(0, 1fr); } .ws-tabs a { padding: 10px 10px; } }
+
+.wsa-top { text-align: right; margin: 0 0 8px; }
+.wsa-msg { min-height: 1.5em; margin: 0 0 12px; font-size: 15px; color: var(--ink-soft); }
+.wsa-msg--bad { color: var(--risk); }
+.wsa-create { display: grid; gap: 8px; max-width: 520px; margin-bottom: 24px; }
+.wsa-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.wsa-table th { padding: 8px 10px 8px 0; text-align: left; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--line); }
+.wsa-table td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line); vertical-align: middle; overflow-wrap: anywhere; }
+.wsa-head { margin-bottom: 14px; }
+.wsa-h { font-size: 22px; margin: 18px 0 10px; }
+.wsa-pro { display: grid; gap: 8px; max-width: 520px; margin: 18px 0; }
+.wsa-item { padding: 14px 16px; margin-bottom: 12px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.wsa-item__t { margin-bottom: 8px; font-size: 15px; }
+.wsa-item__row { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 10px; align-items: start; }
+.wsa-add { display: grid; gap: 8px; max-width: 520px; margin-top: 24px; }
+@media (max-width: 640px) { .wsa-item__row { grid-template-columns: minmax(0, 1fr); } }

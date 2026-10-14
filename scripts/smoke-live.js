@@ -246,6 +246,15 @@ async function waitForDeployment(sha) {
   }
   const home2 = await get('/');
   t('the homepage carries the new title, the four-step ladder (lockups Citehound FREE, PRO, FIX, BEYOND), the Fix/Beyond form and the one FAQ answer about promises, and none of the retired bands', /<title>Citehound: See how AI reads your site\. Then fix it\.<\/title>/.test(home2.text) && ['FREE', 'PRO', 'FIX', 'BEYOND'].every((n) => new RegExp('<h3 class="ladder-card__name"><span class="lockup [^"]*">[\\s\\S]*?<span class="lockup__tag">' + n + '</span>').test(home2.text)) && /id="reqDialog"/.test(home2.text) && /If nobody can promise a citation, why pay\?/.test(home2.text) && (home2.text.match(/No one can guarantee what an assistant says/g) || []).length === 2 && !/<section class="(?:bt-sec|mcp-band|pro-mkt|home-tail)|id="citation"/.test(home2.text));
+  // Project workspaces: the public demo, the bearer link's generic 404, and the admin that must show nothing without its token.
+  const demoFix = await get('/demo/fix');
+  t('/demo/fix is 200 with the "Product demo · Sample data" ribbon, noindex, no referrer, and no Verify button', demoFix.status === 200 && /Product demo &middot; Sample data/.test(demoFix.text) && /example-co\.com/.test(demoFix.text) && /noindex/.test(demoFix.headers.get('x-robots-tag') || '') && (demoFix.headers.get('referrer-policy') || '') === 'no-referrer' && !/class="btn btn--ghost ws-verify"/.test(demoFix.text), String(demoFix.status));
+  const noWs = await get('/w/' + '0'.repeat(32));
+  t('an unknown workspace link is the generic 404, noindex', noWs.status === 404 && /noindex/.test(noWs.headers.get('x-robots-tag') || ''), String(noWs.status));
+  const adminPg = await get('/admin/ws');
+  t('/admin/ws is a 404 (no ADMIN_TOKEN) or only a sign-in form, noindex, never the tool or a list', (adminPg.status === 404 || (adminPg.status === 200 && /id="wsLogin"/.test(adminPg.text) && !/id="wsAdmin"/.test(adminPg.text))) && /noindex/.test(adminPg.headers.get('x-robots-tag') || ''), String(adminPg.status));
+  const adminApi = await fetch(BASE + '/api/pro/wsadminapi', { method: 'POST', headers: { 'User-Agent': 'citehound-smoke/1', 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'list' }) });
+  t('the admin API without a session is 404 or 401, and says nothing about workspaces', (adminApi.status === 404 || adminApi.status === 401) && !/workspaces|domain/.test(await adminApi.text()), String(adminApi.status));
   // Repository files are not part of the site: the same 404 page as an address that does not exist (middleware.js).
   const missing = await get('/this-page-does-not-exist-xyz', { redirect: 'follow' });
   for (const p of ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/CLAUDE.md', '/README.md', '/docs/pro.md', '/docs/env.md', '/docs', '/scripts/run-gates.js', '/scripts', '/vercel.json', '/local', '/local/launch-report/stats.json', '/package.json', '/package-lock.json', '/lib/pro-api.js', '/lib/waitlist.js', '/content/tools.json', '/config/domain-rules.json', '/site.config.json', '/middleware.js', '/.vercelignore', '/data/crm-raw.json', '/domains/crm.txt']) {
