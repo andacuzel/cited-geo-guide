@@ -347,6 +347,7 @@ There are no "known failures". A red gate stops the push.
   `hey@getcitehound.com`), run ONLY when the owner explicitly asks for them in the prompt. Default verification is `npm run gates` plus the tests
   with the fake mail provider. A change that does not touch the mail flow never triggers an e2e run. Reason: the runs waste time, and the burst of
   automated traffic made Vercel answer 403 "Security Checkpoint" to this machine for about ten minutes (11 Oct 2026).
+- `scripts/test-citation-live.js` makes real paid model calls: it is excluded from the gate glob, run it by hand only.
 - `npm run test:real-kv` (`scripts/test-real-kv.js`) and `node scripts/e2e-live.js` need the Upstash credentials and write to the
   real database under a cleaned-up prefix or with cleaned-up keys. They are not in the gate list and run only when the owner asks
   (`e2e-live.js` also sends real email: see the rule above).

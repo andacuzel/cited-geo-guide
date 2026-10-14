@@ -8,6 +8,8 @@
 
    There are no known failures: a red gate stops the push. After the push, run
    node scripts/smoke-live.js (npm run smoke), which waits for the deploy and checks the live site.
+   scripts/test-citation-live.js is not here either (its own header says so): with a key set it makes REAL paid model calls and crawls the live site,
+   about a cent a run; it was picked up by the test-*.js glob until 14 Oct 2026. Run it by hand, on purpose.
    scripts/test-real-kv.js is not here: it needs the Upstash credentials and writes to the real database,
    so it is run by hand (see docs/pro.md).
    ===================================================================== */
@@ -30,7 +32,7 @@ scripts.filter((f) => /^generate-.*\.js$/.test(f)).sort().forEach((f) => gates.p
 gates.push({ name: 'site-chrome.js --check', args: ['scripts/site-chrome.js', '--check'] });
 gates.push({ name: 'site-footer.js --check', args: ['scripts/site-footer.js', '--check'] });
 gates.push({ name: 'capture-pro-shots.js --check', args: ['scripts/capture-pro-shots.js', '--check'] });
-scripts.filter((f) => /^test-.*\.js$/.test(f) && f !== 'test-real-kv.js').sort().forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
+scripts.filter((f) => /^test-.*\.js$/.test(f) && f !== 'test-real-kv.js' && f !== 'test-citation-live.js').sort().forEach((f) => gates.push({ name: f, args: ['scripts/' + f] }));
 
 if (process.argv.indexOf('--list') !== -1) { gates.forEach((g, i) => console.log((i + 1) + '. ' + g.name)); process.exit(0); }
 
