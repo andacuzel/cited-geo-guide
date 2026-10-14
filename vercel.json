@@ -57,8 +57,7 @@
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
         { "key": "Referrer-Policy", "value": "no-referrer" },
-        { "key": "Cache-Control", "value": "no-store" },
-        { "key": "Content-Security-Policy", "value": "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" }
+        { "key": "Cache-Control", "value": "no-store" }
       ]
     },
     {
@@ -66,8 +65,7 @@
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
         { "key": "Referrer-Policy", "value": "no-referrer" },
-        { "key": "Cache-Control", "value": "no-store" },
-        { "key": "Content-Security-Policy", "value": "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" }
+        { "key": "Cache-Control", "value": "no-store" }
       ]
     },
     {
@@ -130,7 +128,8 @@
     { "source": "/api/readiness", "destination": "/api/pro?a=readiness" },
     { "source": "/readiness/download/:token([0-9a-f]{72})", "destination": "/api/pro?a=readinessget&token=:token" },
     { "source": "/readiness/remove/:token", "destination": "/api/pro?a=readinessremove&token=:token" },
-    { "source": "/api/pro/:action(start|order|step|status|email|feedback|webhook|welcome|wsverify|wsadminlogin|wsadminapi)", "destination": "/api/pro?a=:action" },
+    { "source": "/api/pro/:action(start|order|step|status|email|feedback|webhook|welcome)", "destination": "/api/pro?a=:action" },
+    { "source": "/api/pro/:action(wsverify|wsadminlogin|wsadminapi)", "destination": "/api/pro?a=:action" },
     { "source": "/r/:id([0-9a-f]{32})", "destination": "/api/pro?a=report&id=:id" },
     { "source": "/r/:id([0-9a-f]{32})/", "destination": "/api/pro?a=report&id=:id" }
   ]
