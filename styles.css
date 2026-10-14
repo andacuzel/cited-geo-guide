@@ -1938,7 +1938,7 @@ code {
 }
 .about-bio { margin-top: 20px; max-width: 560px; }
 .about-bio p { font-size: 16px; color: var(--ink-soft); margin-bottom: 14px; }
-.about-links { display: flex; gap: 12px; margin-top: 24px; }
+.about-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
 .about-portrait-wrap {
   width: 100%;
@@ -2081,7 +2081,7 @@ code {
   .card-grid { grid-template-columns: repeat(2, 1fr); }
   .pro-band__grid { grid-template-columns: 1fr; gap: 36px; }
   .robots-gen__grid { grid-template-columns: 1fr; }
-  .about-grid { grid-template-columns: 1fr; gap: 36px; }
+  .about-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .video-grid { grid-template-columns: 1fr; }
 }
 
