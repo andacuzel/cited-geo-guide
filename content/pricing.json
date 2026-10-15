@@ -8,41 +8,83 @@
   "measure": "The free scan measures readiness: whether assistants can reach and trust your site. Pro adds a citation check: ten buyer-style questions asked to {ENGINES}, recording whether your brand is named. A dated sample, one run each; API results can differ from the consumer apps.",
   "tiers": [
     {
-      "key": "scan", "tier": "FREE", "name": "Scan", "pill": "", "icon": "search",
-      "priceMain": "Free", "priceUnit": "", "priceNote": "No sign-up",
+      "key": "scan",
+      "tier": "FREE",
+      "name": "Scan",
+      "pill": "",
+      "icon": "search",
+      "priceMain": "Free",
+      "priceUnit": "",
+      "priceNote": "No sign-up",
       "line": "Free · No sign-up",
       "points": [
         "A 100-point score from 16 checks",
         "The access state of 10 AI crawlers",
         "A copy-paste fix for each failed check"
       ],
-      "cta": { "label": "Scan free", "kind": "scan" }
+      "cta": {
+        "label": "Scan free",
+        "kind": "scan"
+      },
+      "outcome": "See your readiness score in about 30 seconds.",
+      "bestFor": "Anyone curious."
     },
     {
-      "key": "pro", "tier": "PRO", "name": "Pro", "pill": "Early access", "icon": "report",
-      "priceMain": "$39", "priceUnit": "/month", "priceAlt": "$390", "priceAltUnit": "/year", "priceNote": "First month free for the first 10 early-access users",
+      "key": "pro",
+      "tier": "PRO",
+      "name": "Pro",
+      "pill": "Early access",
+      "icon": "report",
+      "priceMain": "$39",
+      "priceUnit": "/month",
+      "priceAlt": "$390",
+      "priceAltUnit": "/year",
+      "priceNote": "First month free for the first 10 early-access users",
       "line": "$39/month or $390/year",
       "points": [
         "Whole-site report: up to 25 pages, page by page",
         "Weekly re-scan with email alerts when something regresses (part of Pro early access)",
         "Monthly citation sample on {ENGINES}"
       ],
-      "cta": { "label": "Join the Pro waitlist", "kind": "pro" }
+      "cta": {
+        "label": "Join the Pro waitlist",
+        "kind": "pro"
+      },
+      "outcome": "Know the moment something breaks.",
+      "bestFor": "Teams who want a site that stays readable."
     },
     {
-      "key": "fix", "tier": "FIX", "name": "Fix", "pill": "Early access", "icon": "wrench",
-      "priceMain": "From $299", "priceUnit": "", "priceNote": "Fixed quote after your scan. The price does not change once agreed",
+      "key": "fix",
+      "tier": "FIX",
+      "name": "Fix",
+      "pill": "Early access",
+      "icon": "wrench",
+      "priceMain": "From $299",
+      "priceUnit": "",
+      "priceNote": "Fixed quote after your scan. The price does not change once agreed",
       "line": "From $299 · Fixed quote after your scan",
       "points": [
         "Includes 3 months of Pro",
         "We apply changes by hand where you give us access; otherwise you get the files with instructions",
         "14 days of small corrections after delivery"
       ],
-      "cta": { "label": "Request a Fix quote", "kind": "fix" }
+      "cta": {
+        "label": "Request a Fix quote",
+        "kind": "fix"
+      },
+      "outcome": "Get it done right, with before and after.",
+      "bestFor": "Teams without the time or the developer."
     },
     {
-      "key": "beyond", "tier": "BEYOND", "name": "Beyond", "pill": "Early access", "tag": "Limited seats", "icon": "layers",
-      "priceMain": "$490", "priceUnit": "/month", "priceNote": "3-month minimum",
+      "key": "beyond",
+      "tier": "BEYOND",
+      "name": "Beyond",
+      "pill": "Early access",
+      "tag": "Limited seats",
+      "icon": "layers",
+      "priceMain": "$490",
+      "priceUnit": "/month",
+      "priceNote": "3-month minimum",
       "line": "$490/month · 3-month minimum",
       "points": [
         "Researched questions and a gap analysis",
@@ -50,17 +92,303 @@
         "Monthly re-measurement",
         "Includes Pro"
       ],
-      "cta": { "label": "Apply for Beyond", "kind": "beyond" }
+      "cta": {
+        "label": "Apply for Beyond",
+        "kind": "beyond"
+      },
+      "outcome": "Content built around the questions your buyers ask.",
+      "bestFor": "Teams ready to build, not just repair."
     }
   ],
   "faq": [
-    { "q": "What does early-access pricing mean?", "a": "These are the prices for the first customers. Payments are not open yet. Leave your email through the form on a plan to reserve your spot, and we write to you when it opens. Nothing is charged today." },
-    { "q": "What does each step measure?", "a": "{MEASURE}" },
-    { "q": "Do Fix and Beyond include Pro?", "a": "Yes. Fix includes 3 months of Pro. Beyond includes Pro for as long as you stay." },
-    { "q": "Is the Fix price fixed?", "a": "Fix starts at $299. After your scan we send you a fixed quote. Once you agree to it, the price does not change." },
-    { "q": "How does Beyond work?", "a": "Beyond is $490 a month with a 3-month minimum and a limited number of seats. We research the questions your customers ask, analyze the gaps on your pages and write four edited pieces a month. You approve each one before it is published, and we re-measure every month." },
-    { "q": "When do weekly re-scans and alerts start?", "a": "Weekly re-scans with email alerts are part of Pro early access. They are not running yet. We tell the Pro waitlist when they switch on." }
+    {
+      "q": "What does early-access pricing mean?",
+      "a": "These are the prices for the first customers. Payments are not open yet. Leave your email through the form on a plan to reserve your spot, and we write to you when it opens. Nothing is charged today."
+    },
+    {
+      "q": "What does each step measure?",
+      "a": "{MEASURE}"
+    },
+    {
+      "q": "Do Fix and Beyond include Pro?",
+      "a": "Yes. Fix includes 3 months of Pro. Beyond includes Pro for as long as you stay."
+    },
+    {
+      "q": "Is the Fix price fixed?",
+      "a": "Fix starts at $299. After your scan we send you a fixed quote. Once you agree to it, the price does not change."
+    },
+    {
+      "q": "How does Beyond work?",
+      "a": "Beyond is $490 a month with a 3-month minimum and a limited number of seats. We research the questions your customers ask, analyze the gaps on your pages and write four edited pieces a month. You approve each one before it is published, and we re-measure every month."
+    },
+    {
+      "q": "When do weekly re-scans and alerts start?",
+      "a": "Weekly re-scans with email alerts are part of Pro early access. They are not running yet. We tell the Pro waitlist when they switch on."
+    },
+    {
+      "q": "Can I do this myself?",
+      "a": "Yes. The free generators for schema, robots.txt and llms.txt are there for that. Fix is for when you would rather have it done and verified."
+    },
+    {
+      "q": "What if I am not happy?",
+      "a": "Pro: 14-day refund on your first payment. Fix: we agree the list of fixes and the price first, and rescan to show what changed."
+    }
   ],
   "closeTitle": "See how AI reads your site first.",
-  "closeText": "The scan is free and takes about 30 seconds. Then pick a step."
+  "closeText": "The scan is free and takes about 30 seconds. Then pick a step.",
+  "page": {
+    "heroEyebrow": "Pricing",
+    "h1": "Know where you stand. Then fix it.",
+    "sub": "Start with a free scan. When you want more, Citehound does the work: Pro keeps watch, Fix repairs, Beyond builds content that answers your buyers’ questions.",
+    "heroPrimary": "Scan free",
+    "heroSecondary": "See the four steps",
+    "trust": "{HOMEPAGES} homepages scanned · {CHECKS} checks · {CRAWLERS} AI crawlers · Free scan, no sign-up",
+    "whichKicker": "Which step is right for you?",
+    "whichTitle": "Pick the outcome you want.",
+    "which": [
+      {
+        "say": "I want to know where I stand.",
+        "step": "Free scan",
+        "key": "scan"
+      },
+      {
+        "say": "I want to know the moment something breaks.",
+        "step": "Pro",
+        "key": "pro"
+      },
+      {
+        "say": "I want it fixed, and proof that it worked.",
+        "step": "Fix",
+        "key": "fix"
+      },
+      {
+        "say": "I want content that answers what my customers ask.",
+        "step": "Beyond",
+        "key": "beyond"
+      }
+    ],
+    "stepsKicker": "The four steps",
+    "stepsTitle": "Start with the scan. Go as far as you need.",
+    "seeKicker": "See each step",
+    "seeTitle": "What you get, on real screens.",
+    "see": [
+      {
+        "key": "scan",
+        "tab": "Free scan",
+        "img": "free-scan",
+        "url": "getcitehound.com",
+        "href": "/?scan=getcitehound.com",
+        "link": "Run the same scan yourself",
+        "label": "Real scan of getcitehound.com",
+        "alt": "The result of a free scan of getcitehound.com: a readiness score of 87 out of 100, bars for the three pillars, the AI crawler policy read from robots.txt and the start of the list of 16 checks.",
+        "cap": [
+          "The result page of a real scan of getcitehound.com.",
+          "The score out of 100, the AI crawler policy and every check, each with its fix."
+        ]
+      },
+      {
+        "key": "pro",
+        "tab": "Pro",
+        "img": "pro-report",
+        "url": "getcitehound.com/sample-report",
+        "href": "/sample-report",
+        "link": "Open the sample report",
+        "label": "Product demo · Sample data",
+        "alt": "The sample Pro report for getcitehound.com: the site summary with the whole-site score next to the homepage score, and the section links for pillars, pages and the estimated score.",
+        "cap": [
+          "The sample Pro report: a real crawl of our own site.",
+          "Every page scored and every failed check listed, in one report."
+        ]
+      },
+      {
+        "key": "fix",
+        "tab": "Fix",
+        "img": "fix",
+        "url": "getcitehound.com/demo/fix",
+        "href": "/demo/fix",
+        "link": "Open the live demo",
+        "label": "Product demo · Sample data",
+        "alt": "The Fix workspace demo for the fictional example-co.com: a score ring at 87, a line of eight scans with verified fixes marked, bars by pillar and a status donut.",
+        "cap": [
+          "The Fix workspace, shown with sample data.",
+          "A score ring, the line of scans, verified fixes and the next item to fix."
+        ]
+      },
+      {
+        "key": "beyond",
+        "tab": "Beyond",
+        "img": "beyond",
+        "url": "getcitehound.com/demo/beyond",
+        "href": "/demo/beyond",
+        "link": "Open the live demo",
+        "label": "Product demo · Sample data",
+        "alt": "The Beyond workspace demo for the fictional example-books.com: a pipeline from questions to published, pieces waiting for review and a coverage donut.",
+        "cap": [
+          "The Beyond workspace, shown with sample data.",
+          "Where the work stands, what waits for your approval and which questions are covered."
+        ]
+      }
+    ],
+    "compareKicker": "Compare the steps",
+    "compareTitle": "What each step includes.",
+    "cols": [
+      "Scan",
+      "Pro",
+      "Fix",
+      "Beyond"
+    ],
+    "rows": [
+      {
+        "label": "Readiness score",
+        "has": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "label": "Whole-site report, page by page",
+        "has": [
+          0,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "label": "Weekly re-scan with email alerts",
+        "has": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "note": "Part of Pro early access"
+      },
+      {
+        "label": "Citation check on {ENGINES}, monthly sample",
+        "has": [
+          0,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "label": "Changes prepared or applied by Citehound",
+        "has": [
+          0,
+          0,
+          1,
+          1
+        ]
+      },
+      {
+        "label": "Before and after rescan",
+        "has": [
+          0,
+          0,
+          1,
+          1
+        ]
+      },
+      {
+        "label": "Researched questions and gap analysis",
+        "has": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "label": "4 edited content pieces a month, approved by you",
+        "has": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "label": "Who does the work",
+        "who": [
+          "You",
+          "You",
+          "Citehound",
+          "Citehound"
+        ]
+      }
+    ],
+    "howKicker": "How it works",
+    "howTitle": "From scan to proof.",
+    "how": [
+      {
+        "title": "Scan",
+        "text": "Paste your domain. Free, no sign-up."
+      },
+      {
+        "title": "Choose",
+        "text": "Pick the step that fits."
+      },
+      {
+        "title": "We work",
+        "text": "For Fix and Beyond we agree the scope in writing first."
+      },
+      {
+        "title": "You see proof",
+        "text": "We rescan and show what changed."
+      }
+    ],
+    "proofKicker": "Proof",
+    "proof": [
+      {
+        "title": "What a Fix looks like",
+        "text": "AgaOne Commodities, two corporate sites: readiness score 58 to 100 and 55 to 89. Average 56.5 to 94.5, +38 points, on 16 checks.",
+        "note": "Readiness score, published with permission.",
+        "href": "/research/case-study-agaone",
+        "link": "Read the case study"
+      },
+      {
+        "title": "We scan ourselves too",
+        "text": "Citehound’s own sample report, 4 Oct 2026: homepage 87, whole site 83, 20 of 28 pages fail at least one check.",
+        "href": "/sample-report",
+        "link": "Open the sample report"
+      },
+      {
+        "title": "See the workspaces",
+        "text": "Live demos with sample data: the Fix workspace and the Beyond workspace.",
+        "links": [
+          {
+            "href": "/demo/fix",
+            "link": "Fix demo"
+          },
+          {
+            "href": "/demo/beyond",
+            "link": "Beyond demo"
+          }
+        ]
+      }
+    ],
+    "whyKicker": "Why Citehound",
+    "whyTitle": "Three reasons.",
+    "why": [
+      {
+        "title": "One place, start to finish",
+        "text": "The scan, the report, the fixes and the content live in one workspace, so nothing gets lost between steps."
+      },
+      {
+        "title": "Done by people, checked by a scan",
+        "text": "Every change is rescanned, and you see before and after."
+      },
+      {
+        "title": "A clear method",
+        "text": "The citation check is a dated sample on named assistants, one run per question. We show exactly how it was run."
+      }
+    ],
+    "offerTitle": "Early-access offer",
+    "offer": "First month of Pro free for the first 10 early-access users. Beyond has limited seats. Payments open soon: reserve your spot, nothing to pay now.",
+    "offerCta": "Join the Pro waitlist"
+  }
 }

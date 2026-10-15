@@ -37,7 +37,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 98;
+const CSS_VERSION = 102;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -325,7 +325,7 @@ function build() {
     '            <p class="page-lockup">' + require('../lib/lockup.js').html('PRO', 'navy') + '</p>\n' +
     '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? What would buyers ask?</h1>\n' +
     '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.</p>\n' +
-    '            <p class="pro-price"><span class="pro-price__line">' + esc(Pricing.tier('pro').line) + '</span><span class="pr-chip pr-chip--on-navy">Early access</span></p>\n' +
+    '            <p class="pro-price"><span class="pro-price__line">' + Pricing.cur(esc(Pricing.tier('pro').line)) + '</span><span class="pr-chip pr-chip--on-navy">Early access</span></p>\n' +
     '            <p class="pro-price__note">' + esc(Pricing.DATA.sub) + ' ' + esc(Pricing.tier('pro').priceNote) + '.</p>\n' +
     '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n' +
     '          </div>\n' +

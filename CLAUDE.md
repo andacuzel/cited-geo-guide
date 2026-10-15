@@ -451,4 +451,9 @@ Never fill an expert-tip placeholder. Those are the owner's, by design.
   connectors, "tracks all AI engines", ranking, share of voice, unlimited. **Engines:** the copy says "Claude (ChatGPT coming)" (`engines` in `content/pricing.json`) until `OPENAI_API_KEY` and
   `CITATION_OPENAI_ENABLED=1` are set in production; then change it and regenerate. Weekly re-scans and email alerts are named as part of Pro early access and are NOT built. The one paragraph that says what the
   scan measures and what Pro adds is `measure` in the same file (FAQ, /pricing, the waitlist mail, llms.txt); research pages keep their readiness-only wording.
+- **The pricing page and the dollar sign (15 Oct 2026, second pass).** `/pricing` is written by `scripts/generate-pricing.js` from `content/pricing.json` (`page` holds the hero, the step finder, the screens, the comparison table, the
+  timeline, the proof band, the three reasons and the offer): hero, "which step", the staircase (smaller lockups, an outcome and a "Best for" line on each card), screens in tabs (real screenshots from `assets/tour/`,
+  `free-scan.webp` is a real scan of getcitehound.com made by `scripts/capture-tour.js`), a comparison table, four numbered steps, a navy proof band, three reasons, the offer, the FAQ and the closing call. The homepage
+  pricing block sits just above the footer; the ladder cards under the intro keep their price lines. The "$" is always `<span class="cur">$</span>` (`lib/pricing.js` `cur()`): UI sans, half size, top of the numerals,
+  real text; the display serif draws a bare "$" like an "S". No founder name or biography, no testimonial, rating, logo or countdown on the page; the proof numbers are the case study's and the sample report's own.
 

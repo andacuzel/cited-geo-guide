@@ -25,7 +25,7 @@ const lockup = require('../lib/lockup.js');
 const Pricing = require('../lib/pricing.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 98;
+const CSS_VERSION = 102;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -55,7 +55,7 @@ function shot(p) {
 // The price line under the hero text: the tier's line from content/pricing.json, an Early access chip, Limited seats on Beyond, and the one sentence about early-access pricing.
 function priceBlock(p) {
   const t = Pricing.tier(p.key);
-  return '            <p class="svc-price"><span class="svc-price__line">' + esc(t.line) + '</span><span class="pr-chip pr-chip--on-navy">' + esc(t.pill) + '</span>' + (t.tag ? '<span class="pr-chip pr-chip--seats-on-navy">' + esc(t.tag) + '</span>' : '') + '</p>\n' +
+  return '            <p class="svc-price"><span class="svc-price__line">' + Pricing.cur(esc(t.line)) + '</span><span class="pr-chip pr-chip--on-navy">' + esc(t.pill) + '</span>' + (t.tag ? '<span class="pr-chip pr-chip--seats-on-navy">' + esc(t.tag) + '</span>' : '') + '</p>\n' +
     '            <p class="svc-price__note">' + esc(Pricing.DATA.sub) + '</p>\n';
 }
 
@@ -201,7 +201,7 @@ function check() {
     const text = page.replace(/<script[\s\S]*?<\/script>|<svg[\s\S]*?<\/svg>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;/g, '’').replace(/\s+/g, ' ');
     const body = text.replace(c.faq[0].a, '').replace(c.faq[0].q, '');
     if (BANNED.test(text)) bad(name + ': a banned word is on the page: ' + BANNED.exec(text)[0]);
-    if (page.indexOf('<span class="svc-price__line">' + esc(Pricing.tier(p.key).line) + '</span>') === -1) bad(name + ' must carry its price line "' + Pricing.tier(p.key).line + '" (content/pricing.json)');
+    if (page.indexOf('<span class="svc-price__line">' + Pricing.cur(esc(Pricing.tier(p.key).line)) + '</span>') === -1) bad(name + ' must carry its price line "' + Pricing.tier(p.key).line + '" (content/pricing.json)');
     if (/\b\d+\s?(USD|EUR|dollars|euros)\b|per hour|was \$|<s>|<del>/i.test(body)) bad(name + ': a price in a form the pricing page does not use');
     if (/\b(guarantee[sd]?|proven|will (?:get|make) you (?:cited|rank)|ranks? (?:first|higher|number))\b/i.test(body)) bad(name + ' must promise no result');
     if (/Nobody honestly can|can.t promise|no one can guarantee/i.test(text)) bad(name + ': no no-promise wording outside /terms');
