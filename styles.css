@@ -5144,6 +5144,7 @@ body.wsd-open { overflow: hidden; }
 .pr-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin: 18px 0 0; color: var(--ink); }
 .pr-price__main { font-family: var(--font-display); font-size: clamp(40px, 5.2vw, 54px); font-weight: 400; line-height: 1; letter-spacing: -0.01em; font-variant-numeric: lining-nums tabular-nums; }
 .pr-price__unit { font-size: 16px; color: var(--ink-soft); }
+.pr-price__pre { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
 .pr-price__or { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
 .pr-price--alt + .pr-price--alt { margin-top: 8px; }
 .pr-price--alt + .pr-price--alt .pr-price__main { font-size: clamp(26px, 3.2vw, 32px); }
@@ -5166,8 +5167,9 @@ body.wsd-open { overflow: hidden; }
   .pr-step { margin-left: 0; }
 }
 @media (min-width: 1040px) {
-  .pr-stairs { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end; gap: 18px; }
-  .pr-step { min-height: calc(420px + var(--rise) * 56px); }
+  /* The cards stretch to one bottom line and each starts 44px higher than the one before: a staircase whatever the text length. */
+  .pr-stairs { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; gap: 18px; }
+  .pr-step { margin-top: calc((3 - var(--rise)) * 44px); }
 }
 .ladder-card__price { margin: 12px 0 0; font-family: var(--font-mono); font-size: 13px; font-weight: 500; line-height: 1.5; color: var(--ink); }
 .ladder-card--fix .ladder-card__price, .ladder-card--beyond .ladder-card__price { color: var(--gold-soft); }

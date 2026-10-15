@@ -71,8 +71,8 @@ const pages = htmlFiles('', []);
   const hits = files.filter((f) => banned.test(read(f))).map((f) => f + ': ' + (banned.exec(read(f)) || [])[0]);
   t('public pages, llms.txt, the mail, the start form and the progress script never say "citation run" or "we run it for you", or promise a recorded result', hits.length === 0, hits.join('; '));
   t('/pro and /citation-tracking no longer say the check is "in preparation" (a report can include it)', ['pro.html', 'citation-tracking.html'].every((f) => !/in preparation/i.test(read(f))));
-  const needs = ['pro.html', 'citation-tracking.html'].filter((f) => !/can also include a (dated )?citation check/i.test(read(f)) || !/not a ranking|never a ranking/i.test(read(f)));
-  t('/pro and /citation-tracking say a report can include a citation check, as a dated sample, and that it is not a ranking', needs.length === 0, needs.join(', '));
+  const needs = ['pro.html', 'citation-tracking.html'].filter((f) => !/can also include a (dated )?citation check/i.test(read(f)) || (f === 'citation-tracking.html' && !/not a ranking|never a ranking/i.test(read(f))) || (f === 'pro.html' && !/dated sample/i.test(read(f))));
+  t('/pro and /citation-tracking say a report can include a citation check as a dated sample (and /citation-tracking that it is not a ranking; /pro no longer uses the word)', needs.length === 0, needs.join(', '));
   t('/privacy describes Anthropic for the citation questions and the citation check: what is sent, that nothing personal goes, what is kept, no Gemini and no Perplexity (not switched on)', /Citation questions and citation check \(Pro/.test(read('privacy.html')) && /Anthropic/.test(read('privacy.html')) && /the question text and a language tag, nothing else/.test(read('privacy.html')) && /does not train its models/.test(read('privacy.html')) && !/Perplexity(?!Bot)/.test(read('privacy.html')) && !/Gemini with Google Search|Google&rsquo;s Gemini API, which returns/.test(read('privacy.html')));
 }
 {

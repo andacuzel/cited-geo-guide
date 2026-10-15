@@ -61,7 +61,8 @@ function checkPage(name, cfg) {
   const banned = text.match(BANNED);
   if (banned) bad('banned word: ' + banned[0]);
   // The sample's questions are data, quoted as asked; the copy rules apply to everything else.
-  const copy = textOf(html.replace(/<span class="ct-row__q">[\s\S]*?<\/span>/g, ' '));
+  // The header and the footer are the site's chrome (they carry the Pricing link); the copy rules are for the page's own text.
+  const copy = textOf(html.replace(/<span class="ct-row__q">[\s\S]*?<\/span>/g, ' ').replace(/<header[\s\S]*?<\/header>/g, ' ').replace(/<footer[\s\S]*?<\/footer>/g, ' '));
   if (cfg.noWords) { const m = copy.match(cfg.noWords); if (m) bad('forbidden word in visible copy: ' + m[0]); }
   if (cfg.noTerms) { const m = copy.match(cfg.noTerms); if (m) bad('forbidden term in visible copy: ' + m[0]); }
   text.split(/(?<=[.!?])\s+/).forEach(function () {});
