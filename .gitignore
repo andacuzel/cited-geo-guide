@@ -30,3 +30,6 @@ readers*.csv
 
 # Documents (a report PDF must never be committed: the State of AI Readiness PDF lives in the database)
 *.pdf
+
+# Local launch kit (scripts/make-launch-assets.js): never committed or deployed
+launch/
