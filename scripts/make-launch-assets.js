@@ -21,7 +21,7 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'launch');
 const BASE = (process.argv[2] || 'https://getcitehound.com').replace(/\/$/, '');
 const NAVY = '#0B1526', GOLD = '#C2922F', GOLD_SOFT = '#E7C77C', BG = '#EEF1F5';
-const TAGLINE = 'See if AI assistants can read and trust your site';
+const TAGLINE = require('../lib/site-footer.js').TAGLINE;   // "Scan, fix and write for the way AI answers.": the site's own line
 const LINE = 'Free scan · No sign-up · getcitehound.com';
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&family=Spline+Sans+Mono:wght@500&display=swap" rel="stylesheet">';
 
