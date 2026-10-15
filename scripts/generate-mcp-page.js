@@ -31,7 +31,7 @@ const shell = require('../lib/page-shell.js');
 
 const FILE = path.join(ROOT, 'mcp.html');
 const MCP_PATH = '/api/mcp';
-const CSS_VERSION = 96;
+const CSS_VERSION = 97;
 const PROTOCOL_VERSIONS = ['2026-07-28', '2025-11-25', '2025-06-18', '2025-03-26'];
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 const word = (n) => (n >= 0 && n < WORDS.length ? WORDS[n] : String(n));
@@ -335,7 +335,7 @@ function verify(html, d) {
   const text = decode(body.replace(/<svg[\s\S]*?<\/svg>/g, ''));
   if (/gradient\(/i.test(html)) fail('a gradient appears');
   if (/\p{Extended_Pictographic}/u.test(html.replace(/[©®™]/g, ''))) fail('an emoji appears');
-  if (/\$\s?\d|\bper month\b|\bpricing\b|\/mo\b|\bfree trial\b/i.test(text)) fail('a price appears');
+  if (/\$\s?\d|\bper month\b|\bpricing\b|\/mo\b|\bfree trial\b/i.test(text.replace(/\bPricing\b/g, ''))) fail('a price appears');
   if (/\b(listed (in|on)|verified by|approved by|certified|certification|official directory|in the (claude|anthropic|cursor)[a-z ]* directory|marketplace)\b/i.test(text)) fail('a directory-status or certification claim appears');
   if (/\b(quietly|actually|seamlessly|effortless|powerful|unlock|elevate|supercharge|game-changing|revolutionize|landscape|delve|crucial|robust|recommended|coming soon)\b/i.test(text)) fail('a banned word appears');
   if (/not just [^.]*, but /i.test(text)) fail('the banned construction "not just X, but Y" appears');

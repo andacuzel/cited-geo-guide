@@ -1,0 +1,66 @@
+{
+  "path": "/pricing",
+  "title": "Citehound pricing: Scan free, Pro, Fix and Beyond",
+  "description": "Early-access pricing: Scan is free, Pro is $39 a month, Fix starts at $299, Beyond is $490 a month. Payments open soon. Reserve your spot.",
+  "h1": "Start free. Pay for the step you need.",
+  "sub": "Early-access pricing. Payments open soon, reserve your spot.",
+  "engines": "Claude (ChatGPT coming)",
+  "measure": "The free scan measures readiness: whether assistants can reach and trust your site. Pro adds a citation check: ten buyer-style questions asked to {ENGINES}, recording whether your brand is named. A dated sample, one run each; API results can differ from the consumer apps.",
+  "tiers": [
+    {
+      "key": "scan", "tier": "FREE", "name": "Scan", "pill": "", "icon": "search",
+      "priceMain": "Free", "priceUnit": "", "priceNote": "No sign-up",
+      "line": "Free · No sign-up",
+      "points": [
+        "A 100-point score from 16 checks",
+        "The access state of 10 AI crawlers",
+        "A copy-paste fix for each failed check"
+      ],
+      "cta": { "label": "Scan free", "kind": "scan" }
+    },
+    {
+      "key": "pro", "tier": "PRO", "name": "Pro", "pill": "Early access", "icon": "report",
+      "priceMain": "$39", "priceUnit": "/month", "priceAlt": "$390", "priceAltUnit": "/year", "priceNote": "First month free for the first 10 early-access users",
+      "line": "$39/month or $390/year",
+      "points": [
+        "Whole-site report: up to 25 pages, page by page",
+        "Weekly re-scan with email alerts when something regresses (part of Pro early access)",
+        "Monthly citation sample on {ENGINES}"
+      ],
+      "cta": { "label": "Join the Pro waitlist", "kind": "pro" }
+    },
+    {
+      "key": "fix", "tier": "FIX", "name": "Fix", "pill": "Early access", "icon": "wrench",
+      "priceMain": "From $299", "priceUnit": "", "priceNote": "Fixed quote after your scan. The price does not change once agreed",
+      "line": "From $299 · Fixed quote after your scan",
+      "points": [
+        "Includes 3 months of Pro",
+        "We apply changes by hand where you give us access; otherwise you get the files with instructions",
+        "14 days of small corrections after delivery"
+      ],
+      "cta": { "label": "Request a Fix quote", "kind": "fix" }
+    },
+    {
+      "key": "beyond", "tier": "BEYOND", "name": "Beyond", "pill": "Early access", "tag": "Limited seats", "icon": "layers",
+      "priceMain": "$490", "priceUnit": "/month", "priceNote": "3-month minimum",
+      "line": "$490/month · 3-month minimum",
+      "points": [
+        "Researched questions and a gap analysis",
+        "4 edited pieces a month, which you approve before publishing",
+        "Monthly re-measurement",
+        "Includes Pro"
+      ],
+      "cta": { "label": "Apply for Beyond", "kind": "beyond" }
+    }
+  ],
+  "faq": [
+    { "q": "What does early-access pricing mean?", "a": "These are the prices for the first customers. Payments are not open yet. Leave your email through the form on a plan to reserve your spot, and we write to you when it opens. Nothing is charged today." },
+    { "q": "What does each step measure?", "a": "{MEASURE}" },
+    { "q": "Do Fix and Beyond include Pro?", "a": "Yes. Fix includes 3 months of Pro. Beyond includes Pro for as long as you stay." },
+    { "q": "Is the Fix price fixed?", "a": "Fix starts at $299. After your scan we send you a fixed quote. Once you agree to it, the price does not change." },
+    { "q": "How does Beyond work?", "a": "Beyond is $490 a month with a 3-month minimum and a limited number of seats. We research the questions your customers ask, analyze the gaps on your pages and write four edited pieces a month. You approve each one before it is published, and we re-measure every month." },
+    { "q": "When do weekly re-scans and alerts start?", "a": "Weekly re-scans with email alerts are part of Pro early access. They are not running yet. We tell the Pro waitlist when they switch on." }
+  ],
+  "closeTitle": "See how AI reads your site first.",
+  "closeText": "The scan is free and takes about 30 seconds. Then pick a step."
+}

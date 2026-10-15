@@ -2,7 +2,7 @@
   "fix": {
     "path": "/fix",
     "title": "Citehound Fix: we fix what holds your site back",
-    "description": "Citehound Fix applies the technical changes the scan asks for, then rescans and shows the before and after. Includes Citehound Pro. In early access.",
+    "description": "Citehound Fix applies the technical changes the scan asks for and shows the before and after. From $299, fixed quote. Includes Citehound Pro.",
     "h1": "We fix what holds your site back.",
     "sub": "Schema, robots.txt, llms.txt, sitemap, titles and descriptions: prepared, applied, rescanned.",
     "cta": "Request a Fix quote",
@@ -69,8 +69,8 @@
     "faqTitle": "Before you ask.",
     "faq": [
       {
-        "q": "If nobody can promise a citation, why pay?",
-        "a": "No one can guarantee what an assistant says, including us. What we control is whether you are eligible: a site that blocks crawlers, can’t be read or doesn’t answer the question never gets considered. We close those gaps and measure the result: before/after scores, and a citation check each month."
+        "q": "What do Fix and Beyond cost?",
+        "a": "Fix starts at $299: a fixed quote after your scan, and the price does not change once agreed. It includes 3 months of Pro. Beyond is $490 a month with a 3-month minimum and limited seats, and it includes Pro. These are early-access prices and payments open soon. See the pricing page for what each includes."
       },
       {
         "q": "What does Fix change on my site?",
@@ -86,15 +86,15 @@
       }
     ],
     "requestTitle": "Fix is in early access.",
-    "requestText": "Leave your email and the site. We reply to each request with a quote."
+    "requestText": "Leave your email and the site. We reply to each request with a fixed quote."
   },
   "beyond": {
     "path": "/beyond",
     "title": "Citehound Beyond: be the page assistants pick",
-    "description": "Citehound Beyond researches your customers’ questions, writes the content you approve and re-measures monthly. Includes Citehound Pro. In early access.",
+    "description": "Citehound Beyond researches your customers’ questions, writes the content you approve and re-measures monthly. $490 a month. Includes Citehound Pro.",
     "h1": "Readable is not enough. Be the page assistants pick.",
     "sub": "We research the questions your customers ask, read your pages against them and write the content: new pages, FAQ and comparison blocks, rewrites. Human-edited. You approve it, we publish or hand it over, and we re-measure every month.",
-    "cta": "Join Beyond early access",
+    "cta": "Apply for Beyond",
     "stepsKicker": "How it works",
     "stepsTitle": "From their questions to your pages.",
     "steps": [
@@ -181,8 +181,8 @@
     "faqTitle": "Before you ask.",
     "faq": [
       {
-        "q": "If nobody can promise a citation, why pay?",
-        "a": "No one can guarantee what an assistant says, including us. What we control is whether you are eligible: a site that blocks crawlers, can’t be read or doesn’t answer the question never gets considered. We close those gaps and measure the result: before/after scores, and a citation check each month."
+        "q": "What do Fix and Beyond cost?",
+        "a": "Fix starts at $299: a fixed quote after your scan, and the price does not change once agreed. It includes 3 months of Pro. Beyond is $490 a month with a 3-month minimum and limited seats, and it includes Pro. These are early-access prices and payments open soon. See the pricing page for what each includes."
       },
       {
         "q": "Does anything go live without my approval?",
@@ -190,7 +190,7 @@
       },
       {
         "q": "How do you measure the result?",
-        "a": "We run the same questions each month and send the citation check: a dated sample of one assistant’s answers, one run each, never a ranking. We report what changed, including when nothing did."
+        "a": "We run the same questions each month and send the citation check: a dated sample, one run each; API results can differ from the consumer apps. We report what changed, including when nothing did."
       },
       {
         "q": "Do I need to buy Pro separately?",

@@ -2,7 +2,7 @@
    request-form.js: the homepage ladder's buttons and the Fix / Beyond early-access form.
 
    - "Run the free scan" moves to the scan field and focuses it.
-   - "Request a Fix quote" and "Join Beyond early access" open the dialog (#reqDialog). The scan report's "Some of these gaps we
+   - "Request a Fix quote" and "Apply for Beyond" open the dialog (#reqDialog). The scan report's "Some of these gaps we
      can close for you" line opens it with the scanned domain filled in. That line is shown only for a score below 100; the domain and
      the score are read from the report heading scanner.js already writes, so this file touches nothing in the scanner.
    - The form posts { email, website, note, interest, consent, company_fax } to /api/waitlist, the same endpoint, honeypot and limits
@@ -28,7 +28,7 @@
 
   var TEXT = {
     fix: { kicker: 'Early access · Fix', title: 'Request a Fix quote', lede: 'Leave your email and the site. We reply with a quote.' },
-    beyond: { kicker: 'Early access · Beyond', title: 'Join Beyond early access', lede: 'Leave your email and the site. We write to you about early access.' }
+    beyond: { kicker: 'Early access · Beyond', title: 'Apply for Beyond', lede: 'Leave your email and the site. We write to you about early access.' }
   };
   var fields = {
     email: { input: $('reqEmail'), error: $('reqEmailError') },

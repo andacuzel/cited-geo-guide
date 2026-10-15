@@ -33,7 +33,7 @@ const site = require('../lib/site-config.js');
 const methodology = require('../lib/methodology.js');
 const mcp = require('../api/mcp.js');
 
-const CSS_VERSION = 96;
+const CSS_VERSION = 97;
 const NEXT_START = '<!-- NEXT:START -->';
 const NEXT_END = '<!-- NEXT:END -->';
 const PAGE = path.join(ROOT, 'tools', 'index.html');
@@ -274,7 +274,7 @@ function verify(html, d) {
   // grep rules
   if (/gradient\(/i.test(html)) fail('a gradient appears');
   if (/\p{Extended_Pictographic}/u.test(html.replace(/[©®™]/g, ''))) fail('an emoji appears');
-  if (/\$\s?\d|\bper month\b|\bpricing\b|\/mo\b|\bfree trial\b|\bpremium\b/i.test(text)) fail('a price appears');
+  if (/\$\s?\d|\bper month\b|\bpricing\b|\/mo\b|\bfree trial\b|\bpremium\b/i.test(text.replace(/\bPricing\b/g, ''))) fail('a price appears');
   if (/\b(listed (in|on)|verified by|approved by|certified|certification|official directory|marketplace|trusted by|testimonials?|customers|users love)\b/i.test(text)) fail('a directory, certification, trust or testimonial claim appears');
   if (/\b\d[\d,]*\s+(scans|sites|users|people|domains|brands|visits)\b/i.test(text)) fail('a usage counter appears');
   if (/\b(quietly|actually|seamlessly|effortless|powerful|unlock|elevate|supercharge|game-changing|revolutionize|landscape|delve|crucial|robust|recommended|coming soon)\b/i.test(text)) fail('a banned word appears');

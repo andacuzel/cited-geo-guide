@@ -5126,3 +5126,56 @@ body.wsd-open { overflow: hidden; }
 .tour__view + .tour__view { margin-top: 28px; }
 .tour--js .tour__view { display: none; }
 .tour--js .tour__view.is-active { display: block; }
+
+
+/* ----------------------------- Pricing (15 Oct 2026): a rising staircase of four steps, large tabular numerals, a Pro billing toggle ----------------------------- */
+
+.pricing .pr-sub { margin-top: 10px; max-width: 560px; font-size: 17px; line-height: 1.55; color: var(--ink-soft); }
+.pr-stairs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.pr-step { --rise: 0; display: flex; flex-direction: column; min-width: 0; padding: 24px 22px 22px; background: var(--white); border: 1px solid var(--line); border-top: calc(3px + var(--rise) * 3px) solid var(--gold); border-radius: var(--radius); margin-left: calc(var(--rise) * 12px); }
+.pr-step__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.pr-step__name { margin: 0; font-weight: 400; }
+.pr-step__name .lockup { font-size: 24px; }
+.pr-step__chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.pr-chip { display: inline-block; padding: 3px 8px; border: 1px solid var(--gold-deep); border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.06em; line-height: 1.3; text-transform: uppercase; white-space: nowrap; color: var(--gold-deep); background: transparent; }
+.pr-chip--seats { background: var(--navy-950); border-color: var(--navy-950); color: var(--white); }
+.pr-chip--on-navy { border-color: var(--gold-soft); color: var(--gold-soft); }
+.pr-chip--seats-on-navy { background: var(--white); border-color: var(--white); color: var(--navy-950); }
+.pr-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin: 18px 0 0; color: var(--ink); }
+.pr-price__main { font-family: var(--font-display); font-size: clamp(40px, 5.2vw, 54px); font-weight: 400; line-height: 1; letter-spacing: -0.01em; font-variant-numeric: lining-nums tabular-nums; }
+.pr-price__unit { font-size: 16px; color: var(--ink-soft); }
+.pr-price__or { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.pr-price--alt + .pr-price--alt { margin-top: 8px; }
+.pr-price--alt + .pr-price--alt .pr-price__main { font-size: clamp(26px, 3.2vw, 32px); }
+.pr-note { margin: 10px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); }
+.pr-points { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+.pr-points li { position: relative; padding-left: 20px; }
+.pr-points li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 9px; height: 2px; background: var(--gold); }
+.pr-cta { margin: auto 0 0; padding-top: 22px; }
+.pr-cta .btn { width: 100%; justify-content: center; text-align: center; }
+.pr-toggle { display: inline-flex; margin-top: 16px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.pr-toggle[hidden] { display: none; }
+.pr-toggle__btn { min-height: 44px; padding: 8px 16px; border: 0; background: var(--white); color: var(--ink); font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; }
+.pr-toggle__btn[aria-pressed="true"] { background: var(--navy-950); color: var(--white); }
+.pr-toggle__btn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: -3px; }
+.pr-js [data-period-view]:not(.is-on) { display: none; }
+.pr-foot { margin: 28px 0 0; }
+.pr-foot__link { font-size: 16px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+@media (min-width: 640px) {
+  .pr-stairs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .pr-step { margin-left: 0; }
+}
+@media (min-width: 1040px) {
+  .pr-stairs { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end; gap: 18px; }
+  .pr-step { min-height: calc(420px + var(--rise) * 56px); }
+}
+.ladder-card__price { margin: 12px 0 0; font-family: var(--font-mono); font-size: 13px; font-weight: 500; line-height: 1.5; color: var(--ink); }
+.ladder-card--fix .ladder-card__price, .ladder-card--beyond .ladder-card__price { color: var(--gold-soft); }
+.pr-measure { padding-top: 0; }
+.pr-measure__panel { max-width: 880px; padding: 28px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.pr-measure__title { font-size: 24px; line-height: 1.2; }
+.pr-measure__text { margin-top: 12px; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }
+.svc-price, .pro-price { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 20px 0 0; }
+.svc-price__line, .pro-price__line { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); line-height: 1.15; color: var(--white); font-variant-numeric: lining-nums tabular-nums; }
+.svc-price__note, .pro-price__note { margin: 8px 0 0; font-size: 14.5px; line-height: 1.5; color: rgba(255, 255, 255, 0.86); }
+@media (max-width: 640px) { .pr-step { padding: 22px 18px 20px; } }

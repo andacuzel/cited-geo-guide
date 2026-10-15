@@ -7,7 +7,7 @@
    (lib/request-dialog.js, inline). It also refreshes the homepage's dialog copy and keeps the sitemap and llms.txt entries. Edit the JSON, never the page.
 
    --check fails if a page is out of date, not indexable, not in the sitemap and llms.txt, if a form differs from the shared one, if the FAQ answer
-   differs from the homepage's, if a mockup is not labelled as an illustration, or if the copy has a price, a promise of results or a banned word.
+   differs from the homepage's, if a mockup is not labelled as an illustration, if the price line differs from content/pricing.json, or if the copy has a promise of results or a banned word.
 
      node scripts/generate-service-pages.js            write the pages, the homepage form, the sitemap and llms.txt entries
      node scripts/generate-service-pages.js --check    exit 1 on any mismatch
@@ -22,9 +22,10 @@ const site = require('../lib/site-config.js');
 const icons = require('../lib/icons.js');
 const dialog = require('../lib/request-dialog.js');
 const lockup = require('../lib/lockup.js');
+const Pricing = require('../lib/pricing.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 96;
+const CSS_VERSION = 97;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
@@ -51,11 +52,18 @@ function shot(p) {
     '            <figcaption class="svc-shot__cap"><span class="svc-shot__label">Product demo &middot; Sample data</span><a class="svc-shot__link" href="' + s.href + '">Open the live demo</a></figcaption>\n          </figure>\n';
 }
 
+// The price line under the hero text: the tier's line from content/pricing.json, an Early access chip, Limited seats on Beyond, and the one sentence about early-access pricing.
+function priceBlock(p) {
+  const t = Pricing.tier(p.key);
+  return '            <p class="svc-price"><span class="svc-price__line">' + esc(t.line) + '</span><span class="pr-chip pr-chip--on-navy">' + esc(t.pill) + '</span>' + (t.tag ? '<span class="pr-chip pr-chip--seats-on-navy">' + esc(t.tag) + '</span>' : '') + '</p>\n' +
+    '            <p class="svc-price__note">' + esc(Pricing.DATA.sub) + '</p>\n';
+}
+
 function hero(p, c) {
   return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner svc-banner">\n          <div class="page-banner__body">\n' +
     '            <p class="page-lockup">' + lockup.html(p.tier, 'navy') + '</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">' + esc(c.h1) + '</h1>\n' +
-    '            <p class="page-banner__desc">' + esc(c.sub) + '</p>\n' +
+    '            <p class="page-banner__desc">' + esc(c.sub) + '</p>\n' + priceBlock(p) +
     '            <p class="svc-includes">' + lockup.includes('navy') + '</p>\n' +
     '            <div class="pro-actions"><button type="button" class="btn btn--gold" data-request="' + p.interest + '">' + esc(c.cta) + '</button><a href="#how" class="btn btn--ghost-on-navy">How it works</a></div>\n' +
     '          </div>\n' + shot(p, c) + '        </div>\n      </div>\n    </section>\n';
@@ -153,7 +161,7 @@ function ensureLlms(key) {
 }
 
 const BANNED = /\b(quietly|actually|seamlessly|effortless(ly)?|powerful|unlock|elevate|supercharge|game-changing|revolutioni[sz]e|landscape|delve|crucial|robust|coming soon)\b/i;
-const WHY_Q = 'If nobody can promise a citation, why pay?';
+const WHY_Q = 'What do Fix and Beyond cost?';
 
 function check() {
   const errors = [];
@@ -161,7 +169,7 @@ function check() {
   const home = read('index.html');
   const homeAnswer = (new RegExp('<summary>' + WHY_Q.replace(/[?]/g, '\\?') + '</summary>\\s*<p>([^<]*)</p>').exec(home) || [])[1];
   if (dialog.normalize(home) !== home) bad('the form in index.html differs from lib/request-dialog.js; run node scripts/generate-service-pages.js');
-  if (home.indexOf('<details id="why-pay">') === -1) bad('the homepage FAQ answer has lost its id (why-pay)');
+  if (home.indexOf('<details id="faq-cost">') === -1) bad('the homepage FAQ answer has lost its id (faq-cost)');
   PAGES.forEach((p) => {
     const c = content[p.key];
     const page = fs.existsSync(path.join(ROOT, p.file)) ? read(p.file) : '';
@@ -193,9 +201,10 @@ function check() {
     const text = page.replace(/<script[\s\S]*?<\/script>|<svg[\s\S]*?<\/svg>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;/g, '’').replace(/\s+/g, ' ');
     const body = text.replace(c.faq[0].a, '').replace(c.faq[0].q, '');
     if (BANNED.test(text)) bad(name + ': a banned word is on the page: ' + BANNED.exec(text)[0]);
-    if (/[$€£]\s?\d|\b\d+\s?(USD|EUR|dollars|euros)\b|per month|per hour/i.test(body)) bad(name + ' must state no price');
+    if (page.indexOf('<span class="svc-price__line">' + esc(Pricing.tier(p.key).line) + '</span>') === -1) bad(name + ' must carry its price line "' + Pricing.tier(p.key).line + '" (content/pricing.json)');
+    if (/\b\d+\s?(USD|EUR|dollars|euros)\b|per hour|was \$|<s>|<del>/i.test(body)) bad(name + ': a price in a form the pricing page does not use');
     if (/\b(guarantee[sd]?|proven|will (?:get|make) you (?:cited|rank)|ranks? (?:first|higher|number))\b/i.test(body)) bad(name + ' must promise no result');
-    if (/Nobody honestly can|can.t promise/i.test(body)) bad(name + ': the no-promise line belongs in the FAQ answer only');
+    if (/Nobody honestly can|can.t promise|no one can guarantee/i.test(text)) bad(name + ': no no-promise wording outside /terms');
     const paras = (page.match(/<p[^>]*>[\s\S]*?<\/p>/g) || []).filter((x) => (x.match(/—|&mdash;/g) || []).length > 1);
     if (paras.length) bad(name + ': more than one em dash in a paragraph');
     if (read('sitemap.xml').indexOf('<loc>' + site.baseUrl + c.path + '</loc>') === -1) bad('sitemap.xml has no ' + c.path);
@@ -209,7 +218,7 @@ function main() {
   if (process.argv.indexOf('--check') !== -1) {
     const errors = check();
     if (errors.length) { errors.forEach((e) => console.error('FAIL: ' + e)); process.exit(1); }
-    console.log('OK: /fix and /beyond are current, indexable, in the sitemap and llms.txt; the form is the shared one; the FAQ answer is the homepage\'s; the mockups are labelled; no price, no promised result');
+    console.log('OK: /fix and /beyond are current, indexable, in the sitemap and llms.txt; the form is the shared one; the FAQ answer is the homepage\'s; the mockups are labelled; the price line is the pricing page\'s, no promised result');
     return;
   }
   const out = [];

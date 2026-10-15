@@ -28,6 +28,7 @@ const citationPanel = require('../lib/citation-panel.js');
 const icons = require('../lib/icons.js');
 const siteChrome = require('./site-chrome.js');
 const capture = require('./capture-pro-shots.js');
+const Pricing = require('../lib/pricing.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
@@ -36,13 +37,13 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 96;
+const CSS_VERSION = 97;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
 // Every Pro call to action goes to the waitlist form on /pro. pro-cta.js sends them to PRO_CHECKOUT_URL instead when
 // that is set (GET /api/waitlist), and shows PRO_PRICE_TEXT where data-pro-price stands. No mailto serves as a Pro CTA.
-const CTA_LABEL = 'Join the waitlist';
+const CTA_LABEL = 'Join the Pro waitlist';
 const cta = (href, cls) => '<a href="' + href + '" class="' + cls + '" data-pro-cta data-label-checkout="Get Citehound Pro">' + CTA_LABEL + '</a>';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -254,14 +255,14 @@ function faq(F) {
       html: 'The free scan reads one page: the full 16-check report, the crawler matrix, copy-paste fixes and every playbook. Pro reads up to ' + F.cap + ' pages and shows what the homepage hides, then adds citation questions written for your site. Comparing two sites is free at <a href="/compare">/compare</a>, and the citation question sets by category are free to try in your own assistant through the <a href="/mcp">Citehound MCP server</a>.' },
     { q: 'What is the sample report?',
       html: 'A real crawl of our own site, ' + esc(F.domain) + ', run on ' + esc(F.date) + ': ' + F.pagesRead + ' pages. The crawl results are shown as the crawl recorded them, not edited or improved, and our own pages still fail some checks. The report says which. Its Citations section shows a published sample of how tested questions look, made by hand for a different brand; Pro does not produce that today. <a href="/sample-report">Open it.</a>' },
-    { q: 'Does it measure whether AI names me?',
-      html: 'No. The <a href="/sample-report">crawl</a> measures readiness: whether crawlers can reach and read your pages. The citation questions are for you to try. When a report includes a citation check, it is a separate, dated sample of one provider\'s web search for about ten questions, one run each: not a ranking and not a measure of any other assistant. <a href="/citation-tracking">This page</a> shows what a tested sample looks like. A readiness score of 100 doesn\'t guarantee a mention.' },
+    { q: 'What does the scan measure, and what does Pro add?',
+      html: esc(Pricing.measure()) + ' <a href="/citation-tracking">This page</a> shows what a tested sample looks like.' },
     { q: 'Does Pro test the citation questions?',
       html: 'Where the report says so. A report can include a citation check on one or two providers: about ten questions, one run each, with the provider, the model and the date shown. It describes one run on one provider and says nothing about any other assistant. A report with no check labels its questions "Not tested".' },
     { q: 'Can I try the questions myself?',
       html: 'Yes. The report lists them with a Copy button. Ask each one three to five times, in a new conversation each time, and look at the pattern rather than one answer.' },
     { q: 'Can I buy Pro today?',
-      html: 'Not yet. Pro is in early access: <a href="#waitlist">join the waitlist</a> and we will write once, when it opens. The plan is a single one-time purchase with no subscription.' },
+      html: 'Not yet. Pro is in early access: <a href="#waitlist">join the Pro waitlist</a> and we will write once, when it opens. Early-access pricing is $39 a month or $390 a year, with the first month free for the first 10 early-access users. Weekly re-scans with email alerts are part of Pro early access and are not running yet.' },
     { q: 'Do I need an account?',
       html: 'No. There is no account or login. A report is made from a private link, opens at its own private address and stays available for 90 days.' }
   ];
@@ -290,7 +291,7 @@ function waitlistSection() {
     '            <div class="wl-trap" aria-hidden="true"><label>Company fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off" /></label></div>\n' +
     '            <div class="ps-field ps-field--check"><label class="ps-check" for="wlConsent"><input id="wlConsent" name="consent" type="checkbox" aria-describedby="wlConsentError" required /><span>Tell me when Citehound Pro opens</span></label><p class="ps-error" id="wlConsentError" hidden></p></div>\n' +
     '            <p class="ps-note">We keep your address for up to 12 months and use it to send you one confirmation now and one message when Pro opens. Each message has a link that removes you. See the <a href="/privacy">privacy page</a>.</p>\n' +
-    '            <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="wlSubmit">Join the waitlist</button></p>\n' +
+    '            <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="wlSubmit">Join the Pro waitlist</button></p>\n' +
     '            <p class="wl-status" id="wlStatus" role="status" aria-live="polite" tabindex="-1"></p>\n' +
     '          </form>\n' +
     '          <noscript><p class="ps-note">The form needs JavaScript. Without it, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a> and ask to be added.</p></noscript>\n' +
@@ -303,7 +304,7 @@ function build() {
   const k = F.case;
   const shell = shellParts();
   const title = 'Citehound — Pro: Can AI read you? What would buyers ask?';
-  const desc = 'Pro crawls up to ' + F.cap + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.';
+  const desc = 'Pro crawls up to ' + F.cap + ' pages and writes the citation questions your buyers ask, in your language. Early-access pricing: $39 a month or $390 a year.';
   if (desc.length < 120 || desc.length > 160) throw new Error('description is ' + desc.length + ' characters');
   const questions = faq(F);
   const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map((q) => ({ '@type': 'Question', name: q.q, acceptedAnswer: { '@type': 'Answer', text: textOf(q.html) } })) };
@@ -324,6 +325,8 @@ function build() {
     '            <p class="page-lockup">' + require('../lib/lockup.js').html('PRO', 'navy') + '</p>\n' +
     '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? What would buyers ask?</h1>\n' +
     '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.</p>\n' +
+    '            <p class="pro-price"><span class="pro-price__line">' + esc(Pricing.tier('pro').line) + '</span><span class="pr-chip pr-chip--on-navy">Early access</span></p>\n' +
+    '            <p class="pro-price__note">' + esc(Pricing.DATA.sub) + ' ' + esc(Pricing.tier('pro').priceNote) + '.</p>\n' +
     '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n' +
     '          </div>\n' +
     '          ' + indent(frame('summary', F, 'pro-shot--hero'), '          ') + '\n' +
@@ -577,10 +580,11 @@ function check() {
     if (/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(s[1])) bad(name + ': an emoji');
     const visible = textOf(s[1].replace(/<script[\s\S]*?<\/script>/g, '').replace(/<svg[\s\S]*?<\/svg>/g, '')) + ' ' + alt(s[1]);
     BANNED.forEach((w) => { if (new RegExp('\\b' + w + '\\b', 'i').test(visible)) bad(name + ': banned word "' + w + '"'); });
-    if (/[$€£]\s?\d|\bprice\b|\bpricing\b|\bper (month|year|report)\b|\bUSD\b|\bEUR\b/i.test(visible)) bad(name + ': a price');
+    const noPrice = visible.replace(new RegExp(Pricing.tier('pro').line.replace(/[$.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), ' ').replace(/Early-access pricing[^.]*\./g, ' ').replace(/\$39 a month or \$390 a year/g, ' ').replace(/First month free[^.]*\./g, ' ');
+    if (/[$€£]\s?\d|\bper (month|year|report)\b|\bUSD\b|\bEUR\b/i.test(noPrice)) bad(name + ': a price other than the one in content/pricing.json');
     if (/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|unlimited)\s+(citation\s+)?(runs|crawls)\b/i.test(visible)) bad(name + ': a count of runs or crawls');
     if (/\blaunch(ed|es|ing)?\b|\bavailable (from|on|in|starting)\b|\bwill be available\b|\bin (Q[1-4]|20\d\d)\b/i.test(visible)) bad(name + ': a launch or availability date');
-    if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
+    if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible.split(Pricing.ENGINES).join(' ')) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
     if (name === 'pro.html' && !/\bnot tested\b|\bdoes not test\b|\bhas not tested\b/i.test(visible)) bad(name + ': does not say that a report without a check labels its questions not tested');
     if (/records when your name|asks a model the questions|we run (it|the citation)[^.]*for you/i.test(visible)) bad(name + ': claims a citation result or service Pro does not produce');
     if (/\baccount\b|\blog ?in\b|\bsign ?in\b/i.test(visible.replace('Do I need an account?', '').replace('No. There is no account or login.', ''))) bad(name + ': mentions an account or login');

@@ -25,7 +25,7 @@ const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE = path.join(ROOT, 'research', 'state-of-ai-readiness.html');
-const CSS_VERSION = 96;
+const CSS_VERSION = 97;
 const SCRIPT_VERSION = 1;
 const PATHNAME = '/research/state-of-ai-readiness';
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'readiness.json'), 'utf8'));
