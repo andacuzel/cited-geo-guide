@@ -17,12 +17,14 @@ Everything below is OFF until you switch it on. Nothing public says a result exi
 | `CITATION_QUESTIONS_ENABLED` | `ANTHROPIC_API_KEY` and `CITATION_ANTHROPIC_ENABLED` | the profile and the 21 questions, written by Claude without search. This alone gives the "Citation questions" section |
 | `CITATION_ANTHROPIC_ENABLED` | `ANTHROPIC_API_KEY` | lets Claude be used at all (questions, check, knowledge check) |
 | `CITATION_TEST_ENABLED` | the questions switch and at least one provider ready | the live check on every provider that is ready |
+| `CITATION_OPENAI_ENABLED` | `OPENAI_API_KEY` | ChatGPT (OpenAI API, web search on) joins the check. Exact value `1`, off by default. Read "ChatGPT" below first |
 | `CITATION_PERPLEXITY_ENABLED` | `PERPLEXITY_API_KEY` | Perplexity joins the check. **Leave it off** until you have read "Perplexity" below |
 | `CITATION_KNOWLEDGE_ENABLED` | Claude ready | the model knowledge check (Claude, no search, same sample): only whether the brand or domain appears in the answer. Never citation tracking, never a "cited" column |
 | `CITATION_KILL` | nothing | `1` stops every paid call at once (after a redeploy); the instant, no-redeploy switch is `node scripts/pro-admin.js kill on` |
-| `CITATION_MODEL`, `CITATION_PERPLEXITY_MODEL` | | the models. Defaults `claude-haiku-5-5` and `perplexity/sonar`, both verified (below) |
+| `CITATION_MODEL`, `CITATION_OPENAI_MODEL`, `CITATION_PERPLEXITY_MODEL` | | the models. Defaults `claude-haiku-5-5`, `gpt-4.1-mini` (not yet run live) and `perplexity/sonar` |
+| `CITATION_<ENGINE>_MAX_CALLS`, `_MAX_COST_USD`, `_DAILY_BUDGET_USD` | | per-engine caps (`ENGINE` = `ANTHROPIC`, `OPENAI`, `PERPLEXITY`); unset, they equal the overall caps. One engine reaching its cap stops that engine only |
 | `CITATION_QUESTION_SAMPLE` | | questions asked per provider, default 10, hard ceiling 18 |
-| `CITATION_MAX_CALLS`, `CITATION_MAX_COST_USD` | | per report: paid calls (default 30, ceiling 60) and cost (default $0.50, ceiling $2) |
+| `CITATION_MAX_CALLS`, `CITATION_MAX_COST_USD` | | per report: paid calls (default 30, ceiling 60) and cost (default $0.50, ceiling $2); with all three engines on the defaults are 40 and $0.75 |
 | `CITATION_DAILY_BUDGET_USD`, `CITATION_MONTHLY_BUDGET_USD` | | all reports together: default $2 a day and $4 a month, ceilings $50 and $200 |
 | `CITATION_QUESTIONS_PROVIDER=gemini` | `GEMINI_API_KEY` | the **disabled fallback** question writer (Gemini, no search). Never selected by accident; no work is planned on it |
 
@@ -127,3 +129,32 @@ The first design asked the questions through Gemini with the Google Search tool.
 ## Before you switch anything on
 
 See `docs/launch-checklist.md` ("Citation check") for the order of the steps, the exact variable names, the redeploy and the way back.
+
+## ChatGPT through the OpenAI API (added 15 Oct 2026, internal note: not on the site, not in /privacy)
+
+**What it is.** A third engine beside Claude and Perplexity, behind `CITATION_OPENAI_ENABLED=1` and `OPENAI_API_KEY`, off by default. It asks the same sample of questions (10, one run each) with the Responses API
+and its web search tool, and records the pages the answer cites. Reports label it "ChatGPT (OpenAI API, web search on)", with the model and the sample date, and every engine's section says "API results can
+differ from what the consumer apps show". It is a dated sample, never a ranking or a share of voice. There is no Gemini engine and none is planned until Google's terms have been reviewed.
+
+**The call** (read from developers.openai.com on 15 Oct 2026; **not run live**, because there was no OpenAI key to test with): `POST https://api.openai.com/v1/responses`, bearer key in the header only, body with `model`,
+`instructions`, `input` (the question), `tools: [{"type": "web_search"}]`, `tool_choice: "required"`, `store: false`, `max_output_tokens: 2000`. The reply's `output` has `web_search_call` items and a `message` item whose
+`content[].output_text` carries `annotations` of type `url_citation` (`url`, `title`, `start_index`, `end_index`): those URLs are the citations (kind "cited"). A failure, a timeout (35 s, not retried), a refusal, an empty or
+incomplete answer or an answer that never searched is recorded as "not tested" with its reason; nothing is filled in. When an engine fails three times in a row, or a cap is reached, the report says "Citation check unavailable for
+ChatGPT" and still shows the other engines. OpenAI's own page also lists `gpt-5.5` as the recommended model for web search; its price was not on the pricing page, so it is not the default, and an unlisted model is
+priced like the dearest listed one so the guard overestimates.
+
+**Perplexity, to be exact.** Perplexity's own page says Sonar Chat Completions support ends on 27 September 2026 and moves to the Agent API (re-read 15 Oct 2026). The adapter was already on that API with the `perplexity/sonar`
+model, so "Sonar via API, web search on" is what the report says. Two live calls on 15 Oct 2026 worked (15 pages returned each, $0.0045 each). The terms analysis under "Perplexity: built, verified live, left off" below still stands.
+
+**Caps.** Order of checks before every paid call: kill switch (env or Redis, covers all engines), overall per-report calls and cost, overall daily and monthly budgets, then the engine's own caps. An engine cap
+stops that engine only. `node scripts/pro-admin.js spend` lists calls and cost per engine.
+
+**Cost per report (an estimate, not a measurement for ChatGPT).** Prices from OpenAI's pricing page, 15 Oct 2026: gpt-4.1-mini $0.40 in and $1.60 out per million tokens, web search $10 per 1,000 calls plus search content
+tokens at the model rate. Assuming about 8,000 tokens in, 400 out and one or two searches per question: about $0.014 to $0.024 a call, **$0.14 to $0.24 for ten questions**. With all three engines: Claude about $0.125
+(measured), ChatGPT $0.14 to $0.24 (estimate), Perplexity about $0.045 (measured), the knowledge check about $0.005: **about $0.31 to $0.42 a report**. The reservation estimate for a ChatGPT call is $0.04.
+
+**Before switching it on.** (1) Set a spending limit in the OpenAI dashboard. (2) Read OpenAI's current terms and usage policies for displaying outputs and for automated use (not reviewed here). (3) Run
+`node scripts/test-citation-live.js` once, with at most two ChatGPT calls, to confirm the shape above. (4) Publish a /privacy paragraph for OpenAI in the same deploy, as for Perplexity: the question text and a language tag
+go to OpenAI, nothing else. Draft: "ChatGPT (Pro, only when a report includes it): the generated question text and a language tag are sent to OpenAI's API, which runs a web search and returns an answer with the pages it cited.
+Citehound keeps, for the 90 days of the report, which pages were cited and whether the brand or domain appears in the answer, not the answer text. OpenAI is asked not to store the request."
+

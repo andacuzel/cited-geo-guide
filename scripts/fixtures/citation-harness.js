@@ -9,6 +9,7 @@ const Prompts = require('../../lib/citation-prompts.js');
 const ENV_Q = { CITATION_QUESTIONS_ENABLED: '1', CITATION_ANTHROPIC_ENABLED: '1', ANTHROPIC_API_KEY: 'test-anthropic-key' };
 const ENV_T = Object.assign({}, ENV_Q, { CITATION_TEST_ENABLED: '1' });
 const ENV_TP = Object.assign({}, ENV_T, { CITATION_PERPLEXITY_ENABLED: '1', PERPLEXITY_API_KEY: 'test-perplexity-key' });
+const ENV_ALL = Object.assign({}, ENV_TP, { CITATION_OPENAI_ENABLED: '1', OPENAI_API_KEY: 'test-openai-key' });
 const ENV_K = Object.assign({}, ENV_Q, { CITATION_KNOWLEDGE_ENABLED: '1' });
 
 // The question writer. A profile for a profile request, questions for a question request. generate() reports a cost, json() does not (the Gemini shape).
@@ -32,12 +33,14 @@ function mockLlm(site, opts) {
   return llm;
 }
 
-const DEFAULT_COST = { anthropic: 0.012, perplexity: 0.0045 };
+const DEFAULT_COST = { anthropic: 0.012, openai: 0.02, perplexity: 0.0045 };
+const LABELS = { anthropic: 'Claude', openai: 'ChatGPT', perplexity: 'Perplexity' };
+const MODELS = { anthropic: 'mock-claude', openai: 'mock-gpt', perplexity: 'mock-sonar' };
 // A provider adapter. handler(prompt, n, o) may return a runPrompt result or throw; calls (search) and plain (no search) record the prompts.
 function mockAdapter(id, handler, o) {
   o = o || {};
   const a = {
-    id: id, label: id === 'anthropic' ? 'Claude' : 'Perplexity', model: o.model || (id === 'anthropic' ? 'mock-claude' : 'mock-sonar'), calls: [], plain: [], args: [], active: 0, maxActive: 0,
+    id: id, label: LABELS[id] || id, model: o.model || MODELS[id] || 'mock', calls: [], plain: [], args: [], active: 0, maxActive: 0,
     async runPrompt(arg) {
       a.args.push(arg);
       const search = arg.search !== false;
@@ -89,4 +92,4 @@ async function runJob(site, o) {
   return { store, adapter, id, llm, providers, views, deps, job: await store.getJob(id) };
 }
 
-module.exports = { ENV_Q, ENV_T, ENV_TP, ENV_K, mockLlm, mockAdapter, failResult, siteFetch, runJob };
+module.exports = { ENV_Q, ENV_T, ENV_TP, ENV_ALL, ENV_K, mockLlm, mockAdapter, failResult, siteFetch, runJob };

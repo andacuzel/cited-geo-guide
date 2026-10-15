@@ -60,12 +60,16 @@ All off unless set to exactly `1` and the key is present. Details, costs and ter
 | `CITATION_QUESTIONS_ENABLED` | The profile and the 21 predicted questions | Production | To get the questions | Off | Off |
 | `CITATION_TEST_ENABLED` | The live check on every provider that is ready | Production | To get the check | Off: questions only | Off |
 | `PERPLEXITY_API_KEY` | Perplexity's key (secret) | Production, only if you decide to use it | For Perplexity | Perplexity cannot run | Not set in Vercel (in `.env.local`) |
+| `OPENAI_API_KEY` | ChatGPT through the OpenAI API (Responses API, web search tool). Set as a **secret** (sensitive) in Vercel. Never in the client, never logged | Production, only when ChatGPT is switched on | With the flag below | Nothing from OpenAI runs | Not set (15 Oct 2026) |
+| `CITATION_OPENAI_ENABLED` | ChatGPT joins the live check. Exact value `1`. Read "ChatGPT" in `docs/citation-check.md` first | Production, later | With the key | Off | Off |
+| `CITATION_OPENAI_MODEL` | The ChatGPT model | Production | No | `gpt-4.1-mini` (listed by OpenAI as supporting web search; NOT yet run live) | Default |
+| `CITATION_<ENGINE>_MAX_CALLS`, `CITATION_<ENGINE>_MAX_COST_USD`, `CITATION_<ENGINE>_DAILY_BUDGET_USD` | Per-engine caps (ENGINE = `ANTHROPIC`, `OPENAI` or `PERPLEXITY`): paid calls and cost per report, and the engine's spend per day. Reaching one stops that engine only | Production | No | The overall caps (calls ceiling 60, cost ceiling $2, daily ceiling $50) | Unset |
 | `CITATION_PERPLEXITY_ENABLED` | Perplexity joins the check. **Leave unset**: `docs/citation-check.md`, "Perplexity" | Production, later | No | Off | Off, by recommendation |
 | `CITATION_KNOWLEDGE_ENABLED` | The model knowledge check (Claude, no search) | Production, later | No | Off | Off |
 | `CITATION_KILL` | `1` stops every paid call (needs a redeploy). The instant switch is `node scripts/pro-admin.js kill on` | Production | No | Not killed | Unset |
 | `CITATION_MODEL`, `CITATION_PERPLEXITY_MODEL` | The models | Production | No | `claude-haiku-5-5`, `perplexity/sonar` (both verified 11 Oct 2026) | Defaults |
 | `CITATION_QUESTION_SAMPLE` | Questions asked per provider | Production | No | 10 (ceiling 18) | Default |
-| `CITATION_MAX_CALLS`, `CITATION_MAX_COST_USD` | Per report: paid calls and cost | Production | No | 30 (ceiling 60) and $0.50 (ceiling $2) | Defaults |
+| `CITATION_MAX_CALLS`, `CITATION_MAX_COST_USD` | Per report: paid calls and cost | Production | No | 30 and $0.50 (ceilings 60 and $2); with all three engines on, 40 and $0.75 (sample x engines + 10 calls, $0.25 an engine). An explicit value always wins | Defaults |
 | `CITATION_DAILY_BUDGET_USD`, `CITATION_MONTHLY_BUDGET_USD` | All reports together | Production | No | $2 a day, $4 a month (ceilings $50, $200) | Defaults |
 | `CITATION_QUESTIONS_PROVIDER` | `gemini` selects the disabled fallback writer (needs `GEMINI_API_KEY`) | Never | No | Claude writes | Unset |
 | `GEMINI_API_KEY` | Only the disabled question-writer fallback and the older crawl-summary endpoint | Production (summary) | No | The summary is written by rules | Not needed for citation |
