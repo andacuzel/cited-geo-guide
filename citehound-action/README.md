@@ -1,11 +1,9 @@
 # Citehound AI readiness check
 
-A GitHub Action that scans a domain for AI readiness and puts the result in the job summary. It reads the domain's public `robots.txt`, `llms.txt`, sitemap declaration and homepage, scores them out of 100 and lists the checks that failed with the fix for each. It is free and needs no account, no token and no secret.
+A GitHub Action that checks one page: it scans the one domain you give it and reports the score for that page. It reads the domain's public `robots.txt`, `llms.txt`, sitemap declaration and homepage, scores them out of 100 and writes the score and the checks that failed, with the fix for each, to the job summary. It is free and needs no account, no token and no secret. Whole-site reports, history, alerts and citation samples are part of Citehound Pro: https://getcitehound.com/pricing
 
 ```yaml
-on:
-  workflow_dispatch:
-  schedule: [{ cron: '0 9 * * 1' }]
+on: workflow_dispatch
 jobs:
   readiness:
     runs-on: ubuntu-latest
@@ -14,7 +12,7 @@ jobs:
         with: { domain: example.com, min-score: 70 }
 ```
 
-The Action is limited to up to 4 scans per hour per domain, so run it weekly or by hand rather than on every push.
+The Action is limited to up to 4 scans per hour per domain.
 
 ## Inputs
 

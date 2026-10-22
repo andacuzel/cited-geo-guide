@@ -1,5 +1,5 @@
 name: 'Citehound AI readiness check'
-description: 'Scan a domain for AI readiness: crawler access and on-page signals, scored out of 100. Free, no account.'
+description: 'Check one domain for AI readiness: crawler access and on-page signals of its home page, scored out of 100. Free, no account.'
 author: 'Citehound'
 branding:
   icon: 'search'
