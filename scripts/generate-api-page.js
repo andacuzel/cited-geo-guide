@@ -29,7 +29,7 @@ const Monitor = require('../lib/api-v1/monitor.js');
 const MCFG = Monitor.config({});
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 104;
+const CSS_VERSION = 105;
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const L = Limits.PLAN_LIMITS;
@@ -126,6 +126,7 @@ function monitoringSection() {
     '        <h3 class="cl-h3">Webhooks</h3>\n' +
     '        <p class="cl-note">A webhook receives each event you chose as a JSON <code>POST</code>. The address must be https on the default port and a public host; no redirect is followed. Each request carries <code>X-Citehound-Timestamp</code> (unix seconds), <code>X-Citehound-Signature</code> (<code>v1=</code> and the hex HMAC-SHA-256 of the timestamp, a dot and the raw body, keyed with your secret), <code>X-Citehound-Event</code>, <code>X-Citehound-Event-Id</code> and <code>X-Citehound-Delivery</code>. Any 2xx answer is a success. Otherwise it is retried after 1 minute, 10 minutes and 1 hour, at the next run of the scheduled job, so a retry can be up to a day late. After ' + MCFG.maxFails + ' deliveries in a row fail all their attempts, the webhook is disabled; delete it and create it again to start over. Use <code>POST /v1/webhooks/{id}/test</code> to send a test event and <code>GET /v1/webhooks/{id}/deliveries</code> to see the log.</p>\n' +
     snippet('verifySample', 'Verify a delivery (Node.js)', SAMPLE_VERIFY) +
+    '        <p class="cl-note">Prefer a page to curl? <a href="/watch">/watch</a> lets you paste a Pro key to add and remove watched domains and to read the events and the score history. The key stays in the page&rsquo;s memory and is never saved.</p>\n' +
     '      </div>\n    </section>\n\n';
 }
 

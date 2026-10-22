@@ -43,7 +43,7 @@
       "line": "$39/month or $390/year",
       "points": [
         "Whole-site report: up to 25 pages, page by page",
-        "Weekly re-scan with email alerts when something regresses (part of Pro early access)",
+        "Weekly homepage re-scan with email alerts for up to 5 domains",
         "Citation sample on {ENGINES}"
       ],
       "cta": {
@@ -89,7 +89,7 @@
       "points": [
         "Researched questions and a gap analysis",
         "4 edited pieces a month, which you approve before publishing",
-        "Re-measurement after publishing",
+        "Monthly re-measurement",
         "Includes Pro"
       ],
       "cta": {
@@ -122,8 +122,8 @@
       "a": "Beyond is $490 a month with a 3-month minimum and a limited number of seats. We research the questions your customers ask, analyze the gaps on your pages and write four edited pieces a month. You approve each one before it is published, and we re-measure every month."
     },
     {
-      "q": "When do weekly re-scans and alerts start?",
-      "a": "Weekly re-scans with email alerts are part of Pro early access. They are not running yet. We tell the Pro waitlist when they switch on."
+      "q": "How do weekly re-scans and alerts work?",
+      "a": "A Pro key can watch up to 5 domains. For each one, a scheduled job re-scans the homepage, robots.txt and llms.txt about every 7 days and compares the result with the last scan. We email you when the score drops, an AI crawler becomes blocked or llms.txt disappears, and Pro keys can also receive every change as a webhook. It covers the homepage, not the whole site, and it is set up through the API. Pro is in early access: we switch a key to Pro by hand for people on the waitlist."
     },
     {
       "q": "Can I do this myself?",
@@ -257,14 +257,14 @@
         ]
       },
       {
-        "label": "Weekly re-scan with email alerts",
+        "label": "Weekly homepage re-scan with email alerts, up to 5 domains",
         "has": [
           0,
           1,
           1,
           1
         ],
-        "note": "Part of Pro early access"
+        "note": "Set up through the API"
       },
       {
         "label": "Citation check on {ENGINES}, dated sample",

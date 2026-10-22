@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=104" />
+  <link rel="stylesheet" href="styles.css?v=105" />
 
   <script src="/request-form.js?v=1" defer></script>
   <script src="/pro-cta.js?v=1" defer></script>
@@ -91,10 +91,10 @@
       },
       {
         "@type": "Question",
-        "name": "When do weekly re-scans and alerts start?",
+        "name": "How do weekly re-scans and alerts work?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Weekly re-scans with email alerts are part of Pro early access. They are not running yet. We tell the Pro waitlist when they switch on."
+          "text": "A Pro key can watch up to 5 domains. For each one, a scheduled job re-scans the homepage, robots.txt and llms.txt about every 7 days and compares the result with the last scan. We email you when the score drops, an AI crawler becomes blocked or llms.txt disappears, and Pro keys can also receive every change as a webhook. It covers the homepage, not the whole site, and it is set up through the API. Pro is in early access: we switch a key to Pro by hand for people on the waitlist."
         }
       },
       {
@@ -251,7 +251,7 @@
             <p class="pr-best"><span class="pr-best__label">Best for</span> Teams who want a site that stays readable.</p>
             <ul class="pr-points">
               <li>Whole-site report: up to 25 pages, page by page</li>
-              <li>Weekly re-scan with email alerts when something regresses (part of Pro early access)</li>
+              <li>Weekly homepage re-scan with email alerts for up to 5 domains</li>
               <li>Citation sample on Claude (ChatGPT coming)</li>
             </ul>
             <p class="pr-cta"><a class="btn btn--gold" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a></p>
@@ -278,7 +278,7 @@
             <ul class="pr-points">
               <li>Researched questions and a gap analysis</li>
               <li>4 edited pieces a month, which you approve before publishing</li>
-              <li>Re-measurement after publishing</li>
+              <li>Monthly re-measurement</li>
               <li>Includes Pro</li>
             </ul>
             <p class="pr-cta"><button type="button" class="btn btn--ghost" data-request="beyond">Apply for Beyond</button></p>
@@ -343,7 +343,7 @@
             <tbody>
             <tr><th scope="row">Readiness score</th><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
             <tr><th scope="row">Whole-site report, page by page</th><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
-            <tr><th scope="row">Weekly re-scan with email alerts <span class="pp-rownote">Part of Pro early access</span></th><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
+            <tr><th scope="row">Weekly homepage re-scan with email alerts, up to 5 domains <span class="pp-rownote">Set up through the API</span></th><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
             <tr><th scope="row">Citation check on Claude (ChatGPT coming), dated sample</th><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
             <tr><th scope="row">Changes prepared or applied by Citehound</th><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
             <tr><th scope="row">Before and after rescan</th><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><span class="pp-no" aria-hidden="true">&ndash;</span><span class="pr-vh">Not included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="pp-yes" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="pr-vh">Included</span></td></tr>
@@ -439,8 +439,8 @@
             <p>Beyond is $490 a month with a 3-month minimum and a limited number of seats. We research the questions your customers ask, analyze the gaps on your pages and write four edited pieces a month. You approve each one before it is published, and we re-measure every month.</p>
           </details>
           <details>
-            <summary>When do weekly re-scans and alerts start?</summary>
-            <p>Weekly re-scans with email alerts are part of Pro early access. They are not running yet. We tell the Pro waitlist when they switch on.</p>
+            <summary>How do weekly re-scans and alerts work?</summary>
+            <p>A Pro key can watch up to 5 domains. For each one, a scheduled job re-scans the homepage, robots.txt and llms.txt about every 7 days and compares the result with the last scan. We email you when the score drops, an AI crawler becomes blocked or llms.txt disappears, and Pro keys can also receive every change as a webhook. It covers the homepage, not the whole site, and it is set up through the API. Pro is in early access: we switch a key to Pro by hand for people on the waitlist.</p>
           </details>
           <details>
             <summary>Can I do this myself?</summary>

@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=104" />
+  <link rel="stylesheet" href="styles.css?v=105" />
   <!-- SITE-SCHEMA:START -->
   <script type="application/ld+json">
   {
@@ -138,13 +138,14 @@
           <h2 class="doc-section__heading">The API</h2>
           <p>The Citehound API is for scanning sites you are authorized to check and for generating files. It is the supported way to scan automatically; the public interface is not. A free key allows 20 requests an hour and 100 a day, and the same domain is scanned at most 4 times an hour across all keys. These limits can change; the current ones are on the <a href="/api">API page</a>.</p>
           <p>Keep your key private: you are responsible for requests made with it. Do not use the API to probe private networks, to overload a site, to resell access, to work around a limit or to publish a key. We may revoke a key that is abused, without notice. The API returns the same readiness score as the scan; see &ldquo;What a score means&rdquo; below.</p>
+          <p>Monitoring is part of the Pro plan. A Pro key can watch up to 5 domains. A scheduled job re-scans each watched domain about every 7 days and we compare each scan with the one before. If you gave an address for alerts, we email you when the score drops, an AI crawler becomes blocked or llms.txt disappears, at most once a day for each domain. Webhooks receive the events you choose; a delivery is retried up to three times, and a webhook that keeps failing is disabled. Only add webhook addresses you control, and keep the secret private. Events and alerts report changes in a readiness score and in crawler access.</p>
         </div>
 
         <div class="doc-section">
           <h2 class="doc-section__heading">The paid plans</h2>
           <p>Prices are in US dollars. The plans are in early access: payments open soon, and nothing is charged until they do and you agree to a purchase.</p>
           <ul class="doc-list">
-            <li><strong>Pro</strong> is $39 a month or $390 a year. The first month is free for the first 10 early-access users. Pro today is a whole-site report of up to 25 pages and a dated citation sample on Claude (ChatGPT is coming). Features we describe as planned, such as weekly re-scans with email alerts, are not part of Pro until they are live.</li>
+            <li><strong>Pro</strong> is $39 a month or $390 a year. The first month is free for the first 10 early-access users. Pro today is a whole-site report of up to 25 pages, a dated citation sample on Claude (ChatGPT is coming), and monitoring through the API for up to 5 domains: a weekly re-scan of each domain&rsquo;s homepage with email alerts. Features we describe as planned are not part of Pro until they are live.</li>
             <li><strong>Fix</strong> starts at $299. After your scan we send a fixed quote, and the price does not change once you agree to it. Fix includes 3 months of Pro. Where you give us access to your site, we apply the changes by hand. Where you do not, we deliver the files with instructions. For 14 days after delivery we make small corrections.</li>
             <li><strong>Beyond</strong> is $490 a month, with a 3-month minimum and limited seats. It includes researched questions and a gap analysis, 4 edited pieces a month that you approve before they are published, a monthly re-measurement, and Pro.</li>
           </ul>
@@ -153,7 +154,7 @@
 
         <div class="doc-section">
           <h2 class="doc-section__heading">Billing and cancellation</h2>
-          <p>We bill through our payment provider, in US dollars. [TO CONFIRM: whether taxes are added at checkout, and when Fix is invoiced: before work starts or on delivery.]</p>
+          <p>We bill through our payment provider. Prices are in US dollars. Taxes, where they apply, are added at checkout. Fix is paid in full when you accept the quote, before work starts.</p>
           <p>You can cancel Pro at any time. It stays active until the end of the period you have paid for. You can cancel Beyond after the 3-month minimum with 30 days&rsquo; notice. To cancel, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a>.</p>
         </div>
 
@@ -191,7 +192,7 @@
         <div class="doc-section">
           <h2 class="doc-section__heading">Provided as-is, and our liability</h2>
           <p>Citehound is provided as-is, without warranty of any kind. We work to keep the scanner accurate and available.</p>
-          <p>To the extent the law allows, we are not liable for indirect or consequential loss, such as lost traffic, lost sales or lost profit, and our total liability for a paid plan is limited to the amount you paid for it in the 12 months before the claim. [TO CONFIRM: liability limit and wording, with a lawyer.]</p>
+          <p>To the extent the law allows, we are not liable for indirect or consequential loss, such as lost traffic, lost sales or lost profit, and our total liability to you is limited to the amount you paid us in the 12 months before the claim.</p>
         </div>
 
         <div class="doc-section">

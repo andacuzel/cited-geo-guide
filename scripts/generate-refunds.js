@@ -21,7 +21,7 @@ const shell = require('../lib/page-shell.js');
 const site = require('../lib/site-config.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 104;
+const CSS_VERSION = 105;
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const DATE = '22 October 2026';

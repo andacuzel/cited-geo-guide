@@ -65,6 +65,8 @@ It sets the plan on every active key of that address. Use `"plan": "free"` to un
 - **Webhooks:** signed with `X-Citehound-Signature: v1=<HMAC-SHA-256 of "<timestamp>.<body>">`, with `X-Citehound-Timestamp`. Retries after 1 minute, 10 minutes and 1 hour (the job makes them, so on the daily job they are up to a day late). `API_V1_WEBHOOK_MAX_FAILS` (5) deliveries in a row that fail all their attempts disable the webhook. The secret is stored sealed (AES-256-GCM with a key derived from `API_KEY_PEPPER`): **changing the pepper makes every stored webhook secret unreadable** as well as every key. The POST goes through `lib/safe-fetch.js` (extended for POST: one request, no redirect, public addresses only, https and port 443 only).
 - **Deleting:** removing the last watcher of a domain deletes its snapshots, events and schedule. Revoking a key deletes its watchlist, alert address, webhooks, delivery logs and pending retries. Snapshots and events expire after `API_V1_RETENTION_DAYS` (365).
 
+The browser front end is `/watch` (`scripts/generate-watch-page.js` writes `watch.html`; `watch.js` is its script). It calls only `/v1/me`, `/v1/watchlist`, `/v1/events` and `/v1/history`, so its actions count toward the key's limits.
+
 ### What Vercel's plans allow (checked in the Vercel documentation on 22 Oct 2026)
 
 | | Hobby | Pro |

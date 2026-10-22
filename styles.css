@@ -5294,5 +5294,6 @@ body.wsd-open { overflow: hidden; }
   .cl-table th, .cl-table td { display: block; padding: 2px 0; border: 0; white-space: normal; }
   .cl-table tbody th { font-size: 16px; }
   .cl-table td[data-label="Access"] { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .cl-table--wrap td[data-label]::before { content: attr(data-label) ": "; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); }
 }
 

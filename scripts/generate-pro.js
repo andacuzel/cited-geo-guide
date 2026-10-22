@@ -37,7 +37,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 104;
+const CSS_VERSION = 105;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -262,7 +262,7 @@ function faq(F) {
     { q: 'Can I try the questions myself?',
       html: 'Yes. The report lists them with a Copy button. Ask each one three to five times, in a new conversation each time, and look at the pattern rather than one answer.' },
     { q: 'Can I buy Pro today?',
-      html: 'Not yet. Pro is in early access: <a href="#waitlist">join the Pro waitlist</a> and we will write once, when it opens. Early-access pricing is $39 a month or $390 a year, with the first month free for the first 10 early-access users. Weekly re-scans with email alerts are part of Pro early access and are not running yet.' },
+      html: 'Not yet. Pro is in early access: <a href="#waitlist">join the Pro waitlist</a> and we will write once, when it opens. Early-access pricing is $39 a month or $390 a year, with the first month free for the first 10 early-access users. Weekly homepage re-scans with email alerts for up to 5 domains run through the API for Pro keys.' },
     { q: 'Do I need an account?',
       html: 'No. There is no account or login. A report is made from a private link, opens at its own private address and stays available for 90 days.' }
   ];

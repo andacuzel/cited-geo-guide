@@ -9,7 +9,7 @@
    - /privacy's retention numbers (workspaces 400 and 90 days, reports and orders 90 days, the waitlist 12 months) are the ones in the code, and it names only the processors the code uses;
    - the free scan stores no result: api/scan.js keeps only the hashed-address counters (lib/_rateLimit);
    - no claim of an integration that does not exist or of a certification.
-   The brackets in the three pages are facts only the owner knows; the test lists them and passes (a bracket is not a failure, publishing one is the owner's call).
+   No bracket or TBA is left in the three pages (23 Oct 2026): the owner confirmed every blank.
 
      node scripts/test-legal-pages.js
    ===================================================================== */
@@ -38,7 +38,7 @@ const tier = (k) => pricing.tiers.find((x) => x.key === k);
 t('terms: Pro is $39 a month or $390 a year, as the pricing file says', tier('pro').priceMain === '$39' && tier('pro').priceAlt === '$390' && /Pro<\/strong> is \$39 a month or \$390 a year/.test(read('terms.html')));
 t('terms: Fix starts at $299 with a fixed quote, 3 months of Pro and 14 days of small corrections', tier('fix').priceMain === 'From $299' && /Fix<\/strong> starts at \$299/.test(read('terms.html')) && /fixed quote/.test(terms) && /3 months of Pro/.test(terms) && /14 days after delivery we make small corrections/.test(terms));
 t('terms: Beyond is $490 a month, 3-month minimum, limited seats, 4 edited pieces a month approved by the customer, Pro included', tier('beyond').priceMain === '$490' && /Beyond<\/strong> is \$490 a month, with a 3-month minimum and limited seats/.test(read('terms.html')) && /4 edited pieces a month that you approve before they are published/.test(terms) && /and Pro\./.test(terms));
-t('terms: Pro is described as what exists (a report of up to 25 pages, a dated citation sample on Claude); weekly re-scans appear only as not part of Pro yet', /whole-site report of up to 25 pages/.test(terms) && /Claude \(ChatGPT is coming\)/.test(terms) && (terms.match(/weekly re-scans?/gi) || []).length === 1 && /such as weekly re-scans with email alerts, are not part of Pro until they are live/.test(terms));
+t('terms: Pro is described as what exists (a report of up to 25 pages, a dated citation sample on Claude, monitoring through the API for up to 5 domains with a weekly homepage re-scan and email alerts); planned features are not part of Pro until live', /whole-site report of up to 25 pages/.test(terms) && /Claude \(ChatGPT is coming\)/.test(terms) && /monitoring through the API for up to 5 domains: a weekly re-scan of each domain.s homepage with email alerts/.test(terms) && /Features we describe as planned are not part of Pro until they are live/.test(terms) && require('../lib/api-v1/monitor.js').config({}).watchLimit === 5);
 t('terms: no page-count limit is stated for Fix', !/Fix[^.]*\b\d+ pages\b/.test(terms));
 t('terms: refunds, billing and cancellation, Fix and Beyond work, acceptable use, what a score means, reports and files, as-is and liability, governing law, changes, contact are all sections', ['Billing and cancellation', 'Refunds', 'Fix and Beyond work', 'Acceptable use', 'What a score means', 'Reports, files and links', 'Provided as-is, and our liability', 'Governing law', 'Changes to these terms', 'Contact'].every((h) => read('terms.html').indexOf('>' + h.replace(/&/g, '&amp;') + '<') !== -1));
 t('terms: the delivered reports and files belong to the customer; the research and methodology stay ours', /belong to you/.test(terms) && /Our research, our methodology and the scanner itself stay ours/.test(terms));
@@ -92,17 +92,25 @@ t('the API key store keeps what the privacy page says (a hash, a masked address,
 
 /* wording: no "monthly" next to the citation sample; no "nothing is stored" for the free scan */
 const monthlyCite = pages.filter((f) => !/^(docs|content)\//.test(f) && /monthly (citation|sample|check)|citation (check|sample)[^.<]{0,40}monthly/i.test(read(f)));
-t('no page calls the citation sample monthly', monthlyCite.length === 0 && !/monthly (citation|sample)|monthly re-?measure/i.test(read('content/pricing.json') + read('content/service-pages.json')), monthlyCite.join(', '));
+t('no page calls the citation sample monthly; Beyond keeps its monthly re-measurement (done by hand) and no page says it is automated', monthlyCite.length === 0 && !/monthly (citation|sample)/i.test(read('content/pricing.json') + read('content/service-pages.json')) && /Monthly re-measurement/.test(read('pricing.html')) && /Monthly re-measurement/.test(read('index.html')) && /re-measure every month/.test(main(read('beyond.html'))) && !/automat[a-z]* [^.]{0,60}re-?measure|re-?measure[^.]{0,60}automat/i.test(main(read('beyond.html')) + main(read('pricing.html')) + main(read('index.html')) + main(read('terms.html'))), monthlyCite.join(', '));
 const nothingStored = pages.filter((f) => !/^(mcp\.html|research\/|benchmarks\/|app\/)/.test(f) && /nothing is stored|nothing stored/i.test(main(read(f))));
 t('no page about the free scan or the free tools says "nothing is stored"', nothingStored.length === 0, nothingStored.join(', '));
 t('the free-scan line is "No email. Runs in your browser. Your scan result isn\'t saved." on the homepage, the 404 page and the agentic commerce page', ['index.html', '404.html', 'agentic-commerce.html'].every((f) => read(f).indexOf("No email. Runs in your browser. Your scan result isn't saved.") !== -1));
 
+
+/* the confirmed terms (23 Oct 2026) */
+t('terms: taxes at checkout, Fix paid in full on acceptance before work starts, liability limited to what you paid in the 12 months before the claim', /Prices are in US dollars\. Taxes, where they apply, are added at checkout\./.test(terms) && /Fix is paid in full when you accept the quote, before work starts\./.test(terms) && /limited to the amount you paid us in the 12 months before the claim\./.test(terms) && /Before we start work, you can cancel a Fix project and get a full refund/.test(refunds));
+t('privacy: correspondence and quotes 24 months, invoice and billing records 5 years, the payment provider is never named', /for 24 months\./.test(privacy) && /invoice and billing records for 5 years/.test(privacy) && !/\b(Stripe|Paddle|Polar|PayPal|Lemon ?Squeezy|Gumroad|Adyen|Square|Mollie|iyzico)\b/i.test(terms + privacy + refunds) && /our payment provider/.test(privacy));
+t('terms and privacy describe monitoring as the code does: 5 domains, about every 7 days, 365 days, 90 days of delivery log, 50 deliveries, alert limits, encrypted webhook secrets', (() => { const M = require('../lib/api-v1/monitor.js'), W = require('../lib/api-v1/webhooks.js'), c = M.config({}); return c.watchLimit === 5 && c.retentionDays === 365 && W.LOG_KEEP === 50 && M.ALERT_TYPES.length === 3 && /A scheduled job re-scans each watched domain about every 7 days/.test(terms) && /at most once a day for each domain/.test(terms) && /up to three times/.test(terms) && /up to 365 days/.test(privacy) && /last 50 deliveries/.test(privacy) && /for 90 days/.test(privacy) && /secret is stored encrypted/.test(privacy) && /at most one email a day for each domain/.test(privacy) && /stop watching your last domain or revoke the key/.test(privacy); })());
+t('the outcome sentence is still on /terms exactly once', (read('terms.html').match(new RegExp(SENTENCE.replace(/[.]/g, '\\.'), 'g')) || []).length === 1);
+t('pricing: weekly re-scan is worded as built (homepage, up to 5 domains, email alerts) and the "not running yet" line is gone', /Weekly homepage re-scan with email alerts for up to 5 domains/.test(read('pricing.html')) && /Weekly homepage re-scan with email alerts for up to 5 domains/.test(read('index.html')) && !/not running yet|part of Pro early access/.test(read('pricing.html') + read('index.html') + read('pro.html') + read('content/pricing.json')));
+
 /* the owner's blanks */
 const blanks = {};
 [['terms.html', terms], ['privacy.html', privacy], ['refunds.html', refunds]].forEach((x) => { (x[1].match(/\[[A-Z][^\]]{2,200}\]/g) || []).forEach((b) => { (blanks[x[0]] = blanks[x[0]] || []).push(b); }); });
-const known = /^\[TO CONFIRM:[^\]]+\]$/;
-t('every bracket in the legal pages is a TO CONFIRM blank (the entity, location, governing law and jurisdiction are filled)', Object.keys(blanks).every((f) => blanks[f].every((b) => known.test(b))), JSON.stringify(blanks));
-out('\n  blanks left for the owner: ' + Object.keys(blanks).map((f) => f + ' ' + blanks[f].length).join(', '));
+const known = /^$/;
+t('every bracket in the legal pages is nothing: no placeholder of any kind is left (the entity, location, law, tax, billing, retention, liability and provider blanks are filled)', Object.keys(blanks).every((f) => blanks[f].every((b) => known.test(b))), JSON.stringify(blanks));
+t('no [TO CONFIRM], TBA or TBD anywhere on a public page', !pages.some((f) => /\[TO CONFIRM|\bTBA\b|\bTBD\b/.test(read(f))), pages.filter((f) => /\[TO CONFIRM|\bTBA\b|\bTBD\b/.test(read(f))).join(', '));
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');
 if (fails.length) { out('FAILED:\n  ' + fails.join('\n  ')); process.exit(1); }

@@ -91,9 +91,9 @@
   "beyond": {
     "path": "/beyond",
     "title": "Citehound Beyond: be the page assistants pick",
-    "description": "Citehound Beyond researches your customers’ questions, writes the content you approve and re-measures after you publish. $490 a month. Includes Citehound Pro.",
+    "description": "Citehound Beyond researches your customers’ questions, writes the content you approve and re-measures monthly. $490 a month. Includes Citehound Pro.",
     "h1": "Readable is not enough. Be the page assistants pick.",
-    "sub": "We research the questions your customers ask, read your pages against them and write the content: new pages, FAQ and comparison blocks, rewrites. Human-edited. You approve it, we publish or hand it over, and we re-measure after it is live.",
+    "sub": "We research the questions your customers ask, read your pages against them and write the content: new pages, FAQ and comparison blocks, rewrites. Human-edited. You approve it, we publish or hand it over, and we re-measure every month.",
     "cta": "Apply for Beyond",
     "stepsKicker": "How it works",
     "stepsTitle": "From their questions to your pages.",
@@ -164,7 +164,7 @@
       }
     },
     "bandTitle": "Human-approved, automated.",
-    "bandText": "We automate the question research and the page reading. People edit the drafts. You approve every piece, and nothing is published without you.",
+    "bandText": "We automate the question research and the page reading. People edit the drafts, and we re-measure every month. You approve every piece, and nothing is published without you.",
     "bandCols": [
       {
         "icon": "repeat",
