@@ -29,7 +29,7 @@ const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const MCFG = Monitor.config({});
 
 const TITLE = 'Watch your domains: Citehound Pro monitoring';
-const DESC = 'Paste a Pro API key to watch up to ' + MCFG.watchLimit + ' domains, see their score history and read what changed. The key stays in the page and is never saved.';
+const DESC = 'Paste a Pro, Fix or Beyond API key to watch up to ' + MCFG.watchLimit + ' domains (15 on Beyond), see score history and what changed. The key is never saved.';
 const H1 = 'Watch your domains';
 
 function head(kicker, id, title, sub) {
@@ -42,10 +42,10 @@ function table(id, caption, cols, bodyId) {
 function body() {
   return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner">\n          <div class="page-banner__body">\n            <p class="kicker kicker--on-navy">Pro monitoring</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">' + esc(H1) + '</h1>\n' +
-    '            <p class="page-banner__desc">Add up to ' + MCFG.watchLimit + ' domains. Each is re-scanned about every 7 days, and you see the score history and what changed. This page uses your Pro API key and the same <a href="/api#monitoring">monitoring API</a> you can call yourself.</p>\n' +
+    '            <p class="page-banner__desc">Add up to ' + MCFG.watchLimit + ' domains (15 on Beyond). Each is re-scanned about every 7 days (about every 2 days on Beyond), and you see the score history and what changed. This page uses an API key on Pro, Fix or Beyond and the same <a href="/api#monitoring">monitoring API</a> you can call yourself.</p>\n' +
     '          </div>\n        </div>\n      </div>\n    </section>\n\n' +
 
-    '    <section class="cl-sec hp-light" id="connect" aria-labelledby="connect-heading">\n      <div class="section__inner">\n' + head('Your key', 'connect-heading', 'Paste your Pro key.', 'The key stays in this page&rsquo;s memory. It is not saved in the browser, and it goes only to this site&rsquo;s API. Reload the page and it is gone. Get a key on the <a href="/api#key">API page</a>.') +
+    '    <section class="cl-sec hp-light" id="connect" aria-labelledby="connect-heading">\n      <div class="section__inner">\n' + head('Your key', 'connect-heading', 'Paste your API key.', 'The key stays in this page&rsquo;s memory. It is not saved in the browser, and it goes only to this site&rsquo;s API. Reload the page and it is gone. Get a key on the <a href="/api#key">API page</a>.') +
     '        <form class="ps-form wl-form" id="wKeyForm" novalidate>\n          <div class="ps-field"><label for="wKey" class="ps-label">API key</label><input class="field ps-input" id="wKey" name="key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="64" aria-describedby="wKeyError" required /><p class="ps-error" id="wKeyError" hidden></p></div>\n' +
     '          <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="wConnect">Connect</button></p>\n          <p class="wl-status" id="wKeyStatus" role="status" aria-live="polite" tabindex="-1"></p>\n        </form>\n' +
     '        <noscript><p class="ps-note">This page needs JavaScript. Without it, use the <a href="/api#monitoring">API</a> directly.</p></noscript>\n' +
@@ -53,7 +53,7 @@ function body() {
 
     '    <section class="cl-sec hp-light" id="wPanel" aria-labelledby="wPanelHead" hidden>\n      <div class="section__inner">\n' +
     '        <div class="section-head">\n          <p class="kicker">Connected</p>\n          <h2 id="wPanelHead" class="section-title" tabindex="-1">Your watchlist</h2>\n          <p class="section-sub" id="wPlan"></p>\n          <p><button type="button" class="btn btn--ghost" id="wForget">Forget this key</button></p>\n        </div>\n' +
-    '        <div id="wFree" hidden>\n          <p class="cl-limits">Monitoring is part of the Pro plan, and this key is on the free plan. Pro keys are set up by us: write to <a href="mailto:' + esc(site.contactEmail) + '">' + esc(site.contactEmail) + '</a> to ask. The free key still works for scans and generators on the <a href="/api">API page</a>.</p>\n        </div>\n' +
+    '        <div id="wFree" hidden>\n          <p class="cl-limits">Monitoring is part of Pro, Fix and Beyond, and this key is on the free plan. See the <a href="/pricing">plans</a>. A key gets its plan from us: write to <a href="mailto:' + esc(site.contactEmail) + '">' + esc(site.contactEmail) + '</a> to ask. The free key still works for scans and generators on the <a href="/api">API page</a>.</p>\n        </div>\n' +
     '        <div id="wPro" hidden>\n' +
     '          <h3 class="cl-h3">Add a domain</h3>\n          <p class="cl-note">The first scan runs when you add it and becomes the baseline. After that, a scheduled job re-scans the homepage, robots.txt and llms.txt when the domain is due. Give an alert address (the one this key was sent to) to get an email when the score drops, an AI crawler becomes blocked or llms.txt disappears.</p>\n' +
     '          <form class="ps-form wl-form" id="wAddForm" novalidate>\n            <div class="ps-field"><label for="wDomain" class="ps-label">Domain</label><input class="field ps-input" id="wDomain" name="domain" type="text" inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="false" maxlength="253" placeholder="example.com" aria-describedby="wDomainError" required /><p class="ps-error" id="wDomainError" hidden></p></div>\n' +

@@ -35,6 +35,10 @@ To try it from a local copy without installing, run `claude --plugin-dir ./claud
 
 If you only want the tools and not the skills, add the server on its own: `claude mcp add --transport http citehound https://getcitehound.com/api/mcp`. Setup for other clients is on https://getcitehound.com/claude.
 
+## Plans
+
+The plugin uses the public MCP server, which needs no key and is free in full: scans, compare and the generators. API keys, plans and their limits are separate and are described on https://getcitehound.com/api.
+
 ## Limits
 
 - A scan reads one page of a domain (its robots.txt, llms.txt, sitemap declaration and homepage), not the whole site.

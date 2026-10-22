@@ -4,7 +4,7 @@ info:
   title: "Citehound API"
   version: "1.0.0"
   summary: "Scan a domain for AI readiness and generate llms.txt, robots.txt and schema."
-  description: "Scans one page of a domain (its robots.txt, llms.txt, sitemap declaration and homepage) and scores it out of 100, and generates llms.txt, robots.txt and JSON-LD. Pro keys can also watch domains: weekly re-scans, events and signed webhooks. The score measures readiness: crawler access and on-page signals. It does not measure whether any assistant names a brand.\n\nGet a free key by email at https://getcitehound.com/api. Limits: a free key allows 20 requests an hour and 100 a day; the same domain is scanned at most 4 times an hour across all keys."
+  description: "Scans one page of a domain (its robots.txt, llms.txt, sitemap declaration and homepage) and scores it out of 100, and generates llms.txt, robots.txt and JSON-LD. Pro keys can also watch domains: weekly re-scans, events and signed webhooks. The score measures readiness: crawler access and on-page signals. It does not measure whether any assistant names a brand.\n\nGet a free key by email at https://getcitehound.com/api. Limits: a free key allows 10 requests an hour and 40 a day; the same domain is scanned at most 4 times an hour across all keys."
   termsOfService: "https://getcitehound.com/terms"
   contact:
     name: "Citehound"
@@ -20,9 +20,11 @@ tags:
   - name: "Generate"
   - name: "Benchmark"
   - name: "Monitoring"
-    description: "Pro plan only."
+    description: "Pro, Fix and Beyond."
   - name: "Webhooks"
-    description: "Pro plan only."
+    description: "Pro, Fix and Beyond."
+  - name: "Fix"
+    description: "Fix and Beyond."
 security:
   - bearerAuth: []
   - keyHeader: []
@@ -86,12 +88,22 @@ paths:
                 email: "y***@example.com"
                 created_at: "2026-10-22T12:00:00.000Z"
                 limits:
-                  requests_per_hour: 20
-                  requests_per_day: 100
+                  requests_per_hour: 10
+                  requests_per_day: 40
+                  scans_per_day: 5
                   scans_per_domain_per_hour: 4
                 usage:
                   this_hour: 1
                   today: 1
+                features:
+                  scan_detail: "top3"
+                  compare: false
+                  generators: "preview"
+                  schema_types:
+                    - "organization"
+                  monitoring: false
+                  fixes: false
+                  export: false
         "401":
           "$ref": "#/components/responses/Unauthorized"
         "403":
@@ -302,6 +314,8 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "429":
@@ -607,6 +621,8 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "429":
@@ -666,7 +682,7 @@ paths:
       tags:
         - "Monitoring"
       summary: "Pro: Watch a domain"
-      description: "Pro plan only. Adds a domain to the key's watchlist (up to 5 per Pro key). The first scan runs now and becomes the baseline; after that the domain is re-scanned about every 7 days by a scheduled job, and each scan is compared with the one before. The scan counts toward the per-domain limit. To get alert emails, send \"alert_email\" with the address this key was sent to; alerts can be switched off per domain with \"alerts\": false."
+      description: "Available on Pro, Fix and Beyond. Adds a domain to the key's watchlist (up to 5 per Pro key). The first scan runs now and becomes the baseline; after that the domain is re-scanned about every 7 days by a scheduled job, and each scan is compared with the one before. The scan counts toward the per-domain limit. To get alert emails, send \"alert_email\" with the address this key was sent to; alerts can be switched off per domain with \"alerts\": false."
       "x-plan": "pro"
       requestBody:
         required: true
@@ -703,6 +719,8 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "409":
@@ -720,7 +738,7 @@ paths:
       tags:
         - "Monitoring"
       summary: "Pro: List the watched domains"
-      description: "Pro plan only. The key's watchlist with the time of the last scan, the earliest time of the next one, the last score and whether alerts are on."
+      description: "Available on Pro, Fix and Beyond. The key's watchlist with the time of the last scan, the earliest time of the next one, the last score and whether alerts are on."
       "x-plan": "pro"
       responses:
         "200":
@@ -743,6 +761,8 @@ paths:
                 alert_email: true
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "429":
@@ -754,7 +774,7 @@ paths:
       tags:
         - "Monitoring"
       summary: "Pro: Stop watching a domain"
-      description: "Pro plan only. Removes a domain from the key's watchlist. When no key watches the domain any more, its snapshots and events are deleted."
+      description: "Available on Pro, Fix and Beyond. Removes a domain from the key's watchlist. When no key watches the domain any more, its snapshots and events are deleted."
       "x-plan": "pro"
       parameters:
         - name: "domain"
@@ -779,6 +799,8 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -793,7 +815,7 @@ paths:
       tags:
         - "Monitoring"
       summary: "Pro: The stored scans of a watched domain"
-      description: "Pro plan only. The snapshots of one watched domain, newest first: the score, the pillar scores, the ids of the failed checks, the state of each crawler, and whether llms.txt and JSON-LD were present. Snapshots are kept 365 days."
+      description: "Available on Pro, Fix and Beyond. The snapshots of one watched domain, newest first: the score, the pillar scores, the ids of the failed checks, the state of each crawler, and whether llms.txt and JSON-LD were present. Snapshots are kept 365 days."
       "x-plan": "pro"
       parameters:
         - name: "domain"
@@ -850,6 +872,8 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -864,7 +888,7 @@ paths:
       tags:
         - "Monitoring"
       summary: "Pro: What changed, newest first"
-      description: "Pro plan only. Events from the differences between two scans of the watched domains: score_dropped, score_improved, crawler_blocked, crawler_unblocked, llms_txt_added, llms_txt_removed, check_failed, check_fixed, scan_failed. Ids are stable and sort in time order, so a polling client can pass the newest id it has as \"since\" and take only what is new. To read further back, pass \"next_cursor\" as \"cursor\". \"score_dropped\" and \"score_improved\" fire at a change of 5 points or more. Events are kept 365 days."
+      description: "Available on Pro, Fix and Beyond. Events from the differences between two scans of the watched domains: score_dropped, score_improved, crawler_blocked, crawler_unblocked, llms_txt_added, llms_txt_removed, check_failed, check_fixed, scan_failed. Ids are stable and sort in time order, so a polling client can pass the newest id it has as \"since\" and take only what is new. To read further back, pass \"next_cursor\" as \"cursor\". \"score_dropped\" and \"score_improved\" fire at a change of 5 points or more. Events are kept 365 days."
       "x-plan": "pro"
       parameters:
         - name: "since"
@@ -928,6 +952,177 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "404":
+          "$ref": "#/components/responses/NotFound"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/fixes":
+    get:
+      operationId: "fixes"
+      tags:
+        - "Fix"
+      summary: "Fix: The prioritized fix list, with files to paste"
+      description: "Available on Fix and Beyond. Scans the domain and returns what to change, highest points at stake first. Each finding has the plain fix and, where one applies, the file or snippet to paste (robots.txt, llms.txt, JSON-LD, head tags), built from the site's own title, description and language; anything the scan cannot know is left in square brackets. The list is remembered for 90 days so that POST /v1/fixes/recheck can show what changed."
+      "x-plan": "fix"
+      parameters:
+        - name: "domain"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.com"
+            maxLength: 253
+      responses:
+        "200":
+          description: "The fix list."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/FixList"
+              example:
+                domain: "example.com"
+                scannedAt: "2026-10-22T12:00:00.000Z"
+                score: 62
+                items:
+                  - priority: 1
+                    id: "llms-txt-present"
+                    label: "llms.txt present"
+                    pillar: "Discoverability"
+                    points_at_stake: 4
+                    fix: "Add an llms.txt at the site root"
+                    files:
+                      - where: "https://example.com/llms.txt"
+                        kind: "llms.txt"
+                        content: "# Example Co\n\n> [One sentence describing the site.]"
+                note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/fixes/recheck":
+    post:
+      operationId: "fixesRecheck"
+      tags:
+        - "Fix"
+      summary: "Fix: Re-scan after you made the changes"
+      description: "Available on Fix and Beyond. Scans the domain again and compares it with the fix list made by GET /v1/fixes: which findings are now fixed, which still fail, and which are new, with the score before and after. Needs a fix list first (404 no_fix_list otherwise)."
+      "x-plan": "fix"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              "$ref": "#/components/schemas/RecheckRequest"
+            example:
+              domain: "example.com"
+      responses:
+        "200":
+          description: "The comparison."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/RecheckResult"
+              example:
+                domain: "example.com"
+                checked_at: "2026-10-23T12:00:00.000Z"
+                score_before: 62
+                score_after: 70
+                fixed:
+                  - "llms-txt-present"
+                still_failing:
+                  - "meta-description"
+                new_failures: []
+                note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "404":
+          "$ref": "#/components/responses/NotFound"
+        "415":
+          "$ref": "#/components/responses/UnsupportedMediaType"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/export":
+    get:
+      operationId: "export"
+      tags:
+        - "Monitoring"
+      summary: "Beyond: Export the history or the events of a watched domain"
+      description: "Available on Beyond. The stored snapshots (type=snapshots) or events (type=events) of a watched domain, as JSON or CSV (format=csv), as far back as the plan keeps them (730 days on Beyond)."
+      "x-plan": "beyond"
+      parameters:
+        - name: "domain"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.com"
+            maxLength: 253
+        - name: "type"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            enum:
+              - "snapshots"
+              - "events"
+            default: "snapshots"
+        - name: "format"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            enum:
+              - "json"
+              - "csv"
+            default: "json"
+      responses:
+        "200":
+          description: "The rows (JSON), or a CSV file."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/ExportResult"
+              example:
+                domain: "example.com"
+                type: "snapshots"
+                exported_at: "2026-10-22T12:00:00.000Z"
+                retention_days: 730
+                count: 0
+                rows: []
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -942,7 +1137,7 @@ paths:
       tags:
         - "Webhooks"
       summary: "Pro: Create a webhook"
-      description: "Pro plan only. Registers an https address that receives the events you choose as signed JSON (see \"Webhooks\" below for the headers and how to verify them). Up to 3 per key. Leave \"secret\" out and one is generated and shown once; if you send one, it is never shown again. The address must be https on the default port and a public host."
+      description: "Available on Pro, Fix and Beyond. Registers an https address that receives the events you choose as signed JSON (see \"Webhooks\" below for the headers and how to verify them). Up to 3 per key. Leave \"secret\" out and one is generated and shown once; if you send one, it is never shown again. The address must be https on the default port and a public host."
       "x-plan": "pro"
       requestBody:
         required: true
@@ -980,6 +1175,8 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "409":
@@ -995,7 +1192,7 @@ paths:
       tags:
         - "Webhooks"
       summary: "Pro: List webhooks"
-      description: "Pro plan only. The key's webhooks with their event types, whether they are enabled and how many deliveries in a row have failed. A webhook is disabled after 5 deliveries in a row failed all their attempts. The secret is never returned."
+      description: "Available on Pro, Fix and Beyond. The key's webhooks with their event types, whether they are enabled and how many deliveries in a row have failed. A webhook is disabled after 5 deliveries in a row failed all their attempts. The secret is never returned."
       "x-plan": "pro"
       responses:
         "200":
@@ -1018,6 +1215,8 @@ paths:
                 limit: 3
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "429":
@@ -1030,7 +1229,7 @@ paths:
       tags:
         - "Webhooks"
       summary: "Pro: Get one webhook"
-      description: "Pro plan only. One webhook, without its secret."
+      description: "Available on Pro, Fix and Beyond. One webhook, without its secret."
       "x-plan": "pro"
       parameters:
         - name: "id"
@@ -1059,6 +1258,8 @@ paths:
                   disabled_reason: null
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -1072,7 +1273,7 @@ paths:
       tags:
         - "Webhooks"
       summary: "Pro: Delete a webhook"
-      description: "Pro plan only. Deletes the webhook, its delivery log and any retries still waiting. To use an address again after it was disabled, delete the webhook and create it again."
+      description: "Available on Pro, Fix and Beyond. Deletes the webhook, its delivery log and any retries still waiting. To use an address again after it was disabled, delete the webhook and create it again."
       "x-plan": "pro"
       parameters:
         - name: "id"
@@ -1093,6 +1294,8 @@ paths:
                 id: "whk_0123456789abcdef"
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -1107,7 +1310,7 @@ paths:
       tags:
         - "Webhooks"
       summary: "Pro: The delivery log of a webhook"
-      description: "Pro plan only. The last 50 deliveries, newest first: the event, the status (pending, delivered or failed), the number of attempts, the HTTP status and a short error code, and when the next retry is due. Retries are made after 1 minute, 10 minutes and 1 hour, at the next run of the scheduled job."
+      description: "Available on Pro, Fix and Beyond. The last 50 deliveries, newest first: the event, the status (pending, delivered or failed), the number of attempts, the HTTP status and a short error code, and when the next retry is due. Retries are made after 1 minute, 10 minutes and 1 hour, at the next run of the scheduled job."
       "x-plan": "pro"
       parameters:
         - name: "id"
@@ -1139,6 +1342,8 @@ paths:
                     test: false
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -1153,7 +1358,7 @@ paths:
       tags:
         - "Webhooks"
       summary: "Pro: Send a test event"
-      description: "Pro plan only. Sends one signed test event (type \"test\") to the webhook now, makes one attempt and returns the result. It is logged as a test and does not count toward the failure limit."
+      description: "Available on Pro, Fix and Beyond. Sends one signed test event (type \"test\") to the webhook now, makes one attempt and returns the result. It is logged as a test and does not count toward the failure limit."
       "x-plan": "pro"
       parameters:
         - name: "id"
@@ -1184,6 +1389,8 @@ paths:
                   test: true
         "401":
           "$ref": "#/components/responses/Unauthorized"
+        "402":
+          "$ref": "#/components/responses/PlanRequired"
         "403":
           "$ref": "#/components/responses/Forbidden"
         "404":
@@ -1204,6 +1411,25 @@ components:
       name: "X-Citehound-Key"
       description: "The same key in a header of its own."
   schemas:
+    Upgrade:
+      type: "object"
+      properties:
+        message:
+          type: "string"
+        required_plan:
+          type: "string"
+          enum:
+            - "pro"
+            - "fix"
+            - "beyond"
+        plans_url:
+          type: "string"
+          format: "uri"
+      required:
+        - "message"
+        - "required_plan"
+        - "plans_url"
+      additionalProperties: false
     Error:
       type: "object"
       properties:
@@ -1218,6 +1444,19 @@ components:
         limit_scope:
           type: "string"
           description: "Which limit was reached (rate limits only)."
+        required_plan:
+          type: "string"
+          enum:
+            - "pro"
+            - "fix"
+            - "beyond"
+          description: "The lowest plan with the feature (plan_required only)."
+        plan:
+          type: "string"
+          description: "The plan of the key (plan_required only)."
+        plans_url:
+          type: "string"
+          format: "uri"
       required:
         - "error"
         - "message"
@@ -1276,10 +1515,16 @@ components:
               type: "integer"
             scans_per_domain_per_hour:
               type: "integer"
+            scans_per_day:
+              type:
+                - "integer"
+                - "null"
+              description: "Free keys only; null means no extra cap."
           required:
             - "requests_per_hour"
             - "requests_per_day"
             - "scans_per_domain_per_hour"
+            - "scans_per_day"
           additionalProperties: false
         usage:
           type: "object"
@@ -1292,6 +1537,44 @@ components:
             - "this_hour"
             - "today"
           additionalProperties: false
+        features:
+          type: "object"
+          properties:
+            scan_detail:
+              type: "string"
+              enum:
+                - "top3"
+                - "full"
+            compare:
+              type: "boolean"
+            generators:
+              type: "string"
+              enum:
+                - "preview"
+                - "full"
+            schema_types:
+              oneOf:
+                - type: "string"
+                  enum:
+                    - "all"
+                - type: "array"
+                  items:
+                    type: "string"
+            monitoring:
+              type: "boolean"
+            fixes:
+              type: "boolean"
+            export:
+              type: "boolean"
+          required:
+            - "scan_detail"
+            - "compare"
+            - "generators"
+            - "schema_types"
+            - "monitoring"
+            - "fixes"
+            - "export"
+          additionalProperties: false
       required:
         - "plan"
         - "status"
@@ -1299,6 +1582,7 @@ components:
         - "created_at"
         - "limits"
         - "usage"
+        - "features"
       additionalProperties: false
     Pillar:
       type: "object"
@@ -1429,6 +1713,14 @@ components:
         method:
           type: "string"
           format: "uri"
+        truncated:
+          type: "boolean"
+          description: "Free keys only: more findings exist than are shown."
+        hidden_findings:
+          type: "integer"
+          description: "Free keys only: how many findings are not shown."
+        upgrade:
+          "$ref": "#/components/schemas/Upgrade"
       required:
         - "domain"
         - "scannedAt"
@@ -1542,7 +1834,15 @@ components:
             - "robots.txt"
         content:
           type: "string"
-          description: "The file text, to paste at the site root."
+          description: "The file text, to paste at the site root. A free key gets its first lines (preview true)."
+        preview:
+          type: "boolean"
+        truncated:
+          type: "boolean"
+        total_lines:
+          type: "integer"
+        upgrade:
+          "$ref": "#/components/schemas/Upgrade"
         allow:
           type: "array"
           items:
@@ -2028,6 +2328,154 @@ components:
       required:
         - "delivery"
       additionalProperties: false
+    FixFile:
+      type: "object"
+      properties:
+        where:
+          type: "string"
+        kind:
+          type: "string"
+          enum:
+            - "robots.txt"
+            - "llms.txt"
+            - "json-ld"
+            - "html"
+        content:
+          type: "string"
+      required:
+        - "where"
+        - "kind"
+        - "content"
+      additionalProperties: false
+    FixItem:
+      type: "object"
+      properties:
+        priority:
+          type: "integer"
+        id:
+          type: "string"
+        label:
+          type: "string"
+        pillar:
+          type:
+            - "string"
+            - "null"
+        points_at_stake:
+          type: "integer"
+        fix:
+          type: "string"
+        files:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/FixFile"
+      required:
+        - "priority"
+        - "id"
+        - "label"
+        - "pillar"
+        - "points_at_stake"
+        - "fix"
+        - "files"
+      additionalProperties: false
+    FixList:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+        scannedAt:
+          type: "string"
+          format: "date-time"
+        score:
+          type: "integer"
+        items:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/FixItem"
+        note:
+          type: "string"
+      required:
+        - "domain"
+        - "scannedAt"
+        - "score"
+        - "items"
+        - "note"
+      additionalProperties: false
+    RecheckRequest:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+          description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+          example: "example.com"
+          maxLength: 253
+      required:
+        - "domain"
+      additionalProperties: false
+    RecheckResult:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+        checked_at:
+          type: "string"
+          format: "date-time"
+        score_before:
+          type: "integer"
+        score_after:
+          type: "integer"
+        fixed:
+          type: "array"
+          items:
+            type: "string"
+        still_failing:
+          type: "array"
+          items:
+            type: "string"
+        new_failures:
+          type: "array"
+          items:
+            type: "string"
+        note:
+          type: "string"
+      required:
+        - "domain"
+        - "checked_at"
+        - "score_before"
+        - "score_after"
+        - "fixed"
+        - "still_failing"
+        - "new_failures"
+        - "note"
+      additionalProperties: false
+    ExportResult:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+        type:
+          type: "string"
+          enum:
+            - "snapshots"
+            - "events"
+        exported_at:
+          type: "string"
+          format: "date-time"
+        retention_days:
+          type: "integer"
+        count:
+          type: "integer"
+        rows:
+          type: "array"
+          items:
+            type: "object"
+      required:
+        - "domain"
+        - "type"
+        - "exported_at"
+        - "retention_days"
+        - "count"
+        - "rows"
+      additionalProperties: false
     Benchmark:
       type: "object"
       description: "Without \"category\": categories and overall. With \"category\": the detail of one category."
@@ -2090,15 +2538,24 @@ components:
           description: "How to send the key."
           schema:
             type: "string"
+    PlanRequired:
+      description: "The endpoint, or the full output, is part of a higher plan than the key's. The body names the plan that has it (required_plan) and links the plans."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "plan_required"
+            message: "The endpoint, or the full output, is part of a higher plan than the key's. The body names the plan that has it (required_plan) and links the plans."
     Forbidden:
-      description: "The key has been revoked (key_revoked), or the endpoint is part of the Pro plan and the key is on the free plan (pro_required)."
+      description: "The key has been revoked."
       content:
         "application/json":
           schema:
             "$ref": "#/components/schemas/Error"
           example:
             error: "key_revoked"
-            message: "The key has been revoked (key_revoked), or the endpoint is part of the Pro plan and the key is on the free plan (pro_required)."
+            message: "The key has been revoked."
     NotFound:
       description: "No such category or endpoint."
       content:
@@ -2136,14 +2593,14 @@ components:
             error: "unsupported_media_type"
             message: "Send JSON with Content-Type: application/json."
     RateLimited:
-      description: "A limit was reached. The Retry-After header gives the seconds to wait; the body names the limit."
+      description: "A limit was reached (the key's requests, a free key's scans a day, one domain, or one network address). The Retry-After header gives the seconds to wait; the body names the limit."
       content:
         "application/json":
           schema:
             "$ref": "#/components/schemas/Error"
           example:
             error: "rate_limited"
-            message: "A limit was reached. The Retry-After header gives the seconds to wait; the body names the limit."
+            message: "A limit was reached (the key's requests, a free key's scans a day, one domain, or one network address). The Retry-After header gives the seconds to wait; the body names the limit."
       headers:
         "Retry-After":
           description: "Seconds to wait before trying again."

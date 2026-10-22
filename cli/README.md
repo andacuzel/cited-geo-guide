@@ -90,6 +90,14 @@ export CITEHOUND_API_KEY=chk_...
 
 With a key the CLI uses the Citehound API (`/v1`). The key is read only from the environment. It is sent only to Citehound over https, and it is never printed, not even in an error message. `CITEHOUND_API_URL` can point the CLI at another address (for tests).
 
+## Plans
+
+- **No key:** the full output of the public endpoint, with public limits. This is what most people need.
+- **A free API key:** API access with small limits: `scan` shows the score, the pillars, the crawlers and the first three findings (the rest says where it is), generated files are a preview, `compare` and the other schema types are not included.
+- **Pro, Fix and Beyond keys:** higher limits, the full scan detail, `compare`, full generated files and monitoring (through the API and https://getcitehound.com/watch); Fix and Beyond add the prioritized fix list and re-check, Beyond adds the export.
+
+When a plan does not have something, the CLI prints the API's message, which names the plans that do, and exits with code 3. The table is on https://getcitehound.com/api.
+
 ## What it does not do
 
 - It reads one page of a domain, not the whole site, and it changes nothing on any site.

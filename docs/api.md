@@ -28,8 +28,10 @@ Scoring is `lib/scanner.js` (`scanPage`), the summary is `lib/action-scan.js` (`
 
 | What | Value |
 |---|---|
-| Free key | 20 requests an hour, 100 a day (UTC) |
-| Pro key | 200 requests an hour, 2000 a day (UTC) |
+| Free key | 10 requests an hour, 40 a day (UTC), 5 scans a day |
+| Pro / Fix / Beyond key | 200 / 400 / 600 requests an hour, 2000 / 4000 / 6000 a day (UTC) |
+
+The plans and everything they gate are in `lib/plans.js` (one module) and `docs/integrations/TIERS.md`. A plan gate answers `402 plan_required`.
 | One domain, all keys together | 4 scans an hour (scan, compare, crawlers and schema each count) |
 | One network address | 120 authenticated requests an hour; 20 wrong keys an hour block it |
 | Asking for keys | 5 an hour and 20 a day per network address; 3 an hour and 5 a day per email address (extra requests get the same 202 answer and no email) |

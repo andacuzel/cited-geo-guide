@@ -131,8 +131,8 @@ async function main(argv, env, io, fetchImpl) {
       allow = l.filter((c) => c.default === 'allow').map((c) => c.name); block = l.filter((c) => c.default === 'block').map((c) => c.name);
     }
     const sitemap = o.noSitemap ? undefined : (o.sitemap || 'https://' + domain + '/sitemap.xml');
-    const text = await client.robots(allow, block, sitemap);
-    if (o.json) json({ domain: domain, type: 'robots.txt', allow: allow, block: block, sitemap: sitemap || null, content: text }); else { io.out(text); io.err('Put this at https://' + domain + '/robots.txt. If the site already has a robots.txt, merge the AI crawler groups into it instead of replacing it.\n'); }
+    const gen = await client.robots(allow, block, sitemap), text = gen.text;
+    if (o.json) json({ domain: domain, type: 'robots.txt', allow: allow, block: block, sitemap: sitemap || null, content: text }); else { io.out(text); if (gen.note) io.err(gen.note + '\n'); io.err('Put this at https://' + domain + '/robots.txt. If the site already has a robots.txt, merge the AI crawler groups into it instead of replacing it.\n'); }
     return 0;
   }
 
@@ -148,8 +148,8 @@ async function main(argv, env, io, fetchImpl) {
     if (!name) name = real(org.name) ? org.name : (real(web.name) ? web.name : domain);
     if (!description) description = real(org.description) ? org.description : '[One sentence describing ' + name + '.]';
   }
-  const text = await client.llms(name, description, pages);
-  if (o.json) json({ domain: domain, type: 'llms.txt', content: text, pages: pages }); else { io.out(text); io.err('Put this at https://' + domain + '/llms.txt. Check the description and the pages first. llms.txt is optional and has no demonstrated effect on Google.\n'); }
+  const gen = await client.llms(name, description, pages), text = gen.text;
+  if (o.json) json({ domain: domain, type: 'llms.txt', content: text, pages: pages }); else { io.out(text); if (gen.note) io.err(gen.note + '\n'); io.err('Put this at https://' + domain + '/llms.txt. Check the description and the pages first. llms.txt is optional and has no demonstrated effect on Google.\n'); }
   return 0;
 }
 

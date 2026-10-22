@@ -15,9 +15,9 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 
 ## Checklist
 
-- [ ] Phase 0: TIERS.md
-- [ ] Phase 1: plans module, API gates, limits, admin grant, fixes/recheck/export endpoints, tests
-- [ ] Phase 1: /api, openapi.yaml, /watch, CLI and plugin messages, plan comparison on /api
+- [x] Phase 0: TIERS.md (done)
+- [x] Phase 1: plans module, API gates, limits, admin grant, fixes/recheck/export endpoints, tests (done: scripts/test-plans.js, 46 checks)
+- [x] Phase 1: /api, openapi.yaml, /watch, CLI and plugin messages, plan comparison on /api (done)
 - [ ] Phase 1: deploy and verify
 - [ ] Phase 2.1: n8n community node
 - [ ] Phase 2.2: Make, Zapier, Pipedream, Activepieces, Raycast
@@ -28,3 +28,5 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - [ ] Final report
 
 ## Log
+
+- 23 Oct 00:xx Istanbul: Phase 1 built and tested locally (plans.js, 402 gates, free caps 10/40 and 5 scans a day, fixes, recheck, export, Beyond 15 domains and 2-day re-checks, /api plan table, openapi, /watch, CLI 38 tests, terms.html free caps updated). Bug found and fixed on the way: the JSON-LD flag of a snapshot was always false.

@@ -37,6 +37,7 @@
   }
   function problem(r) {
     if (r.status === 401) return 'That key is not valid. Check it and try again.';
+    if (r.status === 402) return (r.body && r.body.message) || 'This is part of a higher plan. See the plans at /pricing.';
     if (r.status === 403) return r.body && r.body.error === 'key_revoked' ? 'That key has been revoked.' : ((r.body && r.body.message) || 'This key cannot do that.');
     if (r.status === 429) return 'A limit was reached. Try again in ' + (r.retry || 'a few') + ' seconds.';
     if (r.status === 503) return 'The API is not available on this server yet.';
@@ -72,7 +73,7 @@
     form.hidden = true; els.panel.hidden = false;
     var L = me.limits || {};
     els.plan.textContent = 'Plan: ' + me.plan + '. This key may make ' + L.requests_per_hour + ' requests an hour.';
-    var pro = me.plan === 'pro';
+    var pro = !!(me.features && me.features.monitoring);
     els.free.hidden = pro; els.pro.hidden = !pro;
     els.panelHead.focus();
     if (pro) { loadList(); loadEvents(false); }

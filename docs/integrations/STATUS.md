@@ -14,7 +14,7 @@ Needs an npm account. Use a clone outside iCloud (see CLAUDE.md, "Repository loc
 1. Make an account at https://www.npmjs.com/signup and switch on two-factor authentication in the account settings.
 2. In Terminal, get a clean copy: `git clone https://github.com/andacuzel/cited-geo-guide.git ~/dev/citehound && cd ~/dev/citehound/cli`
 3. Log in: `npm login`. A browser window opens; sign in there. Terminal then says "Logged in as <your name>".
-4. Run the tests: `npm test`. You should see `ℹ pass 34` and `ℹ fail 0`.
+4. Run the tests: `npm test`. You should see `ℹ pass 38` and `ℹ fail 0`.
 5. Publish: `npm publish --access public`. npm asks for a one-time code from your authenticator app. You should see `+ citehound@0.1.0`.
 6. Check it: `npm view citehound version` shows `0.1.0`, and `npx citehound --version` shows `0.1.0`.
 7. Then tell the assistant "the CLI is published". It will remove the "not on npm yet" lines, change the site from "In preparation" to the install command, and update this file.

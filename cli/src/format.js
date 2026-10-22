@@ -22,6 +22,7 @@ function scanText(s) {
     const d = s.benchmark.delta;
     L.push('', (d === 0 ? 'About the average' : Math.abs(d) + ' point' + (Math.abs(d) === 1 ? '' : 's') + (d > 0 ? ' above' : ' below') + ' the average') + ' of the ' + s.benchmark.sitesScanned + ' sites in Citehound\'s own archive (' + s.benchmark.overallAverage + '/100).');
   }
+  if (s.truncated && s.upgrade) L.push('', s.hidden_findings + ' more finding' + (s.hidden_findings === 1 ? ' is' : 's are') + ' not shown. ' + s.upgrade.message);
   L.push('', (s.note || NOTE));
   return L.join('\n') + '\n';
 }

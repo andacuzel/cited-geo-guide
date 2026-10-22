@@ -130,13 +130,16 @@ const snapAt = (o, ms) => Monitor.snapshotFrom('example.com', scan(o), ms);
   const pro = await makeKey('pro-user@example.com', 'pro');
   const gates = [['POST', '/v1/watchlist', { domain: 'gate-site.com' }], ['GET', '/v1/watchlist'], ['DELETE', '/v1/watchlist?domain=gate-site.com'], ['GET', '/v1/history?domain=gate-site.com'], ['GET', '/v1/events'], ['POST', '/v1/webhooks', { url: 'https://example.com/h' }], ['GET', '/v1/webhooks'], ['GET', '/v1/webhooks/whk_0123456789abcdef'], ['DELETE', '/v1/webhooks/whk_0123456789abcdef'], ['GET', '/v1/webhooks/whk_0123456789abcdef/deliveries'], ['POST', '/v1/webhooks/whk_0123456789abcdef/test']];
   let gateOk = true, noKeyOk = true;
+  let gn = 0;
   for (const [m, u, b] of gates) {
-    const r = await call(free.key, m, u, b); if (r.status !== 403 || r.json.error !== 'pro_required') { gateOk = false; out('    free key: ' + m + ' ' + u + ' -> ' + r.status); }
+    if (gn++ % 8 === 7) clock += 3600 * 1000;
+    const r = await call(free.key, m, u, b); if (r.status !== 402 || r.json.error !== 'plan_required' || r.json.required_plan !== 'pro') { gateOk = false; out('    free key: ' + m + ' ' + u + ' -> ' + r.status); }
     const r2 = await request(m, u, { json: b, ip: freshIp() }); if (r2.status !== 401) { noKeyOk = false; out('    no key: ' + m + ' ' + u + ' -> ' + r2.status); }
   }
-  t('every monitoring endpoint answers a free key 403 pro_required, and nothing was scanned for it', gateOk && scanCalls.length === 0);
+  t('every monitoring endpoint answers a free key 402 plan_required, and nothing was scanned for it', gateOk && scanCalls.length === 0);
   t('and answers no key 401', noKeyOk);
-  t('the message points to Pro and the contact address', /Pro plan/.test((await call(free.key, 'GET', '/v1/watchlist')).json.message) && /hey@getcitehound\.com/.test((await call(free.key, 'GET', '/v1/watchlist')).json.message));
+  clock += 3600 * 1000;
+  t('the message names the plans that have monitoring and links the plans page', /available on Pro, Fix and Beyond/.test((await call(free.key, 'GET', '/v1/watchlist')).json.message) && /getcitehound\.com\/pricing/.test((await call(free.key, 'GET', '/v1/watchlist')).json.message));
   t('a pro key is let in', (await call(pro.key, 'GET', '/v1/watchlist')).status === 200);
 
   /* ---------- the watchlist ---------- */
@@ -250,7 +253,7 @@ const snapAt = (o, ms) => Monitor.snapshotFrom('example.com', scan(o), ms);
   await request('POST', '/v1/admin/plan', { headers: { authorization: 'Bearer ' + ENV.ADMIN_TOKEN }, json: { email: 'downgrade@example.com', plan: 'free' } });
   clock += 8 * DAY; scanCalls = [];
   const dr = await cron();
-  t('a key that is no longer Pro costs no scans: its domains are skipped', !scanCalls.some((c) => /downgrade-site/.test(c.url)) && dr.json.skipped >= 1 && (await call(dk.key, 'GET', '/v1/watchlist')).status === 403);
+  t('a key that is no longer Pro costs no scans: its domains are skipped', !scanCalls.some((c) => /downgrade-site/.test(c.url)) && dr.json.skipped >= 1 && (await call(dk.key, 'GET', '/v1/watchlist')).status === 402);
 
   /* ---------- history and events ---------- */
   out('history and events');
@@ -489,11 +492,11 @@ const snapAt = (o, ms) => Monitor.snapshotFrom('example.com', scan(o), ms);
   out('documents');
   const spec = OA.spec();
   const monOps = []; Object.keys(spec.paths).forEach((p) => Object.keys(spec.paths[p]).forEach((m) => { const o = spec.paths[p][m]; if (o.tags.indexOf('Monitoring') !== -1 || o.tags.indexOf('Webhooks') !== -1) monOps.push(o); }));
-  t('every monitoring operation is marked Pro (x-plan, the summary and the description), and nothing else is', monOps.length === 11 && monOps.every((o) => o['x-plan'] === 'pro' && /^Pro: /.test(o.summary) && /^Pro plan only\./.test(o.description) && o.responses['403']) && Object.keys(spec.paths).every((p) => Object.keys(spec.paths[p]).every((m) => monOps.indexOf(spec.paths[p][m]) !== -1 || !spec.paths[p][m]['x-plan'])));
+  t('every monitoring operation is marked with its plan (x-plan, the summary and the description, a 402 answer)', monOps.length === 12 && monOps.every((o) => ['pro', 'beyond'].indexOf(o['x-plan']) !== -1 && o.summary.indexOf(({ pro: 'Pro', beyond: 'Beyond' })[o['x-plan']] + ': ') === 0 && /^Available on /.test(o.description) && o.responses['402']));
   t('the examples in the document match their schemas', OA.ENDPOINTS.every((e) => valid(e.ok.schema, e.ok.example)));
   const page = read('api.html');
   const text = page.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ');
-  t('the /api page has a Monitoring (Pro) section with the event types, the signature headers, the retries and a verify sample', /Monitoring \(Pro\)/.test(text) && Monitor.EVENT_TYPES.every((e) => text.indexOf(e) !== -1) && /X-Citehound-Signature/.test(text) && /1 minute, 10 minutes and 1 hour/.test(text) && /timingSafeEqual/.test(text) && /<strong>Pro<\/strong>/.test(page));
+  t('the /api page has a Monitoring (Pro) section with the event types, the signature headers, the retries and a verify sample', /Monitoring \(Pro, Fix and Beyond\)/.test(text) && Monitor.EVENT_TYPES.every((e) => text.indexOf(e) !== -1) && /X-Citehound-Signature/.test(text) && /1 minute, 10 minutes and 1 hour/.test(text) && /timingSafeEqual/.test(text) && /<strong>Pro<\/strong>/.test(page));
   t('the page says only what is built: a daily job, weekly re-scans per domain, retries that wait for the job, no dashboard, no paid checkout', /scheduled job runs once a day/.test(text) && /about 7 days after their last scan/.test(text) && /up to a day late/.test(text) && /no checkout/.test(text) && !/real-time|instant alert|unlimited|dashboard/i.test(text));
   t('the page and the document name no third-party automation tool', !/Zapier|Make\.com|n8n|IFTTT|Slack|Looker/i.test(page + read('openapi.yaml')));
   t('vercel.json has one cron: the job, once a day (Hobby allows nothing more often), and the function keeps 12 of 12', (() => { const v = JSON.parse(read('vercel.json')); const fn = []; (function walk(d) { fs.readdirSync(path.join(ROOT, d), { withFileTypes: true }).forEach((e) => { if (e.isDirectory()) walk(d + '/' + e.name); else if (/\.js$/.test(e.name) && e.name[0] !== '_') fn.push(d + '/' + e.name); }); })('api'); return v.crons.length === 1 && v.crons[0].path === '/api/v1/cron' && /^\d+ \d+ \* \* \*$/.test(v.crons[0].schedule) && fn.length === 12; })());

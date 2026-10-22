@@ -9,6 +9,7 @@ const { CliError, SIGNUP, NOTE, redact } = require('./util.js');
 const parse = require('./parse.js');
 
 const DEFAULT_BASE = 'https://getcitehound.com';
+const PRICING = 'https://getcitehound.com/pricing';
 const TIMEOUT_MS = 90000;
 const RATE_TEXT = /rate limit|too many|limit (was )?reached|try again in|limited/i;
 
@@ -36,8 +37,8 @@ function createClient(env, fetchImpl, version) {
   function rateLimited(retry) {
     const wait = retry && /^\d+$/.test(retry) ? ' Try again in about ' + retry + ' seconds.' : ' Try again in a little while.';
     return new CliError(keyed
-      ? 'The limit of your API key was reached.' + wait + ' The limits are listed at ' + SIGNUP + '.'
-      : 'The public limit was reached.' + wait + ' A free API key has its own, higher limits: get one at ' + SIGNUP + ' and set CITEHOUND_API_KEY.', 3);
+      ? 'The limit of your API key was reached.' + wait + ' The limits of each plan are listed at ' + SIGNUP + ' and the plans at ' + PRICING + '.'
+      : 'The public limit was reached.' + wait + ' An API key has limits of its own: get a free one at ' + SIGNUP + ' and set CITEHOUND_API_KEY. Paid plans have higher limits: ' + PRICING + '.', 3);
   }
 
   function httpError(r) {
@@ -45,6 +46,7 @@ function createClient(env, fetchImpl, version) {
     const msg = j && typeof j.message === 'string' ? redact(j.message) : null;
     if (r.status === 429) return rateLimited(r.retry);
     if (r.status === 401) return new CliError(keyed ? 'Citehound did not accept that API key. Check CITEHOUND_API_KEY, or get a new key at ' + SIGNUP + '.' : 'Citehound asked for an API key. Get a free one at ' + SIGNUP + ' and set CITEHOUND_API_KEY.', 3);
+    if (r.status === 402) return new CliError(msg || 'That is part of a higher plan. See the plans at ' + PRICING + '.', 3);
     if (r.status === 403) return new CliError(msg || 'This key cannot do that.', 3);
     if (r.status === 503) return new CliError('The Citehound API is not available right now. Try again later.', 3);
     if (r.status === 400 && msg) return new CliError(msg, 2);
@@ -79,6 +81,9 @@ function createClient(env, fetchImpl, version) {
     return text;
   }
 
+  // A generated file from the API. A free key gets a preview: the text is the first lines, and the note says where the whole file is.
+  const fileResult = (j) => ({ text: j.content.replace(/\s+$/, '') + '\n', note: j.preview && j.upgrade ? 'This is a preview (the first lines). ' + j.upgrade.message : null });
+
   const withSource = (o) => Object.assign({ source: keyed ? 'api_key' : 'public' }, o);
 
   return {
@@ -96,13 +101,13 @@ function createClient(env, fetchImpl, version) {
       return { json_ld: parse.parseSchema(await mcp('generate_schema', { domain: domain, type: type })) };
     },
     async robots(allow, block, sitemap) {
-      if (keyed) { const j = await v1('/generate/robots-txt', { allow: allow.join(','), block: block.join(','), sitemap: sitemap }); return j.content.replace(/\s+$/, '') + '\n'; }
+      if (keyed) { const j = await v1('/generate/robots-txt', { allow: allow.join(','), block: block.join(','), sitemap: sitemap }); return fileResult(j); }
       const args = {}; if (allow.length) args.allow = allow; if (block.length) args.block = block; if (sitemap) args.sitemap_url = sitemap;
-      return parse.fileBody(await mcp('generate_robots_txt', args));
+      return { text: parse.fileBody(await mcp('generate_robots_txt', args)), note: null };
     },
     async llms(name, description, pages) {
-      if (keyed) { const j = await v1('/generate/llms-txt', { name: name, description: description, page: pages.map((p) => p.url + '|' + p.description) }); return j.content.replace(/\s+$/, '') + '\n'; }
-      return parse.fileBody(await mcp('generate_llms_txt', { name: name, description: description, key_pages: pages }));
+      if (keyed) { const j = await v1('/generate/llms-txt', { name: name, description: description, page: pages.map((p) => p.url + '|' + p.description) }); return fileResult(j); }
+      return { text: parse.fileBody(await mcp('generate_llms_txt', { name: name, description: description, key_pages: pages })), note: null };
     }
   };
 }

@@ -31,6 +31,7 @@ const Limits = require('../lib/api-v1/limits.js');
 const Data = require('../lib/api-v1/data.js');
 const OA = require('../lib/api-v1/openapi.js');
 const Gen = require('./generate-api-page.js');
+const FREE = Limits.PLAN_LIMITS.free;
 const store = require('../lib/pro-store.js');
 const scanner = require('../lib/scanner.js');
 
@@ -176,10 +177,10 @@ const bad = (s) => s >= 400;
   /* ---------- authentication ---------- */
   out('authentication');
   const me = await get('/v1/me', k1.key);
-  t('GET /v1/me with a Bearer key: plan, limits, usage, masked email', me.status === 200 && me.json.plan === 'free' && me.json.email === 'r***@example.com' && me.json.limits.requests_per_hour === 20 && me.json.limits.requests_per_day === 100 && me.json.limits.scans_per_domain_per_hour === 4 && me.json.usage.this_hour === 1 && me.json.usage.today === 1, me.text);
+  t('GET /v1/me with a Bearer key: plan, limits, usage, masked email', me.status === 200 && me.json.plan === 'free' && me.json.email === 'r***@example.com' && me.json.limits.requests_per_hour === FREE.hour && me.json.limits.requests_per_day === FREE.day && me.json.limits.scans_per_day === FREE.scansDay && me.json.features.compare === false && me.json.features.monitoring === false && me.json.features.scan_detail === 'top3' && me.json.limits.scans_per_domain_per_hour === 4 && me.json.usage.this_hour === 1 && me.json.usage.today === 1, me.text);
   t('the answer never shows the full address or any key', me.text.toLowerCase().indexOf('reader@example.com') === -1 && me.text.indexOf(k1.key) === -1);
   t('X-Citehound-Key works too', (await request('GET', '/v1/me', { headers: { 'x-citehound-key': k1.key } })).status === 200);
-  t('rate-limit headers are set', me.headers['x-ratelimit-limit'] === '20' && Number(me.headers['x-ratelimit-remaining']) === 19 && Number(me.headers['x-ratelimit-reset']) > 0);
+  t('rate-limit headers are set', me.headers['x-ratelimit-limit'] === String(FREE.hour) && Number(me.headers['x-ratelimit-remaining']) === FREE.hour - 1 && Number(me.headers['x-ratelimit-reset']) > 0);
   t('answers carry no CORS header, no cookie and are not cached', !Object.keys(me.headers).some((h) => /^access-control|^set-cookie/.test(h)) && /no-store/.test(me.headers['cache-control']));
   const none = await get('/v1/me');
   t('no key: 401 JSON with WWW-Authenticate', none.status === 401 && none.json.error === 'missing_key' && /Bearer/.test(none.headers['www-authenticate']));
@@ -289,25 +290,26 @@ const bad = (s) => s >= 400;
   out('limits');
   const kl = (await newKey('limited@example.com', {})).key;
   const lim = [];
-  for (let i = 0; i < 21; i++) lim.push(await get('/v1/benchmark', kl, { ip: freshIp() }));
-  const l20 = lim[19], l21 = lim[20];
-  t('a free key may make 20 requests an hour', lim.slice(0, 20).every((r) => r.status === 200) && l20.headers['x-ratelimit-remaining'] === '0');
-  t('the 21st is a 429 with Retry-After, the scope and a plain message', l21.status === 429 && Number(l21.headers['retry-after']) > 0 && Number(l21.headers['retry-after']) <= 3600 && l21.json.limit_scope === 'key_hour' && l21.json.retry_after === Number(l21.headers['retry-after']) && /20 requests/.test(l21.json.message));
+  for (let i = 0; i < FREE.hour + 1; i++) lim.push(await get('/v1/benchmark', kl, { ip: freshIp() }));
+  const l20 = lim[FREE.hour - 1], l21 = lim[FREE.hour];
+  t('a free key may make ' + FREE.hour + ' requests an hour (lib/plans.js)', lim.slice(0, FREE.hour).every((r) => r.status === 200) && l20.headers['x-ratelimit-remaining'] === '0');
+  t('the next one is a 429 with Retry-After, the scope and a plain message', l21.status === 429 && Number(l21.headers['retry-after']) > 0 && Number(l21.headers['retry-after']) <= 3600 && l21.json.limit_scope === 'key_hour' && l21.json.retry_after === Number(l21.headers['retry-after']) && new RegExp(FREE.hour + ' requests').test(l21.json.message) && /pricing/.test(l21.json.message));
   t('the window resets on the hour and the key works again', await (async () => { clock += 3600 * 1000; const r = await get('/v1/me', kl); return r.status === 200 && r.json.usage.this_hour === 1; })());
   // daily: 100 per UTC day; walk hours
   const kd = (await newKey('daily@example.com', {})).key;
   let dayHit = null, okCount = 0;
   const day0 = clock;
   for (let h = 0; h < 6 && !dayHit; h++) {
-    for (let i = 0; i < 20 && !dayHit; i++) { const r = await get('/v1/benchmark', kd, { ip: freshIp() }); if (r.status === 429 && r.json.limit_scope === 'key_day') dayHit = r; else if (r.status === 200) okCount++; }
+    for (let i = 0; i < FREE.hour && !dayHit; i++) { const r = await get('/v1/benchmark', kd, { ip: freshIp() }); if (r.status === 429 && r.json.limit_scope === 'key_day') dayHit = r; else if (r.status === 200) okCount++; }
     clock += 3600 * 1000;
     if (new Date(clock).getUTCDate() !== new Date(day0).getUTCDate()) break;
   }
-  t('a free key may make 100 requests a day (UTC); the 101st is a 429 for the day', !!dayHit && okCount === 100 && Number(dayHit.headers['retry-after']) > 0, 'ok=' + okCount);
+  t('a free key may make ' + FREE.day + ' requests a day (UTC); the next is a 429 for the day', !!dayHit && okCount === FREE.day && Number(dayHit.headers['retry-after']) > 0, 'ok=' + okCount);
   clock = Date.UTC(2026, 9, 23, 12, 0, 0);
   t('the next UTC day starts a new count', (await get('/v1/me', kd)).status === 200);
   // same domain across keys
   const kA = (await newKey('dom-a@example.com', {})).key, kB = (await newKey('dom-b@example.com', {})).key;
+  for (const e of ['dom-a@example.com', 'dom-b@example.com']) await request('POST', '/v1/admin/plan', { headers: { authorization: 'Bearer ' + ENV.ADMIN_TOKEN }, json: { email: e, plan: 'pro' } });
   const stat = [];
   for (let i = 0; i < 4; i++) stat.push((await get('/v1/scan?domain=shared-domain.com', i % 2 ? kB : kA, { ip: freshIp() })).status);
   const fifth = await get('/v1/scan?domain=shared-domain.com', kB, { ip: freshIp() });
@@ -320,7 +322,7 @@ const bad = (s) => s >= 400;
   let proOk = 0; for (let i = 0; i < 40; i++) { if ((await get('/v1/benchmark', kp, { ip: freshIp() })).status === 200) proOk++; }
   t('a pro key passes the free limit (40 of 40 requests)', proOk === 40);
   // network address
-  const heavyIp = freshIp(); const keysForIp = []; for (let i = 0; i < 7; i++) keysForIp.push((await newKey('ipkey' + i + '@example.com', {})).key);
+  const heavyIp = freshIp(); const keysForIp = []; for (let i = 0; i < 7; i++) { const nk = await newKey('ipkey' + i + '@example.com', {}); await request('POST', '/v1/admin/plan', { headers: { authorization: 'Bearer ' + ENV.ADMIN_TOKEN }, json: { email: 'ipkey' + i + '@example.com', plan: 'pro' } }); keysForIp.push(nk.key); }
   let ipStatus = [];
   for (let i = 0; i < 125; i++) ipStatus.push((await request('GET', '/v1/benchmark', { headers: { authorization: 'Bearer ' + keysForIp[i % 7] }, ip: heavyIp })).status);
   t('one network address is capped at 120 requests an hour across keys', ipStatus.slice(0, 120).every((s) => s === 200) && ipStatus.slice(120).every((s) => s === 429));
