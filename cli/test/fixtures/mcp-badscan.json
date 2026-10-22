@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":7,"result":{"resultType":"complete","isError":true,"content":[{"type":"text","text":"Invalid or missing \"domain\". Expected a bare hostname, e.g. \"example.com\" — no scheme, no path."}],"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"citehound","title":"Citehound","version":"1.0.0"}}}}

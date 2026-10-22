@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":6,"result":{"resultType":"complete","isError":false,"content":[{"type":"text","text":"llms.txt — paste this at your site root (e.g. https://yoursite.com/llms.txt):\n\n# Example\n\n> An example site.\n\n## Pages\n- [Home](https://example.com/)"}],"_meta":{"io.modelcontextprotocol/serverInfo":{"name":"citehound","title":"Citehound","version":"1.0.0"}}}}

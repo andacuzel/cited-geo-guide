@@ -1,0 +1,37 @@
+{
+  "name": "citehound",
+  "version": "0.1.0",
+  "description": "Scan a domain for AI readiness from the command line, compare two sites, and generate llms.txt, robots.txt and JSON-LD. No dependencies.",
+  "keywords": ["ai-readiness", "robots-txt", "llms-txt", "json-ld", "structured-data", "seo", "cli", "mcp", "citehound"],
+  "homepage": "https://getcitehound.com",
+  "bugs": {
+    "email": "hey@getcitehound.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andacuzel/cited-geo-guide.git",
+    "directory": "cli"
+  },
+  "license": "MIT",
+  "author": "Citehound <hey@getcitehound.com> (https://getcitehound.com)",
+  "type": "commonjs",
+  "bin": {
+    "citehound": "bin/citehound.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

@@ -1,0 +1,35 @@
+# Publishes the CLI (cli/) to npm WITH provenance when a tag like cli-v0.1.0 is pushed.
+# Needs one repository secret, NPM_TOKEN (an npm "automation" token). Nothing else runs on this workflow.
+# The simple route without GitHub is "npm publish --access public" from the cli/ folder: see docs/integrations/STATUS.md.
+name: Publish CLI
+
+on:
+  push:
+    tags:
+      - 'cli-v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - name: The tag must match the version in cli/package.json
+        run: |
+          v=$(node -p "require('./cli/package.json').version")
+          if [ "cli-v$v" != "$GITHUB_REF_NAME" ]; then echo "Tag $GITHUB_REF_NAME does not match version $v"; exit 1; fi
+      - name: Test
+        working-directory: cli
+        run: npm test
+      - name: Publish with provenance
+        working-directory: cli
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
