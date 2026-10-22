@@ -5259,3 +5259,38 @@ body.wsd-open { overflow: hidden; }
 @media (max-width: 759px) { .pp-hint { display: block; } .pp-table th:first-child { min-width: 170px; } }
 @media (max-width: 640px) { .pp-hero { padding-top: 48px; } .pp-trust { font-size: 12px; } .pp-which__say { font-size: 17px; } .pp-offer__panel { padding: 22px 18px; } }
 
+
+/* ----------------------------- /claude (22 Oct 2026): the connector page ----------------------------- */
+
+.cl-h3 { margin-top: 32px; font-size: 24px; line-height: 1.2; }
+.cl-copy .mcp-url { margin-bottom: 8px; }
+.cl-status { min-height: 1.5em; margin: 0 0 8px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.cl-status--on-navy { margin: 8px 16px 12px; color: rgba(255, 255, 255, 0.86); min-height: 1.4em; }
+.cl-steps { margin-top: 14px; }
+.cl-note { max-width: 720px; margin-top: 16px; font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+.cl-clients { margin-top: 28px; max-width: 760px; }
+.cl-clients .fix-snippet { margin-top: 12px; }
+.cl-prompts { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.cl-prompt { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+.cl-prompt__text { margin: 0; font-size: 17px; line-height: 1.5; color: var(--ink); }
+.cl-prompt__tool { margin: auto 0 0; font-size: 13px; color: var(--ink-soft); }
+.cl-tablewrap { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.cl-table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.5; }
+.cl-table th, .cl-table td { padding: 12px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.cl-table tbody tr:last-child th, .cl-table tbody tr:last-child td { border-bottom: 0; }
+.cl-table thead th { font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); background: var(--bg); }
+.cl-table tbody th { font-weight: 400; white-space: nowrap; }
+.cl-table td:last-child { white-space: nowrap; color: var(--ink-soft); }
+.cl-limits { max-width: 720px; font-size: 18px; line-height: 1.6; color: var(--ink); }
+.cl-contact { margin: 20px 0 0; font-size: 15px; color: var(--ink-soft); }
+.cl-contact a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+@media (min-width: 760px) { .cl-prompts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .cl-table thead { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .cl-table tr { display: block; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .cl-table tbody tr:last-child { border-bottom: 0; }
+  .cl-table th, .cl-table td { display: block; padding: 2px 0; border: 0; white-space: normal; }
+  .cl-table tbody th { font-size: 16px; }
+  .cl-table td[data-label="Access"] { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+}
+

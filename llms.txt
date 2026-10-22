@@ -25,6 +25,7 @@
 
 - [Tools](https://getcitehound.com/tools): a robots.txt generator, an llms.txt checker and a schema generator, free, no signup.
 - [MCP server](https://getcitehound.com/mcp): thirteen free, read-only tools for Claude, Cursor or any MCP client. Endpoint: https://getcitehound.com/api/mcp
+- [Claude connector](https://getcitehound.com/claude): how to add the Citehound MCP server to Claude, Claude Code, Cursor and VS Code, with example prompts and the 13 read-only tools. Free, no account.
 - [Agentic commerce](https://getcitehound.com/agentic-commerce): whether AI shopping agents can find a product and read its price.
 
 ## About
