@@ -77,11 +77,31 @@ const legal = terms + ' ' + refunds + ' ' + privacy;
 t('no integration that does not exist (the official GitHub Action does) and no certification is claimed', !/\b(WordPress|Webflow|GitHub(?! Action)|Shopify|Zapier|SOC ?2|ISO ?27001|HIPAA)\b/i.test(legal) && !/GDPR[- ]compliant|certified|compliant with/i.test(legal));
 t('no promise of traffic, rankings, citations, revenue or results outside the one sentence', !/(will|to) (increase|improve|boost|raise) (your )?(traffic|rankings?|citations|revenue|visibility)/i.test(legal));
 
+
+/* the interim operator, governing law and the API (23 Oct 2026) */
+const KEYS = require('../lib/api-v1/keys.js'), LIM = require('../lib/api-v1/limits.js');
+const OPERATOR = 'Citehound is run by Andaç Üzel, a sole proprietor based in Istanbul, Türkiye.';
+t('terms, privacy and refunds name the operator (a sole proprietor in Istanbul, Türkiye, no street address) and say the page will be updated when a company is formed', [terms, privacy, refunds].every((x) => x.indexOf(OPERATOR) !== -1 && /when a company is formed/.test(x)) && !/\b(street|avenue|road|mah\.|sokak|cadde)\b/i.test(terms + privacy + refunds));
+t('terms: governed by the laws of Türkiye, the courts of Istanbul decide', /governed by the laws of Türkiye, and the courts of Istanbul decide disputes about them/.test(terms));
+t('terms: an API section with the real limits, the key, acceptable use and no second outcome sentence', />The API</.test(read('terms.html')) && new RegExp('A free key allows ' + LIM.PLAN_LIMITS.free.hour + ' requests an hour and ' + LIM.PLAN_LIMITS.free.day + ' a day, and the same domain is scanned at most ' + LIM.DOMAIN_PER_HOUR + ' times an hour').test(terms) && /Keep your key private/.test(terms) && /revoke a key that is abused/.test(terms) && (read('terms.html').match(/makes no guarantee/g) || []).length === 1);
+const days = KEYS.REVOKED_TTL / 86400, months = KEYS.MARKETING_TTL / 86400 / 365 * 12;
+t('privacy: an API keys section whose periods are the code\'s: revoked records 90 days, the marketing opt-in 12 months, counters two hours and two days', days === 90 && months === 12 && /API keys<\/h2>/.test(read('privacy.html')) && /expires 90 days later/.test(privacy) && /for 12 months, and use it only to send you product updates/.test(privacy) && /hourly counters expire within two hours and the daily ones within two days/.test(privacy) && /The box is off unless you tick it/.test(privacy));
+t('privacy: the key is not stored readable, the address is kept readable only with the opt-in, and nothing is logged', /do not store the key, or your address, in readable form/.test(privacy) && /We do not log your key, your address or the requests you make/.test(privacy));
+t('privacy: the API key appears in Third parties (Resend: four kinds of message; Upstash holds API key records) and in "what we don\'t collect"', /four kinds of message/.test(privacy) && /API key records/.test(privacy) && /ask for an API key/.test(privacy));
+t('the API key store keeps what the privacy page says (a hash, a masked address, no readable key; the opt-in apart and expiring)', /maskedEmail/.test(read('lib/api-v1/keys.js')) && /expire\('api:mk:'/.test(read('lib/api-v1/keys.js')) && /emailHash: '', maskedEmail: ''/.test(read('lib/api-v1/keys.js')));
+
+/* wording: no "monthly" next to the citation sample; no "nothing is stored" for the free scan */
+const monthlyCite = pages.filter((f) => !/^(docs|content)\//.test(f) && /monthly (citation|sample|check)|citation (check|sample)[^.<]{0,40}monthly/i.test(read(f)));
+t('no page calls the citation sample monthly', monthlyCite.length === 0 && !/monthly (citation|sample)|monthly re-?measure/i.test(read('content/pricing.json') + read('content/service-pages.json')), monthlyCite.join(', '));
+const nothingStored = pages.filter((f) => !/^(mcp\.html|research\/|benchmarks\/|app\/)/.test(f) && /nothing is stored|nothing stored/i.test(main(read(f))));
+t('no page about the free scan or the free tools says "nothing is stored"', nothingStored.length === 0, nothingStored.join(', '));
+t('the free-scan line is "No email. Runs in your browser. Your scan result isn\'t saved." on the homepage, the 404 page and the agentic commerce page', ['index.html', '404.html', 'agentic-commerce.html'].every((f) => read(f).indexOf("No email. Runs in your browser. Your scan result isn't saved.") !== -1));
+
 /* the owner's blanks */
 const blanks = {};
 [['terms.html', terms], ['privacy.html', privacy], ['refunds.html', refunds]].forEach((x) => { (x[1].match(/\[[A-Z][^\]]{2,200}\]/g) || []).forEach((b) => { (blanks[x[0]] = blanks[x[0]] || []).push(b); }); });
-const known = /^\[(LEGAL ENTITY NAME|REGISTERED ADDRESS|GOVERNING LAW|JURISDICTION|TO CONFIRM:[^\]]+)\]$/;
-t('every bracket in the legal pages is one of the known blanks (entity, address, governing law, jurisdiction, TO CONFIRM)', Object.keys(blanks).every((f) => blanks[f].every((b) => known.test(b))), JSON.stringify(blanks));
+const known = /^\[TO CONFIRM:[^\]]+\]$/;
+t('every bracket in the legal pages is a TO CONFIRM blank (the entity, location, governing law and jurisdiction are filled)', Object.keys(blanks).every((f) => blanks[f].every((b) => known.test(b))), JSON.stringify(blanks));
 out('\n  blanks left for the owner: ' + Object.keys(blanks).map((f) => f + ' ' + blanks[f].length).join(', '));
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');

@@ -22,6 +22,15 @@ keys below should be set there unless you test with them). *Local* = `.env.local
 |---|---|---|---|---|---|
 | `ADMIN_TOKEN` | The one credential of the workspace admin (`/admin/ws`). 16 characters or more; use a long random string (`openssl rand -hex 24`). Never put it in the repository, a URL or a chat. | Production only (Local only if you run the dev server with the admin) | To use the admin | **Every `/admin/ws` route answers 404 and renders nothing** (the page, the sign-in and the API). Workspaces themselves, and the demo, work without it. | Not set yet |
 
+## Public API (/v1)
+
+| Variable | What it does | Set in | Required | If missing | Status |
+|---|---|---|---|---|---|
+| `API_KEY_PEPPER` | The server-side secret that keys, addresses and network addresses are hashed with (HMAC-SHA-256) before anything is stored. 32 characters or more; use `openssl rand -hex 32`. Never put it in the repository, a URL or a chat. **Do not change it after keys are issued: every key would stop working.** | Production only | To use the API | **Every `/v1` route answers 503 `not_configured`** and stores nothing. The `/api` page still loads. | Not set yet |
+| `API_V1_SCAN_DEADLINE_MS` | How long one scan may take before the API answers 502 | Production | No | 20000 | Default |
+
+The API also reads `RESEND_API_KEY` and `PRO_MAIL_FROM` (without them `POST /v1/keys` answers 503), `ADMIN_TOKEN` (without it `POST /v1/admin/plan` is a 404) and the Redis variables above. See `docs/api.md`.
+
 ## Email (Resend)
 
 | Variable | What it does | Set in | Required | If missing | Status |

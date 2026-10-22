@@ -1,0 +1,1193 @@
+# Citehound API v1. Written by scripts/generate-api-page.js from lib/api-v1/openapi.js. Do not edit by hand.
+openapi: "3.1.0"
+info:
+  title: "Citehound API"
+  version: "1.0.0"
+  summary: "Scan a domain for AI readiness and generate llms.txt, robots.txt and schema."
+  description: "Scans one page of a domain (its robots.txt, llms.txt, sitemap declaration and homepage) and scores it out of 100, and generates llms.txt, robots.txt and JSON-LD. The score measures readiness: crawler access and on-page signals. It does not measure whether any assistant names a brand.\n\nGet a free key by email at https://getcitehound.com/api. Limits: a free key allows 20 requests an hour and 100 a day; the same domain is scanned at most 4 times an hour across all keys."
+  termsOfService: "https://getcitehound.com/terms"
+  contact:
+    name: "Citehound"
+    email: "hey@getcitehound.com"
+    url: "https://getcitehound.com"
+servers:
+  - url: "https://getcitehound.com/v1"
+    description: "Production"
+tags:
+  - name: "Keys"
+  - name: "Account"
+  - name: "Scan"
+  - name: "Generate"
+  - name: "Benchmark"
+security:
+  - bearerAuth: []
+  - keyHeader: []
+paths:
+  "/keys":
+    post:
+      operationId: "createKey"
+      tags:
+        - "Keys"
+      summary: "Get a free API key by email"
+      description: "Sends a free key to the address. The key is in the email and nowhere else: never in this response. The answer is the same whether or not the address could be given a key. The key email is transactional only; set marketing_optin to true only if you want occasional product updates."
+      security: []
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              "$ref": "#/components/schemas/KeyRequest"
+            example:
+              email: "you@example.com"
+              marketing_optin: false
+      responses:
+        "202":
+          description: "Accepted. If the address can receive a key, it is on its way."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Accepted"
+              example:
+                status: "accepted"
+                message: "If this address can receive a key, it is on its way. The key is sent by email only and is shown once."
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "413":
+          "$ref": "#/components/responses/TooLarge"
+        "415":
+          "$ref": "#/components/responses/UnsupportedMediaType"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/me":
+    get:
+      operationId: "me"
+      tags:
+        - "Account"
+      summary: "Your plan, limits and usage"
+      description: "The plan of the key (free or pro), its limits, how many requests it has made this hour and today (UTC), and the masked address it was sent to."
+      responses:
+        "200":
+          description: "The key's plan and usage."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Me"
+              example:
+                plan: "free"
+                status: "active"
+                email: "y***@example.com"
+                created_at: "2026-10-22T12:00:00.000Z"
+                limits:
+                  requests_per_hour: 20
+                  requests_per_day: 100
+                  scans_per_domain_per_hour: 4
+                usage:
+                  this_hour: 1
+                  today: 1
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/scan":
+    get:
+      operationId: "scan"
+      tags:
+        - "Scan"
+      summary: "Scan one domain for AI readiness"
+      description: "Scans the public robots.txt, llms.txt, sitemap declaration and homepage of the domain (one page, not the whole site) and scores it out of 100 across three pillars. Returns the failed checks with their fixes, the state of ten AI crawlers in robots.txt, and a comparison with our benchmark. The score measures readiness, not whether any assistant names a brand."
+      parameters:
+        - name: "domain"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.com"
+            maxLength: 253
+      responses:
+        "200":
+          description: "The scan."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/ScanResult"
+              example:
+                domain: "example.com"
+                scannedAt: "2026-10-22T12:00:00.000Z"
+                score: 87
+                pillars:
+                  - id: "discover"
+                    name: "Discoverability"
+                    score: 27
+                    max: 40
+                  - id: "tech"
+                    name: "Technical foundation"
+                    score: 20
+                    max: 20
+                  - id: "trust"
+                    name: "Content & trust"
+                    score: 40
+                    max: 40
+                failed:
+                  - label: "AI crawler access (0/10 open)"
+                    pillar: "Discoverability"
+                    points: 13
+                    max: 26
+                    fix: "Review robots.txt rules for blocked AI crawlers"
+                crawlers:
+                  - name: "GPTBot"
+                    vendor: "OpenAI"
+                    state: "limited"
+                    rule: "Disallow: /admin/ (+1 more) · bot-specific rule"
+                crawlerSummary:
+                  open: 0
+                  limited: 10
+                  blocked: 0
+                benchmark:
+                  overallAverage: 73
+                  sitesScanned: 219
+                  categories: 6
+                  delta: 14
+                  position: "above the average"
+                note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+                method: "https://getcitehound.com/methodology"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/compare":
+    get:
+      operationId: "compare"
+      tags:
+        - "Scan"
+      summary: "Compare two domains"
+      description: "Scans two different domains, one after the other, and returns both summaries and every check where they differ. Both domains count toward the per-domain limit."
+      parameters:
+        - name: "a"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.com"
+            maxLength: 253
+        - name: "b"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.org"
+            maxLength: 253
+      responses:
+        "200":
+          description: "Both scans and the differences."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/CompareResult"
+              example:
+                a:
+                  domain: "example.com"
+                  scannedAt: "2026-10-22T12:00:00.000Z"
+                  score: 87
+                  pillars:
+                    - id: "discover"
+                      name: "Discoverability"
+                      score: 27
+                      max: 40
+                    - id: "tech"
+                      name: "Technical foundation"
+                      score: 20
+                      max: 20
+                    - id: "trust"
+                      name: "Content & trust"
+                      score: 40
+                      max: 40
+                  failed:
+                    - label: "AI crawler access (0/10 open)"
+                      pillar: "Discoverability"
+                      points: 13
+                      max: 26
+                      fix: "Review robots.txt rules for blocked AI crawlers"
+                  crawlers:
+                    - name: "GPTBot"
+                      vendor: "OpenAI"
+                      state: "limited"
+                      rule: "Disallow: /admin/ (+1 more) · bot-specific rule"
+                  crawlerSummary:
+                    open: 0
+                    limited: 10
+                    blocked: 0
+                  benchmark:
+                    overallAverage: 73
+                    sitesScanned: 219
+                    categories: 6
+                    delta: 14
+                    position: "above the average"
+                  note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+                  method: "https://getcitehound.com/methodology"
+                b:
+                  domain: "example.org"
+                  scannedAt: "2026-10-22T12:00:00.000Z"
+                  score: 77
+                  pillars:
+                    - id: "discover"
+                      name: "Discoverability"
+                      score: 27
+                      max: 40
+                    - id: "tech"
+                      name: "Technical foundation"
+                      score: 20
+                      max: 20
+                    - id: "trust"
+                      name: "Content & trust"
+                      score: 40
+                      max: 40
+                  failed:
+                    - label: "AI crawler access (0/10 open)"
+                      pillar: "Discoverability"
+                      points: 13
+                      max: 26
+                      fix: "Review robots.txt rules for blocked AI crawlers"
+                  crawlers:
+                    - name: "GPTBot"
+                      vendor: "OpenAI"
+                      state: "limited"
+                      rule: "Disallow: /admin/ (+1 more) · bot-specific rule"
+                  crawlerSummary:
+                    open: 0
+                    limited: 10
+                    blocked: 0
+                  benchmark:
+                    overallAverage: 73
+                    sitesScanned: 219
+                    categories: 6
+                    delta: 14
+                    position: "above the average"
+                  note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+                  method: "https://getcitehound.com/methodology"
+                differences:
+                  - check: "Meta description"
+                    a:
+                      passed: true
+                      points: 5
+                    b:
+                      passed: false
+                      points: 0
+                    max: 5
+                note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+                method: "https://getcitehound.com/methodology"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/crawlers":
+    get:
+      operationId: "crawlers"
+      tags:
+        - "Scan"
+      summary: "The state of ten AI crawlers in robots.txt"
+      description: "Reads robots.txt of the domain and reports, for each of ten AI crawlers, whether it is open, limited (an ordinary Disallow path applies to it) or blocked. This is a scan: it counts toward the per-domain limit."
+      parameters:
+        - name: "domain"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.com"
+            maxLength: 253
+      responses:
+        "200":
+          description: "The ten crawler states."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/CrawlersResult"
+              example:
+                domain: "example.com"
+                scannedAt: "2026-10-22T12:00:00.000Z"
+                crawlers:
+                  - name: "GPTBot"
+                    vendor: "OpenAI"
+                    state: "limited"
+                    rule: "Disallow: /admin/ (+1 more) · bot-specific rule"
+                summary:
+                  open: 0
+                  limited: 10
+                  blocked: 0
+                note: "A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand."
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/generate/llms-txt":
+    get:
+      operationId: "generateLlmsTxt"
+      tags:
+        - "Generate"
+      summary: "Generate an llms.txt"
+      description: "Builds an llms.txt from a name, a one-sentence description and up to 20 pages. Pure text generation: nothing is fetched. Pass each page as \"page=<url>|<description>\", repeated, or use POST with JSON. llms.txt is an optional convention with no demonstrated effect on Google."
+      parameters:
+        - name: "name"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 120
+            example: "Example Co"
+        - name: "description"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            maxLength: 300
+            example: "Project software for small design studios."
+        - name: "page"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+            maxItems: 20
+            example:
+              - "https://example.com/pricing|Plans and prices"
+          description: "Repeat for each page, as \"<url>|<description>\"."
+      responses:
+        "200":
+          description: "The file text."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/GeneratedFile"
+              example:
+                type: "llms.txt"
+                content: "# Example Co\n\n> Project software for small design studios.\n\n## Pages\n- [Plans and prices](https://example.com/pricing)"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+    post:
+      operationId: "generateLlmsTxtPost"
+      tags:
+        - "Generate"
+      summary: "Generate an llms.txt (JSON body)"
+      description: "The same as the GET form, with the pages as a JSON array."
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                description:
+                  type: "string"
+                pages:
+                  type: "array"
+                  items:
+                    type: "object"
+                    properties:
+                      url:
+                        type: "string"
+                        format: "uri"
+                      description:
+                        type: "string"
+                    required:
+                      - "url"
+                      - "description"
+                    additionalProperties: false
+              required:
+                - "name"
+                - "description"
+      responses:
+        "200":
+          description: "The file text."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/GeneratedFile"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "415":
+          "$ref": "#/components/responses/UnsupportedMediaType"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/generate/robots-txt":
+    get:
+      operationId: "generateRobotsTxt"
+      tags:
+        - "Generate"
+      summary: "Generate an AI-crawler robots.txt"
+      description: "Builds a robots.txt that explicitly allows or blocks named crawlers from the ten Citehound tracks, with an optional Sitemap line. Pure text generation: nothing is fetched. Names are comma-separated in the query; POST accepts JSON arrays."
+      parameters:
+        - name: "allow"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            example: "GPTBot,ClaudeBot"
+          description: "Comma-separated crawler names to allow."
+        - name: "block"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            example: "Bytespider"
+          description: "Comma-separated crawler names to block."
+        - name: "sitemap"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            format: "uri"
+            example: "https://example.com/sitemap.xml"
+      responses:
+        "200":
+          description: "The file text."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/GeneratedFile"
+              example:
+                type: "robots.txt"
+                content: "User-agent: GPTBot\nAllow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nSitemap: https://example.com/sitemap.xml"
+                allow:
+                  - "GPTBot"
+                block:
+                  - "Bytespider"
+                sitemap: "https://example.com/sitemap.xml"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+    post:
+      operationId: "generateRobotsTxtPost"
+      tags:
+        - "Generate"
+      summary: "Generate an AI-crawler robots.txt (JSON body)"
+      description: "The same as the GET form, with arrays."
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: "object"
+              properties:
+                allow:
+                  type: "array"
+                  items:
+                    type: "string"
+                block:
+                  type: "array"
+                  items:
+                    type: "string"
+                sitemap:
+                  type: "string"
+                  format: "uri"
+      responses:
+        "200":
+          description: "The file text."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/GeneratedFile"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "415":
+          "$ref": "#/components/responses/UnsupportedMediaType"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/generate/schema":
+    get:
+      operationId: "generateSchema"
+      tags:
+        - "Generate"
+      summary: "Generate JSON-LD from a site's homepage"
+      description: "Reads the homepage of the domain for its real title, description and language and returns JSON-LD of the requested type. Fields the scan cannot know are left in square brackets. This reads the homepage: it counts toward the per-domain limit."
+      parameters:
+        - name: "domain"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            description: "A bare domain: letters, digits and hyphens, no scheme, path, port or credentials."
+            example: "example.com"
+            maxLength: 253
+        - name: "type"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            enum:
+              - "organization"
+              - "faqpage"
+              - "article"
+              - "product"
+              - "localbusiness"
+            example: "organization"
+      responses:
+        "200":
+          description: "The JSON-LD."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/SchemaResult"
+              example:
+                domain: "example.com"
+                type: "organization"
+                json_ld:
+                  "@context": "https://schema.org"
+                  "@graph": []
+                note: "Fields the scan cannot know are left in square brackets for you to fill in."
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "502":
+          "$ref": "#/components/responses/BadGateway"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+  "/benchmark":
+    get:
+      operationId: "benchmark"
+      tags:
+        - "Benchmark"
+      summary: "Our archived benchmark data"
+      description: "Without \"category\": the six categories with their average score and the weighted overall average. With \"category\": the score spread, the per-crawler counts and the failure rate of each check for that category. This is our own archive of scans of well-known sites, from the date shown; it is not live."
+      parameters:
+        - name: "category"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            example: "crm"
+          description: "One of the category ids from the overview."
+      responses:
+        "200":
+          description: "The overview or one category."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Benchmark"
+              example:
+                categories:
+                  - category: "crm"
+                    label: "CRM software"
+                    track: "B2B SaaS"
+                    sitesScanned: 31
+                    average: 78
+                    scannedAt: "2026-07-29"
+                overall:
+                  totalSites: 219
+                  totalCategories: 6
+                  overallAverage: 73
+                note: "Our own archived scans of well-known sites."
+        "401":
+          "$ref": "#/components/responses/Unauthorized"
+        "403":
+          "$ref": "#/components/responses/Forbidden"
+        "404":
+          "$ref": "#/components/responses/NotFound"
+        "429":
+          "$ref": "#/components/responses/RateLimited"
+        "503":
+          "$ref": "#/components/responses/NotConfigured"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: "http"
+      scheme: "bearer"
+      description: "Authorization: Bearer <key>."
+    keyHeader:
+      type: "apiKey"
+      in: "header"
+      name: "X-Citehound-Key"
+      description: "The same key in a header of its own."
+  schemas:
+    Error:
+      type: "object"
+      properties:
+        error:
+          type: "string"
+          description: "A short code."
+        message:
+          type: "string"
+        retry_after:
+          type: "integer"
+          description: "Seconds to wait (rate limits only)."
+        limit_scope:
+          type: "string"
+          description: "Which limit was reached (rate limits only)."
+      required:
+        - "error"
+        - "message"
+      additionalProperties: false
+    KeyRequest:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+          format: "email"
+          maxLength: 254
+        marketing_optin:
+          type: "boolean"
+          default: false
+          description: "True only if you want occasional product updates. The key email never contains marketing."
+      required:
+        - "email"
+      additionalProperties: false
+    Accepted:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          enum:
+            - "accepted"
+        message:
+          type: "string"
+      required:
+        - "status"
+        - "message"
+      additionalProperties: false
+    Me:
+      type: "object"
+      properties:
+        plan:
+          type: "string"
+          enum:
+            - "free"
+            - "pro"
+        status:
+          type: "string"
+          enum:
+            - "active"
+        email:
+          type: "string"
+          description: "The masked address."
+        created_at:
+          type: "string"
+          format: "date-time"
+        limits:
+          type: "object"
+          properties:
+            requests_per_hour:
+              type: "integer"
+            requests_per_day:
+              type: "integer"
+            scans_per_domain_per_hour:
+              type: "integer"
+          required:
+            - "requests_per_hour"
+            - "requests_per_day"
+            - "scans_per_domain_per_hour"
+          additionalProperties: false
+        usage:
+          type: "object"
+          properties:
+            this_hour:
+              type: "integer"
+            today:
+              type: "integer"
+          required:
+            - "this_hour"
+            - "today"
+          additionalProperties: false
+      required:
+        - "plan"
+        - "status"
+        - "email"
+        - "created_at"
+        - "limits"
+        - "usage"
+      additionalProperties: false
+    Pillar:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        score:
+          type: "integer"
+        max:
+          type: "integer"
+      required:
+        - "id"
+        - "name"
+        - "score"
+        - "max"
+      additionalProperties: false
+    FailedCheck:
+      type: "object"
+      properties:
+        label:
+          type: "string"
+        pillar:
+          type: "string"
+        points:
+          type: "integer"
+        max:
+          type: "integer"
+        fix:
+          type: "string"
+      required:
+        - "label"
+        - "pillar"
+        - "points"
+        - "max"
+        - "fix"
+      additionalProperties: false
+    Crawler:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        vendor:
+          type:
+            - "string"
+            - "null"
+        state:
+          type: "string"
+          enum:
+            - "open"
+            - "limited"
+            - "blocked"
+        rule:
+          type:
+            - "string"
+            - "null"
+      required:
+        - "name"
+        - "vendor"
+        - "state"
+        - "rule"
+      additionalProperties: false
+    Benchmark_comparison:
+      type: "object"
+      properties:
+        overallAverage:
+          type: "integer"
+        sitesScanned:
+          type: "integer"
+        categories:
+          type: "integer"
+        delta:
+          type: "integer"
+        position:
+          type: "string"
+      required:
+        - "overallAverage"
+        - "sitesScanned"
+        - "categories"
+        - "delta"
+        - "position"
+      additionalProperties: false
+    ScanResult:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+        scannedAt:
+          type: "string"
+          format: "date-time"
+        score:
+          type: "integer"
+          minimum: 0
+          maximum: 100
+        pillars:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Pillar"
+        failed:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/FailedCheck"
+        crawlers:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Crawler"
+        crawlerSummary:
+          type: "object"
+          properties:
+            open:
+              type: "integer"
+            limited:
+              type: "integer"
+            blocked:
+              type: "integer"
+          required:
+            - "open"
+            - "limited"
+            - "blocked"
+          additionalProperties: false
+        benchmark:
+          oneOf:
+            - "$ref": "#/components/schemas/Benchmark_comparison"
+            - type: "null"
+        note:
+          type: "string"
+        method:
+          type: "string"
+          format: "uri"
+      required:
+        - "domain"
+        - "scannedAt"
+        - "score"
+        - "pillars"
+        - "failed"
+        - "crawlers"
+        - "crawlerSummary"
+        - "benchmark"
+        - "note"
+        - "method"
+      additionalProperties: false
+    CompareResult:
+      type: "object"
+      properties:
+        a:
+          "$ref": "#/components/schemas/ScanResult"
+        b:
+          "$ref": "#/components/schemas/ScanResult"
+        differences:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              check:
+                type: "string"
+              a:
+                type: "object"
+                properties:
+                  passed:
+                    type: "boolean"
+                  points:
+                    type: "integer"
+                required:
+                  - "passed"
+                  - "points"
+                additionalProperties: false
+              b:
+                type: "object"
+                properties:
+                  passed:
+                    type: "boolean"
+                  points:
+                    type: "integer"
+                required:
+                  - "passed"
+                  - "points"
+                additionalProperties: false
+              max:
+                type: "integer"
+            required:
+              - "check"
+              - "a"
+              - "b"
+              - "max"
+            additionalProperties: false
+        note:
+          type: "string"
+        method:
+          type: "string"
+          format: "uri"
+      required:
+        - "a"
+        - "b"
+        - "differences"
+        - "note"
+        - "method"
+      additionalProperties: false
+    CrawlersResult:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+        scannedAt:
+          type: "string"
+          format: "date-time"
+        crawlers:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Crawler"
+        summary:
+          type: "object"
+          properties:
+            open:
+              type: "integer"
+            limited:
+              type: "integer"
+            blocked:
+              type: "integer"
+          required:
+            - "open"
+            - "limited"
+            - "blocked"
+          additionalProperties: false
+        note:
+          type: "string"
+      required:
+        - "domain"
+        - "scannedAt"
+        - "crawlers"
+        - "summary"
+        - "note"
+      additionalProperties: false
+    GeneratedFile:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+          enum:
+            - "llms.txt"
+            - "robots.txt"
+        content:
+          type: "string"
+          description: "The file text, to paste at the site root."
+        allow:
+          type: "array"
+          items:
+            type: "string"
+        block:
+          type: "array"
+          items:
+            type: "string"
+        sitemap:
+          type:
+            - "string"
+            - "null"
+        pages:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              url:
+                type: "string"
+              description:
+                type: "string"
+            required:
+              - "url"
+              - "description"
+            additionalProperties: false
+        note:
+          type: "string"
+      required:
+        - "type"
+        - "content"
+    SchemaResult:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+        type:
+          type: "string"
+          enum:
+            - "organization"
+            - "faqpage"
+            - "article"
+            - "product"
+            - "localbusiness"
+        json_ld:
+          type: "object"
+          description: "A schema.org JSON-LD object."
+        note:
+          type: "string"
+      required:
+        - "domain"
+        - "type"
+        - "json_ld"
+        - "note"
+      additionalProperties: false
+    Benchmark:
+      type: "object"
+      description: "Without \"category\": categories and overall. With \"category\": the detail of one category."
+      properties:
+        categories:
+          type: "array"
+          items:
+            type: "object"
+        overall:
+          type:
+            - "object"
+            - "null"
+        category:
+          type: "string"
+        label:
+          type: "string"
+        track:
+          type: "string"
+        sitesScanned:
+          type: "integer"
+        couldNotBeReached:
+          type: "integer"
+        scannedAt:
+          type: "string"
+        score:
+          type: "object"
+        crawlers:
+          type:
+            - "object"
+            - "null"
+        checkFailureRates:
+          type:
+            - "object"
+            - "null"
+        note:
+          type: "string"
+        method:
+          type: "string"
+  responses:
+    BadRequest:
+      description: "The request is not valid: a missing or malformed parameter."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "invalid_request"
+            message: "The request is not valid: a missing or malformed parameter."
+    Unauthorized:
+      description: "The key is missing or not valid. A WWW-Authenticate header says how to send it."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "invalid_key"
+            message: "The key is missing or not valid. A WWW-Authenticate header says how to send it."
+      headers:
+        "WWW-Authenticate":
+          description: "How to send the key."
+          schema:
+            type: "string"
+    Forbidden:
+      description: "The key has been revoked."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "key_revoked"
+            message: "The key has been revoked."
+    NotFound:
+      description: "No such category or endpoint."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "not_found"
+            message: "No such category or endpoint."
+    TooLarge:
+      description: "The request body is larger than the limit."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "too_large"
+            message: "The request body is larger than the limit."
+    UnsupportedMediaType:
+      description: "Send JSON with Content-Type: application/json."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "unsupported_media_type"
+            message: "Send JSON with Content-Type: application/json."
+    RateLimited:
+      description: "A limit was reached. The Retry-After header gives the seconds to wait; the body names the limit."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "rate_limited"
+            message: "A limit was reached. The Retry-After header gives the seconds to wait; the body names the limit."
+      headers:
+        "Retry-After":
+          description: "Seconds to wait before trying again."
+          schema:
+            type: "integer"
+    BadGateway:
+      description: "The scan could not read the site (robots.txt or the homepage), or the key email could not be sent."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "scan_failed"
+            message: "The scan could not read the site (robots.txt or the homepage), or the key email could not be sent."
+    NotConfigured:
+      description: "The API is not configured on this server, or its storage is unavailable."
+      content:
+        "application/json":
+          schema:
+            "$ref": "#/components/schemas/Error"
+          example:
+            error: "not_configured"
+            message: "The API is not configured on this server, or its storage is unavailable."

@@ -44,7 +44,7 @@
       "points": [
         "Whole-site report: up to 25 pages, page by page",
         "Weekly re-scan with email alerts when something regresses (part of Pro early access)",
-        "Monthly citation sample on {ENGINES}"
+        "Citation sample on {ENGINES}"
       ],
       "cta": {
         "label": "Join the Pro waitlist",
@@ -89,7 +89,7 @@
       "points": [
         "Researched questions and a gap analysis",
         "4 edited pieces a month, which you approve before publishing",
-        "Monthly re-measurement",
+        "Re-measurement after publishing",
         "Includes Pro"
       ],
       "cta": {
@@ -267,7 +267,7 @@
         "note": "Part of Pro early access"
       },
       {
-        "label": "Citation check on {ENGINES}, monthly sample",
+        "label": "Citation check on {ENGINES}, dated sample",
         "has": [
           0,
           1,

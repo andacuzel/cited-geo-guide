@@ -168,6 +168,11 @@ Constraints that must not be broken:
 - **The product tour and the /fix and /beyond hero pictures are real screenshots** of the live sample report and the two demos, in `assets/tour/` (WebP, with width and height),
   made by `scripts/capture-tour.js` (Playwright is not a dependency: see the script's header). Re-run it when one of those pages changes its layout, never to change
   the demo data. The tour's label is "Product demo · Sample data"; show only screens that exist, and no multi-engine visibility tiles or invented metrics.
+- **The public API, /v1 (22 Oct 2026, branch api-v1).** One function, `api/v1/[...path].js` (the 12th and last on Hobby: do not add another, add routes to `lib/api-v1/index.js`), with keys sent by email only
+  (`POST /v1/keys`), stored as HMAC hashes with `API_KEY_PEPPER`, revocable with a signed link, a free and a pro plan (the plan is set only through `POST /v1/admin/plan` behind `ADMIN_TOKEN`; payment code is untouched),
+  and limits in `lib/api-v1/limits.js`. It reuses `scanPage`, `lib/action-scan.js` `summarize`, `lib/file-generators.js` and `lib/schema.js` and fetches only through `lib/safe-fetch.js`; no CORS headers. The description
+  is written once in `lib/api-v1/openapi.js`; `scripts/generate-api-page.js` writes `/api` and `/openapi.yaml` and keeps /api in the sitemap and llms.txt only (never the footer). The score is readiness, never "names a brand".
+  Read `docs/api.md` and `docs/integrations/RULES.md` first; `scripts/test-api-v1.js` is a gate. The API sentences are on `/terms` ("The API") and `/privacy` ("API keys") since 23 Oct 2026; the periods there are the code's (`MARKETING_TTL` 12 months, `REVOKED_TTL` 90 days, counters two hours and two days): change them together. The operator is "Andaç Üzel, a sole proprietor based in Istanbul, Türkiye" until a company is formed.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
   come from the sample data and the real renderer (`renderPro`); rerun

@@ -13,6 +13,9 @@
     "api/mcp.js": {
       "maxDuration": 60
     },
+    "api/v1/[...path].js": {
+      "maxDuration": 60
+    },
     "api/llms-check.js": {
       "maxDuration": 30
     },
@@ -25,6 +28,8 @@
     }
   },
   "redirects": [
+    { "source": "/v1", "destination": "/api", "statusCode": 302 },
+    { "source": "/v1/", "destination": "/api", "statusCode": 302 },
     { "source": "/scan", "destination": "/", "statusCode": 301 },
     { "source": "/scan/", "destination": "/", "statusCode": 301 },
     { "source": "/beyond-technical", "destination": "/beyond", "statusCode": 301 },
@@ -107,6 +112,14 @@
       ]
     },
     {
+      "source": "/openapi.yaml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/yaml; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=300" }
+      ]
+    },
+    {
       "source": "/api/pro(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
@@ -116,6 +129,8 @@
     }
   ],
   "rewrites": [
+    { "source": "/v1/:path*", "destination": "/api/v1/:path*" },
+    { "source": "/api", "destination": "/api.html" },
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
     { "source": "/api/action-scan", "destination": "/api/scan?client=action" },
     { "source": "/admin/ws", "destination": "/api/pro?a=wsadmin" },

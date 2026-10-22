@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=103" />
+  <link rel="stylesheet" href="styles.css?v=104" />
 
   <script type="application/ld+json">
   {
@@ -256,7 +256,7 @@
           <h2 id="data-heading" class="doc-section__heading">How the data is collected</h2>
           <div class="results-content__body">
             <p>Every scan fetches these directly from your domain, live, at scan time: public <code>robots.txt</code>, <code>llms.txt</code>, the UCP profile at <code>/.well-known/ucp</code>, <code>sitemap.xml</code> (if not already declared in robots.txt), and the homepage. If the scan treats the site as a store, it may also read your declared sitemap or one product sitemap, and one product page. All requests happen inside a single Vercel serverless function — nothing routes through a third-party proxy.</p>
-            <p>Nothing is stored. There is no database behind the scan. The result exists in your browser for as long as the page stays open, and re-running the scan simply fetches everything again.</p>
+            <p>Your scan result isn't saved. The result exists in your browser for as long as the page stays open, and re-running the scan simply fetches everything again.</p>
             <p>If <code>robots.txt</code> cannot be read at all — a network failure, not a genuine 404 — the scan stops and returns an error rather than guessing. A missing <code>robots.txt</code> (a real 404) is scored as default-open access, which is the true state of that site; a failed <em>fetch</em> is not, and reporting a guessed score in that case would be a fabricated result. We do not fabricate results.</p>
           </div>
         </div>

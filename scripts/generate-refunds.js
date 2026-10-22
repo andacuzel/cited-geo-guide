@@ -21,7 +21,7 @@ const shell = require('../lib/page-shell.js');
 const site = require('../lib/site-config.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 103;
+const CSS_VERSION = 104;
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const DATE = '22 October 2026';
@@ -46,7 +46,7 @@ const BLOCKS = [
     'A refund goes back to the payment method you used. Payments are not open yet; these terms apply from the first payment.'
   ]],
   ['How to ask', [
-    'Email ' + MAIL + ' with your name, the plan and, if you have it, the order reference. For a Fix or Beyond project, say which project. The <a href="/terms">terms</a> have the rest of the rules for the paid plans.'
+    'Email ' + MAIL + ' with your name, the plan and, if you have it, the order reference. For a Fix or Beyond project, say which project. The <a href="/terms">terms</a> have the rest of the rules for the paid plans. Citehound is run by Andaç Üzel, a sole proprietor based in Istanbul, Türkiye. We will update this page when a company is formed.'
   ]]
 ];
 
