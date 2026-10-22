@@ -1,0 +1,28 @@
+name: 'Citehound AI readiness check'
+description: 'Scan a domain for AI readiness: crawler access and on-page signals, scored out of 100. Free, no account.'
+author: 'Citehound'
+branding:
+  icon: 'search'
+  color: 'blue'
+inputs:
+  domain:
+    description: 'The domain to scan, for example example.com. Only this domain is sent.'
+    required: true
+  min-score:
+    description: 'Fail the step if the score is below this number (0 to 100). Leave empty to never fail on the score.'
+    required: false
+    default: ''
+  fail-on-crawler-block:
+    description: 'Set to true to fail the step if robots.txt fully blocks any of the AI crawlers Citehound tracks.'
+    required: false
+    default: 'false'
+outputs:
+  score:
+    description: 'The readiness score, 0 to 100.'
+  crawlers-blocked:
+    description: 'How many of the tracked AI crawlers robots.txt blocks completely.'
+  failed-checks:
+    description: 'How many checks failed.'
+runs:
+  using: 'node24'
+  main: 'index.js'
