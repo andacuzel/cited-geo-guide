@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "crons": [
     {
-      "path": "/api/v1/cron/run",
+      "path": "/api/v1/cron",
       "schedule": "17 5 * * *"
     }
   ],
@@ -135,6 +135,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/v1/:first/:rest+", "destination": "/api/v1/r?route=:first/:rest" },
     { "source": "/v1/:path*", "destination": "/api/v1/:path*" },
     { "source": "/api", "destination": "/api.html" },
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },

@@ -106,6 +106,8 @@ const bad = (s) => s >= 400;
   const vj = JSON.parse(read('vercel.json'));
   t('vercel.json gives the function its own duration', vj.functions && vj.functions['api/v1/[...path].js'] && vj.functions['api/v1/[...path].js'].maxDuration >= 30);
   t('vercel.json routes /v1/* to the function and /api to the page', (vj.rewrites || []).some((r) => r.source === '/v1/:path*' && r.destination === '/api/v1/:path*') && (vj.rewrites || []).some((r) => r.source === '/api' && r.destination === '/api.html'));
+  t('vercel.json sends addresses of two or more segments to the sentinel /api/v1/r with the rest in ?route=, before the single-segment rule (the catch-all file matches one segment only: found live on 22 Oct 2026)', (() => { const r = vj.rewrites || []; const i = r.findIndex((x) => x.source === '/v1/:first/:rest+' && x.destination === '/api/v1/r?route=:first/:rest'), j = r.findIndex((x) => x.source === '/v1/:path*'); return i !== -1 && j !== -1 && i < j; })());
+  t('the router reads the route from the sentinel for multi-segment addresses and from the catch-all for one segment', JSON.stringify(Api.pathOf({ url: '/api/v1/r?route=keys/revoke/abc', query: { path: 'r', route: 'keys/revoke/abc' } })) === '["keys","revoke","abc"]' && JSON.stringify(Api.pathOf({ url: '/api/v1/me', query: { path: 'me' } })) === '["me"]' && JSON.stringify(Api.pathOf({ url: '/api/v1/r', query: { path: ['r'], route: 'webhooks/whk_1/test' } })) === '["webhooks","whk_1","test"]' && JSON.stringify(Api.pathOf({ url: '/api/v1/me?route=admin/plan', query: { path: 'me', route: 'admin/plan' } })) === '["me"]');
   t('vercel.json serves /openapi.yaml as YAML', (vj.headers || []).some((h) => h.source === '/openapi.yaml' && h.headers.some((x) => /yaml/.test(x.value))));
   t('the sitemap and llms.txt list /api, the footer does not', read('sitemap.xml').indexOf('<loc>https://getcitehound.com/api</loc>') !== -1 && read('llms.txt').indexOf('(https://getcitehound.com/api)') !== -1 && require('../lib/site-footer.js').hrefs().indexOf('/api') === -1);
   t('no CORS header is written anywhere in the API code', !/Access-Control-Allow/i.test(read('lib/api-v1/index.js') + read('lib/api-v1/keys.js') + read('lib/api-v1/limits.js') + read('lib/api-v1/data.js') + read('lib/api-v1/mail.js') + read('api/v1/[...path].js')));
@@ -332,6 +334,7 @@ const bad = (s) => s >= 400;
   t('90 days after revocation the record is gone and the key answers 401', await (async () => { clock += 91 * 86400 * 1000; return (await get('/v1/me', kr.key)).status === 401; })());
 
   /* ---------- the router ---------- */
+  t('a ?route= given by a caller on an ordinary address is ignored', (await request('GET', '/v1/benchmark?route=admin/plan', { headers: { authorization: 'Bearer ' + ks }, query: { path: 'benchmark', route: 'admin/plan' } })).status === 200);
   out('router');
   t('an unknown endpoint is a JSON 404', await get('/v1/nope', ks).then((r) => r.status === 404 && r.json.error === 'not_found'));
   t('a wrong method is a 405 JSON with Allow', await request('POST', '/v1/scan', { headers: { authorization: 'Bearer ' + ks } }).then((r) => r.status === 405 && /GET/.test(r.headers.allow)) && await request('DELETE', '/v1/me', { headers: { authorization: 'Bearer ' + ks } }).then((r) => r.status === 405));
