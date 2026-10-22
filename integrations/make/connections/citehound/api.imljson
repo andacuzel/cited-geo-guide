@@ -1,0 +1,10 @@
+{
+  "url": "/me",
+  "method": "GET",
+  "response": {
+    "valid": "{{statusCode === 200}}",
+    "error": {
+      "message": "[{{statusCode}}] {{body.message}}"
+    }
+  }
+}

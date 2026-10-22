@@ -1,0 +1,12 @@
+{
+  "url": "/generate/robots-txt",
+  "method": "POST",
+  "body": {
+    "allow": "{{parameters.allow}}",
+    "block": "{{parameters.block}}",
+    "sitemap": "{{parameters.sitemap}}"
+  },
+  "response": {
+    "output": "{{body}}"
+  }
+}

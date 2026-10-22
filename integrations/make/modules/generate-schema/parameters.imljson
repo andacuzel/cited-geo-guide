@@ -1,0 +1,38 @@
+[
+  {
+    "name": "domain",
+    "type": "text",
+    "label": "Domain",
+    "required": true,
+    "help": "A bare domain such as example.com."
+  },
+  {
+    "name": "type",
+    "type": "select",
+    "label": "Type",
+    "required": true,
+    "default": "organization",
+    "options": [
+      {
+        "label": "organization",
+        "value": "organization"
+      },
+      {
+        "label": "faqpage",
+        "value": "faqpage"
+      },
+      {
+        "label": "article",
+        "value": "article"
+      },
+      {
+        "label": "product",
+        "value": "product"
+      },
+      {
+        "label": "localbusiness",
+        "value": "localbusiness"
+      }
+    ]
+  }
+]

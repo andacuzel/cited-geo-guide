@@ -1,0 +1,10 @@
+[
+  {
+    "name": "items",
+    "type": "array"
+  },
+  {
+    "name": "score",
+    "type": "number"
+  }
+]

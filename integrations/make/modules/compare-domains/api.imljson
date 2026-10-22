@@ -1,0 +1,11 @@
+{
+  "url": "/compare",
+  "method": "GET",
+  "qs": {
+    "a": "{{parameters.a}}",
+    "b": "{{parameters.b}}"
+  },
+  "response": {
+    "output": "{{body}}"
+  }
+}

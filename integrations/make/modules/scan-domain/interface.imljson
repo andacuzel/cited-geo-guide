@@ -1,0 +1,26 @@
+[
+  {
+    "name": "domain",
+    "type": "text"
+  },
+  {
+    "name": "score",
+    "type": "number"
+  },
+  {
+    "name": "pillars",
+    "type": "array"
+  },
+  {
+    "name": "failed",
+    "type": "array"
+  },
+  {
+    "name": "crawlers",
+    "type": "array"
+  },
+  {
+    "name": "note",
+    "type": "text"
+  }
+]

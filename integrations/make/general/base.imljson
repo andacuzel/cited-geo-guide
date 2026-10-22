@@ -1,0 +1,17 @@
+{
+  "baseUrl": "https://getcitehound.com/v1",
+  "headers": {
+    "Authorization": "Bearer {{connection.apiKey}}",
+    "Accept": "application/json"
+  },
+  "log": {
+    "sanitize": [
+      "request.headers.authorization"
+    ]
+  },
+  "response": {
+    "error": {
+      "message": "[{{statusCode}}] {{body.message}}"
+    }
+  }
+}

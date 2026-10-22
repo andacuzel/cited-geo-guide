@@ -1,0 +1,17 @@
+{
+  "url": "/events",
+  "method": "GET",
+  "qs": {
+    "domain": "{{parameters.domain}}",
+    "type": "{{parameters.type}}"
+  },
+  "response": {
+    "iterate": "{{body.events}}",
+    "output": "{{item}}",
+    "trigger": {
+      "type": "id",
+      "id": "{{item.id}}",
+      "order": "desc"
+    }
+  }
+}

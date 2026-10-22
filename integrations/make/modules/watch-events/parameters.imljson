@@ -1,0 +1,14 @@
+[
+  {
+    "name": "domain",
+    "type": "text",
+    "label": "Domain",
+    "help": "Leave empty for all watched domains."
+  },
+  {
+    "name": "type",
+    "type": "text",
+    "label": "Event Types",
+    "help": "Comma-separated, for example score_dropped,crawler_blocked. Leave empty for all."
+  }
+]

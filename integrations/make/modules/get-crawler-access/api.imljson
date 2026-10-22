@@ -1,0 +1,10 @@
+{
+  "url": "/crawlers",
+  "method": "GET",
+  "qs": {
+    "domain": "{{parameters.domain}}"
+  },
+  "response": {
+    "output": "{{body}}"
+  }
+}

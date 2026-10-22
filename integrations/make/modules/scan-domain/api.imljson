@@ -1,0 +1,10 @@
+{
+  "url": "/scan",
+  "method": "GET",
+  "qs": {
+    "domain": "{{parameters.domain}}"
+  },
+  "response": {
+    "output": "{{body}}"
+  }
+}

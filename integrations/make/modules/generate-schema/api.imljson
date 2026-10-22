@@ -1,0 +1,11 @@
+{
+  "url": "/generate/schema",
+  "method": "GET",
+  "qs": {
+    "domain": "{{parameters.domain}}",
+    "type": "{{parameters.type}}"
+  },
+  "response": {
+    "output": "{{body}}"
+  }
+}

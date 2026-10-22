@@ -1,0 +1,22 @@
+[
+  {
+    "name": "id",
+    "type": "text"
+  },
+  {
+    "name": "type",
+    "type": "text"
+  },
+  {
+    "name": "domain",
+    "type": "text"
+  },
+  {
+    "name": "at",
+    "type": "date"
+  },
+  {
+    "name": "summary",
+    "type": "text"
+  }
+]

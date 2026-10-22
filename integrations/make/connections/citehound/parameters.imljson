@@ -1,0 +1,9 @@
+[
+  {
+    "name": "apiKey",
+    "type": "password",
+    "label": "API Key",
+    "required": true,
+    "help": "A key that starts with chk_. A free key is sent by email at https://getcitehound.com/api."
+  }
+]

@@ -1,0 +1,78 @@
+{
+  "app": "citehound",
+  "version": 1,
+  "description": "Citehound for Make: scan a domain for AI readiness, compare sites, generate llms.txt, robots.txt and schema, and watch monitoring events.",
+  "connection": "citehound",
+  "modules": [
+    {
+      "id": "scan-domain",
+      "type": "action",
+      "label": "Scan a Domain",
+      "description": "Scans a domain for AI readiness: the score, the pillars, the crawlers and the failed checks. A free key shows the first three findings.",
+      "group": "Scan and compare"
+    },
+    {
+      "id": "compare-domains",
+      "type": "action",
+      "label": "Compare Two Domains",
+      "description": "Scans two domains and lists where they differ. Needs a Pro, Fix or Beyond key.",
+      "group": "Scan and compare"
+    },
+    {
+      "id": "get-crawler-access",
+      "type": "action",
+      "label": "Get Crawler Access",
+      "description": "The state of ten AI crawlers in robots.txt.",
+      "group": "Scan and compare"
+    },
+    {
+      "id": "generate-llms-txt",
+      "type": "action",
+      "label": "Generate llms.txt",
+      "description": "Builds an llms.txt from a name, a description and key pages. A free key gets a preview.",
+      "group": "Generate"
+    },
+    {
+      "id": "generate-robots-txt",
+      "type": "action",
+      "label": "Generate robots.txt",
+      "description": "Builds a robots.txt that allows or blocks named AI crawlers. A free key gets a preview.",
+      "group": "Generate"
+    },
+    {
+      "id": "generate-schema",
+      "type": "action",
+      "label": "Generate Schema",
+      "description": "Builds JSON-LD from a homepage. A free key can use the organization type.",
+      "group": "Generate"
+    },
+    {
+      "id": "watch-domain",
+      "type": "action",
+      "label": "Watch a Domain",
+      "description": "Adds a domain to the watchlist. Needs a Pro, Fix or Beyond key.",
+      "group": "Monitoring"
+    },
+    {
+      "id": "list-watched-domains",
+      "type": "search",
+      "label": "List Watched Domains",
+      "description": "The watchlist with the last scan and score. Needs a Pro, Fix or Beyond key.",
+      "group": "Monitoring"
+    },
+    {
+      "id": "get-fix-list",
+      "type": "action",
+      "label": "Get the Fix List",
+      "description": "The prioritized fix list with the files to paste. Needs a Fix or Beyond key.",
+      "group": "Monitoring"
+    },
+    {
+      "id": "watch-events",
+      "type": "trigger",
+      "label": "Watch Monitoring Events",
+      "description": "Triggers for each new monitoring event: a score drop or rise, a crawler blocked or unblocked, llms.txt added or removed, a check failing or fixed, a scan that failed. Needs a Pro, Fix or Beyond key.",
+      "group": "Monitoring"
+    }
+  ]
+}

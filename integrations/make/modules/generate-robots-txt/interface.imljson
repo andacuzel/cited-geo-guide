@@ -1,0 +1,10 @@
+[
+  {
+    "name": "content",
+    "type": "text"
+  },
+  {
+    "name": "preview",
+    "type": "boolean"
+  }
+]

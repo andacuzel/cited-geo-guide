@@ -1,0 +1,31 @@
+[
+  {
+    "name": "name",
+    "type": "text",
+    "label": "Site Name",
+    "required": true
+  },
+  {
+    "name": "description",
+    "type": "text",
+    "label": "Description",
+    "required": true
+  },
+  {
+    "name": "pages",
+    "type": "array",
+    "label": "Key Pages",
+    "spec": [
+      {
+        "name": "url",
+        "type": "url",
+        "label": "URL"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "label": "Description"
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "name": "domain",
+    "type": "text",
+    "label": "Domain",
+    "required": true,
+    "help": "A bare domain such as example.com."
+  }
+]

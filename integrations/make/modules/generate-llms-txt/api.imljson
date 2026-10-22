@@ -1,0 +1,12 @@
+{
+  "url": "/generate/llms-txt",
+  "method": "POST",
+  "body": {
+    "name": "{{parameters.name}}",
+    "description": "{{parameters.description}}",
+    "pages": "{{parameters.pages}}"
+  },
+  "response": {
+    "output": "{{body}}"
+  }
+}

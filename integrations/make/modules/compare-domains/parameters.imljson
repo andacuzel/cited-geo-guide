@@ -1,0 +1,14 @@
+[
+  {
+    "name": "a",
+    "type": "text",
+    "label": "First Domain",
+    "required": true
+  },
+  {
+    "name": "b",
+    "type": "text",
+    "label": "Second Domain",
+    "required": true
+  }
+]

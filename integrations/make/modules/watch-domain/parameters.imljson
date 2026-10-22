@@ -1,0 +1,15 @@
+[
+  {
+    "name": "domain",
+    "type": "text",
+    "label": "Domain",
+    "required": true,
+    "help": "A bare domain such as example.com."
+  },
+  {
+    "name": "alert_email",
+    "type": "email",
+    "label": "Alert Email",
+    "help": "The address the key was sent to, to get alert emails."
+  }
+]

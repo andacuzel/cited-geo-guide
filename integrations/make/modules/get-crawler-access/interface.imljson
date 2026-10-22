@@ -1,0 +1,10 @@
+[
+  {
+    "name": "crawlers",
+    "type": "array"
+  },
+  {
+    "name": "summary",
+    "type": "collection"
+  }
+]

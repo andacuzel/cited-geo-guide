@@ -1,0 +1,10 @@
+[
+  {
+    "name": "domain",
+    "type": "text"
+  },
+  {
+    "name": "last_score",
+    "type": "number"
+  }
+]

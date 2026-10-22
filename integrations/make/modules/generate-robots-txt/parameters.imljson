@@ -1,0 +1,25 @@
+[
+  {
+    "name": "allow",
+    "type": "array",
+    "label": "Allow",
+    "spec": {
+      "type": "text",
+      "label": "Crawler name"
+    }
+  },
+  {
+    "name": "block",
+    "type": "array",
+    "label": "Block",
+    "spec": {
+      "type": "text",
+      "label": "Crawler name"
+    }
+  },
+  {
+    "name": "sitemap",
+    "type": "url",
+    "label": "Sitemap URL"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "a",
+    "type": "collection"
+  },
+  {
+    "name": "b",
+    "type": "collection"
+  },
+  {
+    "name": "differences",
+    "type": "array"
+  }
+]
