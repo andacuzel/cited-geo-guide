@@ -19,3 +19,4 @@ citehound-action/
 claude-plugin/
 .claude-plugin/
 cli/
+integrations/

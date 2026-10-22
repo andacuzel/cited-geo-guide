@@ -1,0 +1,29 @@
+{
+  "name": "n8n-nodes-citehound",
+  "version": "0.1.0",
+  "description": "n8n nodes for Citehound: scan a domain for AI readiness, compare sites, generate llms.txt, robots.txt and schema, and a polling trigger for monitoring events.",
+  "keywords": ["n8n-community-node-package", "citehound", "ai-readiness", "robots-txt", "llms-txt", "seo"],
+  "license": "MIT",
+  "homepage": "https://getcitehound.com/api",
+  "author": { "name": "Citehound", "email": "hey@getcitehound.com" },
+  "repository": { "type": "git", "url": "git+https://github.com/andacuzel/cited-geo-guide.git", "directory": "integrations/n8n" },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && node build-copy.js",
+    "test": "node --test test/*.test.js"
+  },
+  "files": ["dist"],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": ["dist/credentials/CitehoundApi.credentials.js"],
+    "nodes": ["dist/nodes/Citehound/Citehound.node.js", "dist/nodes/Citehound/CitehoundTrigger.node.js"]
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "n8n-workflow": "*",
+    "typescript": "^5.4.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

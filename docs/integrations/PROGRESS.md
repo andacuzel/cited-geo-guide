@@ -18,8 +18,8 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - [x] Phase 0: TIERS.md (done)
 - [x] Phase 1: plans module, API gates, limits, admin grant, fixes/recheck/export endpoints, tests (done: scripts/test-plans.js, 46 checks)
 - [x] Phase 1: /api, openapi.yaml, /watch, CLI and plugin messages, plan comparison on /api (done)
-- [ ] Phase 1: deploy and verify
-- [ ] Phase 2.1: n8n community node
+- [x] Phase 1: deploy and verify (done: 81e211f live; /v1/fixes, /export, /compare answer 401 without a key; MCP 13 tools; action endpoint 200)
+- [x] Phase 2.1: n8n community node (done: integrations/n8n, TypeScript compiled strict against the real n8n-workflow 2.16 types, 11 tests, ready-to-submit, NOT published)
 - [ ] Phase 2.2: Make, Zapier, Pipedream, Activepieces, Raycast
 - [ ] Phase 2.3: Looker Studio connector, Google Sheets
 - [ ] Phase 2.4: Slack slash command, Chrome extension (only with budget)
@@ -30,3 +30,4 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 ## Log
 
 - 23 Oct 00:xx Istanbul: Phase 1 built and tested locally (plans.js, 402 gates, free caps 10/40 and 5 scans a day, fixes, recheck, export, Beyond 15 domains and 2-day re-checks, /api plan table, openapi, /watch, CLI 38 tests, terms.html free caps updated). Bug found and fixed on the way: the JSON-LD flag of a snapshot was always false.
+- 23 Oct: shared client integrations/shared/citehound-core.js (10 tests), scripts/sync-integrations.js (copies + README plan blocks), scripts/test-integrations.js (generic gate for every integrations/<name>/).
