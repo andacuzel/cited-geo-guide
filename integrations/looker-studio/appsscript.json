@@ -1,0 +1,16 @@
+{
+  "timeZone": "Etc/UTC",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "urlFetchWhitelist": ["https://getcitehound.com/"],
+  "dataStudio": {
+    "name": "Citehound",
+    "logoUrl": "https://getcitehound.com/assets/brand/logo-mark.png",
+    "company": "Citehound",
+    "companyUrl": "https://getcitehound.com",
+    "addonUrl": "https://getcitehound.com/api",
+    "supportUrl": "https://getcitehound.com/api",
+    "description": "Scan domains for AI readiness, and chart the score history and events of the domains you watch (Pro, Fix and Beyond keys). The score measures readiness. It does not measure whether any assistant names a brand."
+  }
+}
