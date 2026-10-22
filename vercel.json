@@ -117,6 +117,7 @@
   ],
   "rewrites": [
     { "source": "/admin/crawlers", "destination": "/api/admin-crawlers" },
+    { "source": "/api/action-scan", "destination": "/api/scan?client=action" },
     { "source": "/admin/ws", "destination": "/api/pro?a=wsadmin" },
     { "source": "/demo/fix", "destination": "/api/pro?a=demofix" },
     { "source": "/demo/beyond", "destination": "/api/pro?a=demobeyond" },

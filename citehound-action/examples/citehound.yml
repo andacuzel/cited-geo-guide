@@ -1,0 +1,15 @@
+# Copy this file to .github/workflows/citehound.yml in your own repository.
+name: AI readiness
+on:
+  schedule:
+    - cron: '0 6 * * 1'     # Mondays, 06:00 UTC
+  workflow_dispatch:
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: andacuzel/citehound-action@v1
+        with:
+          domain: example.com
+          min-score: 70
+          fail-on-crawler-block: true

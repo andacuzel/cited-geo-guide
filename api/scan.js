@@ -24,6 +24,8 @@ function normalizeDomain(raw) {
 }
 
 module.exports = async (req, res) => {
+  // The GitHub Action's endpoint (/api/action-scan is rewritten here with client=action): its own checks and limits, lib/action-scan.js.
+  if (req.query && req.query.client === 'action') return require('../lib/action-scan.js').handle(req, res);
   res.setHeader('Cache-Control', 'no-store');
 
   var rl = await checkRateLimit(req);
