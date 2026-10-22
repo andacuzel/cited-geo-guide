@@ -201,6 +201,7 @@ function call(handler, req) {
       'lib/summary-gemini.js': 'a model provider, a fixed address',
       'lib/pro-mail.js': 'the mail provider, a fixed address',
       'lib/waitlist-mail.js': 'the mail provider, a fixed address (the waitlist confirmation)',
+      'lib/api-v1/mail.js': 'the mail provider, a fixed address (the API key email)',
       'lib/safe-fetch.js': 'the guard itself',
       'lib/report-pro-ui.js': 'browser code, same origin',
       'middleware.js': 'edge middleware, a fixed address'

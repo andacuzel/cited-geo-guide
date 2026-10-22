@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Citehound API: scan a domain for AI readiness</title>
+  <meta name="description" content="A free JSON API: scan a domain for AI readiness, compare two sites, check ten AI crawlers, and generate llms.txt, robots.txt and schema. Free key by email." />
+  <meta name="author" content="Citehound" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://getcitehound.com/api" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Citehound API: scan a domain for AI readiness" />
+  <meta property="og:description" content="A free JSON API: scan a domain for AI readiness, compare two sites, check ten AI crawlers, and generate llms.txt, robots.txt and schema. Free key by email." />
+  <meta property="og:url" content="https://getcitehound.com/api" />
+  <meta property="og:image" content="https://getcitehound.com/assets/brand/og-default.png?v=2" />
+  <meta property="og:site_name" content="Citehound" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Citehound API: scan a domain for AI readiness" />
+  <meta name="twitter:description" content="A free JSON API: scan a domain for AI readiness, compare two sites, check ten AI crawlers, and generate llms.txt, robots.txt and schema. Free key by email." />
+  <meta name="twitter:image" content="https://getcitehound.com/assets/brand/og-default.png?v=2" />
+
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=104" />
+
+  <script src="/claude.js?v=1" defer></script>
+  <script src="/get-api-key.js?v=1" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Citehound API: scan a domain for AI readiness",
+    "description": "A free JSON API: scan a domain for AI readiness, compare two sites, check ten AI crawlers, and generate llms.txt, robots.txt and schema. Free key by email.",
+    "url": "https://getcitehound.com/api",
+    "publisher": {
+      "@id": "https://getcitehound.com/#org"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does the score mean?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It is a readiness score out of 100: whether AI crawlers can reach the site and whether its homepage carries signals a model can read. It does not measure whether any assistant names a brand. The same score appears in the web scan and the MCP server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does a scan read?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The public robots.txt, llms.txt, sitemap declaration and homepage of the domain you name, through the same guarded fetch as the web scan. One page, not the whole site. The API never sends your key, your address or any credential to the scanned site."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What do you keep about a key?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A one-way hash of the key, a one-way hash of your address, the masked address shown by /v1/me, the plan and the dates. Your address itself is kept only if you tick the update box. Counters for the limits expire within a day. The key email is transactional only."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I revoke a key?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every key email has a link that revokes that key with one click. A revoked key answers 403 from then on."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a paid plan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The API has a pro plan with higher limits. It is set by us for a key, and there is no checkout for it yet. Write to hey@getcitehound.com to ask."
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:START -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://getcitehound.com/#org",
+        "name": "Citehound",
+        "url": "https://getcitehound.com/",
+        "description": "Citehound is an end-to-end service for AI readiness: a free scanner, Pro site reports, Fix (we make the technical changes) and Beyond (we write the content).",
+        "email": "hey@getcitehound.com",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "hey@getcitehound.com"
+        },
+        "sameAs": [
+          "https://x.com/getcitehound",
+          "https://www.linkedin.com/company/citehound/"
+        ],
+        "founder": {
+          "@id": "https://getcitehound.com/about#person"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://getcitehound.com/#website",
+        "name": "Citehound",
+        "url": "https://getcitehound.com/",
+        "publisher": {
+          "@id": "https://getcitehound.com/#org"
+        },
+        "author": {
+          "@id": "https://getcitehound.com/about#person"
+        }
+      }
+    ]
+  }
+  </script>
+  <!-- SITE-SCHEMA:END -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo" id="logoLink" aria-label="Citehound — back to homepage">
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="logo__mark">Citehound</span>
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+        <a href="/fix" class="site-nav__link">Fix</a>
+        <a href="/beyond" class="site-nav__link">Beyond</a>
+        <a href="/pricing" class="site-nav__link">Pricing</a>
+      </nav>
+    </div>
+    <nav class="mobile-nav" aria-label="Site navigation (mobile)">
+      <div class="mobile-nav__scroll">
+        <a href="/playbooks" class="site-nav__link">Playbooks</a>
+        <a href="/tools" class="site-nav__link">Tools</a>
+        <a href="/agentic-commerce" class="site-nav__link">Agentic commerce</a>
+        <a href="/research" class="site-nav__link">Research</a>
+        <a href="/about" class="site-nav__link">About</a>
+        <a href="/pro" class="site-nav__link">Pro</a>
+        <a href="/fix" class="site-nav__link">Fix</a>
+        <a href="/beyond" class="site-nav__link">Beyond</a>
+        <a href="/pricing" class="site-nav__link">Pricing</a>
+      </div>
+      <div class="mobile-nav__fade" aria-hidden="true"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section aria-labelledby="hero-heading">
+      <div class="section__inner">
+        <div class="page-banner">
+          <div class="page-banner__body">
+            <p class="kicker kicker--on-navy">API v1</p>
+            <h1 id="hero-heading" class="page-banner__title">Scan and generate from your own code</h1>
+            <p class="page-banner__desc">A JSON API for the Citehound scan. It scores one page of a domain out of 100 for AI readiness, lists the fixes, shows the state of ten AI crawlers, compares two sites, and writes llms.txt, robots.txt and JSON-LD. The score measures readiness, not whether any assistant names a brand.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="key" aria-labelledby="key-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Get a key</p>
+          <h2 id="key-heading" class="section-title">A free key, by email.</h2>
+          <p class="section-sub">Free keys allow 20 requests an hour and 100 a day. The key is in the email and is shown once.</p>
+        </div>
+        <form class="ps-form wl-form" id="akForm" novalidate>
+          <div class="ps-field"><label for="akEmail" class="ps-label">Email</label><input class="field ps-input" id="akEmail" name="email" type="email" inputmode="email" autocapitalize="off" autocomplete="email" maxlength="254" aria-describedby="akEmailError" required /><p class="ps-error" id="akEmailError" hidden></p></div>
+          <div class="ps-field ps-field--check"><label class="ps-check" for="akOptin"><input id="akOptin" name="marketing_optin" type="checkbox" /><span>Also send me occasional product updates (optional)</span></label></div>
+          <p class="ps-note">The key email is transactional and carries no marketing. We store a one-way hash of the key and of your address, plus the masked address. We keep your address itself only if you tick the box. Every key email has a link that revokes the key. See the <a href="/privacy">privacy page</a>.</p>
+          <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="akSubmit">Email me a key</button></p>
+          <p class="wl-status" id="akStatus" role="status" aria-live="polite" tabindex="-1"></p>
+        </form>
+        <noscript><p class="ps-note">The form needs JavaScript. Without it, send a POST request to <code>/v1/keys</code> as shown below, or write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a>.</p></noscript>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="start" aria-labelledby="start-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Quick start</p>
+          <h2 id="start-heading" class="section-title">Send the key in a header.</h2>
+          <p class="section-sub">Use <code>Authorization: Bearer &lt;key&gt;</code>, or <code>X-Citehound-Key: &lt;key&gt;</code>. Keep the key out of URLs and public code.</p>
+        </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#qsCurl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="qsCurl">export CITEHOUND_KEY=chk_your_key_here
+curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+        <p class="cl-note">The full description is a machine-readable OpenAPI 3.1 file: <a href="/openapi.yaml">/openapi.yaml</a>.</p>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="reference" aria-labelledby="reference-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Reference</p>
+          <h2 id="reference-heading" class="section-title">9 endpoints.</h2>
+          <p class="section-sub">Base address <code>https://getcitehound.com/v1</code>. Scan: 3. Generate: 3. Keys, account and benchmark: 3.</p>
+        </div>
+        <div class="ac-faq cl-clients">
+          <details>
+            <summary><code>POST /v1/keys</code> Get a free API key by email</summary>
+            <p>Sends a free key to the address. The key is in the email and nowhere else: never in this response. The answer is the same whether or not the address could be given a key. The key email is transactional only; set marketing_optin to true only if you want occasional product updates.</p>
+            <p>No key needed. Answers 202, 400, 413, 415, 429, 502, 503.</p>
+            <p>Send JSON with <code>Content-Type: application/json</code>. Body: <code>{&quot;email&quot;:&quot;you@example.com&quot;,&quot;marketing_optin&quot;:false}</code></p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep1Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep1Curl">curl -X POST https://getcitehound.com/v1/keys \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;email&quot;: &quot;you@example.com&quot;}'</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep1Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep1Out">{
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;message&quot;: &quot;If this address can receive a key, it is on its way. The key is sent by email only and is shown once.&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/me</code> Your plan, limits and usage</summary>
+            <p>The plan of the key (free or pro), its limits, how many requests it has made this hour and today (UTC), and the masked address it was sent to.</p>
+            <p>Needs a key. Answers 200, 401, 403, 429, 503.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep2Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep2Curl">curl https://getcitehound.com/v1/me \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep2Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep2Out">{
+  &quot;plan&quot;: &quot;free&quot;,
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;email&quot;: &quot;y***@example.com&quot;,
+  &quot;created_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+  &quot;limits&quot;: {
+    &quot;requests_per_hour&quot;: 20,
+    &quot;requests_per_day&quot;: 100,
+    &quot;scans_per_domain_per_hour&quot;: 4
+  },
+  &quot;usage&quot;: {
+    &quot;this_hour&quot;: 1,
+    &quot;today&quot;: 1
+  }
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/scan</code> Scan one domain for AI readiness</summary>
+            <p>Scans the public robots.txt, llms.txt, sitemap declaration and homepage of the domain (one page, not the whole site) and scores it out of 100 across three pillars. Returns the failed checks with their fixes, the state of ten AI crawlers in robots.txt, and a comparison with our benchmark. The score measures readiness, not whether any assistant names a brand.</p>
+            <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/scan</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep3Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep3Curl">curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep3Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep3Out">{
+  &quot;domain&quot;: &quot;example.com&quot;,
+  &quot;scannedAt&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+  &quot;score&quot;: 87,
+  &quot;pillars&quot;: [
+    {
+      &quot;id&quot;: &quot;discover&quot;,
+      &quot;name&quot;: &quot;Discoverability&quot;,
+      &quot;score&quot;: 27,
+      &quot;max&quot;: 40
+    },
+    {
+      &quot;id&quot;: &quot;tech&quot;,
+      &quot;name&quot;: &quot;Technical foundation&quot;,
+      &quot;score&quot;: 20,
+      &quot;max&quot;: 20
+    },
+    {
+      &quot;id&quot;: &quot;trust&quot;,
+      &quot;name&quot;: &quot;Content &amp; trust&quot;,
+      &quot;score&quot;: 40,
+      &quot;max&quot;: 40
+    }
+  ],
+  &quot;failed&quot;: [
+    {
+      &quot;label&quot;: &quot;AI crawler access (0/10 open)&quot;,
+      &quot;pillar&quot;: &quot;Discoverability&quot;,
+      &quot;points&quot;: 13,
+      &quot;max&quot;: 26,
+      &quot;fix&quot;: &quot;Review robots.txt rules for blocked AI crawlers&quot;
+    }
+  ],
+  &quot;crawlers&quot;: [
+    {
+      &quot;name&quot;: &quot;GPTBot&quot;,
+      &quot;vendor&quot;: &quot;OpenAI&quot;,
+      &quot;state&quot;: &quot;limited&quot;,
+      &quot;rule&quot;: &quot;Disallow: /admin/ (+1 more) · bot-specific rule&quot;
+    }
+  ],
+  &quot;crawlerSummary&quot;: {
+    &quot;open&quot;: 0,
+    &quot;limited&quot;: 10,
+    &quot;blocked&quot;: 0
+  },
+  &quot;benchmark&quot;: {
+    &quot;overallAverage&quot;: 73,
+    &quot;sitesScanned&quot;: 219,
+    &quot;categories&quot;: 6,
+    &quot;delta&quot;: 14,
+    &quot;position&quot;: &quot;above the average&quot;
+  },
+  &quot;note&quot;: &quot;A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand.&quot;,
+  &quot;method&quot;: &quot;https://getcitehound.com/methodology&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/compare</code> Compare two domains</summary>
+            <p>Scans two different domains, one after the other, and returns both summaries and every check where they differ. Both domains count toward the per-domain limit.</p>
+            <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/compare</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>a</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>b</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep4Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep4Curl">curl &quot;https://getcitehound.com/v1/compare?a=example.com&amp;b=example.org&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep4Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep4Out">{
+  &quot;a&quot;: {
+    &quot;domain&quot;: &quot;example.com&quot;,
+    &quot;scannedAt&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+    &quot;score&quot;: 87,
+    &quot;pillars&quot;: [
+      {
+        &quot;id&quot;: &quot;discover&quot;,
+        &quot;name&quot;: &quot;Discoverability&quot;,
+        &quot;score&quot;: 27,
+        &quot;max&quot;: 40
+      },
+      {
+        &quot;id&quot;: &quot;tech&quot;,
+        &quot;name&quot;: &quot;Technical foundation&quot;,
+        &quot;score&quot;: 20,
+        &quot;max&quot;: 20
+      },
+      {
+        &quot;id&quot;: &quot;trust&quot;,
+        &quot;name&quot;: &quot;Content &amp; trust&quot;,
+        &quot;score&quot;: 40,
+        &quot;max&quot;: 40
+      }
+    ],
+    &quot;failed&quot;: [
+      {
+        &quot;label&quot;: &quot;AI crawler access (0/10 open)&quot;,
+        &quot;pillar&quot;: &quot;Discoverability&quot;,
+        &quot;points&quot;: 13,
+        &quot;max&quot;: 26,
+        &quot;fix&quot;: &quot;Review robots.txt rules for blocked AI crawlers&quot;
+      }
+    ],
+    &quot;crawlers&quot;: [
+      {
+        &quot;name&quot;: &quot;GPTBot&quot;,
+        &quot;vendor&quot;: &quot;OpenAI&quot;,
+        &quot;state&quot;: &quot;limited&quot;,
+        &quot;rule&quot;: &quot;Disallow: /admin/ (+1 more) · bot-specific rule&quot;
+      }
+    ],
+    &quot;crawlerSummary&quot;: {
+      &quot;open&quot;: 0,
+      &quot;limited&quot;: 10,
+      &quot;blocked&quot;: 0
+    },
+    &quot;benchmark&quot;: {
+      &quot;overallAverage&quot;: 73,
+      &quot;sitesScanned&quot;: 219,
+      &quot;categories&quot;: 6,
+      &quot;delta&quot;: 14,
+      &quot;position&quot;: &quot;above the average&quot;
+    },
+    &quot;note&quot;: &quot;A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand.&quot;,
+    &quot;method&quot;: &quot;https://getcitehound.com/methodology&quot;
+  },
+  &quot;b&quot;: {
+    &quot;domain&quot;: &quot;example.org&quot;,
+    &quot;scannedAt&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+    &quot;score&quot;: 77,
+    &quot;pillars&quot;: [
+      {
+        &quot;id&quot;: &quot;discover&quot;,
+        &quot;name&quot;: &quot;Discoverability&quot;,
+        &quot;score&quot;: 27,
+        &quot;max&quot;: 40
+      },
+      {
+        &quot;id&quot;: &quot;tech&quot;,
+        &quot;name&quot;: &quot;Technical foundation&quot;,
+        &quot;score&quot;: 20,
+        &quot;max&quot;: 20
+      },
+      {
+        &quot;id&quot;: &quot;trust&quot;,
+        &quot;name&quot;: &quot;Content &amp; trust&quot;,
+        &quot;score&quot;: 40,
+        &quot;max&quot;: 40
+      }
+    ],
+    &quot;failed&quot;: [
+      {
+        &quot;label&quot;: &quot;AI crawler access (0/10 open)&quot;,
+        &quot;pillar&quot;: &quot;Discoverability&quot;,
+        &quot;points&quot;: 13,
+        &quot;max&quot;: 26,
+        &quot;fix&quot;: &quot;Review robots.txt rules for blocked AI crawlers&quot;
+      }
+    ],
+    &quot;crawlers&quot;: [
+      {
+        &quot;name&quot;: &quot;GPTBot&quot;,
+        &quot;vendor&quot;: &quot;OpenAI&quot;,
+        &quot;state&quot;: &quot;limited&quot;,
+        &quot;rule&quot;: &quot;Disallow: /admin/ (+1 more) · bot-specific rule&quot;
+      }
+    ],
+    &quot;crawlerSummary&quot;: {
+      &quot;open&quot;: 0,
+      &quot;limited&quot;: 10,
+      &quot;blocked&quot;: 0
+    },
+    &quot;benchmark&quot;: {
+      &quot;overallAverage&quot;: 73,
+      &quot;sitesScanned&quot;: 219,
+      &quot;categories&quot;: 6,
+      &quot;delta&quot;: 14,
+      &quot;position&quot;: &quot;above the average&quot;
+    },
+    &quot;note&quot;: &quot;A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand.&quot;,
+    &quot;method&quot;: &quot;https://getcitehound.com/methodology&quot;
+  },
+  &quot;differences&quot;: [
+    {
+      &quot;check&quot;: &quot;Meta description&quot;,
+      &quot;a&quot;: {
+        &quot;passed&quot;: true,
+        &quot;points&quot;: 5
+      },
+      &quot;b&quot;: {
+        &quot;passed&quot;: false,
+        &quot;points&quot;: 0
+      },
+      &quot;max&quot;: 5
+    }
+  ],
+  &quot;note&quot;: &quot;A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand.&quot;,
+  &quot;method&quot;: &quot;https://getcitehound.com/methodology&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/crawlers</code> The state of ten AI crawlers in robots.txt</summary>
+            <p>Reads robots.txt of the domain and reports, for each of ten AI crawlers, whether it is open, limited (an ordinary Disallow path applies to it) or blocked. This is a scan: it counts toward the per-domain limit.</p>
+            <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/crawlers</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep5Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep5Curl">curl &quot;https://getcitehound.com/v1/crawlers?domain=example.com&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep5Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep5Out">{
+  &quot;domain&quot;: &quot;example.com&quot;,
+  &quot;scannedAt&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+  &quot;crawlers&quot;: [
+    {
+      &quot;name&quot;: &quot;GPTBot&quot;,
+      &quot;vendor&quot;: &quot;OpenAI&quot;,
+      &quot;state&quot;: &quot;limited&quot;,
+      &quot;rule&quot;: &quot;Disallow: /admin/ (+1 more) · bot-specific rule&quot;
+    }
+  ],
+  &quot;summary&quot;: {
+    &quot;open&quot;: 0,
+    &quot;limited&quot;: 10,
+    &quot;blocked&quot;: 0
+  },
+  &quot;note&quot;: &quot;A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand.&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/generate/llms-txt</code> Generate an llms.txt</summary>
+            <p>Builds an llms.txt from a name, a one-sentence description and up to 20 pages. Pure text generation: nothing is fetched. Pass each page as &quot;page=&lt;url&gt;|&lt;description&gt;&quot;, repeated, or use POST with JSON. llms.txt is an optional convention with no demonstrated effect on Google.</p>
+            <p>Needs a key. Answers 200, 400, 401, 403, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/generate/llms-txt</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>name</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>description</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>page</code></th><td data-label="Required">No</td><td data-label="What it is">Repeat for each page, as &quot;&lt;url&gt;|&lt;description&gt;&quot;.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>A <code>POST</code> to the same path takes the same fields as a JSON body.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep6Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep6Curl">curl -G https://getcitehound.com/v1/generate/llms-txt \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot; \
+  --data-urlencode &quot;name=Example Co&quot; \
+  --data-urlencode &quot;description=Project software for small design studios.&quot; \
+  --data-urlencode &quot;page=https://example.com/pricing|Plans and prices&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep6Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep6Out">{
+  &quot;type&quot;: &quot;llms.txt&quot;,
+  &quot;content&quot;: &quot;# Example Co\n\n&gt; Project software for small design studios.\n\n## Pages\n- [Plans and prices](https://example.com/pricing)&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/generate/robots-txt</code> Generate an AI-crawler robots.txt</summary>
+            <p>Builds a robots.txt that explicitly allows or blocks named crawlers from the ten Citehound tracks, with an optional Sitemap line. Pure text generation: nothing is fetched. Names are comma-separated in the query; POST accepts JSON arrays.</p>
+            <p>Needs a key. Answers 200, 400, 401, 403, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/generate/robots-txt</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>allow</code></th><td data-label="Required">No</td><td data-label="What it is">Comma-separated crawler names to allow.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>block</code></th><td data-label="Required">No</td><td data-label="What it is">Comma-separated crawler names to block.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>sitemap</code></th><td data-label="Required">No</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>A <code>POST</code> to the same path takes the same fields as a JSON body.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep7Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep7Curl">curl -G https://getcitehound.com/v1/generate/robots-txt \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot; \
+  --data-urlencode &quot;allow=GPTBot,ClaudeBot&quot; \
+  --data-urlencode &quot;block=Bytespider&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep7Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep7Out">{
+  &quot;type&quot;: &quot;robots.txt&quot;,
+  &quot;content&quot;: &quot;User-agent: GPTBot\nAllow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nSitemap: https://example.com/sitemap.xml&quot;,
+  &quot;allow&quot;: [
+    &quot;GPTBot&quot;
+  ],
+  &quot;block&quot;: [
+    &quot;Bytespider&quot;
+  ],
+  &quot;sitemap&quot;: &quot;https://example.com/sitemap.xml&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/generate/schema</code> Generate JSON-LD from a site's homepage</summary>
+            <p>Reads the homepage of the domain for its real title, description and language and returns JSON-LD of the requested type. Fields the scan cannot know are left in square brackets. This reads the homepage: it counts toward the per-domain limit.</p>
+            <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/generate/schema</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>type</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep8Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep8Curl">curl &quot;https://getcitehound.com/v1/generate/schema?domain=example.com&amp;type=organization&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep8Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep8Out">{
+  &quot;domain&quot;: &quot;example.com&quot;,
+  &quot;type&quot;: &quot;organization&quot;,
+  &quot;json_ld&quot;: {
+    &quot;@context&quot;: &quot;https://schema.org&quot;,
+    &quot;@graph&quot;: []
+  },
+  &quot;note&quot;: &quot;Fields the scan cannot know are left in square brackets for you to fill in.&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/benchmark</code> Our archived benchmark data</summary>
+            <p>Without &quot;category&quot;: the six categories with their average score and the weighted overall average. With &quot;category&quot;: the score spread, the per-crawler counts and the failure rate of each check for that category. This is our own archive of scans of well-known sites, from the date shown; it is not live.</p>
+            <p>Needs a key. Answers 200, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Query parameters of GET /v1/benchmark</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>category</code></th><td data-label="Required">No</td><td data-label="What it is">One of the category ids from the overview.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep9Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep9Curl">curl &quot;https://getcitehound.com/v1/benchmark?category=crm&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep9Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep9Out">{
+  &quot;categories&quot;: [
+    {
+      &quot;category&quot;: &quot;crm&quot;,
+      &quot;label&quot;: &quot;CRM software&quot;,
+      &quot;track&quot;: &quot;B2B SaaS&quot;,
+      &quot;sitesScanned&quot;: 31,
+      &quot;average&quot;: 78,
+      &quot;scannedAt&quot;: &quot;2026-07-29&quot;
+    }
+  ],
+  &quot;overall&quot;: {
+    &quot;totalSites&quot;: 219,
+    &quot;totalCategories&quot;: 6,
+    &quot;overallAverage&quot;: 73
+  },
+  &quot;note&quot;: &quot;Our own archived scans of well-known sites.&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="limits" aria-labelledby="limits-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Limits</p>
+          <h2 id="limits-heading" class="section-title">What a key can do.</h2>
+          <p class="section-sub">Every answer carries <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code> and <code>X-RateLimit-Reset</code>. When a limit is reached the answer is 429 with a <code>Retry-After</code> header.</p>
+        </div>
+        <div class="cl-tablewrap">
+          <table class="cl-table cl-table--wrap">
+            <caption class="mcp-vh">Limits of the Citehound API</caption>
+            <thead><tr><th scope="col">Limit</th><th scope="col">Allowed</th><th scope="col">Notes</th></tr></thead>
+            <tbody>
+            <tr><th scope="row" data-label="Limit">Free key</th><td data-label="Allowed">20 requests an hour</td><td data-label="Notes">100 requests a day (UTC)</td></tr>
+            <tr><th scope="row" data-label="Limit">Pro key</th><td data-label="Allowed">200 requests an hour</td><td data-label="Notes">2000 requests a day (UTC)</td></tr>
+            <tr><th scope="row" data-label="Limit">One domain, all keys together</th><td data-label="Allowed">4 scans an hour</td><td data-label="Notes">Counts scans, compare, crawlers and schema</td></tr>
+            <tr><th scope="row" data-label="Limit">One network address</th><td data-label="Allowed">120 requests an hour</td><td data-label="Notes">Across all keys</td></tr>
+            <tr><th scope="row" data-label="Limit">Asking for keys</th><td data-label="Allowed">5 an hour</td><td data-label="Notes">5 a day for one address</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cl-note">Counters expire on their own within a day. Acceptable use: scan sites you have a reason to look at, keep to the limits, and do not use the API to probe private networks. A key that is abused is revoked.</p>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="errors" aria-labelledby="errors-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Errors</p>
+          <h2 id="errors-heading" class="section-title">Errors are JSON.</h2>
+          <p class="section-sub">Every error has the shape <code>{"error": "code", "message": "…"}</code>. A 429 adds <code>retry_after</code> and <code>limit_scope</code>.</p>
+        </div>
+        <div class="cl-tablewrap">
+          <table class="cl-table cl-table--wrap">
+            <caption class="mcp-vh">Errors of the Citehound API</caption>
+            <thead><tr><th scope="col">Status</th><th scope="col">Code</th><th scope="col">Meaning</th></tr></thead>
+            <tbody>
+            <tr><th scope="row" data-label="Status"><code>400</code></th><td data-label="Code"><code>invalid_request</code></td><td data-label="Meaning">The request is not valid: a missing or malformed parameter.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>401</code></th><td data-label="Code"><code>invalid_key</code></td><td data-label="Meaning">The key is missing or not valid. A WWW-Authenticate header says how to send it.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>403</code></th><td data-label="Code"><code>key_revoked</code></td><td data-label="Meaning">The key has been revoked.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>404</code></th><td data-label="Code"><code>not_found</code></td><td data-label="Meaning">No such category or endpoint.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>413</code></th><td data-label="Code"><code>too_large</code></td><td data-label="Meaning">The request body is larger than the limit.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>415</code></th><td data-label="Code"><code>unsupported_media_type</code></td><td data-label="Meaning">Send JSON with Content-Type: application/json.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>429</code></th><td data-label="Code"><code>rate_limited</code></td><td data-label="Meaning">A limit was reached. The Retry-After header gives the seconds to wait; the body names the limit.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>502</code></th><td data-label="Code"><code>scan_failed</code></td><td data-label="Meaning">The scan could not read the site (robots.txt or the homepage), or the key email could not be sent.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>503</code></th><td data-label="Code"><code>not_configured</code></td><td data-label="Meaning">The API is not configured on this server, or its storage is unavailable.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="scope" aria-labelledby="scope-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Scope</p>
+          <h2 id="scope-heading" class="section-title">What it does not do.</h2>
+        </div>
+        <p class="cl-limits">The API measures readiness: whether crawlers can reach a site and whether its homepage carries signals a model can read. It does not measure whether any assistant names a brand, and the benchmark is our own archive of scans, dated as shown. It is read-only: it changes nothing on a scanned site. Browser calls from other sites are not allowed (no cross-origin access), so call it from a server.</p>
+      </div>
+    </section>
+
+    <section class="home-faq hp-light" id="faq" aria-labelledby="faq-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Questions</p>
+          <h2 id="faq-heading" class="section-title">Before you build.</h2>
+        </div>
+        <div class="ac-faq">
+          <details>
+            <summary>What does the score mean?</summary>
+            <p>It is a readiness score out of 100: whether AI crawlers can reach the site and whether its homepage carries signals a model can read. It does not measure whether any assistant names a brand. The same score appears in the web scan and the MCP server.</p>
+          </details>
+          <details>
+            <summary>What does a scan read?</summary>
+            <p>The public robots.txt, llms.txt, sitemap declaration and homepage of the domain you name, through the same guarded fetch as the web scan. One page, not the whole site. The API never sends your key, your address or any credential to the scanned site.</p>
+          </details>
+          <details>
+            <summary>What do you keep about a key?</summary>
+            <p>A one-way hash of the key, a one-way hash of your address, the masked address shown by /v1/me, the plan and the dates. Your address itself is kept only if you tick the update box. Counters for the limits expire within a day. The key email is transactional only.</p>
+          </details>
+          <details>
+            <summary>Can I revoke a key?</summary>
+            <p>Yes. Every key email has a link that revokes that key with one click. A revoked key answers 403 from then on.</p>
+          </details>
+          <details>
+            <summary>Is there a paid plan?</summary>
+            <p>The API has a pro plan with higher limits. It is set by us for a key, and there is no checkout for it yet. Write to hey@getcitehound.com to ask.</p>
+          </details>
+        </div>
+        <p class="cl-contact">Questions, or a key that will not arrive: <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a></p>
+      </div>
+    </section>
+
+    <footer class="site-footer site-footer--navy" aria-label="Footer">
+      <div class="section__inner">
+        <div class="sf-grid">
+          <div class="sf-brand">
+            <a href="/" class="sf-logo" aria-label="Citehound, back to homepage"><span class="sf-logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="sf-logo__mark">Citehound</span></a>
+            <p class="sf-tag">Scan, fix and write for the way AI answers.</p>
+            <ul class="sf-social" aria-label="Citehound on social media">
+              <li><a href="https://x.com/getcitehound" target="_blank" rel="noopener noreferrer" aria-label="Citehound on X"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></li>
+              <li><a href="https://www.linkedin.com/company/citehound/" target="_blank" rel="noopener noreferrer" aria-label="Citehound on LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+            </ul>
+          </div>
+          <nav class="sf-col" aria-labelledby="sf-product">
+            <p class="sf-h" id="sf-product">Product</p>
+            <ul class="sf-list">
+              <li><a href="/">Scanner</a></li>
+              <li><a href="/compare">Compare two sites</a></li>
+              <li><a href="/tools">Tools</a></li>
+              <li><a href="/playbooks">Playbooks</a></li>
+              <li><a href="/pro">Citehound Pro</a></li>
+              <li><a href="/fix">Fix</a></li>
+              <li><a href="/beyond">Beyond</a></li>
+              <li><a href="/pricing">Pricing</a></li>
+              <li><a href="/sample-report">Sample Pro report</a></li>
+              <li><a href="/mcp">MCP server</a></li>
+              <li><a href="/claude">Claude connector</a></li>
+              <li><a href="/agentic-commerce">Agentic commerce</a></li>
+              <li><a href="/citation-tracking">Citation tracking</a></li>
+            </ul>
+          </nav>
+          <nav class="sf-col" aria-labelledby="sf-research">
+            <p class="sf-h" id="sf-research">Research</p>
+            <ul class="sf-list">
+              <li><a href="/research/state-of-ai-readiness">State of AI Readiness</a></li>
+              <li><a href="/research/llms-txt-adoption-2026">llms.txt adoption study</a></li>
+              <li><a href="/research/crawler-access-2026">Crawler access study</a></li>
+              <li><a href="/research/case-study-agaone">Case study</a></li>
+              <li><a href="/benchmarks">Benchmarks</a></li>
+              <li><a href="/methodology">Methodology</a></li>
+            </ul>
+          </nav>
+          <nav class="sf-col" aria-labelledby="sf-company">
+            <p class="sf-h" id="sf-company">Company</p>
+            <ul class="sf-list">
+              <li><a href="/about">About</a></li>
+              <li><a href="/trust">Trust</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/terms">Terms</a></li>
+              <li><a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a></li>
+            </ul>
+          </nav>
+        </div>
+        <p class="sf-legal">© 2026 Citehound</p>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="nav.js?v=3"></script>
+</body>
+</html>
