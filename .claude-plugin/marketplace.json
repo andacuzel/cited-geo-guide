@@ -1,0 +1,21 @@
+{
+  "name": "citehound",
+  "owner": {
+    "name": "Citehound",
+    "email": "hey@getcitehound.com"
+  },
+  "metadata": {
+    "description": "Citehound plugins for Claude: scan a site for AI readiness, fix crawler access, compare two sites."
+  },
+  "plugins": [
+    {
+      "name": "citehound",
+      "source": "./claude-plugin",
+      "description": "Scan a domain for AI readiness, fix crawler access, and compare two sites, through the Citehound MCP server and three guided skills. Read-only, no account.",
+      "version": "0.1.0",
+      "homepage": "https://getcitehound.com/claude",
+      "license": "MIT",
+      "keywords": ["ai-readiness", "robots-txt", "llms-txt", "structured-data", "mcp"]
+    }
+  ]
+}

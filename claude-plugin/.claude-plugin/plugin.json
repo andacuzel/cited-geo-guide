@@ -1,0 +1,14 @@
+{
+  "name": "citehound",
+  "version": "0.1.0",
+  "description": "Scan a domain for AI readiness, fix crawler access, and compare two sites, through the Citehound MCP server and three guided skills. Read-only, no account.",
+  "author": {
+    "name": "Citehound",
+    "email": "hey@getcitehound.com",
+    "url": "https://getcitehound.com"
+  },
+  "homepage": "https://getcitehound.com/claude",
+  "repository": "https://github.com/andacuzel/cited-geo-guide",
+  "license": "MIT",
+  "keywords": ["ai-readiness", "robots-txt", "llms-txt", "structured-data", "mcp", "seo"]
+}

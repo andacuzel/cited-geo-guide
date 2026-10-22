@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "citehound": {
+      "type": "http",
+      "url": "https://getcitehound.com/api/mcp"
+    }
+  }
+}

@@ -16,3 +16,6 @@ local/
 .claude/
 asset/
 citehound-action/
+claude-plugin/
+.claude-plugin/
+cli/
