@@ -196,7 +196,7 @@ const bad = (s) => s >= 400;
   const tok = tokenOf(kr.mail);
   const page = await request('GET', '/v1/keys/revoke/' + tok);
   t('the revoke link opens a page with one button and does not revoke by itself', page.status === 200 && /<form method="post"/.test(page.text) && (await get('/v1/me', kr.key)).status === 200);
-  t('a tampered or malformed link is a 404 page', (await request('GET', '/v1/keys/revoke/' + tok.slice(0, -1) + '0')).status === 404 && (await request('POST', '/v1/keys/revoke/' + tok.slice(0, 20) + '.' + '0'.repeat(32))).status === 404 && (await request('GET', '/v1/keys/revoke/abc')).status === 404);
+  t('a tampered or malformed link is a 404 page', (await request('GET', '/v1/keys/revoke/' + tok.slice(0, -1) + (tok.slice(-1) === '0' ? '1' : '0'))).status === 404 && (await request('POST', '/v1/keys/revoke/' + tok.slice(0, 20) + '.' + '0'.repeat(32))).status === 404 && (await request('GET', '/v1/keys/revoke/abc')).status === 404);
   const rv = await request('POST', '/v1/keys/revoke/' + tok);
   t('POST on the link revokes the key', rv.status === 200 && /revoked/i.test(rv.text));
   const after = await get('/v1/me', kr.key);

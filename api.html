@@ -234,7 +234,18 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <summary><code>POST /v1/keys</code> Get a free API key by email</summary>
             <p>Sends a free key to the address. The key is in the email and nowhere else: never in this response. The answer is the same whether or not the address could be given a key. The key email is transactional only; set marketing_optin to true only if you want occasional product updates.</p>
             <p>No key needed. Answers 202, 400, 413, 415, 429, 502, 503.</p>
-            <p>Send JSON with <code>Content-Type: application/json</code>. Body: <code>{&quot;email&quot;:&quot;you@example.com&quot;,&quot;marketing_optin&quot;:false}</code></p>
+            <p>Send JSON with <code>Content-Type: application/json</code>.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Request body</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep1Body" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep1Body">{
+  &quot;email&quot;: &quot;you@example.com&quot;,
+  &quot;marketing_optin&quot;: false
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
             <div class="fix-snippet" data-copy-wrap>
               <div class="fix-snippet__head">
                 <span class="fix-snippet__label">curl</span>

@@ -90,7 +90,7 @@ function paramRows(e) {
   return '            <div class="cl-tablewrap">\n              <table class="cl-table cl-table--wrap">\n                <caption class="mcp-vh">Query parameters of ' + esc(e.method.toUpperCase() + ' /v1' + e.path) + '</caption>\n                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>\n                <tbody>\n' + rows + '\n                </tbody>\n              </table>\n            </div>\n';
 }
 function endpointBlock(e, i) {
-  const bodyNote = e.body ? '            <p>Send JSON with <code>Content-Type: application/json</code>. Body: <code>' + esc(JSON.stringify(e.body.example)) + '</code></p>\n' : '';
+  const bodyNote = e.body ? '            <p>Send JSON with <code>Content-Type: application/json</code>.</p>\n' + snippet('ep' + (i + 1) + 'Body', 'Request body', JSON.stringify(e.body.example, null, 2)) : '';
   const post = e.id === 'generateLlmsTxt' || e.id === 'generateRobotsTxt' ? '            <p>A <code>POST</code> to the same path takes the same fields as a JSON body.</p>\n' : '';
   return '          <details' + (i === 0 ? '' : '') + '>\n            <summary><code>' + esc(e.method.toUpperCase()) + ' /v1' + esc(e.path) + '</code> ' + esc(e.summary) + '</summary>\n            <p>' + esc(e.description) + '</p>\n            <p>' + (e.auth ? 'Needs a key.' : 'No key needed.') + ' Answers ' + esc([e.ok.status].concat(e.errors).join(', ')) + '.</p>\n' +
     bodyNote + paramRows(e) + post + snippet('ep' + (i + 1) + 'Curl', 'curl', e.curl) + snippet('ep' + (i + 1) + 'Out', 'Example response', JSON.stringify(e.ok.example, null, 2)) + '          </details>';

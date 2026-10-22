@@ -5282,7 +5282,7 @@ body.wsd-open { overflow: hidden; }
 .cl-table tbody th { font-weight: 400; white-space: nowrap; }
 .cl-table td:last-child { white-space: nowrap; color: var(--ink-soft); }
 .cl-table--wrap tbody th, .cl-table--wrap td:last-child { white-space: normal; }
-.cl-table--wrap th:first-child { width: 22%; }
+@media (min-width: 641px) { .cl-table--wrap th:first-child { width: 22%; } }
 .cl-limits { max-width: 720px; font-size: 18px; line-height: 1.6; color: var(--ink); }
 .cl-contact { margin: 20px 0 0; font-size: 15px; color: var(--ink-soft); }
 .cl-contact a { color: var(--ink); text-decoration-color: var(--gold); text-underline-offset: 3px; }
