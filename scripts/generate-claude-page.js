@@ -79,10 +79,13 @@ function head(kicker, id, title, sub) {
   return '        <div class="section-head">\n          <p class="kicker">' + esc(kicker) + '</p>\n          <h2 id="' + id + '" class="section-title">' + esc(title) + '</h2>\n' + (sub ? '          <p class="section-sub">' + sub + '</p>\n' : '') + '        </div>\n';
 }
 
+// The public-page rules keep the words "citation run" off every page but /mcp, so this one tool is described a little differently here.
+const LINE_OVERRIDE = { get_citation_sample: 'See a real, anonymized sample of a citation check, with the spread shown.' };
+
 function body() {
   const cursor = JSON.stringify({ mcpServers: { citehound: { url: URL_MCP } } }, null, 2);
   const toolRows = mcp.TOOLS.map((t) => {
-    const line = (copy.tools[t.name] || {}).line;
+    const line = LINE_OVERRIDE[t.name] || (copy.tools[t.name] || {}).line;
     return '            <tr><th scope="row" data-label="Tool"><code>' + esc(t.name) + '</code></th><td data-label="What it does">' + esc(line) + '</td><td data-label="Access">Read-only</td></tr>';
   }).join('\n');
   return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner">\n          <div class="page-banner__body">\n            <p class="kicker kicker--on-navy">Claude connector</p>\n' +
