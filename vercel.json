@@ -1,5 +1,11 @@
 {
   "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/v1/cron/run",
+      "schedule": "17 5 * * *"
+    }
+  ],
   "functions": {
     "api/scan.js": {
       "maxDuration": 30

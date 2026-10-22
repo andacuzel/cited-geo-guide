@@ -85,7 +85,15 @@
         "name": "Is there a paid plan?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The API has a pro plan with higher limits. It is set by us for a key, and there is no checkout for it yet. Write to hey@getcitehound.com to ask."
+          "text": "The API has a pro plan with higher limits and monitoring: a watchlist, scheduled re-scans, events, alert emails and webhooks. It is set by us for a key, and there is no checkout for it yet. Write to hey@getcitehound.com to ask."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does monitoring keep?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For a Pro key: the domains it watches, a snapshot of each scan and the events between scans for 365 days, the address for alerts if you give one, and the addresses of your webhooks (their secrets are stored encrypted and never shown again). Revoking the key deletes all of it."
         }
       }
     ]
@@ -226,8 +234,8 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
       <div class="section__inner">
         <div class="section-head">
           <p class="kicker">Reference</p>
-          <h2 id="reference-heading" class="section-title">9 endpoints.</h2>
-          <p class="section-sub">Base address <code>https://getcitehound.com/v1</code>. Scan: 3. Generate: 3. Keys, account and benchmark: 3.</p>
+          <h2 id="reference-heading" class="section-title">20 endpoints.</h2>
+          <p class="section-sub">Base address <code>https://getcitehound.com/v1</code>. Scan: 3. Generate: 3. Keys, account and benchmark: 3. Pro monitoring: 11.</p>
         </div>
         <div class="ac-faq cl-clients">
           <details>
@@ -310,7 +318,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/scan</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/scan</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
@@ -396,7 +404,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/compare</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/compare</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>a</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
@@ -557,7 +565,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/crawlers</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/crawlers</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
@@ -605,7 +613,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 400, 401, 403, 429, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/generate/llms-txt</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/generate/llms-txt</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>name</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
@@ -645,7 +653,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 400, 401, 403, 429, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/generate/robots-txt</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/generate/robots-txt</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>allow</code></th><td data-label="Required">No</td><td data-label="What it is">Comma-separated crawler names to allow.</td></tr>
@@ -691,7 +699,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 400, 401, 403, 429, 502, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/generate/schema</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/generate/schema</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
@@ -731,7 +739,7 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <p>Needs a key. Answers 200, 401, 403, 404, 429, 503.</p>
             <div class="cl-tablewrap">
               <table class="cl-table cl-table--wrap">
-                <caption class="mcp-vh">Query parameters of GET /v1/benchmark</caption>
+                <caption class="mcp-vh">Parameters of GET /v1/benchmark</caption>
                 <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
                 <tbody>
               <tr><th scope="row" data-label="Parameter"><code>category</code></th><td data-label="Required">No</td><td data-label="What it is">One of the category ids from the overview.</td></tr>
@@ -773,7 +781,560 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
               <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
             </div>
           </details>
+          <details>
+            <summary><code>POST /v1/watchlist</code> <strong>Pro</strong>: Watch a domain</summary>
+            <p>Adds a domain to the key's watchlist (up to 5 per Pro key). The first scan runs now and becomes the baseline; after that the domain is re-scanned about every 7 days by a scheduled job, and each scan is compared with the one before. The scan counts toward the per-domain limit. To get alert emails, send &quot;alert_email&quot; with the address this key was sent to; alerts can be switched off per domain with &quot;alerts&quot;: false.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 201, 400, 401, 403, 409, 415, 429, 502, 503.</p>
+            <p>Send JSON with <code>Content-Type: application/json</code>.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Request body</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep10Body" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep10Body">{
+  &quot;domain&quot;: &quot;example.com&quot;,
+  &quot;alert_email&quot;: &quot;you@example.com&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep10Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep10Curl">curl -X POST https://getcitehound.com/v1/watchlist \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;domain&quot;: &quot;example.com&quot;, &quot;alert_email&quot;: &quot;you@example.com&quot;}'</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep10Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep10Out">{
+  &quot;watch&quot;: {
+    &quot;domain&quot;: &quot;example.com&quot;,
+    &quot;added_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+    &quot;alerts&quot;: true,
+    &quot;last_scan_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+    &quot;next_scan_after&quot;: &quot;2026-10-29T00:00:00.000Z&quot;,
+    &quot;status&quot;: &quot;ok&quot;,
+    &quot;last_score&quot;: 87
+  },
+  &quot;baseline&quot;: {
+    &quot;snapshot_id&quot;: &quot;snp_20261022120000&quot;,
+    &quot;score&quot;: 87,
+    &quot;scanned_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;
+  },
+  &quot;alert_email&quot;: true,
+  &quot;next_scan_after&quot;: &quot;2026-10-29T00:00:00.000Z&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/watchlist</code> <strong>Pro</strong>: List the watched domains</summary>
+            <p>The key's watchlist with the time of the last scan, the earliest time of the next one, the last score and whether alerts are on.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 401, 403, 429, 503.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep11Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep11Curl">curl https://getcitehound.com/v1/watchlist \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep11Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep11Out">{
+  &quot;domains&quot;: [
+    {
+      &quot;domain&quot;: &quot;example.com&quot;,
+      &quot;added_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+      &quot;alerts&quot;: true,
+      &quot;last_scan_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+      &quot;next_scan_after&quot;: &quot;2026-10-29T00:00:00.000Z&quot;,
+      &quot;status&quot;: &quot;ok&quot;,
+      &quot;last_score&quot;: 87
+    }
+  ],
+  &quot;limit&quot;: 5,
+  &quot;used&quot;: 1,
+  &quot;alert_email&quot;: true
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>DELETE /v1/watchlist</code> <strong>Pro</strong>: Stop watching a domain</summary>
+            <p>Removes a domain from the key's watchlist. When no key watches the domain any more, its snapshots and events are deleted.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 400, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of DELETE /v1/watchlist</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep12Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep12Curl">curl -X DELETE &quot;https://getcitehound.com/v1/watchlist?domain=example.com&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep12Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep12Out">{
+  &quot;removed&quot;: true,
+  &quot;domain&quot;: &quot;example.com&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/history</code> <strong>Pro</strong>: The stored scans of a watched domain</summary>
+            <p>The snapshots of one watched domain, newest first: the score, the pillar scores, the ids of the failed checks, the state of each crawler, and whether llms.txt and JSON-LD were present. Snapshots are kept 365 days.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 400, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of GET /v1/history</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">Yes</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>since</code></th><td data-label="Required">No</td><td data-label="What it is">Only snapshots after this date.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>limit</code></th><td data-label="Required">No</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep13Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep13Curl">curl &quot;https://getcitehound.com/v1/history?domain=example.com&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep13Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep13Out">{
+  &quot;domain&quot;: &quot;example.com&quot;,
+  &quot;retention_days&quot;: 365,
+  &quot;snapshots&quot;: [
+    {
+      &quot;id&quot;: &quot;snp_20261022120000&quot;,
+      &quot;at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+      &quot;domain&quot;: &quot;example.com&quot;,
+      &quot;score&quot;: 87,
+      &quot;pillars&quot;: [
+        {
+          &quot;id&quot;: &quot;discover&quot;,
+          &quot;score&quot;: 27,
+          &quot;max&quot;: 40
+        }
+      ],
+      &quot;failed&quot;: [
+        &quot;ai-crawler-access&quot;
+      ],
+      &quot;check_names&quot;: {
+        &quot;ai-crawler-access&quot;: &quot;AI crawler access&quot;
+      },
+      &quot;crawlers&quot;: {
+        &quot;GPTBot&quot;: &quot;open&quot;
+      },
+      &quot;llms_txt&quot;: true,
+      &quot;schema&quot;: true
+    }
+  ]
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/events</code> <strong>Pro</strong>: What changed, newest first</summary>
+            <p>Events from the differences between two scans of the watched domains: score_dropped, score_improved, crawler_blocked, crawler_unblocked, llms_txt_added, llms_txt_removed, check_failed, check_fixed, scan_failed. Ids are stable and sort in time order, so a polling client can pass the newest id it has as &quot;since&quot; and take only what is new. To read further back, pass &quot;next_cursor&quot; as &quot;cursor&quot;. &quot;score_dropped&quot; and &quot;score_improved&quot; fire at a change of 5 points or more. Events are kept 365 days.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 400, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of GET /v1/events</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>since</code></th><td data-label="Required">No</td><td data-label="What it is">An event id (only newer events) or a date.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>domain</code></th><td data-label="Required">No</td><td data-label="What it is">A bare domain: letters, digits and hyphens, no scheme, path, port or credentials.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>type</code></th><td data-label="Required">No</td><td data-label="What it is">A comma-separated list of event types.</td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>limit</code></th><td data-label="Required">No</td><td data-label="What it is"></td></tr>
+              <tr><th scope="row" data-label="Parameter"><code>cursor</code></th><td data-label="Required">No</td><td data-label="What it is">The next_cursor of a previous answer.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep14Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep14Curl">curl &quot;https://getcitehound.com/v1/events?type=score_dropped,crawler_blocked&amp;limit=20&quot; \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep14Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep14Out">{
+  &quot;events&quot;: [
+    {
+      &quot;id&quot;: &quot;evt_20261029060012_ab12cd34ef&quot;,
+      &quot;type&quot;: &quot;score_dropped&quot;,
+      &quot;domain&quot;: &quot;example.com&quot;,
+      &quot;at&quot;: &quot;2026-10-29T06:00:12.000Z&quot;,
+      &quot;summary&quot;: &quot;Readiness score dropped from 87 to 79 (-8 points).&quot;,
+      &quot;snapshot_id&quot;: &quot;snp_20261029060012&quot;,
+      &quot;data&quot;: {
+        &quot;from&quot;: 87,
+        &quot;to&quot;: 79,
+        &quot;delta&quot;: -8
+      }
+    }
+  ],
+  &quot;has_more&quot;: false,
+  &quot;next_cursor&quot;: null
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>POST /v1/webhooks</code> <strong>Pro</strong>: Create a webhook</summary>
+            <p>Registers an https address that receives the events you choose as signed JSON (see &quot;Webhooks&quot; below for the headers and how to verify them). Up to 3 per key. Leave &quot;secret&quot; out and one is generated and shown once; if you send one, it is never shown again. The address must be https on the default port and a public host.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 201, 400, 401, 403, 409, 415, 429, 503.</p>
+            <p>Send JSON with <code>Content-Type: application/json</code>.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Request body</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep15Body" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep15Body">{
+  &quot;url&quot;: &quot;https://example.com/hooks/citehound&quot;,
+  &quot;events&quot;: [
+    &quot;score_dropped&quot;,
+    &quot;crawler_blocked&quot;
+  ]
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep15Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep15Curl">curl -X POST https://getcitehound.com/v1/webhooks \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;url&quot;: &quot;https://example.com/hooks/citehound&quot;, &quot;events&quot;: [&quot;score_dropped&quot;, &quot;crawler_blocked&quot;]}'</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep15Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep15Out">{
+  &quot;webhook&quot;: {
+    &quot;id&quot;: &quot;whk_0123456789abcdef&quot;,
+    &quot;url&quot;: &quot;https://example.com/hooks/citehound&quot;,
+    &quot;events&quot;: [
+      &quot;score_dropped&quot;,
+      &quot;crawler_blocked&quot;
+    ],
+    &quot;enabled&quot;: true,
+    &quot;consecutive_failures&quot;: 0,
+    &quot;created_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+    &quot;disabled_at&quot;: null,
+    &quot;disabled_reason&quot;: null
+  },
+  &quot;secret&quot;: &quot;whsec_…&quot;,
+  &quot;secret_note&quot;: &quot;This is the only time the secret is shown. Store it now: it signs every delivery.&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/webhooks</code> <strong>Pro</strong>: List webhooks</summary>
+            <p>The key's webhooks with their event types, whether they are enabled and how many deliveries in a row have failed. A webhook is disabled after 5 deliveries in a row failed all their attempts. The secret is never returned.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 401, 403, 429, 503.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep16Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep16Curl">curl https://getcitehound.com/v1/webhooks \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep16Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep16Out">{
+  &quot;webhooks&quot;: [
+    {
+      &quot;id&quot;: &quot;whk_0123456789abcdef&quot;,
+      &quot;url&quot;: &quot;https://example.com/hooks/citehound&quot;,
+      &quot;events&quot;: [
+        &quot;score_dropped&quot;
+      ],
+      &quot;enabled&quot;: true,
+      &quot;consecutive_failures&quot;: 0,
+      &quot;created_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+      &quot;disabled_at&quot;: null,
+      &quot;disabled_reason&quot;: null
+    }
+  ],
+  &quot;limit&quot;: 3
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/webhooks/{id}</code> <strong>Pro</strong>: Get one webhook</summary>
+            <p>One webhook, without its secret.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of GET /v1/webhooks/{id}</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>id</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep17Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep17Curl">curl https://getcitehound.com/v1/webhooks/whk_0123456789abcdef \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep17Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep17Out">{
+  &quot;webhook&quot;: {
+    &quot;id&quot;: &quot;whk_0123456789abcdef&quot;,
+    &quot;url&quot;: &quot;https://example.com/hooks/citehound&quot;,
+    &quot;events&quot;: [
+      &quot;score_dropped&quot;
+    ],
+    &quot;enabled&quot;: true,
+    &quot;consecutive_failures&quot;: 0,
+    &quot;created_at&quot;: &quot;2026-10-22T12:00:00.000Z&quot;,
+    &quot;disabled_at&quot;: null,
+    &quot;disabled_reason&quot;: null
+  }
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>DELETE /v1/webhooks/{id}</code> <strong>Pro</strong>: Delete a webhook</summary>
+            <p>Deletes the webhook, its delivery log and any retries still waiting. To use an address again after it was disabled, delete the webhook and create it again.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of DELETE /v1/webhooks/{id}</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>id</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep18Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep18Curl">curl -X DELETE https://getcitehound.com/v1/webhooks/whk_0123456789abcdef \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep18Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep18Out">{
+  &quot;removed&quot;: true,
+  &quot;id&quot;: &quot;whk_0123456789abcdef&quot;
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>GET /v1/webhooks/{id}/deliveries</code> <strong>Pro</strong>: The delivery log of a webhook</summary>
+            <p>The last 50 deliveries, newest first: the event, the status (pending, delivered or failed), the number of attempts, the HTTP status and a short error code, and when the next retry is due. Retries are made after 1 minute, 10 minutes and 1 hour, at the next run of the scheduled job.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of GET /v1/webhooks/{id}/deliveries</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>id</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep19Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep19Curl">curl https://getcitehound.com/v1/webhooks/whk_0123456789abcdef/deliveries \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep19Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep19Out">{
+  &quot;webhook_id&quot;: &quot;whk_0123456789abcdef&quot;,
+  &quot;deliveries&quot;: [
+    {
+      &quot;id&quot;: &quot;dlv_20261029060013_9f8e7d6c&quot;,
+      &quot;event_id&quot;: &quot;evt_20261029060012_ab12cd34ef&quot;,
+      &quot;event_type&quot;: &quot;score_dropped&quot;,
+      &quot;status&quot;: &quot;delivered&quot;,
+      &quot;attempt&quot;: 1,
+      &quot;next_at&quot;: null,
+      &quot;http_status&quot;: 200,
+      &quot;error&quot;: null,
+      &quot;created_at&quot;: &quot;2026-10-29T06:00:13.000Z&quot;,
+      &quot;delivered_at&quot;: &quot;2026-10-29T06:00:13.000Z&quot;,
+      &quot;test&quot;: false
+    }
+  ]
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <details>
+            <summary><code>POST /v1/webhooks/{id}/test</code> <strong>Pro</strong>: Send a test event</summary>
+            <p>Sends one signed test event (type &quot;test&quot;) to the webhook now, makes one attempt and returns the result. It is logged as a test and does not count toward the failure limit.</p>
+            <p>Needs a key on the Pro plan (a free key gets 403). Answers 200, 401, 403, 404, 429, 503.</p>
+            <div class="cl-tablewrap">
+              <table class="cl-table cl-table--wrap">
+                <caption class="mcp-vh">Parameters of POST /v1/webhooks/{id}/test</caption>
+                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>
+                <tbody>
+              <tr><th scope="row" data-label="Parameter"><code>id</code></th><td data-label="Required">Yes</td><td data-label="What it is"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">curl</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep20Curl" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep20Curl">curl -X POST https://getcitehound.com/v1/webhooks/whk_0123456789abcdef/test \
+  -H &quot;Authorization: Bearer $CITEHOUND_KEY&quot;</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Example response</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#ep20Out" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="ep20Out">{
+  &quot;delivery&quot;: {
+    &quot;id&quot;: &quot;dlv_20261022120005_1a2b3c4d&quot;,
+    &quot;event_id&quot;: &quot;evt_test_20261022120005_ab12cd&quot;,
+    &quot;event_type&quot;: &quot;test&quot;,
+    &quot;status&quot;: &quot;delivered&quot;,
+    &quot;attempt&quot;: 1,
+    &quot;next_at&quot;: null,
+    &quot;http_status&quot;: 200,
+    &quot;error&quot;: null,
+    &quot;created_at&quot;: &quot;2026-10-22T12:00:05.000Z&quot;,
+    &quot;delivered_at&quot;: &quot;2026-10-22T12:00:05.000Z&quot;,
+    &quot;test&quot;: true
+  }
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+          </details>
         </div>
+      </div>
+    </section>
+
+    <section class="cl-sec hp-light" id="monitoring" aria-labelledby="monitoring-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Monitoring (Pro)</p>
+          <h2 id="monitoring-heading" class="section-title">Watch domains, get told when something changes.</h2>
+          <p class="section-sub">Needs a key on the Pro plan. A free key gets <code>403 pro_required</code> on these endpoints.</p>
+        </div>
+        <p class="cl-limits">Add a domain with <code>POST /v1/watchlist</code>. It is scanned at once, and that scan is the baseline. A scheduled job runs once a day and re-scans the domains that are due, about 7 days after their last scan, oldest first. Each scan is compared with the one before and the differences become events. A scan that fails is tried again the next day, up to three times. A domain is scanned once for everyone who watches it.</p>
+        <h3 class="cl-h3">Events</h3>
+        <div class="cl-tablewrap">
+          <table class="cl-table cl-table--wrap">
+            <caption class="mcp-vh">Event types</caption>
+            <thead><tr><th scope="col">Event</th><th scope="col">When</th><th scope="col">Alert email</th></tr></thead>
+            <tbody>
+            <tr><th scope="row" data-label="Event"><code>score_dropped</code></th><td data-label="When">The score fell by 5 points or more since the last scan.</td><td data-label="Alert email">Yes</td></tr>
+            <tr><th scope="row" data-label="Event"><code>score_improved</code></th><td data-label="When">The score rose by 5 points or more.</td><td data-label="Alert email">No</td></tr>
+            <tr><th scope="row" data-label="Event"><code>crawler_blocked</code></th><td data-label="When">One of the ten AI crawlers is now blocked in robots.txt.</td><td data-label="Alert email">Yes</td></tr>
+            <tr><th scope="row" data-label="Event"><code>crawler_unblocked</code></th><td data-label="When">A crawler that was blocked is no longer blocked.</td><td data-label="Alert email">No</td></tr>
+            <tr><th scope="row" data-label="Event"><code>llms_txt_added</code></th><td data-label="When">llms.txt is now found at the site root.</td><td data-label="Alert email">No</td></tr>
+            <tr><th scope="row" data-label="Event"><code>llms_txt_removed</code></th><td data-label="When">llms.txt is no longer found.</td><td data-label="Alert email">Yes</td></tr>
+            <tr><th scope="row" data-label="Event"><code>check_failed</code></th><td data-label="When">A check that passed now fails.</td><td data-label="Alert email">No</td></tr>
+            <tr><th scope="row" data-label="Event"><code>check_fixed</code></th><td data-label="When">A check that failed now passes.</td><td data-label="Alert email">No</td></tr>
+            <tr><th scope="row" data-label="Event"><code>scan_failed</code></th><td data-label="When">The scheduled scan could not read the site (sent once when a run of failures starts).</td><td data-label="Alert email">No</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cl-note">Every event has a stable id, a time, the domain and a one-line summary. Read them with <code>GET /v1/events</code>: pass the newest id you have as <code>since</code> and you get only what is new, newest first. Alert emails go to the address you give as <code>alert_email</code> when you add a domain (it must be the address your key was sent to). They are sent for score drops, blocked crawlers and a removed llms.txt, at most one a day for each domain, and every email has a one-click link to stop them for that domain.</p>
+        <h3 class="cl-h3">Webhooks</h3>
+        <p class="cl-note">A webhook receives each event you chose as a JSON <code>POST</code>. The address must be https on the default port and a public host; no redirect is followed. Each request carries <code>X-Citehound-Timestamp</code> (unix seconds), <code>X-Citehound-Signature</code> (<code>v1=</code> and the hex HMAC-SHA-256 of the timestamp, a dot and the raw body, keyed with your secret), <code>X-Citehound-Event</code>, <code>X-Citehound-Event-Id</code> and <code>X-Citehound-Delivery</code>. Any 2xx answer is a success. Otherwise it is retried after 1 minute, 10 minutes and 1 hour, at the next run of the scheduled job, so a retry can be up to a day late. After 5 deliveries in a row fail all their attempts, the webhook is disabled; delete it and create it again to start over. Use <code>POST /v1/webhooks/{id}/test</code> to send a test event and <code>GET /v1/webhooks/{id}/deliveries</code> to see the log.</p>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Verify a delivery (Node.js)</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#verifySample" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="verifySample">const crypto = require('crypto');
+
+// rawBody: the request body exactly as received (a string, not parsed JSON).
+// headers: the lower-cased request headers. secret: the secret of the webhook.
+function verify(secret, headers, rawBody) {
+  const ts = headers['x-citehound-timestamp'];
+  const want = Buffer.from('v1=' + crypto.createHmac('sha256', secret).update(ts + '.' + rawBody).digest('hex'));
+  const got = Buffer.from(String(headers['x-citehound-signature'] || ''));
+  if (want.length !== got.length || !crypto.timingSafeEqual(want, got)) return false;
+  return Math.abs(Date.now() / 1000 - Number(ts)) &lt; 300;   // reject old deliveries
+}</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
       </div>
     </section>
 
@@ -793,6 +1354,9 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <tr><th scope="row" data-label="Limit">Pro key</th><td data-label="Allowed">200 requests an hour</td><td data-label="Notes">2000 requests a day (UTC)</td></tr>
             <tr><th scope="row" data-label="Limit">One domain, all keys together</th><td data-label="Allowed">4 scans an hour</td><td data-label="Notes">Counts scans, compare, crawlers and schema</td></tr>
             <tr><th scope="row" data-label="Limit">One network address</th><td data-label="Allowed">120 requests an hour</td><td data-label="Notes">Across all keys</td></tr>
+            <tr><th scope="row" data-label="Limit">Pro: watched domains</th><td data-label="Allowed">5 per key</td><td data-label="Notes">Each is re-scanned about every 7 days</td></tr>
+            <tr><th scope="row" data-label="Limit">Pro: webhooks</th><td data-label="Allowed">3 per key</td><td data-label="Notes">Disabled after 5 deliveries in a row fail all their attempts</td></tr>
+            <tr><th scope="row" data-label="Limit">Pro: history and events</th><td data-label="Allowed">365 days</td><td data-label="Notes">Then they are deleted</td></tr>
             <tr><th scope="row" data-label="Limit">Asking for keys</th><td data-label="Allowed">5 an hour</td><td data-label="Notes">5 a day for one address</td></tr>
             </tbody>
           </table>
@@ -815,8 +1379,9 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
             <tbody>
             <tr><th scope="row" data-label="Status"><code>400</code></th><td data-label="Code"><code>invalid_request</code></td><td data-label="Meaning">The request is not valid: a missing or malformed parameter.</td></tr>
             <tr><th scope="row" data-label="Status"><code>401</code></th><td data-label="Code"><code>invalid_key</code></td><td data-label="Meaning">The key is missing or not valid. A WWW-Authenticate header says how to send it.</td></tr>
-            <tr><th scope="row" data-label="Status"><code>403</code></th><td data-label="Code"><code>key_revoked</code></td><td data-label="Meaning">The key has been revoked.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>403</code></th><td data-label="Code"><code>key_revoked</code></td><td data-label="Meaning">The key has been revoked (key_revoked), or the endpoint is part of the Pro plan and the key is on the free plan (pro_required).</td></tr>
             <tr><th scope="row" data-label="Status"><code>404</code></th><td data-label="Code"><code>not_found</code></td><td data-label="Meaning">No such category or endpoint.</td></tr>
+            <tr><th scope="row" data-label="Status"><code>409</code></th><td data-label="Code"><code>watchlist_full</code></td><td data-label="Meaning">A limit of the Pro plan was reached (watchlist_full, webhook_limit) or the item already exists (webhook_exists).</td></tr>
             <tr><th scope="row" data-label="Status"><code>413</code></th><td data-label="Code"><code>too_large</code></td><td data-label="Meaning">The request body is larger than the limit.</td></tr>
             <tr><th scope="row" data-label="Status"><code>415</code></th><td data-label="Code"><code>unsupported_media_type</code></td><td data-label="Meaning">Send JSON with Content-Type: application/json.</td></tr>
             <tr><th scope="row" data-label="Status"><code>429</code></th><td data-label="Code"><code>rate_limited</code></td><td data-label="Meaning">A limit was reached. The Retry-After header gives the seconds to wait; the body names the limit.</td></tr>
@@ -863,7 +1428,11 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
           </details>
           <details>
             <summary>Is there a paid plan?</summary>
-            <p>The API has a pro plan with higher limits. It is set by us for a key, and there is no checkout for it yet. Write to hey@getcitehound.com to ask.</p>
+            <p>The API has a pro plan with higher limits and monitoring: a watchlist, scheduled re-scans, events, alert emails and webhooks. It is set by us for a key, and there is no checkout for it yet. Write to hey@getcitehound.com to ask.</p>
+          </details>
+          <details>
+            <summary>What does monitoring keep?</summary>
+            <p>For a Pro key: the domains it watches, a snapshot of each scan and the events between scans for 365 days, the address for alerts if you give one, and the addresses of your webhooks (their secrets are stored encrypted and never shown again). Revoking the key deletes all of it.</p>
           </details>
         </div>
         <p class="cl-contact">Questions, or a key that will not arrive: <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a></p>

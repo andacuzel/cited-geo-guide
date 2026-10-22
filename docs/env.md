@@ -29,6 +29,19 @@ keys below should be set there unless you test with them). *Local* = `.env.local
 | `API_KEY_PEPPER` | The server-side secret that keys, addresses and network addresses are hashed with (HMAC-SHA-256) before anything is stored. 32 characters or more; use `openssl rand -hex 32`. Never put it in the repository, a URL or a chat. **Do not change it after keys are issued: every key would stop working.** | Production only | To use the API | **Every `/v1` route answers 503 `not_configured`** and stores nothing. The `/api` page still loads. | Not set yet |
 | `API_V1_SCAN_DEADLINE_MS` | How long one scan may take before the API answers 502 | Production | No | 20000 | Default |
 
+### Monitoring (Pro keys)
+
+| Variable | What it does | Set in | Required | If missing | Status |
+|---|---|---|---|---|---|
+| `CRON_SECRET` | The credential of the scheduled job (`/api/v1/cron/run`). 16 characters or more; `openssl rand -hex 24`. Vercel sends it as `Authorization: Bearer <value>` when the cron fires. | Production only | To use monitoring | **The job answers 404 and nothing is re-scanned**; watchlist, history, events and webhooks still answer. | Not set yet |
+| `API_V1_WATCH_LIMIT` | Domains per Pro key | Production | No | 5 (1 to 100) | Default |
+| `API_V1_WEBHOOK_LIMIT` | Webhooks per Pro key | Production | No | 3 (1 to 20) | Default |
+| `API_V1_SCORE_DELTA` | Points of change that make `score_dropped` and `score_improved` | Production | No | 5 (1 to 100) | Default |
+| `API_V1_RETENTION_DAYS` | How long snapshots and events are kept | Production | No | 365 (30 to 730) | Default |
+| `API_V1_CRON_BATCH` | Domains scanned in one run of the job | Production | No | 6 (1 to 20) | Default |
+| `API_V1_CRON_BUDGET_MS` | Time a run may spend before it starts no new work | Production | No | 45000 (5000 to 280000); the function limit is 60 s | Default |
+| `API_V1_WEBHOOK_MAX_FAILS` | Deliveries in a row that fail all their attempts before a webhook is disabled | Production | No | 5 (1 to 50) | Default |
+
 The API also reads `RESEND_API_KEY` and `PRO_MAIL_FROM` (without them `POST /v1/keys` answers 503), `ADMIN_TOKEN` (without it `POST /v1/admin/plan` is a 404) and the Redis variables above. See `docs/api.md`.
 
 ## Email (Resend)

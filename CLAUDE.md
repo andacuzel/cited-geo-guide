@@ -173,6 +173,9 @@ Constraints that must not be broken:
   (`POST /v1/keys`), stored as HMAC hashes with `API_KEY_PEPPER`, revocable with a signed link, a free and a pro plan (the plan is set only through `POST /v1/admin/plan` behind `ADMIN_TOKEN`; payment code is untouched),
   and limits in `lib/api-v1/limits.js`. It reuses `scanPage`, `lib/action-scan.js` `summarize`, `lib/file-generators.js` and `lib/schema.js` and fetches only through `lib/safe-fetch.js`; no CORS headers. The description
   is written once in `lib/api-v1/openapi.js`; `scripts/generate-api-page.js` writes `/api` and `/openapi.yaml` and keeps /api in the sitemap and llms.txt only (never the footer). The score is readiness, never "names a brand".
+  **Monitoring (Pro keys, branch api-v1-monitoring):** watchlist (5 domains), weekly re-scans by one daily Vercel cron (`/api/v1/cron/run`, `CRON_SECRET`; Hobby allows nothing faster), snapshots and diffed events kept 365 days,
+  alert emails (3 types, once a day per domain, one-click unsubscribe) and signed webhooks with retries (`lib/api-v1/monitor*.js`, `webhooks.js`, `alerts.js`). The webhook POST goes through `lib/safe-fetch.js`; a webhook secret is sealed with a key
+  derived from `API_KEY_PEPPER`. Revoking a key deletes all of it. `scripts/test-api-monitoring.js` is a gate. Pricing copy says weekly re-scans with email alerts are part of Pro early access: that is now built for the API only (no dashboard).
   Read `docs/api.md` and `docs/integrations/RULES.md` first; `scripts/test-api-v1.js` is a gate. `/terms` and `/privacy` are not changed until the owner applies `docs/api-legal-additions.md`.
 - **Pro screenshots are generated.** The crops of the report on `/pro` and in
   the homepage Pro band (including the Citations section with the published CRM sample)
