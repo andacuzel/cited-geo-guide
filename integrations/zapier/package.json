@@ -1,0 +1,13 @@
+{
+  "name": "citehound-zapier",
+  "version": "0.1.0",
+  "description": "Citehound for Zapier: scan a domain for AI readiness, compare sites, generate llms.txt, robots.txt and schema, and a trigger for monitoring events.",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://getcitehound.com/api",
+  "repository": { "type": "git", "url": "git+https://github.com/andacuzel/cited-geo-guide.git", "directory": "integrations/zapier" },
+  "main": "index.js",
+  "scripts": { "test": "node --test test/*.test.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": { "zapier-platform-core": "19.2.1" }
+}

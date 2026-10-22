@@ -1,0 +1,11 @@
+{
+  "name": "@citehound/pipedream",
+  "version": "0.1.0",
+  "description": "Pipedream components for Citehound: actions to scan, compare, generate files and watch domains, and a source for monitoring events.",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://getcitehound.com/api",
+  "repository": { "type": "git", "url": "git+https://github.com/andacuzel/cited-geo-guide.git", "directory": "integrations/pipedream" },
+  "scripts": { "test": "node --test test/*.test.js" },
+  "engines": { "node": ">=18" }
+}
