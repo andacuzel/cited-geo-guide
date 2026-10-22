@@ -28,7 +28,7 @@ const mcp = require('../api/mcp.js');
 const copy = require('../content/mcp-copy.json');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 103;
+const CSS_VERSION = 105;
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const URL_MCP = site.baseUrl + '/api/mcp';

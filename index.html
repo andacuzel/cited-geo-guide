@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=103" />
+  <link rel="stylesheet" href="styles.css?v=105" />
 
   <script type="application/ld+json">
   {
@@ -90,7 +90,7 @@
             "name": "Is the scan free and does it require signup?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes, the scan is free and requires no email or signup. It runs in your browser using publicly visible site data and nothing is stored."
+              "text": "Yes, the scan is free and requires no email or signup. It runs in your browser using publicly visible site data. Your scan result isn't saved."
             }
           },
           {
@@ -183,7 +183,7 @@
                 <input type="text" class="field" id="scanInput" placeholder="yourdomain.com" autocomplete="off" spellcheck="false" aria-label="Domain to scan" />
                 <button type="submit" class="btn btn--gold" id="scanBtn">Scan free</button>
               </form>
-              <p class="hero__fineprint">No email. Runs in your browser. Nothing is stored.</p>
+              <p class="hero__fineprint">No email. Runs in your browser. Your scan result isn't saved.</p>
               <p class="hero__alt"><a href="/compare">Compare two sites</a></p>
 
               <div class="scan__status" id="scanStatus" role="status" aria-live="polite"></div>
@@ -654,7 +654,7 @@
             </details>
             <details>
               <summary>Is the scan free and does it require signup?</summary>
-              <p>Yes, the scan is free and requires no email or signup. It runs in your browser using publicly visible site data and nothing is stored.</p>
+              <p>Yes, the scan is free and requires no email or signup. It runs in your browser using publicly visible site data. Your scan result isn't saved.</p>
             </details>
             <details>
               <summary>What does the scan measure, and what does Pro add?</summary>
@@ -716,8 +716,8 @@
             <p class="pr-best"><span class="pr-best__label">Best for</span> Teams who want a site that stays readable.</p>
             <ul class="pr-points">
               <li>Whole-site report: up to 25 pages, page by page</li>
-              <li>Weekly re-scan with email alerts when something regresses (part of Pro early access)</li>
-              <li>Monthly citation sample on Claude (ChatGPT coming)</li>
+              <li>Weekly homepage re-scan with email alerts for up to 5 domains</li>
+              <li>Citation sample on Claude (ChatGPT coming)</li>
             </ul>
             <p class="pr-cta"><a class="btn btn--gold" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a></p>
           </li>
@@ -805,6 +805,7 @@
                 <li><a href="/trust">Trust</a></li>
                 <li><a href="/privacy">Privacy</a></li>
                 <li><a href="/terms">Terms</a></li>
+                <li><a href="/refunds">Refunds</a></li>
                 <li><a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a></li>
               </ul>
             </nav>

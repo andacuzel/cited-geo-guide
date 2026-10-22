@@ -164,12 +164,12 @@
       }
     },
     "bandTitle": "Human-approved, automated.",
-    "bandText": "We automate the question research, the page reading and the monthly re-measurement. People edit the drafts. You approve every piece, and nothing is published without you.",
+    "bandText": "We automate the question research and the page reading. People edit the drafts, and we re-measure every month. You approve every piece, and nothing is published without you.",
     "bandCols": [
       {
         "icon": "repeat",
         "title": "We automate",
-        "text": "Question research, page reading and the monthly measurement."
+        "text": "Question research and page reading."
       },
       {
         "icon": "check",

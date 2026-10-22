@@ -25,7 +25,7 @@ const Pricing = require('../lib/pricing.js');
 const icons = require('../lib/icons.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 103;
+const CSS_VERSION = 105;
 const D = Pricing.DATA;
 const esc = Pricing.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
