@@ -1,5 +1,6 @@
 [
   "integrations/n8n/citehound-core.js",
   "integrations/zapier/citehound-core.js",
-  "integrations/pipedream/common/citehound-core.js"
+  "integrations/pipedream/common/citehound-core.js",
+  "integrations/activepieces/src/lib/citehound-core.js"
 ]

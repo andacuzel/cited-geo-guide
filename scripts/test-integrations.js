@@ -58,7 +58,7 @@ dirs.forEach((d) => {
     t(d + ': no runtime dependency' + (d === 'zapier' ? ' except the Zapier platform package' : '') + ', license MIT, repository with its directory', deps.every((x) => d === 'zapier' && x === 'zapier-platform-core') && pkg.license === 'MIT' && pkg.repository && pkg.repository.directory === base, JSON.stringify(deps));
   }
   const reqs = texts.filter((x) => /\.(js|ts|gs)$/.test(x.f) && !/\/test\//.test(x.f) && !/citehound-core\.js$/.test(x.f)).map((x) => x.s.replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '')).join('\n');
-  t(d + ': the only address in its code is getcitehound.com', (reqs.match(/https?:\/\/[a-z0-9.-]+/gi) || []).every((u) => /getcitehound\.com|schema\.org|www\.w3\.org|127\.0\.0\.1|localhost/.test(u)), (reqs.match(/https?:\/\/[a-z0-9.-]+/gi) || []).filter((u) => !/getcitehound\.com|schema\.org|www\.w3\.org|127\.0\.0\.1|localhost/.test(u)).join());
+  t(d + ': the only address in its code is getcitehound.com', (reqs.match(/https?:\/\/[a-z0-9.-]+/gi) || []).every((u) => /getcitehound\.com|schema\.org|www\.w3\.org|127\.0\.0\.1|localhost|example\.(com|org)/.test(u)), (reqs.match(/https?:\/\/[a-z0-9.-]+/gi) || []).filter((u) => !/getcitehound\.com|schema\.org|www\.w3\.org|127\.0\.0\.1|localhost|example\.(com|org)/.test(u)).join());
   const r = runTests(base);
   t(d + ': its own tests pass' + (r.files ? ' (' + r.n + ' tests)' : ''), r.files > 0 && r.ok && r.n >= 5, r.msg || 'no tests');
 });

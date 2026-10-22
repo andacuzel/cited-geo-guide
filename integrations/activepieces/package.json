@@ -1,0 +1,13 @@
+{
+  "name": "citehound-activepieces",
+  "version": "0.1.0",
+  "description": "An Activepieces piece for Citehound: scan, compare, generate files, watch domains and a trigger for monitoring events.",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://getcitehound.com/api",
+  "repository": { "type": "git", "url": "git+https://github.com/andacuzel/cited-geo-guide.git", "directory": "integrations/activepieces" },
+  "main": "dist/src/index.js",
+  "scripts": { "build": "tsc && node build-copy.js", "test": "node --test test/*.test.js" },
+  "devDependencies": { "@activepieces/pieces-framework": "^0.32.0", "@types/node": "^20.0.0", "typescript": "^5.4.0" },
+  "peerDependencies": { "@activepieces/pieces-framework": "*" }
+}
