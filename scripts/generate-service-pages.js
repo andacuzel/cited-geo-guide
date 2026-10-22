@@ -25,7 +25,7 @@ const lockup = require('../lib/lockup.js');
 const Pricing = require('../lib/pricing.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 102;
+const CSS_VERSION = 103;
 const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'service-pages.json'), 'utf8'));
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');

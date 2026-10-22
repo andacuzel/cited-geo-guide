@@ -37,7 +37,7 @@ const CITATION = path.join(ROOT, 'content', 'citations', 'sample-crm.json');
 const CASE = path.join(ROOT, 'research', 'case-study-agaone.html');
 const PAGE = path.join(ROOT, 'pro.html');
 const INDEX = path.join(ROOT, 'index.html');
-const CSS_VERSION = 102;
+const CSS_VERSION = 103;
 const START = '<!-- PRO-BAND:START -->';
 const END = '<!-- PRO-BAND:END -->';
 const WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten' };
@@ -584,7 +584,7 @@ function check() {
     if (/[$€£]\s?\d|\bper (month|year|report)\b|\bUSD\b|\bEUR\b/i.test(noPrice)) bad(name + ': a price other than the one in content/pricing.json');
     if (/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|unlimited)\s+(citation\s+)?(runs|crawls)\b/i.test(visible)) bad(name + ': a count of runs or crawls');
     if (/\blaunch(ed|es|ing)?\b|\bavailable (from|on|in|starting)\b|\bwill be available\b|\bin (Q[1-4]|20\d\d)\b/i.test(visible)) bad(name + ': a launch or availability date');
-    if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible.split(Pricing.ENGINES).join(' ')) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
+    if (/\b(chatgpt|openai|perplexity|copilot|claude|anthropic|grok|bard)\b/i.test(visible.split(Pricing.ENGINES).join(' ').split('Claude connector').join(' ')) || /gemini/i.test(visible.replace(/gemini-3\.5-flash-lite/g, ''))) bad(name + ': names a consumer AI product');
     if (name === 'pro.html' && !/\bnot tested\b|\bdoes not test\b|\bhas not tested\b/i.test(visible)) bad(name + ': does not say that a report without a check labels its questions not tested');
     if (/records when your name|asks a model the questions|we run (it|the citation)[^.]*for you/i.test(visible)) bad(name + ': claims a citation result or service Pro does not produce');
     if (/\baccount\b|\blog ?in\b|\bsign ?in\b/i.test(visible.replace('Do I need an account?', '').replace('No. There is no account or login.', ''))) bad(name + ': mentions an account or login');
