@@ -41,7 +41,7 @@ const pages = htmlFiles('', []);
   t('the About page points at it, in the picture and in the structured data', /src="\/assets\/andac\.jpg"/.test(read('about.html')) && /assets\/andac\.jpg/.test(read('about.html').split('application/ld+json')[1] || ''));
 }
 {
-  const bad = pages.filter((f) => /October 2026 rescan|rescan of the same|rescan in October|2 October 2026/i.test(read(f)));
+  const bad = pages.filter((f) => /October 2026 rescan|rescan of the same|rescan in October|(?<!\d)2 October 2026/i.test(read(f)));
   t('no public page cites the October 2026 rescan or a 2 October 2026 run (only the July snapshot)', bad.length === 0, bad.join(', '));
   t('every benchmark page says its figures are one July 2026 snapshot', fs.readdirSync(path.join(ROOT, 'benchmarks')).filter((f) => f !== 'index.html' && /\.html$/.test(f)).every((f) => /one scan of these sites in July 2026/.test(read('benchmarks/' + f))));
   t('the research index and the crawler-access study say the same', !/rescan/i.test(read('content/research-index.json')) && /July 2026 snapshot/.test(read('research/crawler-access-2026.html')));
