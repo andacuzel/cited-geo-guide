@@ -360,14 +360,17 @@ const bad = (s) => s >= 400;
   const ops = []; Object.keys(spec.paths).forEach((p) => Object.keys(spec.paths[p]).forEach((m) => ops.push(spec.paths[p][m].operationId)));
   t('operation ids are unique and every operation has a summary, a tag and responses', new Set(ops).size === ops.length && Object.keys(spec.paths).every((p) => Object.keys(spec.paths[p]).every((m) => { const o = spec.paths[p][m]; return o.summary && o.tags && o.responses && Object.keys(o.responses).length; })));
   t('every route the router knows is documented, and every documented route is routed', await (async () => {
-    const documented = Object.keys(spec.paths).map((p) => p.replace(/^\//, ''));
-    const routed = ['keys', 'me', 'scan', 'compare', 'crawlers', 'generate/llms-txt', 'generate/robots-txt', 'generate/schema', 'benchmark'];
-    const routerSrc = read('lib/api-v1/index.js');
-    const knownLine = /const known = \[([^\]]*)\]/.exec(routerSrc)[1].match(/'([^']+)'/g).map((s) => s.slice(1, -1));
-    const ok1 = documented.every((d) => d === 'keys' || knownLine.indexOf(d) !== -1);
-    const ok2 = knownLine.every((k) => documented.indexOf(k) !== -1);
-    let ok3 = true; for (const d of documented) { if (d === 'keys') continue; const r = await get('/v1/' + d, ks, { ip: freshIp() }); if (r.status === 404 || r.status === 405) ok3 = false; }
-    return ok1 && ok2 && ok3 && routed.length === documented.length;
+    const MonRoutes = require('../lib/api-v1/monitor-routes.js');
+    const documented = [];
+    Object.keys(spec.paths).forEach((p) => Object.keys(spec.paths[p]).forEach((m) => documented.push(m.toUpperCase() + ' ' + p)));
+    const routed = [];
+    Api.KNOWN.forEach((k) => routed.push('GET /' + k)); routed.push('POST /keys', 'POST /generate/llms-txt', 'POST /generate/robots-txt');
+    MonRoutes.ROUTES.forEach((r) => r.methods.forEach((m) => routed.push(m + ' ' + r.path)));
+    const missing = documented.filter((d) => routed.indexOf(d) === -1), extra = routed.filter((r) => documented.indexOf(r) === -1);
+    let ok3 = true;
+    for (const d of documented) { const [m, pth] = d.split(' '); if (pth === '/keys') continue; const r = await request(m, '/v1' + pth.replace('{id}', 'whk_0000000000000000'), { headers: { authorization: 'Bearer ' + ks }, ip: freshIp() }); if (r.status === 405 || (r.status === 404 && /No such endpoint/.test(r.text))) { ok3 = false; out('    not routed: ' + d + ' ' + r.status); } }
+    if (missing.length || extra.length) out('    missing: ' + missing.join(', ') + ' extra: ' + extra.join(', '));
+    return !missing.length && !extra.length && ok3;
   })());
   t('the admin plan route is not in the public document', JSON.stringify(spec).indexOf('admin/plan') === -1);
   t('the document and the page say the score measures readiness, not whether an assistant names a brand', /does not measure whether any assistant names a brand/.test(spec.info.description) && /does not measure whether any assistant names a brand/.test(read('api.html').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ')));

@@ -20,3 +20,13 @@ Applied on 23 Oct 2026 on branch `legal-pages` (the wording on the pages is the 
 - **No cookies, no analytics, no logs of requests** are added.
 - The scanned domains are public sites; the API fetches their robots.txt, llms.txt, sitemap declaration and homepage through the same guarded fetch as the web scan and never sends the key or any address to them.
 - Retention for the optional marketing record has no end date yet: decide one (the waitlist uses 12 months) before launch.
+
+## Monitoring (Pro keys): additions when the feature goes live (22 Oct 2026, not applied)
+
+Exact sentences for `/privacy` ("API keys" section) and `/terms` ("The API" section). `/terms` and `/privacy` are untouched on branch `api-v1-monitoring`.
+
+> **Privacy, monitoring (Pro keys).** If a Pro key watches a domain, we store the domain with the key's id, a snapshot of each scan (the score, the pillar scores, the ids of the checks that failed, the state of ten AI crawlers, and whether llms.txt and structured data were present) and the changes between scans, for 365 days. If you give an address for alerts, we store it in readable form, with the date, only to send those alerts: at most one email a day for each domain, each with a one-click link that stops them for that domain. If you add a webhook, we store its https address, the event types you chose and a delivery log of the last 50 deliveries (time, event, status, no content) for 90 days; the secret that signs deliveries is stored encrypted. When you revoke a key, or when the last key watching a domain stops, all of this is deleted. Domains you watch are public sites; we scan them the same way as any scan.
+
+> **Terms, monitoring (Pro keys).** Monitoring is part of the Pro plan: a watchlist of up to 5 domains, scheduled re-scans about every 7 days, events, alert emails and webhooks. Webhook deliveries are retried up to three times and a webhook that keeps failing is disabled. Only add webhooks that you control, and keep the secret private. Alerts and events report changes in a readiness score and in crawler access; they do not say whether any assistant names a brand.
+
+Privacy impact: new readable data is the alert address (only when given, matched to the key, deleted with the key) and the webhook address (customer-chosen; it can contain a token in its path, so treat as sensitive); new processors: none (Resend already sends the key email; webhook receivers are chosen by the customer). Webhook calls come from Vercel's network, so a receiver sees Vercel IP addresses.

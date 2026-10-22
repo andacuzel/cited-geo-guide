@@ -25,6 +25,8 @@ const shell = require('../lib/page-shell.js');
 const site = require('../lib/site-config.js');
 const OA = require('../lib/api-v1/openapi.js');
 const Limits = require('../lib/api-v1/limits.js');
+const Monitor = require('../lib/api-v1/monitor.js');
+const MCFG = Monitor.config({});
 
 const ROOT = path.resolve(__dirname, '..');
 const CSS_VERSION = 104;
@@ -41,7 +43,8 @@ const FAQ = [
   ['What does a scan read?', 'The public robots.txt, llms.txt, sitemap declaration and homepage of the domain you name, through the same guarded fetch as the web scan. One page, not the whole site. The API never sends your key, your address or any credential to the scanned site.'],
   ['What do you keep about a key?', 'A one-way hash of the key, a one-way hash of your address, the masked address shown by /v1/me, the plan and the dates. Your address itself is kept only if you tick the update box. Counters for the limits expire within a day. The key email is transactional only.'],
   ['Can I revoke a key?', 'Yes. Every key email has a link that revokes that key with one click. A revoked key answers 403 from then on.'],
-  ['Is there a paid plan?', 'The API has a pro plan with higher limits. It is set by us for a key, and there is no checkout for it yet. Write to ' + site.contactEmail + ' to ask.']
+  ['Is there a paid plan?', 'The API has a pro plan with higher limits and monitoring: a watchlist, scheduled re-scans, events, alert emails and webhooks. It is set by us for a key, and there is no checkout for it yet. Write to ' + site.contactEmail + ' to ask.'],
+  ['What does monitoring keep?', 'For a Pro key: the domains it watches, a snapshot of each scan and the events between scans for ' + MCFG.retentionDays + ' days, the address for alerts if you give one, and the addresses of your webhooks (their secrets are stored encrypted and never shown again). Revoking the key deletes all of it.']
 ];
 
 /* ---------- the YAML emitter ---------- */
@@ -87,13 +90,43 @@ function snippet(id, label, code) {
 function paramRows(e) {
   if (!e.params || !e.params.length) return '';
   const rows = e.params.map((p) => '              <tr><th scope="row" data-label="Parameter"><code>' + esc(p.name) + '</code></th><td data-label="Required">' + (p.required ? 'Yes' : 'No') + '</td><td data-label="What it is">' + esc(p.description || p.schema.description || '') + '</td></tr>').join('\n');
-  return '            <div class="cl-tablewrap">\n              <table class="cl-table cl-table--wrap">\n                <caption class="mcp-vh">Query parameters of ' + esc(e.method.toUpperCase() + ' /v1' + e.path) + '</caption>\n                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>\n                <tbody>\n' + rows + '\n                </tbody>\n              </table>\n            </div>\n';
+  return '            <div class="cl-tablewrap">\n              <table class="cl-table cl-table--wrap">\n                <caption class="mcp-vh">Parameters of ' + esc(e.method.toUpperCase() + ' /v1' + e.path) + '</caption>\n                <thead><tr><th scope="col">Parameter</th><th scope="col">Required</th><th scope="col">What it is</th></tr></thead>\n                <tbody>\n' + rows + '\n                </tbody>\n              </table>\n            </div>\n';
 }
 function endpointBlock(e, i) {
   const bodyNote = e.body ? '            <p>Send JSON with <code>Content-Type: application/json</code>.</p>\n' + snippet('ep' + (i + 1) + 'Body', 'Request body', JSON.stringify(e.body.example, null, 2)) : '';
   const post = e.id === 'generateLlmsTxt' || e.id === 'generateRobotsTxt' ? '            <p>A <code>POST</code> to the same path takes the same fields as a JSON body.</p>\n' : '';
-  return '          <details' + (i === 0 ? '' : '') + '>\n            <summary><code>' + esc(e.method.toUpperCase()) + ' /v1' + esc(e.path) + '</code> ' + esc(e.summary) + '</summary>\n            <p>' + esc(e.description) + '</p>\n            <p>' + (e.auth ? 'Needs a key.' : 'No key needed.') + ' Answers ' + esc([e.ok.status].concat(e.errors).join(', ')) + '.</p>\n' +
+  return '          <details' + (i === 0 ? '' : '') + '>\n            <summary><code>' + esc(e.method.toUpperCase()) + ' /v1' + esc(e.path) + '</code> ' + (e.pro ? '<strong>Pro</strong>: ' : '') + esc(e.summary) + '</summary>\n            <p>' + esc(e.description) + '</p>\n            <p>' + (e.pro ? 'Needs a key on the Pro plan (a free key gets 403).' : (e.auth ? 'Needs a key.' : 'No key needed.')) + ' Answers ' + esc([e.ok.status].concat(e.errors).join(', ')) + '.</p>\n' +
     bodyNote + paramRows(e) + post + snippet('ep' + (i + 1) + 'Curl', 'curl', e.curl) + snippet('ep' + (i + 1) + 'Out', 'Example response', JSON.stringify(e.ok.example, null, 2)) + '          </details>';
+}
+
+
+const SAMPLE_VERIFY = [
+  "const crypto = require('crypto');",
+  '',
+  '// rawBody: the request body exactly as received (a string, not parsed JSON).',
+  '// headers: the lower-cased request headers. secret: the secret of the webhook.',
+  'function verify(secret, headers, rawBody) {',
+  "  const ts = headers['x-citehound-timestamp'];",
+  "  const want = Buffer.from('v1=' + crypto.createHmac('sha256', secret).update(ts + '.' + rawBody).digest('hex'));",
+  "  const got = Buffer.from(String(headers['x-citehound-signature'] || ''));",
+  '  if (want.length !== got.length || !crypto.timingSafeEqual(want, got)) return false;',
+  '  return Math.abs(Date.now() / 1000 - Number(ts)) < 300;   // reject old deliveries',
+  '}'
+].join('\n');
+
+const EVENT_TEXT = { score_dropped: 'The score fell by ' + MCFG.scoreDelta + ' points or more since the last scan.', score_improved: 'The score rose by ' + MCFG.scoreDelta + ' points or more.', crawler_blocked: 'One of the ten AI crawlers is now blocked in robots.txt.', crawler_unblocked: 'A crawler that was blocked is no longer blocked.', llms_txt_added: 'llms.txt is now found at the site root.', llms_txt_removed: 'llms.txt is no longer found.', check_failed: 'A check that passed now fails.', check_fixed: 'A check that failed now passes.', scan_failed: 'The scheduled scan could not read the site (sent once when a run of failures starts).' };
+
+function monitoringSection() {
+  const rows = Monitor.EVENT_TYPES.map((t) => '            <tr><th scope="row" data-label="Event"><code>' + t + '</code></th><td data-label="When">' + esc(EVENT_TEXT[t]) + '</td><td data-label="Alert email">' + (Monitor.ALERT_TYPES.indexOf(t) !== -1 ? 'Yes' : 'No') + '</td></tr>').join('\n');
+  return '    <section class="cl-sec hp-light" id="monitoring" aria-labelledby="monitoring-heading">\n      <div class="section__inner">\n' +
+    head('Monitoring (Pro)', 'monitoring-heading', 'Watch domains, get told when something changes.', 'Needs a key on the Pro plan. A free key gets <code>403 pro_required</code> on these endpoints.') +
+    '        <p class="cl-limits">Add a domain with <code>POST /v1/watchlist</code>. It is scanned at once, and that scan is the baseline. A scheduled job runs once a day and re-scans the domains that are due, about 7 days after their last scan, oldest first. Each scan is compared with the one before and the differences become events. A scan that fails is tried again the next day, up to three times. A domain is scanned once for everyone who watches it.</p>\n' +
+    '        <h3 class="cl-h3">Events</h3>\n        <div class="cl-tablewrap">\n          <table class="cl-table cl-table--wrap">\n            <caption class="mcp-vh">Event types</caption>\n            <thead><tr><th scope="col">Event</th><th scope="col">When</th><th scope="col">Alert email</th></tr></thead>\n            <tbody>\n' + rows + '\n            </tbody>\n          </table>\n        </div>\n' +
+    '        <p class="cl-note">Every event has a stable id, a time, the domain and a one-line summary. Read them with <code>GET /v1/events</code>: pass the newest id you have as <code>since</code> and you get only what is new, newest first. Alert emails go to the address you give as <code>alert_email</code> when you add a domain (it must be the address your key was sent to). They are sent for score drops, blocked crawlers and a removed llms.txt, at most one a day for each domain, and every email has a one-click link to stop them for that domain.</p>\n' +
+    '        <h3 class="cl-h3">Webhooks</h3>\n' +
+    '        <p class="cl-note">A webhook receives each event you chose as a JSON <code>POST</code>. The address must be https on the default port and a public host; no redirect is followed. Each request carries <code>X-Citehound-Timestamp</code> (unix seconds), <code>X-Citehound-Signature</code> (<code>v1=</code> and the hex HMAC-SHA-256 of the timestamp, a dot and the raw body, keyed with your secret), <code>X-Citehound-Event</code>, <code>X-Citehound-Event-Id</code> and <code>X-Citehound-Delivery</code>. Any 2xx answer is a success. Otherwise it is retried after 1 minute, 10 minutes and 1 hour, at the next run of the scheduled job, so a retry can be up to a day late. After ' + MCFG.maxFails + ' deliveries in a row fail all their attempts, the webhook is disabled; delete it and create it again to start over. Use <code>POST /v1/webhooks/{id}/test</code> to send a test event and <code>GET /v1/webhooks/{id}/deliveries</code> to see the log.</p>\n' +
+    snippet('verifySample', 'Verify a delivery (Node.js)', SAMPLE_VERIFY) +
+    '      </div>\n    </section>\n\n';
 }
 
 function body() {
@@ -104,6 +137,9 @@ function body() {
     ['Pro key', L.pro.hour + ' requests an hour', L.pro.day + ' requests a day (UTC)'],
     ['One domain, all keys together', Limits.DOMAIN_PER_HOUR + ' scans an hour', 'Counts scans, compare, crawlers and schema'],
     ['One network address', Limits.IP_PER_HOUR + ' requests an hour', 'Across all keys'],
+    ['Pro: watched domains', MCFG.watchLimit + ' per key', 'Each is re-scanned about every 7 days'],
+    ['Pro: webhooks', MCFG.webhookLimit + ' per key', 'Disabled after ' + MCFG.maxFails + ' deliveries in a row fail all their attempts'],
+    ['Pro: history and events', MCFG.retentionDays + ' days', 'Then they are deleted'],
     ['Asking for keys', Limits.CREATE.ipHour + ' an hour', Limits.CREATE.emailDay + ' a day for one address']
   ].map((r) => '            <tr><th scope="row" data-label="Limit">' + esc(r[0]) + '</th><td data-label="Allowed">' + esc(r[1]) + '</td><td data-label="Notes">' + esc(r[2]) + '</td></tr>').join('\n');
   const errRows = Object.keys(OA.ERRORS).map((c) => '            <tr><th scope="row" data-label="Status"><code>' + c + '</code></th><td data-label="Code"><code>' + esc(OA.ERRORS[c].code) + '</code></td><td data-label="Meaning">' + esc(OA.ERRORS[c].description) + '</td></tr>').join('\n');
@@ -126,9 +162,10 @@ function body() {
     '        <p class="cl-note">The full description is a machine-readable OpenAPI 3.1 file: <a href="/openapi.yaml">/openapi.yaml</a>.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
-    '    <section class="cl-sec hp-light" id="reference" aria-labelledby="reference-heading">\n      <div class="section__inner">\n' + head('Reference', 'reference-heading', OA.ENDPOINTS.length + ' endpoints.', 'Base address <code>' + esc(OA.BASE) + '</code>. Scan: ' + tag('Scan').length + '. Generate: ' + tag('Generate').length + '. Keys, account and benchmark: ' + (tag('Keys').length + tag('Account').length + tag('Benchmark').length) + '.') +
+    '    <section class="cl-sec hp-light" id="reference" aria-labelledby="reference-heading">\n      <div class="section__inner">\n' + head('Reference', 'reference-heading', OA.ENDPOINTS.length + ' endpoints.', 'Base address <code>' + esc(OA.BASE) + '</code>. Scan: ' + tag('Scan').length + '. Generate: ' + tag('Generate').length + '. Keys, account and benchmark: ' + (tag('Keys').length + tag('Account').length + tag('Benchmark').length) + '. Pro monitoring: ' + (tag('Monitoring').length + tag('Webhooks').length) + '.') +
     '        <div class="ac-faq cl-clients">\n' + endpoints + '\n        </div>\n      </div>\n    </section>\n\n' +
 
+    monitoringSection() +
     '    <section class="cl-sec hp-light" id="limits" aria-labelledby="limits-heading">\n      <div class="section__inner">\n' + head('Limits', 'limits-heading', 'What a key can do.', 'Every answer carries <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code> and <code>X-RateLimit-Reset</code>. When a limit is reached the answer is 429 with a <code>Retry-After</code> header.') +
     '        <div class="cl-tablewrap">\n          <table class="cl-table cl-table--wrap">\n            <caption class="mcp-vh">Limits of the Citehound API</caption>\n            <thead><tr><th scope="col">Limit</th><th scope="col">Allowed</th><th scope="col">Notes</th></tr></thead>\n            <tbody>\n' + limitRows + '\n            </tbody>\n          </table>\n        </div>\n' +
     '        <p class="cl-note">Counters expire on their own within a day. Acceptable use: scan sites you have a reason to look at, keep to the limits, and do not use the API to probe private networks. A key that is abused is revoked.</p>\n' +
