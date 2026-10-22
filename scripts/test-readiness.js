@@ -484,7 +484,7 @@ const dl = (token, deps, o) => call(Object.assign({ query: { a: 'readinessget', 
     t('privacy: the abuse limit and the daily totals are described', /keyed one-way hash of your IP address/.test(text) && /daily totals of how many people asked for the report/.test(text));
     t('privacy: Third parties names the report list in Upstash and the PDF, and Resend\'s third kind of message', /the report list, the State of AI Readiness PDF itself/.test(priv) && /three kinds of message/.test(priv) && /link to the State of AI Readiness PDF/.test(priv));
     t('privacy: the homepage notices that use session storage are named, with no cookie', /session storage/.test(priv) && /sets no cookies|set no cookies/.test(priv));
-    t('privacy: dated 11 October 2026', /Last updated 11 October 2026/.test(priv));
+    t('privacy: dated 22 October 2026 (the legal pages update)', /Last updated 22 October 2026/.test(priv));
     const page = fs.readFileSync(path.join(ROOT, 'research', 'state-of-ai-readiness.html'), 'utf8').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
     t('the form note says the same as the code: 12 months, 30 days, three a day, removal, no tracking, Resend', /up to 12 months/.test(page) && /works for 30 days/.test(page) && /at most three report emails a day/.test(page) && /deletes your address at once/.test(page) && /no tracking pixel and no open or click tracking/.test(page) && /sent through Resend/.test(page));
     const html = fs.readFileSync(path.join(ROOT, 'research', 'state-of-ai-readiness.html'), 'utf8');
