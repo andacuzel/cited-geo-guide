@@ -7,7 +7,7 @@
    - the tests of the shared client and of each integration pass (node --test, mocked API: no key, no network);
    - each README says its status ("built and tested, not published" until the owner submits it), has the four plan lines, the readiness sentence, and promises no outcome;
    - the words follow RULES.md (no recommend, cite, rank, guarantee, boost, official, verified, partner outside a sentence that denies it), no third-party logo files, no banned voice words;
-   - no real-looking key or secret in any file, no runtime dependency (Zapier's platform package is the one allowed, by design), nothing makes a request but to getcitehound.com;
+   - no real-looking key or secret in any file, no runtime dependency (the Zapier and Raycast platform packages are the ones allowed, by design), nothing makes a request but to getcitehound.com;
    - the folder is kept off the deployed site (.vercelignore).
 
      node scripts/test-integrations.js
@@ -50,12 +50,13 @@ dirs.forEach((d) => {
   t(d + ': README words: no recommend, cite, rank, guarantee, boost, official, verified or partner outside a denial, no outcome promise, no banned voice word', !hit && !/will (increase|improve|boost|raise|get you|make)|more (traffic|citations|revenue)/i.test(positive) && !VOICE.test(R), hit && hit[0]);
   const texts = files.filter((f) => /\.(js|ts|json|md|gs|html)$/.test(f)).map((f) => ({ f: f, s: read(f) }));
   t(d + ': no real-looking key or secret in any file', !texts.some((x) => /chk_[A-Za-z0-9_-]{32}\b/.test(x.s) || /(api[_-]?key|secret|token)["']?\s*[:=]\s*["'][A-Za-z0-9_\-]{24,}["']/i.test(x.s)), texts.filter((x) => /chk_[A-Za-z0-9_-]{32}\b/.test(x.s)).map((x) => x.f).join());
-  t(d + ': no image or logo file except Citehound\'s own mark', files.filter((f) => /\.(png|jpe?g|gif|webp|ico|svg)$/i.test(f)).every((f) => /citehound\.svg$|icon\.(png|svg)$/.test(f)));
+  t(d + ': no image or logo file except Citehound\'s own mark', files.filter((f) => /\.(png|jpe?g|gif|webp|ico|svg)$/i.test(f)).every((f) => /citehound\.(svg|png)$|icon\.(png|svg)$/.test(f)));
   const pkgPath = base + '/package.json';
   if (fs.existsSync(path.join(ROOT, pkgPath))) {
     const pkg = JSON.parse(read(pkgPath));
     const deps = Object.keys(pkg.dependencies || {});
-    t(d + ': no runtime dependency' + (d === 'zapier' ? ' except the Zapier platform package' : '') + ', license MIT, repository with its directory', deps.every((x) => d === 'zapier' && x === 'zapier-platform-core') && pkg.license === 'MIT' && pkg.repository && pkg.repository.directory === base, JSON.stringify(deps));
+    const PLATFORM_DEP = { zapier: 'zapier-platform-core', raycast: '@raycast/api' };
+    t(d + ': no runtime dependency' + (PLATFORM_DEP[d] ? ' except the platform package (' + PLATFORM_DEP[d] + ')' : '') + ', license MIT, repository with its directory', deps.every((x) => x === PLATFORM_DEP[d]) && pkg.license === 'MIT' && pkg.repository && pkg.repository.directory === base, JSON.stringify(deps));
   }
   const reqs = texts.filter((x) => /\.(js|ts|gs)$/.test(x.f) && !/\/test\//.test(x.f) && !/citehound-core\.js$/.test(x.f)).map((x) => x.s.replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '')).join('\n');
   t(d + ': the only address in its code is getcitehound.com', (reqs.match(/https?:\/\/[a-z0-9.-]+/gi) || []).every((u) => /getcitehound\.com|schema\.org|www\.w3\.org|127\.0\.0\.1|localhost|example\.(com|org)/.test(u)), (reqs.match(/https?:\/\/[a-z0-9.-]+/gi) || []).filter((u) => !/getcitehound\.com|schema\.org|www\.w3\.org|127\.0\.0\.1|localhost|example\.(com|org)/.test(u)).join());

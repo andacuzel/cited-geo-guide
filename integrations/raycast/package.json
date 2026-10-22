@@ -1,0 +1,25 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "citehound",
+  "title": "Citehound",
+  "description": "Scan a domain for AI readiness, compare sites, generate llms.txt and robots.txt, and read monitoring events.",
+  "icon": "citehound.png",
+  "author": "citehound",
+  "license": "MIT",
+  "private": true,
+  "repository": { "type": "git", "url": "git+https://github.com/andacuzel/cited-geo-guide.git", "directory": "integrations/raycast" },
+  "categories": ["Developer Tools", "Web"],
+  "platforms": ["macOS"],
+  "preferences": [
+    { "name": "apiKey", "type": "password", "required": true, "title": "API Key", "description": "A key that starts with chk_. A free key is sent by email at https://getcitehound.com/api.", "placeholder": "chk_..." }
+  ],
+  "commands": [
+    { "name": "scan-domain", "title": "Scan a Domain", "description": "Score a domain for AI readiness and list what to fix.", "mode": "view", "arguments": [{ "name": "domain", "type": "text", "placeholder": "example.com", "required": true }] },
+    { "name": "compare-domains", "title": "Compare Two Domains", "description": "Compare two domains (Pro, Fix and Beyond keys).", "mode": "view", "arguments": [{ "name": "first", "type": "text", "placeholder": "mysite.com", "required": true }, { "name": "second", "type": "text", "placeholder": "theirsite.com", "required": true }] },
+    { "name": "generate-file", "title": "Generate robots.txt or llms.txt", "description": "Generate a file and copy it.", "mode": "view" },
+    { "name": "monitoring-events", "title": "Monitoring Events", "description": "What changed on the domains you watch (Pro, Fix and Beyond keys).", "mode": "view" }
+  ],
+  "dependencies": { "@raycast/api": "^1.80.0" },
+  "devDependencies": { "@types/node": "^20.0.0", "@types/react": "^19.0.0", "typescript": "^5.4.0" },
+  "scripts": { "build": "ray build -e dist", "dev": "ray develop", "test": "node --test test/*.test.js" }
+}

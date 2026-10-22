@@ -33,3 +33,4 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - 23 Oct: shared client integrations/shared/citehound-core.js (10 tests), scripts/sync-integrations.js (copies + README plan blocks), scripts/test-integrations.js (generic gate for every integrations/<name>/).
 - 23 Oct: Zapier CLI app (integrations/zapier, 6 tests; the app definition validates with zapier-platform-schema 19.2.1 after the CLI's function conversion, run in a scratch dir) and Pipedream components (integrations/pipedream, 8 tests) built, not submitted.
 - 23 Oct: Activepieces piece (integrations/activepieces, TypeScript strict against the real pieces-framework 0.32 types, 6 tests with a stub of the builders) built, not submitted.
+- 23 Oct: Raycast extension (integrations/raycast: 4 commands, TypeScript type-checked against @raycast/api 1.x with @types/react 19, 7 tests on the view code and the manifest) built, not submitted; `ray lint` not run.
