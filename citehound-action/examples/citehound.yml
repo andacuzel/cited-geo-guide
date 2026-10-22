@@ -1,9 +1,9 @@
 # Copy this file to .github/workflows/citehound.yml in your own repository.
 name: AI readiness
 on:
-  schedule:
-    - cron: '0 6 * * 1'     # Mondays, 06:00 UTC
   workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * 1'     # Mondays, 09:00 UTC
 jobs:
   readiness:
     runs-on: ubuntu-latest

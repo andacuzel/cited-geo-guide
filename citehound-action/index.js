@@ -5,8 +5,9 @@
    GET https://getcitehound.com/api/action-scan?domain=<the domain you configured>, with the User-Agent "Citehound-Action/1.0". Nothing else leaves the runner: no
    repository name, no token, no file. It writes the outputs and a job summary through the files GitHub gives it ($GITHUB_OUTPUT, $GITHUB_STEP_SUMMARY).
 
-   Exit: 0 when the scan ran and no gate failed; 1 when the score is under min-score, when fail-on-crawler-block is true and a tracked crawler is fully blocked, or when
-   a configured gate could not be checked because the scan did not run (rate limit, the site unreadable, no network). With no gate set, a scan that did not run is a warning.
+   Exit: 0 when the scan ran and no gate failed; 1 when the score is under min-score or when fail-on-crawler-block is true and a tracked crawler is fully blocked. A rate limit
+   (HTTP 429) never fails the step, gates or not: it says nothing about your site, so the Action warns, leaves the outputs empty and writes a note to the job summary (v1.0.1).
+   When the scan cannot run for another reason (the site unreadable, no network), a step with a gate fails and a step without one only warns.
    ===================================================================== */
 
 'use strict';
@@ -59,9 +60,9 @@ async function main() {
   } catch (e) {
     return unreachable('Could not reach Citehound (' + (e && e.name ? e.name : 'network error') + ').', gated);
   }
+  if (res.status === 429) return rateLimited(res.headers.get('retry-after'));
   if (!res.ok || !body || typeof body.score !== 'number') {
     const why = body && body.error ? body.error : 'HTTP ' + res.status;
-    if (res.status === 429 && res.headers.get('retry-after')) console.log('Retry after ' + res.headers.get('retry-after') + ' seconds.');
     return unreachable('The scan did not run: ' + why, gated);
   }
 
@@ -75,6 +76,17 @@ async function main() {
   if (min !== null && body.score < min) { console.log('::error::The score ' + body.score + ' is below min-score ' + min + '.'); code = 1; }
   if (failOnBlock && body.crawlers.blocked > 0) { console.log('::error::robots.txt blocks these tracked AI crawlers completely: ' + body.crawlers.blockedNames.join(', ') + '.'); code = 1; }
   return code;
+}
+
+// A rate limit is not a finding about your site: skip, say so, fail nothing. The outputs exist and are empty, so a later step can tell the scan did not run.
+function rateLimited(retryAfter) {
+  setOutput('score', '');
+  setOutput('crawlers-blocked', '');
+  setOutput('failed-checks', '');
+  console.log('::warning::Citehound rate limit reached, skipping this scan. Try again later.');
+  if (retryAfter) console.log('Retry after ' + retryAfter + ' seconds.');
+  summary('## Citehound AI readiness\n\nCitehound rate limit reached, so this scan was skipped. Nothing was checked and no gate was applied. Try again later.\n');
+  return 0;
 }
 
 function unreachable(message, gated) {
