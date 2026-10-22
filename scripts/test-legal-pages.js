@@ -74,7 +74,7 @@ t('privacy: the one cookie is the admin sign-in cookie (the code sets one for th
 
 /* claims we must not make */
 const legal = terms + ' ' + refunds + ' ' + privacy;
-t('no integration that does not exist and no certification is claimed', !/\b(WordPress|Webflow|GitHub|Shopify|Zapier|SOC ?2|ISO ?27001|HIPAA)\b/i.test(legal) && !/GDPR[- ]compliant|certified|compliant with/i.test(legal));
+t('no integration that does not exist (the official GitHub Action does) and no certification is claimed', !/\b(WordPress|Webflow|GitHub(?! Action)|Shopify|Zapier|SOC ?2|ISO ?27001|HIPAA)\b/i.test(legal) && !/GDPR[- ]compliant|certified|compliant with/i.test(legal));
 t('no promise of traffic, rankings, citations, revenue or results outside the one sentence', !/(will|to) (increase|improve|boost|raise) (your )?(traffic|rankings?|citations|revenue|visibility)/i.test(legal));
 
 /* the owner's blanks */
