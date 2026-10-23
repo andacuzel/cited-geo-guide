@@ -22,10 +22,10 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - [x] Phase 2.1: n8n community node (done: integrations/n8n, TypeScript compiled strict against the real n8n-workflow 2.16 types, 11 tests, ready-to-submit, NOT published)
 - [x] Phase 2.2: Make, Zapier, Pipedream, Activepieces, Raycast (done: all five built and tested with mocks, none submitted)
 - [ ] Phase 2.3: Looker Studio (done), Google Sheets (done)
-- [ ] Phase 2.4: Slack slash command, Chrome extension (only with budget)
+- [ ] Phase 2.4: Chrome extension (todo, not started); Slack slash command (blocked: it needs a server address that receives Slack's POST and a Slack signing secret; the one function (api/v1) could host it later)
 - [x] Phase 3: /integrations page (done: content/integrations.json, 4 live items, the rest by name under In preparation, footer and /api links)
-- [ ] Phase 4: deploy and verify
-- [ ] Final report
+- [x] Phase 4: deploy and verify (done for everything pushed: e48e09f live, gates 83/83, /integrations /api /claude /pricing /watch /terms 200, /v1/me 401, MCP 13 tools)
+- [x] Final report (below and in the last message)
 
 ## Log
 
@@ -39,3 +39,9 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - STOPPED by the usage limit. Resume from the first todo line: Google Sheets (integrations/sheets), Slack and Chrome (only with budget), Phase 3 (/integrations page from a JSON file, footer and /api links), Phase 4 verification, the final report. Phase 1 (plans, 402 gates, fixes, export) is live; n8n, Zapier, Pipedream, Activepieces, Raycast, Make and Looker Studio are in the repository, tested with mocks, not submitted, and not mentioned on the site.
 - 23 Oct (resumed): last push verified (82 gates, deploy success, /api 200, /v1/me 401). CLI: a Free key no longer gets less than no key (falls back to the public output, plan note on stderr; 39 tests). Google Sheets script (integrations/sheets, 11 tests) built, not published.
 - 23 Oct: /integrations page generated from content/integrations.json (scripts/generate-integrations-page.js, a gate); footer and /api link it; only live items shown as available.
+
+## FINAL REPORT (23 Oct 2026)
+
+**Canlı:** plan matrisi (API v1: 402 plan_required, ücretsiz anahtar limitleri, Fix listesi ve yeniden kontrol, Beyond dışa aktarma), /api plan tablosu, /openapi.yaml, /watch, /integrations (yalnız 4 canlı öğe: Claude connector, MCP Registry kaydı, GitHub Action, public API; diğerleri "In preparation" altında yalnız adla), footer ve /api bağlantısı.
+**Hazır, giriş bekliyor (hiçbiri gönderilmedi, sitede canlı diye geçmiyor):** CLI, Claude eklentisi, n8n, Make, Zapier, Pipedream, Activepieces, Raycast, Looker Studio, Google Sheets. Adımlar son mesajda.
+**Atlanan/bloke:** Chrome eklentisi (başlanmadı), Slack komutu (Slack'in POST'unu alacak adres ve imza anahtarı gerekir).
