@@ -5672,4 +5672,6 @@ input.field::placeholder { color: var(--ink-faint); }
   .page-banner__desc { font-size: 17px; }
 }
 .page-banner { margin-bottom: 40px; }
+/* banners that carry their own picture or icons keep no arch */
+.svc-banner::before, .svc-banner::after, .pro-banner::before, .pro-banner::after, .tools-banner::before, .tools-banner::after, .mcp-banner::before, .mcp-banner::after, .ac-banner::before, .ac-banner::after { display: none; }
 
