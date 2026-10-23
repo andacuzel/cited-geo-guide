@@ -6,6 +6,7 @@ Read `RULES.md` first. A line below changes to "live" only when the thing really
 |---|---|---|---|
 | Claude plugin (MCP server + 3 skills) | `claude-plugin/`, marketplace file `.claude-plugin/marketplace.json` | Built and validated with `claude plugin validate --strict`; not yet tested in a real Claude Code session. Installable from this repository. Not listed in any plugin directory. | In preparation |
 | `citehound` command-line tool | `cli/` | **Published to npm as `citehound@0.1.0`** (https://www.npmjs.com/package/citehound), self-checked by the owner with `npm view`. | Available: `/integrations`, `/claude`, `/api` |
+| n8n community node | `integrations/n8n/` | **Published to npm as `n8n-nodes-citehound@0.1.0`.** Loaded in a real n8n 2.44.6 on 23 Oct 2026 (log: "Loaded all credentials and nodes from n8n-nodes-citehound": 1 credential, 2 nodes, `citehound` and `citehoundTrigger`); no key and no API call used. Not submitted to n8n for review (a community node). | Available on `/integrations`, as a community node |
 
 ## The CLI on npm (published 23 Oct 2026, version 0.1.0)
 

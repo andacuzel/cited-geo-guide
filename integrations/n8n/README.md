@@ -4,14 +4,14 @@ n8n community nodes for Citehound: scan a domain for AI **readiness**, compare s
 
 The score is a readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand. Nothing here promises a change in traffic, rankings, citations or revenue.
 
-> **Status: built and tested, not published.** It is not on npm and not submitted to n8n. Until it is published, the steps under "Install" do not work yet.
+> **Status: published on npm as `n8n-nodes-citehound` 0.1.0, as a community node.** It has not been submitted to n8n for review, so it is not in n8n's reviewed list. It loads in n8n 2.44 (checked on 23 Oct 2026 by starting n8n with the package installed: both nodes and the credential were loaded; no API call was made).
 
 ## Nodes
 
 - **Citehound** (an action node): Scan a Domain, Compare Two Domains, Get Crawler Access, Get Benchmark, Generate Schema, Generate llms.txt, Generate robots.txt, Watch a Domain, List Watched Domains, Stop Watching a Domain, Get Score History, Get Events, Get Fix List, Re-Check After Fixes, Export History or Events, Get Plan and Limits.
 - **Citehound Trigger** (a polling trigger): starts a workflow for each new monitoring event (score dropped, crawler blocked, llms.txt removed and the other types). It remembers the newest event it has seen, so an event starts a workflow once. Its first run does not send old events; a manual test run shows the latest few.
 
-## Install (after it is published)
+## Install
 
 1. In n8n, open **Settings**, then **Community Nodes**, then **Install**.
 2. Type `n8n-nodes-citehound` and confirm.

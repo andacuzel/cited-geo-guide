@@ -43,7 +43,7 @@ const VOICE = /\b(unlock|seamless(ly)?|powerful|robust|crucial|delve|supercharge
 dirs.forEach((d) => {
   const base = 'integrations/' + d, files = walk(base, []).filter((f) => !/\/dist\/|\/node_modules\//.test(f));
   const R = fs.existsSync(path.join(ROOT, base, 'README.md')) ? read(base + '/README.md') : '';
-  t(d + ': a README with its status (built and tested, not published) and the readiness sentence', /^> \*\*Status: [^*]*\*\*/m.test(R) && /not (published|submitted|on npm)/i.test(R) && /does not measure whether any assistant names a brand/.test(R));
+  t(d + ': a README with its status (built and tested and not published, or published on npm) and the readiness sentence', /^> \*\*Status: [^*]*\*\*/m.test(R) && /not (published|submitted|on npm)|published on npm/i.test(R) && /does not measure whether any assistant names a brand/.test(R));
   t(d + ': the README has the four plan lines (Free, Pro, Fix, Beyond) from the matrix', /<!-- PLANS:START -->[\s\S]*\*\*Free:\*\*[\s\S]*\*\*Pro:\*\*[\s\S]*\*\*Fix:\*\*[\s\S]*\*\*Beyond:\*\*[\s\S]*<!-- PLANS:END -->/.test(R));
   const positive = R.split('\n').filter((l) => !NEG.test(l)).join('\n').replace(/cited-geo-guide/g, 'repository');
   const hit = BAD.exec(positive);

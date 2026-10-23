@@ -42,15 +42,16 @@
       "install": "npx citehound scan yourdomain.com"
     },
     {
-      "id": "claude-plugin",
-      "name": "Claude plugin",
-      "status": "ready-to-submit",
-      "url": null,
-      "description": ""
-    },
-    {
       "id": "n8n",
       "name": "n8n node",
+      "status": "live",
+      "url": "https://www.npmjs.com/package/n8n-nodes-citehound",
+      "description": "Nodes for n8n to scan, compare, generate files and read monitoring events, with a polling trigger. It is a community node: it has not been through n8n's own review. An API key is needed; a free one is sent by email.",
+      "install": "Settings → Community Nodes → n8n-nodes-citehound"
+    },
+    {
+      "id": "claude-plugin",
+      "name": "Claude plugin",
       "status": "ready-to-submit",
       "url": null,
       "description": ""
