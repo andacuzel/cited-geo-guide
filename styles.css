@@ -6142,4 +6142,5 @@ input.field::placeholder { color: var(--ink-faint); }
   .site-header { view-transition-name: site-header; }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
 }
+.proof-band.hp-band, .pricing.hp-light + .aud { margin-top: 0; }
 

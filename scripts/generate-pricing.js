@@ -3,7 +3,7 @@
    scripts/generate-pricing.js
 
    Writes pricing.html (/pricing: hero, which step, the staircase, the screens, the comparison, how it works, proof, why, the offer, the FAQ, the closing call) and the pricing
-   section of the homepage (between <!-- PRICING:START --> and <!-- PRICING:END -->, just above the footer) from content/pricing.json through lib/pricing.js, and keeps the
+   section of the homepage (between <!-- PRICING:START --> and <!-- PRICING:END -->, after the case study) from content/pricing.json through lib/pricing.js, and keeps the
    sitemap and llms.txt entries. Edit the JSON, never the markup.
 
    --check fails if a page or the section is out of date, if a price line on a ladder card or on /pro, /fix or /beyond differs from the JSON, if the copy
@@ -154,12 +154,12 @@ function build() {
   });
 }
 
-// The homepage section sits just above the footer: the block is taken out wherever it is and put back before the footer comment.
+// The homepage section sits after the case study and before the playbooks (round 2, 24 Oct 2026; it was above the footer): the block is taken out wherever it is and put back before the playbooks section.
 function withHome(html) {
   const sec = homeSection();
   const stripped = html.replace(new RegExp('[ \\t]*' + START + '[\\s\\S]*?' + END + '\\n\\n?'), '');
-  const at = stripped.indexOf('      <!-- ---------- Site footer ---------- -->');
-  if (at === -1) throw new Error('index.html has no footer marker to place the pricing section before');
+  const at = stripped.indexOf('      <!-- ---------- Playbooks for three kinds of site ---------- -->');
+  if (at === -1) throw new Error('index.html has no playbooks marker to place the pricing section before');
   return stripped.slice(0, at) + '      ' + sec.replace(/^/, '').replace(START, START) + '\n\n' + stripped.slice(at);
 }
 
