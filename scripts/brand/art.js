@@ -87,4 +87,4 @@ async function render(jobs) {
   await browser.close();
 }
 
-module.exports = { ROOT, BRAND, C, esc, uri, fontCss, shell, doorDefs, render };
+module.exports = { ROOT, BRAND, C, esc, uri, fontCss, shell, doorDefs, render, launch };
