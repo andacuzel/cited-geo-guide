@@ -23,6 +23,7 @@ const site = require('../lib/site-config.js');
 const dialog = require('../lib/request-dialog.js');
 const Pricing = require('../lib/pricing.js');
 const icons = require('../lib/icons.js');
+const Plans = require('../lib/plans.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const CSS_VERSION = 105;
@@ -61,9 +62,10 @@ const hd = (kicker, id, title) => head(kicker, id + '-heading', title).replace(/
 function hero(P) {
   const f = facts();
   const trust = P.trust.replace('{HOMEPAGES}', f.homepages).replace('{CHECKS}', f.checks).replace('{CRAWLERS}', f.crawlers).split(' · ');
-  return '    <section class="pp-hero" aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <p class="kicker">' + esc(P.heroEyebrow) + '</p>\n        <h1 id="hero-heading" class="pp-hero__title">' + esc(P.h1) + '</h1>\n' +
+  return '    <section class="pp-hero" aria-labelledby="hero-heading">\n      <div class="section__inner pp-hero__grid">\n        <div class="pp-hero__copy">\n        <p class="kicker">' + esc(P.heroEyebrow) + '</p>\n        <h1 id="hero-heading" class="pp-hero__title">' + esc(P.h1) + '</h1>\n' +
     '        <p class="pp-hero__sub">' + esc(P.sub) + '</p>\n' +
-    '        <p class="pp-hero__actions"><a class="btn btn--primary" href="/#scan">' + esc(P.heroPrimary) + '</a><a class="btn btn--ghost" href="#steps">' + esc(P.heroSecondary) + '</a></p>\n' +
+    '        <p class="pp-hero__actions"><a class="btn btn--primary" href="/#scan">' + esc(P.heroPrimary) + '</a><a class="btn btn--ghost" href="#steps">' + esc(P.heroSecondary) + '</a></p>\n        </div>\n' +
+    '        <ol class="pp-hero__art" aria-hidden="true"><li class="pp-hero__arch pp-hero__arch--1">Scan</li><li class="pp-hero__arch pp-hero__arch--2">Pro</li><li class="pp-hero__arch pp-hero__arch--3">Fix</li><li class="pp-hero__arch pp-hero__arch--4">Beyond</li></ol>\n' +
     '        <ul class="pp-trust">' + trust.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>\n      </div>\n    </section>\n\n';
 }
 
@@ -97,6 +99,24 @@ function compare(P) {
     '        <div class="pp-tablewrap" role="region" aria-label="What each step includes" tabindex="0">\n          <table class="pp-table">\n            <caption class="pr-vh">What each step includes</caption>\n            <thead><tr><th scope="col">What you get</th>' + P.cols.map((c) => '<th scope="col">' + esc(c) + '</th>').join('') + '</tr></thead>\n            <tbody>\n' + rows + '\n            </tbody>\n          </table>\n        </div>\n');
 }
 
+// The API by plan, from the one source of the plan limits (lib/plans.js), the same facts as the table on /api.
+function apiPlans() {
+  const P = Plans.PLANS, yes = 'Yes', no = '-';
+  const row = (label, f) => '            <tr><th scope="row">' + esc(label) + '</th>' + Plans.ORDER.map((n) => '<td>' + esc(f(P[n])) + '</td>').join('') + '</tr>';
+  const rows = [
+    row('Requests an hour, a day', (p) => p.hour + ', ' + p.day),
+    row('Scan detail', (p) => (p.scanDetail === 'full' ? 'Full' : 'Score, pillars, crawlers, top 3 findings')),
+    row('Compare two sites', (p) => (p.compare ? yes : no)),
+    row('Generated llms.txt and robots.txt', (p) => (p.generators === 'full' ? 'Full file' : 'Preview')),
+    row('Watched domains, history kept', (p) => (p.monitoring ? p.watch + ' domains, ' + p.retentionDays + ' days' : no)),
+    row('Fix list and re-check', (p) => (p.fixes ? yes : no)),
+    row('Export of history and events', (p) => (p.exportData ? yes : no))
+  ].join('\n');
+  return sect('pp-api hp-light', 'api-plans', hd('For developers', 'api-plans', 'The API and the integrations, by plan.') +
+    '        <p class="section-sub">The free scan on the website, the free tools and the MCP server stay free and complete. These are the limits and features of an API key, which the command line and the n8n node use. <a href="/api#plans">The full table is on the API page.</a></p>\n' +
+    '        <div class="pp-tablewrap" role="region" aria-label="What each plan gets from the API" tabindex="0">\n          <table class="pp-table">\n            <caption class="pr-vh">What each plan gets from the API</caption>\n            <thead><tr><th scope="col">Feature</th>' + Plans.ORDER.map((n) => '<th scope="col">' + esc(P[n].label) + '</th>').join('') + '</tr></thead>\n            <tbody>\n' + rows + '\n            </tbody>\n          </table>\n        </div>\n');
+}
+
 function how(P) {
   return sect('pp-how hp-light', 'how', hd(P.howKicker, 'how', P.howTitle) +
     '        <ol class="pp-how__list">\n' + P.how.map((h) => '          <li class="pp-how__step"><h3 class="pp-how__title">' + esc(h.title) + '</h3><p class="pp-how__text">' + esc(h.text) + '</p></li>').join('\n') + '\n        </ol>\n');
@@ -121,7 +141,7 @@ function build() {
   const P = D.page;
   const body = hero(P) + which(P) +
     '    <section class="pricing hp-light" id="steps" aria-labelledby="steps-heading">\n      <div class="section__inner">\n' + hd(P.stepsKicker, 'steps', P.stepsTitle) + Pricing.staircase('page') + '      </div>\n    </section>\n\n' +
-    see(P) + compare(P) + how(P) + proof(P) + why(P) + offer(P) + faq() + '\n' +
+    see(P) + compare(P) + apiPlans() + how(P) + proof(P) + why(P) + offer(P) + faq() + '\n' +
     '    <section class="home-close hp-light" aria-labelledby="close-heading">\n      <div class="section__inner">\n        <div class="home-close__panel">\n          <div>\n            <h2 id="close-heading" class="home-close__title">' + esc(D.closeTitle) + '</h2>\n            <p class="home-close__text">' + esc(D.closeText) + '</p>\n          </div>\n          <div class="home-close__actions">\n            <a class="btn btn--primary" href="/#scan">Scan free</a>\n            <a class="home-close__link" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a>\n          </div>\n        </div>\n      </div>\n    </section>\n\n' +
     '    ' + dialog.html('    ') + '\n';
   const ld = [
