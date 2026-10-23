@@ -149,7 +149,7 @@ function shellParts() {
   const grab = (re, what) => { const m = about.match(re); if (!m) throw new Error('about.html: could not find ' + what); return m[0]; };
   return {
     favicon: grab(/<link rel="icon"[^>]*>/, 'favicon'),
-    fonts: grab(/<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
+    fonts: grab(/<link rel="preload" href="\/assets\/fonts\/[\s\S]*?<script defer src="\/_vercel\/insights\/script\.js"><\/script>/, 'font links'),
     header: grab(/<header class="site-header">[\s\S]*?<\/header>/, 'header'),
   };
 }

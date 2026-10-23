@@ -27,9 +27,11 @@
 
   <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/assets/fonts/gloock-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/hanken-grotesk-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/spline-sans-mono-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link href="/fonts.css?v=1" rel="stylesheet" />
+  <script defer src="/_vercel/insights/script.js"></script>
 
   <link rel="stylesheet" href="styles.css?v=105" />
   <!-- SITE-SCHEMA:START -->
@@ -118,7 +120,7 @@
         <div class="section-head">
           <p class="kicker">Privacy</p>
           <h1 id="privacy-heading" class="section-title">What we fetch, what we store, what we don't.</h1>
-          <p class="section-sub">Last updated 22 October 2026.</p>
+          <p class="section-sub">Last updated 23 October 2026.</p>
         </div>
 
         <div class="doc-section">
@@ -133,6 +135,7 @@
           <p>A second exception is the older full-site crawl endpoint, which is not linked from the site but whose address is open. A crawl stores the domain, the list of pages it chose, and each page&rsquo;s result, under a random 128-bit id, for 90 days after its last step. Nothing about who started it is stored with it, and nobody can list or search crawls: you need the id.</p>
           <p>To stop abuse, we keep a keyed one-way hash of your IP address paired with a request counter, purely to enforce a rate limit. It expires automatically within a day (the hourly counter within an hour), isn't linked to which domains were scanned, and is never stored as a raw IP address.</p>
           <p>The MCP server keeps short-lived counters keyed by the scanned domain, kept for an hour, to limit repeated fetches of one site. They hold no caller identity. The Citehound GitHub Action&rsquo;s endpoint does the same with one-way hashes of the scanned domain and of the caller&rsquo;s IP address, also kept for an hour; it receives the domain and nothing else, and no repository name.</p>
+          <p>When the scanner cannot fetch a page, it writes the address it tried and the reason to our server log, to help us fix problems. That log line holds no IP address and no scan result.</p>
           <p>Separately, we count visits from known AI crawlers (GPTBot, ClaudeBot, PerplexityBot and similar) to our own site, so we can publish real data on how often they show up. This is two aggregate counts: visits per crawler per day, and how often each page of our site was requested by those crawlers. It is never a per-visit log, and nothing about human visitors is recorded at all.</p>
           <div class="callout callout--gold">
             <p class="callout__label">Will change</p>
@@ -193,20 +196,18 @@
 
         <div class="doc-section">
           <h2 class="doc-section__heading">What we don't collect</h2>
-          <p>The free scanner and tools collect no personal data: no email addresses, no accounts, no advertising trackers. The only personal details we hold are the ones you give us when you join the Pro waitlist, ask for the State of AI Readiness report, ask for an API key or order a Pro report, described above. This site&rsquo;s pages set no cookies and load no analytics or advertising script. The one exception is the sign-in cookie of our own admin page, which is set only when we sign in. Two small notices on the homepage, the Pro waitlist bar and the report card, remember in your browser, for that visit only, that you closed them. That uses your browser&rsquo;s session storage on your device; nothing about it is sent to us.</p>
+          <p>The free scanner and tools collect no personal data: no email addresses, no accounts, no advertising trackers. The only personal details we hold are the ones you give us when you join the Pro waitlist, ask for the State of AI Readiness report, ask for an API key or order a Pro report, described above. This site&rsquo;s pages set no cookies and load no advertising script and no tracker that follows you across other sites. They count page views with Vercel Web Analytics, described under Third parties, which sets no cookies. The one exception is the sign-in cookie of our own admin page, which is set only when we sign in. Two small notices on the homepage, the Pro waitlist bar and the report card, remember in your browser, for that visit only, that you closed them. That uses your browser&rsquo;s session storage on your device; nothing about it is sent to us.</p>
         </div>
 
         <div class="doc-section">
           <h2 class="doc-section__heading">Third parties</h2>
-          <p>Hosting: Vercel. The site and the scan function both run on Vercel's infrastructure, and Vercel handles the requests that reach them as any host does, under its own terms.</p>
+          <p>Hosting: Vercel. The site and the scan function both run on Vercel's infrastructure, and Vercel handles the requests that reach them as any host does, under its own terms. Vercel also keeps its own request logs, which include the IP addresses of visitors, under its own terms and for the periods it sets. Vercel also keeps its own request logs, which include the IP addresses of visitors, for the periods it sets; we do not follow visitors with them.</p>
           <p>Storage: Upstash holds the records described above (rate-limit counters, crawl results, the Pro waitlist, the report list, the State of AI Readiness PDF itself, API key records, the Pro order and report records, feedback, and the daily totals).</p>
           <p>Email: Resend delivers four kinds of message: the report link a Pro customer asks for, the one confirmation message a waitlist signup gets, the link to the State of AI Readiness PDF and the API key a person asks for, each to the address the person gave us. It receives nothing else.</p>
-          <p>Launch Llama badge: the homepage footer loads a badge image from a third party, Launch Llama, which receives the visitor&rsquo;s IP address and browser details when it loads. No other page loads it.</p>
-          <p>Typefaces: pages load their typefaces from Google Fonts, so your browser sends its IP address and user agent to Google when a page loads. Private Pro pages do the same but send no referrer.</p>
           <p>Executive summaries: when a crawl run through the older endpoint finishes, its executive summary may be written from aggregated figures: scores, counts of pages and the names of the checks. Those figures are sent to a model provider, Google&rsquo;s Gemini API, to be phrased. No page content, no page addresses, no domain name and no personal data are sent. Google&rsquo;s terms for unpaid use of the API may allow it to use what it receives to improve its products. If the model is unavailable, or its reply fails our checks, the summary is written by rules here and nothing is sent.</p>
           <p>Citation questions and citation check (Pro, only when a report includes them): to understand a site and write questions about it, excerpts of that site&rsquo;s public page text (up to 12,000 characters, from the homepage and up to four key pages) go to Anthropic, which runs the Claude model; no web search is used for this step, and nothing about you goes with the text: no name, email address, token, order or report id. When a report includes a citation check, each of about ten of the generated questions (the question text and a language tag, nothing else: no site text, no domain, no personal detail) is sent to Anthropic again with Claude&rsquo;s web search tool, and the cited pages come back. Anthropic&rsquo;s commercial terms say it does not train its models on this content. Citehound keeps, for the 90 days of the report, only whether the site&rsquo;s domain was cited, whether the brand name appears in the answer, the other cited domains with a link, the model name and the date: not the answer text. The results are a dated sample from one provider, one run per question, not a ranking. For the citation check, Anthropic is the only model provider used today. If we start using another one, for example OpenAI for a ChatGPT sample, we will update this page first.</p>
           <p>Payment provider: not in use yet. When payments open, our payment provider will take the payment on its own hosted checkout page and will tell us the buyer&rsquo;s name, email address and an order reference.</p>
-          <p>Analytics: there is none. The pages carry no analytics script, so no tool collects what you read or click. The only visit counts we keep are the aggregate crawler counts described above. The Pro system also keeps daily totals of its own events: how many people joined the waitlist or asked for the State of AI Readiness report, or removed themselves from either, how many order links were issued, how many reports were started, finished, partly finished or failed, and how many messages were sent. They are plain numbers with no person, address, link or report attached, and nothing in your browser feeds them.</p>
+          <p>Analytics: the pages count page views with Vercel Web Analytics. It sets no cookies. Vercel says that it collects no identifiers that follow visitors across other websites or applications, and that visitors are told apart for a day by a hash made from the request, which is discarded after 24 hours. Each page view records the page address, the referrer, the visitor&rsquo;s country and region, the type of device, the system and the browser, and it is used for aggregated counts. A shared scan link carries the scanned domain in its address, so that domain is part of the recorded page address. Beyond that, the only visit counts we keep are the aggregate crawler counts described above. The Pro system also keeps daily totals of its own events: how many people joined the waitlist or asked for the State of AI Readiness report, or removed themselves from either, how many order links were issued, how many reports were started, finished, partly finished or failed, and how many messages were sent. They are plain numbers with no person, address, link or report attached, and nothing in your browser feeds them.</p>
         </div>
 
         <div class="doc-section">

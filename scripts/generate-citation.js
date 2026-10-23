@@ -146,7 +146,7 @@ function shellParts() {
   const wrap = grab(read('content/citation-scatter.fragment.txt'), /<div class="teaser__scene-wrap">[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>\s*<\/div>/, 'the scatter (teaser__scene-wrap) in content/citation-scatter.fragment.txt');
   return {
     favicon: grab(about, /<link rel="icon"[^>]*>/, 'favicon'),
-    fonts: grab(about, /<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com" \/>[\s\S]*?rel="stylesheet" \/>/, 'font links'),
+    fonts: grab(about, /<link rel="preload" href="\/assets\/fonts\/[\s\S]*?<script defer src="\/_vercel\/insights\/script\.js"><\/script>/, 'font links'),
     sceneSnippet: grab(index, /<script>if \(window\.IntersectionObserver && window\.CSS && CSS\.registerProperty[^<]*<\/script>/, 'the scene-anim head snippet'),
     header: grab(about, /<header class="site-header">[\s\S]*?<\/header>/, 'header'),
     scene: wrap

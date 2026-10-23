@@ -221,7 +221,7 @@ function loadPage(file, search, responder) {
   }
   const dir = path.dirname(file);
   const scripts = [];
-  all(root, (e) => { if (e.tagName === 'SCRIPT' && e.getAttribute('src')) scripts.push(e.getAttribute('src').split('?')[0]); });
+  all(root, (e) => { if (e.tagName === 'SCRIPT' && e.getAttribute('src') && !/^\/_vercel\//.test(e.getAttribute('src'))) scripts.push(e.getAttribute('src').split('?')[0]); });
   const errs = [];
   scripts.forEach((src) => {
     const full = path.join(ROOT, dir, src);

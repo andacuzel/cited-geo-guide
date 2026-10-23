@@ -302,7 +302,7 @@ function shell() {
   const src = fs.readFileSync(path.join(ROOT, 'citation-tracking.html'), 'utf8');
   const header = (/ {2}<header class="site-header">[\s\S]*?<\/header>/.exec(src) || [])[0];
   const icon = (/ {2}<link rel="icon"[^\n]*/.exec(src) || [])[0];
-  const fonts = (/ {2}<link rel="preconnect"[\s\S]*?rel="stylesheet" \/>/.exec(src) || [])[0];
+  const fonts = (/ {2}<link rel="preload" href="\/assets\/fonts\/[\s\S]*?<script defer src="\/_vercel\/insights\/script\.js"><\/script>/.exec(src) || [])[0];
   if (!header || !icon || !fonts) throw new Error('Could not read the page shell from citation-tracking.html');
   return { header: header, icon: icon, fonts: fonts };
 }
