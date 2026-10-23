@@ -59,14 +59,30 @@ function priceBlock(p) {
     '            <p class="svc-price__note">' + esc(Pricing.DATA.sub) + '</p>\n';
 }
 
+// Round 2 (24 Oct 2026): each page has its own opening. Fix is a dark workbench with an animated fix list (demo data, labelled); Beyond is an orange studio with an animated content board.
+function fixBoard() {
+  const rows = [['Author / about signals', '+8 pts', 'To do', 0], ['Content schema (Article, FAQ\u2026)', '+6 pts', 'In progress', 1.4], ['Structured data (JSON-LD)', '+3 pts', 'Applied', 2.8], ['AI crawler access', '+25 pts', 'To do', 4.2], ['Organization / WebSite schema', '+8 pts', 'In progress', 5.6]];
+  return '          <div class="svc-hero__art">\n            <div class="fb" role="img" aria-label="Product demo, sample data: a fix list in which failed checks of the fictional example-co.com turn from To do to Verified one by one while the score ring moves from 33 to 87 out of 100.">\n              <div class="fb__top" aria-hidden="true"><b>example-co.com</b><span class="fb__label">Product demo &middot; Sample data</span></div>\n' +
+    '              <div class="fb__score" aria-hidden="true"><svg class="fb__ring" viewBox="0 0 100 100"><circle class="fb__track" cx="50" cy="50" r="42" pathLength="100"/><circle class="fb__fill" cx="50" cy="50" r="42" pathLength="100"/></svg><span class="fb__num"><b class="fb__n fb__n--a">33</b><b class="fb__n fb__n--b">87</b><small>/100</small></span><p class="fb__gain"><span class="fb__gain-a">Before 33</span><span class="fb__gain-b">+54 points since the first scan</span></p></div>\n' +
+    '              <ul class="fb__list" aria-hidden="true">\n' + rows.map((r) => '                <li class="fb__row" style="--d:' + r[3] + 's"><span class="fb__item">' + esc(r[0]) + '</span><span class="fb__pts">' + r[1] + '</span><span class="fb__chips"><i class="fb__chip fb__chip--a">' + r[2] + '</i><i class="fb__chip fb__chip--b">Verified</i></span></li>').join('\n') + '\n              </ul>\n            </div>\n          </div>\n';
+}
+function kanban(c) {
+  const q = c.mock.questions;
+  const cols = [['Draft', [q[1]]], ['In review', [q[0]]], ['Approved', [q[2]]], ['Published', [q[3]]]];
+  return '          <div class="svc-hero__art">\n            <div class="kb" role="img" aria-label="Illustration, not a real client: pieces of content move across four columns, Draft, In review, Approved and Published.">\n              <div class="kb__cols" aria-hidden="true">\n' +
+    cols.map((cl, i) => '                <div class="kb__col"><p class="kb__h">' + cl[0] + '</p>' + cl[1].map((t) => '<p class="kb__card">' + esc(t) + '</p>').join('') + '</div>').join('\n') + '\n                <p class="kb__mover kb__mover--a">' + esc(q[4]) + '</p><p class="kb__mover kb__mover--b">' + esc(q[5]) + '</p>\n              </div>\n              <p class="kb__note">' + esc(c.mockNote) + '</p>\n            </div>\n          </div>\n';
+}
+
 function hero(p, c) {
-  return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner svc-banner">\n          <div class="page-banner__body">\n' +
-    '            <p class="page-lockup">' + lockup.html(p.tier, 'navy') + '</p>\n' +
-    '            <h1 id="hero-heading" class="page-banner__title">' + esc(c.h1) + '</h1>\n' +
-    '            <p class="page-banner__desc">' + esc(c.sub) + '</p>\n' + priceBlock(p) +
-    '            <p class="svc-includes">' + lockup.includes('navy') + '</p>\n' +
-    '            <div class="pro-actions"><button type="button" class="btn btn--gold" data-request="' + p.interest + '">' + esc(c.cta) + '</button><a href="#how" class="btn btn--ghost-on-navy">How it works</a></div>\n' +
-    '          </div>\n' + shot(p, c) + '        </div>\n      </div>\n    </section>\n';
+  const fix = p.key === 'fix';
+  return '    <section class="svc-hero svc-hero--' + p.key + '" aria-labelledby="hero-heading">\n      <div class="section__inner svc-hero__grid">\n        <div class="svc-hero__copy">\n' +
+    '            <p class="page-lockup">' + lockup.html(p.tier, fix ? 'navy' : 'light') + '</p>\n' +
+    '            <h1 id="hero-heading" class="svc-hero__title">' + esc(c.h1) + '</h1>\n' +
+    '            <p class="svc-hero__desc">' + esc(c.sub) + '</p>\n' + priceBlock(p) +
+    '            <p class="svc-includes">' + lockup.includes(fix ? 'navy' : 'light') + '</p>\n' +
+    '            <div class="pro-actions"><button type="button" class="btn ' + (fix ? 'btn--gold' : 'btn--primary') + '" data-request="' + p.interest + '">' + esc(c.cta) + '</button><a href="#how" class="btn ' + (fix ? 'btn--ghost-on-navy' : 'btn--ghost') + '">How it works</a></div>\n' +
+    '        </div>\n' + (fix ? fixBoard() : kanban(c)) + '      </div>\n    </section>\n' +
+    '    <section class="svc-demo svc-demo--' + p.key + '" aria-label="The live demo">\n      <div class="section__inner">\n' + shot(p, c) + '      </div>\n    </section>\n';
 }
 
 function steps(c) {
@@ -130,7 +146,7 @@ function build(p) {
     { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
   ];
   return shell.page({
-    title: c.title, description: c.description, path: c.path, cssVersion: CSS_VERSION, ogImage: 'og-' + c.path.replace('/', '') + '.png',
+    title: c.title, description: c.description, path: c.path, cssVersion: CSS_VERSION, mainClass: 'theme-' + p.key, ogImage: 'og-' + c.path.replace('/', '') + '.png',
     headExtra: '  <script src="/request-form.js?v=1" defer></script>\n', jsonld: ld, body: body
   });
 }
@@ -183,7 +199,7 @@ function check() {
     if (page.indexOf('<script src="/request-form.js?v=1" defer></script>') === -1) bad(name + ' does not load request-form.js');
     if (page.indexOf(lockup.html(p.tier, 'navy')) === -1) bad(name + ' has no ' + p.tier + ' lockup');
     if (page.indexOf('src="/assets/tour/' + SHOT[p.key].img + '.webp" width="960" height="640"') === -1 || page.indexOf('Product demo &middot; Sample data') === -1 || !fs.existsSync(path.join(ROOT, 'assets', 'tour', SHOT[p.key].img + '.webp'))) bad(name + ' needs its hero screenshot (assets/tour/' + SHOT[p.key].img + '.webp), labelled "Product demo · Sample data"');
-    if ((page.match(/<span class="includes-pro includes-pro--navy">/g) || []).length < 2) bad(name + ' needs the "Includes Citehound PRO" badge in the hero and beside the form');
+    if ((page.match(/<span class="includes-pro includes-pro--(?:navy|light)">/g) || []).length < 2) bad(name + ' needs the "Includes Citehound PRO" badge in the hero and beside the form');
     if (c.description.indexOf('Includes Citehound Pro.') === -1) bad(name + ': the meta description must say it includes Citehound Pro');
     if (!c.faq.some((f) => f.q === 'Do I need to buy Pro separately?' && f.a === 'No. Fix and Beyond both include Citehound Pro.')) bad(name + ' has no "Do I need to buy Pro separately?" FAQ entry');
     if (c.faq[0].q !== WHY_Q || c.faq[0].a !== homeAnswer) bad(name + ': the first FAQ entry must be the homepage answer, word for word');
