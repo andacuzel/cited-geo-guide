@@ -86,6 +86,7 @@ async function main(argv, env, io, fetchImpl) {
     if (o._.length > 2) throw new CliError('scan takes one domain. To compare two, use: citehound compare a.com b.com', 2);
     const s = await client.scan(domain);
     if (o.json) json(s); else io.out(fmt.scanText(s));
+    if (s.plan_note) io.err('Your key\'s plan has less than the public output, so the full result came from the public endpoint. ' + s.plan_note + '\n');
     if (floor !== null && s.score < floor) { io.err('Score ' + s.score + ' is below --fail-under ' + floor + '.\n'); return 1; }
     return 0;
   }
@@ -96,6 +97,7 @@ async function main(argv, env, io, fetchImpl) {
     if (o._.length > 3) throw new CliError('compare takes two domains.', 2);
     const c = await client.compare(a, b);
     if (o.json) json(c); else io.out(fmt.compareText(c));
+    if (c.plan_note) io.err('Your key\'s plan does not include compare, so the result came from the public endpoint. ' + c.plan_note + '\n');
     const low = [c.a, c.b].filter((x) => floor !== null && x.score < floor);
     if (low.length) { io.err(low.map((x) => x.domain + ' scored ' + x.score).join(', ') + ', below --fail-under ' + floor + '.\n'); return 1; }
     return 0;
@@ -119,7 +121,7 @@ async function main(argv, env, io, fetchImpl) {
     const type = (o.type || 'organization').toLowerCase();
     if (SCHEMA_TYPES.indexOf(type) === -1) throw new CliError('--type must be one of: ' + SCHEMA_TYPES.join(', ') + '.', 2);
     const r = await client.schema(domain, type);
-    if (o.json) json({ domain: domain, type: type, json_ld: r.json_ld }); else { io.out(JSON.stringify(r.json_ld, null, 2) + '\n'); io.err('Paste this inside <script type="application/ld+json"> in the <head> of the page. Fill in anything left in [square brackets] first.\n'); }
+    if (o.json) json({ domain: domain, type: type, json_ld: r.json_ld }); else { io.out(JSON.stringify(r.json_ld, null, 2) + '\n'); if (r.note) io.err(r.note + '\n'); io.err('Paste this inside <script type="application/ld+json"> in the <head> of the page. Fill in anything left in [square brackets] first.\n'); }
     return 0;
   }
 

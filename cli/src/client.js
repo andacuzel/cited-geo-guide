@@ -46,7 +46,7 @@ function createClient(env, fetchImpl, version) {
     const msg = j && typeof j.message === 'string' ? redact(j.message) : null;
     if (r.status === 429) return rateLimited(r.retry);
     if (r.status === 401) return new CliError(keyed ? 'Citehound did not accept that API key. Check CITEHOUND_API_KEY, or get a new key at ' + SIGNUP + '.' : 'Citehound asked for an API key. Get a free one at ' + SIGNUP + ' and set CITEHOUND_API_KEY.', 3);
-    if (r.status === 402) return new CliError(msg || 'That is part of a higher plan. See the plans at ' + PRICING + '.', 3);
+    if (r.status === 402) { const e = new CliError(msg || 'That is part of a higher plan. See the plans at ' + PRICING + '.', 3); e.plan = true; return e; }
     if (r.status === 403) return new CliError(msg || 'This key cannot do that.', 3);
     if (r.status === 503) return new CliError('The Citehound API is not available right now. Try again later.', 3);
     if (r.status === 400 && msg) return new CliError(msg, 2);
@@ -88,8 +88,19 @@ function createClient(env, fetchImpl, version) {
 
   return {
     keyed: keyed,
-    async scan(domain) { return withSource(keyed ? await v1('/scan', { domain: domain }) : parse.parseScan(await mcp('scan_site', { domain: domain }))); },
-    async compare(a, b) { return withSource(keyed ? await v1('/compare', { a: a, b: b }) : parse.parseCompare(await mcp('compare_sites', { domain_a: a, domain_b: b }))); },
+    // A key on a plan that has less than the public endpoint gives (the Free plan) must not make the CLI worse than no key: when the answer is limited by the plan, the full output comes from the public
+    // endpoint and the plan's message is kept as a note (printed on standard error).
+    async scan(domain) {
+      if (!keyed) return withSource(parse.parseScan(await mcp('scan_site', { domain: domain })));
+      const j = await v1('/scan', { domain: domain });
+      if (j.truncated) return Object.assign({ source: 'public' }, parse.parseScan(await mcp('scan_site', { domain: domain })), { plan_note: (j.upgrade && j.upgrade.message) || null });
+      return withSource(j);
+    },
+    async compare(a, b) {
+      if (!keyed) return withSource(parse.parseCompare(await mcp('compare_sites', { domain_a: a, domain_b: b })));
+      try { return withSource(await v1('/compare', { a: a, b: b })); }
+      catch (e) { if (!e.plan) throw e; return Object.assign({ source: 'public' }, parse.parseCompare(await mcp('compare_sites', { domain_a: a, domain_b: b })), { plan_note: e.message }); }
+    },
     async crawlerList() { return parse.parseCrawlerList(await mcp('list_ai_crawlers', {})); },
     async crawlersFor(domain) {
       if (keyed) { const j = await v1('/crawlers', { domain: domain }); return withSource({ domain: j.domain, crawlers: j.crawlers, summary: j.summary, note: j.note }); }
@@ -97,16 +108,16 @@ function createClient(env, fetchImpl, version) {
       return withSource({ domain: s.domain, crawlers: s.crawlers, summary: s.crawlerSummary, note: NOTE });
     },
     async schema(domain, type) {
-      if (keyed) { const j = await v1('/generate/schema', { domain: domain, type: type }); return { json_ld: j.json_ld }; }
+      if (keyed) { try { const j = await v1('/generate/schema', { domain: domain, type: type }); return { json_ld: j.json_ld }; } catch (e) { if (!e.plan) throw e; return { json_ld: parse.parseSchema(await mcp('generate_schema', { domain: domain, type: type })), note: e.message }; } }
       return { json_ld: parse.parseSchema(await mcp('generate_schema', { domain: domain, type: type })) };
     },
     async robots(allow, block, sitemap) {
-      if (keyed) { const j = await v1('/generate/robots-txt', { allow: allow.join(','), block: block.join(','), sitemap: sitemap }); return fileResult(j); }
+      if (keyed) { const j = await v1('/generate/robots-txt', { allow: allow.join(','), block: block.join(','), sitemap: sitemap }); if (!j.preview) return fileResult(j); const args = {}; if (allow.length) args.allow = allow; if (block.length) args.block = block; if (sitemap) args.sitemap_url = sitemap; return { text: parse.fileBody(await mcp('generate_robots_txt', args)), note: j.upgrade ? j.upgrade.message : null }; }
       const args = {}; if (allow.length) args.allow = allow; if (block.length) args.block = block; if (sitemap) args.sitemap_url = sitemap;
       return { text: parse.fileBody(await mcp('generate_robots_txt', args)), note: null };
     },
     async llms(name, description, pages) {
-      if (keyed) { const j = await v1('/generate/llms-txt', { name: name, description: description, page: pages.map((p) => p.url + '|' + p.description) }); return fileResult(j); }
+      if (keyed) { const j = await v1('/generate/llms-txt', { name: name, description: description, page: pages.map((p) => p.url + '|' + p.description) }); if (!j.preview) return fileResult(j); return { text: parse.fileBody(await mcp('generate_llms_txt', { name: name, description: description, key_pages: pages })), note: j.upgrade ? j.upgrade.message : null }; }
       return { text: parse.fileBody(await mcp('generate_llms_txt', { name: name, description: description, key_pages: pages })), note: null };
     }
   };

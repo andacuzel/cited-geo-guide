@@ -246,25 +246,40 @@ test('the text the CLI prints never claims a result: no recommend, cite, rank, g
 /* ---------- plans (the API gates by plan: a 402 says which) ---------- */
 
 const GATE402 = { error: 'plan_required', required_plan: 'pro', plan: 'free', message: 'Comparing two sites through the API is available on Pro, Fix and Beyond. This key is on the Free plan. See the plans at https://getcitehound.com/pricing.', plans_url: 'https://getcitehound.com/pricing' };
-test('a plan gate (402) prints the API\'s own message, which names the plans and the pricing page, and exits 3', async () => {
+test('a plan gate (402) on a command with no public equivalent prints the API\'s own message, which names the plans and the pricing page, and exits 3', async () => {
   const r = await runCli(['compare', 'a.com', 'b.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(() => reply(402, GATE402)));
   assert.equal(r.code, 3); assert.match(r.err, /available on Pro, Fix and Beyond/); assert.match(r.err, /https:\/\/getcitehound\.com\/pricing/); assert.ok(!(r.err + r.out).includes(KEY));
   const bare = await runCli(['compare', 'a.com', 'b.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(() => reply(402, '{}')));
   assert.match(bare.err, /part of a higher plan/);
 });
-test('a free key\'s scan says how many findings are not shown and where the rest is', async () => {
-  const j = Object.assign({}, V1_SCAN, { truncated: true, hidden_findings: 5, upgrade: { message: 'The full scan detail is available on Pro, Fix and Beyond. See the plans at https://getcitehound.com/pricing.', required_plan: 'pro', plans_url: 'https://getcitehound.com/pricing' } });
-  const r = await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(v1({ '/scan': j })));
-  assert.equal(r.code, 0); assert.match(r.out, /5 more findings are not shown\. The full scan detail is available on Pro, Fix and Beyond/);
-  assert.equal(JSON.parse((await runCli(['scan', 'example.com', '--json'], { CITEHOUND_API_KEY: KEY }, mockFetch(v1({ '/scan': j })))).out).hidden_findings, 5);
-  assert.doesNotMatch((await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(v1({ '/scan': V1_SCAN })))).out, /not shown/);
+const both = (map) => (url, init, body) => (/\/api\/mcp$/.test(url) ? mcp()(url, init, body) : v1(map)(url, init));
+const FREE_NOTE = 'The full scan detail is available on Pro, Fix and Beyond. See the plans at https://getcitehound.com/pricing.';
+test('a Free key is never worse than no key: a trimmed scan is replaced by the full public output, with the plan note on stderr', async () => {
+  const trimmed = Object.assign({}, V1_SCAN, { truncated: true, hidden_findings: 5, upgrade: { message: FREE_NOTE, required_plan: 'pro' } });
+  const f = mockFetch(both({ '/scan': trimmed }));
+  const r = await runCli(['scan', 'getcitehound.com'], { CITEHOUND_API_KEY: KEY }, f);
+  assert.equal(r.code, 0); assert.match(r.out, /^getcitehound\.com: 87\/100/); assert.doesNotMatch(r.out, /not shown/); assert.match(r.err, /came from the public endpoint\. The full scan detail is available on Pro, Fix and Beyond/);
+  assert.deepEqual(f.calls.map((c) => c.method + ' ' + new URL(c.url).pathname), ['GET /v1/scan', 'POST /api/mcp']); assert.equal(f.calls[1].headers.Authorization, undefined);
+  const j = JSON.parse((await runCli(['scan', 'getcitehound.com', '--json'], { CITEHOUND_API_KEY: KEY }, mockFetch(both({ '/scan': trimmed })))).out);
+  assert.equal(j.source, 'public'); assert.equal(j.crawlers.length, 10); assert.match(j.plan_note, /available on Pro/);
+  const full = await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(both({ '/scan': V1_SCAN })));
+  assert.match(full.out, /^example\.com: 62\/100/); assert.equal(full.err, '');
 });
-test('a free key\'s generated file is a preview: the file goes to stdout, the note about the rest to stderr', async () => {
-  const j = { type: 'robots.txt', content: 'User-agent: GPTBot\nAllow: /\n', preview: true, truncated: true, total_lines: 31, upgrade: { message: 'The full generated file is available on Pro, Fix and Beyond. See the plans at https://getcitehound.com/pricing.' } };
-  const r = await runCli(['generate', 'robots-txt', 'example.com', '--allow', 'GPTBot'], { CITEHOUND_API_KEY: KEY }, mockFetch(v1({ '/generate/robots-txt': j })));
-  assert.equal(r.out, 'User-agent: GPTBot\nAllow: /\n'); assert.match(r.err, /This is a preview \(the first lines\)\. The full generated file is available on Pro/);
-  const l = await runCli(['generate', 'llms-txt', 'example.com', '--name', 'E', '--description', 'D'], { CITEHOUND_API_KEY: KEY }, mockFetch(v1({ '/generate/llms-txt': Object.assign({}, j, { type: 'llms.txt', content: '# E\n' }) })));
-  assert.equal(l.out, '# E\n'); assert.match(l.err, /preview/);
+test('a Free key\'s compare, preview files and non-organization schema come from the public endpoint, with the plan\'s message on stderr', async () => {
+  const f = mockFetch((url, init, body) => (/\/api\/mcp$/.test(url) ? mcp()(url, init, body) : (/\/compare/.test(url) ? reply(402, GATE402) : (/generate\/schema/.test(url) ? reply(402, GATE402) : reply(200, { type: 'robots.txt', content: 'User-agent: GPTBot\n', preview: true, truncated: true, upgrade: { message: 'The full generated file is available on Pro, Fix and Beyond.' } })))));
+  const c = await runCli(['compare', 'getcitehound.com', 'example.com'], { CITEHOUND_API_KEY: KEY }, f);
+  assert.equal(c.code, 0); assert.match(c.out, /getcitehound\.com: 87\/100\nexample\.com: 29\/100/); assert.match(c.err, /does not include compare.*available on Pro, Fix and Beyond/);
+  const s = await runCli(['generate', 'schema', 'example.com', '--type', 'faqpage'], { CITEHOUND_API_KEY: KEY }, f);
+  assert.equal(s.code, 0); assert.equal(JSON.parse(s.out)['@context'], 'https://schema.org'); assert.match(s.err, /available on Pro, Fix and Beyond/);
+  const r = await runCli(['generate', 'robots-txt', 'example.com', '--allow', 'GPTBot', '--block', 'Bytespider'], { CITEHOUND_API_KEY: KEY }, f);
+  assert.match(r.out, /^User-agent: GPTBot\nAllow: \/\n/); assert.ok(r.out.split('\n').length > 5); assert.match(r.err, /full generated file is available on Pro/);
+  const l = await runCli(['generate', 'llms-txt', 'example.com', '--name', 'E', '--description', 'D'], { CITEHOUND_API_KEY: KEY }, mockFetch((url, init, body) => (/\/api\/mcp$/.test(url) ? mcp()(url, init, body) : reply(200, { type: 'llms.txt', content: '# E\n', preview: true, upgrade: { message: 'full file on Pro' } }))));
+  assert.match(l.out, /^# Example\n/); assert.match(l.err, /full file on Pro/);
+  assert.ok(!(c.err + s.err + r.err + l.err + c.out).includes(KEY));
+});
+test('a plan gate that has no public equivalent (the key is Free, the command is monitoring-only) still prints the API\'s message and exits 3', async () => {
+  const r = await runCli(['compare', 'a.com', 'b.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(() => reply(402, GATE402)));
+  assert.equal(r.code, 3); assert.match(r.err, /available on Pro, Fix and Beyond/);
 });
 test('the rate-limit message names the plans', async () => {
   const keyless = await runCli(['scan', 'a.com'], {}, mockFetch(() => reply(429, '', { 'retry-after': '60' })));

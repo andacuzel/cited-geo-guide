@@ -93,7 +93,7 @@ With a key the CLI uses the Citehound API (`/v1`). The key is read only from the
 ## Plans
 
 - **No key:** the full output of the public endpoint, with public limits. This is what most people need.
-- **A free API key:** API access with small limits: `scan` shows the score, the pillars, the crawlers and the first three findings (the rest says where it is), generated files are a preview, `compare` and the other schema types are not included.
+- **A free API key:** API access with small limits (the plan table is on https://getcitehound.com/api). The CLI never gives you less than no key: where the Free plan has less than the public endpoint (the full scan detail, compare, the full generated files, the other schema types), the full result comes from the public endpoint, and the plan's message is printed on standard error. That costs one extra request to the public endpoint.
 - **Pro, Fix and Beyond keys:** higher limits, the full scan detail, `compare`, full generated files and monitoring (through the API and https://getcitehound.com/watch); Fix and Beyond add the prioritized fix list and re-check, Beyond adds the export.
 
 When a plan does not have something, the CLI prints the API's message, which names the plans that do, and exits with code 3. The table is on https://getcitehound.com/api.
