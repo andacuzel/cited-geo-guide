@@ -534,7 +534,7 @@ function check() {
     const brightest = mix(white, LEFT_FIELD_OPACITY, navy950);
     const outline = ratioOf(brightest, navy950);
     if (LEFT_FIELD_OPACITY > 0 && outline < 1.3) bad('the left field outline is ' + outline.toFixed(2) + ':1 against --navy-950; it must be at least 1.3:1 to be visible');
-    [['headline', white, 3, '.pro-mkt h2', 'var(--white)'], ['sentence', mix(white, alphaOf('.pro-mkt__lede'), navy950), 4.5, '.pro-mkt__lede'], ['list labels', mix(white, alphaOf('.pro-band-list li'), navy950), 4.5, '.pro-band-list li'], ['price line', goldSoft, 4.5, '.pro-mkt__price'], ['PRO tag', gold, 4.5, '.pro-band-tag'], ['list icons', gold, 3, '.pro-band-list__icon']].forEach((t) => {
+    [['headline', white, 3, '.pro-mkt h2', 'var(--white)'], ['sentence', mix(white, alphaOf('.pro-mkt__lede'), navy950), 4.5, '.pro-mkt__lede'], ['list labels', mix(white, alphaOf('.pro-band-list li'), navy950), 4.5, '.pro-band-list li'], ['price line', goldSoft, 4.5, '.pro-mkt__price'], ['PRO tag', goldSoft, 4.5, '.pro-band-tag'], ['list icons', gold, 3, '.pro-band-list__icon']].forEach((t) => {
       if (t[1].some(isNaN)) { bad('cannot read the colour of ' + t[0]); return; }
       const r = ratioOf(t[1], brightest);
       if (r < t[2]) bad(t[0] + ' has ' + r.toFixed(2) + ':1 against the brightest left-field pixel; it must be at least ' + t[2] + ':1 (lower LEFT_FIELD_OPACITY)');

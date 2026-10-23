@@ -101,7 +101,7 @@ function check() {
   if (read('sitemap.xml').indexOf('<loc>' + site.baseUrl + '/integrations</loc>') === -1) bad('sitemap.xml has no /integrations');
   if (require('../lib/site-footer.js').hrefs().indexOf('/integrations') === -1) bad('the footer has no /integrations link');
   if (!/href="\/integrations"/.test(read('api.html'))) bad('/api does not link to /integrations');
-  if (/href="\/integrations"[^>]*>[^<]*<\/a>/.test(read('index.html').replace(/<footer[\s\S]*?<\/footer>/, '').replace(/<header[\s\S]*?<\/header>/, ''))) bad('the homepage trust strip must stay text-only and carry no integrations link');
+  if (/href="\/integrations"[^>]*>[^<]*<\/a>/.test(read('index.html').replace(/<section class="ints [\s\S]*?<\/section>/, '').replace(/<footer[\s\S]*?<\/footer>/, '').replace(/<header[\s\S]*?<\/header>/, ''))) bad('the homepage carries no integrations link outside its text-only integrations section (the redesign of 23 Oct 2026 added that section)');
   return errors;
 }
 

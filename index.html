@@ -29,10 +29,9 @@
 
   <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml" />
 
-  <link rel="preload" href="/assets/fonts/gloock-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/bricolage-grotesque-wght-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/hanken-grotesk-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/assets/fonts/spline-sans-mono-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link href="/fonts.css?v=1" rel="stylesheet" />
+  <link href="/fonts.css?v=2" rel="stylesheet" />
   <script defer src="/_vercel/insights/script.js"></script>
 
   <link rel="stylesheet" href="styles.css?v=105" />
@@ -131,7 +130,7 @@
   <header class="site-header site-header--hero-navy">
     <div class="site-header__inner">
       <a href="/" class="logo" id="logoLink" aria-label="Citehound — back to homepage">
-        <span class="logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="logo__mark">Citehound</span>
+        <span class="logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="logo__mark">Citehound</span>
       </a>
       <nav class="site-nav" aria-label="Site navigation">
         <a href="/playbooks" class="site-nav__link">Playbooks</a>
@@ -171,7 +170,7 @@
         <div class="section__inner">
           <div class="hero__grid">
             <div>
-              <p class="hero__lockup"><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FREE</span></span></p>
+              <p class="hero__lockup"><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FREE</span></span></p>
               <h1 id="hero-heading" class="hero__title">
                 See how AI reads&nbsp;your&nbsp;site.<br />
                 Then&nbsp;<em>fix&nbsp;it</em>.
@@ -198,32 +197,36 @@
               </div>
             </div>
 
-            <div class="hero__visual" role="img" aria-label="Illustration contrasting a traditional search results list with an AI-generated answer that cites three product sources">
-              <div class="search-mock" aria-hidden="true">
-                <span class="search-mock__label">TRADITIONAL SERP</span>
-                <span class="search-mock__line"></span>
-                <span class="search-mock__line"></span>
-                <span class="search-mock__line short"></span>
-              </div>
-
-              <div class="answer-mock answer-mock--inverted" aria-hidden="true">
-                <div class="answer-mock__head">
-                  <span class="answer-mock__label">ANSWER ENGINE</span>
+            <div class="hero__visual">
+              <svg class="rv-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+                <symbol id="door-open" viewBox="0 0 30 40"><path class="door__in" d="M7 40V15.5a8 8 0 0 1 16 0V40Z"/><path class="door__frame" fill-rule="evenodd" d="M2 40V15a13 13 0 0 1 26 0v25ZM7 40h16V15.5a8 8 0 0 0-16 0Z"/></symbol>
+                <symbol id="door-limited" viewBox="0 0 30 40"><path class="door__in door__in--dim" d="M7 40V15.5a8 8 0 0 1 16 0V40Z"/><path class="door__leaf" d="M7 40V16.3c0-2 1.1-3.6 3-4.4L16 9.6V36Z"/><path class="door__frame" fill-rule="evenodd" d="M2 40V15a13 13 0 0 1 26 0v25ZM7 40h16V15.5a8 8 0 0 0-16 0Z"/></symbol>
+                <symbol id="door-blocked" viewBox="0 0 30 40"><path class="door__leaf" d="M7 40V15.5a8 8 0 0 1 16 0V40Z"/><path class="door__frame" fill-rule="evenodd" d="M2 40V15a13 13 0 0 1 26 0v25ZM7 40h16V15.5a8 8 0 0 0-16 0Z"/></symbol>
+              </defs></svg>
+              <figure class="rv" aria-labelledby="rv-cap">
+                <div class="rv__top"><span class="rv__dom">getcitehound.com</span><span class="rv__date">Scanned 23 Oct 2026</span></div>
+                <div class="rv__main">
+                  <div class="rv__gauge" role="img" aria-label="Score: 87 out of 100">
+                    <svg viewBox="0 0 200 108" aria-hidden="true" focusable="false"><path class="rv__track" d="M14 100A86 86 0 0 1 186 100" pathLength="100"/><path class="rv__fill" d="M14 100A86 86 0 0 1 186 100" pathLength="100"/></svg>
+                    <b class="rv__score">87</b><span class="rv__of">out of 100</span>
+                  </div>
+                  <ul class="rv__pillars" aria-label="Score by pillar">
+                    <li><span class="rv__pn">Discoverability</span><b class="rv__pv">27<small>/40</small></b><i class="rv__bar"><u class="rv__pw rv__pw--27"></u></i></li>
+                    <li><span class="rv__pn">Technical foundation</span><b class="rv__pv">20<small>/20</small></b><i class="rv__bar"><u class="rv__pw rv__pw--20"></u></i></li>
+                    <li><span class="rv__pn">Content and trust</span><b class="rv__pv">40<small>/40</small></b><i class="rv__bar"><u class="rv__pw rv__pw--40"></u></i></li>
+                  </ul>
                 </div>
-                <p class="answer-mock__query">“Best project management tool for a small team?”</p>
-                <div class="answer-mock__response">
-                  <p>Based on reviews and product documentation, three platforms are consistently recommended:</p>
-                  <ol>
-                    <li><span class="answer-mock__brand">Platform A</span><span class="cited-badge">Cited · G2</span></li>
-                    <li><span class="answer-mock__brand">Platform B</span><span class="cited-badge">Cited · Capterra</span></li>
-                    <li><span class="answer-mock__brand">Platform C</span><span class="cited-badge">Cited · Docs</span></li>
-                  </ol>
+                <div class="rv__doors">
+                  <p class="rv__doors-t">Ten AI crawlers at the robots.txt door</p>
+                  <ul class="rv__row" role="img" aria-label="State of the ten tracked AI crawlers: all ten limited, none blocked"><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li><li class="door door--limited"><svg viewBox="0 0 30 40" aria-hidden="true" focusable="false"><use href="#door-limited"/></svg></li></ul>
+                  <p class="rv__legend" aria-hidden="true"><span class="rv__key rv__key--open">Open</span><span class="rv__key rv__key--limited">Limited</span><span class="rv__key rv__key--blocked">Blocked</span></p>
                 </div>
-              </div>
+                <figcaption id="rv-cap" class="rv__cap">A real scan of our own site. All ten crawlers have a Disallow rule that applies (for example /admin/), and none is blocked outright. The score measures readiness, not whether any assistant names a brand.</figcaption>
+              </figure>
             </div>
           </div>
                 <div class="analyze" id="analyze" hidden>
-          <svg class="analyze__mark" viewBox="13 8.5 52 52" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z"/><circle cx="40" cy="22.9" r="1.6" fill="#C2922F"/></svg>
+          <svg class="analyze__mark" viewBox="13 8.5 52 52" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/><circle cx="40" cy="22.9" r="1.6" fill="#C2922F"/></svg>
           <h2 class="analyze__title"><span id="analyzeText"></span><span class="dots" id="analyzeDots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></h2>
           <ol class="analyze__stages scan-progress__list" id="analyzeStages" aria-label="Scan steps"></ol>
           <p class="analyze__still" id="analyzeStill" hidden>Still working. Some sites answer slowly, and the scan waits for them.</p>
@@ -332,6 +335,54 @@
       </section>
 
       <!-- ---------- The ladder: scan, Pro report, Fix, Beyond ---------- -->
+      <!-- ---------- Capabilities ---------- -->
+      <section class="verticals band-white hp-band" aria-labelledby="capabilities-heading">
+        <div class="section__inner">
+          <div class="section-head">
+            <p class="kicker">How the scan works</p>
+            <h2 id="capabilities-heading" class="section-title">Sixteen checks. Three pillars. One fix list.</h2>
+          </div>
+          <div class="capability-grid">
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18.5" r="1.5"/><path d="M8.5 15a5 5 0 017 0M5.3 11.8a9.5 9.5 0 0113.4 0"/></svg></span>
+                <span class="capability-card__weight">40%</span>
+              </div>
+              <p class="capability-card__kicker">Discoverability</p>
+              <h3 class="capability-card__q">Can AI crawlers reach you?</h3>
+              <p class="capability-card__desc">robots.txt policy and sitemap access for 10 AI crawlers, plus llms.txt.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 7L4 12l4.5 5M15.5 7L20 12l-4.5 5M13.5 5.5l-3 13"/></svg></span>
+                <span class="capability-card__weight">20%</span>
+              </div>
+              <p class="capability-card__kicker">Technical foundation</p>
+              <h3 class="capability-card__q">Can machines parse your pages?</h3>
+              <p class="capability-card__desc">Canonical, language, title, description, Open Graph and structured data.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7l4 4v12.5a.5.5 0 01-.5.5h-10.5a.5.5 0 01-.5-.5V4a.5.5 0 01.5-.5z"/><path d="M13.5 3.5V8h4"/><path d="M9 14.5l2 2 4-4.5"/></svg></span>
+                <span class="capability-card__weight">40%</span>
+              </div>
+              <p class="capability-card__kicker">Content &amp; trust</p>
+              <h3 class="capability-card__q">Do you look like a credible source?</h3>
+              <p class="capability-card__desc">Heading structure, Organization schema, author and contact signals.</p>
+            </div>
+            <div class="capability-card">
+              <div class="capability-card__top">
+                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a3.5 3.5 0 00-4.6 4.4L4.5 16.3a1.5 1.5 0 002.1 2.1l5.6-5.6a3.5 3.5 0 004.4-4.6l-2.5 2.5-2-2 2.6-2.4z"/></svg></span>
+                <span class="capability-card__weight">16 checks</span>
+              </div>
+              <p class="capability-card__kicker">The fix</p>
+              <h3 class="capability-card__q">What do you do about it?</h3>
+              <p class="capability-card__desc">Every finding ranked by impact, with copy-paste JSON-LD and robots.txt generated from your own site's data.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="ladder hp-light" id="ladder" aria-labelledby="ladder-heading">
         <div class="section__inner">
           <div class="section-head">
@@ -341,32 +392,32 @@
           <ul class="ladder-grid" id="ladderGrid">
             <li class="ladder-card ladder-card--scan">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="5.5"/><path d="M15 15l5 5"/></svg></span><p class="ladder-card__tag">Free</p></div>
-              <h3 class="ladder-card__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FREE</span></span></h3>
+              <h3 class="ladder-card__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FREE</span></span></h3>
               <p class="ladder-card__text">Free page analysis</p>
               <p class="ladder-card__price">Free · No sign-up</p>
               <p class="ladder-card__cta"><button type="button" class="btn btn--primary" data-ladder-scan>Run the scan</button></p>
             </li>
             <li class="ladder-card ladder-card--pro">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11v17h-11z"/><path d="M9.5 15.5v-3M12 15.5v-6M14.5 15.5v-4.5"/><path d="M9.5 7h5"/></svg></span><p class="ladder-card__tag">Waitlist</p></div>
-              <h3 class="ladder-card__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></h3>
+              <h3 class="ladder-card__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></h3>
               <p class="ladder-card__text">Detailed site report and citation test</p>
               <p class="ladder-card__price">$39/month or $390/year</p>
               <p class="ladder-card__cta"><a class="btn btn--ghost" href="/pro">See Pro</a></p>
             </li>
             <li class="ladder-card ladder-card--fix">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M14.5 5a4 4 0 00-3.8 5.4L4.4 16.7a1.9 1.9 0 002.7 2.7l6.3-6.3A4 4 0 0019 9.5l-2.4 2.3-2.4-.6-.6-2.4L15.9 6.5A4 4 0 0014.5 5z"/></svg></span><p class="ladder-card__tag">Early access</p></div>
-              <h3 class="ladder-card__name"><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FIX</span></span></h3>
+              <h3 class="ladder-card__name"><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FIX</span></span></h3>
               <p class="ladder-card__text">We make the technical fixes</p>
               <p class="ladder-card__price">From $299 · Fixed quote after your scan</p>
-              <p class="ladder-card__includes"><span class="includes-pro includes-pro--navy"><span class="includes-pro__lead">Includes</span><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></span></p>
+              <p class="ladder-card__includes"><span class="includes-pro includes-pro--navy"><span class="includes-pro__lead">Includes</span><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></span></p>
               <p class="ladder-card__cta"><a class="btn btn--gold" href="/fix">See Fix</a></p>
             </li>
             <li class="ladder-card ladder-card--beyond">
               <div class="ladder-card__top"><span class="ladder-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ladder-card__svg" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M9 7h8v8"/></svg></span><p class="ladder-card__tag">Early access</p></div>
-              <h3 class="ladder-card__name"><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">BEYOND</span></span></h3>
+              <h3 class="ladder-card__name"><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">BEYOND</span></span></h3>
               <p class="ladder-card__text">We write the content</p>
               <p class="ladder-card__price">$490/month · 3-month minimum</p>
-              <p class="ladder-card__includes"><span class="includes-pro includes-pro--navy"><span class="includes-pro__lead">Includes</span><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></span></p>
+              <p class="ladder-card__includes"><span class="includes-pro includes-pro--navy"><span class="includes-pro__lead">Includes</span><span class="lockup lockup--navy"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></span></p>
               <p class="ladder-card__cta"><a class="btn btn--gold" href="/beyond">See Beyond</a></p>
             </li>
           </ul>
@@ -491,51 +542,18 @@
         </div>
       </section>
 
-      <!-- ---------- Capabilities ---------- -->
-      <section class="verticals band-white hp-band" aria-labelledby="capabilities-heading">
+      <!-- ---------- Playbooks for three kinds of site ---------- -->
+      <section class="aud hp-light" aria-labelledby="aud-heading">
         <div class="section__inner">
           <div class="section-head">
-            <p class="kicker">How the scan works</p>
-            <h2 id="capabilities-heading" class="section-title">Sixteen checks. Three pillars. One fix list.</h2>
+            <p class="kicker">Playbooks</p>
+            <h2 id="aud-heading" class="section-title">Fixes grounded in where your category is read.</h2>
           </div>
-          <div class="capability-grid">
-            <div class="capability-card">
-              <div class="capability-card__top">
-                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18.5" r="1.5"/><path d="M8.5 15a5 5 0 017 0M5.3 11.8a9.5 9.5 0 0113.4 0"/></svg></span>
-                <span class="capability-card__weight">40%</span>
-              </div>
-              <p class="capability-card__kicker">Discoverability</p>
-              <h3 class="capability-card__q">Can AI crawlers reach you?</h3>
-              <p class="capability-card__desc">robots.txt policy and sitemap access for 10 AI crawlers, plus llms.txt.</p>
-            </div>
-            <div class="capability-card">
-              <div class="capability-card__top">
-                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 7L4 12l4.5 5M15.5 7L20 12l-4.5 5M13.5 5.5l-3 13"/></svg></span>
-                <span class="capability-card__weight">20%</span>
-              </div>
-              <p class="capability-card__kicker">Technical foundation</p>
-              <h3 class="capability-card__q">Can machines parse your pages?</h3>
-              <p class="capability-card__desc">Canonical, language, title, description, Open Graph and structured data.</p>
-            </div>
-            <div class="capability-card">
-              <div class="capability-card__top">
-                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7l4 4v12.5a.5.5 0 01-.5.5h-10.5a.5.5 0 01-.5-.5V4a.5.5 0 01.5-.5z"/><path d="M13.5 3.5V8h4"/><path d="M9 14.5l2 2 4-4.5"/></svg></span>
-                <span class="capability-card__weight">40%</span>
-              </div>
-              <p class="capability-card__kicker">Content &amp; trust</p>
-              <h3 class="capability-card__q">Do you look like a credible source?</h3>
-              <p class="capability-card__desc">Heading structure, Organization schema, author and contact signals.</p>
-            </div>
-            <div class="capability-card">
-              <div class="capability-card__top">
-                <span class="capability-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a3.5 3.5 0 00-4.6 4.4L4.5 16.3a1.5 1.5 0 002.1 2.1l5.6-5.6a3.5 3.5 0 004.4-4.6l-2.5 2.5-2-2 2.6-2.4z"/></svg></span>
-                <span class="capability-card__weight">16 checks</span>
-              </div>
-              <p class="capability-card__kicker">The fix</p>
-              <h3 class="capability-card__q">What do you do about it?</h3>
-              <p class="capability-card__desc">Every finding ranked by impact, with copy-paste JSON-LD and robots.txt generated from your own site's data.</p>
-            </div>
-          </div>
+          <ul class="aud__list">
+            <li class="aud__item"><a class="aud__link" href="/for-saas"><span class="aud__who">B2B SaaS</span><span class="aud__what">Six playbooks: CRM, MarTech, HRTech, FinTech, Cybersecurity and DevTools.</span><span class="aud__go">Open the SaaS playbooks</span></a></li>
+            <li class="aud__item"><a class="aud__link" href="/for-brands"><span class="aud__who">Consumer and e-commerce brands</span><span class="aud__what">Four playbooks: e-commerce, consumer apps, hospitality and marketplaces.</span><span class="aud__go">Open the brand playbooks</span></a></li>
+            <li class="aud__item"><a class="aud__link" href="/for-professionals"><span class="aud__who">Independent professionals</span><span class="aud__what">Four playbooks: real estate, legal, health and wellness, and local services.</span><span class="aud__go">Open the professional playbooks</span></a></li>
+          </ul>
         </div>
       </section>
 
@@ -638,6 +656,26 @@
         </div>
       </section>
 
+      <!-- ---------- Integrations that are live (text only; content/integrations.json) ---------- -->
+      <section class="ints hp-light" aria-labelledby="ints-heading">
+        <div class="section__inner">
+          <div class="ints__grid">
+            <div class="section-head">
+              <p class="kicker">Integrations</p>
+              <h2 id="ints-heading" class="section-title">Use it where you already work.</h2>
+              <p class="section-sub">Each one runs the same scan and the same score.</p>
+              <p class="ints__all"><a class="btn btn--ghost" href="/integrations">All integrations</a></p>
+            </div>
+            <ul class="ints__list">
+              <li><a href="/claude"><b>Claude</b><span>Connect the MCP server: 13 free, read-only tools, no account.</span></a></li>
+              <li><a href="/integrations"><b>Command line</b><span>npx citehound scan yourdomain.com</span></a></li>
+              <li><a href="/api"><b>Public API</b><span>JSON with an OpenAPI description. A free key arrives by email.</span></a></li>
+              <li><a href="/integrations"><b>n8n</b><span>A community node with a polling trigger.</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <!-- ---------- FAQ (the same questions are in the FAQPage JSON-LD in the head) ---------- -->
       <section class="home-faq band-white hp-band" id="faq" aria-labelledby="faq-heading">
         <div class="section__inner">
@@ -696,7 +734,7 @@
         </div>
         <ul class="pr-stairs" data-pricing>
           <li class="pr-step pr-step--scan" id="step-scan" style="--rise:0">
-            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FREE</span></span></h3></div>
+            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FREE</span></span></h3></div>
             <p class="pr-price"><span class="pr-price__main">Free</span></p>
             <p class="pr-note">No sign-up</p>
             <p class="pr-outcome">See your readiness score in about 30 seconds.</p>
@@ -709,7 +747,7 @@
             <p class="pr-cta"><button type="button" class="btn btn--primary" data-ladder-scan>Scan free</button></p>
           </li>
           <li class="pr-step pr-step--pro" id="step-pro" style="--rise:1">
-            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></h3><p class="pr-step__chips"><span class="pr-chip">Early access</span></p></div>
+            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></h3><p class="pr-step__chips"><span class="pr-chip">Early access</span></p></div>
             <div class="pr-toggle" role="group" aria-label="Pro billing period" hidden><button type="button" class="pr-toggle__btn" data-period="m" aria-pressed="true">Monthly</button><button type="button" class="pr-toggle__btn" data-period="y" aria-pressed="false">Annual</button></div>
             <p class="pr-price pr-price--alt is-on" data-period-view="m"><span class="pr-price__main"><span class="cur">$</span>39</span><span class="pr-price__unit">/month</span></p>
             <p class="pr-price pr-price--alt is-on" data-period-view="y"><span class="pr-price__or">or</span><span class="pr-price__main"><span class="cur">$</span>390</span><span class="pr-price__unit">/year</span></p>
@@ -724,7 +762,7 @@
             <p class="pr-cta"><a class="btn btn--gold" href="/pro#waitlist" data-pro-cta data-label-checkout="Get Citehound Pro">Join the Pro waitlist</a></p>
           </li>
           <li class="pr-step pr-step--fix" id="step-fix" style="--rise:2">
-            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FIX</span></span></h3><p class="pr-step__chips"><span class="pr-chip">Early access</span></p></div>
+            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">FIX</span></span></h3><p class="pr-step__chips"><span class="pr-chip">Early access</span></p></div>
             <p class="pr-price"><span class="pr-price__pre">From</span><span class="pr-price__main"><span class="cur">$</span>299</span></p>
             <p class="pr-note">Fixed quote after your scan. The price does not change once agreed</p>
             <p class="pr-outcome">Get it done right, with before and after.</p>
@@ -737,7 +775,7 @@
             <p class="pr-cta"><button type="button" class="btn btn--ghost" data-request="fix">Request a Fix quote</button></p>
           </li>
           <li class="pr-step pr-step--beyond" id="step-beyond" style="--rise:3">
-            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">BEYOND</span></span></h3><p class="pr-step__chips"><span class="pr-chip">Early access</span><span class="pr-chip pr-chip--seats">Limited seats</span></p></div>
+            <div class="pr-step__head"><h3 class="pr-step__name"><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">BEYOND</span></span></h3><p class="pr-step__chips"><span class="pr-chip">Early access</span><span class="pr-chip pr-chip--seats">Limited seats</span></p></div>
             <p class="pr-price"><span class="pr-price__main"><span class="cur">$</span>490</span><span class="pr-price__unit">/month</span></p>
             <p class="pr-note">3-month minimum</p>
             <p class="pr-outcome">Content built around the questions your buyers ask.</p>
@@ -761,7 +799,7 @@
         <div class="section__inner">
           <div class="sf-grid">
             <div class="sf-brand">
-              <a href="/" class="sf-logo" aria-label="Citehound, back to homepage"><span class="sf-logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="sf-logo__mark">Citehound</span></a>
+              <a href="/" class="sf-logo" aria-label="Citehound, back to homepage"><span class="sf-logo__icon" aria-hidden="true"><svg viewBox="13 8.5 52 52" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="sf-logo__mark">Citehound</span></a>
               <p class="sf-tag">Scan, fix and write for the way AI answers.</p>
               <ul class="sf-social" aria-label="Citehound on social media">
                 <li><a href="https://x.com/getcitehound" target="_blank" rel="noopener noreferrer" aria-label="Citehound on X"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></li>
@@ -837,7 +875,7 @@
       <div class="wl-trap" aria-hidden="true"><label>Company fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off" /></label></div>
       <div class="ps-field ps-field--check"><label class="ps-check" for="reqConsent"><input id="reqConsent" name="consent" type="checkbox" aria-describedby="reqConsentError" required /><span>You may email me about this request</span></label><p class="ps-error" id="reqConsentError" hidden></p></div>
       <p class="ps-note">We keep your address and what you write here for up to 12 months and use them only to answer you. To have them deleted, write to <a href="mailto:hey@getcitehound.com">hey@getcitehound.com</a>. See the <a href="/privacy">privacy page</a>.</p>
-      <template id="reqIncludes"><span class="includes-pro includes-pro--light"><span class="includes-pro__lead">Includes</span><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M62 30 L58 28.5 L40 20 L35 17.5 L28 12 L21 15.5 Q13 32 17 57 L32 57 Q28.5 46.5 37 41 L39 38 L58 34.5 L61 32.5 Z M27.5 16.5 L16 25 L27 22.5 Z M38.4 22.9 a1.6 1.6 0 1 0 3.2 0 a1.6 1.6 0 1 0 -3.2 0 Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></span></template>
+      <template id="reqIncludes"><span class="includes-pro includes-pro--light"><span class="includes-pro__lead">Includes</span><span class="lockup lockup--light"><span class="lockup__icon"><svg viewBox="13 8.5 52 52" focusable="false" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19 58V32a20 20 0 0 1 40 0v26ZM27 58V33a12 12 0 0 1 24 0v25Z"/><path fill="#F05A28" d="M27 58V32.5c0-3 1.6-5.4 4.4-6.6L45 24.2V54Z"/></svg></span><span class="lockup__mark">Citehound</span><span class="lockup__tag">PRO</span></span></span></template>
       <p class="ps-actions"><button type="submit" class="btn btn--gold ps-submit" id="reqSubmit">Send</button></p>
       <p class="wl-status" id="reqStatus" role="status" aria-live="polite" tabindex="-1"></p>
     </form>
