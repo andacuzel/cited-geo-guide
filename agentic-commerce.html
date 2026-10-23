@@ -175,40 +175,42 @@
     </nav>
   </header>
 
-  <main id="main">
+  <main id="main" class="theme-agent">
 
-    <!-- ---------- Banner ---------- -->
-    <section aria-labelledby="hero-heading">
-      <div class="section__inner">
-        <div class="page-banner ac-banner">
-          <div class="page-banner__body ac-banner__body">
-            <p class="kicker kicker--on-navy">Agentic commerce</p>
-            <h1 id="hero-heading" class="page-banner__title">Can an AI agent find your product, read the price and buy it?</h1>
-            <p class="page-banner__desc">Shopping agents read what your store publishes. Scan it the way an agent would.</p>
-            <a href="#scan" class="btn btn--gold">Scan your store</a>
-          </div>
-          <div class="ac-banner__tiles">
-            <div class="ac-tiles" role="img" aria-label="Illustration: three product tiles, each with a name, a price and an availability label. Two carry a UCP badge, one does not.">
-              <div class="ac-tile" aria-hidden="true">
-                <div class="ac-tile__art"><!--icon:bag--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg><!--/icon--><span class="ac-tile__ucp">UCP</span></div>
-                <p class="ac-tile__name">Canvas tote</p>
-                <p class="ac-tile__price">$42</p>
-                <span class="ac-chip">In stock</span>
+    <!-- ---------- Opening: an agent reading a shelf (round 2) ---------- -->
+    <section class="ag-hero" aria-labelledby="hero-heading">
+      <div class="section__inner ag-hero__grid">
+        <div class="ag-hero__copy">
+          <p class="kicker">Agentic commerce</p>
+          <h1 id="hero-heading" class="ag-hero__title">Can an AI agent find your product, read the price and buy it?</h1>
+          <p class="ag-hero__desc">Shopping agents read what your store publishes. Scan it the way an agent would.</p>
+          <p class="ag-hero__cta"><a href="#scan" class="btn btn--primary">Scan your store</a></p>
+        </div>
+        <div class="ag-hero__art">
+          <div class="ag-shelf" role="img" aria-label="Illustration: three product tiles, each with a name, a price and an availability label. Two carry a UCP badge, one does not. A cursor reads each tile in turn while the steps Find, Read, Compare and Buy light up.">
+            <ol class="ag-steps" aria-hidden="true"><li>Find</li><li>Read</li><li>Compare</li><li>Buy</li></ol>
+            <div class="ag-tiles">
+              <div class="ag-tile" aria-hidden="true">
+                <div class="ag-tile__art"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg><span class="ag-tile__ucp">UCP</span></div>
+                <p class="ag-tile__name ag-f" style="--f:0">Canvas tote</p>
+                <p class="ag-tile__price ag-f" style="--f:1">$42</p>
+                <span class="ag-chip ag-f" style="--f:2">In stock</span>
               </div>
-              <div class="ac-tile" aria-hidden="true">
-                <div class="ac-tile__art"><!--icon:box--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7.5L12 4l8 3.5v9L12 20l-8-3.5v-9z"/><path d="M4 7.5L12 11l8-3.5M12 11v9"/></svg><!--/icon--><span class="ac-tile__ucp">UCP</span></div>
-                <p class="ac-tile__name">Ceramic mug set</p>
-                <p class="ac-tile__price">$38</p>
-                <span class="ac-chip">In stock</span>
+              <div class="ag-tile" aria-hidden="true">
+                <div class="ag-tile__art"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7.5L12 4l8 3.5v9L12 20l-8-3.5v-9z"/><path d="M4 7.5L12 11l8-3.5M12 11v9"/></svg><span class="ag-tile__ucp">UCP</span></div>
+                <p class="ag-tile__name ag-f" style="--f:3">Ceramic mug set</p>
+                <p class="ag-tile__price ag-f" style="--f:4">$38</p>
+                <span class="ag-chip ag-f" style="--f:5">In stock</span>
               </div>
-              <div class="ac-tile" aria-hidden="true">
-                <div class="ac-tile__art"><!--icon:bag--><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg><!--/icon--></div>
-                <p class="ac-tile__name">Wool throw</p>
-                <p class="ac-tile__price">$120</p>
-                <span class="ac-chip ac-chip--warn">Pre-order</span>
+              <div class="ag-tile" aria-hidden="true">
+                <div class="ag-tile__art"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg></div>
+                <p class="ag-tile__name ag-f" style="--f:6">Wool throw</p>
+                <p class="ag-tile__price ag-f" style="--f:7">$120</p>
+                <span class="ag-chip ag-chip--warn ag-f" style="--f:8">Pre-order</span>
               </div>
             </div>
-            <p class="ac-banner__caption">Illustration. Not real data.</p>
+            <span class="ag-cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 7-6 2-2 6z"/></svg></span>
+            <p class="ag-shelf__cap" aria-hidden="true">Illustration. Not real data.</p>
           </div>
         </div>
       </div>
