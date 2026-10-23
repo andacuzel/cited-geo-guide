@@ -90,7 +90,7 @@ function html(type) {
   const css = 'body{background:' + bg + ';color:' + ink + ';padding:64px 72px}' +
     '.logo{width:400px;height:auto;display:block}' +
     '.k{font-weight:700;font-size:26px;color:' + tagc + ';margin-top:46px}' +
-    '.h{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-0.04em;font-size:' + big + 'px;line-height:1.02;margin:' + (s.kicker ? '10px' : '52px') + ' 0 0;max-width:' + (s.visual === 'hound' ? '560px' : '600px') + '}' +
+    '.h{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-0.04em;font-size:' + big + 'px;line-height:1.02;margin:' + (s.kicker ? '10px' : '52px') + ' 0 0;max-width:' + '560px' + '}' +
     '.s{font-size:25px;line-height:1.4;color:' + main + ';margin-top:24px;max-width:560px}' +
     '.u{position:absolute;left:72px;bottom:46px;font-weight:700;font-size:24px;color:' + tagc + '}' +
     '.hound{position:absolute;right:44px;bottom:-24px;height:420px;width:auto}' + visualCss(light);
@@ -113,7 +113,7 @@ function check() {
 async function main() {
   if (process.argv.includes('--check')) process.exit(check());
   const only = process.argv[2] ? process.argv[2].split(',') : Object.keys(SPEC);
-  await art.render(only.map((t) => ({ out: path.join(art.BRAND, og.TYPES[t].file), w: og.W, h: og.H, html: html(t) })));
+  await art.render(only.map((t) => ({ out: path.join(art.BRAND, og.TYPES[t].file), w: og.W, h: og.H, html: html(t), check: { text: ['.logo', '.k', '.h', '.s', '.u'], art: ['.hound', '.card', '.arches', '.code', '.list', '.cmp'] } })));
   process.exit(check());
 }
 

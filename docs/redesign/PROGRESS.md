@@ -52,3 +52,4 @@ Rollback: tag `pre-round2` (commit 49702be); `git revert` the round 2 commits (o
 Baseline self-scan: 87/100 (27/40, 20/20, 40/40). Gates 88/88 before.
 Todo: 1 home rebuild (remove orange "See how AI reads your site" block; story order; paid plans + Agentic Commerce presented) / 2 integrations hub (home + /integrations) / 3 OG overlap fix + check / 4 About photo / 5 sell pages (Pro, Fix, Beyond, Agentic Commerce, Pricing) / 6 animations autoplay only / 7 skills audit / 8 QA.
 New strings (every new text, by step):
+- [x] 3 OG overlap: scripts/brand/art.js now measures every text line against the artwork (14 px gap, 24 px edge margin) and fails the script; generate-og.js and the social templates use it. It caught og-api (headline touching the code box) and the 560 px headline limit now applies to every type. Images regenerated, tags at ?v=5. scripts/regenerate-all.js runs all generators in order.

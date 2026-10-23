@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
+const VER = require('../lib/og.js').VERSION;
 let pass = 0; const fails = [];
 const out = (...a) => process.stdout.write(a.join(' ') + '\n');
 const t = (name, ok, extra) => { if (ok) pass++; else fails.push(name + (extra ? ' :: ' + extra : '')); out((ok ? '  ok  ' : '  FAIL ') + name + (ok ? '' : '  ' + (extra || ''))); };
@@ -73,7 +74,7 @@ const png = (f) => { const b = fs.readFileSync(path.join(ROOT, 'assets/brand', f
 ['og-default.png', 'og-default-light.png', 'og-pro.png', 'og-fix.png', 'og-beyond.png'].forEach((f) => { const d = png(f); t(f + ' is a 1200x630 PNG', d && d[0] === 1200 && d[1] === 630, JSON.stringify(d)); });
 const imgs = [];
 pages.forEach((p) => { (read(p).match(/(?:og|twitter):image" content="[^"]*"/g) || []).forEach((m) => imgs.push([p, m.replace(/^.*content="|"$/g, '')])); });
-t('every page names its share image with ?v=4 and the file exists', imgs.length > 60 && imgs.every((x) => /^https:\/\/[^/]+\/assets\/brand\/og-[a-z-]+\.png\?v=4$/.test(x[1]) && fs.existsSync(path.join(ROOT, 'assets/brand', x[1].split('/').pop().split('?')[0]))), imgs.filter((x) => !/\?v=4$/.test(x[1])).slice(0, 3).join(' '));
+t('every page names its share image with the version of lib/og.js and the file exists', imgs.length > 60 && imgs.every((x) => new RegExp('^https://[^/]+/assets/brand/og-[a-z-]+\\.png\\?v=' + VER + '$').test(x[1]) && fs.existsSync(path.join(ROOT, 'assets/brand', x[1].split('/').pop().split('?')[0]))), imgs.filter((x) => !new RegExp('\\?v=' + VER + '$').test(x[1])).slice(0, 3).join(' '));
 const imgOf = (p) => (read(p).match(/og:image" content="[^"]*og-([a-z-]+)\.png/) || [])[1];
 t('the home, pricing, claude, api, integrations, tools, compare, about, Pro, Fix and Beyond each use their own share image (lib/og.js), everything else the default', imgOf('index.html') === 'home' && imgOf('pricing.html') === 'pricing' && imgOf('about.html') === 'about' && imgOf('terms.html') === 'default' && imgOf('pro.html') === 'pro' && imgOf('fix.html') === 'fix' && imgOf('beyond.html') === 'beyond');
 

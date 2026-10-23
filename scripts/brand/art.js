@@ -46,7 +46,24 @@ async function launch() {
   return pw.chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 }
 
-// jobs: [{ out: absolute path, w, h, html, transparent? }]. Writes PNG files.
+// The overlap check: text must keep clear of the artwork. job.check = { text: [selectors], art: [selectors], gap: px }. Text is measured by its rendered lines (a Range), artwork by its
+// box (the hound image is inset by 3 percent, the margin of its viewBox). Any text line closer than the gap to an artwork box is a failure that stops the script.
+function overlapScript() {
+  return ([text, art, gap]) => {
+    const rects = (sel, isText) => [].concat.apply([], Array.from(document.querySelectorAll(sel)).map((el) => {
+      if (isText && el.tagName !== 'IMG') { const r = document.createRange(); r.selectNodeContents(el); return Array.from(r.getClientRects()).filter((x) => x.width > 2 && x.height > 2).map((x) => ({ l: x.left, t: x.top, r: x.right, b: x.bottom, n: sel })); }
+      const x = el.getBoundingClientRect(), inset = el.classList.contains('hound') ? x.width * 0.03 : 0;
+      return [{ l: x.left + inset, t: x.top + inset, r: x.right - inset, b: x.bottom - inset, n: sel }];
+    }));
+    const T = [].concat.apply([], text.map((s) => rects(s, true))), A = [].concat.apply([], art.map((s) => rects(s, false))), bad = [];
+    T.forEach((a) => A.forEach((b) => { if (a.l < b.r + gap && a.r > b.l - gap && a.t < b.b + gap && a.b > b.t - gap) bad.push(a.n + ' (' + Math.round(a.l) + ',' + Math.round(a.t) + ' to ' + Math.round(a.r) + ',' + Math.round(a.b) + ') touches ' + b.n); }));
+    const W = window.innerWidth, H = window.innerHeight;
+    T.forEach((a) => { if (a.r > W - 24 || a.l < 24 || a.b > H - 20) bad.push(a.n + ' leaves the safe margin'); });
+    return bad.slice(0, 4);
+  };
+}
+
+// jobs: [{ out: absolute path, w, h, html, transparent?, check? }]. Writes PNG files.
 async function render(jobs) {
   const browser = await launch();
   const ctx = await browser.newContext({ deviceScaleFactor: 1 });
@@ -57,6 +74,10 @@ async function render(jobs) {
     fs.writeFileSync(tmp, j.html);
     await p.goto('file://' + tmp, { waitUntil: 'networkidle' });
     await p.evaluate(() => document.fonts.ready);
+    if (j.check) {
+      const bad = await p.evaluate(overlapScript(), [j.check.text, j.check.art, j.check.gap === undefined ? 14 : j.check.gap]);
+      if (bad.length) { console.error('FAIL overlap in ' + path.basename(j.out) + ': ' + bad.join('; ')); process.exitCode = 1; }
+    }
     fs.mkdirSync(path.dirname(j.out), { recursive: true });
     await p.screenshot({ path: j.out, clip: { x: 0, y: 0, width: j.w, height: j.h }, omitBackground: !!j.transparent });
     await p.close();

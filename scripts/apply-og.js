@@ -18,7 +18,7 @@ const ROOT = path.resolve(__dirname, '..');
 const CHECK = process.argv.includes('--check');
 
 const pages = cp.execSync('git ls-files "*.html"', { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean)
-  .filter((f) => !/^(r|app)\//.test(f) && f !== '404.html');
+  .filter((f) => !/^(r|app)\//.test(f));
 
 const pathOf = (f) => '/' + f.replace(/(^|\/)index\.html$/, '').replace(/\.html$/, '');
 

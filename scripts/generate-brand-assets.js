@@ -24,7 +24,8 @@ const gen = require('./generate-og.js');
 const { TAGLINE } = require('../lib/site-footer.js');
 const { C, esc, uri, ROOT, BRAND } = art;
 
-const png = (dir, name, w, h, html, transparent) => ({ out: path.join(dir, name), w, h, html, transparent });
+const CHECKS = { wide: { text: ['.l', '.u', '.lk'], art: ['.hound'] }, post: { text: ['.h', '.s', '.u', '.lk'], art: ['.hound'] } };
+const png = (dir, name, w, h, html, transparent) => ({ out: path.join(dir, name), w, h, html, transparent, check: /class="hound"/.test(html) ? (/class="h"/.test(html) ? CHECKS.post : CHECKS.wide) : null });
 const SOCIAL = path.join(ROOT, 'brand', 'social'), LISTING = path.join(ROOT, 'brand', 'listing-icons'), PNGDIR = path.join(BRAND, 'png');
 const img = (file, style) => '<img src="' + uri(file) + '" style="display:block;' + (style || '') + '" alt="">';
 
@@ -78,8 +79,8 @@ function listingJobs() {
 
 // ---------- social templates ----------
 const COPY = { headline: 'See how AI reads your site. Then fix it.', tagline: TAGLINE, url: 'getcitehound.com' };
-const houndOrange = (css) => '<img src="' + uri('logo-mark-orange.svg') + '" style="position:absolute;display:block;' + css + '" alt="">';
-const lock = (w, light) => img(light ? 'logo-lockup.svg' : 'logo-lockup-dark.svg', 'width:' + w + 'px;height:auto');
+const houndOrange = (css) => '<img class="hound" src="' + uri('logo-mark-orange.svg') + '" style="position:absolute;display:block;' + css + '" alt="">';
+const lock = (w, light) => '<img class="lk" src="' + uri(light ? 'logo-lockup.svg' : 'logo-lockup-dark.svg') + '" style="display:block;width:' + w + 'px;height:auto" alt="">';
 
 // a wide banner: lockup, one line, the hound cropped at the right. opt: { w, h, x0 (left edge of the content), lockW, size, y, hound: css }
 function wide(o) {
