@@ -1,0 +1,80 @@
+{
+  "name": "Citehound",
+  "version": "2026-10-23",
+  "idea": "A free scanner that shows whether AI assistants can reach and read a website, with a paid ladder (Pro, Fix, Beyond). The score measures readiness, not whether any assistant recommends, cites or names a brand.",
+  "tagline": "Scan, fix and write for the way AI answers.",
+  "logo": {
+    "mark": "greyhound head, variant B (docs/redesign/logo-options.png)",
+    "onlyBrandMark": true,
+    "door": "functional UI and illustration icon only (crawler states, robots.txt explanations); never a logo, avatar, favicon or listing icon",
+    "files": {
+      "mark": "assets/brand/logo-mark.svg",
+      "markDark": "assets/brand/logo-mark-dark.svg",
+      "markMono": "assets/brand/logo-mark-mono.svg",
+      "markWhite": "assets/brand/logo-mark-white.svg",
+      "markOrange": "assets/brand/logo-mark-orange.svg",
+      "lockupHorizontal": "assets/brand/logo-lockup.svg",
+      "lockupStacked": "assets/brand/logo-stacked.svg",
+      "wordmark": "assets/brand/logo-wordmark.svg",
+      "badge": "assets/brand/logo-badge.svg",
+      "favicon": "assets/brand/favicon.svg"
+    },
+    "clearSpace": "the height of the hound's ear, about a quarter of the mark's height, on every side",
+    "minimumSizePx": { "mark": 16, "lockupHorizontalWidth": 96, "lockupStackedWidth": 64, "useBadgeBelow": 24 },
+    "dont": ["add a door or any second symbol", "recolour the eye or body", "outline, shadow, glow or gradient", "stretch, rotate or crop", "retype the wordmark", "use the pre-redesign mark"]
+  },
+  "color": {
+    "ink": "#0E1B2C",
+    "paper": "#F4F4F0",
+    "white": "#FFFFFF",
+    "orange": "#F05A28",
+    "orangeOnLight": "#B23A10",
+    "orangeOnInk": "#FFAE92",
+    "ink2": "#15263B",
+    "ink3": "#1F3552",
+    "textSoft": "#435064",
+    "textFaint": "#566376",
+    "line": "#DAD9D1",
+    "statusOpen": "#1B7A4E",
+    "statusLimited": "#E0A100",
+    "statusBlocked": "#B42318",
+    "rules": ["flat colour, no gradients", "orange is a field or a button with ink text, not text on light grounds", "status colours are for status only", "WCAG AA"]
+  },
+  "type": {
+    "display": { "family": "Bricolage Grotesque", "weights": [700, 800], "tracking": "-0.03em to -0.045em", "lineHeight": "0.98 to 1.1", "license": "SIL OFL 1.1", "file": "assets/fonts/bricolage-grotesque-wght-latin.woff2" },
+    "text": { "family": "Hanken Grotesk", "weights": [400, 500, 600, 700], "size": "17px", "lineHeight": 1.6, "license": "SIL OFL 1.1" },
+    "mono": { "family": "Spline Sans Mono", "weights": [400, 500], "use": "code, addresses, tables only", "license": "SIL OFL 1.1" }
+  },
+  "spacing": { "base": "8px", "contentWidthPx": 1180, "sectionPaddingPx": [72, 80, 112] },
+  "radius": { "buttonPx": 12, "inputPx": 12, "cardPx": [14, 18, 22, 24], "bannerPx": 28, "pill": "not used" },
+  "shadow": "one soft token on panels: 0 1px 0 rgba(14,27,44,.04), 0 18px 40px -24px rgba(14,27,44,.3)",
+  "motion": {
+    "properties": ["opacity", "transform", "one SVG stroke draw"],
+    "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "durationsMs": { "feedback": 150, "logoDoorHover": 220, "entrance": [520, 1100], "stagger": 60 },
+    "reducedMotion": "everything inside prefers-reduced-motion: no-preference; reduced motion gets the final static state",
+    "never": ["bounce", "parallax", "glow", "confetti", "looping decoration"]
+  },
+  "voice": {
+    "style": "experienced practitioner; short declarative sentences; numbers before adjectives; US English",
+    "avoidWords": ["quietly", "actually", "seamlessly", "effortless", "powerful", "unlock", "elevate", "supercharge", "game-changing", "revolutionize", "landscape", "delve", "crucial", "robust"],
+    "hardLimits": [
+      "the score measures readiness; never claim an assistant recommends, cites or names a brand",
+      "no promises about traffic, rankings, citations or revenue",
+      "no invented numbers, testimonials, logos, ratings or user counts",
+      "no official, verified or partner (except official for our own GitHub Action)",
+      "third-party names only descriptively; no third-party logos",
+      "only live integrations are described as available",
+      "llms.txt is optional with no demonstrated effect on Google"
+    ]
+  },
+  "video": {
+    "aspectRatios": ["16:9", "9:16", "1:1"],
+    "hookSeconds": 3,
+    "lengthSeconds": { "shortsReelsTikTok": "15-30", "xLinkedIn": "20-45", "youtubeExplainer": "60-120" },
+    "captions": "always",
+    "storySafeAreaPx": { "top": 250, "bottom": 340 },
+    "labelSyntheticContent": true
+  },
+  "images": { "share": "1200x630 PNG under 300 KB per page type (scripts/generate-og.js)", "socialPack": "brand/social", "listingIcons": "brand/listing-icons" }
+}

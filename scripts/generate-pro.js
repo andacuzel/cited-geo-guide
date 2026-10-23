@@ -19,6 +19,7 @@
 'use strict';
 
 const fs = require('fs');
+const og = require('../lib/og.js');
 const siteFooter = require('../lib/site-footer.js');
 const path = require('path');
 const render = require('../lib/report-render.js');
@@ -272,7 +273,7 @@ function shellParts() {
   const about = fs.readFileSync(path.join(ROOT, 'about.html'), 'utf8');
   const grab = (re, what) => { const m = about.match(re); if (!m) throw new Error('about.html: could not find ' + what); return m[0]; };
   return {
-    favicon: grab(/<link rel="icon"[^>]*>/, 'favicon'),
+    favicon: grab(/<link rel="icon" href="\/assets\/brand\/favicon\.svg"[^>]*>/, 'favicon'),
     fonts: grab(/<link rel="preload" href="\/assets\/fonts\/[\s\S]*?<script defer src="\/_vercel\/insights\/script\.js"><\/script>/, 'font links'),
     header: grab(/<header class="site-header">[\s\S]*?<\/header>/, 'header'),
   };
@@ -298,7 +299,9 @@ function waitlistSection() {
     '        </div>\n      </div>\n    </section>\n\n';
 }
 
-function build() {
+function build() { return og.apply(buildRaw(), '/pro'); }
+
+function buildRaw() {
   const F = figures();
   const c = F.cit;
   const k = F.case;

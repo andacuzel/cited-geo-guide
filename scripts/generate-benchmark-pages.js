@@ -38,6 +38,8 @@
    ===================================================================== */
 
 const fs = require('fs');
+const og = require('../lib/og.js');
+
 const siteChrome = require('./site-chrome.js');
 const siteFooter = require('../lib/site-footer.js');
 const datasetLicense = require('../lib/dataset-license.js');
@@ -301,7 +303,7 @@ function tieNote(c) {
 function shell() {
   const src = fs.readFileSync(path.join(ROOT, 'citation-tracking.html'), 'utf8');
   const header = (/ {2}<header class="site-header">[\s\S]*?<\/header>/.exec(src) || [])[0];
-  const icon = (/ {2}<link rel="icon"[^\n]*/.exec(src) || [])[0];
+  const icon = (/ {2}<link rel="icon" href="\/assets\/brand\/favicon\.svg"[^\n]*/.exec(src) || [])[0];
   const fonts = (/ {2}<link rel="preload" href="\/assets\/fonts\/[\s\S]*?<script defer src="\/_vercel\/insights\/script\.js"><\/script>/.exec(src) || [])[0];
   if (!header || !icon || !fonts) throw new Error('Could not read the page shell from citation-tracking.html');
   return { header: header, icon: icon, fonts: fonts };
@@ -379,7 +381,9 @@ function figureSection(id, heading, lead, label, svg, caption, source) {
    Category page
    --------------------------------------------------------------------- */
 
-function categoryPage(c, overall) {
+function categoryPage(c, overall) { return og.apply(categoryPageRaw(c, overall), '/benchmarks/' + c.slug); }
+
+function categoryPageRaw(c, overall) {
   const url = SITE + '/benchmarks/' + c.slug;
   const source = 'Source: Citehound scan, ' + dateLong(c.date) + ', ' + c.scanned + ' ' + c.note;
   const title = 'Citehound — ' + c.label + ': AI Readiness Benchmark';
@@ -473,7 +477,9 @@ function categoryPage(c, overall) {
    Index page
    --------------------------------------------------------------------- */
 
-function indexPage(all) {
+function indexPage(all) { return og.apply(indexPageRaw(all), '/benchmarks'); }
+
+function indexPageRaw(all) {
   const ranked = all.cats.slice().sort((a, b) => b.avg - a.avg || b.scanned - a.scanned);
   const url = SITE + '/benchmarks';
   const win = dateWindow(all.cats.map((c) => c.date));

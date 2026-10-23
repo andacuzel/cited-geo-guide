@@ -20,3 +20,5 @@ claude-plugin/
 .claude-plugin/
 cli/
 integrations/
+# The social asset pack and the listing icons are repository files (brand/); the press kit page uses assets/brand.
+/brand/

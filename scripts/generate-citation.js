@@ -26,6 +26,8 @@
 const siteChrome = require('./site-chrome.js');
 
 const fs = require('fs');
+const og = require('../lib/og.js');
+
 const siteFooter = require('../lib/site-footer.js');
 const path = require('path');
 const ICONS = require('../lib/icons.js');
@@ -145,7 +147,7 @@ function shellParts() {
   const index = read('index.html');
   const wrap = grab(read('content/citation-scatter.fragment.txt'), /<div class="teaser__scene-wrap">[\s\S]*?<p class="teaser__caption">Illustration\. Not real data\.<\/p>\s*<\/div>/, 'the scatter (teaser__scene-wrap) in content/citation-scatter.fragment.txt');
   return {
-    favicon: grab(about, /<link rel="icon"[^>]*>/, 'favicon'),
+    favicon: grab(about, /<link rel="icon" href="\/assets\/brand\/favicon\.svg"[^>]*>/, 'favicon'),
     fonts: grab(about, /<link rel="preload" href="\/assets\/fonts\/[\s\S]*?<script defer src="\/_vercel\/insights\/script\.js"><\/script>/, 'font links'),
     sceneSnippet: grab(index, /<script>if \(window\.IntersectionObserver && window\.CSS && CSS\.registerProperty[^<]*<\/script>/, 'the scene-anim head snippet'),
     header: grab(about, /<header class="site-header">[\s\S]*?<\/header>/, 'header'),
@@ -157,7 +159,9 @@ function shellParts() {
    The page
    --------------------------------------------------------------------- */
 
-function build(sample) {
+function build(sample) { return og.apply(buildRaw(sample), '/citation-tracking'); }
+
+function buildRaw(sample) {
   const d = derive(sample);
   const shell = shellParts();
   const title = 'Citehound — Citation Tracking: Does a Model Name Your Brand?';

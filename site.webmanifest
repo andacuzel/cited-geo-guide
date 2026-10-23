@@ -1,0 +1,21 @@
+{
+  "name": "Citehound",
+  "short_name": "Citehound",
+  "description": "Scan, fix and write for the way AI answers.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#F4F4F0",
+  "theme_color": "#0E1B2C",
+  "icons": [
+    {
+      "src": "/assets/brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
