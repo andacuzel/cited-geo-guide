@@ -10,9 +10,18 @@ Baseline (before): gates 84/84. Self-scan of getcitehound.com: see BASELINE belo
 - [x] 2 Homepage and /pricing
 - [x] 3 Other public pages (inherit v4; page banners; tour screenshots re-captured from the live pages)
 - [x] 4 Motion (CSS only; hero arc and doors, pricing arches, scroll reveals, press feedback, logo door)
-- [ ] 5 Final QA, after screenshots
+- [x] 5 Final QA, after screenshots (docs/redesign/after)
 
 ## In progress
+- Nothing. The redesign is deployed (last commit c82513f plus this file).
+
+## Final QA (live, 23 Oct 2026)
+- Gates 84/84.
+- Headless browser over 40 public pages at 390, 768 and 1280 px against production: 0 CSP violations, 0 console errors, 0 horizontal overflow, 0 requests to another host. Real scan from the home page works under the CSP.
+- Cookies: 0 (document.cookie empty, browser jar empty). Third-party requests: 0.
+- Home page sanity (unthrottled, one run): desktop LCP 548 ms, mobile LCP 1096 ms, CLS 0, 21 to 22 requests.
+- Self-scan of getcitehound.com after: 87/100 (27/40, 20/20, 40/40), the same as before.
+- Not done: Lighthouse itself (not installed here); an axe-style contrast run (token ratios are checked by test-contrast-scope.js; the new combinations were checked by hand); the encrypted /r/ pages keep their old baked-in look.
 - 3: other public pages inherit the system (page banners with the arch). Brand files regenerated (logo SVG/PNG, favicon, apple-touch-icon, share images v=3, with the wordmark as outlines of Bricolage Grotesque 800). Next: product-tour screenshots, motion pass, final QA.
 - 1 + 2 (stage 1): tokens, Bricolage Grotesque, new mark, base components, homepage (hero report preview with ten doors, how it works as arches, audiences, integrations, orange closing field). Pricing page next.
 
