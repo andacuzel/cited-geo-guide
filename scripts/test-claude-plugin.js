@@ -9,7 +9,7 @@
      readiness sentence is in the README and in the scan and compare skills; no logo or image;
    - the licence is MIT and the README has the install steps;
    - `claude plugin validate` passes when the Claude Code CLI is on this machine (it is looked for on the PATH and in the desktop app's folder; skipped, and said so, when it is not).
-   The site says "In preparation" about the plugin until the owner publishes it (scripts/generate-claude-page.js checks that).
+   The plugin is live from our own marketplace (owner-tested in the Claude desktop app, 23 Oct 2026); /claude and /integrations give the install lines (scripts/generate-claude-page.js checks that).
 
      node scripts/test-claude-plugin.js
    ===================================================================== */

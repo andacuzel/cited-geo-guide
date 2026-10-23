@@ -29,14 +29,15 @@ const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
 const TITLE = 'Citehound integrations: what is available';
-const DESC = 'The ways to use Citehound now: the Claude connector, the MCP Registry listing, the GitHub Action, the public API and the command line. Others are apart.';
+const DESC = 'Ways to use Citehound now: the Claude connector and plugin, the MCP Registry listing, the GitHub Action, the public API, the command line and n8n.';
 const H1 = 'Where you can use Citehound';
 
 const live = data.items.filter((i) => i.status === 'live');
 const waiting = data.items.filter((i) => i.status !== 'live');
+const installs = (i) => [].concat(i.install || []);
 
 function body() {
-  const cards = live.map((i) => '          <li class="cl-prompt"><p class="cl-prompt__text">' + (i.url ? '<a href="' + esc(i.url) + '">' + esc(i.name) + '</a>' : esc(i.name)) + '</p><p class="cl-prompt__tool">' + esc(i.description) + '</p>' + (i.install ? '<p class="cl-prompt__tool"><code>' + esc(i.install) + '</code></p>' : '') + '</li>').join('\n');
+  const cards = live.map((i) => '          <li class="cl-prompt"><p class="cl-prompt__text">' + (i.url ? '<a href="' + esc(i.url) + '">' + esc(i.name) + '</a>' : esc(i.name)) + '</p><p class="cl-prompt__tool">' + esc(i.description) + '</p>' + installs(i).map((l) => '<p class="cl-prompt__tool"><code>' + esc(l) + '</code></p>').join('') + '</li>').join('\n');
   return '    <section aria-labelledby="hero-heading">\n      <div class="section__inner">\n        <div class="page-banner">\n          <div class="page-banner__body">\n            <p class="kicker kicker--on-navy">Integrations</p>\n' +
     '            <h1 id="hero-heading" class="page-banner__title">' + esc(H1) + '</h1>\n' +
     '            <p class="page-banner__desc">' + ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven'][live.length] + ' ways to use Citehound are available now. They measure AI readiness: crawler access and on-page signals. The score does not measure whether any assistant names a brand.</p>\n' +
@@ -90,7 +91,7 @@ function check() {
   const prep = /id="preparation"[\s\S]*$/.exec(page);
   if (!prep || /<a href="(?!mailto)/.test(prep[0].replace(/<footer[\s\S]*$/, ''))) bad('the "In preparation" section must carry no link');
   if (/npx |npm install|\/plugin install|marketplace add|zapier push|pd publish|ray develop/i.test(prep ? prep[0] : '')) bad('the "In preparation" section must give no install step');
-  data.items.forEach((i) => { if (i.install && i.status !== 'live') bad(i.id + ' has an install line but is not live'); if (i.status === 'live' && i.install && page.indexOf(esc(i.install)) === -1) bad(i.id + ' install line is not on the page'); });
+  data.items.forEach((i) => { if (i.install && i.status !== 'live') bad(i.id + ' has an install line but is not live'); installs(i).forEach((l) => { if (i.status === 'live' && page.indexOf(esc(l)) === -1) bad(i.id + ' install line is not on the page'); }); });
   if (TITLE.length > 60) bad('the title is over 60 characters');
   if (DESC.length < 120 || DESC.length > 160) bad('the description is ' + DESC.length + ' characters, not 120 to 160');
   if ((page.match(/<h1[ >]/g) || []).length !== 1) bad('needs exactly one h1');

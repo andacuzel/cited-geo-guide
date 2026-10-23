@@ -67,7 +67,7 @@ const wf = read('.github/workflows/publish-cli.yml');
 t('the publish workflow runs only on a cli-v* tag, with id-token write and --provenance, and checks the tag against the version', /tags:\s*\n\s*- 'cli-v\*'/.test(wf) && !/pull_request|branches:|schedule:|workflow_dispatch/.test(wf) && /id-token: write/.test(wf) && /npm publish --provenance --access public/.test(wf) && /does not match version/.test(wf) && /secrets\.NPM_TOKEN/.test(wf) && !/NPM_TOKEN: *[A-Za-z0-9]{10}/.test(wf));
 t('the CLI is kept off the deployed site (.vercelignore)', /^cli\/$/m.test(read('.vercelignore')));
 const claudePage = read('claude.html').replace(/<[^>]+>/g, ' ');
-t('the site: /claude gives the CLI install line and keeps the plugin as In preparation; /integrations lists the CLI as available with the npm link; no plugin install command anywhere', /npx citehound scan yourdomain\.com/.test(claudePage) && /In preparation/.test(claudePage) && !/\/plugin install|marketplace add/i.test(read('claude.html') + read('llms.txt') + read('index.html') + read('api.html') + read('integrations.html')) && /https:\/\/www\.npmjs\.com\/package\/citehound/.test(read('integrations.html')) && /npx citehound scan yourdomain\.com/.test(read('integrations.html')));
+t('the site: /claude gives the CLI install line; /integrations lists the CLI as available with the npm link', /npx citehound scan yourdomain\.com/.test(claudePage) && /https:\/\/www\.npmjs\.com\/package\/citehound/.test(read('integrations.html')) && /npx citehound scan yourdomain\.com/.test(read('integrations.html')));
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');
 if (fails.length) { fails.forEach((f) => out('FAIL: ' + f)); process.exit(1); }

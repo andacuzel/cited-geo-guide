@@ -52,9 +52,13 @@
     {
       "id": "claude-plugin",
       "name": "Claude plugin",
-      "status": "ready-to-submit",
-      "url": null,
-      "description": ""
+      "status": "live",
+      "url": "/claude#plugin",
+      "description": "Adds the Citehound MCP server and three guided skills (scan a site, fix AI crawler access, compare with a competitor) to Claude. It installs from our own GitHub marketplace, andacuzel/cited-geo-guide, not from Anthropic's plugin directory.",
+      "install": [
+        "Claude desktop app: Plugins → Add → marketplace \"andacuzel/cited-geo-guide\" → install \"citehound\"",
+        "Claude Code: /plugin marketplace add andacuzel/cited-geo-guide, then /plugin install citehound@citehound"
+      ]
     },
     {
       "id": "make",
@@ -102,6 +106,20 @@
       "id": "google-sheets",
       "name": "Google Sheets script",
       "status": "ready-to-submit",
+      "url": null,
+      "description": ""
+    },
+    {
+      "id": "slack",
+      "name": "Slack command",
+      "status": "planned",
+      "url": null,
+      "description": ""
+    },
+    {
+      "id": "chrome-extension",
+      "name": "Chrome extension",
+      "status": "planned",
       "url": null,
       "description": ""
     }

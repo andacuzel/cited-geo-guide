@@ -334,7 +334,8 @@
         </div>
         <p class="cl-limits">The connector measures readiness: whether crawlers can reach a site and whether its pages carry signals a model can read. It does not measure whether any assistant names a brand. It has no Pro or signed-in layer yet.</p>
         <p class="cl-limits"><strong>Command line:</strong> <code>npx citehound scan yourdomain.com</code> scans a domain from a terminal or a build, and writes llms.txt, robots.txt and JSON-LD. It needs no account. See the <a href="/api#cli">API page</a>.</p>
-        <p class="cl-limits"><strong>In preparation:</strong> a Claude plugin that adds three guided skills to this connector. It is not published yet.</p>
+        <p class="cl-limits" id="plugin"><strong>Claude plugin:</strong> adds this connector and three guided skills (scan a site, fix AI crawler access, compare with a competitor). It installs from our own plugin marketplace, the <code>andacuzel/cited-geo-guide</code> repository, not from Anthropic's plugin directory.</p>
+        <p class="cl-limits">In the Claude desktop app: <strong>Plugins</strong>, <strong>Add</strong>, add the marketplace <code>andacuzel/cited-geo-guide</code>, then install <code>citehound</code>. In Claude Code: <code>/plugin marketplace add andacuzel/cited-geo-guide</code>, then <code>/plugin install citehound@citehound</code>.</p>
       </div>
     </section>
 

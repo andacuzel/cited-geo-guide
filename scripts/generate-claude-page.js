@@ -114,7 +114,8 @@ function body() {
     '    <section class="cl-sec hp-light" id="limits" aria-labelledby="limits-heading">\n      <div class="section__inner">\n' + head('Limits', 'limits-heading', 'What it does not do.') +
     '        <p class="cl-limits">The connector measures readiness: whether crawlers can reach a site and whether its pages carry signals a model can read. It does not measure whether any assistant names a brand. It has no Pro or signed-in layer yet.</p>\n' +
     '        <p class="cl-limits"><strong>Command line:</strong> <code>npx citehound scan yourdomain.com</code> scans a domain from a terminal or a build, and writes llms.txt, robots.txt and JSON-LD. It needs no account. See the <a href="/api#cli">API page</a>.</p>\n' +
-    '        <p class="cl-limits"><strong>In preparation:</strong> a Claude plugin that adds three guided skills to this connector. It is not published yet.</p>\n' +
+    '        <p class="cl-limits" id="plugin"><strong>Claude plugin:</strong> adds this connector and three guided skills (scan a site, fix AI crawler access, compare with a competitor). It installs from our own plugin marketplace, the <code>andacuzel/cited-geo-guide</code> repository, not from Anthropic\'s plugin directory.</p>\n' +
+    '        <p class="cl-limits">In the Claude desktop app: <strong>Plugins</strong>, <strong>Add</strong>, add the marketplace <code>andacuzel/cited-geo-guide</code>, then install <code>citehound</code>. In Claude Code: <code>/plugin marketplace add andacuzel/cited-geo-guide</code>, then <code>/plugin install citehound@citehound</code>.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
     '    <section class="home-faq hp-light" id="faq" aria-labelledby="faq-heading">\n      <div class="section__inner">\n' + head('Questions', 'faq-heading', 'Before you connect.') +
@@ -186,9 +187,9 @@ function check() {
   const text = visible(page.replace(/<header class="site-header">[\s\S]*?<\/header>/, '').replace(/<footer[\s\S]*?<\/footer>/, ''));
   const hit = FORBIDDEN.exec(text);
   if (hit) bad('a word the brief forbids is on the page: "' + hit[0] + '"');
-  if (!/In preparation: a Claude plugin/.test(text)) bad('the page must say, as "In preparation", that the plugin is not published yet');
+  if (!/\/plugin marketplace add andacuzel\/cited-geo-guide/.test(text) || !/\/plugin install citehound@citehound/.test(text) || !/not from Anthropic['’]s plugin directory/.test(text)) bad('the page must give both plugin install lines and say it is not from Anthropic’s plugin directory');
   if (!/npx citehound scan yourdomain\.com/.test(text)) bad('the page must give the command-line install line');
-  if (/npm install|npm i -g|\/plugin install|marketplace add|\bcitehound-cli\b/i.test(text)) bad('the page must not give an install command for the plugin before it is published');
+  if (/npm install|npm i -g|\bcitehound-cli\b/i.test(text)) bad('the page must not give an npm install command; the CLI runs with npx');
   if (/\bChatGPT\b|\bOpenAI\b/.test(text)) bad('the page names ChatGPT or OpenAI; it is about the Claude connector');
   if ((text.match(/—|&mdash;/g) || []).length > 2) bad('too many em dashes for the voice');
   if (page.indexOf('value="' + URL_MCP + '"') === -1) bad('the server address is not the registry\'s (' + URL_MCP + ')');

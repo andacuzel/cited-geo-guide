@@ -4,7 +4,7 @@ Read `RULES.md` first. A line below changes to "live" only when the thing really
 
 | Item | Folder | State on 23 Oct 2026 | What the site says |
 |---|---|---|---|
-| Claude plugin (MCP server + 3 skills) | `claude-plugin/`, marketplace file `.claude-plugin/marketplace.json` | Built and validated with `claude plugin validate --strict`; not yet tested in a real Claude Code session. Installable from this repository. Not listed in any plugin directory. | In preparation |
+| Claude plugin (MCP server + 3 skills) | `claude-plugin/`, marketplace file `.claude-plugin/marketplace.json` | **Live from our own GitHub marketplace** (`andacuzel/cited-geo-guide`). Installed and tried by the owner in the Claude desktop app on 23 Oct 2026; also installed in Claude Code, where `scan_site` ran through it. Not listed in Anthropic's plugin directory. | Available: `/integrations`, `/claude` (both install lines) |
 | `citehound` command-line tool | `cli/` | **Published to npm as `citehound@0.1.0`** (https://www.npmjs.com/package/citehound), self-checked by the owner with `npm view`. | Available: `/integrations`, `/claude`, `/api` |
 | n8n community node | `integrations/n8n/` | **Published to npm as `n8n-nodes-citehound@0.1.0`.** Loaded in a real n8n 2.44.6 on 23 Oct 2026 (log: "Loaded all credentials and nodes from n8n-nodes-citehound": 1 credential, 2 nodes, `citehound` and `citehoundTrigger`); no key and no API call used. Not submitted to n8n for review (a community node). | Available on `/integrations`, as a community node |
 
@@ -31,4 +31,20 @@ Paste the key when the cursor waits (nothing shows as you type), press Return. W
 
 ## Claude plugin
 
-Nothing to publish for it to work: in Claude Code run `/plugin marketplace add andacuzel/cited-geo-guide` and `/plugin install citehound@citehound`. Submitting it to Anthropic's plugin directory is a separate step the owner decides; do not claim a listing before the directory has approved it (RULES.md).
+Live from our own marketplace. Claude desktop app: Plugins → Add → marketplace `andacuzel/cited-geo-guide` → install `citehound`. Claude Code: `/plugin marketplace add andacuzel/cited-geo-guide` and `/plugin install citehound@citehound`. Submitting it to Anthropic's plugin directory is a separate step the owner decides; do not claim a listing before the directory has approved it (RULES.md).
+
+## Closed for 23 Oct 2026
+
+**Live:** Claude connector, MCP Registry listing, GitHub Action, public API, npm CLI (`citehound`), n8n community node (`n8n-nodes-citehound`), Claude plugin (own marketplace).
+
+**Deferred** (listed by name only under "In preparation" on `/integrations`, no link, no claim):
+
+- Google Sheets: the code is ready; the owner's browser is too old to test the Apps Script menu.
+- Looker Studio: the code is ready; same browser problem as Google Sheets.
+- Zapier: a public listing needs a company; a private invite link is optional later.
+- Pipedream: listing is review-based and takes days.
+- Raycast: store submission is review-based and takes days.
+- Activepieces: listing is review-based and takes days.
+- Make: the app was never opened in Make's editor.
+- Slack: needs an endpoint for Slack's requests, and no new serverless function may be added.
+- Chrome extension: not built.
