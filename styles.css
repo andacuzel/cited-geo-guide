@@ -6122,3 +6122,24 @@ input.field::placeholder { color: var(--ink-faint); }
 @media (max-width: 700px) { .home-close__panel { padding: 32px 24px; border-radius: 22px; } }
 .ag-hero__title { font-size: clamp(38px, 4.5vw, 66px); }
 
+
+/* ---------- Round 2 polish, from the design-taste inspector and a manual review ---------- */
+/* section kickers repeat the heading under them; the headline carries the meaning (banners and heroes keep theirs) */
+.section-head > .kicker { display: none; }
+.bframe { box-shadow: none; }
+.bframe__url { font-family: var(--font-body); font-size: 13px; }
+.plan__frame--aux { box-shadow: 0 30px 60px -30px rgba(14, 27, 44, 0.55); }
+.plan__text { font-size: clamp(30px, 3.2vw, 46px); }
+.agent__ok, .ag-chip, .ac-chip { color: #14613D; }
+.ag-chip--warn, .agent__pre { color: #6B4600; }
+.cf__p { font-size: 11px; }
+.fb__chip, .fb__pts { font-size: 13px; }
+.hub-hero, .hub-section { margin-top: 0; }
+
+/* page changes cross-fade where the browser supports it (no script); the header stays put */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .site-header { view-transition-name: site-header; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+}
+
