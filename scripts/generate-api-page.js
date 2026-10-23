@@ -152,6 +152,14 @@ function plansSection() {
     '      </div>\n    </section>\n\n';
 }
 
+function cliSection() {
+  return '    <section class="cl-sec hp-light" id="cli" aria-labelledby="cli-heading">\n      <div class="section__inner">\n' +
+    head('Command line', 'cli-heading', 'Use it from a terminal or a build.', 'The <code>citehound</code> command on npm has no dependencies and needs Node.js 18 or newer. Its package page is <a href="https://www.npmjs.com/package/citehound">npmjs.com/package/citehound</a>.') +
+    snippet('cliSample', 'Terminal', 'npx citehound scan yourdomain.com\nnpx citehound scan yourdomain.com --fail-under 70\nnpx citehound compare mysite.com theirsite.com\nnpx citehound generate robots-txt yourdomain.com > robots.txt') +
+    '        <p class="cl-note">Without a key the command uses the public endpoint of the MCP server and gives the full output, with public limits. To use your key, put it in the environment: <code>CITEHOUND_API_KEY=chk_...</code>; it is sent only to Citehound and never printed. With a key the command uses this API and your plan\'s limits. Where the Free plan has less than the public output (the full scan detail, compare, the full generated files, the other schema types), the command prints the full public result and the plan\'s message, so a key never gives you less. Pro, Fix and Beyond keys have higher limits and the full API output, as the plan table above shows. <code>--fail-under</code> exits with code 1 when a score is below the number you give.</p>\n' +
+    '      </div>\n    </section>\n\n';
+}
+
 function body() {
   const tag = (t) => OA.ENDPOINTS.filter((e) => e.tag === t);
   const endpoints = OA.ENDPOINTS.map(endpointBlock).join('\n');
@@ -190,6 +198,7 @@ function body() {
     '    <section class="cl-sec hp-light" id="reference" aria-labelledby="reference-heading">\n      <div class="section__inner">\n' + head('Reference', 'reference-heading', OA.ENDPOINTS.length + ' endpoints.', 'Base address <code>' + esc(OA.BASE) + '</code>. Scan: ' + tag('Scan').length + '. Generate: ' + tag('Generate').length + '. Keys, account and benchmark: ' + (tag('Keys').length + tag('Account').length + tag('Benchmark').length) + '. Pro monitoring: ' + (tag('Monitoring').length + tag('Webhooks').length) + '.') +
     '        <div class="ac-faq cl-clients">\n' + endpoints + '\n        </div>\n      </div>\n    </section>\n\n' +
 
+    cliSection() +
     plansSection() +
     monitoringSection() +
     '    <section class="cl-sec hp-light" id="limits" aria-labelledby="limits-heading">\n      <div class="section__inner">\n' + head('Limits', 'limits-heading', 'What a key can do.', 'Every answer carries <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code> and <code>X-RateLimit-Reset</code>. When a limit is reached the answer is 429 with a <code>Retry-After</code> header.') +
@@ -264,6 +273,7 @@ function check() {
   if (hit) bad('a word the brief forbids is on the page: "' + hit[0] + '"');
   if (/\bChatGPT\b|\bClaude\b|\bGemini\b|\bPerplexity\b/.test(text)) bad('the page names an assistant; the API page is about the scan');
   if ((text.match(/—|&mdash;/g) || []).length > 2) bad('too many em dashes for the voice');
+  if (!/npx citehound scan yourdomain\.com/.test(text)) bad('the page must show the command-line usage');
   if (!/does not measure whether any assistant names a brand/.test(text)) bad('the page must say the score does not measure whether any assistant names a brand');
   if (page.indexOf('mailto:' + site.contactEmail) === -1) bad('no contact line');
   (page.match(/href="(\/[^"]*)"/g) || []).forEach((m) => { const h = m.slice(6, -1); if (!pageExists(h)) bad('an internal link points at a page that does not exist: ' + h); });

@@ -1441,6 +1441,28 @@ curl &quot;https://getcitehound.com/v1/scan?domain=example.com&quot; \
       </div>
     </section>
 
+    <section class="cl-sec hp-light" id="cli" aria-labelledby="cli-heading">
+      <div class="section__inner">
+        <div class="section-head">
+          <p class="kicker">Command line</p>
+          <h2 id="cli-heading" class="section-title">Use it from a terminal or a build.</h2>
+          <p class="section-sub">The <code>citehound</code> command on npm has no dependencies and needs Node.js 18 or newer. Its package page is <a href="https://www.npmjs.com/package/citehound">npmjs.com/package/citehound</a>.</p>
+        </div>
+            <div class="fix-snippet" data-copy-wrap>
+              <div class="fix-snippet__head">
+                <span class="fix-snippet__label">Terminal</span>
+                <div class="fix-snippet__actions"><button type="button" class="btn btn--ghost-on-navy cl-copybtn" data-copy-from="#cliSample" data-copied="Copied" hidden>Copy</button></div>
+              </div>
+              <pre class="fix-snippet__code" id="cliSample">npx citehound scan yourdomain.com
+npx citehound scan yourdomain.com --fail-under 70
+npx citehound compare mysite.com theirsite.com
+npx citehound generate robots-txt yourdomain.com &gt; robots.txt</pre>
+              <p class="cl-status cl-status--on-navy" role="status" aria-live="polite"></p>
+            </div>
+        <p class="cl-note">Without a key the command uses the public endpoint of the MCP server and gives the full output, with public limits. To use your key, put it in the environment: <code>CITEHOUND_API_KEY=chk_...</code>; it is sent only to Citehound and never printed. With a key the command uses this API and your plan's limits. Where the Free plan has less than the public output (the full scan detail, compare, the full generated files, the other schema types), the command prints the full public result and the plan's message, so a key never gives you less. Pro, Fix and Beyond keys have higher limits and the full API output, as the plan table above shows. <code>--fail-under</code> exits with code 1 when a score is below the number you give.</p>
+      </div>
+    </section>
+
     <section class="cl-sec hp-light" id="plans" aria-labelledby="plans-heading">
       <div class="section__inner">
         <div class="section-head">

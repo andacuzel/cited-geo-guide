@@ -4,22 +4,19 @@ Read `RULES.md` first. A line below changes to "live" only when the thing really
 
 | Item | Folder | State on 23 Oct 2026 | What the site says |
 |---|---|---|---|
-| Claude plugin (MCP server + 3 skills) | `claude-plugin/`, marketplace file `.claude-plugin/marketplace.json` | Built and validated with `claude plugin validate --strict`. Installable from this repository once it is on `main`. Not listed in any plugin directory. | In preparation |
-| `citehound` command-line tool | `cli/` | Built and tested. **Not published to npm.** The name `citehound` was free on npm on 23 Oct 2026. | In preparation |
+| Claude plugin (MCP server + 3 skills) | `claude-plugin/`, marketplace file `.claude-plugin/marketplace.json` | Built and validated with `claude plugin validate --strict`; not yet tested in a real Claude Code session. Installable from this repository. Not listed in any plugin directory. | In preparation |
+| `citehound` command-line tool | `cli/` | **Published to npm as `citehound@0.1.0`** (https://www.npmjs.com/package/citehound), self-checked by the owner with `npm view`. | Available: `/integrations`, `/claude`, `/api` |
 
-## Publish the CLI to npm (the owner does this once)
+## The CLI on npm (published 23 Oct 2026, version 0.1.0)
 
-Needs an npm account. Use a clone outside iCloud (see CLAUDE.md, "Repository location").
+For a later version the owner does this (CLI changes need a new version: `npm version` and a publish, see CLAUDE.md):
 
-1. Make an account at https://www.npmjs.com/signup and switch on two-factor authentication in the account settings.
-2. In Terminal, get a clean copy: `git clone https://github.com/andacuzel/cited-geo-guide.git ~/dev/citehound && cd ~/dev/citehound/cli`
-3. Log in: `npm login`. A browser window opens; sign in there. Terminal then says "Logged in as <your name>".
-4. Run the tests: `npm test`. You should see `ℹ pass 39` and `ℹ fail 0`.
-5. Publish: `npm publish --access public`. npm asks for a one-time code from your authenticator app. You should see `+ citehound@0.1.0`.
-6. Check it: `npm view citehound version` shows `0.1.0`, and `npx citehound --version` shows `0.1.0`.
-7. Then tell the assistant "the CLI is published". It will remove the "not on npm yet" lines, change the site from "In preparation" to the install command, and update this file.
+1. `cd cli`, change the code, add a line to `CHANGELOG.md`, run `npm test` (all pass).
+2. `npm version patch` (or `minor`), which raises the version in `package.json`. Commit and push.
+3. `npm login` if needed, then `npm publish --access public`; check with `npm view citehound version`.
+4. Optional, with provenance: add an npm automation token as the repository secret `NPM_TOKEN`, then `git tag cli-vX.Y.Z && git push origin cli-vX.Y.Z`; `.github/workflows/publish-cli.yml` publishes it. Do not publish the same version both ways.
 
-Optional, with provenance (a badge on npm that proves which commit built the package): add an npm "automation" token as a repository secret named `NPM_TOKEN` (GitHub, the repository, Settings, Secrets and variables, Actions, New repository secret), then run `git tag cli-v0.1.0 && git push origin cli-v0.1.0`. `.github/workflows/publish-cli.yml` publishes it with `--provenance`. Do not do both ways for the same version. npm refuses `--provenance` from a laptop, which is why `package.json` does not set it.
+The README on the npm page is the one inside the published version: it shows the changes made after 0.1.0 only after the next publish.
 
 ## Confirm the CLI against the live API with your key
 
@@ -29,7 +26,7 @@ In Terminal, without pasting the key anywhere else (the key stays in your shell)
 read -s CITEHOUND_API_KEY && export CITEHOUND_API_KEY && npx citehound scan getcitehound.com --json | head -c 400
 ```
 
-Paste the key when the cursor waits (nothing shows as you type), press Return. You should see JSON that starts with `"source": "api_key"` and a `"score"`. If it says the key was not accepted, the key is wrong or revoked; if it says a limit was reached, wait the seconds it names.
+Paste the key when the cursor waits (nothing shows as you type), press Return. With a free key and a Free-plan limit you may see `"source": "public"` (the CLI falls back to the public output). With a paid key you should see JSON that starts with `"source": "api_key"` and a `"score"`. If it says the key was not accepted, the key is wrong or revoked; if it says a limit was reached, wait the seconds it names.
 
 ## Claude plugin
 

@@ -9,7 +9,7 @@
    - `npm pack --dry-run` lists only the intended files (bin, src, README, CHANGELOG, LICENSE, package.json);
    - the source makes no request except to the Citehound address, reads the key only from CITEHOUND_API_KEY, never logs it, and prints no stack trace;
    - the README has three usage examples, the key section, the exit codes and the readiness sentence, and promises no outcome; the site does not say the CLI is live
-     (it says "In preparation" until the owner publishes it: scripts/generate-claude-page.js checks that);
+     (published to npm as 0.1.0 on 23 Oct 2026: /claude, /integrations and /api carry the install line);
    - the publish workflow runs on a cli-v* tag only, with provenance, and checks the tag against the version.
 
      node scripts/test-cli.js
@@ -55,7 +55,7 @@ t('the CLI sends no analytics: its only requests are the API (GET /v1) and the p
 // The README.
 const R = read('cli/README.md');
 t('the README has the three usage examples, the key section, the exit codes and the readiness sentence', /### 1\. Score a site/.test(R) && /### 2\. Fail a build/.test(R) && /### 3\. Write the files/.test(R) && /CITEHOUND_API_KEY/.test(R) && /https:\/\/getcitehound\.com\/api/.test(R) && /## Exit codes/.test(R) && /does not measure whether any assistant names a brand/.test(R));
-t('the README says it is not on npm yet (until the owner publishes it) and says no dependencies, Node 18, MIT', /not on npm yet/.test(R) && /No dependencies/.test(R) && /Node\.js 18/.test(R) && /MIT/.test(R));
+t('the README says it is on npm (published 0.1.0), how to run it, and no dependencies, Node 18, MIT', /npx citehound scan example\.com/.test(R) && !/not on npm yet/.test(R) && /No dependencies/.test(R) && /Node\.js 18/.test(R) && /MIT/.test(R));
 const NEG = /\b(not|never|nothing|no|nor|without|does not|doesn't)\b/i;
 const positive = R.split('\n').filter((l) => !NEG.test(l)).join('\n');
 const hit = /\b(recommend\w*|cites?|cited|ranks?|ranking\w*|guarantee\w*|boost\w*|unlimited|official\w*|verified|partner\w*|visibility)\b/i.exec(positive);
@@ -67,7 +67,7 @@ const wf = read('.github/workflows/publish-cli.yml');
 t('the publish workflow runs only on a cli-v* tag, with id-token write and --provenance, and checks the tag against the version', /tags:\s*\n\s*- 'cli-v\*'/.test(wf) && !/pull_request|branches:|schedule:|workflow_dispatch/.test(wf) && /id-token: write/.test(wf) && /npm publish --provenance --access public/.test(wf) && /does not match version/.test(wf) && /secrets\.NPM_TOKEN/.test(wf) && !/NPM_TOKEN: *[A-Za-z0-9]{10}/.test(wf));
 t('the CLI is kept off the deployed site (.vercelignore)', /^cli\/$/m.test(read('.vercelignore')));
 const claudePage = read('claude.html').replace(/<[^>]+>/g, ' ');
-t('the site says "In preparation" about the CLI and the plugin and does not say they are live', /In preparation/.test(claudePage) && !/npx citehound|npm install|npm i -g|\/plugin install|marketplace add/i.test(read('claude.html') + read('llms.txt') + read('index.html') + read('api.html')));
+t('the site: /claude gives the CLI install line and keeps the plugin as In preparation; /integrations lists the CLI as available with the npm link; no plugin install command anywhere', /npx citehound scan yourdomain\.com/.test(claudePage) && /In preparation/.test(claudePage) && !/\/plugin install|marketplace add/i.test(read('claude.html') + read('llms.txt') + read('index.html') + read('api.html') + read('integrations.html')) && /https:\/\/www\.npmjs\.com\/package\/citehound/.test(read('integrations.html')) && /npx citehound scan yourdomain\.com/.test(read('integrations.html')));
 
 out('\n' + pass + ' passed, ' + fails.length + ' failed');
 if (fails.length) { fails.forEach((f) => out('FAIL: ' + f)); process.exit(1); }

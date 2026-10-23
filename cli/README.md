@@ -4,10 +4,8 @@ Scan a domain for AI **readiness** from the command line: can AI crawlers reach 
 
 The score is a readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand. Nothing here promises a change in traffic, rankings, citations or revenue.
 
-> **Status: not on npm yet.** Until it is published, run it from this repository: `node cli/bin/citehound.js scan example.com`. After it is published, the commands below work as written.
-
 - No dependencies. Node.js 18 or newer. MIT licence.
-- No account and no key needed. A free key raises the limits.
+- No account and no key needed. A key is optional: see Plans below.
 
 ## Use it
 

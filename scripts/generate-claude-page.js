@@ -113,7 +113,8 @@ function body() {
 
     '    <section class="cl-sec hp-light" id="limits" aria-labelledby="limits-heading">\n      <div class="section__inner">\n' + head('Limits', 'limits-heading', 'What it does not do.') +
     '        <p class="cl-limits">The connector measures readiness: whether crawlers can reach a site and whether its pages carry signals a model can read. It does not measure whether any assistant names a brand. It has no Pro or signed-in layer yet.</p>\n' +
-    '        <p class="cl-limits"><strong>In preparation:</strong> a Claude plugin that adds three guided skills to this connector, and a command-line tool for scans in a terminal or in a build. Neither is published yet.</p>\n' +
+    '        <p class="cl-limits"><strong>Command line:</strong> <code>npx citehound scan yourdomain.com</code> scans a domain from a terminal or a build, and writes llms.txt, robots.txt and JSON-LD. It needs no account. See the <a href="/api#cli">API page</a>.</p>\n' +
+    '        <p class="cl-limits"><strong>In preparation:</strong> a Claude plugin that adds three guided skills to this connector. It is not published yet.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
     '    <section class="home-faq hp-light" id="faq" aria-labelledby="faq-heading">\n      <div class="section__inner">\n' + head('Questions', 'faq-heading', 'Before you connect.') +
@@ -185,8 +186,9 @@ function check() {
   const text = visible(page.replace(/<header class="site-header">[\s\S]*?<\/header>/, '').replace(/<footer[\s\S]*?<\/footer>/, ''));
   const hit = FORBIDDEN.exec(text);
   if (hit) bad('a word the brief forbids is on the page: "' + hit[0] + '"');
-  if (!/In preparation: a Claude plugin/.test(text)) bad('the page must say, as "In preparation", that the plugin and the command-line tool are not published yet');
-  if (/npx citehound|npm install|npm i -g|\/plugin install|marketplace add|\bcitehound-cli\b/i.test(text)) bad('the page must not give an install command for the plugin or the CLI before they are published');
+  if (!/In preparation: a Claude plugin/.test(text)) bad('the page must say, as "In preparation", that the plugin is not published yet');
+  if (!/npx citehound scan yourdomain\.com/.test(text)) bad('the page must give the command-line install line');
+  if (/npm install|npm i -g|\/plugin install|marketplace add|\bcitehound-cli\b/i.test(text)) bad('the page must not give an install command for the plugin before it is published');
   if (/\bChatGPT\b|\bOpenAI\b/.test(text)) bad('the page names ChatGPT or OpenAI; it is about the Claude connector');
   if ((text.match(/—|&mdash;/g) || []).length > 2) bad('too many em dashes for the voice');
   if (page.indexOf('value="' + URL_MCP + '"') === -1) bad('the server address is not the registry\'s (' + URL_MCP + ')');
