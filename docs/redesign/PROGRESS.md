@@ -46,3 +46,9 @@ Status 23 Oct 2026: 1 to 6 done and gated (88/88); 7 QA and deploy next. Chosen 
 Skill guidance on OG imagery: design-taste-frontend has none (a "tells" note only); ui-ux-pro-max says "include OpenGraph images for social sharing" (a Metadata rule, no sizes). Followed: one image per page type, 1200x630, real text only, alt text, absolute URLs.
 
 Brand finalisation QA (live, 23 Oct 2026, commit 2176a71 plus this file): 88/88 gates; headless run over 41 public pages (incl. /brand) at 390, 768 and 1280 px: 0 CSP violations, 0 console errors, 0 overflow, 0 third-party requests; real scan under the CSP works; self-scan 87/100 (27/40, 20/20, 40/40), unchanged. All 13 og:image URLs, favicon.ico, favicon.svg, apple-touch-icon.png, site.webmanifest and /brand answer 200 with the right type; brand/ and docs/ are 404 on the site. After screenshots re-saved in docs/redesign/after. Not done: uploads (the owner does them: brand/social/README.md, brand/listing-icons/README.md); the Claude plugin icon was not touched; the n8n icon SVG is updated in the repository and ships with the next npm publish.
+
+## Round 2 (24 Oct 2026, owner's feedback)
+Rollback: tag `pre-round2` (commit 49702be); `git revert` the round 2 commits (one commit per experiment) or Vercel's instant rollback.
+Baseline self-scan: 87/100 (27/40, 20/20, 40/40). Gates 88/88 before.
+Todo: 1 home rebuild (remove orange "See how AI reads your site" block; story order; paid plans + Agentic Commerce presented) / 2 integrations hub (home + /integrations) / 3 OG overlap fix + check / 4 About photo / 5 sell pages (Pro, Fix, Beyond, Agentic Commerce, Pricing) / 6 animations autoplay only / 7 skills audit / 8 QA.
+New strings (every new text, by step):
