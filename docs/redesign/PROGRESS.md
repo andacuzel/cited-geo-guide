@@ -6,10 +6,10 @@ Baseline (before): gates 84/84. Self-scan of getcitehound.com: see BASELINE belo
 
 ## Todo
 - [x] 0 Audit, before screenshots (docs/redesign/before, reduced size; originals not kept), BRIEF.md
-- [ ] 1 Design system
-- [ ] 2 Homepage and /pricing
-- [ ] 3 Other public pages
-- [ ] 4 Motion
+- [x] 1 Design system
+- [x] 2 Homepage and /pricing
+- [x] 3 Other public pages (inherit v4; page banners; tour screenshots re-captured from the live pages)
+- [x] 4 Motion (CSS only; hero arc and doors, pricing arches, scroll reveals, press feedback, logo door)
 - [ ] 5 Final QA, after screenshots
 
 ## In progress
@@ -21,6 +21,7 @@ Baseline (before): gates 84/84. Self-scan of getcitehound.com: see BASELINE belo
 - Safety: disk 4.0 GB free, 84/84 gates, tag pre-redesign pushed.
 
 ## Decisions
+- Motion audit (design-motion-principles, marketing page weighting: Jakub primary, Emil for nav and forms): nothing animates that is used a hundred times a day; no hover lift or scale; all moves are 520 to 1100 ms entrances once per page view or scroll reveals; reduced motion gets the static page; scroll reveals use animation-timeline so nothing is hidden when unsupported. Checked in a browser that centred elements reach opacity 1.
 - scripts/capture-og.js rewritten: no Google Fonts (local woff2 via file URLs), new palette and arch. The share images are versioned ?v=3 on every page (lib/page-shell.js too); test-contrast-scope expects v=3.
 - Baseline self-scan of getcitehound.com: 87/100 (27/40, 20/20, 40/40), 10 crawlers all "Limited" (Disallow /admin/). Must not drop.
 - Strategy: v3 token names kept and re-pointed (palette, fonts, radius); `styles.css` ends with a marked v4 block ("v4:START") that restyles components. The 96 tiny uppercase mono labels in the v3 rules were rewritten in place (sentence case, body font, 13px minimum).

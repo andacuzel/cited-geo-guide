@@ -261,7 +261,18 @@ When editing `index.html`, bump the `?v=` query on the `app.js`,
 `scanner.js` and `styles.css` references — stale caches have broken
 this project twice.
 
-## Design system — "Confident Editorial"
+## Design system v4: "The Doorway" (23 Oct 2026, the owner's redesign; it replaces v3 wherever they differ)
+
+Read `docs/redesign/BRIEF.md` and `docs/redesign/PROGRESS.md`. The motif is the arch, a doorway: robots.txt is the door each AI crawler stands at (open, limited, blocked).
+- **Tokens** are in `:root` of `styles.css` (v3 names, new values): paper `--bg` #F4F4F0, ink `--navy-950` #0E1B2C, white panels, one accent `--gold` #F05A28 (door orange: flat fields and primary buttons with ink text; text on light uses `--gold-deep` #B23A10; on ink use `--gold-soft`). Status colours (green, amber `#E0A100`, red) are for status only.
+- **Type:** Bricolage Grotesque (display, 700 to 800, OFL, self-hosted in `assets/fonts`, `fonts.css`), Hanken Grotesk (text), Spline Sans Mono (code and data only). Gloock is kept in `fonts.css` only for encrypted private reports made before the redesign. No labels in tiny uppercase mono: kickers are sentence case with an arch bullet.
+- **Where the CSS lives:** the v3 rules, then a block starting `/* ===== v4:START ===== */` that restyles components and holds the new ones (hero report preview `.rv`, doors `.door`, arch cards, page banner arches, pricing arches, motion). Edit the v4 block for new work; do not add a second stylesheet.
+- **The mark** is an arch with a door ajar (an inline SVG in every header, footer and lockup; `assets/brand/*`). The wordmark files are outlines of Bricolage Grotesque 800. Share images come from `scripts/capture-og.js` (local fonts, no network; `?v=3`).
+- **The homepage hero preview** is static markup from a real, dated scan of getcitehound.com (score 87; 27/40, 20/20, 40/40; ten crawlers limited, none blocked). Re-date it and re-read the figures when it is touched; it never shows an invented number.
+- **Motion** is opacity and transform (plus one SVG stroke draw), CSS only, inside `prefers-reduced-motion: no-preference`; scroll reveals use `animation-timeline: view()` where supported (nothing stays hidden where it is not).
+- Constraints that stay: no gradients, one shadow token, no third-party request, zero cookies, the CSP in `vercel.json`, WCAG AA contrast, 390 px with no horizontal scroll. The v3 "never" list below is superseded for navy bands (the homepage now has several ink bands and one orange closing field) and for mono uppercase labels; its other rules (sticky header, scan reveal, the two motion exceptions) still hold.
+
+## Design system v3 "Confident Editorial" (superseded by v4 above where they differ)
 
 Surface rhythm creates hierarchy. Never a single-background page.
 

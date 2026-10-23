@@ -39,7 +39,7 @@ async function main() {
   let pw;
   try { pw = require('playwright'); } catch (e) { console.error('playwright is not installed. Set NODE_PATH to a node_modules folder that has it (see the header of this file).'); process.exit(1); }
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await pw.chromium.launch();
+  const browser = await pw.chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
   for (const s of SHOTS) {
     if (ONLY && ONLY.indexOf(s.file) === -1) continue;
     for (const [suffix, scale] of s.sizes) {
