@@ -8,6 +8,7 @@
    groups:  logo      assets/brand/png/*  and the legacy logo-mark / logo-lockup PNGs
             icons     favicon.ico, apple-touch-icon.png, assets/brand/icon-192.png and icon-512.png, site.webmanifest
             listing   brand/listing-icons/*   (512 and 1024 px square icons for directory listings)
+            copy      brand/logo/* (a copy of the logo set; also done by the logo group)
             social    brand/social/*          (profile images, headers, covers, post and story templates, thumbnails)
 
    One-off images in the same style (a post, a story or a thumbnail) with your own words:
@@ -139,14 +140,24 @@ function check() {
     const b = fs.readFileSync(j.out);
     if (b.slice(1, 4).toString() !== 'PNG' || b.readUInt32BE(16) !== j.w || b.readUInt32BE(20) !== j.h) errs.push(path.relative(ROOT, j.out) + ' is not ' + j.w + 'x' + j.h + ' PNG');
   });
-  ['favicon.ico', 'site.webmanifest', 'brand/social/README.md', 'brand/listing-icons/README.md', 'brand/brand.json'].forEach((f) => { if (!fs.existsSync(path.join(ROOT, f))) errs.push('missing ' + f); });
+  ['favicon.ico', 'site.webmanifest', 'brand/logo/logo-lockup.svg', 'brand/logo/png/logo-mark-512.png', 'docs/brand/README.md', 'brand/social/README.md', 'brand/listing-icons/README.md', 'brand/brand.json'].forEach((f) => { if (!fs.existsSync(path.join(ROOT, f))) errs.push('missing ' + f); });
   if (errs.length) { errs.forEach((e) => console.error('FAIL: ' + e)); return 1; }
   console.log('OK: the logo PNGs, icons, listing icons and social pack exist at the sizes their templates ask for');
   return 0;
 }
 
+// brand/logo/: a copy of the logo set (SVG and PNG exports) for the repository's own brand folder; assets/brand stays the source the site serves
+function copyLogo() {
+  const dst = path.join(ROOT, 'brand', 'logo');
+  fs.mkdirSync(path.join(dst, 'png'), { recursive: true });
+  fs.readdirSync(BRAND).filter((f) => /^(logo-.*|favicon)\.(svg|png)$/.test(f)).forEach((f) => fs.copyFileSync(path.join(BRAND, f), path.join(dst, f)));
+  fs.readdirSync(path.join(BRAND, 'png')).forEach((f) => fs.copyFileSync(path.join(BRAND, 'png', f), path.join(dst, 'png', f)));
+  console.log('copied the logo set to brand/logo');
+}
+
 async function main() {
   if (process.argv.includes('--check')) process.exit(check());
+  if (process.argv[2] === 'copy') return copyLogo();
   const arg = process.argv[2];
   if (arg === 'make') return art.render(make(process.argv.slice(3)));
   const groups = (arg || 'logo,icons,listing,social').split(',');
@@ -157,6 +168,7 @@ async function main() {
   if (groups.includes('social')) jobs = jobs.concat(socialJobs());
   await art.render(jobs);
   if (groups.includes('icons')) writeIco();
+  if (groups.includes('logo')) copyLogo();
 }
 
 if (require.main === module) main().catch((e) => { console.error(e && e.stack ? e.stack : e); process.exit(1); });

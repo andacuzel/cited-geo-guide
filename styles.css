@@ -5732,36 +5732,6 @@ input.field::placeholder { color: var(--ink-faint); }
 }
 
 
-/* ---------- /brand (press kit) ---------- */
-.br-sec { padding: 72px 0; }
-.br-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-.br-tile { border: 2px solid var(--navy-950); border-radius: 22px; background: var(--white); overflow: hidden; }
-.br-art { display: flex; align-items: center; justify-content: center; min-height: 170px; padding: 24px; background: var(--bg); border-bottom: 2px solid var(--navy-950); }
-.br-art--dark { background: var(--navy-950); }
-.br-art img { display: block; max-width: 100%; height: auto; }
-.br-name { margin: 14px 18px 4px; font-weight: 700; }
-.br-links { margin: 0 18px 16px; display: flex; gap: 16px; font-weight: 700; }
-.br-links a { color: var(--gold-deep); }
-.br-h3 { margin: 56px 0 16px; font-size: 28px; }
-.br-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
-.br-lead { margin: 0 0 8px; font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.03em; }
-.br-list { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
-.br-list--wide { max-width: 760px; }
-.br-swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.br-sw { display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto auto; gap: 2px 16px; align-items: center; padding: 14px; border: 2px solid var(--navy-950); border-radius: 18px; background: var(--white); }
-.br-chip { grid-row: 1 / 4; width: 64px; height: 64px; border-radius: 14px; border: 2px solid var(--navy-950); }
-.br-sw__name { font-weight: 700; }
-.br-sw code { font-family: var(--font-mono); font-size: 14px; }
-.br-sw__use { font-size: 14.5px; color: var(--ink-soft); }
-.br-type { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 2px solid var(--navy-950); }
-.br-type li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: baseline; padding: 20px 4px; border-bottom: 2px solid var(--navy-950); }
-.br-type__s { font-size: 34px; line-height: 1.1; }
-.br-type__s--d { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.04em; }
-.br-type__s--m { font-family: var(--font-mono); font-size: 28px; }
-.br-more { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
-@media (max-width: 700px) { .br-cols, .br-type li { grid-template-columns: minmax(0, 1fr); } .br-sec { padding: 56px 0; } }
-
-
 /* ======================= Round 2 (24 Oct 2026): the plans, agentic commerce and the integrations hub ======================= */
 
 /* ---------- the plans: three stages, each with its real screens, swapping by themselves ---------- */

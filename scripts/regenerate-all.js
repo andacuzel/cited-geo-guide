@@ -5,7 +5,7 @@
 const cp = require('child_process');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
-const steps = ['generate-api-page', 'generate-changelog', 'generate-claude-page', 'generate-integrations-page', 'generate-mcp-page', 'generate-pricing', 'generate-readiness', 'generate-refunds', 'generate-research-002', 'generate-service-pages', 'generate-tools-page', 'generate-trust', 'generate-watch-page', 'generate-pro', 'generate-citation', 'generate-playbooks-page', 'generate-benchmark-pages', 'generate-sample-report', 'generate-brand-page', 'site-footer', 'site-chrome', 'apply-og', 'capture-pro-shots', 'generate-pro'];
+const steps = ['generate-api-page', 'generate-changelog', 'generate-claude-page', 'generate-integrations-page', 'generate-mcp-page', 'generate-pricing', 'generate-readiness', 'generate-refunds', 'generate-research-002', 'generate-service-pages', 'generate-tools-page', 'generate-trust', 'generate-watch-page', 'generate-pro', 'generate-citation', 'generate-playbooks-page', 'generate-benchmark-pages', 'generate-sample-report', 'site-footer', 'site-chrome', 'apply-og', 'capture-pro-shots', 'generate-pro'];
 let bad = 0;
 steps.forEach((s) => { const r = cp.spawnSync(process.execPath, [path.join(__dirname, s + '.js')], { cwd: ROOT, encoding: 'utf8' }); if (r.status !== 0) { bad++; console.log('FAIL ' + s + '\n' + (r.stdout + r.stderr).split('\n').slice(0, 4).join('\n')); } });
 console.log(bad ? bad + ' step(s) failed' : 'regenerated ' + steps.length + ' steps');

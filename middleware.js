@@ -34,9 +34,7 @@ export const config = {
 
 /* ---------- repository files that are not part of the site ---------- */
 
-var BLOCKED_DIRS = ['docs', 'scripts', 'local', 'config', 'domains', 'supabase', 'plugin', 'content', 'data', 'lib', 'node_modules', 'asset'];
-// Subtrees whose files are blocked while the bare path stays a page (/brand is the press kit; brand/social and brand/listing-icons are repository files).
-var BLOCKED_SUBTREES = ['brand'];
+var BLOCKED_DIRS = ['docs', 'scripts', 'local', 'config', 'domains', 'supabase', 'plugin', 'content', 'data', 'lib', 'node_modules', 'asset', 'brand'];
 var BLOCKED_FILES = ['claude.md', 'readme.md', 'package.json', 'package-lock.json', 'vercel.json', 'site.config.json', 'middleware.js'];
 // The only files under a blocked directory that the site serves on purpose.
 var OPEN_FILES = [
@@ -57,9 +55,6 @@ function isBlocked(rawPath) {
   }
   if (BLOCKED_FILES.indexOf(p) !== -1) return true;
   if (OPEN_FILES.indexOf(p) !== -1) return false;
-  for (var k = 0; k < BLOCKED_SUBTREES.length; k++) {
-    if (p.indexOf(BLOCKED_SUBTREES[k] + '/') === 0) return true;
-  }
   for (var j = 0; j < BLOCKED_DIRS.length; j++) {
     if (p === BLOCKED_DIRS[j] || p.indexOf(BLOCKED_DIRS[j] + '/') === 0) return true;
   }
