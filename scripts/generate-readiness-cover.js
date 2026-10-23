@@ -25,10 +25,11 @@ function html(scale) {
     '.t{font-family:"Bricolage Grotesque";font-weight:800;letter-spacing:-0.04em;font-size:54px;line-height:0.98;margin-top:14px}' +
     '.s{font-size:15px;line-height:1.45;color:' + C.soft + ';margin-top:22px;max-width:380px}' +
     '.bar{width:52px;height:4px;background:' + C.orange + ';margin-top:30px}' +
-    '.meta{position:absolute;left:46px;right:46px;bottom:56px;border-top:2px solid rgba(255,255,255,.16);padding-top:18px;display:grid;grid-template-columns:auto auto 1fr;gap:20px}' +
-    '.meta small{display:block;font-size:11px;font-weight:700;color:' + C.orangeSoft + ';margin-bottom:4px}.meta b{font-size:12px;font-weight:600;white-space:nowrap;line-height:1.35}' +
+    '.meta{position:absolute;left:46px;right:46px;bottom:62px;border-top:2px solid rgba(255,255,255,.16);padding-top:18px;display:grid;grid-template-columns:auto auto 1fr;gap:20px}' +
+    '.meta small{display:block;white-space:nowrap;font-size:11px;font-weight:700;color:' + C.orangeSoft + ';margin-bottom:4px}.meta b{font-size:12px;font-weight:600;white-space:nowrap;line-height:1.35}' +
+    '.hd{position:absolute;right:30px;top:420px;height:96px;width:auto}' +
     '.f{position:absolute;left:46px;right:46px;bottom:22px;font-size:10.5px;line-height:1.4;color:#98A1AE}';
-  return art.shell(W * scale, H * scale, C.ink, css, '<img class="lk" src="' + uri('logo-lockup-dark.svg') + '" alt="">' +
+  return art.shell(W * scale, H * scale, C.ink, css, '<img class="lk" src="' + uri('logo-lockup-dark.svg') + '" alt=""><img class="hd" src="' + uri('logo-mark-orange.svg') + '" alt="">' +
     '<div class="k">Benchmark report · Launch Edition 2026</div><div class="t">State of AI Readiness</div>' +
     '<div class="s">How ready are 219 well-known websites for AI crawlers and assistants? A benchmark across six categories, scanned 29–31 July 2026.</div><div class="bar"></div>' +
     '<div class="meta"><div><small>Published by</small><b>Citehound</b></div><div><small>Edition</small><b>Launch Edition 2026</b></div><div><small>Data</small><b>219 scored sites · 29–31 July 2026</b></div></div>' +
