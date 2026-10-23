@@ -184,7 +184,7 @@ function body() {
 
     '    <section class="cl-sec hp-light" id="start" aria-labelledby="start-heading">\n      <div class="section__inner">\n' + head('Quick start', 'start-heading', 'Send the key in a header.', 'Use <code>Authorization: Bearer &lt;key&gt;</code>, or <code>X-Citehound-Key: &lt;key&gt;</code>. Keep the key out of URLs and public code.') +
     snippet('qsCurl', 'curl', 'export CITEHOUND_KEY=' + KEYSTUB + '\ncurl "' + OA.BASE + '/scan?domain=example.com" \\\n  -H "Authorization: Bearer $CITEHOUND_KEY"') +
-    '        <p class="cl-note">The full description is a machine-readable OpenAPI 3.1 file: <a href="/openapi.yaml">/openapi.yaml</a>.</p>\n' +
+    '        <p class="cl-note">The full description is a machine-readable OpenAPI 3.1 file: <a href="/openapi.yaml">/openapi.yaml</a>. The other ways to use Citehound that are available now are on the <a href="/integrations">integrations page</a>.</p>\n' +
     '      </div>\n    </section>\n\n' +
 
     '    <section class="cl-sec hp-light" id="reference" aria-labelledby="reference-heading">\n      <div class="section__inner">\n' + head('Reference', 'reference-heading', OA.ENDPOINTS.length + ' endpoints.', 'Base address <code>' + esc(OA.BASE) + '</code>. Scan: ' + tag('Scan').length + '. Generate: ' + tag('Generate').length + '. Keys, account and benchmark: ' + (tag('Keys').length + tag('Account').length + tag('Benchmark').length) + '. Pro monitoring: ' + (tag('Monitoring').length + tag('Webhooks').length) + '.') +

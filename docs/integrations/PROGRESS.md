@@ -23,7 +23,7 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - [x] Phase 2.2: Make, Zapier, Pipedream, Activepieces, Raycast (done: all five built and tested with mocks, none submitted)
 - [ ] Phase 2.3: Looker Studio (done), Google Sheets (done)
 - [ ] Phase 2.4: Slack slash command, Chrome extension (only with budget)
-- [ ] Phase 3: /integrations page (generated from JSON), footer and /api links
+- [x] Phase 3: /integrations page (done: content/integrations.json, 4 live items, the rest by name under In preparation, footer and /api links)
 - [ ] Phase 4: deploy and verify
 - [ ] Final report
 
@@ -38,3 +38,4 @@ Resume rule: continue from the first line that is not "done". Never redo a done 
 - 23 Oct: Looker Studio connector (integrations/looker-studio, 9 tests in a sandbox with stand-ins for Apps Script) built, not published.
 - STOPPED by the usage limit. Resume from the first todo line: Google Sheets (integrations/sheets), Slack and Chrome (only with budget), Phase 3 (/integrations page from a JSON file, footer and /api links), Phase 4 verification, the final report. Phase 1 (plans, 402 gates, fixes, export) is live; n8n, Zapier, Pipedream, Activepieces, Raycast, Make and Looker Studio are in the repository, tested with mocks, not submitted, and not mentioned on the site.
 - 23 Oct (resumed): last push verified (82 gates, deploy success, /api 200, /v1/me 401). CLI: a Free key no longer gets less than no key (falls back to the public output, plan note on stderr; 39 tests). Google Sheets script (integrations/sheets, 11 tests) built, not published.
+- 23 Oct: /integrations page generated from content/integrations.json (scripts/generate-integrations-page.js, a gate); footer and /api link it; only live items shown as available.

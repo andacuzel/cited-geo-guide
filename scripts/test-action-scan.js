@@ -120,7 +120,7 @@ function memKv() {
   /* ---- where the Action is mentioned ---- */
   const siteFiles = fs.readdirSync(ROOT).filter((f) => /\.html$/.test(f)).concat(['llms.txt', 'sitemap.xml', 'lib/site-footer.js']);
   const mentions = siteFiles.filter((f) => /github action/i.test(read(f)));
-  t('the site mentions the Action only in the terms (and, once the legal pages are merged, the privacy page): not in the navigation, the homepage, the footer, llms.txt or the sitemap', mentions.every((f) => ['terms.html', 'privacy.html'].indexOf(f) !== -1) && !/github action/i.test(read('index.html')) && !/<footer[\s\S]*?github action/i.test(read('terms.html')), mentions.join(', '));
+  t('the site mentions the Action only in the terms, the privacy page and the integrations page: not in the navigation, the homepage, the footer, llms.txt or the sitemap', mentions.every((f) => ['terms.html', 'privacy.html', 'integrations.html'].indexOf(f) !== -1) && !/github action/i.test(read('index.html')) && !/<footer[\s\S]*?github action/i.test(read('terms.html')), mentions.join(', '));
 
   /* ---- the Action's files ---- */
   const yml = read('citehound-action/action.yml');

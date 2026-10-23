@@ -1,0 +1,19 @@
+{
+  "statuses": ["live", "ready-to-submit", "planned"],
+  "items": [
+    { "id": "claude-connector", "name": "Claude connector", "status": "live", "url": "/claude", "description": "Add the Citehound MCP server to Claude, Claude Code, Cursor or VS Code. Free and read-only, no account." },
+    { "id": "mcp-registry", "name": "MCP Registry listing", "status": "live", "url": "/mcp", "description": "The Citehound MCP server is published in the MCP Registry, with its 13 read-only tools described on the MCP page." },
+    { "id": "github-action", "name": "GitHub Action", "status": "live", "url": null, "description": "The official Citehound GitHub Action scans a domain from a workflow and can fail a build when the score is below a number you set." },
+    { "id": "public-api", "name": "Public API", "status": "live", "url": "/api", "description": "A JSON API with an OpenAPI description: scan, compare, crawler access and generated files with a free key, and monitoring, the fix list and exports on Pro, Fix and Beyond." },
+    { "id": "claude-plugin", "name": "Claude plugin", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "cli", "name": "Command-line tool", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "n8n", "name": "n8n node", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "make", "name": "Make app", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "zapier", "name": "Zapier app", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "pipedream", "name": "Pipedream components", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "activepieces", "name": "Activepieces piece", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "raycast", "name": "Raycast extension", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "looker-studio", "name": "Looker Studio connector", "status": "ready-to-submit", "url": null, "description": "" },
+    { "id": "google-sheets", "name": "Google Sheets script", "status": "ready-to-submit", "url": null, "description": "" }
+  ]
+}
