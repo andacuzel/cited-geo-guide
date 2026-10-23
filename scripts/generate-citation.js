@@ -182,10 +182,10 @@ function build(sample) {
     '  <link rel="canonical" href="' + SITE + '/citation-tracking" />\n\n' +
     '  <!-- Open Graph -->\n  <meta property="og:type" content="website" />\n' +
     '  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(ogDesc) + '" />\n' +
-    '  <meta property="og:url" content="' + SITE + '/citation-tracking" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png?v=2" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
+    '  <meta property="og:url" content="' + SITE + '/citation-tracking" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png?v=3" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
     '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
     '  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(ogDesc) + '" />\n' +
-    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png?v=2" />\n\n' +
+    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png?v=3" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n' +
     '  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +

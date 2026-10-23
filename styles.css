@@ -5675,3 +5675,12 @@ input.field::placeholder { color: var(--ink-faint); }
 /* banners that carry their own picture or icons keep no arch */
 .svc-banner::before, .svc-banner::after, .pro-banner::before, .pro-banner::after, .tools-banner::before, .tools-banner::after, .mcp-banner::before, .mcp-banner::after, .ac-banner::before, .ac-banner::after { display: none; }
 
+
+/* ---------- the scan report: the doors, again ---------- */
+.bot-chip { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; border-radius: 8px; }
+.bot-chip::before { content: ""; flex: none; width: 9px; height: 12px; border-radius: 9px 9px 0 0; background: currentColor; }
+.bot-chip--open { background: var(--ok-tint); color: var(--ok); }
+.bot-chip--partial { background: var(--warn-tint); color: #7A5200; }
+.bot-chip--partial::before { background: #E0A100; }
+.bot-chip--block { background: var(--risk-tint); color: var(--risk); }
+

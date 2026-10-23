@@ -320,11 +320,11 @@ function head(title, desc, url, ld) {
     '  <meta property="og:title" content="' + esc(title) + '" />\n' +
     '  <meta property="og:description" content="' + esc(desc) + '" />\n' +
     '  <meta property="og:url" content="' + url + '" />\n' +
-    '  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png?v=2" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
+    '  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png?v=3" />\n  <meta property="og:site_name" content="Citehound" />\n\n' +
     '  <!-- Twitter -->\n  <meta name="twitter:card" content="summary_large_image" />\n' +
     '  <meta name="twitter:title" content="' + esc(title) + '" />\n' +
     '  <meta name="twitter:description" content="' + esc(desc) + '" />\n' +
-    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png?v=2" />\n\n' +
+    '  <meta name="twitter:image" content="' + SITE + '/assets/brand/og-default.png?v=3" />\n\n' +
     sh.icon + '\n\n' + sh.fonts + '\n\n' +
     '  <link rel="stylesheet" href="../styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n  ' + JSON.stringify(ld, null, 2).replace(/\n/g, '\n  ') + '\n  </script>\n' +

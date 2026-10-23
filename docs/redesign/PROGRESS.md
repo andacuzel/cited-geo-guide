@@ -13,12 +13,15 @@ Baseline (before): gates 84/84. Self-scan of getcitehound.com: see BASELINE belo
 - [ ] 5 Final QA, after screenshots
 
 ## In progress
+- 3: other public pages inherit the system (page banners with the arch). Brand files regenerated (logo SVG/PNG, favicon, apple-touch-icon, share images v=3, with the wordmark as outlines of Bricolage Grotesque 800). Next: product-tour screenshots, motion pass, final QA.
 - 1 + 2 (stage 1): tokens, Bricolage Grotesque, new mark, base components, homepage (hero report preview with ten doors, how it works as arches, audiences, integrations, orange closing field). Pricing page next.
 
 ## Done
+- Stage 1 deployed (f10881d), stage 2 (d6ef70c, 3132b91): pricing hero, API-by-plan section on /pricing, banners, tablet nav.
 - Safety: disk 4.0 GB free, 84/84 gates, tag pre-redesign pushed.
 
 ## Decisions
+- scripts/capture-og.js rewritten: no Google Fonts (local woff2 via file URLs), new palette and arch. The share images are versioned ?v=3 on every page (lib/page-shell.js too); test-contrast-scope expects v=3.
 - Baseline self-scan of getcitehound.com: 87/100 (27/40, 20/20, 40/40), 10 crawlers all "Limited" (Disallow /admin/). Must not drop.
 - Strategy: v3 token names kept and re-pointed (palette, fonts, radius); `styles.css` ends with a marked v4 block ("v4:START") that restyles components. The 96 tiny uppercase mono labels in the v3 rules were rewritten in place (sentence case, body font, 13px minimum).
 - New mark (arch with a door ajar) replaces the sighthound mark inline on every public page and in lib/lockup.js, lib/site-footer.js, lib/report-render.js, lib/pro-report-page.js and scripts/encrypt-report.js. Encrypted /r/ pages made earlier keep their old baked-in mark (private, not touched).

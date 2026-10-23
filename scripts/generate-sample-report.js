@@ -81,7 +81,7 @@ function build(data) {
     '  <title>' + esc(title) + '</title>\n  <meta name="description" content="' + esc(desc) + '" />\n' +
     '  <meta name="author" content="Citehound" />\n  <meta name="robots" content="index, follow" />\n  <link rel="canonical" href="' + SITE + '/sample-report" />\n\n' +
     '  <meta property="og:type" content="website" />\n  <meta property="og:title" content="' + esc(title) + '" />\n  <meta property="og:description" content="' + esc(desc) + '" />\n' +
-    '  <meta property="og:url" content="' + SITE + '/sample-report" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png?v=2" />\n  <meta property="og:site_name" content="Citehound" />\n' +
+    '  <meta property="og:url" content="' + SITE + '/sample-report" />\n  <meta property="og:image" content="' + SITE + '/assets/brand/og-default.png?v=3" />\n  <meta property="og:site_name" content="Citehound" />\n' +
     '  <meta name="twitter:card" content="summary_large_image" />\n  <meta name="twitter:title" content="' + esc(title) + '" />\n  <meta name="twitter:description" content="' + esc(desc) + '" />\n\n' +
     '  ' + shell.favicon + '\n\n  ' + shell.fonts + '\n\n  <link rel="stylesheet" href="styles.css?v=' + CSS_VERSION + '" />\n\n' +
     '  <script type="application/ld+json">\n' + JSON.stringify(ld, null, 2).replace(/^/gm, '  ') + '\n  </script>\n' + siteChrome.schemaBlock().replace(/^/gm, '  ') + '\n</head>\n<body>\n\n' +
