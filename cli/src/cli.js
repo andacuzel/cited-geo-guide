@@ -1,6 +1,6 @@
 'use strict';
 
-const { CliError, SIGNUP, NOTE, redact, normalizeDomain } = require('./util.js');
+const { CliError, SIGNUP, NOTE, HINT, redact, normalizeDomain } = require('./util.js');
 const { createClient } = require('./client.js');
 const fmt = require('./format.js');
 const VERSION = require('../package.json').version;
@@ -20,6 +20,7 @@ Usage
 Options
   --json                 Print JSON instead of text
   --fail-under <score>   For scan and compare: exit with code 1 if a score is below this number (0 to 100)
+  -q, --quiet            Leave out the one-line note about plans that follows a scan (or set CITEHOUND_NO_HINTS=1)
   -h, --help             Show this help
   -v, --version          Show the version
 
@@ -35,7 +36,7 @@ Generated files are printed to standard output, so you can redirect them: citeho
 `;
 
 const VALUE_FLAGS = { '--fail-under': 'failUnder', '--type': 'type', '--allow': 'allow', '--block': 'block', '--sitemap': 'sitemap', '--name': 'name', '--description': 'description', '--page': 'page' };
-const BOOL_FLAGS = { '--json': 'json', '--help': 'help', '-h': 'help', '--version': 'version', '-v': 'version', '--no-sitemap': 'noSitemap' };
+const BOOL_FLAGS = { '--json': 'json', '--quiet': 'quiet', '-q': 'quiet', '--help': 'help', '-h': 'help', '--version': 'version', '-v': 'version', '--no-sitemap': 'noSitemap' };
 
 function parseArgs(argv) {
   const o = { _: [], page: [] };
@@ -86,6 +87,11 @@ async function main(argv, env, io, fetchImpl) {
     if (o._.length > 2) throw new CliError('scan takes one domain. To compare two, use: citehound compare a.com b.com', 2);
     const s = await client.scan(domain);
     if (o.json) json(s); else io.out(fmt.scanText(s));
+    if (!o.json && !o.quiet && !/^(1|true|yes)$/i.test(String(env.CITEHOUND_NO_HINTS || ''))) {
+      // The line goes to standard error, so a redirected scan stays clean. Without a key, or on the Free plan: a paid plan sees nothing, and neither does a key whose plan could not be read.
+      const free = !client.keyed || !!s.plan_note || (await client.plan()) === 'free';
+      if (free) io.err(HINT + '\n');
+    }
     if (s.plan_note) io.err('Your key\'s plan has less than the public output, so the full result came from the public endpoint. ' + s.plan_note + '\n');
     if (floor !== null && s.score < floor) { io.err('Score ' + s.score + ' is below --fail-under ' + floor + '.\n'); return 1; }
     return 0;

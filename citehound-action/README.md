@@ -21,6 +21,7 @@ The Action is limited to up to 4 scans per hour per domain.
 | `domain` | yes | The domain to scan, for example `example.com`. This is the only thing the Action sends. |
 | `min-score` | no | Fail the step if the score is below this number (0 to 100). Empty means the score never fails the step. |
 | `fail-on-crawler-block` | no | `true` fails the step if `robots.txt` blocks any of the tracked AI crawlers completely. Default `false`. |
+| `hints` | no | `false` leaves out the one plain line at the end of the job summary that names Pro (watching a domain and alerts) and Fix (ready-to-paste fixes) and links the pricing page. Default `true`. |
 
 ## Outputs
 

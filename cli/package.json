@@ -1,6 +1,6 @@
 {
   "name": "citehound",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scan a domain for AI readiness from the command line, compare two sites, and generate llms.txt, robots.txt and JSON-LD. No dependencies.",
   "keywords": ["ai-readiness", "robots-txt", "llms-txt", "json-ld", "structured-data", "seo", "cli", "mcp", "citehound"],
   "homepage": "https://getcitehound.com",

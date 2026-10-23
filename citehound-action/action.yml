@@ -16,6 +16,10 @@ inputs:
     description: 'Set to true to fail the step if robots.txt fully blocks any of the AI crawlers Citehound tracks.'
     required: false
     default: 'false'
+  hints:
+    description: 'Set to false to leave out the one-line note about Citehound plans at the end of the job summary.'
+    required: false
+    default: 'true'
 outputs:
   score:
     description: 'The readiness score, 0 to 100.'

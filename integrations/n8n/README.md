@@ -30,6 +30,16 @@ A key gets its plan from us. When a plan does not have something, the answer nam
 
 The trigger and the monitoring operations need Pro, Fix or Beyond. On a free key they stop with a message that names the plans and links the pricing page.
 
+## The next_step line
+
+After a **Scan a Domain** on the Free plan, the result carries one extra field, `next_step`:
+
+```
+Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing
+```
+
+Pro, Fix and Beyond keys never get it. If the node cannot read the plan (one `GET /v1/me` call), it adds nothing. Switch **Plan Hint** off in the node to leave the field out. Nothing else about the result changes.
+
 ## Build and test
 
 `npm install` then `npm run build` compiles `nodes/` and `credentials/` to `dist/` (TypeScript, strict, against the real `n8n-workflow` types). `npm test` runs the tests, which need no install: they run the compiled nodes against a mocked API. The nodes have no runtime dependencies; `citehound-core.js` is a copy of `integrations/shared/citehound-core.js` made by `scripts/sync-integrations.js` in the repository.

@@ -31,7 +31,10 @@ function summary(md) {
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md + '\n');
 }
 
-function markdown(r) {
+// One plain line about the plans, added to the job summary (the Action has no key, so it is always the free path). Turn it off with the input hints: 'false'.
+const HINT = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
+
+function markdown(r, hints) {
   const lines = ['## Citehound AI readiness: ' + r.domain, '', '**Score: ' + r.score + ' / 100**', '',
     '| Pillar | Score |', '| --- | --- |'].concat(r.pillars.map((p) => '| ' + cell(p.name) + ' | ' + p.score + ' / ' + p.max + ' |'));
   lines.push('');
@@ -41,6 +44,7 @@ function markdown(r) {
   } else lines.push('No check failed.');
   lines.push('', 'AI crawlers in robots.txt: ' + r.crawlers.open + ' open, ' + r.crawlers.limited + ' limited, ' + r.crawlers.blocked + ' blocked' + (r.crawlers.blockedNames.length ? ' (' + r.crawlers.blockedNames.join(', ') + ')' : '') + '.', '',
     '_' + r.note + ' Scanned ' + r.scannedAt.slice(0, 10) + '. Method: ' + r.method + '_');
+  if (hints !== false) lines.push('', HINT);
   return lines.join('\n');
 }
 
@@ -49,6 +53,7 @@ async function main() {
   const minRaw = input('min-score');
   const min = minRaw === '' ? null : Number(minRaw);
   const failOnBlock = input('fail-on-crawler-block').toLowerCase() === 'true';
+  const hints = input('hints').toLowerCase() !== 'false';
   const gated = min !== null || failOnBlock;
   if (!domain) { console.log('::error::The domain input is not a valid domain, for example example.com.'); return 1; }
   if (min !== null && !(min >= 0 && min <= 100)) { console.log('::error::min-score must be a number from 0 to 100.'); return 1; }
@@ -69,7 +74,7 @@ async function main() {
   setOutput('score', body.score);
   setOutput('crawlers-blocked', body.crawlers.blocked);
   setOutput('failed-checks', body.failed.length);
-  summary(markdown(body));
+  summary(markdown(body, hints));
   console.log('Citehound: ' + domain + ' scores ' + body.score + ' / 100; ' + body.failed.length + ' failed checks; ' + body.crawlers.blocked + ' tracked crawlers blocked.');
 
   let code = 0;
@@ -97,4 +102,4 @@ function unreachable(message, gated) {
 }
 
 if (require.main === module) main().then((code) => { process.exitCode = code; }, (e) => { console.log('::error::' + (e && e.message ? e.message : 'Unexpected error')); process.exitCode = 1; });
-module.exports = { main, normalizeDomain, markdown };
+module.exports = { main, normalizeDomain, markdown, HINT };

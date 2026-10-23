@@ -88,6 +88,11 @@ function createClient(env, fetchImpl, version) {
 
   return {
     keyed: keyed,
+    // The plan of the key ('free', 'pro', 'fix', 'beyond'), or null when it cannot be read (no key, or the call failed). Used only to decide whether to print the one-line hint.
+    async plan() {
+      if (!keyed) return null;
+      try { const j = await v1('/me'); return typeof j.plan === 'string' ? j.plan : null; } catch (e) { return null; }
+    },
     // A key on a plan that has less than the public endpoint gives (the Free plan) must not make the CLI worse than no key: when the answer is limited by the plan, the full output comes from the public
     // endpoint and the plan's message is kept as a note (printed on standard error).
     async scan(domain) {

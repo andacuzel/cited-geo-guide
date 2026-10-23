@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-citehound",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n nodes for Citehound: scan a domain for AI readiness, compare sites, generate llms.txt, robots.txt and schema, and a polling trigger for monitoring events.",
   "keywords": ["n8n-community-node-package", "citehound", "ai-readiness", "robots-txt", "llms-txt", "seo"],
   "license": "MIT",

@@ -113,3 +113,28 @@ test('the trigger: a manual test run returns the latest events; a free key gets 
   assert.deepEqual(r[0].map((i) => i.json.id), ['evt_8', 'evt_9']);
   await assert.rejects(() => new CitehoundTrigger().poll.call(ctx({ eventTypes: [], domain: '' }, () => ({ status: 402, body: { error: 'plan_required', message: 'Monitoring is available on Pro, Fix and Beyond.' } }))), (e) => e.name === 'NodeOperationError' && /Monitoring is available on Pro, Fix and Beyond/.test(e.message));
 });
+
+const HINT = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
+const scanApi = (plan, scan) => (url) => (/\/v1\/me/.test(url) ? ok({ plan: plan }) : ok(scan || { domain: 'example.com', score: 62, failed: [] }));
+test('scan: a Free key gets a next_step line (one /v1/me call), Pro, Fix and Beyond never do', async () => {
+  const c = ctx({ operation: 'scan', domain: 'example.com' }, scanApi('free'));
+  const r = await new Citehound().execute.call(c);
+  assert.equal(r[0][0].json.next_step, HINT); assert.equal(r[0][0].json.score, 62); assert.deepEqual(c.calls.map((x) => x.url.replace('https://getcitehound.com/v1', '')), ['/scan?domain=example.com', '/me']);
+  for (const plan of ['pro', 'fix', 'beyond']) { const p = await new Citehound().execute.call(ctx({ operation: 'scan', domain: 'example.com' }, scanApi(plan))); assert.equal(p[0][0].json.next_step, undefined, plan); }
+});
+test('scan: a trimmed scan is a Free key already (no /v1/me call); an unreadable plan adds nothing; Plan Hint off adds nothing and calls nothing more', async () => {
+  const c = ctx({ operation: 'scan', domain: 'example.com' }, scanApi('pro', { domain: 'example.com', score: 62, truncated: true, hidden_findings: 4 }));
+  const r = await new Citehound().execute.call(c);
+  assert.equal(r[0][0].json.next_step, HINT); assert.equal(c.calls.length, 1);
+  const bad = await new Citehound().execute.call(ctx({ operation: 'scan', domain: 'example.com' }, (url) => (/\/v1\/me/.test(url) ? { status: 500, body: {} } : ok({ domain: 'example.com', score: 62 }))));
+  assert.equal(bad[0][0].json.next_step, undefined);
+  const off = ctx({ operation: 'scan', domain: 'example.com', planHint: false }, scanApi('free'));
+  const o = await new Citehound().execute.call(off);
+  assert.equal(o[0][0].json.next_step, undefined); assert.equal(off.calls.length, 1);
+});
+test('the Plan Hint option shows only for Scan, is on by default, and the hint text makes no promise', () => {
+  const d = new Citehound().description, p = d.properties.find((x) => x.name === 'planHint');
+  assert.deepEqual(p.displayOptions.show.operation, ['scan']); assert.equal(p.default, true); assert.equal(p.type, 'boolean');
+  assert.doesNotMatch(HINT, /\b(recommend|cite|cited|rank|ranking|guarantee|visibility|limited time|hurry|now)\b/i);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version, '0.1.1');
+});

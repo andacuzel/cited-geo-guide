@@ -65,7 +65,17 @@ The file goes to standard output, and a hint on where to put it goes to standard
 | `citehound generate robots-txt <domain>` | A robots.txt for the tracked crawlers. `--allow a,b` and `--block c,d` choose names (see `citehound crawlers`); without them the tracked list's own defaults are used. A `Sitemap:` line is added (`--sitemap <url>` changes it, `--no-sitemap` leaves it out). |
 | `citehound generate schema <domain>` | JSON-LD built from the homepage's title and language. `--type` is `organization` (default), `faqpage`, `article`, `product` or `localbusiness`. |
 
-Options for every command: `--json` prints JSON instead of text (the same shape as the Citehound API, plus `source`: `public` or `api_key`), `-h` and `--help`, `-v` and `--version`.
+Options for every command: `--json` prints JSON instead of text (the same shape as the Citehound API, plus `source`: `public` or `api_key`), `-q` and `--quiet` leave out the plan line described below, `-h` and `--help`, `-v` and `--version`.
+
+## The plan line
+
+After a successful `scan` without a key, or with a Free key, the CLI prints one line on standard error:
+
+```
+Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing
+```
+
+Pro, Fix and Beyond keys do not see it. It is not printed with `--json`, and it never goes to standard output, so a redirected scan stays clean. Turn it off with `--quiet` (or `-q`) or with `CITEHOUND_NO_HINTS=1`. With a key, the CLI reads the plan once from `GET /v1/me` to decide; if that call fails, nothing is printed.
 
 ## Exit codes
 

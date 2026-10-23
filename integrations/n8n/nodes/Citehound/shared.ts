@@ -4,6 +4,9 @@ import type { IExecuteFunctions, IPollFunctions } from 'n8n-workflow';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createCore } = require('./citehound-core.js');
 
+// The one plain line shown after a scan on the Free plan (the same text as the CLI and the GitHub Action).
+export const HINT = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
+
 type Ctx = IExecuteFunctions | IPollFunctions;
 
 export async function makeCore(ctx: Ctx) {
@@ -22,5 +25,5 @@ export async function makeCore(ctx: Ctx) {
 		const headers = res.headers || {};
 		return { status: res.statusCode, headers: { get: (k: string) => headers[k.toLowerCase()] ?? null }, text: async () => text };
 	};
-	return createCore({ apiKey: String(credentials.apiKey || ''), fetch: fetchLike, platform: 'n8n', version: '0.1.0' });
+	return createCore({ apiKey: String(credentials.apiKey || ''), fetch: fetchLike, platform: 'n8n', version: '0.1.1' });
 }

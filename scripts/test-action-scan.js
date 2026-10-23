@@ -161,6 +161,12 @@ function memKv() {
   t('Action: a score under min-score fails the step (exit 1) with an error line, the summary still written', a.code === 1 && /::error::The score \d+ is below min-score 100/.test(a.log) && a.summary.length > 100);
   a = await runAction({ INPUT_DOMAIN: 'example.com', 'INPUT_MIN-SCORE': '1' });
   t('Action: a score over min-score passes', a.code === 0);
+  const HINT_LINE = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
+  a = await runAction({ INPUT_DOMAIN: 'example.com' });
+  t('Action: the job summary ends with the one plan line (Pro, Fix, pricing link); the log and the outputs do not carry it', a.summary.trimEnd().endsWith(HINT_LINE) && a.summary.split(HINT_LINE).length === 2 && !a.log.includes('pricing') && !a.output.includes('pricing'));
+  a = await runAction({ INPUT_DOMAIN: 'example.com', INPUT_HINTS: 'false' });
+  t('Action: hints: false leaves the line out and changes nothing else (exit 0, outputs written)', a.code === 0 && !/Watch this domain|pricing/.test(a.summary) && /Score: \d+ \/ 100/.test(a.summary) && /^score=\d+$/m.test(a.output));
+  t('Action: action.yml declares the hints input (default true) and the README documents it; the hint line is the same text in the Action as in the CLI and the n8n node', /hints:\s+description:[^\n]+\n\s+required: false\n\s+default: 'true'/.test(yml) && /\| `hints` \|/.test(readme) && read('cli/src/util.js').includes(HINT_LINE) && read('integrations/n8n/nodes/Citehound/shared.ts').includes(HINT_LINE) && read('citehound-action/index.js').includes(HINT_LINE));
   a = await runAction({ INPUT_DOMAIN: 'example.com', 'INPUT_FAIL-ON-CRAWLER-BLOCK': 'true' });
   t('Action: fail-on-crawler-block with a fully blocked crawler fails and names it', a.code === 1 && /blocks these tracked AI crawlers completely: Bytespider, CCBot/.test(a.log));
   mode = 'limited';

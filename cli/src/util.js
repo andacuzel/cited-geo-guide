@@ -1,6 +1,7 @@
 'use strict';
 
 const SIGNUP = 'https://getcitehound.com/api';
+const HINT = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
 const NOTE = 'A readiness score: crawler access and on-page signals. It does not measure whether any assistant names a brand.';
 
 // An error with a message that is safe and plain enough to print as it is, and an exit code.
@@ -22,4 +23,4 @@ function normalizeDomain(raw) {
   return s;
 }
 
-module.exports = { SIGNUP, NOTE, CliError, redact, normalizeDomain };
+module.exports = { SIGNUP, NOTE, HINT, CliError, redact, normalizeDomain };

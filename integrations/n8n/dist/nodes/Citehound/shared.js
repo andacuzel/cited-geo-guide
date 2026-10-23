@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HINT = void 0;
 exports.makeCore = makeCore;
 // The shared client (citehound-core.js, copied from integrations/shared). It needs a fetch-like function: this one is made from n8n's own HTTP helper.
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createCore } = require('./citehound-core.js');
+// The one plain line shown after a scan on the Free plan (the same text as the CLI and the GitHub Action).
+exports.HINT = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
 async function makeCore(ctx) {
     const credentials = await ctx.getCredentials('citehoundApi');
     const fetchLike = async (url, init) => {
@@ -20,5 +23,5 @@ async function makeCore(ctx) {
         const headers = res.headers || {};
         return { status: res.statusCode, headers: { get: (k) => { var _a; return (_a = headers[k.toLowerCase()]) !== null && _a !== void 0 ? _a : null; } }, text: async () => text };
     };
-    return createCore({ apiKey: String(credentials.apiKey || ''), fetch: fetchLike, platform: 'n8n', version: '0.1.0' });
+    return createCore({ apiKey: String(credentials.apiKey || ''), fetch: fetchLike, platform: 'n8n', version: '0.1.1' });
 }

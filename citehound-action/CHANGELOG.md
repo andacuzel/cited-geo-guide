@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.2 (not tagged yet)
+
+- The job summary ends with one plain line that names Pro (watching a domain and alerts) and Fix (ready-to-paste fixes) and links https://getcitehound.com/pricing. The new input `hints: 'false'` turns it off. The score, the outputs and the exit code are unchanged.
+
 ## v1.0.1 (2026-10-22)
 
 - A rate limit (HTTP 429) no longer fails the step, even when `min-score` or `fail-on-crawler-block` is set. The Action warns ("Citehound rate limit reached, skipping this scan. Try again later."), leaves the outputs empty and writes a note to the job summary. A score below `min-score` or a blocked crawler still fails the step.

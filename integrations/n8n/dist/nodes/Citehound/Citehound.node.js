@@ -5,7 +5,7 @@ const n8n_workflow_1 = require("n8n-workflow");
 const shared_1 = require("./shared");
 // Every operation: its value, name, what it does, the plans that have it and the parameters it shows.
 const OPS = [
-    { value: 'scan', name: 'Scan a Domain', action: 'Scan a domain for AI readiness', plans: 'All plans. A free key shows the score and the first three findings.', show: ['domain'] },
+    { value: 'scan', name: 'Scan a Domain', action: 'Scan a domain for AI readiness', plans: 'All plans. A free key shows the score and the first three findings.', show: ['domain', 'planHint'] },
     { value: 'compare', name: 'Compare Two Domains', action: 'Compare two domains', plans: 'Pro, Fix and Beyond.', show: ['domainA', 'domainB'] },
     { value: 'crawlers', name: 'Get Crawler Access', action: 'Get the state of ten AI crawlers in robots.txt', plans: 'All plans.', show: ['domain'] },
     { value: 'benchmark', name: 'Get Benchmark', action: 'Get the archived benchmark data', plans: 'All plans.', show: ['category'] },
@@ -54,6 +54,7 @@ const properties = [
         placeholder: 'Add Page',
         options: [{ displayName: 'Page', name: 'page', values: [{ displayName: 'URL', name: 'url', type: 'string', default: '' }, { displayName: 'Description', name: 'description', type: 'string', default: '' }] }],
     }),
+    param('planHint', { displayName: 'Plan Hint', name: 'planHint', type: 'boolean', default: true, description: 'Whether to add a next_step line about Pro and Fix to the result of a scan on the Free plan. Paid plans never get it.' }),
     param('allow', { displayName: 'Allow', name: 'allow', type: 'string', default: '', placeholder: 'GPTBot,ClaudeBot', description: 'Comma-separated crawler names to allow' }),
     param('block', { displayName: 'Block', name: 'block', type: 'string', default: '', placeholder: 'Bytespider', description: 'Comma-separated crawler names to block' }),
     param('sitemap', { displayName: 'Sitemap URL', name: 'sitemap', type: 'string', default: '' }),
@@ -121,6 +122,20 @@ class Citehound {
                 if (op === 'exportData')
                     params = { domain: s('domain'), type: s('exportType'), format: s('exportFormat') };
                 const result = (await core.run(run, params));
+                // One plain line for a Free key. A trimmed scan says so itself; otherwise the plan is read once. If it cannot be read, no line is added.
+                if (op === 'scan' && this.getNodeParameter('planHint', i, true)) {
+                    let free = result.truncated === true;
+                    if (!free) {
+                        try {
+                            free = (await core.run('me', {})).plan === 'free';
+                        }
+                        catch (e) {
+                            free = false;
+                        }
+                    }
+                    if (free)
+                        result.next_step = shared_1.HINT;
+                }
                 if (op === 'events' && Array.isArray(result.events))
                     for (const e of result.events)
                         out.push({ json: e, pairedItem: { item: i } });

@@ -287,3 +287,38 @@ test('the rate-limit message names the plans', async () => {
   const keyed = await runCli(['scan', 'a.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(() => reply(429, '{}', { 'retry-after': '60' })));
   assert.match(keyed.err, /plans at https:\/\/getcitehound\.com\/pricing/);
 });
+
+/* ---------- the one-line plan hint ---------- */
+
+const HINT = 'Watch this domain weekly and get alerts: Pro. Ready-to-paste fixes: Fix. See https://getcitehound.com/pricing';
+const meOf = (plan) => (url, init, body) => (/\/v1\/me$/.test(url) ? reply(200, { plan: plan }) : both({ '/scan': V1_SCAN })(url, init, body));
+test('the hint: one plain line on stderr after a scan without a key; stdout and --json stay clean', async () => {
+  const r = await runCli(['scan', 'example.com'], {}, mockFetch(mcp()));
+  assert.equal(r.code, 0); assert.equal(r.err, HINT + '\n'); assert.ok(!r.out.includes('pricing'));
+  assert.equal((await runCli(['scan', 'example.com', '--json'], {}, mockFetch(mcp()))).err, '');
+  const low = await runCli(['scan', 'example.com', '--fail-under', '99'], {}, mockFetch(mcp()));
+  assert.equal(low.code, 1); assert.match(low.err, /^Watch this domain weekly/);
+});
+test('the hint: a Free key sees it (trimmed scan, or a full one when /v1/me says free); Pro, Fix and Beyond never do; an unreadable plan shows nothing', async () => {
+  const trimmed = Object.assign({}, V1_SCAN, { truncated: true, hidden_findings: 5, upgrade: { message: FREE_NOTE, required_plan: 'pro' } });
+  const t = await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(both({ '/scan': trimmed })));
+  assert.ok(t.err.includes(HINT));
+  const free = await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(meOf('free')));
+  assert.equal(free.err, HINT + '\n');
+  for (const plan of ['pro', 'fix', 'beyond']) { const f = mockFetch(meOf(plan)); const r = await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, f); assert.equal(r.err, '', plan); assert.equal(f.calls.map((c) => new URL(c.url).pathname).join(), '/v1/scan,/v1/me'); }
+  const unread = await runCli(['scan', 'example.com'], { CITEHOUND_API_KEY: KEY }, mockFetch(both({ '/scan': V1_SCAN })));
+  assert.equal(unread.err, '');
+  assert.ok(!(free.err + free.out).includes(KEY));
+});
+test('the hint can be turned off: --quiet, -q and CITEHOUND_NO_HINTS=1 (and no /v1/me call is made then)', async () => {
+  for (const [args, env] of [[['--quiet'], {}], [['-q'], {}], [[], { CITEHOUND_NO_HINTS: '1' }], [[], { CITEHOUND_NO_HINTS: 'true' }]]) {
+    const r = await runCli(['scan', 'example.com'].concat(args), env, mockFetch(mcp())); assert.equal(r.err, '', args.join() + JSON.stringify(env)); assert.equal(r.code, 0);
+  }
+  const f = mockFetch(meOf('free')); await runCli(['scan', 'example.com', '-q'], { CITEHOUND_API_KEY: KEY }, f); assert.equal(f.calls.length, 1);
+  assert.equal((await runCli(['scan', 'example.com'], { CITEHOUND_NO_HINTS: '0' }, mockFetch(mcp()))).err, HINT + '\n');
+});
+test('the hint is only for scan: compare, crawlers and generate print none, and the hint makes no promise', async () => {
+  assert.equal((await runCli(['crawlers'], {}, mockFetch(mcp()))).err, '');
+  assert.equal((await runCli(['compare', 'a.com', 'b.com'], {}, mockFetch(mcp()))).err, '');
+  assert.doesNotMatch(HINT, /\b(recommend|cite|cited|rank|ranking|guarantee|visibility|limited time|hurry|now)\b/i);
+});
