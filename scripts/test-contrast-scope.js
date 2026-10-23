@@ -34,7 +34,7 @@ t('the stylesheet has no showcase, dialog or preview-strip rules and the mask as
 t('nothing links to a removed anchor (#showcase)', !/#showcase\b/.test(home) && !/#showcase\b/.test(read('nav.js')));
 
 /* 2. scope and contrast */
-t('the homepage MCP band is .mcp-home, not the shared .mcp-section', /<section class="mcp-home hp-band" id="mcp"/.test(home) && !/mcp-section/.test(home));
+t('the homepage carries no shared .mcp-section (its MCP band, .mcp-home, left the homepage on 24 Oct 2026; the Claude connector is in the integrations hub)', !/mcp-section/.test(home));
 const sectionRules = css.split('\n').filter((l) => /^\s*\.mcp-section\b/.test(l) && !/^\s*@media/.test(l));
 t('no .mcp-section rule sets a dark background or light text', sectionRules.length > 0 && sectionRules.every((l) => !/navy|#fff|white|rgba\(255/.test(l)), sectionRules.join(' | ').slice(0, 200));
 const mcpPage = read('mcp.html');

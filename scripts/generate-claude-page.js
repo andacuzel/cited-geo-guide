@@ -200,7 +200,7 @@ function check() {
   if (read('llms.txt').indexOf('(' + site.baseUrl + '/claude)') === -1) bad('llms.txt has no /claude');
   if (require('../lib/site-footer.js').hrefs().indexOf('/claude') === -1) bad('the footer has no /claude link');
   const home = read('index.html');
-  if (!/<a href="\/claude" class="btn btn--gold">Connect the MCP server<\/a>/.test(home)) bad('the homepage "Connect the MCP server" button must link to /claude');
+  if (!/<a href="\/claude">Claude connector<\/a>/.test(home)) bad('the homepage integrations hub must link the Claude connector to /claude (the MCP band left the homepage on 24 Oct 2026)');
   return errors;
 }
 

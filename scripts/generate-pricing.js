@@ -204,8 +204,11 @@ function check() {
 
   // The same price on every surface.
   D.tiers.forEach((t) => {
-    const card = (new RegExp('<li class="ladder-card ladder-card--' + t.key + '"[\\s\\S]*?</li>').exec(home) || [''])[0];
-    if (card.indexOf('<p class="ladder-card__price">' + esc(t.line) + '</p>') === -1) bad('the ' + t.name + ' ladder card has no price line "' + t.line + '"');
+    // the plan stages of the homepage (Pro, Fix, Beyond; the scan is the hero) carry the same price line
+    if (t.key !== 'scan') {
+      const card = (new RegExp('<article class="plan plan--' + t.key + '[\\s\\S]*?</article>').exec(home) || [''])[0];
+      if (card.indexOf('<p class="plan__price">' + esc(t.line) + '</p>') === -1) bad('the ' + t.name + ' stage of the homepage has no price line "' + t.line + '"');
+    }
     if (t.key !== 'scan') { const f = t.key + '.html'; if (read(f).indexOf('<p class="svc-price"') === -1 && t.key !== 'pro') bad(f + ' has no price line'); }
   });
   const pro = read('pro.html');
