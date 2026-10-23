@@ -106,6 +106,7 @@ function figures() {
     hidden: hiddenChecks.length,
     failingOthers: others.filter((r) => r.failed.some((c) => hiddenChecks.indexOf(render.cleanLabel(c.label)) !== -1)).length,
     others: others.length,
+    tiles: a.pageRows.map((r) => ({ path: (r === home ? '/' : (new URL(r.url).pathname.replace(/\/$/, '') || '/')), score: r.total, home: r === home })),
     summary: data.executiveSummary || null,
     cit: {
       model: m0.model, date: render.longDate(m0.date), tries: m0.tries, triesWord: WORDS[m0.tries] || String(m0.tries),
@@ -299,6 +300,16 @@ function waitlistSection() {
     '        </div>\n      </div>\n    </section>\n\n';
 }
 
+// The opening picture: every page of the real sample crawl as a tile with its own score, lighting up one after another (CSS only). Homepage and whole-site scores are the sample's own.
+function crawlField(F) {
+  const band = (n) => (n >= 90 ? 'ok' : n >= 75 ? 'mid' : 'low');
+  const tiles = F.tiles.map((t, i) => '<li class="cf__t cf__t--' + band(t.score) + (t.home ? ' cf__t--home' : '') + '" style="--i:' + i + '"><span class="cf__p">' + esc(t.path.length > 22 ? t.path.slice(0, 21) + '\u2026' : t.path) + '</span><b class="cf__s">' + t.score + '</b></li>').join('');
+  return '        <div class="pro-hero__art">\n          <div class="cf" role="img" aria-label="A real crawl of ' + esc(F.domain) + ', ' + F.tiles.length + ' pages, each with its score. The homepage scores ' + F.homepage + ' and the whole site ' + F.site + '.">\n' +
+    '            <div class="cf__top" aria-hidden="true"><span class="cf__big"><small>Homepage</small><b>' + F.homepage + '</b></span><span class="cf__big"><small>Whole site</small><b>' + F.site + '</b></span></div>\n' +
+    '            <ul class="cf__grid" aria-hidden="true">' + tiles + '</ul>\n' +
+    '            <p class="cf__note" aria-hidden="true">A real crawl of ' + esc(F.domain) + ', ' + F.date + '. Results shown as recorded.</p>\n          </div>\n        </div>\n';
+}
+
 function build() { return og.apply(buildRaw(), '/pro'); }
 
 function buildRaw() {
@@ -322,18 +333,18 @@ function buildRaw() {
 
   const card = (ic, title, text, thumb) => '          <li class="pro-card">\n            <span class="pro-row__icon">' + icon(ic) + '</span>\n            <h3 class="pro-card__title">' + title + '</h3>\n            <p class="pro-card__text">' + text + '</p>\n' + (thumb ? '            ' + indent(thumb, '            ') + '\n' : '') + '          </li>';
 
-  const body = '  <main id="main">\n\n' +
-    '    <!-- ---------- Banner ---------- -->\n' +
-    '    <section aria-labelledby="pro-heading">\n      <div class="section__inner">\n        <div class="page-banner pro-banner">\n          <div class="page-banner__body">\n' +
-    '            <p class="page-lockup">' + require('../lib/lockup.js').html('PRO', 'navy') + '</p>\n' +
-    '            <h1 id="pro-heading" class="page-banner__title">Can AI read you? What would buyers ask?</h1>\n' +
-    '            <p class="page-banner__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.</p>\n' +
-    '            <p class="pro-price"><span class="pro-price__line">' + Pricing.cur(esc(Pricing.tier('pro').line)) + '</span><span class="pr-chip pr-chip--on-navy">Early access</span></p>\n' +
+  const body = '  <main id="main" class="theme-pro">\n\n' +
+    '    <!-- ---------- Opening: a crawl field of the real sample (round 2) ---------- -->\n' +
+    '    <section class="pro-hero" aria-labelledby="pro-heading">\n      <div class="section__inner pro-hero__grid">\n        <div class="pro-hero__copy">\n' +
+    '            <p class="page-lockup">' + require('../lib/lockup.js').html('PRO', 'light') + '</p>\n' +
+    '            <h1 id="pro-heading" class="pro-hero__title">Can AI read you? What would buyers ask?</h1>\n' +
+    '            <p class="pro-hero__desc">Pro crawls up to ' + fig('cap', F.cap) + ' pages to show what your homepage hides, then writes the citation questions your buyers ask, in your language, to try yourself.</p>\n' +
+    '            <p class="pro-price"><span class="pro-price__line">' + Pricing.cur(esc(Pricing.tier('pro').line)) + '</span><span class="pr-chip">Early access</span></p>\n' +
     '            <p class="pro-price__note">' + esc(Pricing.DATA.sub) + ' ' + esc(Pricing.tier('pro').priceNote) + '.</p>\n' +
-    '            <div class="pro-actions"><a href="/sample-report" class="btn btn--gold">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost-on-navy') + '</div>\n' +
-    '          </div>\n' +
-    '          ' + indent(frame('summary', F, 'pro-shot--hero'), '          ') + '\n' +
-    '        </div>\n      </div>\n    </section>\n\n' +
+    '            <div class="pro-actions"><a href="/sample-report" class="btn btn--primary">See a real report. No signup.</a>' + cta('#waitlist', 'btn btn--ghost') + '</div>\n' +
+    '        </div>\n' + crawlField(F) +
+    '      </div>\n    </section>\n' +
+    '    <section class="pro-sheet" aria-label="The first screen of a report">\n      <div class="section__inner">\n        ' + indent(frame('summary', F, 'pro-shot--hero'), '        ') + '\n      </div>\n    </section>\n\n' +
     '    <!-- ---------- Two questions, one report ---------- -->\n' +
     '    <section class="verticals" aria-labelledby="two-heading">\n      <div class="section__inner">\n        <div class="section-head">\n          <p class="kicker">What Pro answers</p>\n          <h2 id="two-heading" class="section-title">Two questions. One report.</h2>\n        </div>\n' +
     '        <div class="pro-panels">\n' +
