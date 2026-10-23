@@ -7,8 +7,16 @@
     "email": "hey@getcitehound.com",
     "url": "https://getcitehound.com"
   },
-  "homepage": "https://getcitehound.com/claude",
+  "homepage": "https://getcitehound.com",
   "repository": "https://github.com/andacuzel/cited-geo-guide",
   "license": "MIT",
-  "keywords": ["ai-readiness", "robots-txt", "llms-txt", "structured-data", "mcp", "seo"]
+  "keywords": [
+    "ai-readiness",
+    "robots-txt",
+    "llms-txt",
+    "structured-data",
+    "mcp",
+    "seo"
+  ],
+  "privacyPolicyUrl": "https://getcitehound.com/privacy"
 }
