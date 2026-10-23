@@ -18,5 +18,8 @@
     "mcp",
     "seo"
   ],
-  "privacyPolicyUrl": "https://getcitehound.com/privacy"
+  "privacyPolicyUrl": "https://getcitehound.com/privacy",
+  "termsOfServiceUrl": "https://getcitehound.com/terms",
+  "documentationUrl": "https://getcitehound.com/claude",
+  "supportUrl": "https://getcitehound.com/api"
 }
