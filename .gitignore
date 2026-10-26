@@ -33,3 +33,6 @@ readers*.csv
 
 # Local launch kit (scripts/make-launch-assets.js): never committed or deployed
 launch/
+
+# Launch video renders and their work files (never committed or deployed)
+brag-output/
