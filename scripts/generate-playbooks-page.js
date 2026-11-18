@@ -35,7 +35,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = require('../lib/site-config.js').baseUrl;
-const CSS_VERSION = 105; // bump when styles.css changes
+const CSS_VERSION = 106; // bump when styles.css changes
 const PLAYBOOKS = require('../lib/playbooks.js');
 const ICONS = require('../lib/icons.js');
 

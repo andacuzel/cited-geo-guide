@@ -23,7 +23,7 @@ const site = require('../lib/site-config.js');
 const Monitor = require('../lib/api-v1/monitor.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 105;
+const CSS_VERSION = 106;
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const MCFG = Monitor.config({});

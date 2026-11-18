@@ -26,7 +26,7 @@ const icons = require('../lib/icons.js');
 const Plans = require('../lib/plans.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 105;
+const CSS_VERSION = 106;
 const D = Pricing.DATA;
 const esc = Pricing.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');

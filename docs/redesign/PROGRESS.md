@@ -76,3 +76,6 @@ New strings (every new text, by step):
 
 ## State of AI Readiness PDF (23 Oct 2026)
 - Regenerated with the hound on the cover, the running footer and the closing panel, in the redesign colors and type. No sentence or number changed; 68/68 figures verified. Uploaded to the gated store (hash matches). Cover pictures on the landing page were already redrawn (`scripts/generate-readiness-cover.js`).
+
+## Craft pass (18 Nov 2026)
+Rollback: tag `pre-craft-pass` (a1818ee). One marked block at the end of `styles.css` (stylesheet v106) and three markup fixes; direction, results, before and after screenshots in `docs/redesign/craft-pass/`. Gates 88/88; self-scan 87/100 (27/40, 20/20, 40/40) unchanged; Lighthouse mobile (median of 5): home accessibility 92 to 100, no page lost performance, CSS +3.4% gzip, JavaScript unchanged; 0 third-party requests, 0 cookies.

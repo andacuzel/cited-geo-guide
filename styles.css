@@ -6114,3 +6114,104 @@ input.field::placeholder { color: var(--ink-faint); }
 }
 .proof-band.hp-band, .pricing.hp-light + .aud { margin-top: 0; }
 
+
+/* ======================= Craft pass (18 Nov 2026): type, rhythm, hierarchy, motion, detail =======================
+   A finishing layer; docs/redesign/craft-pass/DIRECTION.md says what and why. No copy, colour, structure or claim changes.
+   Motion: opacity and transform only, inside no-preference, nothing with a replay or pause control. No gradient, no hover lift, no new shadow. */
+:root { --ease-out: cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* type: display lines breathe (0.96 to 1.0 let descenders touch the next line), headings balance, paragraphs avoid orphans */
+.hero__title, .home-close__title, .pp-hero__title, .page-banner__title, .hub__title, .svc-hero__title, .pro-hero__title, .ag-hero__title { line-height: 1.05; letter-spacing: -0.04em; text-wrap: balance; }
+h1, h2, h3, .section-title, .plan__text, .home-close__title { text-wrap: balance; }
+p, li, dd, figcaption { text-wrap: pretty; }
+.section-sub { color: var(--ink-soft); }
+.score-bar__val, .check-row__pts, .action-item__gain, .bm-row__score, .pp-table td, .report-table td { font-variant-numeric: tabular-nums; }
+
+/* rhythm: the hero meets the first band (no stray strip of paper); a light section after a band, and the pricing block, get more air; related sections sit closer */
+.hero--navy ~ .verticals.hp-band { margin-top: 0; }
+#scanReport:not([hidden]) ~ .verticals.hp-band { margin-top: var(--sp-section); }
+.hp-band + .hp-light { padding-top: calc(var(--sp-section) + 24px); }
+.pricing.hp-light { padding-top: calc(var(--sp-section) + 24px); }
+.aud + .research-strip { padding-top: calc(var(--sp-section) - 24px); }
+.page-banner { margin-top: 24px; }
+
+/* hierarchy: a card that is a link underlines its title on hover, not every line of it */
+.research-strip__link, .research-strip__link:hover { text-decoration: none; }
+.research-strip__link:hover .research-strip__name { text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.research-strip__link:focus-visible { outline-offset: 2px; border-radius: var(--radius); }
+.research-strip__desc { color: var(--ink-soft); font-size: 15px; }
+a { text-underline-offset: 0.2em; }
+.btn { transition: background-color var(--t), border-color var(--t), color var(--t), transform var(--t); }
+
+/* integration cards: a command is a block, not a chip that breaks across lines */
+.hub__card code { display: block; margin-top: 10px; padding: 8px 12px; line-height: 1.55; border-radius: var(--radius-sm); overflow-wrap: anywhere; }
+
+/* the free-scan report: mono is for code (BRAND.md), figures align, the crawler rules are readable on navy */
+.score-entry__meta { font-family: var(--font-body); font-size: 14px; line-height: 1.5; }
+.score-entry__meta + .score-entry__meta { margin-top: 2px; }
+.score-bar { font-size: 15px; }
+.score-bar__val, .check-row__pts, .action-item__gain { font-family: var(--font-body); font-size: 14px; font-weight: 600; }
+.score-bar__val { color: var(--ink-soft); }
+.check-row__pts { color: var(--ink-soft); }
+.bot-console { font-family: var(--font-body); }
+.bot-console__label { font-size: 15px; font-weight: 700; letter-spacing: 0; }
+.bot-chip { font-size: 13px; font-weight: 700; }
+.bot-card__rule { font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: rgba(255, 255, 255, 0.76); }
+.bot-console__note { font-size: 12.5px; color: rgba(255, 255, 255, 0.72); }
+.bot-console__link { font-size: 14px; color: rgba(255, 255, 255, 0.82); }
+.fix-details summary, #scanReport details > summary { font-family: var(--font-body); }
+#scanReport details > summary span { font-family: var(--font-body); font-size: 15px; font-weight: 700; }
+.action-item__label { font-size: 16px; }
+
+/* footer: the long Product list runs in two columns so the four columns end at about the same height */
+@media (min-width: 901px) {
+  .sf-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 2fr) repeat(2, minmax(0, 1fr)); }
+  .sf-grid > :nth-child(2) .sf-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; grid-auto-flow: column; grid-template-rows: repeat(7, auto); }
+}
+
+/* the sample report: the full-site report starts after a clear break from the before-and-after block above it */
+.rp-ba + .pr-head { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--line); }
+.rp-ba .rp-note { margin-top: 16px; }
+
+/* the comparison table: a readable header row and a row that follows the pointer */
+.pp-table thead th { font-size: 14px; font-weight: 700; }
+.pp-table tbody tr { transition: background-color var(--t); }
+@media (hover: hover) { .pp-table tbody tr:hover td, .pp-table tbody tr:hover th:first-child { background: #FAFAF7; } }
+
+/* tool pages: the chips no longer press against the banner, and the generator starts closer to them */
+.toolx-intro { margin-top: 0; padding-top: 4px; }
+.toolx-intro + .verticals { padding-top: 40px; }
+@media (max-width: 640px) { .toolx-intro { margin-top: 0; } .toolx-intro + .verticals { padding-top: 28px; } }
+
+/* the FAQ plus turns into a cross when a question is open (a single glyph, so it can rotate) */
+.ac-faq summary:hover::after, .ct-faq summary:hover::after { color: var(--ink); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ac-faq summary::after, .ct-faq summary::after { display: block; line-height: 1; transition: transform 220ms var(--ease-out), color var(--t); }
+  .ac-faq details[open] summary::after, .ct-faq details[open] summary::after { content: "+"; transform: rotate(45deg); }
+  /* the outcome rows on /pricing: the arrow steps forward on hover and focus */
+  .pp-which__arrow { display: inline-block; transition: transform 220ms var(--ease-out); }
+  .pp-which__row:hover .pp-which__arrow, .pp-which__row:focus-visible .pp-which__arrow { transform: translateX(4px); }
+  /* the agent steps keep one text colour: the highlight is a bar and a border, so contrast never dips while a step lights up */
+  .agent__steps li { position: relative; animation-name: agent-step-v2; color: rgba(255, 255, 255, 0.86); }
+  .agent__steps li::after { content: ""; position: absolute; left: 14%; right: 14%; bottom: 5px; height: 3px; border-radius: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left center; animation: agent-bar 8s ease-in-out infinite; animation-delay: inherit; }
+  .agent__steps li:nth-child(2)::after { animation-delay: 1.5s; } .agent__steps li:nth-child(3)::after { animation-delay: 3s; } .agent__steps li:nth-child(4)::after { animation-delay: 4.5s; }
+  @keyframes agent-step-v2 { 0%, 12% { border-color: rgba(255, 255, 255, 0.22); } 18%, 36% { border-color: var(--gold); } 44%, 100% { border-color: rgba(255, 255, 255, 0.22); } }
+  @keyframes agent-bar { 0%, 12% { transform: scaleX(0); } 20%, 36% { transform: scaleX(1); } 44%, 100% { transform: scaleX(0); } }
+
+  /* scroll reveals reach the text of each plan, the pricing steps and the how-it-works steps (browsers without scroll timelines show them as they are) */
+  @supports (animation-timeline: view()) {
+    .plan__copy, .pr-step, .pp-how__step, .toolx-step, .benchmark-strip, .fix-snippet {
+      animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 45%;
+    }
+    .pr-step:nth-child(2), .pp-how__step:nth-child(2), .toolx-step:nth-child(2) { animation-range: entry 6% entry 51%; }
+    .pr-step:nth-child(3), .pp-how__step:nth-child(3), .toolx-step:nth-child(3) { animation-range: entry 12% entry 57%; }
+    .pr-step:nth-child(4), .pp-how__step:nth-child(4) { animation-range: entry 18% entry 63%; }
+  }
+
+  /* page changes: the old page fades fast, the new one fades in and rises 10 px; the header keeps its own name and stays put */
+  ::view-transition-old(root) { animation: vt-out 140ms ease-in both; }
+  ::view-transition-new(root) { animation: vt-in 360ms var(--ease-out) both; }
+  @keyframes vt-out { to { opacity: 0; } }
+  @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+}
