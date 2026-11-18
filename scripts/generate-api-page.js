@@ -30,7 +30,7 @@ const MCFG = Monitor.config({});
 const Plans = require('../lib/plans.js');
 
 const ROOT = path.resolve(__dirname, '..');
-const CSS_VERSION = 105;
+const CSS_VERSION = 106;
 const esc = shell.esc;
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const L = Limits.PLAN_LIMITS;
